@@ -1,0 +1,1118 @@
+/* ════════════════════════════════════════════════════════════════════════
+   CALDERYN COLLEGE — REGISTRY DATA
+   ────────────────────────────────────────────────────────────────────────
+   This is where you edit characters, faculty, clubs, etc.
+   The HTML and JSX never need to be touched for normal updates.
+
+   QUICK NAVIGATION (search for these markers):
+     • houseColors     — house theme colours (rarely edit)
+     • houses          — the four house objects (rarely edit)
+     • students        — STUDENT ROSTER ← paste student applications here
+     • faculty         — FACULTY ROSTER ← paste faculty applications here
+     • strata          — STRATA corporate directory
+     • outside         — Greenwich orgs (police, NHS, council, press, etc.)
+     • powers          — Power registry (linked to students/faculty)
+     • powerStatuses   — Status definitions (Student / Vanguard / etc.)
+     • bannedPowers    — Banned-power list
+     • powerTiers      — Tier definitions (A through D)
+     • clubs           — CLUBS ← Powerball, Drama, Council, Press, etc.
+     • studentGov      — STUDENT GOVERNMENT (President, RAs, Committee)
+     • heroLists       — STRATA hero rosters (A-list / B-list / C-list / D-list)
+     • groups          — VANGUARD + Hero Collectives
+     • rules           — RP rules (rarely edit)
+     • curriculumTracks — Curriculum (rarely edit)
+     • tabs            — Tab nav config (don't edit)
+
+   To add a new character: search for the right section, paste the snippet
+   from the application Discord embed at the right spot, save, and push.
+   ════════════════════════════════════════════════════════════════════════ */
+
+window.CALDERYN = {
+
+houseColors: {
+  valaris: { primary: "#c41a1a", secondary: "#ffcc00", trim: "#FFF8E7" },
+  orenne:  { primary: "#d4901a", secondary: "#ffcc00", trim: "#E8DDC2" },
+  saberis: { primary: "#15803d", secondary: "#0C0C0C", trim: "#ffcc00" },
+  grimere: { primary: "#1e40af", secondary: "#9B6A2F", trim: "#D6D8E1" },
+},
+
+houses: [
+  {
+    id: "valaris", name: "VALARIS", bg: "#c41a1a", animal: "Falcon",
+    crest: "https://i.ibb.co/G4q9m34x/Valaris.png",
+    established: "2020", virtue: "Justice",
+    virtue_gloss: "What is right · Spoken aloud · Without apology",
+    traits: ["Brave", "Charismatic", "Idealistic"],
+    motto: "Loud, and unafraid.",
+    rival: "saberis",
+    rivalry: "The bitterest rivalry on campus, and the one the administration has never managed to defuse. Valaris students view Saberis as compromised — willing to deal with the institution rather than challenge it, willing to launder ambition as 'pragmatism.' Saberis students view Valaris as naive — performing principle in public while their bills get paid by the same STRATA contracts. Neither side is wrong.",
+    represents: "Valaris is built on Justice. Students here are taught to draw moral lines and hold them — to act decisively when something is wrong, to refuse to soften the truth for comfort, and to take responsibility for the consequences.",
+    namesake: { name: "Adrian Valaris", title: "Paragon · Vanguard · Active", portrait: null, desc: "Adrian Valaris — Paragon, the symbol — never set foot in this school as a student.", link: null },
+    sorting: "Valaris finds you. The intake board favours students with a measurable public or social footprint.",
+    alumni: [
+      { name: "[Open]", alias: "[ALIAS]", era: "Class of 2018", note: "A-list. Headline operator." },
+      { name: "[Open]", alias: "[ALIAS]", era: "Class of 2022", note: "B-list. Press circuit." },
+    ],
+  },
+  {
+    id: "orenne", name: "ORENNE", bg: "#d4901a", animal: "Stag",
+    crest: "https://i.ibb.co/0RQXNgXg/Orenne.png",
+    established: "2020", virtue: "Fortitude",
+    virtue_gloss: "Endurance · Loyalty · Holding the Line",
+    traits: ["Loyal", "Humble", "Resilient"],
+    motto: "Still standing. Still ours.",
+    rival: null, rivalry: null,
+    represents: "Orenne is built on Fortitude — the slow virtue. Students here are not the loudest and rarely the most decorated, but they are the ones still standing when the press has moved on.",
+    namesake: { name: "Margery Orenne", title: "Aegis · Vanguard · Active", portrait: null, desc: "Margery Orenne — Aegis — was here from 2005 to 2009.", link: null },
+    sorting: "Orenne selects students with documented histories of consistent behaviour under pressure.",
+    alumni: [
+      { name: "[Open]", alias: "[ALIAS]", era: "Class of 2019", note: "B-list. Long-form rescue operations." },
+      { name: "[Open]", alias: "[ALIAS]", era: "Class of 2023", note: "C-list. Regional. Refused promotion." },
+    ],
+  },
+  {
+    id: "saberis", name: "SABERIS", bg: "#15803d", animal: "Serpent",
+    crest: "https://i.ibb.co/qMry0fF2/Saberis.png",
+    established: "2020", virtue: "Prudence",
+    virtue_gloss: "Foresight · Judgment · Strategic Patience",
+    traits: ["Ambitious", "Cunning", "Versatile"],
+    motto: "Patient. Then decisive.",
+    rival: "valaris",
+    rivalry: "Saberis maintains, on record, that there is no rivalry. Off the record, every Saberis senior keeps a private file on at least one Valaris counterpart.",
+    represents: "Saberis is built on Prudence — the practical wisdom of knowing when, where, how, and at what cost.",
+    namesake: { name: "Caius Saberis", title: "Vigil · Vanguard · Active", portrait: null, desc: "Caius Saberis — Vigil — was here from 2002 to 2006.", link: null },
+    sorting: "Saberis selects for ambition with direction.",
+    alumni: [
+      { name: "[Open]", alias: "[ALIAS]", era: "Class of 2017", note: "A-list. Three-time STRATA contract renewal." },
+      { name: "[Open]", alias: "[ALIAS]", era: "Class of 2021", note: "Politician. Powered policy advisor." },
+    ],
+  },
+  {
+    id: "grimere", name: "GRIMERE", bg: "#1e40af", animal: "Moth",
+    crest: "https://i.ibb.co/PGhrJBBm/Grimere.png",
+    established: "2020", virtue: "Temperance",
+    virtue_gloss: "Restraint · Balance · Knowing When Not To",
+    traits: ["Knowledge", "Unconventional", "Curious"],
+    motto: "Know it. Then keep it.",
+    rival: null, rivalry: null,
+    represents: "Grimere is built on Temperance — the virtue of restraint, balance, and knowing when not to deploy.",
+    namesake: { name: "Iris Grimere", title: "Switchboard · Vanguard · Active", portrait: null, desc: "Iris Grimere — Switchboard — was here from 2009 to 2013, and never quite left.", link: null },
+    sorting: "Grimere takes those who don't fit elsewhere — not as a consolation, but deliberately.",
+    alumni: [
+      { name: "[Open]", alias: "[ALIAS]", era: "Class of 2016", note: "Now College faculty — Power Theory." },
+      { name: "[Open]", alias: "[ALIAS]", era: "Class of 2024", note: "Unsanctioned. Withdrew from contract negotiation." },
+    ],
+  },
+],
+
+students: [],
+
+faculty: [
+  {
+    section: "OFFICE OF THE DEAN",
+    note: "The Dean is the operational head of Calderyn College. Final authority on admission, discipline, expulsion, and reassignment. Reports to the STRATA executive board and to no one else.",
+    rows: [
+      { role: "Dean", char: "Dr. Devika Ravindrakumar", power: "Power Nullification (15m field)", npc: true },
+      { role: "Director of Admissions" },
+      { role: "Registrar" },
+    ],
+  },
+  {
+    section: "HEROES TRACK FACULTY",
+    note: "Professors who teach exclusively on the Heroes track (Track One). Combat, deployment, public-facing capability. Each prof tracks their students through all four years — the freshman instructor is the senior instructor.",
+    rows: [
+      { role: "Combat Training", tracks: ["hero"], subjects: [
+        { year: "FR", title: "Combat Training I",   desc: "Unarmed basics, conditioning, controlled-arena sparring. Most physical washouts come out of this class — STRATA wants the unwillable broken early." },
+        { year: "SO", title: "Combat Training II",  desc: "Weapon familiarisation, formation work with track partners, sustained-engagement endurance. First time you fight someone who fights back at full intent." },
+        { year: "JR", title: "Combat Training III", desc: "Multi-opponent engagement, terrain exploitation, integrating power use into combat reflex rather than treating it as a separate tool. Live sparring against juniors from rival houses." },
+        { year: "SR", title: "Combat Training IV",  desc: "Specialisation to your power signature and tier. Top performers begin shadowing the instructor as junior trainers — most contracted A-listers came through this seat." },
+      ]},
+      { role: "Deployment & Field Ops", tracks: ["hero"], subjects: [
+        { year: "FR", title: "Deployment & Field Ops I",   desc: "Pre-deployment theory. Operational doctrine, hostile profiling fundamentals, the difference between a sanctioned op and a fight you happened to win. No live ops yet — supervised arena scenarios only." },
+        { year: "SO", title: "Deployment & Field Ops II",  desc: "Civilian-adjacent shadowing. Sponsored low-stakes appearances with established heroes, threat assessment in friendly environments, learning to read a crowd before you have to read a crisis." },
+        { year: "JR", title: "Deployment & Field Ops III", desc: "Live sanctioned ops with faculty present. Property damage scenes, crowd control, low-end hostage incidents. Body counts get logged. Strike planning and approach vectors integrated week by week." },
+        { year: "SR", title: "Deployment & Field Ops IV",  desc: "Solo and paired ops scaled to your tier. International response for A-list, regional for B, niche specialist for C. Faculty no longer present — you radio in for permission, you don't ask it. The collateral math gets formalised." },
+      ]},
+      { role: "Powered Conditioning", tracks: ["hero"], subjects: [
+        { year: "FR", title: "Powered Conditioning I",   desc: "Foundation. Power-output baseline measurement, recovery curves on your specific ability, sleep cycles, nutrition under powered metabolism — accelerated healing burns more calories than people realise. The Diagnostic Wing assesses every freshman in the first month and writes a personalised programme. Most students are surprised by what their own body actually wants." },
+        { year: "SO", title: "Powered Conditioning II",  desc: "Application and limits. Sustained-use endurance, working through fatigue, recognising the difference between a safe limit and an ego limit. Mock-deployment sessions where students hold output for hours under faculty observation. The class where most students discover, properly, what their ceiling looks like." },
+        { year: "JR", title: "Powered Conditioning III", desc: "Live conditioning. Working through real injury during deployment year, pain management protocols, when to call yourself out of a scene and when to push through. Highest visit rate to the Diagnostic Wing of any class on the timetable. Most of what you learn here you wish you'd learned theoretically." },
+        { year: "SR", title: "Powered Conditioning IV",  desc: "Career pacing. The twenty-year operative arc — recovery between deployments, off-season protocols, recognising the early signs of burnout that end careers. Frank statistics on injury rates, retirement ages, and what active duty does to a body over time. The lecturer brings in retired Vanguard members for some sessions. They tell you the truth." },
+      ]},
+    ],
+  },
+  {
+    section: "SIDEKICKS TRACK FACULTY",
+    note: "Professors who teach exclusively on the Sidekicks track (Track Two). Triage, handling, partnership, deniability. Same prof carries forward across all four years — continuity is the point.",
+    rows: [
+      { role: "Field Medicine & Triage", tracks: ["sidekick"], subjects: [
+        { year: "FR", title: "Field Medicine I",   desc: "Emergency stabilisation, wound packing, airway management, the photogenic-victim triage doctrine. You learn to keep someone conscious long enough for the cameras." },
+        { year: "SO", title: "Field Medicine II",  desc: "Powered-injury treatment basics, rapid casualty sorting at multi-victim scenes, on-the-ground decisions about who gets the helicopter. The class where you learn whose life is worth the paperwork." },
+        { year: "JR", title: "Field Medicine III", desc: "Live-scene rotations during your hero partner's first sanctioned ops. Advanced powered trauma — burns at unusual temperature, regen-cancer interactions, structural damage from kinetic supes. Diagnostic Wing supplies most of the case material." },
+        { year: "SR", title: "Field Medicine IV",  desc: "Under-contract field medicine. Casualty triage at deployment scale, mass-incident protocols, the legal architecture of life-and-death decisions you make with cameras present." },
+      ]},
+      { role: "Tactical Communications", tracks: ["sidekick"], subjects: [
+        { year: "FR", title: "Tactical Communications I",   desc: "Comms protocols, encrypted channels, handler-to-operative call-and-response. Reading a crisis through audio alone before you've ever stood in one." },
+        { year: "SO", title: "Tactical Communications II",  desc: "Live handler comms with your assigned Heroes-track partner during their sponsored events. Real timing, real corrections, real transcripts pulled apart in the next class." },
+        { year: "JR", title: "Tactical Communications III", desc: "Multi-team coordination, real STRATA frequencies, listening to ongoing operations as they happen. You stop being a single voice in your hero's ear and start being one node in a network." },
+        { year: "SR", title: "Tactical Communications IV",  desc: "Contract-condition handler work. You run live comms during your hero's debut deployment. Recordings are kept on file and reviewed by their handler team for the rest of your career." },
+      ]},
+      { role: "Pairing & Protocol", tracks: ["sidekick"], subjects: [
+        { year: "FR", title: "Pairing & Protocol I",   desc: "Observation theory. Studying recorded hero-handler relationships, the protocols that hold partnerships together and the ones that fail them. You do not yet have a partner." },
+        { year: "SO", title: "Pairing & Protocol II",  desc: "Pairing assignment. You're matched with a Heroes-track sophomore and trained on their tells, triggers, tolerances, and the legal framework that makes you responsible for their public behaviour. The pairing usually persists through senior year." },
+        { year: "JR", title: "Pairing & Protocol III", desc: "Field handling under live pairing. You handle your hero's calendar, public appearances, and incident logistics during their first sanctioned ops. This is when most pairings either solidify or quietly break." },
+        { year: "SR", title: "Pairing & Protocol IV",  desc: "Contract-pairing transition. Co-signing onto your hero's contract as a paired operative. You learn what the joint deployment clauses actually mean for your career, not just theirs." },
+      ]},
+    ],
+  },
+  {
+    section: "SHARED FACULTY",
+    note: "Professors whose subjects are required on both tracks. The classes where Heroes and Sidekicks sit in the same room, and notice the difference in how they're spoken to. One prof teaches the whole four-year arc on both tracks simultaneously.",
+    rows: [
+      { role: "Power Theory & Application", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Power Theory I",   desc: "Power assessment, classification fundamentals, baseline output measurement. The class where your own ability gets weighed and the number is read aloud." },
+        { year: "SO", title: "Power Theory II",  desc: "Application and limits. Sustained-use endurance, recovery curves, what burns out and how fast. You stop asking what you can do and start asking what you can do for eight straight hours." },
+        { year: "JR", title: "Power Theory III", desc: "Edge-case powers, interaction modelling, the published literature on cascading effects. Half this term is reading other supes' incident reports and writing what should have been done." },
+        { year: "SR", title: "Power Theory IV",  desc: "Senior capstone. Original case study on your own power signature, ethics-of-use writeups, defended in front of the prof and a STRATA observer. The transcript follows you into your contract negotiation." },
+      ]},
+      { role: "Crisis Management", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Crisis Management I",   desc: "Basic crisis response — what a scene looks like, what command structure exists when you arrive, how to not make it worse before someone qualified takes over." },
+        { year: "SO", title: "Crisis Management II",  desc: "Scene control during your shadowing-year sponsored appearances. Reading a low-stakes incident as it develops, calling the right people, knowing when to step back." },
+        { year: "JR", title: "Crisis Management III", desc: "Multi-vector incidents — a fire and a hostage and a power outage at the same time. Triage of crises, not just casualties. After-action reviews, witness coordination, the architecture of cleanup. Joint sessions with Media & PR juniors." },
+        { year: "SR", title: "Crisis Management IV",  desc: "Leadership at a crisis scene. Commanding junior responders, coordinating with civilian emergency services, owning the incident report. Most senior thesis incidents come out of this class." },
+      ]},
+      { role: "Media & Public Relations", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Media & PR I",   desc: "Camera presence, interview basics, the press kit. Sitting still under hot lights without flinching. Transcript analysis of historical incidents — learning the difference between what gets said and what gets cleared." },
+        { year: "SO", title: "Media & PR II",  desc: "Identity management — public name, working alias, the legal architecture of a hero identity. Case study: Paragon, the world's most famous no-separation supe. Plus on-camera discipline at scale: scripted appearances, sponsor obligations, when to refuse a question and when to refuse it visibly." },
+        { year: "JR", title: "Media & PR III", desc: "Damage control and live drafting. Crisis comms after a real incident, drafted in real time, with real consequences. You write press releases for the graduating cohort's first live ops and watch which lines survive into print. Joint sessions with Crisis Management juniors." },
+        { year: "SR", title: "Media & PR IV",  desc: "Contract-period press. Building your own brand voice, sustained press tour discipline, the press conference you give in your debut year. Witness coordination, the architecture of the public apology, the press-release voice as second nature." },
+      ]},
+      { role: "Contract Law & Ethics", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Contract Law I",   desc: "Foundations of powered ethics. The Geneva 2009 framework, STRATA's regulatory authority, the legal status of registered abilities. You read the rules before you read the contracts." },
+        { year: "SO", title: "Contract Law II",  desc: "Contract literacy. Standard clause structure, the language used in template agreements, the difference between what a contract says and what it does. Mock negotiations against upper-year students." },
+        { year: "JR", title: "Contract Law III", desc: "Reading the binding language. Standard STRATA contract architecture, term lengths, deployment clauses, what you sign and what you don't realise you signed." },
+        { year: "SR", title: "Contract Law IV",  desc: "Contract preparation and STRATA certification prep. Exit clauses (or lack of them), liability transfer, image rights post-termination, and what each senior STRATA officer actually wants in a candidate. Most of the cynicism in your senior year comes out of this room." },
+      ]},
+    ],
+  },
+  {
+    section: "ELECTIVE FACULTY",
+    note: "Open to both tracks across all four years. Students self-select based on aptitude, ambition, and what they want their post-Calderyn life to look like. Some electives align naturally with house culture — Grimere fills the engineering benches, Orenne fills the medical wing — but no elective is gated to a house.",
+    rows: [
+      { role: "Engineering & Fabrication", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Engineering I",   desc: "Workshop fundamentals. Materials, tolerances, the physics of gear that works under power-induced stress. You build something simple before you build something useful." },
+        { year: "SO", title: "Engineering II",  desc: "Powered-equipment design — gear that interacts with the user's ability rather than getting destroyed by it. Switchboard guest-lectures most terms." },
+        { year: "JR", title: "Engineering III", desc: "Field fabrication — building gear under time pressure, with limited materials, for a specific operative's specific need. The class is structured like a sustained design sprint." },
+        { year: "SR", title: "Engineering IV",  desc: "Senior project. Design and build something a working operative would actually use. Best projects get adopted by the Diagnostic Wing or sold to STRATA's procurement pipeline." },
+      ]},
+      { role: "Powered Medicine & Healing", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Powered Medicine I",   desc: "Anatomy and pathology with a powered overlay. How standard human medicine breaks down at the edges of supe biology. Required for anyone who wants to work in the Diagnostic Wing." },
+        { year: "SO", title: "Powered Medicine II",  desc: "Powered-injury treatment beyond Field Medicine — burns at unusual temperature, regen-cancer interactions, structural damage from kinetic supes. Diagnostic Wing supplies the case material." },
+        { year: "JR", title: "Powered Medicine III", desc: "Long-form recovery. The patients who don't die but never come back the same. Rehabilitation protocols, long-term monitoring, the ethics of telling someone their power is gone." },
+        { year: "SR", title: "Powered Medicine IV", desc: "Diagnostic Wing rotation. Senior students spend the year working under direct supervision in the Wing itself. Graduates are first in line for Diagnostic Wing positions on graduation." },
+      ]},
+      { role: "Performance & Stunt Arts", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Performance Arts I",   desc: "Foundational stagecraft. Voice, presence, blocking, the discipline of holding an audience without using your power as a crutch. Plus sonic-power calibration for students whose abilities live on a wavelength." },
+        { year: "SO", title: "Performance Arts II",  desc: "Public performance and exhibition — choreographed power use for sponsored shows, openings, demonstrations. Adjacent to Powerball training but with no opposing team." },
+        { year: "JR", title: "Performance Arts III", desc: "Stunt choreography and stage craft. Building set-pieces that look dangerous and aren't, or are dangerous and look fine. The class with the highest insurance premium on campus." },
+        { year: "SR", title: "Performance Arts IV",  desc: "Composition and headlining. Senior recital is a public event — friends, family, scouts, sometimes a small TV crew. Some students leave this class as touring performers instead of operatives." },
+      ]},
+      { role: "Powered Research & Theory", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Powered Research I",   desc: "Research methods. How to read a powered-incident paper, how to interrogate a case study, what counts as evidence when the subject can rewrite their own biology mid-experiment." },
+        { year: "SO", title: "Powered Research II",  desc: "Power interaction modelling. Predicting what happens when two abilities collide, overlap, or cancel. Heavy maths, heavier writeups." },
+        { year: "JR", title: "Powered Research III", desc: "Edge-case research. Original investigative work on documented anomalies. Most students choose a single power category and go deep." },
+        { year: "SR", title: "Powered Research IV",  desc: "Senior thesis. Original work, defended in front of two professors and an external reader. Some senior projects get classified before they get graded. The track Grimere's strangest students disappear into." },
+      ]},
+      { role: "Strategic Studies & Doctrine", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Strategic Studies I",   desc: "Foundations of doctrine. Reading historical operations, understanding how powered persons have been used as policy instruments since the modern era began." },
+        { year: "SO", title: "Strategic Studies II",  desc: "Long-game tactics. Operational planning at the team and unit level. The class students take when they want to run the room rather than fight in it." },
+        { year: "JR", title: "Strategic Studies III", desc: "Powered statecraft. National-level doctrine, treaty implications, the architecture of how powered persons get used as policy instruments. The Geneva framework in detail." },
+        { year: "SR", title: "Strategic Studies IV",  desc: "Senior practicum. Students brief on a hypothetical national-scale incident in front of a panel that includes a STRATA observer and (in some years) a serving member of the Foreign Office." },
+      ]},
+      { role: "Covert Operations", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Covert Ops I",   desc: "Tradecraft fundamentals — surveillance, counter-surveillance, asset handling. The instructor's CV is officially redacted." },
+        { year: "SO", title: "Covert Ops II",  desc: "Cover construction. Building a working alias that survives sustained scrutiny, holding it under pressure, knowing when to burn it." },
+        { year: "JR", title: "Covert Ops III", desc: "Off-book deployment basics. STRATA has plausible deniability for things that haven't been written down. This class teaches you what doesn't get written down, and why." },
+        { year: "SR", title: "Covert Ops IV",  desc: "Senior practicum. Students run a sustained multi-week operation against another senior cohort. Outcomes are not graded — only debriefed." },
+      ]},
+      { role: "Forensic Analysis", tracks: ["hero", "sidekick"], subjects: [
+        { year: "FR", title: "Forensic Analysis I",   desc: "Crime scene fundamentals with a powered overlay. Standard forensic procedure, then what changes when an unknown supe was the cause." },
+        { year: "SO", title: "Forensic Analysis II",  desc: "Power-signature reading. Identifying the type of ability used at a scene from physical evidence alone. Met Specialist Unit consultancy work begins for top students." },
+        { year: "JR", title: "Forensic Analysis III", desc: "Live casework. Students rotate through real Met Specialist Unit consults as observers, then assistants. The first time you see a real powered-crime scene." },
+        { year: "SR", title: "Forensic Analysis IV",  desc: "Senior caseload. Students lead a single Met Specialist Unit consult under faculty supervision. Some graduates take direct Met positions on graduation." },
+      ]},
+    ],
+  },
+  {
+    section: "SUPPORT STAFF",
+    note: "The Diagnostic Wing is overseen, in name and in practice, by Iris Grimere (Switchboard). Day-to-day medical staff report through her.",
+    rows: [
+      { role: "Diagnostic Wing — Director", char: "Iris Grimere", stage: "Switchboard", power: "Technokinesis", npc: true },
+      { role: "Chief Medical Officer" },
+      { role: "Security Chief" },
+      { role: "Head Groundskeeper" },
+      { role: "Residential Warden" },
+    ],
+  },
+],
+
+strata: [
+  {
+    section: "CORPORATE — EXECUTIVE",
+    note: "STRATA International. The school's owner. Chair Silas Strathe (78) and CEO Felix Strathe (53) are public figures and answer to no one outside the family. Other senior identities are classified at Level 4+.",
+    rows: [
+      { role: "Chair", char: "Silas Strathe", npc: true },
+      { role: "Chief Executive", char: "Felix Strathe", npc: true },
+      { role: "Board Member" },
+      { role: "Board Member" },
+      { role: "Legal Director" },
+      { role: "Chief Science Officer", clf: true },
+    ],
+  },
+  {
+    section: "FIELD — HANDLERS & AGENTS",
+    rows: [
+      { role: "Senior Handler" },
+      { role: "Handler — Campus Embedded" },
+      { role: "Handler — Campus Embedded" },
+      { role: "Field Agent" },
+      { role: "Field Agent" },
+    ],
+  },
+  {
+    section: "PR & INTELLIGENCE",
+    rows: [
+      { role: "PR Director" },
+      { role: "Senior Analyst" },
+      { role: "Media Liaison" },
+      { role: "Intelligence Operative" },
+    ],
+  },
+],
+
+outside: [
+  {
+    section: "GOVERNMENT & CIVIC",
+    note: "Elected officials, mayoral staff, regulators, public servants who interface with STRATA.",
+    orgs: [
+      {
+        name: "Royal Borough of Greenwich",
+        type: "Local Council",
+        note: "The Royal Borough's elected leadership and senior staff. Negotiates the STRATA municipal contract and answers to the Mayor of London on incidents that cross borough lines.",
+        roles: [
+          { role: "Council Leader" },
+          { role: "Mayor (Ceremonial)" },
+          { role: "Chief Executive" },
+          { role: "Press Officer" },
+        ],
+      },
+      {
+        name: "Borough Council",
+        type: "Elected Members",
+        note: "Fifty-one elected councillors across seventeen wards. Approves the STRATA contract every four years and complains about it the rest of the time.",
+        roles: [
+          { role: "Cabinet Member" },
+          { role: "Cabinet Member" },
+          { role: "Backbench Councillor" },
+        ],
+      },
+      {
+        name: "Oversight Office",
+        type: "Powered-Activity Regulator",
+        note: "Borough-level body that files paperwork, reads incident reports, and has subpoena authority on STRATA but rarely uses it. Reports to the Greater London Authority on serious matters.",
+        roles: [
+          { role: "Director" },
+          { role: "Lead Regulator" },
+          { role: "Civic Liaison" },
+        ],
+      },
+    ],
+  },
+  {
+    section: "LAW ENFORCEMENT",
+    note: "Police, federal agents, investigators handling powered-incident cases.",
+    orgs: [
+      {
+        name: "Greenwich Borough Met",
+        type: "Local Police Borough",
+        note: "Greenwich's Metropolitan Police borough command. Files everything that's NOT explicitly a STRATA matter, which depending on the week is either everything or nothing.",
+        roles: [
+          { role: "Borough Commander" },
+          { role: "Detective Inspector" },
+          { role: "Detective Sergeant" },
+          { role: "Constable" },
+        ],
+      },
+      {
+        name: "Met Specialist Unit",
+        type: "Powered-Crimes Division",
+        note: "Metropolitan Police division handling cross-borough powered crime. Permanent friction with STRATA over jurisdiction.",
+        roles: [
+          { role: "Detective Chief Inspector" },
+          { role: "Detective Inspector" },
+          { role: "Forensic Analyst" },
+        ],
+      },
+    ],
+  },
+  {
+    section: "PRESS & MEDIA",
+    note: "Reporters, broadcasters, freelance journalists. Some of them know more than they should.",
+    orgs: [
+      {
+        name: "The Daily Crown",
+        type: "London Newspaper",
+        note: "London's broadsheet of record, with its newsroom in Canary Wharf. Print and digital. STRATA holds an executive seat on its editorial board, which the staff resent and route around.",
+        roles: [
+          { role: "Editor-in-Chief" },
+          { role: "Investigative Reporter" },
+          { role: "STRATA Beat Reporter" },
+          { role: "Powerball Beat Reporter" },
+        ],
+      },
+      {
+        name: "Channel 4 — South-East London",
+        type: "Local News Bureau",
+        note: "Channel 4's regional bureau, broadcast out of a converted warehouse in Deptford. Goes hard on STRATA press conferences and harder on the human-interest segments.",
+        roles: [
+          { role: "Anchor" },
+          { role: "Field Reporter" },
+          { role: "Camera Operator" },
+        ],
+      },
+      {
+        name: "Independent Press",
+        type: "Freelance & Substack",
+        note: "Self-published reporters and photographers. Lower readership, fewer constraints.",
+        roles: [
+          { role: "Freelance Investigator" },
+          { role: "Freelance Photographer" },
+          { role: "Substack Columnist" },
+        ],
+      },
+    ],
+  },
+  {
+    section: "MEDICAL & EMERGENCY",
+    note: "Hospital staff, EMTs, fire and rescue. People who clean up after STRATA.",
+    orgs: [
+      {
+        name: "Greenwich General",
+        type: "Teaching Hospital",
+        note: "Main trauma centre, on the river road past the Cutty Sark. Has a dedicated Powered-Injury Wing on the third floor that no civilian patient ever sees.",
+        roles: [
+          { role: "Chief of Medicine" },
+          { role: "ER Physician" },
+          { role: "Trauma Nurse" },
+          { role: "Powered-Injury Specialist" },
+        ],
+      },
+      {
+        name: "Greenwich Fire & Rescue",
+        type: "Emergency Services",
+        note: "Fire, rescue, ambulance. First on scene at every powered-incident call.",
+        roles: [
+          { role: "Fire Captain" },
+          { role: "Paramedic" },
+          { role: "EMT" },
+        ],
+      },
+    ],
+  },
+  {
+    section: "INDEPENDENT OPERATORS",
+    note: "Private investigators, freelance consultants, contractors-for-hire.",
+    orgs: [
+      {
+        name: "Vesper & Associates",
+        type: "Private Investigation Firm",
+        note: "Boutique PI shop. Specialises in cases STRATA won't touch and the police can't.",
+        roles: [
+          { role: "Senior Investigator" },
+          { role: "Investigator" },
+        ],
+      },
+      {
+        name: "Independent Consultants",
+        type: "Freelance Pool",
+        note: "Solo operators with niche expertise. No firm, no overhead, no oversight.",
+        roles: [
+          { role: "Powered-Threat Consultant" },
+          { role: "Contract Investigator" },
+          { role: "Security Specialist" },
+        ],
+      },
+    ],
+  },
+  {
+    section: "UNDERWORLD",
+    note: "Criminal enterprises, fixers, fences. The ecosystem powered crime feeds into.",
+    orgs: [
+      {
+        name: "The Sokol Family",
+        type: "Organised Crime Syndicate",
+        note: "Old money, old methods. Three generations deep. Don't accept new initiates from outside the family unless STRATA is involved.",
+        roles: [
+          { role: "Boss" },
+          { role: "Underboss" },
+          { role: "Capo" },
+          { role: "Soldier" },
+        ],
+      },
+      {
+        name: "The Iron Hand",
+        type: "Powered Crew",
+        note: "Newer crew, all powered, all unsanctioned. STRATA hasn't decided whether to recruit them or burn them down.",
+        roles: [
+          { role: "Crew Leader" },
+          { role: "Operator" },
+          { role: "Operator" },
+        ],
+      },
+      {
+        name: "Independent Fixers",
+        type: "Solo Operators",
+        note: "Brokers who connect powered freelancers with paying clients. No loyalty beyond the next payment.",
+        roles: [
+          { role: "Fixer" },
+          { role: "Fence" },
+          { role: "Fence" },
+        ],
+      },
+    ],
+  },
+  {
+    section: "PROFESSIONAL POWERBALL",
+    note: "PBL teams, the league above college. Players move between teams across their career — same character may appear on multiple rosters over time.",
+    orgs: [
+      {
+        name: "Berlin Bolts",
+        type: "PBL Team",
+        note: "Defending champions. Aggressive offence, polished media presence, deepest sponsor bench in the league.",
+        roles: [
+          { role: "Captain" },
+          { role: "Playmaker" },
+          { role: "Attack" }, { role: "Attack" },
+          { role: "Defence" }, { role: "Defence" },
+          { role: "Goalkeeper" },
+        ],
+      },
+      {
+        name: "Tokyo Storm",
+        type: "PBL Team",
+        note: "Defensive specialists. Lowest goals-conceded in the league three years running. Fans call them \"the wall.\"",
+        roles: [
+          { role: "Captain" },
+          { role: "Playmaker" },
+          { role: "Attack" }, { role: "Attack" },
+          { role: "Defence" }, { role: "Defence" },
+          { role: "Goalkeeper" },
+        ],
+      },
+      {
+        name: "Madrid Crown",
+        type: "PBL Team",
+        note: "Old franchise, recently reorganised. Heavy investment from Vanguard alumni. Currently rebuilding.",
+        roles: [
+          { role: "Captain" },
+          { role: "Playmaker" },
+          { role: "Attack" }, { role: "Attack" },
+          { role: "Defence" }, { role: "Defence" },
+          { role: "Goalkeeper" },
+        ],
+      },
+      {
+        name: "Free Agents & Retired",
+        type: "Out of Contract",
+        note: "Players between contracts, draft hopefuls awaiting placement, retired veterans returning to the city. Available for assignment.",
+        roles: [
+          { role: "Free Agent" }, { role: "Free Agent" },
+          { role: "Draft Hopeful" }, { role: "Draft Hopeful" },
+          { role: "Retired Pro" }, { role: "Retired Pro" },
+        ],
+      },
+    ],
+  },
+  {
+    section: "LOCAL BUSINESS & TRADE",
+    note: "Cafés, bars, restaurants, shops — the civilian fabric of the city. One character may own or work at multiple establishments.",
+    orgs: [
+      {
+        name: "STRATA Burger",
+        type: "Fast Food Chain",
+        note: "STRATA's flagship fast-food brand. Locations on Trafalgar Road, by the Cutty Sark, and across the river at Canary Wharf. The corporate sponsor reaches everywhere, including lunch.",
+        roles: [
+          { role: "Franchise Manager" },
+          { role: "Shift Lead" },
+          { role: "Crew Member" }, { role: "Crew Member" },
+        ],
+      },
+      {
+        name: "The Iron Owl Café",
+        type: "Café",
+        note: "On a side street between Greenwich Market and the campus gate. Open late. Notoriously the only place to study where Calderyn students don't run into faculty.",
+        roles: [
+          { role: "Owner" },
+          { role: "Manager" },
+          { role: "Barista" }, { role: "Barista" },
+        ],
+      },
+      {
+        name: "Mira's",
+        type: "Greasy Spoon",
+        note: "Twenty-four-hour caff just off Greenwich Market. Cheap fry-ups. Students after exams, coppers after shifts, journalists after deadlines.",
+        roles: [
+          { role: "Owner" },
+          { role: "Cook" },
+          { role: "Server" }, { role: "Server" },
+        ],
+      },
+      {
+        name: "Arboleda",
+        type: "Restaurant",
+        note: "Upscale bistro overlooking Greenwich Park. Where STRATA executives take their meetings and where Vanguard alumni get spotted by paparazzi.",
+        roles: [
+          { role: "Head Chef" },
+          { role: "Sous Chef" },
+          { role: "Maître d'" },
+          { role: "Server" },
+        ],
+      },
+      {
+        name: "Pulse",
+        type: "Nightclub",
+        note: "Two stops up the DLR by the O2. The nightclub everyone tells their parents they don't go to. STRATA contractors mix with Calderyn students; somehow nobody calls it in.",
+        roles: [
+          { role: "Owner" },
+          { role: "Manager" },
+          { role: "Bartender" }, { role: "Bartender" },
+          { role: "Bouncer" },
+        ],
+      },
+      {
+        name: "Marrow & Tonic",
+        type: "Pub",
+        note: "Backstreet boozer between the campus and Maze Hill station. Doesn't card aggressively. Standing weekly tab for at least three Calderyn faculty.",
+        roles: [
+          { role: "Owner" },
+          { role: "Bartender" }, { role: "Bartender" },
+        ],
+      },
+    ],
+  },
+],
+
+powers: [
+  {
+    status: "vanguard",
+    tier: "A",
+    power: "Solar Metabolism · Limitless Endurance · Uncapped Strength · Flight · Heat Vision · Enhanced Senses",
+    char: "Adrian Valaris",
+    alias: "PARAGON",
+    npc: true,
+    expression: "The sun feeds him. Nothing measurable runs him down. His strength has no documented ceiling and his flight is officially uncatalogued because every piece of equipment that tries to clock him fails at full speed. Heat vision in coherent ranged beams, calibrated by something the medical wing has elected to call intent because no one has come up with a better word. His senses run well beyond baseline — he can pick a single conversation out of a crowded street from above, read a license plate at altitude, hear a heartbeat through a wall. Whether that's a separate ability or simply what comes with the rest of him, the medical wing has stopped trying to settle. In person: quiet, unfailingly polite, stands up when you walk into a room.",
+  },
+  {
+    status: "vanguard",
+    tier: "A",
+    power: "Precognition",
+    char: "Caius Saberis",
+    alias: "VIGIL",
+    npc: true,
+    expression: "A precognitive window ninety seconds wide and roughly thirty metres deep. He sees every branch of every possible action laid out around him with the clarity of sheet music — the bullet leaving the barrel, the door opening, the word leaving the mouth — and picks the branch he wants. The other branches collapse and are not. Fights with a folded-steel longsword Switchboard made him in 2018, which he has never named. Cost: migraines. Wrong twice in eleven years.",
+  },
+  {
+    status: "vanguard",
+    tier: "A",
+    power: "Damage Resistance · Accelerated Healing · Flight · Super Strength",
+    char: "Margery Orenne",
+    alias: "AEGIS",
+    npc: true,
+    expression: "Her body does not break the way bodies break. Blades go in, bullets go in, but the damage does not propagate outward the way damage is supposed to. She bleeds, but the bleeding stops sooner than it ought. Heals six times faster than is decent. Cruises at three hundred miles an hour, holds position indefinitely, lifts roughly four hundred kilograms without breaking a sweat. Field-condition endurance record: fifty-one hours. She broke nine bones during it and did not notice until the third day.",
+  },
+  {
+    status: "vanguard",
+    tier: "A",
+    power: "Technokinesis",
+    char: "Iris Grimere",
+    alias: "SWITCHBOARD",
+    npc: true,
+    expression: "She speaks to electronics by thought, in a range that has no precise edge but seems to extend as far as she can perceive a device. She does not need to touch them. She does not need to see them. They listen. Not physically superhuman in any other respect — strength, durability, and reflexes are baseline human, and her health is, if anything, slightly under because she forgets to eat. Every piece of gear the Vanguard carries is hers: Vigil's sword, Aegis's flight harness, Paragon's gauntlets.",
+  },
+  {
+    status: "faculty",
+    tier: "A",
+    power: "Power Nullification",
+    char: "Dr. Devika Ravindrakumar",
+    alias: null,
+    npc: true,
+    expression: "Spherical fifteen-metre nullification field, manually toggled. Inside the field, registered abilities are completely suspended — the nullification does not distinguish between hostile and friendly, and includes her own. Sustained activation produces severe migraines; she rarely holds the field for more than ten minutes at a stretch. The Dean's primary tool for de-escalating campus crises and the reason she does not contract as an active hero.",
+  },
+],
+
+powerStatuses: [
+  { id: "student",      label: "Student",      bg: "#1e40af", text: "#fff",    desc: "Enrolled at Calderyn College. Tier is provisional — locked in sophomore year, reviewed every spring after that. Day-to-day life: house residence, Power Theory faculty, mandatory training. Higher-tier students get earlier handler attention, sponsorship scouts, and STRATA liaison meetings starting sophomore year. Lower-tier students train, sit exams, and wait." },
+  { id: "vanguard",     label: "Vanguard",     bg: "#d4901a", text: "#ffcc00", desc: "STRATA's flagship unit. Four members, capped, household names. Vanguard contracts are negotiated separately from the standard A-list contract and operate at international response scale. Every member is also classified A-List for tier purposes — Vanguard is a role, not a tier. Currently: Paragon (Unit Leader), Vigil and Aegis (Field Operatives), Switchboard (Specialist)." },
+  { id: "strata",       label: "STRATA",       bg: "#e31b23", text: "#fff",    desc: "Under active STRATA contract. Deployment, schedule, public messaging, sponsorship, and travel are all coordinated through your handler team — the size of which scales to your tier. STRATA decides where you go, what you say, and what your face is worth this quarter. Contracts are typically multi-year and the exit clauses are deliberately not in the brochure." },
+  { id: "faculty",      label: "Faculty",      bg: "#15803d", text: "#fff",    desc: "Calderyn staff with a registered ability. Most faculty contracts include a field-deployment clause that suspends external operations during teaching terms — instruction or admin work only. Some faculty negotiate exceptions for ongoing field roles (the Diagnostic Wing director still runs Vanguard tech support; the Dean's nullification field is on call for crisis events on campus). Some are former A-listers cooling off after a bad press cycle. Some never made the leagues at all." },
+  { id: "unsanctioned", label: "Unsanctioned", bg: "#0e0e10", text: "#ff2a32", desc: "Operating without a STRATA contract. Independent vigilantes, hostiles, rogue former assets, and anyone who registered but declined a contract. STRATA tracks them, estimates their tier internally, and decides case-by-case whether to recruit, contain, or ignore. Most know they're being watched. Concealment of a registered power outside contract structure is a Class III violation." },
+  { id: "inactive",     label: "Civilian",     bg: "#54545c", text: "#fff",    desc: "Registered with STRATA, no operational contract, no active deployment. The largest group on the registry by a wide margin. Includes anyone who chose civilian life from the start (a baker who can heat his ovens with a glance, a nurse with low-grade healing, an office worker who pulls files telekinetically), retired operatives who walked away from a contract, dormant supes whose powers have not manifested in years, and deceased registry entries kept on file as historical record. STRATA tracks tier and ability for the registry, but does not assign handlers, dictate deployment, or restrict daily life. Civilian status is the default outcome for any registered ability whose owner does not want to be a hero." },
+],
+
+bannedPowers: [
+  "Full reality rewriting or universal creation/erasure",
+  "Time travel or paradox-creating temporal manipulation",
+  "Permanent complete mind destruction or total memory wiping",
+  "Mass resurrection or wide-scale death negation",
+  "Universal simultaneous telepathy — every mind at once",
+  "Dimensional collapse or pocket-universe creation",
+  "Mass cellular rewriting affecting third parties without their knowledge",
+  "Reproductive interference, fertility manipulation, or pregnancy alteration",
+  "Wartime-equivalent destructive output (Geneva 2009 — supes are barred from active war zones, and abilities scaled to that line will not be approved for civilian play)",
+  "Anything that breaks the registry's one-expression-per-character rule",
+],
+
+powerTiers: [
+  {
+    id: "a", tier: "A", label: "A-LIST",
+    tagline: "The face on the billboard.",
+    bracket: "Global Flagship",
+    deployment: "Global crisis response. International ops. STRATA elite field unit. Press-facing by default.",
+    ceiling: "Flagship endorsements. Solo IP. Biopic-tier PR. Cereal boxes, action figures, fragrance lines.",
+    cost: "Full handler team. 30-day registration deadline. Every public appearance logged. Burnout rate is not in the brochure.",
+    slots: "Mandatory full STRATA registration. Handler team assigned within 30 days. Annual reassessment. Capped at 10 active A-list slots — application requires admin conversation before submission.",
+    color: "#e31b23", accent: "#ff2a32",
+  },
+  {
+    id: "b", tier: "B", label: "B-LIST",
+    tagline: "Reliable. Dangerous. Working.",
+    bracket: "Regional / Team",
+    deployment: "Regional hero contracts. STRATA field agent. Private security lead. Rescue and response unit.",
+    ceiling: "Regional endorsements. Team IP only — no solo. Entertainment and stunt work on the side.",
+    cost: "Annual reassessment. Public-use registration. Most working supes are here. Not glamorous, but it pays.",
+    slots: "Full STRATA registration. Single handler assigned. Annual reassessment.",
+    color: "#1e40af", accent: "#3a5ab8",
+  },
+  {
+    id: "c", tier: "C", label: "C-LIST",
+    tagline: "Specialist. Sidekick. Support.",
+    bracket: "Private / Niche",
+    deployment: "Sidekick or team member. Investigation, medical support, consulting. Local hero work.",
+    ceiling: "Local endorsements only. No solo IP. Occasional reality TV.",
+    cost: "Standard monitoring. Often paired with combat training to stay relevant. The unsung middle of the roster.",
+    slots: "Standard registration. Shared handler or team liaison. Biennial check-in.",
+    color: "#15803d", accent: "#2e7f57",
+  },
+  {
+    id: "d", tier: "D", label: "D-LIST",
+    tagline: "A power that helps. Not one that pays.",
+    bracket: "Unmarketable",
+    deployment: "Civilian career with an edge. Niche consulting. Private contracts. STRATA won't call.",
+    ceiling: "No endorsements. No monitoring beyond registration. You are not famous.",
+    cost: "None — except the career you could have had if your power had landed anywhere else.",
+    slots: "Registration on file. No active monitoring. No handler.",
+    color: "#54545c", accent: "#8a857e",
+  },
+],
+
+clubs: [
+  {
+    name: "Powerball",
+    bg: "#c41a1a",
+    category: "Athletics",
+    access: "House tryout",
+    tag: "STRATA-SPONSORED COLLEGIATE LEAGUE",
+    desc: "Calderyn's marquee sport. The most-watched event on campus and a viable post-graduation career — the college league feeds the pros, with scouts at every Friday night match.",
+    rules: {
+      summary: "Six-on-six on a three-elevation court split at midfield. Each side fields one Playmaker, two Attack, two Defence, and one Goalkeeper. Attack stays in the attacking half; Defence stays in the defending half; the Goalkeeper is locked to the goal area; the Playmaker plays anywhere. Catching the ball freezes you in place — you have four seconds to pass before possession drops. The Playmaker is the only exception: they can move while holding the ball, but the four-second clock still applies. Only Attack can score, and only from inside the scoring zone. Powers are legal against the ball, the environment, and other players, within injury limits. The pass — and the Playmaker's carry — is the entire game.",
+      format: [
+        "Four quarters, twelve minutes each. Running clock except on dead balls and medical pauses.",
+        "Active line-up: 1 Playmaker · 2 Attack · 2 Defence · 1 Goalkeeper. Bench: a full Reserves Squad with one reserve per starting role.",
+        "The ball is INDESTRUCTIBLE — engineered composite that no registered power can vaporise, dissolve, fracture, melt, or permanently deform. It can only be moved.",
+        "Receivers cannot pass back to the same player who served them. No self-pass loops.",
+        "Every score is one point. No multi-point shots.",
+        "Each quarter opens with a serve from midcourt by the Playmaker of the team awarded the serve (alternating quarters; coin toss for Q1). After every score, the conceding Playmaker serves from their own goal line. The serve must clear midcourt before any teammate may receive it.",
+        "Each team names a Team Captain pre-game — any starter — who wears the C, leads the line-up, addresses referees, and may issue one official challenge per game.",
+        "Tiebreaker is sudden death on a half-size single-elevation court, four players per side.",
+      ],
+      violence: "Powers may disable, displace, restrain, intercept, or knock down opposing players. Powers may NOT inflict bleeding wounds, fractures, burns above first-degree, or any injury requiring more than on-bench medical attention. The rule is enforced; it is also broken. Powerball has the highest in-season injury rate of any collegiate sport in the country, and STRATA's medical insurance for league players is the most expensive line item in the athletic department's budget. Three personal fouls = ejection. Flagrant fouls (deliberate injury, attack on a downed player or referee, holding past the four-second count, crossing midline outside Playmaker permissions, leaving the goal area as Goalkeeper) = automatic ejection plus a minimum two-game suspension. A career-ending flagrant triggers league review and possible permanent ban.",
+      career: "Powerball is one of two viable career paths for a powered graduate who does not want a STRATA hero contract. The professional league — the PBL — drafts roughly forty players a year out of the four major collegiate programs in the country. Calderyn is one of those four. Top picks sign multi-year deals in the seven figures plus sponsorships; mid picks earn the same as a B-list STRATA hero with significantly less paperwork and no contractual obligation to die. Career length averages five seasons. Career-ending injuries are common. Calderyn graduates drafted directly into the PBL are tracked as a separate honour from the Vanguard pipeline.",
+      roles: [
+        { name: "Playmaker", tagline: "1 per side · The only role that can move with the ball.", desc: "The court's only mobile possession unit. Engine of every offence and primary target of every defence. The position rewards reading the court above all.", best_for: "Mobility powers — speed, flight, short-range teleport, parkour-coded enhancement, evasion, environmental traversal." },
+        { name: "Attack", tagline: "2 per side · The only role that can score. Locked to the attacking half.", desc: "Holds position in the attacking half, works to receive in the scoring zone, and converts. Pro scouts watch this pair first — every highlight reel is built here.", best_for: "Powers that fire from a standstill — short-range teleport, kinetic projection, force pulses, body-armoring abilities." },
+        { name: "Defence", tagline: "2 per side · Disrupts before the goal area. Locked to the defending half.", desc: "The pressure layer. Splits coverage between the deeper court and the edge of the goal area, intercepting passes and breaking up plays before the Goalkeeper has to make a save.", best_for: "Force-field, barrier, gravity, sensory, telekinetic, or rapid-reaction powers — anything that contests space across the defending half." },
+        { name: "Goalkeeper", tagline: "1 per side · Last line. Locked to the goal area.", desc: "Stands between the ball and the goal line. Confined to the painted goal area at their own end of the court — leaving it is a flagrant. Every save is a four-second window against an Attack already inside the scoring zone. The position is purely reactive, brutally exposed, and the most-replayed clip from any match.", best_for: "Deflection, force-field, barrier, body-armoring, or rapid-reaction powers. Anything that can stop or redirect a projectile in the moment it arrives." },
+      ],
+    },
+    teams: [
+      { house: "Valaris", bg: "#c41a1a", train: ["MON · 6:00 AM", "WED · 7:00 PM"], positions: [
+        { pos: "Playmaker" },
+        { pos: "Attack" }, { pos: "Attack" },
+        { pos: "Defence" }, { pos: "Defence" },
+        { pos: "Goalkeeper" },
+        { pos: "Reserve · Playmaker" },
+        { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
+        { pos: "Reserve · Defence" }, { pos: "Reserve · Defence" },
+        { pos: "Reserve · Goalkeeper" },
+      ]},
+      { house: "Orenne", bg: "#d4901a", train: ["TUE · 6:00 AM", "THU · 7:00 PM"], positions: [
+        { pos: "Playmaker" },
+        { pos: "Attack" }, { pos: "Attack" },
+        { pos: "Defence" }, { pos: "Defence" },
+        { pos: "Goalkeeper" },
+        { pos: "Reserve · Playmaker" },
+        { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
+        { pos: "Reserve · Defence" }, { pos: "Reserve · Defence" },
+        { pos: "Reserve · Goalkeeper" },
+      ]},
+      { house: "Saberis", bg: "#15803d", train: ["THU · 6:00 AM", "MON · 7:00 PM"], positions: [
+        { pos: "Playmaker" },
+        { pos: "Attack" }, { pos: "Attack" },
+        { pos: "Defence" }, { pos: "Defence" },
+        { pos: "Goalkeeper" },
+        { pos: "Reserve · Playmaker" },
+        { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
+        { pos: "Reserve · Defence" }, { pos: "Reserve · Defence" },
+        { pos: "Reserve · Goalkeeper" },
+      ]},
+      { house: "Grimere", bg: "#1e40af", train: ["FRI · 6:00 AM", "TUE · 7:00 PM"], positions: [
+        { pos: "Playmaker" },
+        { pos: "Attack" }, { pos: "Attack" },
+        { pos: "Defence" }, { pos: "Defence" },
+        { pos: "Goalkeeper" },
+        { pos: "Reserve · Playmaker" },
+        { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
+        { pos: "Reserve · Defence" }, { pos: "Reserve · Defence" },
+        { pos: "Reserve · Goalkeeper" },
+      ]},
+    ],
+    courtNote: "Practice court is open Saturday and Sunday — first come, first served, any house.",
+    positions: [
+      { pos: "Head Coach" },
+      { pos: "Assistant Coach" },
+      { pos: "Referee — Senior" },
+    ],
+  },
+  {
+    name: "Cheer Squad",
+    bg: "#7a1a4a",
+    category: "Performance",
+    access: "Tryout",
+    tag: "PERFORMANCE — POWERS ENCOURAGED",
+    desc: "Performs at every Powerball match and STRATA campus event. Powers are part of the routine — flight, propulsion, force projection, sonic flair, anything choreographed and rehearsed. Coach is a retired A-lister with a clipboard and zero patience for sloppy power control. Sloppy execution is what gets you flagged at the league level, not the powers themselves.",
+    meets: ["TUE · 5:00 PM", "THU · 5:00 PM", "GAME DAYS"],
+    output: "Performs at every home Powerball match · STRATA campus events · Annual showcase",
+    groups: [
+      { label: "Leadership", roles: ["Captain", "Co-Captain"] },
+      { label: "Squad", roles: ["Flyer", "Base", "Tumbler"] },
+      { label: "Reserves", roles: ["Alternate"] },
+    ],
+    positions: [
+      { pos: "Captain", group: "leadership" }, { pos: "Co-Captain", group: "leadership" },
+      { pos: "Flyer", group: "squad" }, { pos: "Flyer", group: "squad" },
+      { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
+      { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" },
+      { pos: "Alternate", group: "reserves" },
+    ],
+  },
+  {
+    name: "Symphony & Choir",
+    bg: "#1e40af",
+    category: "Performance",
+    access: "Audition",
+    tag: "POWERS WELCOME · BLIND AUDITION",
+    desc: "Calderyn's combined orchestral ensemble and college choir. Performs at the Dean's dinners, alumni events, the annual memorial service, and one full joint programme each spring. Auditions are blind and any power is welcome — sonic, kinetic, illusory, perceptual, anything that makes the music better. The Music Director cares about the result; argue with the result and they'll show you the door.",
+    meets: ["MON · 7:00 PM", "WED · 7:00 PM", "SAT · 10:00 AM"],
+    output: "Dean's dinners · Alumni events · Annual memorial service · Annual joint programme",
+    groups: [
+      { label: "Direction", roles: ["Music Director", "Concertmaster", "Choir Master"] },
+      { label: "Orchestra Leads", roles: ["Strings Lead", "Woodwind Lead", "Brass Lead", "Percussion Lead"] },
+      { label: "Choir Leads", roles: ["Soprano Lead", "Alto Lead", "Tenor Lead", "Bass Lead"] },
+      { label: "Members", roles: ["Member"] },
+    ],
+    positions: [
+      { pos: "Music Director", group: "direction" },
+      { pos: "Concertmaster", group: "direction" },
+      { pos: "Choir Master", group: "direction" },
+      { pos: "Strings Lead", group: "orchestra-leads" },
+      { pos: "Woodwind Lead", group: "orchestra-leads" },
+      { pos: "Brass Lead", group: "orchestra-leads" },
+      { pos: "Percussion Lead", group: "orchestra-leads" },
+      { pos: "Soprano Lead", group: "choir-leads" },
+      { pos: "Alto Lead", group: "choir-leads" },
+      { pos: "Tenor Lead", group: "choir-leads" },
+      { pos: "Bass Lead", group: "choir-leads" },
+      { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
+      { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
+    ],
+  },
+  {
+    name: "Drama Society",
+    bg: "#d4901a",
+    category: "Performance",
+    access: "Open",
+    tag: "PERFORMANCE — POWERS INTEGRATED",
+    desc: "Two main productions a year — a musical and a straight play — plus occasional devised work. Powers are part of the craft: a flying actor, a telekinetic set change, illusion-based lighting, sonic vocal range. The script gets written around what the cast can actually do. Closest thing on campus to live, choreographed combat performance — minus the bruises.",
+    meets: ["TUE · 6:00 PM", "FRI · 6:00 PM", "PRODUCTION WEEKS DAILY"],
+    output: "Two productions per year · Devised work as scheduled · Showcase performances",
+    groups: [
+      { label: "Leadership", roles: ["President", "Artistic Director", "Stage Manager"] },
+      { label: "Cast", roles: ["Actor"] },
+      { label: "Tech", roles: ["Technical Director", "Lighting", "Sound", "Set"] },
+      { label: "Hair & Makeup", roles: ["H&M Lead", "H&M Artist"] },
+      { label: "Ensemble", roles: ["Ensemble"] },
+    ],
+    positions: [
+      { pos: "President", group: "leadership" },
+      { pos: "Artistic Director", group: "leadership" },
+      { pos: "Stage Manager", group: "leadership" },
+      { pos: "Actor", group: "cast" }, { pos: "Actor", group: "cast" },
+      { pos: "Actor", group: "cast" }, { pos: "Actor", group: "cast" },
+      { pos: "Actor", group: "cast" }, { pos: "Actor", group: "cast" },
+      { pos: "Technical Director", group: "tech" },
+      { pos: "Lighting", group: "tech" },
+      { pos: "Sound", group: "tech" },
+      { pos: "Set", group: "tech" }, { pos: "Set", group: "tech" },
+      { pos: "H&M Lead", group: "hair-makeup" },
+      { pos: "H&M Artist", group: "hair-makeup" }, { pos: "H&M Artist", group: "hair-makeup" },
+      { pos: "Ensemble", group: "ensemble" }, { pos: "Ensemble", group: "ensemble" },
+    ],
+  },
+  {
+    name: "Debate Club",
+    bg: "#15803d",
+    category: "Academic",
+    access: "Open",
+    tag: "INTER-UNIVERSITY CIRCUIT",
+    desc: "Competes on the inter-university debate circuit. Policy, parliamentary, Lincoln-Douglas. Telepathic, persuasive, and empathic abilities are barred by league rule. Administration sends a STRATA observer to every home round.",
+    meets: ["MON · 7:30 PM", "THU · 7:30 PM"],
+    output: "Inter-university circuit · Home round once per term · Nationals if qualified",
+    groups: [
+      { label: "Leadership", roles: ["Captain", "Vice Captain", "Research Lead"] },
+      { label: "Varsity", roles: ["Policy", "Parliamentary"] },
+      { label: "Novice", roles: ["Novice"] },
+    ],
+    positions: [
+      { pos: "Captain", group: "leadership" }, { pos: "Vice Captain", group: "leadership" },
+      { pos: "Research Lead", group: "leadership" },
+      { pos: "Policy", group: "varsity" }, { pos: "Policy", group: "varsity" },
+      { pos: "Parliamentary", group: "varsity" }, { pos: "Parliamentary", group: "varsity" },
+      { pos: "Novice", group: "novice" }, { pos: "Novice", group: "novice" },
+    ],
+  },
+  {
+    name: "Cape & Dagger",
+    bg: "#2c1d4a",
+    category: "Publications",
+    access: "Application",
+    tag: "STUDENT-RUN NEWS",
+    desc: "The student-run news outlet. Campus reporting, investigative features, the Powerball beat, faculty profiles, anonymous tip line. Publishes weekly online and in a printed end-of-term anthology. STRATA reads every issue, has pulled three articles in the last decade, and the editors keep going.",
+    meets: ["WED · 8:00 PM", "SUN · 4:00 PM"],
+    output: "Weekly online edition · End-of-term printed anthology · Breaking coverage as needed",
+    groups: [
+      { label: "Masthead", roles: ["Editor-in-Chief", "Managing Editor"] },
+      { label: "Section Editors", roles: ["News Editor", "Investigative Editor", "Features Editor", "Sports Editor", "Photo Editor", "Copy Editor"] },
+      { label: "Reporters & Columnists", roles: ["Staff Reporter", "Columnist"] },
+    ],
+    positions: [
+      { pos: "Editor-in-Chief", group: "masthead" },
+      { pos: "Managing Editor", group: "masthead" },
+      { pos: "News Editor", group: "section-editors" },
+      { pos: "Investigative Editor", group: "section-editors" },
+      { pos: "Features Editor", group: "section-editors" },
+      { pos: "Sports Editor", group: "section-editors" },
+      { pos: "Photo Editor", group: "section-editors" },
+      { pos: "Copy Editor", group: "section-editors" },
+      { pos: "Staff Reporter", group: "reporters" }, { pos: "Staff Reporter", group: "reporters" },
+      { pos: "Staff Reporter", group: "reporters" },
+      { pos: "Columnist", group: "reporters" }, { pos: "Columnist", group: "reporters" },
+    ],
+  },
+],
+
+studentGov: [
+  {
+    section: "OFFICE OF THE PRESIDENT",
+    type: "elected",
+    note: "Campus-wide ballot. One-year term. The Student Body President leads the government and chairs the Student Council. Real budget. Administration overrides routinely and without explanation.",
+    seats: [
+      { pos: "Student Body President", term: "2026–27" },
+      { pos: "Treasurer",              term: "2026–27" },
+      { pos: "Secretary",              term: "2026–27" },
+    ],
+  },
+  {
+    section: "STUDENT COUNCIL — RESIDENT ASSISTANTS",
+    type: "elected",
+    note: "One House Representative per house, doubling as senior Resident Assistant for that house's dorms. They run house meetings, mediate dorm disputes, oversee underclassman conduct, and report to the President. New club proposals start here — pitch your idea to your RA, and if there's enough demonstrated interest, it gets raised to the President for approval. Term: one academic year.",
+    seats: [
+      { pos: "Valaris Rep · Senior RA", term: "2026–27" },
+      { pos: "Orenne Rep · Senior RA",  term: "2026–27" },
+      { pos: "Saberis Rep · Senior RA", term: "2026–27" },
+      { pos: "Grimere Rep · Senior RA", term: "2026–27" },
+    ],
+  },
+  {
+    section: "EVENT COMMITTEE",
+    type: "appointed",
+    note: "Appointed by the President. Plans and runs whatever the campus throws at them — formals, mixers, fundraisers, rivalries, sanctioned and otherwise. Budget approval routes through Treasurer.",
+    seats: [
+      { pos: "Committee Chair" },
+      { pos: "Vice Chair" },
+      { pos: "Logistics Lead" },
+      { pos: "Programming Lead" },
+      { pos: "Committee Member" },
+      { pos: "Committee Member" },
+    ],
+  },
+],
+
+heroLists: [
+  {
+    tier: "A",
+    label: "A-LIST HEROES",
+    desc: "Household names below the Vanguard. Headline operators, sponsorship-heavy, own primetime coverage. The working top tier — the heroes everyone knows without needing to ask.",
+    req: "A-List tier. Capped at 10 slots — application requires admin conversation before submission.",
+    color: "#e31b23",
+    slots: [
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+    ],
+  },
+  {
+    tier: "B",
+    label: "B-LIST HEROES",
+    desc: "Known. Deployed regularly. Good enough for press releases, not quite good enough for primetime. Capable operators who haven't broken through — or have been deliberately kept from doing so.",
+    req: "B-List tier or above.",
+    color: "#1e40af",
+    slots: [
+      { alias: "[Open]", role: "Contracted Hero", char: null, power: null },
+      { alias: "[Open]", role: "Contracted Hero", char: null, power: null },
+      { alias: "[Open]", role: "Contracted Hero", char: null, power: null },
+    ],
+  },
+  {
+    tier: "C",
+    label: "C-LIST HEROES",
+    desc: "Regional. Niche. Occasionally useful. STRATA keeps them contracted because it's cheaper than letting them go independent. They know this.",
+    req: "C-List tier or above.",
+    color: "#15803d",
+    slots: [
+      { alias: "[Open]", role: "Regional Hero", char: null, power: null },
+      { alias: "[Open]", role: "Regional Hero", char: null, power: null },
+      { alias: "[Open]", role: "Regional Hero", char: null, power: null },
+    ],
+  },
+  {
+    tier: "D",
+    label: "D-LIST HEROES",
+    desc: "Barely known. Struggling. Some are trying to climb. Some have given up. All of them are one bad headline away from having their contract quietly voided.",
+    req: "D-List tier. Open to any registered ability.",
+    color: "#54545c",
+    slots: [
+      { alias: "[Open]", role: "Contracted Hero", char: null, power: null },
+      { alias: "[Open]", role: "Contracted Hero", char: null, power: null },
+    ],
+  },
+],
+
+groups: [
+  {
+    name: "VANGUARD",
+    type: "STRATA Vanguard",
+    status: "Active",
+    desc: "The absolute top of STRATA's roster. Four slots total. International household names — the face of every press release, every billboard, every sanctioned global response. Their contracts are classified. Their smiles are not. All four members are NPCs.",
+    sanctioned: true,
+    members: [
+      { alias: "PARAGON",     role: "Unit Leader",     char: "Adrian Valaris",  npc: true },
+      { alias: "VIGIL",       role: "Field Operative", char: "Caius Saberis",   npc: true },
+      { alias: "AEGIS",       role: "Field Operative", char: "Margery Orenne",  npc: true },
+      { alias: "SWITCHBOARD", role: "Specialist",      char: "Iris Grimere",    npc: true },
+    ],
+  },
+  {
+    name: "[Open Collective Slot]",
+    type: "Independent Collective",
+    status: "Concept",
+    desc: "Unsanctioned heroes (B-List tier and below) operating outside STRATA's contract system. Propose structure and motive to admin.",
+    members: [],
+  },
+  {
+    name: "[Open Collective Slot]",
+    type: "Independent Collective",
+    status: "Concept",
+    desc: "Unsanctioned heroes (B-List tier and below) operating outside STRATA's contract system. Propose structure and motive to admin.",
+    members: [],
+  },
+],
+
+rules: [
+  { n: "01", title: "Respect everyone.",                     body: "Treat all members with respect in and out of character. Your character can be terrible. You cannot. Harassment, bigotry, or targeted behaviour toward another player is grounds for immediate removal." },
+  { n: "02", title: "No godmodding or powerplaying.",        body: "You do not control another player's character without their explicit consent. This includes dictating outcomes of actions, overriding another character's reactions, or writing their responses for them." },
+  { n: "03", title: "Keep OOC conflict out of IC spaces.",   body: "If you have a problem with another player, take it to admin privately. Do not play out real grievances through your characters. Do not use IC spaces to publicly address OOC issues." },
+  { n: "04", title: "Check the masterlist before applying.", body: "All character concepts must be checked against the registry before submission. Duplicate power expressions and naming conflicts will be caught at review — checking first saves everyone time." },
+  { n: "05", title: "Activity.",                              body: "If you go inactive without notice for more than 30 days, your character slots may be reopened. Let admin know if you need a hiatus — we will hold your spots. Silence will not be assumed to be a hiatus." },
+  { n: "06", title: "Three-day cooldown between applications.", body: "There is no cap on how many characters you can play, but the room is run by a single mod. To keep applications reviewable, please wait three days after submitting one character application before submitting your next. Patience here keeps the queue moving and the reviews thorough." },
+  { n: "07", title: "Power applications require approval.",   body: "All powers must be registered in the Powers tab before play begins. A-List applications require a separate conversation with admin before submission. Do not play an unregistered ability." },
+  { n: "08", title: "Admin decisions are final.",             body: "Disagreements with admin decisions should be raised calmly and in private. Public disputes, callouts, or attempts to rally other players against a ruling will not be entertained and may result in removal." },
+],
+
+curriculumTracks: [
+  {
+    n: "01",
+    label: "TRACK ONE · FOUR YEARS",
+    title: "HEROES",
+    tag: "The weapon. The brand. The scapegoat.",
+    bg: "var(--red)",
+    fg: "#fff",
+    badge: "var(--ink)",
+    badgeFg: "var(--yellow)",
+    stamps: ["WEAPONIZED", "ON CAMERA", "SPONSORED", "EXPENDABLE"],
+    years: [
+      { y: "FRESHMAN",  t: "Intake & Indoctrination",   d: "Power assessment, combat basics, media training 101. All deployment is simulated — supervised arena drills, controlled scenarios, no civilians in the room. You learn to hit things and smile on cue. Most washouts happen this year — STRATA prefers it that way." },
+      { y: "SOPHOMORE", t: "Classification & Branding", d: "Your tier gets locked in. Your alias gets trademarked. Sponsorship scouts start circling. Identity Management lectures begin — public name, working alias, what to do when one leaks into the other. Deployment escalates to civilian-adjacent: shadowing established heroes at low-stakes events, sponsored ribbon-cuttings, charity matches, anywhere the cameras are friendly. You stop being a student and start being an asset with a projected lifetime value." },
+      { y: "JUNIOR",    t: "Live Deployment Trials",    d: "Sanctioned live ops under faculty supervision. Real crisis scenes — property damage, crowd control, hostage incidents at the lower end of the threat ladder. Body counts get logged. PR handles the cleanup. You are told the collateral was unavoidable. You are told this often." },
+      { y: "SENIOR",    t: "Contract & Debut",          d: "You sign. Solo or paired contract deployment, scaled to your tier — A-list seniors get pulled into international response, B-list and below get regional, C-list get specialist niche work. The contract is binding, the language is deliberate, and the exit clauses do not exist. You graduate onto a roster. You are now someone's weapon." },
+    ],
+  },
+  {
+    n: "02",
+    label: "TRACK TWO · FOUR YEARS",
+    title: "SIDEKICKS",
+    tag: "The handler. The cleaner. The fall guy.",
+    bg: "var(--ink)",
+    fg: "var(--yellow)",
+    badge: "var(--yellow)",
+    badgeFg: "var(--ink)",
+    stamps: ["HANDLER", "CLEANER", "FALL GUY", "DENIABLE"],
+    years: [
+      { y: "FRESHMAN",  t: "Intake & Triage",       d: "Field medicine, tactical comms, basic crisis management. All deployment is classroom — mock comms drills, simulated triage scenes, no live partner yet. You learn to keep someone conscious long enough to be photogenic. You learn whose life is worth the paperwork." },
+      { y: "SOPHOMORE", t: "Pairing & Protocol",    d: "Assigned to a Heroes-track sophomore for observation. You co-attend their sponsored low-stakes events — the ribbon-cuttings, the charity matches, the soft-launch appearances. You handle their schedule, not yet their incidents. You learn their tells, their triggers, their tolerances. You are now legally responsible for their behaviour in public." },
+      { y: "JUNIOR",    t: "Spin & Cleanup",        d: "Rotations through real STRATA PR, legal, and incident-response teams. You draft press releases for the graduating cohort's first live ops. You sit in on actual after-action reviews. You learn which details survive the final cut, and which lawyers signed off on what." },
+      { y: "SENIOR",    t: "Contract & Assignment", d: "You sign the same contract. Your name goes on the same roster, two columns over, paired with the hero you've been shadowing since sophomore year. You go where they go. You write what their team needs written. When your hero finally does something the firm can't spin, your signature is on the incident report." },
+    ],
+  },
+],
+
+tabs: [
+  { id: "rules",      label: "Rules",         n: "01" },
+  { id: "houses",     label: "Lore",          n: "02" },
+  { id: "faculty",    label: "Faculty",       n: "03" },
+  { id: "students",   label: "Students",      n: "04" },
+  { id: "clubs",      label: "Clubs",         n: "05" },
+  { id: "strata",     label: "STRATA",        n: "06" },
+  { id: "outside",    label: "Outside",       n: "07" },
+  { id: "powers",     label: "Powers",        n: "08" },
+  { id: "join",       label: "Join Now",      n: "09" },
+],
+
+};
+
