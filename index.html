@@ -8730,6 +8730,188 @@ tbody td:has(.empty-state-block){ padding:12px 16px !important; }
   text-shadow:none !important;
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 8 — POWERS REGISTRY + FACULTY COURSE ARC + STUDENTS EMPTY STATE   ║
+   ║  Force-overrides for legacy color:var(--paper) / cream bg rules.        ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* Powers Registry rows — original CSS used color:var(--paper)/--paper-3 with
+   !important (was near-white in light theme; reads as black-on-black now).
+   Use very high specificity so we beat both the original and any inheritance. */
+.preg-tbl tbody tr td.preg-col-char,
+.preg-tbl tbody tr td.preg-col-char a,
+.preg-tbl tbody tr td.preg-col-char .clink,
+.preg-tbl tbody tr td.preg-col-char span{
+  color:var(--text) !important;
+  font-weight:600 !important;
+  font-size:14.5px !important;
+}
+.preg-tbl tbody tr td.preg-col-alias,
+.preg-tbl tbody tr td.preg-col-alias .preg-alias{
+  color:var(--gold-bright) !important;
+  font-family:var(--display) !important;
+  letter-spacing:.04em !important;
+  font-size:14px !important;
+  font-weight:400 !important;
+}
+.preg-tbl tbody tr td.preg-col-power{
+  color:var(--text-mid) !important;
+  font-weight:500 !important;
+  font-size:13.5px !important;
+  line-height:1.55 !important;
+}
+.preg-tbl tbody tr td.preg-col-power.preg-na,
+.preg-tbl tbody tr td.preg-col-power span.preg-na{
+  color:var(--text-low) !important;
+  font-style:italic;
+}
+.preg-row.is-clickable:hover td,
+.preg-row.is-open td{
+  background:rgba(212,168,74,.06) !important;
+}
+
+/* Faculty Registry hint banner — yellow bg + dark text was a light-theme
+   banner. Convert to gold-tinted dark surface with gold text. */
+.freg-hint{
+  background:linear-gradient(180deg, rgba(212,168,74,.10), rgba(212,168,74,.04)) !important;
+  color:var(--gold-bright) !important;
+  border-top:1px solid rgba(212,168,74,.3) !important;
+  border-bottom:1px solid rgba(212,168,74,.3) !important;
+  padding:14px 32px !important;
+  font-family:var(--mono) !important;
+  font-size:11.5px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+}
+
+/* Faculty Registry expanded course arc panel — was cream bg with dark text */
+.freg-tbl tbody tr.freg-detail-row td{
+  background:rgba(212,168,74,.04) !important;
+  border-top:1px solid rgba(212,168,74,.18) !important;
+  border-bottom:1px solid rgba(212,168,74,.18) !important;
+  padding:18px 24px !important;
+}
+.freg-detail-label{
+  color:var(--gold) !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.6px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+}
+.freg-arc-year{
+  background:rgba(212,168,74,.14) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.4) !important;
+  border-radius:4px !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.4px !important;
+  font-weight:700 !important;
+  padding:4px 8px !important;
+  text-align:center !important;
+}
+.freg-arc-title{
+  color:var(--text) !important;
+  font-family:var(--sans) !important;
+  font-size:13.5px !important;
+  font-weight:600 !important;
+  letter-spacing:.02em !important;
+  text-transform:none !important;
+}
+
+/* Faculty Registry "VIEW ▾" buttons — the small chip on each row.
+   Original used white bg + ink text; map to gold ghost. */
+.freg-view-btn{
+  background:transparent !important;
+  color:var(--gold) !important;
+  border:1px solid rgba(212,168,74,.4) !important;
+  border-radius:6px !important;
+  padding:5px 10px !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.4px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+}
+.freg-row.is-clickable:hover .freg-view-btn,
+.freg-row.is-open .freg-view-btn{
+  background:rgba(212,168,74,.14) !important;
+  color:var(--gold-bright) !important;
+  border-color:var(--gold) !important;
+}
+
+/* Faculty Registry table cells generally */
+.freg-tbl thead th{
+  background:rgba(255,255,255,.02) !important;
+  color:var(--gold) !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+}
+.freg-tbl tbody td{
+  color:var(--text) !important;
+  background:transparent !important;
+  border-bottom:1px solid var(--rule-faint) !important;
+  font-size:14px !important;
+}
+.freg-row.is-clickable:hover td,
+.freg-row.is-open td{
+  background:rgba(212,168,74,.06) !important;
+}
+
+/* Students empty state — when there are no rows, the empty cell takes a
+   colSpan=7 row but the table headers and outer table wrapper still show.
+   Make the empty state cell occupy a clear, centred panel and dim out the
+   surrounding empty headers. */
+.tw:has(.empty-state-block){
+  background:transparent !important;
+  border:none !important;
+}
+.tw:has(.empty-state-block) thead{
+  display:none !important;
+}
+.tw:has(.empty-state-block) tbody td{
+  border:none !important;
+  padding:0 !important;
+}
+.empty-state-block{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:18px !important;
+  padding:64px 32px !important;
+  margin:24px auto !important;
+  max-width:520px;
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px dashed var(--rule-soft) !important;
+  border-radius:14px !important;
+  text-align:center !important;
+}
+.empty-state-block .empty{
+  color:var(--text) !important;
+  font-family:var(--mono) !important;
+  font-size:13px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  opacity:1 !important;
+}
+.empty-state-block .empty::before{
+  width:9px !important;
+  height:9px !important;
+  background:var(--gold) !important;
+  margin-right:8px;
+}
+.empty-state-block .empty-cta{
+  margin-top:4px;
+}
+
 </style>
 </head>
 <body>
