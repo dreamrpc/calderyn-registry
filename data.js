@@ -1109,7 +1109,7 @@ curriculumTracks: [
 
 tabs: [
   { id: "rules",      label: "Rules",         n: "01" },
-  { id: "houses",     label: "Lore",          n: "02" },
+  { id: "lore",       label: "Lore",          n: "02" },
   { id: "faculty",    label: "Faculty",       n: "03" },
   { id: "students",   label: "Students",      n: "04" },
   { id: "clubs",      label: "Clubs",         n: "05" },
