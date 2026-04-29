@@ -6592,6 +6592,283 @@ button, .btn{
 }
 /* End STEP 6b */
 
+/* === STEP 7 — POLISH PASS: FORM, BANNERS, MARKS, SUBHEADS, BADGES === */
+
+/* ── 7.1 JOIN FORM: kill cream, dark slabs, gold focus rings ── */
+.join-fieldset {
+  background: linear-gradient(180deg,#0d1118,#0a0d13) !important;
+  background-color: #0d1118 !important;
+  border: 1px solid rgba(201,161,74,.18) !important;
+  border-radius: 0 !important;
+  color: #ede4c8 !important;
+  padding: 32px !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.4) inset, 0 12px 30px -16px rgba(0,0,0,.7) !important;
+}
+.join-field-label {
+  color: #c9a14a !important;
+  font-family: Oswald, sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: .12em !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  margin-bottom: 6px !important;
+}
+.join-field-label .label-hint, .join-field-label small, .join-field-label .hint {
+  color: rgba(237,228,200,.45) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  margin-left: 8px !important;
+}
+.join-input, .join-select, .join-textarea {
+  background: rgba(0,0,0,.35) !important;
+  background-color: rgba(0,0,0,.35) !important;
+  border: 1px solid rgba(201,161,74,.22) !important;
+  border-radius: 0 !important;
+  color: #ede4c8 !important;
+  padding: 12px 14px !important;
+  font-family: Inter, system-ui, sans-serif !important;
+  font-size: 14px !important;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.join-input:focus, .join-select:focus, .join-textarea:focus {
+  outline: none !important;
+  border-color: #c9a14a !important;
+  box-shadow: 0 0 0 1px #c9a14a inset, 0 0 12px -2px rgba(201,161,74,.5) !important;
+}
+.join-input::placeholder, .join-textarea::placeholder {
+  color: rgba(237,228,200,.32) !important;
+}
+.join-input:-webkit-autofill, .join-input:-webkit-autofill:focus,
+.join-textarea:-webkit-autofill {
+  -webkit-text-fill-color: #ede4c8 !important;
+  -webkit-box-shadow: 0 0 0 1000px rgba(0,0,0,.5) inset !important;
+  caret-color: #ede4c8 !important;
+}
+.join-checkbox {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  background: rgba(201,161,74,.06) !important;
+  border: 1px solid rgba(201,161,74,.22) !important;
+  padding: 14px 16px !important;
+  color: rgba(237,228,200,.85) !important;
+  font-size: 13px !important;
+}
+.join-checkbox input[type=checkbox] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 16px !important;
+  height: 16px !important;
+  border: 1px solid rgba(201,161,74,.55) !important;
+  background: rgba(0,0,0,.4) !important;
+  margin-top: 2px !important;
+  position: relative !important;
+  cursor: pointer !important;
+  border-radius: 0 !important;
+}
+.join-checkbox input[type=checkbox]:checked {
+  background: #c9a14a !important;
+  border-color: #c9a14a !important;
+}
+.join-checkbox input[type=checkbox]:checked::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 4px !important; top: 0px !important;
+  width: 5px !important; height: 10px !important;
+  border-right: 2px solid #0c0e14 !important;
+  border-bottom: 2px solid #0c0e14 !important;
+  transform: rotate(45deg) !important;
+}
+.join-submit {
+  background: linear-gradient(180deg, #c9a14a, #a8862e) !important;
+  background-color: #c9a14a !important;
+  color: #0c0e14 !important;
+  border: 1px solid #c9a14a !important;
+  border-radius: 0 !important;
+  padding: 14px 28px !important;
+  font-family: Oswald, sans-serif !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .14em !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px) !important;
+  transition: background .15s ease, box-shadow .15s ease;
+}
+.join-submit:hover {
+  background: linear-gradient(180deg, #d4ac56, #b8923a) !important;
+  box-shadow: 0 0 22px -4px rgba(201,161,74,.6) !important;
+}
+.join-submit:disabled {
+  background: rgba(201,161,74,.18) !important;
+  color: rgba(201,161,74,.55) !important;
+  border-color: rgba(201,161,74,.3) !important;
+  cursor: not-allowed !important;
+}
+.join-cancel {
+  background: transparent !important;
+  border: 1px solid rgba(201,161,74,.32) !important;
+  border-radius: 0 !important;
+  color: rgba(237,228,200,.78) !important;
+  padding: 13px 22px !important;
+  font-family: Oswald, sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: .12em !important;
+  font-size: 12px !important;
+}
+.join-cancel:hover {
+  border-color: rgba(201,161,74,.6) !important;
+  color: #ede4c8 !important;
+}
+.join-missing, [class*="missing-fields"], .join-fieldset ~ * [class*="missing"] {
+  color: #b13a3a !important;
+  font-family: Oswald, sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: .14em !important;
+  font-size: 11px !important;
+}
+
+/* ── 7.2 LORE: tighten loud full-width "PUBLIC RECORD" banner ── */
+.lore [class*="banner"], .lore [class*="bookmark"], .lore [class*="orientation"],
+.lore .lore-banner, .lore .lore-section-banner {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 0 20px 0 !important;
+  display: inline-block !important;
+  width: auto !important;
+}
+.lore [class*="banner"] > *:first-child, .lore [class*="bookmark"] > *:first-child {
+  display: inline-block !important;
+  background: rgba(201,161,74,.12) !important;
+  color: #c9a14a !important;
+  border: 1px solid rgba(201,161,74,.45) !important;
+  padding: 4px 10px !important;
+  font-family: Oswald, sans-serif !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: .14em !important;
+  font-weight: 500 !important;
+}
+
+/* ── 7.3 LORE: inline mark highlights (gold-stroke underline, not cream blocks) ── */
+.lore mark, .lore .lore-mark {
+  background: rgba(201,161,74,.14) !important;
+  color: #ede4c8 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(201,161,74,.55) !important;
+  padding: 0 .25em !important;
+  text-shadow: none !important;
+}
+
+/* ── 7.4 LORE: subhead small caps lifted to gold tracking ── */
+.lore [class*="kicker"], .lore [class*="eyebrow"], .lore .lore-kicker, .lore .section-kicker {
+  color: #c9a14a !important;
+  font-family: Oswald, sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: .14em !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  border-bottom: 1px solid rgba(201,161,74,.4) !important;
+  padding-bottom: 4px !important;
+  display: inline-block !important;
+}
+
+/* ── 7.5 FACULTY: track tags (HEROES wine, SIDEKICKS, SHARED) → unified hairline pill language ── */
+.curr [class*="track-tag"], .curr [class*="course-tag"], .curr .heroes-tag, .curr .sidekicks-tag, .curr .shared-tag,
+.curr .pill, .curr .badge, .curr [class*="-pill"], .curr [class*="-badge"] {
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 2px 8px !important;
+  font-family: Oswald, sans-serif !important;
+  font-size: 10px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+}
+/* Wine HEROES tag */
+.curr [class*="heroes"], .curr .tag-heroes, .curr .track-heroes {
+  background: rgba(177,58,58,.18) !important;
+  color: #e57373 !important;
+  border: 1px solid rgba(177,58,58,.5) !important;
+}
+/* SIDEKICKS tag */
+.curr [class*="sidekicks"], .curr .tag-sidekicks, .curr .track-sidekicks {
+  background: rgba(91,139,214,.14) !important;
+  color: #8db6e0 !important;
+  border: 1px solid rgba(91,139,214,.45) !important;
+}
+/* SHARED tag */
+.curr [class*="shared"], .curr .tag-shared, .curr .track-shared {
+  background: rgba(201,161,74,.16) !important;
+  color: #c9a14a !important;
+  border: 1px solid rgba(201,161,74,.45) !important;
+}
+
+/* ── 7.6 FACULTY: VIEW dropdown buttons → outline gold pill ── */
+.curr [class*="view"], .curr .view-btn, .curr .row-view, .curr .class-view, .curr button[class*="View"] {
+  background: transparent !important;
+  color: #c9a14a !important;
+  border: 1px solid rgba(201,161,74,.4) !important;
+  border-radius: 0 !important;
+  padding: 4px 10px !important;
+  font-family: Oswald, sans-serif !important;
+  font-size: 10px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+}
+.curr [class*="view"]:hover {
+  background: rgba(201,161,74,.12) !important;
+  border-color: #c9a14a !important;
+}
+
+/* ── 7.7 FACULTY: year-track band — tighten ── */
+.curr [class*="year-row"], .curr [class*="years"], .curr .curr-years {
+  background: rgba(0,0,0,.25) !important;
+  border-bottom: 1px solid rgba(201,161,74,.18) !important;
+}
+
+/* ── 7.8 FOOTER: lift the 'STRATA INTERNAL' meta line from dim blue to muted gold ── */
+.footer-meta, [class*="footer-meta"] {
+  color: rgba(201,161,74,.48) !important;
+}
+.footer-meta strong, [class*="footer-meta"] strong {
+  color: #c9a14a !important;
+}
+[class*="confidential"], .confidential-stamp, .footer-stamp {
+  color: rgba(201,161,74,.42) !important;
+  border-color: rgba(201,161,74,.32) !important;
+}
+
+/* ── 7.9 GLOBAL: kill any remaining ink-on-dark text traps ── */
+.lore [style*="color: var(--ink)"], .curr [style*="color: var(--ink)"],
+.strc [style*="color: var(--ink)"], .pg-guide [style*="color: var(--ink)"],
+.orgs [style*="color: var(--ink)"], .join [style*="color: var(--ink)"],
+.lore .ink-text, .curr .ink-text, .strc .ink-text {
+  color: #ede4c8 !important;
+}
+
+/* ── 7.10 GLOBAL: remove any rounded corners we missed ── */
+.lore button, .curr button, .strc button, .pg-guide button, .orgs button, .join button,
+.lore input, .curr input, .strc input, .pg-guide input, .orgs input,
+.lore select, .curr select, .strc select, .pg-guide select, .orgs select,
+.lore .pill, .curr .pill, .strc .pill, .pg-guide .pill, .orgs .pill, .join .pill {
+  border-radius: 0 !important;
+}
+
+/* ── 7.11 STRATA: large empty space below role list — collapse if section is short ── */
+.strc {
+  min-height: 0 !important;
+}
+
+/* End STEP 7 */
+
+
 
 
 </style>
