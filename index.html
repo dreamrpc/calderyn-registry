@@ -2373,6 +2373,91 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 
 /* ════════════════════════════════════════════════════════════════════════
+   POWERED REGISTRY — UNIFIED DARK PALETTE OVERRIDES (Commit E)
+   Re-skins the registry to match the rest of the site (Rules / Lore / etc):
+   ink-black panels, red rule borders, white-paper text, no comic primaries.
+   ════════════════════════════════════════════════════════════════════════ */
+.preg-hint{
+  background:var(--ink-2);
+  color:var(--paper-3);
+  border-bottom:2px solid var(--red);
+  padding:12px 32px;
+}
+.preg-toolbar{
+  background:var(--ink);
+  border-bottom:2px solid var(--red);
+  color:var(--paper);
+}
+.preg-pill{
+  background:var(--ink-2);
+  color:var(--paper-3);
+  border-color:var(--ink-soft);
+}
+.preg-pill.is-on,
+.preg-pill[aria-pressed="true"]{
+  background:var(--red);
+  color:var(--paper);
+  border-color:var(--red);
+}
+.preg-search{
+  background:var(--ink-2);
+  color:var(--paper);
+  border-color:var(--ink-soft);
+}
+.preg-search::placeholder{ color:var(--faint); }
+.preg-count{ color:var(--faint); }
+.preg-group-hd{
+  background:var(--ink) !important;
+  color:var(--paper) !important;
+  border-top:3px solid var(--red);
+  border-bottom:1px solid var(--ink-3);
+}
+.preg-group-name{ color:var(--paper); }
+.preg-group-count{ color:var(--faint); }
+.preg-tbl-wrap{ background:var(--ink-2); }
+.preg-tbl{ table-layout:auto; }
+.preg-tbl thead th{
+  background:var(--ink-3);
+  color:var(--faint);
+  border-bottom:2px solid var(--red);
+}
+.preg-tbl tbody td{
+  background:var(--ink-2);
+  color:var(--paper-3);
+  border-bottom:1px solid var(--ink-3);
+}
+.preg-col-char{
+  color:var(--paper);
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+  word-break:normal;
+  min-width:200px;
+}
+.preg-col-power{ white-space:normal; overflow:visible; text-overflow:clip; }
+.preg-col-alias{ color:var(--paper-3); }
+.preg-alias{ color:var(--paper); }
+.preg-row.is-clickable:hover td{ background:var(--ink-soft); }
+.preg-row.is-open td{ background:var(--ink-3); border-bottom-color:transparent; }
+.preg-detail-row td{
+  background:var(--ink-3) !important;
+  border-bottom:2px solid var(--red) !important;
+}
+.preg-detail-label{ color:var(--faint); }
+.preg-detail-text{ color:var(--paper-3); }
+.preg-view-btn{
+  background:var(--ink);
+  color:var(--paper);
+  border-color:var(--ink-soft);
+}
+.preg-view-btn:hover{
+  background:var(--red);
+  color:var(--paper);
+  border-color:var(--red);
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
    STRATA HERO LISTS + GROUPS
    ════════════════════════════════════════════════════════════════════════ */
 .hero-list{ border-bottom:3px solid var(--ink); }
