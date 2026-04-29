@@ -9383,6 +9383,223 @@ p, li, dd, dt{
   font-weight:500;
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 12 — TYPOGRAPHY OVERHAUL: muted status tags, no colour clashes    ║
+   ║  Kill saturated solid-colour blocks site-wide. Coloured accent → bar.   ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* Status-card tag (POWER_STATUSES) — was solid saturated blocks per data.js
+   bg colour. Now: unified muted dark surface, coloured 4px left bar based
+   on the inline bg, themed text colour per status. !important required to
+   override the inline style="background:#xxx". */
+.status-card-tag{
+  background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:8px !important;
+  padding:14px 18px 14px 22px !important;
+  font-family:var(--sans) !important;
+  font-size:17px !important;
+  font-weight:700 !important;
+  letter-spacing:.04em !important;
+  text-shadow:none !important;
+  position:relative !important;
+  overflow:hidden !important;
+  color:var(--text) !important;
+  display:flex !important;
+  align-items:center !important;
+}
+.status-card-tag span{
+  color:var(--text) !important;
+  text-shadow:none !important;
+}
+.status-card-tag::before{
+  content:"" !important;
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:4px;
+  background:var(--gold);
+}
+/* Per-status accent bar + themed text from inline bg attribute */
+.status-card-tag[style*="background:#1e40af"]::before,
+.status-card-tag[style*="background: #1e40af"]::before{ background:#5b85d6; }
+.status-card-tag[style*="background:#d4901a"]::before,
+.status-card-tag[style*="background: #d4901a"]::before{ background:#e8b14a; }
+.status-card-tag[style*="background:#e31b23"]::before,
+.status-card-tag[style*="background: #e31b23"]::before{ background:#e4324a; }
+.status-card-tag[style*="background:#15803d"]::before,
+.status-card-tag[style*="background: #15803d"]::before{ background:#4ab866; }
+.status-card-tag[style*="background:#0e0e10"]::before,
+.status-card-tag[style*="background: #0e0e10"]::before{ background:#797571; }
+.status-card-tag[style*="background:#54545c"]::before,
+.status-card-tag[style*="background: #54545c"]::before{ background:#a8a298; }
+
+.status-card-tag[style*="background:#1e40af"] span,
+.status-card-tag[style*="background: #1e40af"] span{ color:#b8cdf2 !important; }
+.status-card-tag[style*="background:#d4901a"] span,
+.status-card-tag[style*="background: #d4901a"] span{ color:#f1cd72 !important; }
+.status-card-tag[style*="background:#e31b23"] span,
+.status-card-tag[style*="background: #e31b23"] span{ color:#ffd9dd !important; }
+.status-card-tag[style*="background:#15803d"] span,
+.status-card-tag[style*="background: #15803d"] span{ color:#b3e6c5 !important; }
+.status-card-tag[style*="background:#0e0e10"] span,
+.status-card-tag[style*="background: #0e0e10"] span{ color:var(--silver-bright) !important; }
+.status-card-tag[style*="background:#54545c"] span,
+.status-card-tag[style*="background: #54545c"] span{ color:var(--text) !important; }
+
+/* Status-card surrounding card */
+.status-card{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:12px !important;
+  padding:18px 20px !important;
+  color:var(--text);
+}
+.status-card-num{
+  color:var(--gold) !important;
+  font-family:var(--mono) !important;
+  font-size:11.5px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  margin-bottom:10px !important;
+}
+.status-card-desc{
+  color:var(--text-mid) !important;
+  font-size:14.5px !important;
+  line-height:1.7 !important;
+  margin-top:12px !important;
+}
+
+/* Powerball team headers (kb-team-hd) — same treatment as status tags */
+.kb-team-hd{
+  background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02)) !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  position:relative;
+  color:var(--text) !important;
+  text-shadow:none !important;
+}
+.kb-team-hd *{
+  color:var(--text) !important;
+  text-shadow:none !important;
+}
+.kb-team-hd::before{
+  content:"";
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:4px;
+}
+.kb-team-hd[style*="background:#c41a1a"]::before,
+.kb-team-hd[style*="background: #c41a1a"]::before{ background:#e63946; }
+.kb-team-hd[style*="background:#d4901a"]::before,
+.kb-team-hd[style*="background: #d4901a"]::before{ background:#e8b14a; }
+.kb-team-hd[style*="background:#15803d"]::before,
+.kb-team-hd[style*="background: #15803d"]::before{ background:#4ab866; }
+.kb-team-hd[style*="background:#1e40af"]::before,
+.kb-team-hd[style*="background: #1e40af"]::before{ background:#5b85d6; }
+
+/* Club-hd + club-side-hd — same treatment so brand colours don't clash */
+.club-hd, .club-side-hd{
+  background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02)) !important;
+  position:relative;
+  color:var(--text) !important;
+  text-shadow:none !important;
+}
+.club-hd *, .club-side-hd *{
+  color:var(--text) !important;
+  text-shadow:none !important;
+}
+.club-hd::before, .club-side-hd::before{
+  content:"";
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:4px;
+}
+/* Map club bg colours to accent bars */
+.club-hd[style*="background:#c41a1a"]::before,
+.club-hd[style*="background: #c41a1a"]::before,
+.club-side-hd[style*="background:#c41a1a"]::before,
+.club-side-hd[style*="background: #c41a1a"]::before{ background:#e63946; }
+.club-hd[style*="background:#d4901a"]::before,
+.club-hd[style*="background: #d4901a"]::before,
+.club-side-hd[style*="background:#d4901a"]::before,
+.club-side-hd[style*="background: #d4901a"]::before{ background:#e8b14a; }
+.club-hd[style*="background:#15803d"]::before,
+.club-hd[style*="background: #15803d"]::before,
+.club-side-hd[style*="background:#15803d"]::before,
+.club-side-hd[style*="background: #15803d"]::before{ background:#4ab866; }
+.club-hd[style*="background:#1e40af"]::before,
+.club-hd[style*="background: #1e40af"]::before,
+.club-side-hd[style*="background:#1e40af"]::before,
+.club-side-hd[style*="background: #1e40af"]::before{ background:#5b85d6; }
+.club-hd[style*="background:#7a1a4a"]::before,
+.club-hd[style*="background: #7a1a4a"]::before,
+.club-side-hd[style*="background:#7a1a4a"]::before,
+.club-side-hd[style*="background: #7a1a4a"]::before{ background:#c44a8a; }
+.club-hd[style*="background:#2c1d4a"]::before,
+.club-hd[style*="background: #2c1d4a"]::before,
+.club-side-hd[style*="background:#2c1d4a"]::before,
+.club-side-hd[style*="background: #2c1d4a"]::before{ background:#7a5dc4; }
+
+/* TYPOGRAPHY OVERHAUL — site-wide */
+
+/* Drop Bebas Neue display from any small/label-style usage; switch to Inter
+   semibold so caps don't read as a different visual register from body. */
+.club-name{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:24px !important;
+  letter-spacing:-.005em !important;
+  text-transform:none !important;
+}
+.club-side-name{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:30px !important;
+  letter-spacing:-.01em !important;
+  text-transform:none !important;
+}
+.kb-team-hd{
+  font-family:var(--sans) !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  letter-spacing:.06em !important;
+  text-transform:uppercase !important;
+}
+.lore-vg-alias, .lore-house-name{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  letter-spacing:-.01em !important;
+  text-transform:none !important;
+}
+.hero-list-letter{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:64px !important;
+  letter-spacing:-.02em !important;
+}
+.hero-list-label{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:22px !important;
+  letter-spacing:-.005em !important;
+  text-transform:none !important;
+}
+
+/* All "PageHead" titles already use Fraunces — no change. */
+
+/* Make sure ANY uppercase-letter-spaced display class still has font:Inter
+   semibold rather than Bebas Neue. */
+.preg-alias, .stage-name{
+  font-family:var(--sans) !important;
+  font-weight:600 !important;
+  letter-spacing:.04em !important;
+  font-size:13px !important;
+}
+
+/* Body inherits brighter text */
+body, .pg, .page{
+  color:var(--text) !important;
+}
+
 </style>
 </head>
 <body>
