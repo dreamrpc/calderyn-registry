@@ -8002,6 +8002,330 @@ tbody td:has(.empty-state-block){ padding:12px 16px !important; }
   color:var(--text-mid) !important;
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 6 — CURRICULUM REDESIGN (streamlined, single-list layout)         ║
+   ║  Year tabs → year head → toolbar → unified list → footnote.             ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+.curr{
+  max-width:1100px !important;
+  margin:0 auto !important;
+  padding:24px 32px 48px !important;
+  color:var(--text);
+}
+
+/* Year tab strip */
+.curr-yeartabs{
+  display:grid !important;
+  grid-template-columns:repeat(4, 1fr) !important;
+  gap:8px !important;
+  padding:0 !important;
+  margin-bottom:32px;
+  background:transparent !important;
+  border:none !important;
+}
+.curr-yeartab{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  gap:4px !important;
+  padding:14px 18px !important;
+  background:rgba(255,255,255,.025) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:10px !important;
+  color:var(--text-mid) !important;
+  cursor:pointer;
+  transition:all var(--dur) var(--ease);
+  text-align:left !important;
+}
+.curr-yeartab:hover{ border-color:rgba(212,168,74,.3) !important; color:var(--text) !important; }
+.curr-yeartab.on{
+  background:rgba(212,168,74,.08) !important;
+  border-color:var(--gold) !important;
+  color:var(--text) !important;
+  box-shadow:0 0 0 1px var(--gold);
+}
+.curr-yeartab-num{
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  color:var(--gold) !important;
+}
+.curr-yeartab-label{
+  font-family:var(--sans) !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  color:inherit !important;
+  letter-spacing:0 !important;
+}
+
+/* Year head */
+.curr-yearhead{
+  margin-bottom:24px;
+  padding-bottom:24px;
+  border-bottom:1px solid var(--rule-soft);
+}
+.curr-yearhead-eyebrow{
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  font-weight:700;
+  color:var(--gold);
+  margin-bottom:10px;
+}
+.curr-yearhead-title{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:36px;
+  letter-spacing:-.018em;
+  line-height:1.1;
+  color:var(--text);
+  margin:0 0 14px;
+  max-width:680px;
+  text-wrap:balance;
+}
+.curr-yearhead-tracks{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.curr-yearhead-line{
+  color:var(--text-mid);
+  font-size:14px;
+  line-height:1.6;
+  margin:0;
+  display:flex;
+  gap:10px;
+  align-items:baseline;
+}
+.curr-yearhead-tag{
+  font-family:var(--mono);
+  font-size:9.5px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  font-weight:700;
+  padding:3px 8px;
+  border-radius:4px;
+  border:1px solid var(--rule-soft);
+  flex-shrink:0;
+}
+.curr-yearhead-tag.t-hero{ color:var(--red-bright); border-color:rgba(228,50,74,.4); }
+.curr-yearhead-tag.t-sidekick{ color:var(--gold-bright); border-color:rgba(212,168,74,.4); }
+
+/* Toolbar — counts + filter pills */
+.curr-toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.curr-counts{
+  font-family:var(--sans);
+  font-size:13px;
+  color:var(--text-mid);
+  font-weight:500;
+}
+.curr-counts strong{ color:var(--text); font-weight:700; }
+.curr-counts-sep{ color:var(--text-low); margin:0 6px; }
+.curr-filter{ display:flex; gap:6px; flex-wrap:wrap; }
+.curr-filter-pill{
+  background:rgba(255,255,255,.03) !important;
+  color:var(--text-mid) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:999px !important;
+  padding:6px 14px !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.5px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  cursor:pointer;
+  transition:all var(--dur) var(--ease);
+  min-height:auto !important;
+}
+.curr-filter-pill:hover{ color:var(--text) !important; border-color:rgba(212,168,74,.3) !important; }
+.curr-filter-pill.on{
+  background:rgba(212,168,74,.12) !important;
+  color:var(--gold-bright) !important;
+  border-color:var(--gold) !important;
+}
+
+/* Unified class list */
+.curr-list{
+  list-style:none !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.curr-row{
+  background:rgba(255,255,255,.02);
+  border:1px solid var(--rule-soft);
+  border-radius:10px;
+  overflow:hidden;
+  transition:border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.curr-row:hover{ border-color:rgba(212,168,74,.25); background:rgba(212,168,74,.03); }
+.curr-row.is-open{ border-color:rgba(212,168,74,.4); background:rgba(212,168,74,.05); }
+.curr-row-empty{
+  padding:24px;
+  text-align:center;
+  color:var(--text-low);
+  font-style:italic;
+  background:rgba(255,255,255,.02);
+  border:1px dashed var(--rule-soft);
+  border-radius:10px;
+}
+.curr-row-btn{
+  display:grid !important;
+  grid-template-columns:1fr auto auto auto !important;
+  gap:14px !important;
+  align-items:center !important;
+  width:100% !important;
+  padding:14px 18px !important;
+  background:transparent !important;
+  border:none !important;
+  cursor:pointer;
+  text-align:left;
+  font-family:var(--sans) !important;
+  color:var(--text) !important;
+  min-height:auto !important;
+  border-radius:0 !important;
+  letter-spacing:0 !important;
+  text-transform:none !important;
+}
+.curr-row-btn:disabled{ cursor:default; }
+.curr-row-btn:hover:not(:disabled) .curr-row-name{ color:var(--gold-bright); }
+.curr-row-name{
+  font-family:var(--sans) !important;
+  font-weight:600 !important;
+  font-size:14.5px !important;
+  color:var(--text) !important;
+  text-transform:none !important;
+  letter-spacing:0 !important;
+  transition:color var(--dur) var(--ease);
+  min-width:0;
+}
+.curr-row-kind{
+  font-family:var(--mono) !important;
+  font-size:9.5px !important;
+  letter-spacing:1.4px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  padding:3px 9px !important;
+  border-radius:4px !important;
+  border:1px solid !important;
+  white-space:nowrap;
+}
+.curr-row-kind.is-required{
+  color:var(--gold-bright) !important;
+  border-color:rgba(212,168,74,.4) !important;
+  background:rgba(212,168,74,.05) !important;
+}
+.curr-row-kind.is-elective{
+  color:var(--silver) !important;
+  border-color:var(--rule-soft) !important;
+  background:rgba(255,255,255,.02) !important;
+}
+.curr-row-track{
+  font-family:var(--mono) !important;
+  font-size:9.5px !important;
+  letter-spacing:1.4px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  padding:3px 9px !important;
+  border-radius:4px !important;
+  border:1px solid !important;
+  white-space:nowrap;
+}
+.curr-row-track.t-hero{
+  color:var(--red-bright) !important;
+  border-color:rgba(228,50,74,.4) !important;
+  background:rgba(228,50,74,.05) !important;
+}
+.curr-row-track.t-sidekick{
+  color:var(--gold-bright) !important;
+  border-color:rgba(212,168,74,.4) !important;
+  background:rgba(212,168,74,.05) !important;
+}
+.curr-row-track.t-shared{
+  color:var(--silver-bright) !important;
+  border-color:var(--rule-soft) !important;
+  background:rgba(201,205,211,.05) !important;
+}
+.curr-row-toggle{
+  font-family:var(--mono) !important;
+  font-size:18px !important;
+  font-weight:400 !important;
+  color:var(--gold) !important;
+  width:24px;
+  text-align:center;
+  line-height:1;
+}
+.curr-row.has-desc .curr-row-name::after{
+  content:"";
+  display:inline-block;
+  width:6px; height:6px;
+  margin-left:8px;
+  border-radius:50%;
+  background:rgba(212,168,74,.4);
+  vertical-align:2px;
+  opacity:.5;
+}
+.curr-row-desc{
+  padding:0 18px 16px 18px !important;
+  color:var(--text-mid) !important;
+  font-size:13.5px !important;
+  line-height:1.7 !important;
+  background:rgba(0,0,0,.15);
+  border-top:1px solid var(--rule-faint);
+  margin-top:0;
+}
+
+/* Footnote — quiet italic, no big stamp */
+.curr-finenote{
+  margin-top:32px;
+  padding:18px 22px;
+  font-family:var(--sans);
+  font-size:13.5px;
+  line-height:1.7;
+  color:var(--text-low);
+  font-style:italic;
+  border-left:2px solid var(--rule-soft);
+  background:transparent;
+  max-width:780px;
+}
+.curr-finenote-hit{
+  color:var(--text-mid);
+  font-style:italic;
+  font-weight:500;
+}
+
+@media (max-width:720px){
+  .curr{ padding:16px 18px 32px !important; }
+  .curr-yeartabs{ grid-template-columns:repeat(2, 1fr) !important; }
+  .curr-yearhead-title{ font-size:28px; }
+  .curr-row-btn{ grid-template-columns:1fr auto !important; gap:8px !important; padding:12px 14px !important; }
+  .curr-row-track{ display:none !important; }
+  .curr-row-toggle{ grid-column:2; grid-row:1; }
+  .curr-row-kind{ grid-column:1/-1; justify-self:start; margin-top:4px; }
+}
+
+/* Override earlier wave 4 curriculum styles that built the multi-card layout
+   we just removed (old .curr-overview, .curr-tracks, .curr-classes-section). */
+.curr-overview, .curr-tracks, .curr-track,
+.curr-classes, .curr-classes-section, .curr-classes-hd,
+.curr-classes-tag, .curr-classes-blurb, .curr-classes-list,
+.curr-class-empty, .fine-print, .fine-print-stamp, .fine-print-text{
+  /* harmless reset — these elements no longer render */
+  all:unset;
+}
+
 </style>
 </head>
 <body>

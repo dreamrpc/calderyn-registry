@@ -394,6 +394,7 @@ function RulesTab(){
 function CurriculumView(){
   const tracks = D.curriculumTracks;
   const [yearIdx, setYearIdx] = useState(0);
+  const [filter, setFilter] = useState("all"); // all / hero / sidekick / shared
 
   const YEAR_KEY = { FR: 0, SO: 1, JR: 2, SR: 3 };
   const SECTION_OF = {};
@@ -435,10 +436,10 @@ function CurriculumView(){
   }
 
   const YEAR_TABS = [
-    { idx: 0, key: "FR", label: "Freshman",  short: "FR · Yr 1" },
-    { idx: 1, key: "SO", label: "Sophomore", short: "SO · Yr 2" },
-    { idx: 2, key: "JR", label: "Junior",    short: "JR · Yr 3" },
-    { idx: 3, key: "SR", label: "Senior",    short: "SR · Yr 4" },
+    { idx: 0, key: "FR", label: "Freshman" },
+    { idx: 1, key: "SO", label: "Sophomore" },
+    { idx: 2, key: "JR", label: "Junior" },
+    { idx: 3, key: "SR", label: "Senior" },
   ];
 
   const heroTrack     = tracks.find(t => t.title.toLowerCase() === "heroes");
@@ -456,21 +457,34 @@ function CurriculumView(){
       const ex = seen.get(key);
       if (!ex.tracks.includes(trackId)) ex.tracks.push(trackId);
     } else {
-      seen.set(key, {
-        ...s,
-        tracks: [trackId],
-        required: s.kind !== "elective",
-      });
+      seen.set(key, { ...s, tracks: [trackId], required: s.kind !== "elective" });
     }
   }
   heroSubs.forEach(s => addSubject(s, "hero"));
   sideSubs.forEach(s => addSubject(s, "sidekick"));
-  const allSubs = Array.from(seen.values());
-  const requiredSubs = allSubs.filter(s => s.required).sort((a,b) => a.subject.localeCompare(b.subject));
-  const electiveSubs = allSubs.filter(s => !s.required).sort((a,b) => a.subject.localeCompare(b.subject));
+
+  // Single unified list, alphabetical, with required-first secondary sort
+  const allSubs = Array.from(seen.values()).sort((a, b) => {
+    if (a.required !== b.required) return a.required ? -1 : 1;
+    return a.subject.localeCompare(b.subject);
+  });
+  const requiredCount = allSubs.filter(s => s.required).length;
+  const electiveCount = allSubs.length - requiredCount;
+
+  // Apply filter
+  const filtered = allSubs.filter(s => {
+    if (filter === "all") return true;
+    const isHero = s.tracks.includes("hero");
+    const isSide = s.tracks.includes("sidekick");
+    if (filter === "shared")    return isHero && isSide;
+    if (filter === "hero")      return isHero && !isSide;
+    if (filter === "sidekick")  return isSide && !isHero;
+    return true;
+  });
 
   return (
     <div className="curr">
+      {/* Year tabs — clean strip */}
       <div className="curr-yeartabs" role="tablist" aria-label="Choose a year">
         {YEAR_TABS.map(yt => (
           <button
@@ -481,109 +495,99 @@ function CurriculumView(){
             className={"curr-yeartab" + (yt.idx === yearIdx ? " on" : "")}
             onClick={() => setYearIdx(yt.idx)}
           >
-            <span className="curr-yeartab-num">{yt.key}</span>
+            <span className="curr-yeartab-num">YR {yt.idx+1}</span>
             <span className="curr-yeartab-label">{yt.label}</span>
           </button>
         ))}
       </div>
 
-      <section className="curr-overview">
-        <div className="curr-overview-hd">
-          <div className="curr-overview-y">YEAR {yearIdx+1}</div>
-          <div className="curr-overview-name">{YEAR_TABS[yearIdx].label}</div>
-        </div>
-        <div className="curr-tracks">
-          {heroYr && (
-            <div className="curr-track curr-track-hero">
-              <div className="curr-track-tag">Heroes Track</div>
-              <h4 className="curr-track-title">{heroYr.t}</h4>
-              <p className="curr-track-desc">{heroYr.d}</p>
-            </div>
-          )}
-          {sidekickYr && (
-            <div className="curr-track curr-track-sidekick">
-              <div className="curr-track-tag">Sidekicks Track</div>
-              <h4 className="curr-track-title">{sidekickYr.t}</h4>
-              <p className="curr-track-desc">{sidekickYr.d}</p>
-            </div>
-          )}
-        </div>
-      </section>
+      {/* Year head — single condensed band */}
+      <header className="curr-yearhead">
+        <div className="curr-yearhead-eyebrow">Year {yearIdx+1} · {YEAR_TABS[yearIdx].label}</div>
+        <h3 className="curr-yearhead-title">
+          {heroYr?.t && sidekickYr?.t && heroYr.t === sidekickYr.t
+            ? heroYr.t
+            : <>The {YEAR_TABS[yearIdx].label.toLowerCase()} year</>}
+        </h3>
+        {(heroYr?.d || sidekickYr?.d) && (
+          <div className="curr-yearhead-tracks">
+            {heroYr?.d && <p className="curr-yearhead-line"><span className="curr-yearhead-tag t-hero">Heroes</span> {heroYr.d}</p>}
+            {sidekickYr?.d && <p className="curr-yearhead-line"><span className="curr-yearhead-tag t-sidekick">Sidekicks</span> {sidekickYr.d}</p>}
+          </div>
+        )}
+      </header>
 
-      <section className="curr-classes">
-        <div className="curr-classes-hint">
-          Click any class to read what it covers.
+      {/* Toolbar — counts + track filter */}
+      <div className="curr-toolbar">
+        <div className="curr-counts">
+          <strong>{allSubs.length}</strong> classes
+          <span className="curr-counts-sep">·</span>
+          <strong>{requiredCount}</strong> required
+          <span className="curr-counts-sep">·</span>
+          <strong>{electiveCount}</strong> elective{electiveCount === 1 ? "" : "s"}
         </div>
-        <div className="curr-classes-section">
-          <header className="curr-classes-hd">
-            <div className="curr-classes-tag">Required · Year {yearIdx+1}</div>
-            <p className="curr-classes-blurb">All students take these. Tags show which track each is for.</p>
-          </header>
-          <ul className="curr-classes-list">
-            {requiredSubs.length > 0
-              ? requiredSubs.map((s, i) => <ClassChip key={i} subject={s} />)
-              : <li className="curr-class-empty">— No required classes this year —</li>}
-          </ul>
-        </div>
-        <div className="curr-classes-section curr-classes-electives">
-          <header className="curr-classes-hd">
-            <div className="curr-classes-tag">Electives · Optional</div>
-            <p className="curr-classes-blurb">Pick-and-choose. Both tracks may take any of these.</p>
-          </header>
-          <ul className="curr-classes-list">
-            {electiveSubs.length > 0
-              ? electiveSubs.map((s, i) => <ClassChip key={i} subject={s} />)
-              : <li className="curr-class-empty">— No electives this year —</li>}
-          </ul>
-        </div>
-      </section>
-
-      <div className="fine-print">
-        <div className="fine-print-stamp">THE FINE PRINT</div>
-        <div className="fine-print-text">
-          Both tracks serve the machine. Both tracks break you down and rebuild you as something useful. And by the time you realize you're complicit, <span className="fine-print-hit">you're already too deep to walk away.</span>
+        <div className="curr-filter">
+          {[
+            ["all", "All"],
+            ["hero", "Heroes"],
+            ["sidekick", "Sidekicks"],
+            ["shared", "Shared"],
+          ].map(([id, lbl]) => (
+            <button
+              key={id}
+              type="button"
+              className={"curr-filter-pill" + (filter === id ? " on" : "")}
+              onClick={() => setFilter(id)}
+            >{lbl}</button>
+          ))}
         </div>
       </div>
+
+      {/* Unified class list */}
+      <ul className="curr-list">
+        {filtered.length === 0 ? (
+          <li className="curr-row-empty">— No classes match this filter —</li>
+        ) : filtered.map((s, i) => <ClassRow key={i} subject={s} />)}
+      </ul>
+
+      {/* Quiet footnote */}
+      <p className="curr-finenote">
+        Both tracks serve the machine. Both tracks break you down and rebuild you as something useful. <span className="curr-finenote-hit">By the time you realise you're complicit, you're already too deep to walk away.</span>
+      </p>
     </div>
   );
 }
 
-function ClassChip({subject}){
+function ClassRow({subject}){
   const [open, setOpen] = useState(false);
   const hasDesc = !!subject.desc;
-  const tracks = subject.tracks || [];
-  const isHero = tracks.includes("hero");
-  const isSide = tracks.includes("sidekick");
-  const trackLabel = (isHero && isSide) ? "Shared"
-                   : isHero              ? "Heroes"
-                   : isSide              ? "Sidekicks"
-                   : null;
-  const trackKind  = (isHero && isSide) ? "shared"
-                   : isHero              ? "hero"
-                   : isSide              ? "sidekick"
-                   : "";
+  const isHero = subject.tracks.includes("hero");
+  const isSide = subject.tracks.includes("sidekick");
+  const trackLabel = (isHero && isSide) ? "Shared" : isHero ? "Heroes" : isSide ? "Sidekicks" : null;
+  const trackKind  = (isHero && isSide) ? "shared" : isHero ? "hero"   : isSide ? "sidekick"  : "";
+  const required = subject.required;
   return (
-    <li className={"class-chip" + (open ? " is-open" : "") + (hasDesc ? " has-desc" : "")}>
+    <li className={"curr-row" + (open ? " is-open" : "") + (hasDesc ? " has-desc" : "")}>
       <button
         type="button"
-        className="class-chip-btn"
+        className="curr-row-btn"
         onClick={() => hasDesc && setOpen(!open)}
         disabled={!hasDesc}
         aria-expanded={open}
       >
-        <span className="class-chip-name">{subject.subject}</span>
+        <span className="curr-row-name">{subject.subject}</span>
+        <span className={"curr-row-kind " + (required ? "is-required" : "is-elective")}>
+          {required ? "Required" : "Elective"}
+        </span>
         {trackLabel && (
-          <span className={"class-chip-track t-" + trackKind}>{trackLabel}</span>
+          <span className={"curr-row-track t-" + trackKind}>{trackLabel}</span>
         )}
         {hasDesc && (
-          <span className="class-chip-toggle" aria-hidden="true">
-            {open ? "Hide" : "View"}
-            <span className="class-chip-toggle-arrow">{open ? "▲" : "▼"}</span>
-          </span>
+          <span className="curr-row-toggle" aria-hidden="true">{open ? "−" : "+"}</span>
         )}
       </button>
       {open && hasDesc && (
-        <div className="class-chip-desc">{subject.desc}</div>
+        <div className="curr-row-desc">{subject.desc}</div>
       )}
     </li>
   );
