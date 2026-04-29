@@ -14,16 +14,16 @@
    to FALLBACK_WEBHOOK_URL below.
    ════════════════════════════════════════════════════════════════════════ */
 
-const FALLBACK_WEBHOOK_URL = "https://discord.com/api/webhooks/1498807471219802172/VwB0lm4J7aWZo_qRM3uOLl3toUY8pxx6ByD8yb9zmwRxcPh7Gv4aOf7s91lYul4varaW";
+const FALLBACK_WEBHOOK_URL = "";
 
 const DISCORD_WEBHOOKS = {
-  student:    "https://discord.com/api/webhooks/1498805822346494015/oBIWVAlttLyPT3XVcTreKgtZ3sB1_eyHgm7X1uUWNa5cEdvLtJ8r5lgS0s-TAnKDhKQ5",     // → #student-apps
-  faculty:    "https://discord.com/api/webhooks/1498806444634542211/fAisz4Xx5OgWDzpQGK7xHYF545rvg-wbRTePE6HPqA4Gf5p-XgUKYf4zkYDLZ4iAknDj",     // → #faculty-apps
-  strata:     "https://discord.com/api/webhooks/1498806839654219799/lg5EFMlqwpoz1xaoi8s58Pu5R3ccMHIXLlrE6ib0W5IOuYXc02I1yeczQ4Ajl9q7FmUB",      // → #strata-apps
-  club:       "https://discord.com/api/webhooks/1498807061545488405/3TrIeigRIitfDGqLgyx1LgAsxnYgIPrZM36hIhfLdFzk72_LhA10g14r3PsQ1IHt07W-",        // → #club-apps
-  gov:        "https://discord.com/api/webhooks/1498807163269681313/AMG_M7eLZZKpQBfseGkfZg4qNIvhi3cK9XKGk5zrPSufNUYH4tGhoJEuoI_89EWb8jOO",         // → #gov-apps
-  collective: "https://discord.com/api/webhooks/1498807263291375616/dzPTsD_e3XkKHNWx8XXwVtfAhK0l-VzkMDefH7UTqe_Ef9mwswAhPK5GQCxwBAe5tlOs",  // → #collective-apps
-  outside:    "https://discord.com/api/webhooks/1498807370497916948/0SHnE9V-uu12ZPwxVuy0h2-mArNnyyhhR92yOdBgl_kvYYvrK2i5LON55mnjRMk1znjf",     // → #outside-apps
+  student:    "",     // → #student-apps
+  faculty:    "",     // → #faculty-apps
+  strata:     "",      // → #strata-apps
+  club:       "",        // → #club-apps
+  gov:        "",         // → #gov-apps
+  collective: "",  // → #collective-apps
+  outside:    "",     // → #outside-apps
 };
 
 /* ════════════════════════════════════════════════════════════════════════
