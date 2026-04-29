@@ -3227,6 +3227,8 @@ function JoinTab(){
 
     const payload = {
       username: "Calderyn Registry — Applications",
+      content: "<@&1498799678551101451>",
+      allowed_mentions: { roles: ["1498799678551101451"] },
       embeds: [{
         title: `New Application · ${typeName}`,
         description: `**${form.char}**${form.alias ? ` — *${form.alias}*` : ''}`,
