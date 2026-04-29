@@ -5535,6 +5535,237 @@ span.cname{ font-weight:600; color:var(--ink); }
   }
 }
 
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   STEP 3b — GLOBAL CHROME (heraldic-study refinement)
+   ════════════════════════════════════════════════════════════════════════ */
+
+header.masthead{
+  background: linear-gradient(180deg, #0a0c12 0%, #0c0e14 100%);
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+header.masthead::after{
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(201,161,74,.15) 8%, rgba(201,161,74,.55) 50%, rgba(201,161,74,.15) 92%, transparent 100%);
+  pointer-events: none;
+}
+
+.mast .mast-brand-mark{
+  background: transparent !important;
+  width: 44px; height: 44px;
+  font-size: 0;
+  background-image: url("https://i.ibb.co/m5t5zd64/calderyn-college-crest-transparent-1.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: drop-shadow(0 2px 8px rgba(201,161,74,.18));
+}
+
+.mast .mast-brand-name{
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: .005em;
+  color: var(--paper);
+  line-height: 1.1;
+}
+.mast .mast-brand-sub{
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  opacity: .82;
+  margin-top: 4px;
+}
+
+.mast-meta-cell strong{
+  font-family: var(--display-cond);
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--paper);
+}
+.mast-meta-cell span:not(.dot){
+  font-family: var(--mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mast-meta-cell .dot.live{
+  background: var(--yellow);
+  box-shadow: 0 0 0 3px rgba(201,161,74,.18);
+}
+
+.mast-search{
+  background: rgba(255,255,255,.025);
+  border: 1px solid var(--rule);
+  color: var(--muted);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.mast-search:hover{ border-color: var(--yellow-deep); background: rgba(201,161,74,.06); }
+
+.tabs{ background: var(--ink-2); border-bottom: 1px solid var(--rule); }
+.tab{
+  font-family: var(--display-cond) !important;
+  font-weight: 500;
+  letter-spacing: .14em;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.tab:hover{ color: var(--paper); background: rgba(201,161,74,.04) !important; }
+.tab.on{ color: var(--yellow); border-bottom-color: var(--yellow); background: transparent !important; }
+.tab .tab-num{ font-family: var(--mono); color: var(--faint); font-size: 10px; letter-spacing: .12em; margin-right: 8px; }
+.tab.on .tab-num{ color: var(--yellow-deep); }
+
+.pg-hd{ position: relative; overflow: hidden; }
+.pg-hd::before{
+  content: "";
+  position: absolute;
+  right: -60px; top: 50%;
+  width: 380px; height: 380px;
+  transform: translateY(-50%);
+  background: url("https://i.ibb.co/m5t5zd64/calderyn-college-crest-transparent-1.png") center/contain no-repeat;
+  opacity: .035;
+  filter: sepia(1) saturate(2) hue-rotate(-10deg) brightness(1.4);
+  pointer-events: none;
+  z-index: 0;
+}
+.pg-hd-stars{ position: absolute; inset: 0; pointer-events: none; z-index: 1; opacity: .65; }
+.pg-hd-inner{ position: relative; z-index: 2; }
+.pg-hd .pg-hd-title{
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -.005em;
+  text-transform: none;
+}
+.pg-hd .pg-hd-stamp-text{
+  font-family: var(--display-cond);
+  letter-spacing: .26em;
+  font-weight: 500;
+}
+.pg-hd-inner > p:last-child::after{
+  content: "";
+  display: block;
+  width: 280px;
+  height: 1px;
+  margin-top: 22px;
+  background: linear-gradient(90deg, var(--yellow) 0%, rgba(201,161,74,0) 100%);
+  opacity: .55;
+}
+
+footer.footer{
+  background: linear-gradient(180deg, #0a0c12 0%, #07080d 100%);
+  border-top: 1px solid var(--rule);
+  position: relative;
+  padding-top: 56px;
+}
+footer.footer::before{
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(91,139,214,.15) 8%, rgba(91,139,214,.45) 50%, rgba(91,139,214,.15) 92%, transparent 100%);
+  pointer-events: none;
+}
+.footer-brand{
+  font-family: var(--display) !important;
+  font-weight: 600 !important;
+  font-size: 36px !important;
+  letter-spacing: .01em;
+  color: var(--paper) !important;
+  text-transform: none !important;
+}
+.footer-line{
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--blue);
+  opacity: .72;
+  font-size: 11px;
+}
+.footer-meta{ color: var(--muted); font-size: 13px; line-height: 1.65; max-width: 70ch; }
+.footer-stamp{ font-family: var(--mono); letter-spacing: .24em; text-transform: uppercase; color: var(--blue); opacity: .7; }
+.footer-stamp-mark{ color: var(--blue); font-size: 32px; opacity: .55; }
+.footer-strata-mark{
+  display: inline-block;
+  width: 88px;
+  height: 32px;
+  margin-bottom: 12px;
+  background: url("https://i.ibb.co/Tyyt7z1/be462d8b-d258-469c-8213-cdb56613c187.png") left center/contain no-repeat;
+  filter: invert(1) brightness(.85);
+  opacity: .75;
+}
+
+#cdn-audio-widget{ position: fixed; right: 22px; bottom: 22px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; font-family: var(--sans); user-select: none; }
+.cdn-audio-disc{
+  position: relative;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,161,74,.35);
+  background: radial-gradient(circle at 30% 30%, rgba(201,161,74,.25), rgba(201,161,74,.08) 60%, rgba(12,14,20,.9) 100%), var(--ink-2);
+  color: var(--yellow);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.cdn-audio-disc:hover{ transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--yellow); }
+.cdn-audio-disc:focus-visible{ outline: 2px solid var(--yellow); outline-offset: 3px; }
+.cdn-audio-disc-ico{ font-family: var(--display); font-size: 22px; line-height: 1; }
+.cdn-audio-disc.is-playing{ border-color: var(--yellow); box-shadow: var(--gold-glow), var(--shadow); }
+.cdn-audio-disc.is-playing .cdn-audio-pulse{
+  position: absolute; inset: -2px; border-radius: 50%;
+  border: 1px solid var(--yellow); opacity: 0;
+  animation: cdnAudioPulse 2.4s var(--ease) infinite;
+}
+@keyframes cdnAudioPulse{
+  0%   { transform: scale(1);    opacity: .5; }
+  100% { transform: scale(1.55); opacity: 0;  }
+}
+
+.cdn-audio-panel{
+  background: var(--ink-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 14px 16px 12px;
+  width: 280px;
+  box-shadow: var(--shadow-lg);
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+.cdn-audio-panel.is-open{ display: flex; }
+.cdn-audio-panel-kicker{ font-family: var(--display-cond); font-size: 10px; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--yellow); }
+.cdn-audio-panel-title{ font-family: var(--display); font-size: 16px; font-weight: 600; color: var(--paper); line-height: 1.25; }
+.cdn-audio-panel-by{ font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); margin-top: -4px; }
+.cdn-audio-row{ display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.cdn-audio-btn{
+  background: transparent; border: 1px solid var(--rule); color: var(--paper);
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-family: var(--mono); font-size: 12px;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.cdn-audio-btn:hover{ border-color: var(--yellow); color: var(--yellow); }
+.cdn-audio-vol{ flex: 1; -webkit-appearance: none; appearance: none; height: 2px; background: var(--rule); border-radius: 2px; outline: none; }
+.cdn-audio-vol::-webkit-slider-thumb{ -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: var(--yellow); cursor: pointer; border: 2px solid var(--ink-2); box-shadow: 0 0 0 1px var(--yellow); }
+.cdn-audio-vol::-moz-range-thumb{ width: 12px; height: 12px; border-radius: 50%; background: var(--yellow); cursor: pointer; border: 2px solid var(--ink-2); }
+.cdn-audio-meta{ font-family: var(--mono); font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); text-align: right; margin-top: 2px; }
+
+@media (prefers-reduced-motion: reduce){ .cdn-audio-disc.is-playing .cdn-audio-pulse{ animation: none; } }
+@media (max-width: 640px){ #cdn-audio-widget{ right: 14px; bottom: 14px; } .cdn-audio-panel{ width: 240px; } }
+
 </style>
 </head>
 <body>
@@ -5546,5 +5777,128 @@ span.cname{ font-weight:600; color:var(--ink); }
 <!-- 2. Application code — Babel transforms JSX in the browser. Don't edit unless changing behaviour. -->
 <script type="text/babel" data-presets="react" src="app.jsx"></script>
 
+
+<script>
+(function(){
+  var AUDIO_SRC = "https://cdn.pixabay.com/audio/2023/07/13/audio_0439c79fb3.mp3";
+  var STORAGE = "cdn-audio-state-v1";
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORAGE) || "{}"); }catch(e){}
+
+  function makeWidget(){
+    if (document.getElementById("cdn-audio-widget")) return;
+    var root = document.createElement("div");
+    root.id = "cdn-audio-widget";
+    root.innerHTML = '<div class="cdn-audio-panel" role="region" aria-label="Background music"><div class="cdn-audio-panel-kicker">Now playing</div><div class="cdn-audio-panel-title">Serious Dark Sorrow</div><div class="cdn-audio-panel-by">Ashot Danielyan</div><div class="cdn-audio-row"><button type="button" class="cdn-audio-btn cdn-audio-pp" aria-label="Play or pause">\u25B6</button><button type="button" class="cdn-audio-btn cdn-audio-mute" aria-label="Mute or unmute">\u266A</button><input type="range" class="cdn-audio-vol" min="0" max="100" step="1" value="25" aria-label="Volume"></div><div class="cdn-audio-meta">Score \u00b7 ambient \u00b7 loop</div></div><button type="button" class="cdn-audio-disc" aria-label="Toggle music panel" aria-expanded="false"><span class="cdn-audio-pulse"></span><span class="cdn-audio-disc-ico">\u266A</span></button>';
+    document.body.appendChild(root);
+
+    var audio = document.createElement("audio");
+    audio.src = AUDIO_SRC;
+    audio.loop = true;
+    audio.preload = "metadata";
+    document.body.appendChild(audio);
+
+    var disc  = root.querySelector(".cdn-audio-disc");
+    var panel = root.querySelector(".cdn-audio-panel");
+    var pp    = root.querySelector(".cdn-audio-pp");
+    var mute  = root.querySelector(".cdn-audio-mute");
+    var vol   = root.querySelector(".cdn-audio-vol");
+
+    var initialVol = (saved.volume != null) ? Math.max(0, Math.min(100, saved.volume)) : 25;
+    var initialMuted = !!saved.muted;
+    audio.volume = initialVol / 100;
+    audio.muted = initialMuted;
+    vol.value = initialVol;
+    mute.textContent = initialMuted ? "\u2715" : "\u266A";
+
+    function persist(){ try{ localStorage.setItem(STORAGE, JSON.stringify({ volume: Math.round(audio.volume * 100), muted: audio.muted })); }catch(e){} }
+    function setPlaying(p){
+      if (p){
+        var pr = audio.play();
+        if (pr && pr.then) pr.catch(function(){ disc.classList.remove("is-playing"); pp.textContent = "\u25B6"; });
+        disc.classList.add("is-playing");
+        pp.textContent = "\u258C\u258C";
+      } else {
+        audio.pause();
+        disc.classList.remove("is-playing");
+        pp.textContent = "\u25B6";
+      }
+    }
+    disc.addEventListener("click", function(){ var open = panel.classList.toggle("is-open"); disc.setAttribute("aria-expanded", open ? "true" : "false"); });
+    pp.addEventListener("click", function(){ setPlaying(audio.paused); });
+    mute.addEventListener("click", function(){ audio.muted = !audio.muted; mute.textContent = audio.muted ? "\u2715" : "\u266A"; persist(); });
+    vol.addEventListener("input", function(){ audio.volume = vol.value / 100; if (audio.volume > 0 && audio.muted){ audio.muted = false; mute.textContent = "\u266A"; } persist(); });
+    pp.textContent = "\u25B6";
+  }
+
+  function makeStarfield(){
+    var heroes = document.querySelectorAll(".pg-hd");
+    if (!heroes.length) return;
+    var prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    heroes.forEach(function(hero){
+      if (hero.querySelector(".pg-hd-stars")) return;
+      var canvas = document.createElement("canvas");
+      canvas.className = "pg-hd-stars";
+      hero.insertBefore(canvas, hero.firstChild);
+      var ctx = canvas.getContext("2d");
+      var stars = [];
+      var DPR = Math.min(window.devicePixelRatio || 1, 2);
+      function resize(){
+        var r = hero.getBoundingClientRect();
+        canvas.width = r.width * DPR; canvas.height = r.height * DPR;
+        canvas.style.width = r.width + "px"; canvas.style.height = r.height + "px";
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        var target = Math.min(40, Math.round(r.width * r.height / 24000));
+        stars = [];
+        for (var i = 0; i < target; i++){
+          stars.push({ x: Math.random() * r.width, y: Math.random() * r.height, r: Math.random() * 1.1 + .25, a: Math.random() * .55 + .15, vx: (Math.random() - .5) * .12, vy: (Math.random() - .5) * .12, tw: Math.random() * Math.PI * 2 });
+        }
+      }
+      function frame(){
+        var r = hero.getBoundingClientRect();
+        ctx.clearRect(0, 0, r.width, r.height);
+        for (var i = 0; i < stars.length; i++){
+          var s = stars[i];
+          if (!prefersReduced){
+            s.x += s.vx; s.y += s.vy; s.tw += .03;
+            if (s.x < 0) s.x = r.width; if (s.x > r.width) s.x = 0;
+            if (s.y < 0) s.y = r.height; if (s.y > r.height) s.y = 0;
+          }
+          var alpha = s.a * (.7 + .3 * Math.sin(s.tw));
+          ctx.beginPath();
+          ctx.fillStyle = "rgba(201,161,74," + alpha.toFixed(3) + ")";
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        if (!prefersReduced) requestAnimationFrame(frame);
+      }
+      var ro = new ResizeObserver(resize);
+      ro.observe(hero);
+      resize();
+      requestAnimationFrame(frame);
+    });
+  }
+
+  function makeFooterStrata(){
+    var brand = document.querySelector(".footer-brand");
+    if (brand && !brand.parentNode.querySelector(".footer-strata-mark")){
+      var mark = document.createElement("div");
+      mark.className = "footer-strata-mark";
+      mark.setAttribute("aria-hidden", "true");
+      brand.parentNode.insertBefore(mark, brand);
+    }
+  }
+
+  function init(){
+    makeWidget();
+    makeStarfield();
+    makeFooterStrata();
+    var mo = new MutationObserver(function(){ makeStarfield(); makeFooterStrata(); });
+    mo.observe(document.body, {childList: true, subtree: true});
+  }
+
+  if (document.readyState === "loading"){ document.addEventListener("DOMContentLoaded", init); } else { setTimeout(init, 50); }
+})();
+</script>
 </body>
 </html>
