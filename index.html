@@ -8912,6 +8912,260 @@ tbody td:has(.empty-state-block){ padding:12px 16px !important; }
   margin-top:4px;
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 9 — CRADLE PHASES + CASSANDRA INCIDENT (dark-on-dark headers)     ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* Cradle phase cards (LoreHistory) — every text element used color:var(--ink) */
+.prog-phase{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-top:4px solid var(--red) !important;
+  border-radius:12px !important;
+  color:var(--text);
+}
+.prog-phase:nth-child(2){ border-top-color:var(--gold) !important; }
+.prog-phase:nth-child(3){ border-top-color:var(--h-grimere) !important; }
+.prog-phase:nth-child(4){
+  border-top-color:var(--silver-dim) !important;
+  background:linear-gradient(180deg, var(--paper-2), var(--paper-3)) !important;
+}
+.prog-phase-era{
+  color:var(--gold) !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.8px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+}
+.prog-phase-name{
+  color:var(--text) !important;
+  font-family:var(--serif) !important;
+  font-size:30px !important;
+  letter-spacing:-.01em !important;
+  text-transform:none !important;
+  font-weight:600 !important;
+  line-height:1.05 !important;
+  margin-top:4px !important;
+}
+.prog-phase-years{
+  color:var(--text-mid) !important;
+  font-family:var(--mono) !important;
+  font-size:11px !important;
+  letter-spacing:1.6px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  border-bottom-color:var(--rule-soft) !important;
+}
+.prog-phase-body{
+  color:var(--text-mid) !important;
+  font-size:14.5px !important;
+  line-height:1.7 !important;
+}
+.prog-phase-body strong{
+  color:var(--text) !important;
+  font-weight:600 !important;
+}
+.prog-phase-body em{
+  background:rgba(212,168,74,.12) !important;
+  color:var(--gold-bright) !important;
+  font-style:italic !important;
+  padding:1px 6px !important;
+  border-radius:3px !important;
+  font-weight:500 !important;
+}
+.prog-phase-stat{
+  background:rgba(255,255,255,.04) !important;
+  color:var(--text) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:6px !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  padding:9px 12px !important;
+}
+.prog-phase-stat-k{ color:var(--gold) !important; }
+
+/* Cassandra incident — case-col diptych headers + paragraphs */
+.case-col{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:12px !important;
+  color:var(--text);
+}
+.case-col:first-child{
+  border-left:3px solid var(--silver-dim) !important;
+  border-right:none !important;
+}
+.case-col:last-child{
+  border-left:3px solid var(--red) !important;
+}
+.case-col-tag{
+  background:transparent !important;
+  border:1px solid !important;
+  border-radius:999px !important;
+  padding:5px 12px !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.8px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  margin-bottom:14px;
+}
+.case-col:first-child .case-col-tag{
+  background:rgba(255,255,255,.04) !important;
+  color:var(--silver) !important;
+  border-color:var(--rule-soft) !important;
+}
+.case-col:last-child .case-col-tag{
+  background:rgba(228,50,74,.12) !important;
+  color:#ffd9dd !important;
+  border-color:rgba(228,50,74,.45) !important;
+}
+.case-col-h{
+  font-family:var(--serif) !important;
+  font-size:28px !important;
+  letter-spacing:-.012em !important;
+  line-height:1.1 !important;
+  text-transform:none !important;
+  font-weight:600 !important;
+  margin-bottom:16px !important;
+  color:var(--text) !important;
+}
+.case-col:first-child .case-col-h,
+.case-col:last-child .case-col-h{ color:var(--text) !important; }
+.case-col-h em{
+  font-style:italic !important;
+  font-weight:500 !important;
+  color:var(--gold-bright) !important;
+}
+.case-col-p{ color:var(--text-mid) !important; font-size:14.5px !important; line-height:1.7 !important; }
+.case-col:first-child .case-col-p,
+.case-col:last-child .case-col-p{ color:var(--text-mid) !important; }
+.case-col-p strong,
+.case-col:first-child .case-col-p strong,
+.case-col:last-child .case-col-p strong{
+  color:var(--text) !important;
+  font-weight:600 !important;
+}
+.case-col-p em,
+.case-col:first-child .case-col-p em,
+.case-col:last-child .case-col-p em{
+  background:rgba(212,168,74,.12) !important;
+  color:var(--gold-bright) !important;
+  font-style:italic !important;
+  padding:1px 6px !important;
+  border-radius:3px !important;
+  font-weight:500 !important;
+}
+
+/* case-stats grid */
+.case-stat{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  color:var(--text) !important;
+  border-radius:12px !important;
+}
+.case-stat:nth-child(2){
+  background:linear-gradient(180deg, rgba(228,50,74,.18), rgba(125,16,24,.14)) !important;
+  border-color:rgba(228,50,74,.45) !important;
+}
+.case-stat:nth-child(2) .case-stat-l{ color:#ffd9dd !important; }
+.case-stat:nth-child(2) .case-stat-n{ color:#ffffff !important; }
+.case-stat-n{
+  color:var(--text) !important;
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:36px !important;
+  letter-spacing:-.015em !important;
+  line-height:1 !important;
+}
+.case-stat-l{
+  color:var(--text-low) !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.6px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  margin-top:6px !important;
+}
+
+/* case-dossier ("WHAT SET HIM OFF" panel) */
+.case-dossier{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-left:3px solid var(--red) !important;
+  border-radius:12px !important;
+  color:var(--text);
+}
+.case-stamp{
+  background:linear-gradient(180deg, var(--red), var(--red-deep)) !important;
+  color:#ffffff !important;
+  border:1px solid rgba(228,50,74,.5) !important;
+  border-radius:999px !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+}
+.case-dossier-hd{
+  background:transparent !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+}
+.case-dossier-hd-l{
+  color:var(--text) !important;
+  font-family:var(--serif) !important;
+  font-size:28px !important;
+  letter-spacing:-.012em !important;
+  text-transform:none !important;
+  font-weight:600 !important;
+}
+.case-dossier-hd-r{
+  color:var(--text-low) !important;
+  font-family:var(--mono) !important;
+}
+.case-dossier-body p{
+  color:var(--text-mid) !important;
+  font-size:14.5px !important;
+  line-height:1.7 !important;
+}
+.case-dossier-body p strong{
+  color:var(--text) !important;
+  font-weight:600 !important;
+}
+
+/* "I NEED TO COME HOME NOW" yellow quote block — keep gold but make text dark */
+.case-quote{
+  background:linear-gradient(180deg, rgba(212,168,74,.18), rgba(212,168,74,.10)) !important;
+  border:1px solid rgba(212,168,74,.45) !important;
+  border-left:3px solid var(--gold) !important;
+  border-radius:8px !important;
+  color:var(--text) !important;
+}
+.case-quote-l{
+  color:var(--gold-bright) !important;
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:18px !important;
+  letter-spacing:-.005em !important;
+  text-transform:none !important;
+}
+.case-quote-c{
+  color:var(--text-mid) !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.6px !important;
+}
+
+/* ALSO: any remaining display-font header that uses color:var(--ink) and
+   sits in a content section — force light. Hits .lore-h, faculty-section,
+   etc. The original CSS uses var(--ink); we now want var(--text). */
+.lore-h, .lore-h .accent{
+  color:var(--text) !important;
+}
+.lore-h .accent{
+  color:var(--gold-bright) !important;
+  font-style:italic;
+}
+
 </style>
 </head>
 <body>
