@@ -4,31 +4,11 @@
    This file is the React app. You don't normally need to edit it.
    For adding/removing characters, see data.js instead.
 
-   ▼▼▼ THE ONLY THING YOU NEED TO EDIT IN THIS FILE ▼▼▼
-   Paste a Discord webhook URL for EACH application type below.
-   Each type can route to its own channel for easier triage.
-   Get URLs: Discord channel → Edit Channel → Integrations → Webhooks → New Webhook
-
-   You can use the same URL for multiple types if you want them in one channel —
-   just paste the same URL into multiple slots. Empty/unset slots will fall back
-   to FALLBACK_WEBHOOK_URL below.
+   Application submissions are routed through a Cloudflare Worker proxy
+   so that webhook URLs are never exposed in client code.
    ════════════════════════════════════════════════════════════════════════ */
 
-const FALLBACK_WEBHOOK_URL = "";
-
-const DISCORD_WEBHOOKS = {
-  student:    "",     // → #student-apps
-  faculty:    "",     // → #faculty-apps
-  strata:     "",      // → #strata-apps
-  club:       "",        // → #club-apps
-  gov:        "",         // → #gov-apps
-  collective: "",  // → #collective-apps
-  outside:    "",     // → #outside-apps
-};
-
-/* ════════════════════════════════════════════════════════════════════════
-   END OF CONFIGURATION — code below is implementation
-   ════════════════════════════════════════════════════════════════════════ */
+const WORKER_URL = "https://calderyn-registry-relay.dreamroleplaywriter.workers.dev";
 
 const {useState, useMemo, useEffect, useCallback} = React;
 const D = window.CALDERYN;
@@ -3233,7 +3213,7 @@ function JoinTab(){
     if (form.year)             fields.push({ name: "Year",        value: form.year, inline: true });
     if (form.track)            fields.push({ name: "Track",       value: form.track, inline: true });
     if (form.tier)             fields.push({ name: "Tier",        value: form.tier, inline: true });
-    if (form.power)            fields.push({ name: "Power Name",  value: form.power, inline: false });
+    if (form.power)            fields.push({ name: "Power Type",  value: form.power, inline: false });
     if (form.powerExpression)  fields.push({ name: "Power Expression / How It Works", value: form.powerExpression.slice(0, 1024), inline: false });
     if (form.drawbacks)        fields.push({ name: "Drawbacks / Limits", value: form.drawbacks.slice(0, 1024), inline: false });
     if (form.facultyRole)      fields.push({ name: "Faculty Role",     value: `${form.facultyRole} (${form.facultySection || '?'})`, inline: false });
@@ -3261,27 +3241,15 @@ function JoinTab(){
       }],
     };
 
-    // Pick the webhook for this application type, falling back to the catch-all
-    const isPlaceholder = (url) => !url || /^PASTE_[A-Z_]+_HERE$/.test(url);
-    const typedUrl    = DISCORD_WEBHOOKS && DISCORD_WEBHOOKS[type];
-    const webhookUrl  = !isPlaceholder(typedUrl) ? typedUrl
-                      : !isPlaceholder(FALLBACK_WEBHOOK_URL) ? FALLBACK_WEBHOOK_URL
-                      : null;
-
-    if (!webhookUrl){
-      setStatus({ state: "error", msg: "Webhook not configured — contact admin" });
-      return;
-    }
-
     try {
-      const res = await fetch(webhookUrl, {
+      const res = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ type, payload }),
       });
       if (!res.ok){
         const txt = await res.text().catch(() => "");
-        throw new Error("Discord rejected: " + res.status + " " + txt.slice(0, 200));
+        throw new Error("Relay rejected: " + res.status + " " + txt.slice(0, 200));
       }
       setConfirmed(true);
       setStatus({ state: "idle", msg: "" });
@@ -3436,10 +3404,10 @@ function JoinFieldset({type, form, set}){
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
-        <Field label="Power Name" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. Mechanics go in the next field." full>
+        <Field label="Power Type" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. The unique way it works for your character goes in the next field." full>
           <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Electromagnetic field manipulation"/>
         </Field>
-        <Field label="Power Expression / How It Works" required hint="Mechanics, costs, limits, what it looks like in practice. Be detailed." full>
+        <Field label="Power Expression / How It Works" required hint="The unique way your power functions for this character. Even characters with the same Power Type express it differently — describe what makes yours different. Mechanics in the field above; drawbacks below." full>
           <textarea className="join-textarea is-tall" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How does the power work? What does it cost them? What can't they do? What does it look like?"/>
         </Field>
         <Field label="Drawbacks / Limits" required hint="What does this power cost? Where does it fail? What can't they do? Even broken-tier characters need limits — be honest." full>
@@ -3488,10 +3456,10 @@ function JoinFieldset({type, form, set}){
             ))}
           </select>
         </Field>
-        <Field label="Power Name" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. Mechanics go in the next field." full>
+        <Field label="Power Type" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. The unique way it works for your character goes in the next field." full>
           <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Cellular regeneration"/>
         </Field>
-        <Field label="Power Expression / How It Works" required hint="Mechanics, costs, limits, what it looks like in practice. Be detailed." full>
+        <Field label="Power Expression / How It Works" required hint="The unique way your power functions for this character. Even characters with the same Power Type express it differently — describe what makes yours different. Mechanics in the field above; drawbacks below." full>
           <textarea className="join-textarea is-tall" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How does the power work? What does it cost them? What can't they do? What does it look like?"/>
         </Field>
         <Field label="Drawbacks / Limits" required hint="What does this power cost? Where does it fail? What can't they do? Even broken-tier characters need limits — be honest." full>
@@ -3528,10 +3496,10 @@ function JoinFieldset({type, form, set}){
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
-        <Field label="Power Name" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. Mechanics go in the next field." full>
+        <Field label="Power Type" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. The unique way it works for your character goes in the next field." full>
           <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Pyrokinesis"/>
         </Field>
-        <Field label="Power Expression / How It Works" required hint="Mechanics, costs, limits, what it looks like in practice. Be detailed." full>
+        <Field label="Power Expression / How It Works" required hint="The unique way your power functions for this character. Even characters with the same Power Type express it differently — describe what makes yours different. Mechanics in the field above; drawbacks below." full>
           <textarea className="join-textarea is-tall" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How does the power work? What does it cost them? What can't they do? What does it look like?"/>
         </Field>
         <Field label="Drawbacks / Limits" required hint="What does this power cost? Where does it fail? What can't they do? Even broken-tier characters need limits — be honest." full>
@@ -3665,10 +3633,10 @@ function JoinFieldset({type, form, set}){
         <Field label="Role within Collective" required hint="Leader, Specialist, Field, etc.">
           <input className="join-input" type="text" value={form.collectiveRole || ""} onChange={e => set("collectiveRole", e.target.value)} placeholder="e.g. Field Operative"/>
         </Field>
-        <Field label="Power Name" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. Mechanics go in the next field." full>
+        <Field label="Power Type" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. The unique way it works for your character goes in the next field." full>
           <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Phase shift"/>
         </Field>
-        <Field label="Power Expression / How It Works" required hint="Mechanics, costs, limits, what it looks like in practice. Be detailed." full>
+        <Field label="Power Expression / How It Works" required hint="The unique way your power functions for this character. Even characters with the same Power Type express it differently — describe what makes yours different. Mechanics in the field above; drawbacks below." full>
           <textarea className="join-textarea is-tall" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How does the power work? What does it cost them? What can't they do? What does it look like?"/>
         </Field>
         <Field label="Drawbacks / Limits" required hint="What does this power cost? Where does it fail? What can't they do? Even broken-tier characters need limits — be honest." full>
