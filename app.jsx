@@ -890,7 +890,10 @@ function StudentRoster({track}){
           {list.length === 0 && (
             <tr>
               <td colSpan={7} style={{padding:"60px 16px", textAlign:"center"}}>
-                <EmptyState label={`No ${track}s on file yet`}/>
+                <div className="empty-state-block">
+                  <EmptyState label={`No ${track === "hero" ? "heroes" : "sidekicks"} on file yet`}/>
+                  <a href="#join" className="empty-cta">+ Apply as a {track === "hero" ? "hero" : "sidekick"}</a>
+                </div>
               </td>
             </tr>
           )}
