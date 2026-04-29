@@ -3162,8 +3162,8 @@ const APPLICATION_TYPES = [
   },
   {
     id: "strata",
-    name: "STRATA Hero",
-    desc: "Sanctioned hero on STRATA's roster. Pick a tier from A-list down to D-list.",
+    name: "STRATA (Talent or Corporate)",
+    desc: "Apply to STRATA International. Talent = hero roster (A→D-list). Corporate = executive, field, or PR.",
   },
   {
     id: "club",
@@ -3247,6 +3247,7 @@ const JOIN_HOUSES = ["Valaris", "Orenne", "Saberis", "Grimere"];
 const JOIN_YEARS = ["Freshman", "Sophomore", "Junior", "Senior"];
 const JOIN_TIERS = ["A-List", "B-List", "C-List", "D-List"];
 const JOIN_TRACKS = ["Heroes", "Sidekicks"];
+const JOIN_STRATA_DEPTS = ["Executive", "Field — Handlers & Agents", "PR & Intelligence"];
 
 function JoinTab(){
   const [type, setType]   = useState(null);
@@ -3272,7 +3273,9 @@ function JoinTab(){
     switch (type) {
       case "student":    return [...base, "house", "year", "track", "tier", ...power];
       case "faculty":    return [...base, "facultyRole", ...power];
-      case "strata":     return [...base, "alias", "tier", ...power];
+      case "strata":     return form.strataRole === "corporate"
+                                ? [...base, "strataRole", "strataDept", "strataTitle", ...power]
+                                : [...base, "strataRole", "alias", "tier", ...power];
       case "club":       return [...base, "clubPosition"];
       case "gov":        return [...base, "govSeat"];
       case "collective": return [...base, "alias", "collectiveName", "collectiveRole", ...power];
@@ -3711,9 +3714,18 @@ function JoinFieldset({type, form, set}){
   }
 
   if (type === "strata"){
+    const isCorporate = form.strataRole === "corporate";
     return (
       <div className="join-fieldset">
         {Common}
+        <Field label="STRATA Role" required hint="Talent = hero roster. Corporate = executive, field, or PR.">
+          <select className="join-select" value={form.strataRole || ""} onChange={e => set("strataRole", e.target.value)}>
+            <option value="">Select role…</option>
+            <option value="talent">Talent (Hero)</option>
+            <option value="corporate">Corporate</option>
+          </select>
+        </Field>
+        {form.strataRole === "talent" && (<>
         <Field label="Stage Name / Alias" required hint="Their hero name">
           <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="ARCLIGHT, etc."/>
         </Field>
@@ -3723,7 +3735,19 @@ function JoinFieldset({type, form, set}){
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
-        <PowerFields form={form} set={set}/>
+        </>)}
+        {isCorporate && (<>
+        <Field label="Department" required hint="Which division they work in">
+          <select className="join-select" value={form.strataDept || ""} onChange={e => set("strataDept", e.target.value)}>
+            <option value="">Select department…</option>
+            {JOIN_STRATA_DEPTS.map(d => <option key={d} value={d}>{d}</option>)}
+          </select>
+        </Field>
+        <Field label="Role / Title" required hint="e.g. Board Member, Senior Handler, PR Director">
+          <input className="join-input" type="text" value={form.strataTitle || ""} onChange={e => set("strataTitle", e.target.value)} placeholder="e.g. Senior Handler"/>
+        </Field>
+        </>)}
+        {form.strataRole && (<PowerFields form={form} set={set} allowHuman={isCorporate}/>)}
         <TailFields form={form} set={set}/>
       </div>
     );
