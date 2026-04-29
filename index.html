@@ -8326,6 +8326,387 @@ tbody td:has(.empty-state-block){ padding:12px 16px !important; }
   all:unset;
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 7 — CURRICULUM RESTYLE: bigger, bolder, easier to scan            ║
+   ║  Higher-contrast surfaces, solid-colour track pills, gold required bar. ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* Container — generous canvas */
+.curr{
+  max-width:1100px !important;
+  margin:0 auto !important;
+  padding:32px 32px 56px !important;
+}
+
+/* Year tabs — taller and clearer active state */
+.curr-yeartabs{
+  display:grid !important;
+  grid-template-columns:repeat(4, 1fr) !important;
+  gap:10px !important;
+  margin-bottom:36px !important;
+  padding:0 !important;
+}
+.curr-yeartab{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:6px !important;
+  padding:18px 20px !important;
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:12px !important;
+  color:var(--text-mid) !important;
+  cursor:pointer;
+  text-align:left !important;
+  transition:all var(--dur) var(--ease);
+}
+.curr-yeartab:hover{
+  border-color:rgba(212,168,74,.4) !important;
+  color:var(--text) !important;
+  transform:translateY(-1px);
+}
+.curr-yeartab.on{
+  background:linear-gradient(180deg, rgba(212,168,74,.14), rgba(212,168,74,.04)) !important;
+  border-color:var(--gold) !important;
+  color:var(--text) !important;
+  box-shadow:0 0 0 1px var(--gold), 0 12px 28px -18px rgba(212,168,74,.5);
+}
+.curr-yeartab-num{
+  font-family:var(--mono) !important;
+  font-size:11px !important;
+  letter-spacing:1.8px !important;
+  font-weight:700 !important;
+  color:var(--gold) !important;
+  text-transform:uppercase !important;
+}
+.curr-yeartab-label{
+  font-family:var(--serif) !important;
+  font-size:18px !important;
+  font-weight:600 !important;
+  color:var(--text) !important;
+  letter-spacing:-.005em !important;
+  line-height:1.1 !important;
+}
+
+/* Year head — big serif title, refined intro lines */
+.curr-yearhead{
+  margin-bottom:32px;
+  padding-bottom:28px;
+  border-bottom:1px solid var(--rule-soft);
+}
+.curr-yearhead-eyebrow{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:2.2px;
+  text-transform:uppercase;
+  font-weight:700;
+  color:var(--gold);
+  margin-bottom:14px;
+}
+.curr-yearhead-title{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:44px !important;
+  letter-spacing:-.02em !important;
+  line-height:1.05 !important;
+  color:var(--text) !important;
+  margin:0 0 22px !important;
+  max-width:760px;
+}
+.curr-yearhead-tracks{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.curr-yearhead-line{
+  display:flex !important;
+  gap:14px !important;
+  align-items:flex-start !important;
+  margin:0 !important;
+  font-size:15px !important;
+  line-height:1.6 !important;
+  color:var(--text-mid) !important;
+}
+.curr-yearhead-tag{
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.6px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  padding:5px 11px !important;
+  border-radius:6px !important;
+  border:1px solid !important;
+  flex-shrink:0;
+  margin-top:1px;
+}
+.curr-yearhead-tag.t-hero{
+  color:#ffffff !important;
+  background:linear-gradient(180deg, var(--red), var(--red-deep)) !important;
+  border-color:rgba(255,255,255,.1) !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.5) !important;
+}
+.curr-yearhead-tag.t-sidekick{
+  color:var(--ink) !important;
+  background:linear-gradient(180deg, var(--gold-bright), var(--gold)) !important;
+  border-color:rgba(0,0,0,.2) !important;
+}
+
+/* Toolbar — counts left, filter pills right */
+.curr-toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+  padding:14px 18px;
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2));
+  border:1px solid var(--rule-soft);
+  border-radius:10px;
+}
+.curr-counts{
+  font-family:var(--sans);
+  font-size:14px;
+  color:var(--text-mid);
+  font-weight:500;
+}
+.curr-counts strong{
+  color:var(--text);
+  font-weight:700;
+  font-size:16px;
+  font-family:var(--serif);
+}
+.curr-counts-sep{ color:var(--text-low); margin:0 8px; }
+.curr-filter{ display:flex; gap:6px; flex-wrap:wrap; }
+.curr-filter-pill{
+  background:rgba(255,255,255,.04) !important;
+  color:var(--text-mid) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:8px !important;
+  padding:7px 14px !important;
+  font-family:var(--sans) !important;
+  font-size:12px !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  cursor:pointer;
+  transition:all var(--dur) var(--ease);
+  min-height:auto !important;
+}
+.curr-filter-pill:hover{
+  color:var(--text) !important;
+  border-color:rgba(212,168,74,.4) !important;
+  background:rgba(212,168,74,.06) !important;
+}
+.curr-filter-pill.on{
+  background:linear-gradient(180deg, rgba(212,168,74,.18), rgba(212,168,74,.08)) !important;
+  color:var(--gold-bright) !important;
+  border-color:var(--gold) !important;
+}
+
+/* Class list — clearer cards, gold left bar = Required */
+.curr-list{
+  list-style:none !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.curr-row{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-left:4px solid var(--rule-soft) !important;
+  border-radius:10px !important;
+  overflow:hidden;
+  transition:border-color var(--dur) var(--ease), background var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.curr-row:hover{
+  border-color:rgba(212,168,74,.35) !important;
+  border-left-color:rgba(212,168,74,.5) !important;
+}
+.curr-row.is-open{
+  border-color:var(--gold) !important;
+  border-left-color:var(--gold) !important;
+  background:linear-gradient(180deg, rgba(212,168,74,.06), rgba(212,168,74,.02)) !important;
+}
+/* Required gets a gold left bar (replaces the tiny pill) */
+.curr-row:has(.curr-row-kind.is-required){
+  border-left-color:var(--gold) !important;
+}
+.curr-row:has(.curr-row-kind.is-required).is-open{
+  border-left-color:var(--gold-bright) !important;
+}
+
+.curr-row-empty{
+  padding:32px;
+  text-align:center;
+  color:var(--text-low);
+  font-style:italic;
+  background:transparent;
+  border:1px dashed var(--rule-soft);
+  border-radius:10px;
+  list-style:none;
+}
+
+.curr-row-btn{
+  display:grid !important;
+  grid-template-columns:1fr auto auto auto !important;
+  gap:18px !important;
+  align-items:center !important;
+  width:100% !important;
+  padding:18px 22px !important;
+  background:transparent !important;
+  border:none !important;
+  cursor:pointer;
+  text-align:left;
+  font-family:var(--sans) !important;
+  color:var(--text) !important;
+  min-height:auto !important;
+  border-radius:0 !important;
+  letter-spacing:0 !important;
+  text-transform:none !important;
+}
+.curr-row-btn:disabled{ cursor:default; }
+.curr-row-btn:hover:not(:disabled) .curr-row-name{ color:var(--gold-bright); }
+
+.curr-row-name{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:18px !important;
+  letter-spacing:-.005em !important;
+  color:var(--text) !important;
+  text-transform:none !important;
+  line-height:1.25 !important;
+  transition:color var(--dur) var(--ease);
+  min-width:0;
+}
+
+/* "Required" gets a tiny gold dot before the name (in addition to the left bar) */
+.curr-row:has(.curr-row-kind.is-required) .curr-row-name::before{
+  content:"";
+  display:inline-block;
+  width:7px; height:7px;
+  background:var(--gold);
+  border-radius:50%;
+  margin-right:10px;
+  vertical-align:2px;
+  box-shadow:0 0 0 3px rgba(212,168,74,.18);
+}
+/* Hide the small pill since the bar + dot now communicate it */
+.curr-row-kind{
+  display:none !important;
+}
+
+/* Track pill — solid, high-contrast colours */
+.curr-row-track{
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.6px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  padding:5px 12px !important;
+  border-radius:6px !important;
+  border:1px solid !important;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.curr-row-track.t-hero{
+  color:#ffffff !important;
+  background:linear-gradient(180deg, var(--red), var(--red-deep)) !important;
+  border-color:rgba(255,255,255,.08) !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.5) !important;
+}
+.curr-row-track.t-sidekick{
+  color:var(--ink) !important;
+  background:linear-gradient(180deg, var(--gold-bright), var(--gold)) !important;
+  border-color:rgba(0,0,0,.2) !important;
+}
+.curr-row-track.t-shared{
+  color:var(--ink) !important;
+  background:linear-gradient(180deg, var(--silver-bright), var(--silver)) !important;
+  border-color:rgba(0,0,0,.15) !important;
+}
+
+.curr-row-toggle{
+  font-family:var(--mono) !important;
+  font-size:22px !important;
+  font-weight:300 !important;
+  color:var(--gold) !important;
+  width:28px;
+  height:28px;
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:rgba(212,168,74,.10);
+  border:1px solid rgba(212,168,74,.3);
+  line-height:1;
+  transition:all var(--dur) var(--ease);
+}
+.curr-row:hover .curr-row-toggle{
+  background:rgba(212,168,74,.18);
+  border-color:var(--gold);
+  color:var(--gold-bright);
+}
+.curr-row.is-open .curr-row-toggle{
+  background:var(--gold);
+  border-color:var(--gold);
+  color:var(--ink);
+}
+
+/* Hide the dot indicator I added in Wave 6 */
+.curr-row.has-desc .curr-row-name::after{ display:none !important; }
+
+/* Description panel inside expanded row */
+.curr-row-desc{
+  padding:0 22px 20px 22px !important;
+  color:var(--text-mid) !important;
+  font-size:15px !important;
+  line-height:1.7 !important;
+  background:transparent !important;
+  border-top:1px solid var(--rule-soft);
+  margin-top:0;
+}
+.curr-row-desc::before{
+  content:"";
+  display:block;
+  height:14px;
+}
+
+/* Footnote */
+.curr-finenote{
+  margin-top:40px;
+  padding:22px 26px;
+  font-family:var(--serif);
+  font-size:15px;
+  font-style:italic;
+  line-height:1.7;
+  color:var(--text-mid);
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2));
+  border:1px solid var(--rule-soft);
+  border-left:3px solid var(--gold);
+  border-radius:10px;
+  max-width:820px;
+}
+.curr-finenote-hit{
+  color:var(--gold-bright);
+  font-style:italic;
+  font-weight:600;
+}
+
+@media (max-width:720px){
+  .curr{ padding:18px 18px 36px !important; }
+  .curr-yeartabs{ grid-template-columns:repeat(2, 1fr) !important; }
+  .curr-yearhead-title{ font-size:30px !important; }
+  .curr-row-btn{
+    grid-template-columns:1fr auto !important;
+    gap:10px !important;
+    padding:14px 16px !important;
+  }
+  .curr-row-track{ display:none !important; }
+  .curr-row-name{ font-size:16px !important; }
+}
+
 </style>
 </head>
 <body>
