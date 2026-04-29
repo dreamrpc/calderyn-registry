@@ -6,7 +6,7 @@
 <title>CALDERYN COLLEGE — Central Registry</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js" crossorigin="anonymous"></script>
@@ -19,42 +19,46 @@
    ════════════════════════════════════════════════════════════════════════ */
 
 :root{
-  /* clean-app palette */
-  --ink:        #1f2937;
-  --ink-2:      #374151;
-  --ink-3:      #4b5563;
-  --ink-soft:   #6b7280;
+  /* ─── core palette ─── heraldic study ─── */
+  --ink:        #0c0e14;          /* deep ink — page bg, dark accents */
+  --ink-2:      #13161f;          /* raised dark surface */
+  --ink-3:      #1a1e2a;          /* dark panel separator */
+  --ink-soft:   #232838;          /* hover on dark */
 
-  --paper:      #ffffff;
-  --paper-2:    #f9fafb;
-  --paper-3:    #f3f4f6;
-  --paper-4:    #e5e7eb;
+  --paper:      #ede4c8;          /* warm parchment cream — cards, body text */
+  --paper-2:    #e3d9b8;          /* slightly warmer parchment */
+  --paper-3:    #d6cba6;          /* aged parchment */
+  --paper-4:    #c8bb91;          /* deepest parchment */
 
-  --rule:       #d1d5db;
-  --rule-soft:  #e5e7eb;
-  --rule-faint: #f3f4f6;
-  --muted:      #6b7280;
-  --faint:      #9ca3af;
+  --rule:       #2a3040;          /* dark divider */
+  --rule-soft:  #c8bb91;          /* parchment hairline (on cream cards) */
+  --rule-faint: #d6cba6;          /* whisper-faint hairline */
+  --muted:      #6b6856;          /* muted text on cream */
+  --faint:      #8d8970;          /* faint text on cream */
 
-  --red:        #2563eb;
-  --red-deep:   #1d4ed8;
-  --red-bright: #3b82f6;
+  /* ─── heraldic accents ─── grounded in Calderyn crest ─── */
+  --red:        #7a1818;          /* wine red — sparingly, A-list, warnings, seals */
+  --red-deep:   #5a1010;          /* deeper wine */
+  --red-bright: #9a2828;          /* lifted wine for hover */
 
-  --yellow:     #f59e0b;
-  --yellow-deep:#b45309;
+  --yellow:     #c9a14a;          /* PRIMARY heraldic gold — accents, CTAs, marks */
+  --yellow-deep:#a8862e;          /* gold pressed/hover */
 
-  --blue:       #2563eb;
-  --blue-deep:  #1d4ed8;
+  --blue:       #5b8bd6;          /* STRATA ice blue — STRATA-only callouts */
+  --blue-deep:  #3a5a9a;
 
-  --h-valaris:  #b91c1c;
-  --h-orenne:   #b45309;
-  --h-saberis:  #15803d;
-  --h-grimere:  #1d4ed8;
+  /* house colors — toned heraldic register */
+  --h-valaris:  #8a1818;          /* wine — house Valaris */
+  --h-orenne:   #b8862e;          /* warm gold — house Orenne */
+  --h-saberis:  #4f6b4f;          /* sage — house Saberis */
+  --h-grimere:  #3a5a9a;          /* steel blue — house Grimere */
 
+  /* ─── typography ─── */
   --sans:       'Inter', system-ui, -apple-system, sans-serif;
-  --display:    'Inter', system-ui, sans-serif;
+  --display:    'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
   --mono:       'JetBrains Mono', monospace;
 
+  /* ─── header heights ─── */
   --hdr-h:      72px;
   --tabs-h:     56px;
   --sticky-tabs-top:   var(--hdr-h);
@@ -62,7 +66,41 @@
   --hdr-subnav-h:      60px;
   --sticky-thead-top:  calc(var(--hdr-h) + var(--tabs-h));
   --sticky-thead-with-subnav-top: calc(var(--hdr-h) + var(--tabs-h) + var(--hdr-subnav-h));
+
+  /* ─── design system foundation ─── */
+  --radius-sm: 4px;
+  --radius:    8px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.45);
+  --shadow:    0 8px 28px rgba(0,0,0,.55);
+  --shadow-lg: 0 22px 70px rgba(0,0,0,.65);
+  --gold-glow: 0 0 0 1px rgba(201,161,74,.22), 0 6px 28px rgba(201,161,74,.12);
+  --ease:      cubic-bezier(.22,.61,.36,1);
+  --dur-fast:  140ms;
+  --dur:       240ms;
+  --dur-slow:  420ms;
 }
+
+/* ─── design-system foundation overrides ─── heraldic-study retoken ─── */
+body{
+  background:
+    radial-gradient(1400px 700px at 50% -10%, rgba(201,161,74,.06), transparent 65%),
+    radial-gradient(1000px 600px at 92% 110%, rgba(122,24,24,.05), transparent 60%),
+    var(--ink);
+  background-attachment: fixed;
+  color: var(--paper);
+}
+*:focus-visible{
+  outline:2px solid var(--yellow);
+  outline-offset:2px;
+  border-radius: var(--radius-sm);
+}
+::selection{ background:rgba(201,161,74,.32); color:var(--paper); }
+::-moz-selection{ background:rgba(201,161,74,.32); color:var(--paper); }
+*{ scrollbar-width:thin; scrollbar-color:var(--rule) transparent; }
+*::-webkit-scrollbar-thumb{ background:var(--rule); border-radius:0; }
+*::-webkit-scrollbar-thumb:hover{ background:var(--yellow-deep); }
+
 
 /* ─── reset ─── */
 *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
