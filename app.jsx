@@ -810,6 +810,8 @@ function PowersRegistry(){
                             <div className="preg-detail">
                               <span className="preg-detail-label">Expression</span>
                               <p className="preg-detail-text">{p.expression}</p>
+                              {p.drawbacks && <span className="preg-detail-label">Drawbacks / Limits</span>}
+                              {p.drawbacks && <p className="preg-detail-text">{p.drawbacks}</p>}
                             </div>
                           </td>
                         </tr>
