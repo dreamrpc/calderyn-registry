@@ -9666,6 +9666,44 @@ body, .pg, .page{
   }
 }
 
+/* Outside role "OPEN" pill — was yellow bg with dim grey text. Replace
+   with muted ghost chip matching the rest of the site's open-state pattern. */
+.orgs-role-open,
+.strc-role-open{
+  background:rgba(255,255,255,.04) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.4) !important;
+  border-radius:4px !important;
+  padding:3px 8px !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.4px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  font-style:normal !important;
+  display:inline-block !important;
+}
+
+/* Faculty Registry "OPEN ROLE" + Powerball "OPEN" + any other yellow pill
+   sitting on a saturated background — same treatment. */
+[class*="open-pill"],
+[class$="-open"]:not(.is-open):not(.curr-row.is-open):not(.preg-row.is-open),
+.role-open,
+.role-vacant,
+.position-open{
+  background:rgba(255,255,255,.04) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.4) !important;
+  border-radius:4px !important;
+  padding:3px 8px !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.4px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  font-style:normal !important;
+}
+
 </style>
 </head>
 <body>
