@@ -9603,6 +9603,20 @@ body, .pg, .page{
   color:var(--text) !important;
 }
 
+/* Curriculum year-tab strip: kill sticky positioning. The original CSS made
+   the strip sticky, but with the new card-style year tabs and gaps between
+   them, the sticky overlay shows scrolled content through the gaps and
+   stacks the year-tab text on top of class rows. Top-of-page navigation is
+   plenty for picking a year. */
+.curr-yeartabs{
+  position:static !important;
+  top:auto !important;
+  z-index:auto !important;
+  background:transparent !important;
+  border:none !important;
+  border-bottom:none !important;
+}
+
 </style>
 </head>
 <body>
