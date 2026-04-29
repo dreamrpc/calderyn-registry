@@ -9617,6 +9617,55 @@ body, .pg, .page{
   border-bottom:none !important;
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  CREST WATERMARK — identical position/size on every page                ║
+   ║  Single source of truth: 240px wide, right-aligned, .15 opacity.        ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* Apply to every page hero — PageHead variant + Join hero variant. */
+.pg-hd::after,
+.join-hero::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background-image:
+    url('https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png'),
+    radial-gradient(rgba(212,168,74,.10) 1px, transparent 1.4px) !important;
+  background-size: 240px auto, 14px 14px !important;
+  background-position: calc(100% - 36px) center, 0 0 !important;
+  background-repeat: no-repeat, repeat !important;
+  opacity:.15 !important;
+  filter:saturate(.5) brightness(.7) !important;
+  mix-blend-mode:normal !important;
+  mask-image:linear-gradient(90deg, transparent 55%, rgba(0,0,0,.95) 100%) !important;
+  -webkit-mask-image:linear-gradient(90deg, transparent 55%, rgba(0,0,0,.95) 100%) !important;
+  pointer-events:none !important;
+  z-index:0 !important;
+}
+.pg-hd-inner, .join-hero-inner{ position:relative; z-index:2 !important; }
+
+/* Don't ALSO render a separate crest watermark inside Lore world's own
+   intro slab — the page-head crest above it is canonical. */
+.lore-intro::after{
+  background-image: radial-gradient(rgba(212,168,74,.18) 1.4px, transparent 2px) !important;
+  background-size: 12px 12px !important;
+  background-position: 0 0 !important;
+  opacity:.5 !important;
+  mask-image:linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.15) 70%, transparent) !important;
+  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.15) 70%, transparent) !important;
+  filter:none !important;
+}
+
+/* Mobile: scale crest down so it doesn't crowd the headline */
+@media (max-width:900px){
+  .pg-hd::after,
+  .join-hero::after{
+    background-size: 180px auto, 14px 14px !important;
+    background-position: calc(100% - 16px) center, 0 0 !important;
+    opacity:.12 !important;
+  }
+}
+
 </style>
 </head>
 <body>

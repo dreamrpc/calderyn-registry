@@ -1267,8 +1267,7 @@ function HousesTab(){
 function LoreWorld(){
   return (
     <div className="lore">
-      <section className="lore-block lore-intro lore-intro-crest">
-        <img className="lore-intro-crest-watermark" src="https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png" alt="" aria-hidden="true" loading="lazy"/>
+      <section className="lore-block lore-intro">
         <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
         <h2 className="lore-intro-title">It is 2026, and there are <span className="accent">gods</span> walking around.</h2>
         <p className="lore-lead">
