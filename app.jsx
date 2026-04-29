@@ -3167,13 +3167,13 @@ function JoinTab(){
     const link = form.rpcLink ? `, link: ${s(form.rpcLink)}` : "";
     switch (type) {
       case "student":
-        return `{ char: ${s(form.char)}, alias: ${s(form.alias) || '""'}, house: ${s((form.house||"").toLowerCase())}, year: ${s(form.year)}, track: ${s((form.track||"").toLowerCase().replace(/s$/, ''))}, tier: ${s(form.tier)}, power: ${s(form.power)}${link} },`;
+        return `{ char: ${s(form.char)}, alias: ${s(form.alias) || '""'}, house: ${s((form.house||"").toLowerCase())}, year: ${s(form.year)}, track: ${s((form.track||"").toLowerCase().replace(/s$/, ''))}, tier: ${s(form.tier)}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
       case "faculty":
         return `// → goes in FACULTY → "${form.facultySection || ''}" section
-{ role: ${s(form.facultyRole)}, char: ${s(form.char)}, stage: ${s(form.alias) || '""'}, power: ${s(form.power)}${link} },`;
+{ role: ${s(form.facultyRole)}, char: ${s(form.char)}, stage: ${s(form.alias) || '""'}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
       case "strata":
         return `// → goes in HERO_LISTS → ${form.tier} list, fills first open slot
-{ alias: ${s(form.alias)}, char: ${s(form.char)}, power: ${s(form.power)}${link} },`;
+{ alias: ${s(form.alias)}, char: ${s(form.char)}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
       case "club":
         return `// → goes in CLUBS → "${form.clubName || ''}" → ${form.clubTeam ? 'team "' + form.clubTeam + '"' : 'positions'}
 { pos: ${s(form.clubPosition)}, char: ${s(form.char)}${link} },`;
@@ -3182,7 +3182,7 @@ function JoinTab(){
 { pos: ${s(form.govSeat)}, char: ${s(form.char)}, term: ${s(form.govTerm) || '"2026-27"'}${link} },`;
       case "collective":
         return `// → goes in GROUPS → "${form.collectiveName || ''}" → members
-{ alias: ${s(form.alias)}, role: ${s(form.collectiveRole)}, char: ${s(form.char)}${link} },`;
+{ alias: ${s(form.alias)}, role: ${s(form.collectiveRole)}, char: ${s(form.char)}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
       case "outside":
         return `// → goes in OUTSIDE → "${form.outsideSection || ''}" → org "${form.outsideOrg || ''}" → roles
 { role: ${s(form.outsideRole)}, char: ${s(form.char)}${link} },`;
