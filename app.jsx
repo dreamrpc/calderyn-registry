@@ -360,7 +360,7 @@ function RulesTab(){
       <PageHead
         stamp="DOC · 01 · NON-NEGOTIABLE"
         title={<>Rules &amp; conduct</>}
-        body="Read these before you apply. They are not negotiable and they are not long. If something isn't covered here, use common sense — and if you're unsure, ask admin before acting."
+        body="Read these before you apply. Short. Non-negotiable. If something isn't covered, use common sense — when in doubt, ask admin first."
         pageNum="P. 001 / VIII"
       />
       <div className="rules-grid">
@@ -378,10 +378,10 @@ function RulesTab(){
       <section className="about-bay">
         <div className="about-bay-stamp">About This RP</div>
         <p className="about-bay-text">
-          Calderyn College is an original world inspired by the room owners' favourite superhero media — an adaptation built from the parts of capes-and-cowls fiction that genuinely landed, recombined into something new. STRATA, the Vanguard, the houses, the curriculum, the politics: all original work. Any resemblance to specific characters, organisations, or storylines from existing media is the influence of love, not a port of canon.
+          Calderyn is an original world drawn from the parts of capes-and-cowls fiction we love, recombined into something new. STRATA, the Vanguard, the houses, the curriculum — all original. Any resemblance to existing characters or storylines is influence, not a port of canon.
         </p>
         <p className="about-bay-text about-bay-text-quiet">
-          This is a fan-made roleplaying setting created for collaborative storytelling. No infringement of any existing intellectual property is intended.
+          A fan-made roleplay setting for collaborative storytelling. No infringement of any existing intellectual property is intended.
         </p>
       </section>
     </div>
@@ -3290,9 +3290,7 @@ function JoinTab(){
           <div className="join-hero-stamp">⚑ INTAKE · 2026 INTAKE OPEN</div>
           <h2>Join the <span className="accent">registry.</span></h2>
           <p>
-            Calderyn is open for new characters. Pick what you're applying for, fill in the
-            details, and we'll review it on Discord. <strong>One form per character.</strong> If
-            you want to play multiple characters, submit them separately.
+            Calderyn is open. Pick what you're applying for, fill in the details, we'll review on Discord. <strong>One form per character</strong> — submit multiples separately.
           </p>
         </div>
       </div>
@@ -3303,9 +3301,7 @@ function JoinTab(){
           <span className="join-step-tag">Step 01 · Application Type</span>
           <div className="join-step-title">What are you applying for?</div>
           <div className="join-step-blurb">
-            Pick the role type that matches the character you want to play. The form will adjust
-            to ask only what's needed for that role. You can change your mind by clicking another
-            type — your inputs will reset.
+            Pick a role. The form adjusts to ask only what's needed. Switching types resets your inputs.
           </div>
           <div className="join-typegrid">
             {APPLICATION_TYPES.map((t, i) => (
@@ -3949,9 +3945,9 @@ function App(){
       <header className="masthead">
         <div className="mast-inner">
           <div className="mast-brand">
-            <div className="mast-brand-mark">CC</div>
+            <div className="mast-brand-mark" aria-label="Calderyn College">CC</div>
             <div className="mast-brand-text">
-              <div className="mast-brand-name">CALDERYN COLLEGE</div>
+              <div className="mast-brand-name">Calderyn College</div>
               <div className="mast-brand-sub">Central Registry · Greenwich</div>
             </div>
           </div>
@@ -3978,6 +3974,13 @@ function App(){
             <span className="mast-search-text">Search the registry…</span>
             <span className="mast-search-kbd">⌘K</span>
           </button>
+          <div className="mast-strata" aria-label="STRATA International — operator">
+            <div className="mast-strata-logo" aria-hidden="true"/>
+            <div className="mast-strata-text">
+              <div className="mast-strata-name">STRATA</div>
+              <div className="mast-strata-sub">International · Operator</div>
+            </div>
+          </div>
         </div>
       </header>
 
