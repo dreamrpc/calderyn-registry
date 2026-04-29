@@ -9305,6 +9305,84 @@ p, li, dd, dt{
   font-weight:700 !important;
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 11 — HOUSE AT A GLANCE + global "color:var(--ink)" sweep          ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* House at a Glance — every row span had color:var(--ink) directly */
+.house-glance-virtue,
+.house-glance-mascot{
+  color:var(--text) !important;
+  font-weight:600 !important;
+}
+.house-glance-traits{
+  color:var(--text-mid) !important;
+  font-size:11.5px !important;
+  letter-spacing:1.2px !important;
+}
+.house-glance-rival{
+  color:#ffd9dd !important;
+}
+.house-glance-tbl thead{
+  background:rgba(255,255,255,.03) !important;
+}
+.house-glance-tbl thead th{
+  color:var(--gold) !important;
+  font-family:var(--mono) !important;
+  font-size:11px !important;
+  letter-spacing:1.4px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  border-right:1px solid var(--rule-faint) !important;
+  background:transparent !important;
+}
+.house-glance-tbl tbody tr{
+  border-top:1px solid var(--rule-faint) !important;
+}
+.house-glance-tbl tbody tr:nth-child(even){
+  background:rgba(255,255,255,.015) !important;
+}
+.house-glance-tbl tbody td{
+  border-right:1px solid var(--rule-faint) !important;
+  color:var(--text) !important;
+}
+.house-glance-name{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:22px !important;
+  letter-spacing:-.005em !important;
+  text-transform:uppercase !important;
+}
+
+/* GLOBAL SAFETY NET — any class likely to carry text content but still
+   resolving to color:var(--ink) gets pushed to var(--text). */
+[class$="-virtue"],
+[class$="-mascot"],
+[class$="-traits"],
+[class$="-rival"],
+[class$="-name"]:not(.club-name):not(.club-side-name):not(.lore-house-name):not(.lore-vg-name):not(.curr-row-name),
+[class$="-title"]:not(.bay-hd-title):not(.club-side-stat-num):not(.curr-row-name),
+[class$="-label"]:not(.house-cell-name),
+[class$="-h"],
+[class$="-p"]{
+  color:var(--text) !important;
+}
+[class$="-traits"], [class$="-meta"], [class$="-sub"], [class$="-blurb"],
+[class$="-desc"], [class$="-text"], [class$="-note"], [class$="-bio"],
+[class$="-body"]{
+  color:var(--text-mid) !important;
+}
+
+/* Make sure highlighted em / accent inline get the gold treatment */
+[class$="-h"] em, [class$="-h"] .accent,
+[class$="-title"] em, [class$="-title"] .accent,
+[class$="-name"] em, [class$="-name"] .accent{
+  color:var(--gold-bright) !important;
+  font-style:italic;
+  font-weight:500;
+}
+
 </style>
 </head>
 <body>
