@@ -2253,8 +2253,8 @@ function StrataOverview({onJump}){
           <div className="strata-stat-sub">A → D-list talent ↗</div>
         </button>
         <button className="strata-stat" onClick={() => onJump("groups")}>
-          <div className="strata-stat-num">{groupMembers}<span className="strata-stat-of">/{groupCount}</span></div>
-          <div className="strata-stat-label">Group members across {sanctioned} sanctioned + {groupCount - sanctioned} independent</div>
+          <div className="strata-stat-num">{groupCount}</div>
+          <div className="strata-stat-label">{sanctioned} sanctioned · {groupCount - sanctioned} independent · {groupMembers} {groupMembers === 1 ? "member" : "members"} on file</div>
           <div className="strata-stat-sub">Vanguard & collectives ↗</div>
         </button>
       </section>
