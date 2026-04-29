@@ -6401,6 +6401,163 @@ button, .btn{
 .about-panel *{ color: rgba(237,228,200,.78) !important; }
 .about-panel strong{ color: #c9a14a !important; }
 
+/* === STEP 6 — KILL CREAM SURFACES SITEWIDE, NORMALISE TYPE === */
+.lore, .curr, .strc, .pg-guide, .orgs, .join,
+.curr-classes-list, .strc-roles, .banned-bay-list,
+.club-filters-band, .orgs-toolbar {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #ede4c8 !important;
+  border-color: rgba(201,161,74,.16) !important;
+  box-shadow: none !important;
+}
+.curr-classes-hd, .strc-group-note {
+  background: linear-gradient(180deg,#0f1319,#0c0f15) !important;
+  background-color: #0f1319 !important;
+  color: #ede4c8 !important;
+  border: 1px solid rgba(201,161,74,.16) !important;
+}
+.tier-card, .status-card, .banned-bay-item, .club, .join-type {
+  background: linear-gradient(180deg,#0f1319,#0c0f15) !important;
+  background-color: #0f1319 !important;
+  color: #ede4c8 !important;
+  border: 1px solid rgba(201,161,74,.18) !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.4) inset, 0 8px 22px -10px rgba(0,0,0,.6) !important;
+}
+.tier-card:hover, .status-card:hover, .club:hover, .join-type:hover {
+  border-color: rgba(201,161,74,.42) !important;
+}
+.lore, .lore *, .curr, .curr *, .strc, .strc *,
+.pg-guide, .pg-guide *, .orgs, .orgs *, .join, .join * {
+  color: #ede4c8;
+}
+.lore h2, .lore h3, .curr h2, .curr h3, .strc h2, .strc h3,
+.pg-guide h2, .pg-guide h3, .orgs h2, .orgs h3, .join h2, .join h3 {
+  color: #ede4c8 !important;
+}
+.lore p, .curr p, .strc p, .pg-guide p, .orgs p, .join p,
+.lore li, .curr li, .strc li, .pg-guide li, .orgs li, .join li,
+.lore dd, .curr dd, .strc dd, .pg-guide dd, .orgs dd, .join dd {
+  color: rgba(237,228,200,.78) !important;
+}
+.lore dt, .curr dt, .strc dt, .pg-guide dt, .orgs dt, .join dt {
+  color: #c9a14a !important; letter-spacing: .04em;
+}
+.lore strong, .curr strong, .strc strong, .pg-guide strong, .orgs strong, .join strong {
+  color: #ede4c8 !important; font-weight: 600;
+}
+.lore mark, .curr mark, .strc mark, .pg-guide mark, .orgs mark, .join mark {
+  background: rgba(201,161,74,.18) !important;
+  color: #ede4c8 !important;
+  padding: 0 .25em; border-radius: 0;
+  border-bottom: 1px solid rgba(201,161,74,.45);
+}
+.lore .accent, .lore .red, .curr .accent, .curr .red,
+.strc .accent, .strc .red, .pg-guide .accent, .pg-guide .red {
+  color: #b13a3a !important;
+}
+.curr-classes-list li, .strc-roles li, .banned-bay-list li {
+  border-bottom: 1px solid rgba(201,161,74,.10) !important;
+  background: transparent !important;
+}
+.curr-classes-list li:hover, .strc-roles li:hover {
+  background: rgba(201,161,74,.04) !important;
+}
+.curr [role="tab"], .curr .year-tab, .curr .yr-tab {
+  background: transparent !important;
+  color: rgba(237,228,200,.55) !important;
+  border-bottom: 2px solid transparent !important;
+}
+.curr [role="tab"][aria-selected="true"], .curr .year-tab.is-active, .curr .yr-tab.is-active {
+  color: #ede4c8 !important;
+  border-bottom-color: #c9a14a !important;
+}
+.curr article, .curr .subject-card, .curr .track-card {
+  border: 1px solid rgba(201,161,74,.18) !important;
+}
+.curr .hint, .curr .note, .curr [class*="hint"] {
+  background: rgba(201,161,74,.08) !important;
+  color: #c9a14a !important;
+  border: 1px solid rgba(201,161,74,.22) !important;
+}
+.tier-card .letter, .tier-card h2, .tier-card .glyph {
+  color: #c9a14a !important;
+  text-shadow: 0 0 18px rgba(201,161,74,.35);
+}
+.strc-roles li { background: transparent !important; color: #ede4c8 !important; }
+.strc-roles .role, .strc-roles .role-name { color: #ede4c8 !important; }
+.strc-roles .badge, .strc .badge {
+  background: rgba(201,161,74,.18) !important;
+  color: #c9a14a !important;
+  border: 1px solid rgba(201,161,74,.4) !important;
+  border-radius: 0 !important;
+}
+.strc .badge.classified, .strc-roles .badge.classified {
+  background: rgba(177,58,58,.22) !important;
+  color: #e57373 !important;
+  border-color: rgba(177,58,58,.55) !important;
+}
+.tier-card { position: relative; }
+.tier-card::before { background: rgba(201,161,74,.6) !important; }
+.club { text-align: left !important; }
+.club:hover { transform: translateY(-2px); }
+.club .club-meta {
+  background: rgba(0,0,0,.25) !important;
+  color: rgba(237,228,200,.7) !important;
+  border-top: 1px solid rgba(201,161,74,.14) !important;
+}
+.club-filters-band button, .club-filters-band .chip {
+  background: transparent !important;
+  border: 1px solid rgba(201,161,74,.32) !important;
+  color: #ede4c8 !important;
+  border-radius: 0 !important;
+}
+.club-filters-band .is-active, .club-filters-band [aria-pressed="true"] {
+  background: rgba(201,161,74,.18) !important;
+  border-color: #c9a14a !important;
+  color: #c9a14a !important;
+}
+.orgs-toolbar input, .orgs-toolbar select, .orgs-toolbar button {
+  background: rgba(0,0,0,.3) !important;
+  border: 1px solid rgba(201,161,74,.28) !important;
+  color: #ede4c8 !important;
+  border-radius: 0 !important;
+}
+.join-type { text-align: left !important; padding: 18px 22px !important; }
+.join-type:hover {
+  background: linear-gradient(180deg,#11161e,#0d1118) !important;
+  border-color: rgba(201,161,74,.42) !important;
+}
+.join-type.is-selected, .join-type[aria-pressed="true"] {
+  border-color: #c9a14a !important;
+  box-shadow: 0 0 0 1px rgba(201,161,74,.5) inset !important;
+}
+.lore [style*="color: #fff"], .curr [style*="color: #fff"],
+.strc [style*="color: #fff"], .pg-guide [style*="color: #fff"],
+.orgs [style*="color: #fff"], .join [style*="color: #fff"] {
+  color: #ede4c8 !important;
+}
+.lore table, .curr table, .strc table, .pg-guide table, .orgs table, .join table {
+  background: transparent !important;
+  color: #ede4c8 !important;
+  border-collapse: collapse;
+}
+.lore th, .curr th, .strc th, .pg-guide th, .orgs th, .join th {
+  color: #c9a14a !important;
+  background: rgba(0,0,0,.35) !important;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(201,161,74,.3) !important;
+}
+.lore td, .curr td, .strc td, .pg-guide td, .orgs td, .join td {
+  border-bottom: 1px solid rgba(201,161,74,.08) !important;
+  background: transparent !important;
+  color: #ede4c8 !important;
+}
+/* End STEP 6 */
+
+
 </style>
 </head>
 <body>
