@@ -8707,6 +8707,29 @@ tbody td:has(.empty-state-block){ padding:12px 16px !important; }
   .curr-row-name{ font-size:16px !important; }
 }
 
+/* WAVE 7b — kill dark-text-on-bright-pill. Every chip becomes dark surface
+   with bright text, consistent with the rest of the dark theme. */
+.curr-yearhead-tag.t-hero,
+.curr-row-track.t-hero{
+  color:#ffd9dd !important;
+  background:rgba(228,50,74,.14) !important;
+  border:1px solid rgba(228,50,74,.5) !important;
+  text-shadow:none !important;
+}
+.curr-yearhead-tag.t-sidekick,
+.curr-row-track.t-sidekick{
+  color:var(--gold-bright) !important;
+  background:rgba(212,168,74,.12) !important;
+  border:1px solid rgba(212,168,74,.5) !important;
+  text-shadow:none !important;
+}
+.curr-row-track.t-shared{
+  color:var(--silver-bright) !important;
+  background:rgba(201,205,211,.10) !important;
+  border:1px solid rgba(201,205,211,.4) !important;
+  text-shadow:none !important;
+}
+
 </style>
 </head>
 <body>
