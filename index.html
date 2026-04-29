@@ -6247,6 +6247,472 @@ h1,h2,h3,h4{ color:var(--text); }
 strong{ color:var(--text); }
 em{ color:var(--gold-bright); font-style:italic; }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 2 — CONTRAST FIXES, COMIC PUSH, DEAN PORTRAIT, CREST WATERMARK    ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* ─── 1. Dean portrait inside lore-intro ─── */
+.lore-intro-portrait{ padding-top:64px; padding-bottom:56px; }
+.lore-intro-portrait-wrap{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 320px;
+  gap:48px;
+  align-items:center;
+}
+.lore-intro-portrait-text{ min-width:0; }
+.lore-intro-portrait-fig{
+  position:relative;
+  margin:0;
+  aspect-ratio:3/4;
+  background:linear-gradient(180deg, #14141a, #08080b);
+  border:1px solid var(--rule-soft);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 30px 60px -28px rgba(0,0,0,.95), 0 0 0 1px rgba(212,168,74,.18);
+}
+.lore-intro-portrait-fig::after{
+  content:"";
+  position:absolute; inset:0;
+  background-image:radial-gradient(rgba(193,26,44,.18) 1px, transparent 1.5px);
+  background-size:6px 6px;
+  mix-blend-mode:screen;
+  opacity:.45;
+  mask-image:linear-gradient(180deg, rgba(0,0,0,.9), transparent 70%);
+  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.9), transparent 70%);
+  pointer-events:none;
+}
+.lore-intro-portrait-fig img{
+  width:100%; height:100%;
+  object-fit:cover;
+  object-position:center top;
+  filter:contrast(1.05) saturate(.92);
+}
+.lore-intro-portrait-fig figcaption{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  padding:18px 22px 16px;
+  background:linear-gradient(180deg, transparent, rgba(0,0,0,.92) 60%);
+  display:flex; flex-direction:column; gap:2px;
+}
+.lore-intro-portrait-cap{
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  color:var(--gold);
+}
+.lore-intro-portrait-name{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:20px;
+  letter-spacing:-.01em;
+  color:var(--text);
+}
+@media (max-width:900px){
+  .lore-intro-portrait-wrap{ grid-template-columns:1fr; gap:28px; }
+  .lore-intro-portrait-fig{ max-width:340px; aspect-ratio:4/5; }
+}
+
+/* ─── 2. Calderyn crest watermark on Lore world hero ─── */
+.lore-intro-crest{ overflow:hidden; }
+.lore-intro-crest-watermark{
+  position:absolute;
+  right:-60px; top:50%;
+  transform:translateY(-50%);
+  width:520px;
+  max-width:55%;
+  opacity:.085;
+  filter:drop-shadow(0 20px 40px rgba(193,26,44,.4));
+  pointer-events:none;
+  user-select:none;
+  z-index:0;
+}
+.lore-intro-crest > *:not(.lore-intro-crest-watermark){ position:relative; z-index:1; }
+@media (max-width:900px){
+  .lore-intro-crest-watermark{ right:-120px; opacity:.06; width:440px; }
+}
+
+/* Also drop a faint crest into every page-head as a watermark */
+.pg-hd::after{
+  background-image:
+    url('https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png'),
+    radial-gradient(rgba(212,168,74,.12) 1px, transparent 1.4px);
+  background-size: 360px auto, 14px 14px;
+  background-position: calc(100% - 32px) center, 0 0;
+  background-repeat: no-repeat, repeat;
+  opacity:.85;
+  mix-blend-mode:normal;
+  mask-image:linear-gradient(90deg, transparent 50%, rgba(0,0,0,.9) 100%),
+             linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.15) 70%, transparent);
+  -webkit-mask-image:linear-gradient(90deg, transparent 50%, rgba(0,0,0,.9) 100%),
+                     linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.15) 70%, transparent);
+  filter:saturate(.6) brightness(.7);
+}
+.pg-hd-inner{ position:relative; z-index:1; }
+
+/* ─── 3. CONTRAST FIXES — kill all #fff5d4 cream hovers; force readable text ─── */
+tbody tr:hover td,
+.house-glance-tbl tbody tr:nth-child(even),
+.class-chip-btn:not(:disabled):hover,
+.class-chip.is-open .class-chip-btn,
+.freg-row.is-clickable:hover,
+.freg-row.is-open,
+.preg-row.is-clickable:hover,
+.preg-row.is-open,
+.club-filter-pill:hover,
+.club-filter-pill.on{
+  background:rgba(212,168,74,.10) !important;
+  color:var(--text) !important;
+}
+.freg-row.is-open, .preg-row.is-open{
+  background:rgba(212,168,74,.06) !important;
+}
+
+/* Anything still rendering on a hardcoded #fff or near-white */
+[style*="background:#fff"]:not(input):not(select):not(textarea),
+[style*="background: #fff"]:not(input):not(select):not(textarea){
+  background:var(--paper-2) !important;
+  color:var(--text) !important;
+}
+
+/* Tier-pill #555 fallback → readable */
+.tier-pill{
+  color:var(--text) !important;
+  text-shadow:0 1px 0 rgba(0,0,0,.4);
+}
+
+/* Form inputs — keep them dark, readable */
+.join-input, .join-select, .join-textarea{
+  background:var(--paper-3) !important;
+  color:var(--text) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:8px !important;
+  padding:11px 13px !important;
+  font-family:var(--sans) !important;
+  font-size:14px !important;
+  transition:border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.join-input:focus, .join-select:focus, .join-textarea:focus{
+  border-color:var(--gold) !important;
+  background:var(--paper-2) !important;
+  outline:none !important;
+}
+.join-input::placeholder, .join-textarea::placeholder{ color:var(--text-low) !important; }
+.join-select option{ background:var(--paper-2); color:var(--text); }
+
+/* Form labels and field chrome */
+.join-field-label, .join-step-tag, .join-step-title, .join-step-blurb{
+  color:var(--text);
+}
+.join-step-title{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  background:transparent !important;
+  font-size:28px !important;
+  letter-spacing:-.01em !important;
+}
+.join-step-blurb{ color:var(--text-mid); }
+.join-step-tag{
+  color:var(--gold) !important;
+  background:transparent !important;
+  border:1px solid rgba(212,168,74,.4) !important;
+  border-radius:999px !important;
+  padding:5px 12px !important;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:2px;
+  font-weight:600;
+}
+.join-checkbox{ color:var(--text-mid); }
+.join-checkbox input[type="checkbox"]{ accent-color:var(--gold); }
+
+/* Type-grid (step 1 picker buttons) */
+.join-type-card, .join-typegrid > button{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  color:var(--text) !important;
+  border-radius:14px !important;
+  padding:22px !important;
+  text-align:left !important;
+  cursor:pointer;
+  transition:transform var(--dur) var(--ease), border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.join-type-card:hover, .join-typegrid > button:hover{
+  transform:translateY(-2px);
+  border-color:rgba(212,168,74,.4) !important;
+  box-shadow:0 18px 40px -28px rgba(0,0,0,.9), 0 0 0 1px rgba(212,168,74,.15);
+}
+.join-type-card.on, .join-typegrid > button.on{
+  border-color:var(--gold) !important;
+  background:linear-gradient(180deg, rgba(193,26,44,.18), var(--paper-2)) !important;
+  box-shadow:0 0 0 1px var(--gold), 0 18px 40px -28px rgba(193,26,44,.5);
+}
+
+/* Submit button → comic-style red with gold border */
+.join-submit{
+  background:linear-gradient(180deg, var(--red-bright), var(--red)) !important;
+  color:var(--text) !important;
+  border:2px solid var(--gold) !important;
+  border-radius:8px !important;
+  font-family:var(--sans);
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  padding:13px 24px !important;
+  cursor:pointer;
+  transition:transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  box-shadow:0 6px 0 0 var(--red-deep), 0 18px 40px -20px rgba(193,26,44,.5);
+}
+.join-submit:hover:not(:disabled){
+  transform:translateY(-1px);
+  box-shadow:0 8px 0 0 var(--red-deep), 0 22px 50px -20px rgba(193,26,44,.65);
+}
+.join-submit:active:not(:disabled){ transform:translateY(2px); box-shadow:0 4px 0 0 var(--red-deep); }
+.join-submit:disabled{
+  background:var(--paper-3) !important;
+  color:var(--text-low) !important;
+  border-color:var(--rule-soft) !important;
+  box-shadow:none;
+  cursor:not-allowed;
+}
+.join-cancel{
+  color:var(--text-mid) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:8px !important;
+  background:transparent !important;
+}
+.join-cancel:hover{ border-color:var(--gold) !important; color:var(--text) !important; }
+
+.join-confirm{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-left:3px solid var(--gold) !important;
+  border-radius:14px !important;
+  color:var(--text) !important;
+}
+.join-confirm h3{ color:var(--text) !important; font-family:var(--serif) !important; font-weight:600 !important; }
+.join-confirm p{ color:var(--text-mid) !important; }
+
+/* Generic catch-all: any old "cream" surface that isn't masthead/dark */
+.bay, .case, .curr, .strc, .gov, .group{
+  color:var(--text);
+}
+
+/* ─── 4. COMIC PUSH — thicker borders, brighter halftone, panel shadows ─── */
+
+/* Stronger halftone on heroes (was .55, now .8 + larger dots) */
+.pg-hd::after{ /* already overridden above with crest */ }
+.lore-block.lore-intro::after,
+.about-bay::after,
+.join-confirm::after{
+  background-image: radial-gradient(rgba(212,168,74,.18) 1.4px, transparent 2px);
+  background-size: 12px 12px;
+  opacity:.7;
+}
+
+/* Comic-frame card style for major content cards */
+.lore-vg, .lore-house, .rule, .club-card, .club, .group, .case, .gov, .strc, .kb-team, .cp-rgroup{
+  border:1px solid var(--rule-soft) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.04) inset,
+    0 22px 44px -32px rgba(0,0,0,.95);
+  position:relative;
+}
+.lore-vg::before, .lore-house::before, .rule::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background-image:radial-gradient(rgba(255,255,255,.045) 1px, transparent 1.3px);
+  background-size:14px 14px;
+  pointer-events:none;
+  mask-image:linear-gradient(135deg, rgba(0,0,0,.6), transparent 60%);
+  -webkit-mask-image:linear-gradient(135deg, rgba(0,0,0,.6), transparent 60%);
+  opacity:.5;
+}
+
+/* Bigger hero title — more visual weight */
+.lore-intro-title{ font-size:84px; }
+@media (max-width:900px){ .lore-intro-title{ font-size:48px; } }
+
+/* Tab indicator: thicker comic underline */
+.tab.on::after{ height:3px; }
+
+/* Section row in tables — more dramatic comic stamp */
+.sec-row td{
+  background:linear-gradient(90deg, var(--red-deep) 0%, var(--red) 50%, var(--red-deep) 100%) !important;
+  text-shadow:0 1px 0 rgba(0,0,0,.4);
+  border-top:1px solid rgba(255,255,255,.08) !important;
+  border-bottom:1px solid rgba(0,0,0,.5) !important;
+  position:relative;
+}
+
+/* Page-head pageNum — comic-style page tag */
+.pg-hd-note{
+  background:rgba(212,168,74,.06);
+  border-left:3px solid var(--gold);
+  border-radius:0 6px 6px 0;
+  padding:10px 14px 10px 16px;
+}
+
+/* "About this RP" gets a thicker comic strip on the left */
+.about-bay{ border-left-width:4px !important; }
+
+/* ─── 5. Footer brand mark — keep crest visible ─── */
+.footer-brand::before{
+  content:"";
+  display:inline-block;
+  width:28px; height:28px;
+  vertical-align:-7px;
+  margin-right:10px;
+  background:url('https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png') center/contain no-repeat;
+}
+
+/* ─── 6. Universal: any remaining low-contrast text ─── */
+p, li, span, td, th, label, div { /* don't change everything; only tighten where text-color is unset */ }
+.muted, .faint{ color:var(--text-low); }
+
+/* ─── 7. STRATA Overview dashboard ─── */
+.strata-overview{
+  max-width:1680px;
+  margin:0 auto;
+  padding:32px 40px 48px;
+}
+.strata-stats{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:18px;
+  margin-bottom:36px;
+}
+.strata-stat{
+  text-align:left;
+  padding:24px 26px;
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2));
+  border:1px solid var(--rule-soft);
+  border-radius:14px;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  color:var(--text);
+  transition:transform var(--dur) var(--ease), border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.strata-stat::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.04) 1px, transparent 1.4px);
+  background-size:14px 14px;
+  mask-image:linear-gradient(135deg, rgba(0,0,0,.5), transparent 60%);
+  -webkit-mask-image:linear-gradient(135deg, rgba(0,0,0,.5), transparent 60%);
+  pointer-events:none;
+}
+.strata-stat::after{
+  content:"";
+  position:absolute;
+  top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--red), var(--gold));
+  transform:scaleX(.4);
+  transform-origin:left;
+  transition:transform var(--dur) var(--ease);
+}
+.strata-stat:hover{
+  transform:translateY(-2px);
+  border-color:rgba(212,168,74,.4);
+  box-shadow:0 22px 50px -32px rgba(0,0,0,.95);
+}
+.strata-stat:hover::after{ transform:scaleX(1); }
+.strata-stat-num{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:54px;
+  line-height:1;
+  letter-spacing:-.02em;
+  color:var(--text);
+  margin-bottom:6px;
+}
+.strata-stat-of{
+  font-size:24px;
+  color:var(--text-low);
+  font-weight:400;
+  letter-spacing:0;
+  margin-left:4px;
+}
+.strata-stat-label{
+  font-size:14px;
+  color:var(--text-mid);
+  line-height:1.5;
+  margin-bottom:10px;
+}
+.strata-stat-sub{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  color:var(--gold);
+  font-weight:600;
+}
+@media (max-width:900px){ .strata-stats{ grid-template-columns:1fr; } }
+
+.strata-directory{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2));
+  border:1px solid var(--rule-soft);
+  border-radius:14px;
+  padding:28px 28px 0;
+  overflow:hidden;
+}
+.strata-directory-hd{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px;
+  margin-bottom:20px;
+}
+.strata-directory-eyebrow{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:8px;
+  font-weight:700;
+}
+.strata-directory-title{
+  font-family:var(--serif);
+  font-weight:600;
+  font-size:32px;
+  line-height:1.1;
+  letter-spacing:-.015em;
+  color:var(--text);
+  margin-bottom:6px;
+}
+.strata-directory-blurb{
+  color:var(--text-mid);
+  font-size:14px;
+  line-height:1.6;
+  max-width:580px;
+}
+.strata-directory-count{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  color:var(--text-low);
+  border:1px solid var(--rule-soft);
+  border-radius:999px;
+  padding:6px 12px;
+  font-weight:600;
+  white-space:nowrap;
+}
+.strata-directory .tw{ border:none; border-top:1px solid var(--rule-soft); border-radius:0; }
+.strata-crossref{
+  display:inline-block;
+  margin-left:8px;
+  color:var(--gold-bright);
+  font-size:14px;
+  vertical-align:1px;
+  cursor:help;
+}
+
 </style>
 </head>
 <body>

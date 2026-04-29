@@ -1250,7 +1250,8 @@ function HousesTab(){
 function LoreWorld(){
   return (
     <div className="lore">
-      <section className="lore-block lore-intro">
+      <section className="lore-block lore-intro lore-intro-crest">
+        <img className="lore-intro-crest-watermark" src="https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png" alt="" aria-hidden="true" loading="lazy"/>
         <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
         <h2 className="lore-intro-title">It is 2026, and there are <span className="accent">gods</span> walking around.</h2>
         <p className="lore-lead">
@@ -1630,14 +1631,25 @@ function LoreHouses(){
 function LoreDean(){
   return (
     <div className="lore">
-      <section className="lore-block lore-intro">
-        <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
-        <h2 className="lore-intro-title">The <span className="accent">Dean.</span></h2>
-        <p className="lore-lead">
-          Her name is <strong>Dr. Devika Ravindrakumar</strong>. She is fifty-three, born in
-          Manchester, and her power, when she chooses to use it, is to switch other powers
-          off.
-        </p>
+      <section className="lore-block lore-intro lore-intro-portrait">
+        <div className="lore-intro-portrait-wrap">
+          <div className="lore-intro-portrait-text">
+            <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
+            <h2 className="lore-intro-title">The <span className="accent">Dean.</span></h2>
+            <p className="lore-lead">
+              Her name is <strong>Dr. Devika Ravindrakumar</strong>. She is fifty-three, born in
+              Manchester, and her power, when she chooses to use it, is to switch other powers
+              off.
+            </p>
+          </div>
+          <figure className="lore-intro-portrait-fig">
+            <img src="https://i.ibb.co/sJ5Cpr33/d3e97bef-2645-43b0-ae16-fddf2256890f.png" alt="Dr. Devika Ravindrakumar — Dean of Calderyn" loading="lazy"/>
+            <figcaption>
+              <span className="lore-intro-portrait-cap">Dean</span>
+              <span className="lore-intro-portrait-name">Devika Ravindrakumar</span>
+            </figcaption>
+          </figure>
+        </div>
       </section>
 
       <section className="lore-block">
@@ -2182,20 +2194,112 @@ function StrataCorporateView(){
   );
 }
 
+/* ─── Unified STRATA dashboard — one organisation, three faces ─── */
+function StrataOverview({onJump}){
+  // Aggregate counts
+  const corpRoles = STRATA.reduce((n, s) => n + s.rows.length, 0);
+  const corpFilled = STRATA.reduce((n, s) => n + s.rows.filter(r => r.char || r.clf).length, 0);
+  const heroSlots = HERO_LISTS.reduce((n, l) => n + l.slots.length, 0);
+  const heroFilled = HERO_LISTS.reduce((n, l) => n + l.slots.filter(s => s.char).length, 0);
+  const groupCount = GROUPS.length;
+  const sanctioned = GROUPS.filter(g => g.sanctioned).length;
+  const groupMembers = GROUPS.reduce((n, g) => n + g.members.filter(m => m.char).length, 0);
+
+  // Unified directory — every named person under STRATA's umbrella, with their role-type
+  const directory = [];
+  STRATA.forEach(sec => sec.rows.forEach(r => {
+    if (r.char) directory.push({ kind: "Corporate", section: sec.section, role: r.role, char: r.char, link: r.link || null, npc: r.npc });
+  }));
+  HERO_LISTS.forEach(l => l.slots.forEach(s => {
+    if (s.char) directory.push({ kind: `${l.tier}-List Hero`, section: "Talent Roster", role: s.alias, char: s.char, link: s.link || null, power: s.power });
+  }));
+  GROUPS.forEach(g => g.members.forEach(m => {
+    if (m.char) directory.push({ kind: g.sanctioned ? "Sanctioned Group" : "Collective", section: g.name, role: m.role || m.alias, char: m.char, link: m.link || null, alias: m.alias, npc: m.npc });
+  }));
+  // Cross-references: people appearing in multiple sections
+  const byChar = {};
+  directory.forEach(d => { byChar[d.char] = (byChar[d.char] || 0) + 1; });
+  directory.forEach(d => { d.crossRef = byChar[d.char] > 1; });
+  directory.sort((a, b) => a.char.localeCompare(b.char));
+
+  return (
+    <div className="strata-overview">
+      <section className="strata-stats">
+        <button className="strata-stat" onClick={() => onJump("corporate")}>
+          <div className="strata-stat-num">{corpFilled}<span className="strata-stat-of">/{corpRoles}</span></div>
+          <div className="strata-stat-label">Corporate roles filled</div>
+          <div className="strata-stat-sub">Internal structure ↗</div>
+        </button>
+        <button className="strata-stat" onClick={() => onJump("talent")}>
+          <div className="strata-stat-num">{heroFilled}<span className="strata-stat-of">/{heroSlots}</span></div>
+          <div className="strata-stat-label">Heroes on the roster</div>
+          <div className="strata-stat-sub">A → D-list talent ↗</div>
+        </button>
+        <button className="strata-stat" onClick={() => onJump("groups")}>
+          <div className="strata-stat-num">{groupMembers}<span className="strata-stat-of">/{groupCount}</span></div>
+          <div className="strata-stat-label">Group members across {sanctioned} sanctioned + {groupCount - sanctioned} independent</div>
+          <div className="strata-stat-sub">Vanguard & collectives ↗</div>
+        </button>
+      </section>
+
+      <section className="strata-directory">
+        <div className="strata-directory-hd">
+          <div>
+            <div className="strata-directory-eyebrow">◆ Unified Directory</div>
+            <h3 className="strata-directory-title">Every name on the STRATA books.</h3>
+            <p className="strata-directory-blurb">Corporate, talent, and group affiliations in one place. Names with cross-affiliation are flagged.</p>
+          </div>
+          <div className="strata-directory-count">{directory.length} entries</div>
+        </div>
+        <div className="tw">
+          <table>
+            <thead><tr>
+              <th style={{width:"34%"}}>Character</th>
+              <th style={{width:"22%"}}>Type</th>
+              <th>Role / Section</th>
+            </tr></thead>
+            <tbody>
+              {directory.length === 0 && <tr><td colSpan={3}><EmptyState label="No personnel on file."/></td></tr>}
+              {directory.map((d, di) => (
+                <tr key={di}>
+                  <td>
+                    <CLink name={d.char} link={d.link}/>
+                    {d.npc && <NpcBadge/>}
+                    {d.crossRef && <span className="strata-crossref" title="Appears in multiple STRATA sections">⇄</span>}
+                  </td>
+                  <td><Chip variant={d.kind === "Corporate" ? "ink" : d.kind === "Sanctioned Group" ? "gold" : d.kind === "Collective" ? "ghost" : "red"}>{d.kind}</Chip></td>
+                  <td><span style={{color:"var(--text-mid)"}}>{d.section}</span> <span style={{color:"var(--text-low)", margin:"0 6px"}}>·</span> <span style={{color:"var(--text)", fontWeight:600}}>{d.role}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function StrataTab(){
   const ctx = React.useContext(RegContext);
-  const [view, setView] = useState("corporate");
+  const [view, setView] = useState("overview");
   useEffect(() => {
-    if (ctx.targetSubview && ["corporate","talent","groups"].includes(ctx.targetSubview)){
+    if (ctx.targetSubview && ["overview","corporate","talent","groups"].includes(ctx.targetSubview)){
       setView(ctx.targetSubview);
       ctx.consumeSubview();
     }
   }, [ctx]);
 
   const titleMap = {
+    overview:  <>STRATA <span className="pg-hd-accent">at a glance</span></>,
     corporate: <>STRATA corporate</>,
     talent:    <>STRATA talent</>,
     groups:    <>Hero collectives</>,
+  };
+  const bodyMap = {
+    overview:  "One organisation, three faces. Corporate, talent, and sanctioned groups in a single directory. Click any tile to drill in.",
+    corporate: "Corporate employees, field agents, and PR. Executive identities are classified at Level 4+. Contact admin to claim a senior role.",
+    talent:    "STRATA's contracted heroes — A-list down to D-list. Tier reflects roster prominence and contract value, not raw power.",
+    groups:    "The sanctioned Vanguard at the top. Independent collectives below — unsanctioned heroes operating outside STRATA's contract system.",
   };
 
   return (
@@ -2203,7 +2307,7 @@ function StrataTab(){
       <PageHead
         stamp="DOC · 06 · STRATA"
         title={titleMap[view]}
-        body="Corporate employees, field agents, and sanctioned heroes. Executive identities are classified at Level 4+. Contact admin to claim a senior role."
+        body={bodyMap[view]}
         note={<>⚠ Viewing this section is logged<br/>Executive records: Level 4+ only</>}
         noteVariant="warn"
         pageNum="P. 006 / VIII"
@@ -2211,6 +2315,7 @@ function StrataTab(){
       <div className="subnav">
         <div className="subnav-inner">
           {[
+            ["overview","Overview","Unified directory"],
             ["corporate","Corporate","Internal structure"],
             ["talent","Talent","A → D-list heroes"],
             ["groups","Groups","Vanguard & collectives"]
@@ -2228,6 +2333,7 @@ function StrataTab(){
         </div>
       </div>
 
+      {view === "overview"  && <StrataOverview onJump={setView}/>}
       {view === "corporate" && <StrataCorporateView/>}
       {view === "talent"    && <StrataTalent/>}
       {view === "groups"    && <StrataGroups/>}
@@ -3147,18 +3253,20 @@ function JoinTab(){
   // Validation: list missing required fields per application type
   const requiredFields = useMemo(() => {
     if (!type) return [];
-    const base = ["rpcLink", "char", "concept", "rulesAgree"];
+    const base = ["rpcLink", "char", "rulesAgree"];
+    // Power fields are universal: any role can be powered unless explicitly "fully human"
+    const power = form.fullyHuman ? [] : ["power", "ability", "powerExpression", "powerFunctions", "drawbacks"];
     switch (type) {
-      case "student":    return [...base, "house", "year", "track", "tier", "power", "powerExpression", "drawbacks"];
-      case "faculty":    return [...base, "facultyRole", "power", "powerExpression", "drawbacks"];
-      case "strata":     return [...base, "alias", "tier", "power", "powerExpression", "drawbacks"];
-      case "club":       return [...base, "clubPosition"];
-      case "gov":        return [...base, "govSeat"];
-      case "collective": return [...base, "alias", "collectiveRole", "power", "powerExpression", "drawbacks"];
-      case "outside":    return [...base, "outsideOrg", "outsideRole"];
+      case "student":    return [...base, "house", "year", "track", "tier", ...power];
+      case "faculty":    return [...base, "facultyRole", ...power];
+      case "strata":     return [...base, "alias", "tier", ...power];
+      case "club":       return [...base, "clubPosition", ...power];
+      case "gov":        return [...base, "govSeat", ...power];
+      case "collective": return [...base, "alias", "collectiveName", "collectiveRole", ...power];
+      case "outside":    return [...base, "outsideOrg", "outsideRole", ...power];
       default: return base;
     }
-  }, [type]);
+  }, [type, form.fullyHuman]);
 
   const missing = requiredFields.filter(k => !form[k] || !String(form[k]).trim());
   const canSubmit = type && missing.length === 0 && status.state !== "loading";
@@ -3167,29 +3275,53 @@ function JoinTab(){
   const buildSnippet = () => {
     const s = (v) => v ? `"${String(v).replace(/"/g, '\\"')}"` : "";
     const link = form.rpcLink ? `, link: ${s(form.rpcLink)}` : "";
+    const human = form.fullyHuman ? `, human: true` : "";
+    const powerFrag = form.fullyHuman ? "" :
+      `, power: ${s(form.power)}, ability: ${s(form.ability)}, expression: ${s(form.powerExpression)}, functions: ${s(form.powerFunctions)}, drawbacks: ${s(form.drawbacks)}`;
+
+    let main = "";
     switch (type) {
       case "student":
-        return `{ char: ${s(form.char)}, alias: ${s(form.alias) || '""'}, house: ${s((form.house||"").toLowerCase())}, year: ${s(form.year)}, track: ${s((form.track||"").toLowerCase())}, tier: ${s(form.tier)}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
+        main = `{ char: ${s(form.char)}, alias: ${s(form.alias) || '""'}, house: ${s((form.house||"").toLowerCase())}, year: ${s(form.year)}, track: ${s((form.track||"").toLowerCase())}, tier: ${s(form.tier)}${powerFrag}${human}${link} },`;
+        break;
       case "faculty":
-        return `// → goes in FACULTY → "${form.facultySection || ''}" section
-{ role: ${s(form.facultyRole)}, char: ${s(form.char)}, stage: ${s(form.alias) || '""'}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
+        main = `// → goes in FACULTY → "${form.facultySection || ''}" section
+{ role: ${s(form.facultyRole)}, char: ${s(form.char)}, stage: ${s(form.alias) || '""'}${powerFrag}${human}${link} },`;
+        break;
       case "strata":
-        return `// → goes in HERO_LISTS → ${form.tier} list, fills first open slot
-{ alias: ${s(form.alias)}, char: ${s(form.char)}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
+        main = `// → goes in HERO_LISTS → ${form.tier} list, fills first open slot
+{ alias: ${s(form.alias)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
+        break;
       case "club":
-        return `// → goes in CLUBS → "${form.clubName || ''}" → ${form.clubTeam ? 'team "' + form.clubTeam + '"' : 'positions'}
-{ pos: ${s(form.clubPosition)}, char: ${s(form.char)}${link} },`;
+        main = `// → goes in CLUBS → "${form.clubName || ''}" → ${form.clubTeam ? 'team "' + form.clubTeam + '"' : 'positions'}
+{ pos: ${s(form.clubPosition)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
+        break;
       case "gov":
-        return `// → goes in STUDENT_GOV → "${form.govSection || ''}" → seats
-{ pos: ${s(form.govSeat)}, char: ${s(form.char)}, term: ${s(form.govTerm) || '"2026-27"'}${link} },`;
+        main = `// → goes in STUDENT_GOV → "${form.govSection || ''}" → seats
+{ pos: ${s(form.govSeat)}, char: ${s(form.char)}, term: ${s(form.govTerm) || '"2026-27"'}${powerFrag}${human}${link} },`;
+        break;
       case "collective":
-        return `// → goes in GROUPS → "${form.collectiveName || ''}" → members
-{ alias: ${s(form.alias)}, role: ${s(form.collectiveRole)}, char: ${s(form.char)}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
+        main = `// → goes in GROUPS → "${form.collectiveName || ''}" → members
+{ alias: ${s(form.alias)}, role: ${s(form.collectiveRole)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
+        break;
       case "outside":
-        return `// → goes in OUTSIDE → "${form.outsideSection || ''}" → org "${form.outsideOrg || ''}" → roles
-{ role: ${s(form.outsideRole)}, char: ${s(form.char)}${link} },`;
+        main = `// → goes in OUTSIDE → "${form.outsideSection || ''}" → org "${form.outsideOrg || ''}" → roles
+{ role: ${s(form.outsideRole)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
+        break;
       default: return "";
     }
+
+    // Optional cross-references for student form (clubs / gov)
+    const extras = [];
+    if (type === "student" && form.optClubPosition){
+      extras.push(`// → also add to CLUBS → "${form.optClubName || ''}" → ${form.optClubTeam ? 'team "' + form.optClubTeam + '"' : 'positions'}
+{ pos: ${s(form.optClubPosition)}, char: ${s(form.char)}${link} },`);
+    }
+    if (type === "student" && form.optGovSeat){
+      extras.push(`// → also add to STUDENT_GOV → "${form.optGovSection || ''}" → seats
+{ pos: ${s(form.optGovSeat)}, char: ${s(form.char)}, term: ${s(form.optGovTerm) || '"2026-27"'}${link} },`);
+    }
+    return [main, ...extras].join("\n\n");
   };
 
   const submit = async () => {
@@ -3204,7 +3336,7 @@ function JoinTab(){
     const typeName = APPLICATION_TYPES.find(t => t.id === type)?.name || type;
     const snippet = buildSnippet();
 
-    // Build the Discord embed
+    // Build the Discord embed — only the info admin actually needs to update the site
     const fields = [
       { name: "Type",          value: typeName, inline: true },
       { name: "Character",     value: form.char || "—", inline: true },
@@ -3215,15 +3347,27 @@ function JoinTab(){
     if (form.year)             fields.push({ name: "Year",        value: form.year, inline: true });
     if (form.track)            fields.push({ name: "Track",       value: form.track, inline: true });
     if (form.tier)             fields.push({ name: "Tier",        value: form.tier, inline: true });
-    if (form.power)            fields.push({ name: "Power Type",  value: form.power, inline: false });
-    if (form.powerExpression)  fields.push({ name: "Power Expression / How It Works", value: form.powerExpression.slice(0, 1024), inline: false });
-    if (form.drawbacks)        fields.push({ name: "Drawbacks / Limits", value: form.drawbacks.slice(0, 1024), inline: false });
     if (form.facultyRole)      fields.push({ name: "Faculty Role",     value: `${form.facultyRole} (${form.facultySection || '?'})`, inline: false });
     if (form.clubPosition)     fields.push({ name: "Club Position",    value: `${form.clubName || '?'} — ${form.clubPosition}${form.clubTeam ? ' (' + form.clubTeam + ')' : ''}`, inline: false });
     if (form.govSeat)          fields.push({ name: "Gov Seat",         value: `${form.govSeat} (${form.govSection || '?'})`, inline: false });
     if (form.collectiveRole)   fields.push({ name: "Collective",       value: `${form.collectiveName || '?'} — ${form.collectiveRole}`, inline: false });
     if (form.outsideRole)      fields.push({ name: "Outside Role",     value: `${form.outsideOrg || '?'} — ${form.outsideRole}`, inline: false });
-    if (form.concept)          fields.push({ name: "Character Concept", value: form.concept.slice(0, 1024), inline: false });
+
+    // Powers (only if not fully human)
+    if (form.fullyHuman){
+      fields.push({ name: "Powers",         value: "Fully human — no powers.", inline: false });
+    } else {
+      if (form.power)           fields.push({ name: "Power Type",       value: form.power, inline: true });
+      if (form.ability)         fields.push({ name: "Ability",          value: form.ability, inline: true });
+      if (form.powerExpression) fields.push({ name: "Power Expression", value: form.powerExpression.slice(0, 1024), inline: false });
+      if (form.powerFunctions)  fields.push({ name: "How It Functions", value: form.powerFunctions.slice(0, 1024), inline: false });
+      if (form.drawbacks)       fields.push({ name: "Drawbacks",        value: form.drawbacks.slice(0, 1024), inline: false });
+    }
+
+    // Optional cross-references (student only)
+    if (form.optClubPosition)  fields.push({ name: "Optional Club",    value: `${form.optClubName || '?'} — ${form.optClubPosition}${form.optClubTeam ? ' (' + form.optClubTeam + ')' : ''}`, inline: false });
+    if (form.optGovSeat)       fields.push({ name: "Optional Gov Seat", value: `${form.optGovSeat} (${form.optGovSection || '?'})`, inline: false });
+
     if (form.notes)            fields.push({ name: "Additional Notes",  value: form.notes.slice(0, 1024), inline: false });
     fields.push({ name: "Rules Acknowledged", value: form.rulesAgree ? "✅ Confirmed read & agreed" : "✗ Not confirmed", inline: false });
 
@@ -3360,8 +3504,117 @@ function JoinTab(){
   );
 }
 
+/* Reusable, universal Powers block. Any role can be powered or fully human. */
+function PowerFields({form, set}){
+  const isHuman = !!form.fullyHuman;
+  return (
+    <>
+      <Field label="Powers" full hint="Tick the box if this character is fully human (no powers). Otherwise, fill in the five fields below.">
+        <label className="join-checkbox">
+          <input type="checkbox" checked={isHuman} onChange={e => set("fullyHuman", e.target.checked)}/>
+          <span>This character is fully human — no powers.</span>
+        </label>
+      </Field>
+      {!isHuman && (
+        <>
+          <Field label="Power Type" required hint="The category — e.g. Pyrokinesis, Telekinesis, Phasing." full>
+            <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Electromagnetic field manipulation"/>
+          </Field>
+          <Field label="Ability" required hint="The specific ability or codename — what they can actually do." full>
+            <input className="join-input" type="text" value={form.ability || ""} onChange={e => set("ability", e.target.value)} placeholder="e.g. Mass-shift, Photosphere control"/>
+          </Field>
+          <Field label="Power Expression" required hint="What it looks like — visual and physical manifestation." full>
+            <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How it presents — what others see, hear, feel."/>
+          </Field>
+          <Field label="How It Functions" required hint="The mechanics — the rules of how the power works." full>
+            <textarea className="join-textarea is-medium" value={form.powerFunctions || ""} onChange={e => set("powerFunctions", e.target.value)} placeholder="The internal logic. What it does, how it does it, what it costs."/>
+          </Field>
+          <Field label="Drawbacks" required hint="Costs, weaknesses, hard limits, things that turn it off." full>
+            <textarea className="join-textarea is-medium" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value)} placeholder="Even broken-tier characters need limits — be honest."/>
+          </Field>
+        </>
+      )}
+    </>
+  );
+}
+
+/* Tail block — Notes + Rules + Honeypot. Used by every form. */
+function TailFields({form, set}){
+  return (
+    <>
+      <Field label="Additional Notes" hint="Content warnings, plot hooks, connections wanted, triggers, etc. Optional." full>
+        <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value)} placeholder="Optional"/>
+      </Field>
+      <Field label="Rules Acknowledgment" required full>
+        <label className="join-checkbox">
+          <input type="checkbox" checked={!!form.rulesAgree} onChange={e => set("rulesAgree", e.target.checked)}/>
+          <span>I have read and agree to the room rules. I understand my character must follow them, and that admin has final say on conduct, conflict, and content.</span>
+        </label>
+      </Field>
+      <Honeypot form={form} set={set}/>
+    </>
+  );
+}
+
+/* Optional cross-references for Student form (clubs + gov) */
+function StudentExtras({form, set}){
+  const openPos = getOpenClubPositions();
+  const openSeats = getOpenGovSeats();
+  return (
+    <>
+      <Field label="Optional · Club Position" hint="If this student also wants to join a club. Skip if you'll decide later." full>
+        <select
+          className="join-select"
+          value={form.optClubPosition || ""}
+          onChange={e => {
+            const idx = e.target.selectedIndex - 1;
+            const found = openPos[idx];
+            set("optClubPosition", e.target.value);
+            if (found){
+              set("optClubName", found.club);
+              set("optClubTeam", found.team || "");
+            } else {
+              set("optClubName", "");
+              set("optClubTeam", "");
+            }
+          }}
+        >
+          <option value="">— None —</option>
+          {openPos.map((p, i) => (
+            <option key={i} value={p.position}>
+              {p.club}{p.team ? ` · ${p.team}` : ""} — {p.position}
+            </option>
+          ))}
+        </select>
+      </Field>
+      <Field label="Optional · Student Government Seat" hint="If this student also wants to run for office. Skip if you'll decide later." full>
+        <select
+          className="join-select"
+          value={form.optGovSeat || ""}
+          onChange={e => {
+            const idx = e.target.selectedIndex - 1;
+            const found = openSeats[idx];
+            set("optGovSeat", e.target.value);
+            if (found){
+              set("optGovSection", found.section);
+              set("optGovTerm", found.term);
+            } else {
+              set("optGovSection", "");
+              set("optGovTerm", "");
+            }
+          }}
+        >
+          <option value="">— None —</option>
+          {openSeats.map((s, i) => (
+            <option key={i} value={s.position}>{s.section} — {s.position}{s.term ? ` (${s.term})` : ""}</option>
+          ))}
+        </select>
+      </Field>
+    </>
+  );
+}
+
 function JoinFieldset({type, form, set}){
-  // Universal fields component
   const Common = (
     <>
       <Field label="Character Name" required>
@@ -3404,29 +3657,9 @@ function JoinFieldset({type, form, set}){
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
-        <Field label="Power Type" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. The unique way it works for your character goes in the next field." full>
-          <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Electromagnetic field manipulation"/>
-        </Field>
-        <Field label="Power Expression / How It Works" required hint="The unique way your power functions for this character. Even characters with the same Power Type express it differently — describe what makes yours different. Mechanics in the field above; drawbacks below." full>
-          <textarea className="join-textarea is-tall" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How does the power work? What does it cost them? What can't they do? What does it look like?"/>
-        </Field>
-        <Field label="Drawbacks / Limits" required hint="What does this power cost? Where does it fail? What can't they do? Even broken-tier characters need limits — be honest." full>
-          <textarea className="join-textarea is-tall" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value)} placeholder="Costs, weaknesses, hard limits, vulnerabilities, things that turn the power off, side effects…"/>
-        </Field>
-        <Field label="Character Concept" required hint="Voice, vibe, why this person." full>
-          <textarea className="join-textarea is-tall" value={form.concept || ""} onChange={e => set("concept", e.target.value)} placeholder="Tell us about them…"/>
-        </Field>
-        <Field label="Additional Notes" hint="Anything admin should know — content warnings, plot hooks, connections wanted, triggers, etc. Optional." full>
-          <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value)} placeholder="Optional"/>
-        </Field>
-        <Field label="Rules Acknowledgment" required full>
-          <label className="join-checkbox">
-            <input type="checkbox" checked={!!form.rulesAgree} onChange={e => set("rulesAgree", e.target.checked)}/>
-            <span>I have read and agree to the room rules. I understand my character must follow them, and that admin has final say on conduct, conflict, and content.</span>
-          </label>
-        </Field>
-
-        <Honeypot form={form} set={set}/>
+        <PowerFields form={form} set={set}/>
+        <StudentExtras form={form} set={set}/>
+        <TailFields form={form} set={set}/>
       </div>
     );
   }
@@ -3456,29 +3689,8 @@ function JoinFieldset({type, form, set}){
             ))}
           </select>
         </Field>
-        <Field label="Power Type" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. The unique way it works for your character goes in the next field." full>
-          <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Cellular regeneration"/>
-        </Field>
-        <Field label="Power Expression / How It Works" required hint="The unique way your power functions for this character. Even characters with the same Power Type express it differently — describe what makes yours different. Mechanics in the field above; drawbacks below." full>
-          <textarea className="join-textarea is-tall" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How does the power work? What does it cost them? What can't they do? What does it look like?"/>
-        </Field>
-        <Field label="Drawbacks / Limits" required hint="What does this power cost? Where does it fail? What can't they do? Even broken-tier characters need limits — be honest." full>
-          <textarea className="join-textarea is-tall" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value)} placeholder="Costs, weaknesses, hard limits, vulnerabilities, things that turn the power off, side effects…"/>
-        </Field>
-        <Field label="Character Concept" required hint="Why this professor, why this subject." full>
-          <textarea className="join-textarea is-tall" value={form.concept || ""} onChange={e => set("concept", e.target.value)} placeholder="Tell us about them…"/>
-        </Field>
-        <Field label="Additional Notes" hint="Anything admin should know — content warnings, plot hooks, connections wanted, triggers, etc. Optional." full>
-          <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value)} placeholder="Optional"/>
-        </Field>
-        <Field label="Rules Acknowledgment" required full>
-          <label className="join-checkbox">
-            <input type="checkbox" checked={!!form.rulesAgree} onChange={e => set("rulesAgree", e.target.checked)}/>
-            <span>I have read and agree to the room rules. I understand my character must follow them, and that admin has final say on conduct, conflict, and content.</span>
-          </label>
-        </Field>
-
-        <Honeypot form={form} set={set}/>
+        <PowerFields form={form} set={set}/>
+        <TailFields form={form} set={set}/>
       </div>
     );
   }
@@ -3496,29 +3708,8 @@ function JoinFieldset({type, form, set}){
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
-        <Field label="Power Type" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. The unique way it works for your character goes in the next field." full>
-          <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Pyrokinesis"/>
-        </Field>
-        <Field label="Power Expression / How It Works" required hint="The unique way your power functions for this character. Even characters with the same Power Type express it differently — describe what makes yours different. Mechanics in the field above; drawbacks below." full>
-          <textarea className="join-textarea is-tall" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How does the power work? What does it cost them? What can't they do? What does it look like?"/>
-        </Field>
-        <Field label="Drawbacks / Limits" required hint="What does this power cost? Where does it fail? What can't they do? Even broken-tier characters need limits — be honest." full>
-          <textarea className="join-textarea is-tall" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value)} placeholder="Costs, weaknesses, hard limits, vulnerabilities, things that turn the power off, side effects…"/>
-        </Field>
-        <Field label="Character Concept" required hint="Public persona, contract status, why STRATA signed them." full>
-          <textarea className="join-textarea is-tall" value={form.concept || ""} onChange={e => set("concept", e.target.value)} placeholder="Tell us about them…"/>
-        </Field>
-        <Field label="Additional Notes" hint="Anything admin should know — content warnings, plot hooks, connections wanted, triggers, etc. Optional." full>
-          <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value)} placeholder="Optional"/>
-        </Field>
-        <Field label="Rules Acknowledgment" required full>
-          <label className="join-checkbox">
-            <input type="checkbox" checked={!!form.rulesAgree} onChange={e => set("rulesAgree", e.target.checked)}/>
-            <span>I have read and agree to the room rules. I understand my character must follow them, and that admin has final say on conduct, conflict, and content.</span>
-          </label>
-        </Field>
-
-        <Honeypot form={form} set={set}/>
+        <PowerFields form={form} set={set}/>
+        <TailFields form={form} set={set}/>
       </div>
     );
   }
@@ -3533,7 +3724,7 @@ function JoinFieldset({type, form, set}){
             className="join-select"
             value={form.clubPosition || ""}
             onChange={e => {
-              const idx = e.target.selectedIndex - 1; // -1 for placeholder
+              const idx = e.target.selectedIndex - 1;
               const found = openPos[idx];
               set("clubPosition", e.target.value);
               if (found){
@@ -3550,20 +3741,8 @@ function JoinFieldset({type, form, set}){
             ))}
           </select>
         </Field>
-        <Field label="Character Concept" required hint="Why they're in this club, what they bring." full>
-          <textarea className="join-textarea is-tall" value={form.concept || ""} onChange={e => set("concept", e.target.value)} placeholder="Tell us about them…"/>
-        </Field>
-        <Field label="Additional Notes" hint="Anything admin should know — content warnings, plot hooks, connections wanted, triggers, etc. Optional." full>
-          <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value)} placeholder="Optional"/>
-        </Field>
-        <Field label="Rules Acknowledgment" required full>
-          <label className="join-checkbox">
-            <input type="checkbox" checked={!!form.rulesAgree} onChange={e => set("rulesAgree", e.target.checked)}/>
-            <span>I have read and agree to the room rules. I understand my character must follow them, and that admin has final say on conduct, conflict, and content.</span>
-          </label>
-        </Field>
-
-        <Honeypot form={form} set={set}/>
+        <PowerFields form={form} set={set}/>
+        <TailFields form={form} set={set}/>
       </div>
     );
   }
@@ -3593,20 +3772,8 @@ function JoinFieldset({type, form, set}){
             ))}
           </select>
         </Field>
-        <Field label="Character Concept" required hint="Why they ran, what they want to do." full>
-          <textarea className="join-textarea is-tall" value={form.concept || ""} onChange={e => set("concept", e.target.value)} placeholder="Tell us about them…"/>
-        </Field>
-        <Field label="Additional Notes" hint="Anything admin should know — content warnings, plot hooks, connections wanted, triggers, etc. Optional." full>
-          <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value)} placeholder="Optional"/>
-        </Field>
-        <Field label="Rules Acknowledgment" required full>
-          <label className="join-checkbox">
-            <input type="checkbox" checked={!!form.rulesAgree} onChange={e => set("rulesAgree", e.target.checked)}/>
-            <span>I have read and agree to the room rules. I understand my character must follow them, and that admin has final say on conduct, conflict, and content.</span>
-          </label>
-        </Field>
-
-        <Honeypot form={form} set={set}/>
+        <PowerFields form={form} set={set}/>
+        <TailFields form={form} set={set}/>
       </div>
     );
   }
@@ -3633,29 +3800,8 @@ function JoinFieldset({type, form, set}){
         <Field label="Role within Collective" required hint="Leader, Specialist, Field, etc.">
           <input className="join-input" type="text" value={form.collectiveRole || ""} onChange={e => set("collectiveRole", e.target.value)} placeholder="e.g. Field Operative"/>
         </Field>
-        <Field label="Power Type" required hint="The short name only — e.g. Pyrokinesis, Telekinesis, Phasing. The unique way it works for your character goes in the next field." full>
-          <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Phase shift"/>
-        </Field>
-        <Field label="Power Expression / How It Works" required hint="The unique way your power functions for this character. Even characters with the same Power Type express it differently — describe what makes yours different. Mechanics in the field above; drawbacks below." full>
-          <textarea className="join-textarea is-tall" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How does the power work? What does it cost them? What can't they do? What does it look like?"/>
-        </Field>
-        <Field label="Drawbacks / Limits" required hint="What does this power cost? Where does it fail? What can't they do? Even broken-tier characters need limits — be honest." full>
-          <textarea className="join-textarea is-tall" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value)} placeholder="Costs, weaknesses, hard limits, vulnerabilities, things that turn the power off, side effects…"/>
-        </Field>
-        <Field label="Character Concept" required hint="Why unsanctioned. What the collective stands for." full>
-          <textarea className="join-textarea is-tall" value={form.concept || ""} onChange={e => set("concept", e.target.value)} placeholder="Tell us about them…"/>
-        </Field>
-        <Field label="Additional Notes" hint="Anything admin should know — content warnings, plot hooks, connections wanted, triggers, etc. Optional." full>
-          <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value)} placeholder="Optional"/>
-        </Field>
-        <Field label="Rules Acknowledgment" required full>
-          <label className="join-checkbox">
-            <input type="checkbox" checked={!!form.rulesAgree} onChange={e => set("rulesAgree", e.target.checked)}/>
-            <span>I have read and agree to the room rules. I understand my character must follow them, and that admin has final say on conduct, conflict, and content.</span>
-          </label>
-        </Field>
-
-        <Honeypot form={form} set={set}/>
+        <PowerFields form={form} set={set}/>
+        <TailFields form={form} set={set}/>
       </div>
     );
   }
@@ -3685,20 +3831,8 @@ function JoinFieldset({type, form, set}){
         <Field label="Role at Organisation" required hint="e.g. DCI, Councillor, Reporter" full>
           <input className="join-input" type="text" value={form.outsideRole || ""} onChange={e => set("outsideRole", e.target.value)} placeholder="Job title"/>
         </Field>
-        <Field label="Character Concept" required hint="Civilian perspective. Their angle on the powered world." full>
-          <textarea className="join-textarea is-tall" value={form.concept || ""} onChange={e => set("concept", e.target.value)} placeholder="Tell us about them…"/>
-        </Field>
-        <Field label="Additional Notes" hint="Anything admin should know — content warnings, plot hooks, connections wanted, triggers, etc. Optional." full>
-          <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value)} placeholder="Optional"/>
-        </Field>
-        <Field label="Rules Acknowledgment" required full>
-          <label className="join-checkbox">
-            <input type="checkbox" checked={!!form.rulesAgree} onChange={e => set("rulesAgree", e.target.checked)}/>
-            <span>I have read and agree to the room rules. I understand my character must follow them, and that admin has final say on conduct, conflict, and content.</span>
-          </label>
-        </Field>
-
-        <Honeypot form={form} set={set}/>
+        <PowerFields form={form} set={set}/>
+        <TailFields form={form} set={set}/>
       </div>
     );
   }
@@ -4019,9 +4153,9 @@ try{
   ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 }catch(err){
   document.getElementById("root").innerHTML =
-    '<div style="padding:32px;font-family:Inter,sans-serif;color:#e31b23;background:#fff;border:3px solid #e31b23;margin:24px;">'
-    + '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:32px;margin-bottom:12px;letter-spacing:.04em;">RENDER ERROR</div>'
-    + '<pre style="white-space:pre-wrap;font-size:12px;color:#0e0e10;">' + (err && err.stack ? err.stack : String(err)) + '</pre>'
+    '<div style="padding:32px;font-family:Inter,sans-serif;color:#f1ede4;background:#0c0c10;border:1px solid #e4324a;border-left:4px solid #e4324a;margin:24px;border-radius:12px;">'
+    + '<div style="font-family:Fraunces,Georgia,serif;font-size:32px;margin-bottom:12px;letter-spacing:-.01em;color:#f1cd72;">Render error</div>'
+    + '<pre style="white-space:pre-wrap;font-size:12px;color:#b8b3a8;">' + (err && err.stack ? err.stack : String(err)) + '</pre>'
     + '</div>';
   console.error(err);
 }
