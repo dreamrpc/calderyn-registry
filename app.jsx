@@ -3167,7 +3167,7 @@ function JoinTab(){
     const link = form.rpcLink ? `, link: ${s(form.rpcLink)}` : "";
     switch (type) {
       case "student":
-        return `{ char: ${s(form.char)}, alias: ${s(form.alias) || '""'}, house: ${s((form.house||"").toLowerCase())}, year: ${s(form.year)}, track: ${s((form.track||"").toLowerCase().replace(/s$/, ''))}, tier: ${s(form.tier)}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
+        return `{ char: ${s(form.char)}, alias: ${s(form.alias) || '""'}, house: ${s((form.house||"").toLowerCase())}, year: ${s(form.year)}, track: ${s((form.track||"").toLowerCase())}, tier: ${s(form.tier)}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
       case "faculty":
         return `// → goes in FACULTY → "${form.facultySection || ''}" section
 { role: ${s(form.facultyRole)}, char: ${s(form.char)}, stage: ${s(form.alias) || '""'}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
