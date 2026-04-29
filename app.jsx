@@ -1217,12 +1217,22 @@ function HousesTab(){
     return <>{parts.join(" ")} {last.toLowerCase()}</>;
   })();
 
+  // Per-sub-tab body copy so the page-head intro reflects the active section
+  const bodyMap = {
+    world:     "Eleven years on, the world has not been the same since the first hero team walked out onto a stage in west London. STRATA owns most of them. Calderyn trains the rest.",
+    history:   "Sixty years of preparation for a war that never came. Project Cradle, Strathogen, the pipeline that shaped almost every working superhuman in Britain.",
+    vanguard:  "Four members. The most powerful superhumans alive. Paragon, Vigil, Aegis, Switchboard — and the politics keeping them on the same team.",
+    houses:    "Four houses, four virtues, four namesakes. Pick the one that matches the character you want to play.",
+    dean:      "Dr. Devika Ravindrakumar. Fifty-three. Field nullification at fifteen metres. Students are afraid of her before they meet her, and more afraid afterwards.",
+    incidents: "The MV Cassandra. February 2024. A press cycle no one survived intact — and the contingency plans Felix Strathe quietly began developing the day after.",
+  };
+
   return (
     <div className="subnav-host">
       <PageHead
         stamp="DOC · 02 · LORE"
         title={titleWithItalic}
-        body="Calderyn College and the world it lives in. The Vanguard. The four houses. The Dean. Read in any order."
+        body={bodyMap[view] || bodyMap.world}
         note={<>Public record · IC-visible<br/>Plot-locked content lives elsewhere</>}
         pageNum="P. 002 / VIII"
       />
@@ -3872,7 +3882,7 @@ function Honeypot({form, set}){
 const TAB_MAP = {
   rules:      <RulesTab/>,
   faculty:    <FacultyTab/>,
-  houses:     <HousesTab/>,
+  lore:       <HousesTab/>,
   students:   <StudentsTab/>,
   strata:     <StrataTab/>,
   outside:    <OutsideTab/>,
@@ -3880,6 +3890,8 @@ const TAB_MAP = {
   clubs:      <ClubsTab/>,
   join:       <JoinTab/>,
 };
+// Legacy hash redirect: anyone with #houses in their URL gets sent to #lore
+const TAB_ALIAS = { houses: "lore" };
 
 /* ═══════════════════════════════════════════════════════════════════════════
    GLOBAL SEARCH
@@ -4013,17 +4025,23 @@ function Footer(){
 ═══════════════════════════════════════════════════════════════════════════ */
 function App(){
   const validIds = TABS.map(t => t.id);
-  const initial = (() => {
-    try{
-      const h = (window.location.hash || "").replace(/^#/, "").split("/")[0];
-      if(validIds.includes(h)) return h;
-    }catch(e){}
-    return TABS[0].id;
-  })();
-  const [tab, setTabState] = useState(initial);
 
+  // Parse a hash like "#lore/world" or "#houses" into {tab, subview}, applying aliases
+  const parseHash = () => {
+    try{
+      const raw = (window.location.hash || "").replace(/^#/, "").split("/");
+      let id = raw[0] || "";
+      const sub = raw[1] || null;
+      if (TAB_ALIAS[id]) id = TAB_ALIAS[id];
+      if (validIds.includes(id)) return { tab: id, subview: sub };
+    }catch(e){}
+    return { tab: TABS[0].id, subview: null };
+  };
+
+  const initial = parseHash();
+  const [tab, setTabState] = useState(initial.tab);
   const [gsOpen, setGsOpen] = useState(false);
-  const [targetSubview, setTargetSubview] = useState(null);
+  const [targetSubview, setTargetSubview] = useState(initial.subview);
 
   const setTab = useCallback((id) => {
     setTabState(id);
@@ -4032,10 +4050,9 @@ function App(){
 
   useEffect(() => {
     const onHash = () => {
-      try{
-        const h = (window.location.hash || "").replace(/^#/, "").split("/")[0];
-        if(validIds.includes(h)) setTabState(h);
-      }catch(e){}
+      const parsed = parseHash();
+      setTabState(parsed.tab);
+      if (parsed.subview) setTargetSubview(parsed.subview);
     };
     try{ window.addEventListener("hashchange", onHash); }catch(e){}
     return () => { try{ window.removeEventListener("hashchange", onHash); }catch(e){} };
