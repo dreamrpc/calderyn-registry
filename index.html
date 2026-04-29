@@ -6713,6 +6713,584 @@ p, li, span, td, th, label, div { /* don't change everything; only tighten where
   cursor:help;
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 3 — TARGETED CONTRAST FIXES, PILL REPAINT, JOIN LAYOUT, CREST     ║
+   ║  Addresses tab-by-tab audit: dark-on-dark prose, broken pills, layout   ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* ─── 1. Crest watermarks ─── */
+.lore-intro-crest-watermark{
+  width:280px !important;
+  max-width:30% !important;
+  height:auto !important;
+  max-height:75% !important;
+  right:24px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  opacity:.10 !important;
+  filter:none !important;
+  z-index:0;
+}
+@media (max-width:900px){
+  .lore-intro-crest-watermark{ width:200px !important; right:0 !important; opacity:.06 !important; }
+}
+/* Page-head crest — much subtler (was hiding the headline) */
+.pg-hd::after{
+  opacity:.20 !important;
+  filter:saturate(.4) brightness(.6) !important;
+  background-size: 280px auto, 14px 14px !important;
+  background-position: calc(100% - 24px) center, 0 0 !important;
+}
+
+/* ─── 2. Force light text on prose blocks (override legacy color:var(--ink)) ─── */
+.dean-card-bio,
+.freg-group-note,
+.freg-hint,
+.preg-hint,
+.intro-bay-text,
+.intro-bay-rule-val,
+.bay-hd-blurb,
+.banned-bay-blurb,
+.banned-bay-text,
+.status-card-desc,
+.tier-card-deployment,
+.tier-card-bracket,
+.club-desc,
+.preg-empty,
+.kbr-role-desc,
+.kbr-arena-tile-meta{
+  color:var(--text-mid) !important;
+}
+.dean-card-name,
+.dean-card-eyebrow,
+.dean-card-stage,
+.intro-bay-eyebrow,
+.bay-hd-tag,
+.bay-hd-title,
+.banned-bay-stamp,
+.tier-card-letter,
+.status-card-num,
+.kbr-role-name,
+.kbr-arena-tile-title,
+.intro-bay-rule-key,
+.dean-card-power-tag{
+  color:var(--text) !important;
+}
+.intro-bay-eyebrow,
+.bay-hd-tag,
+.dean-card-eyebrow,
+.dean-card-power-tag,
+.kbr-arena-tile-eyebrow,
+.banned-bay-stamp{
+  color:var(--gold) !important;
+}
+.intro-bay-rule-key{
+  color:var(--gold) !important;
+  font-family:var(--mono);
+  font-weight:700;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  font-size:10.5px;
+}
+.intro-bay-rule-val{ color:var(--text-mid) !important; }
+
+/* Bay containers (Powers Guide, Banned, etc.) — dark surfaces */
+.intro-bay, .tier-bay, .status-bay, .banned-bay, .kbr, .kbr-body, .case, .bay, .curr{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:14px !important;
+  color:var(--text);
+}
+.intro-bay-col-canon, .intro-bay-col-main{ color:var(--text); }
+.intro-bay-rules li{
+  border-bottom:1px solid var(--rule-faint);
+  padding:10px 0;
+  display:grid;
+  grid-template-columns:160px 1fr;
+  gap:14px;
+}
+.intro-bay-rules li:last-child{ border-bottom:none; }
+
+/* Tier cards / status cards / banned items dark theme */
+.tier-card, .status-card, .banned-bay-item{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  color:var(--text);
+}
+.banned-bay-num, .banned-bay-tag{
+  color:var(--text-low);
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:1.4px;
+}
+
+/* ─── 3. Pills repainted for dark canvas ─── */
+.chip-yellow{
+  background:rgba(212,168,74,.10) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.45) !important;
+}
+.chip-gold{
+  background:rgba(212,168,74,.10) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.4) !important;
+}
+.chip-ink{
+  background:rgba(255,255,255,.06) !important;
+  color:var(--silver) !important;
+  border:1px solid var(--rule-soft) !important;
+}
+.chip-red{
+  background:linear-gradient(180deg, var(--red), var(--red-deep)) !important;
+  color:var(--text) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+}
+.chip-ghost{
+  background:transparent !important;
+  color:var(--text-mid) !important;
+  border:1px solid var(--rule-soft) !important;
+}
+.chip-classified{
+  background:repeating-linear-gradient(45deg, rgba(228,50,74,.6) 0 6px, rgba(125,16,24,.6) 6px 12px) !important;
+  color:#fff !important;
+  border:1px solid rgba(228,50,74,.4) !important;
+}
+.npc-badge{
+  background:rgba(212,168,74,.12) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.3) !important;
+  border-radius:4px;
+  padding:2px 7px;
+  font-size:9px;
+  letter-spacing:1.3px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+/* Outside filter pills */
+.orgs-pill{
+  background:rgba(255,255,255,.03) !important;
+  color:var(--text-mid) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:999px !important;
+  padding:8px 14px !important;
+  font-family:var(--mono) !important;
+  font-size:11px !important;
+  letter-spacing:1.5px !important;
+  font-weight:600 !important;
+  text-transform:uppercase !important;
+  cursor:pointer;
+  transition:color var(--dur) var(--ease), border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.orgs-pill:hover{ color:var(--text) !important; border-color:rgba(212,168,74,.4) !important; }
+.orgs-pill.on{
+  background:rgba(212,168,74,.12) !important;
+  color:var(--gold-bright) !important;
+  border-color:var(--gold) !important;
+}
+.orgs-pill-n{ color:var(--text-low) !important; margin-left:6px; }
+.orgs-pill.on .orgs-pill-n{ color:var(--gold) !important; }
+
+/* Club filter pills */
+.club-filter-pill{
+  background:rgba(255,255,255,.03) !important;
+  color:var(--text-mid) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:999px !important;
+  font-weight:600 !important;
+  padding:7px 14px !important;
+}
+.club-filter-pill:hover{ color:var(--text) !important; border-color:rgba(212,168,74,.4) !important; background:rgba(255,255,255,.04) !important; }
+.club-filter-pill.on{
+  background:rgba(212,168,74,.12) !important;
+  color:var(--gold-bright) !important;
+  border-color:var(--gold) !important;
+}
+.club-filter-count{ color:var(--text-low) !important; margin-left:6px; }
+.club-filter-pill.on .club-filter-count{ color:var(--gold) !important; }
+.club-filters-label{ color:var(--text-low) !important; }
+
+/* Powers Registry filter pills */
+.preg-pill{
+  background:rgba(255,255,255,.03) !important;
+  color:var(--text-mid) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:999px !important;
+}
+.preg-pill:hover{ color:var(--text) !important; border-color:rgba(212,168,74,.4) !important; }
+.preg-pill.on{
+  background:rgba(212,168,74,.12) !important;
+  color:var(--gold-bright) !important;
+  border-color:var(--gold) !important;
+}
+.preg-search{
+  background:var(--paper-3) !important;
+  color:var(--text) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:8px !important;
+}
+.preg-search:focus{ border-color:var(--gold) !important; outline:none !important; }
+.preg-count{ color:var(--text-low) !important; }
+
+/* ─── 4. Club cards — readable text ─── */
+.club{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:14px !important;
+  overflow:hidden !important;
+  color:var(--text) !important;
+}
+.club-hd .club-name, .club-hd .club-tag{
+  color:#fff !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.6);
+}
+.club-meta{
+  background:rgba(255,255,255,.03) !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  color:var(--text-mid) !important;
+}
+.club-cat-pip{
+  background:rgba(212,168,74,.12) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.3) !important;
+  border-radius:999px !important;
+  padding:3px 9px !important;
+}
+.club-access{
+  color:var(--text-mid) !important;
+  font-weight:500;
+}
+.club-desc{
+  color:var(--text-mid) !important;
+  background:transparent !important;
+  font-size:14px;
+  line-height:1.65;
+  padding:14px 18px !important;
+}
+
+/* ─── 5. VIEW button (Faculty Curriculum + Powers Registry) ─── */
+.class-chip-btn,
+.preg-view-btn,
+button.class-chip-btn{
+  background:transparent !important;
+  color:var(--gold) !important;
+  border:1px solid rgba(212,168,74,.4) !important;
+  border-radius:6px !important;
+  padding:6px 12px !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.4px !important;
+  font-weight:700 !important;
+  cursor:pointer;
+  transition:all var(--dur) var(--ease);
+}
+.class-chip-btn:hover, .preg-view-btn:hover{
+  background:rgba(212,168,74,.10) !important;
+  color:var(--gold-bright) !important;
+  border-color:var(--gold) !important;
+}
+.class-chip{ background:transparent !important; }
+.class-chip.is-open .class-chip-btn{
+  background:rgba(212,168,74,.12) !important;
+  color:var(--gold-bright) !important;
+  border-color:var(--gold) !important;
+}
+
+/* ─── 6. STRATA Overview — fix sticky thead clipping ─── */
+.strata-directory{ overflow:visible !important; }
+.strata-directory > .tw{ overflow:hidden; border-radius:0 0 14px 14px; margin:0 -28px; padding:0; }
+
+/* ─── 7. Faculty Registry — Office of the Dean card ─── */
+.dean-card{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-left:3px solid var(--gold) !important;
+  border-radius:14px !important;
+  color:var(--text) !important;
+}
+.dean-card-portrait img{ filter:contrast(1.05) saturate(.92); }
+.dean-card-eyebrow{
+  font-family:var(--mono) !important;
+  color:var(--gold) !important;
+  font-size:10px !important;
+  letter-spacing:1.8px !important;
+  text-transform:uppercase !important;
+}
+.dean-card-name{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:28px !important;
+  letter-spacing:-.01em !important;
+  color:var(--text) !important;
+}
+.dean-card-stage{
+  color:var(--text-low) !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.6px !important;
+  text-transform:uppercase !important;
+}
+.dean-card-power{
+  background:rgba(212,168,74,.08) !important;
+  border:1px solid rgba(212,168,74,.25) !important;
+  border-radius:8px !important;
+  padding:10px 14px !important;
+  color:var(--text) !important;
+}
+.dean-card-power-tag{
+  color:var(--gold) !important;
+  font-family:var(--mono) !important;
+  font-size:9.5px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  margin-right:10px;
+}
+.dean-card-bio{
+  color:var(--text-mid) !important;
+  line-height:1.7 !important;
+  font-size:14.5px !important;
+}
+
+/* ─── 8. Faculty Registry — section names + subtitles ─── */
+.freg-group-name{
+  font-family:var(--serif) !important;
+  font-weight:600;
+  font-size:22px;
+  letter-spacing:-.005em;
+  color:var(--text) !important;
+}
+.freg-group-count{
+  color:var(--text-low) !important;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:1.5px;
+}
+.freg-group-note{
+  color:var(--text-mid) !important;
+  font-size:14px;
+  line-height:1.7;
+}
+.freg-tbl tbody td, .freg-tbl thead th{ color:var(--text-mid); }
+.freg-tbl tbody td{ border-bottom:1px solid var(--rule-faint); }
+.preg-tbl tbody td, .preg-tbl thead th{ color:var(--text-mid); }
+.preg-na{ color:var(--text-low) !important; font-style:italic; }
+.preg-col-power{ color:var(--text) !important; font-weight:500; }
+
+/* ─── 9. Tier-pill — readable on coloured background ─── */
+.tier-pill{
+  border:1px solid rgba(0,0,0,.3);
+  font-weight:700;
+  text-shadow:0 1px 0 rgba(0,0,0,.45);
+}
+
+/* ─── 10. JOIN page layout — full width ─── */
+.join, .join-form-wrap{
+  max-width:1280px !important;
+  margin:0 auto !important;
+}
+.join-form-wrap{ padding:32px 40px 48px !important; }
+.join-typegrid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap:14px !important;
+  margin-top:14px;
+}
+.join-typegrid > button, .join-type-card{
+  width:100% !important;
+}
+.join-step{ margin-bottom:32px; }
+.join-step-tag{
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:2px !important;
+  font-weight:700 !important;
+  color:var(--gold) !important;
+  background:rgba(212,168,74,.08) !important;
+  border:1px solid rgba(212,168,74,.35) !important;
+  border-radius:999px !important;
+  padding:6px 14px !important;
+  display:inline-block !important;
+  margin-bottom:14px;
+  text-transform:uppercase;
+}
+.join-step-title{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:32px !important;
+  letter-spacing:-.015em !important;
+  line-height:1.1 !important;
+  color:var(--text) !important;
+  background:transparent !important;
+  margin-bottom:8px;
+  padding:0 !important;
+}
+.join-step-blurb{
+  color:var(--text-mid) !important;
+  font-size:15px;
+  line-height:1.65;
+  max-width:640px;
+  margin-bottom:22px;
+}
+.join-fieldset{
+  display:grid !important;
+  grid-template-columns:repeat(2, minmax(0,1fr)) !important;
+  gap:18px 20px !important;
+  align-items:start;
+}
+.join-field, .join-field-row{ min-width:0; }
+.join-field.is-full, .join-field--full{ grid-column:1/-1; }
+.join-input::placeholder, .join-textarea::placeholder{
+  color:rgba(241,237,228,.50) !important;
+  font-style:italic;
+}
+.join-checkbox{
+  color:var(--text) !important;
+  font-size:14px;
+  line-height:1.55;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+.join-checkbox input{ flex-shrink:0; margin-top:3px; }
+.join-checkbox span{ color:var(--text); }
+@media (max-width:720px){
+  .join-fieldset{ grid-template-columns:1fr !important; }
+  .join-form-wrap{ padding:20px 18px 36px !important; }
+}
+
+/* ─── 11. Empty-state CTA (Students, Faculty, Powers) ─── */
+.empty-state-block{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  padding:24px 16px;
+}
+.empty-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 20px;
+  background:linear-gradient(180deg, var(--red-bright), var(--red));
+  color:var(--text) !important;
+  border:1px solid var(--gold);
+  border-radius:8px;
+  font-family:var(--sans);
+  font-weight:700;
+  font-size:13px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  cursor:pointer;
+  text-decoration:none !important;
+  transition:transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  box-shadow:0 4px 0 0 var(--red-deep);
+}
+.empty-cta:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 0 0 var(--red-deep);
+  color:var(--text) !important;
+}
+
+/* Powerball arena rules (kbr) — dark surface inheritance */
+.kbr, .kbr-hd, .kbr-tabs, .kbr-tab, .kbr-body{
+  color:var(--text);
+}
+.kbr-role, .kbr-arena-tile{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  color:var(--text);
+}
+.kbr-role-num, .kbr-role-tagline{ color:var(--text-low); }
+
+/* Strata corporate — text in role labels */
+.strc-role-label, .strc-role-who, .strc-group-note{ color:var(--text); }
+.strc-role.is-vacant .strc-role-who .strc-role-open{ color:var(--text-low); font-style:italic; }
+.strc-role-sep{ color:var(--text-low); }
+
+/* Hero list contained text */
+.hero-list, .hero-list-hd, .hero-list-label, .hero-list-desc, .hero-list-req{ color:var(--text); }
+.hero-list-req{ color:var(--text-low); font-family:var(--mono); font-size:10px; letter-spacing:1.4px; }
+
+/* Group / collective text */
+.group, .group-hd, .group-name, .group-type, .group-desc, .groups-intro, .groups-intro-title, .groups-intro-body, .group-empty{ color:var(--text); }
+.group-type, .groups-intro-title{ color:var(--gold); }
+.group-desc, .groups-intro-body{ color:var(--text-mid) !important; }
+.group-empty{ color:var(--text-low); font-style:italic; }
+
+/* Student-row stage-name */
+.stage-name{ font-family:var(--display); letter-spacing:.04em; color:var(--text); }
+
+/* ─── 12. Join hero — match the editorial dark page-head, add crest watermark ─── */
+.join-hero{
+  background:
+    radial-gradient(1200px 600px at 90% -100%, rgba(193,26,44,.20), transparent 60%),
+    radial-gradient(1200px 600px at -20% 120%, rgba(212,168,74,.10), transparent 60%),
+    linear-gradient(180deg, #0a0a0e 0%, #0f0f15 100%) !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  position:relative;
+  overflow:hidden;
+}
+.join-hero::before{
+  display:none !important;
+}
+.join-hero::after{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    url('https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png'),
+    radial-gradient(rgba(212,168,74,.15) 1px, transparent 1.4px);
+  background-size: 280px auto, 14px 14px;
+  background-position: calc(100% - 24px) center, 0 0;
+  background-repeat: no-repeat, repeat;
+  opacity:.20;
+  filter:saturate(.4) brightness(.6);
+  mask-image:linear-gradient(90deg, transparent 50%, rgba(0,0,0,.9) 100%),
+             linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.15) 70%, transparent);
+  -webkit-mask-image:linear-gradient(90deg, transparent 50%, rgba(0,0,0,.9) 100%),
+                     linear-gradient(180deg, rgba(0,0,0,.85), rgba(0,0,0,.15) 70%, transparent);
+  pointer-events:none;
+  z-index:0;
+}
+.join-hero-inner{ position:relative; z-index:1; max-width:1280px !important; padding:64px 40px 56px !important; margin:0 auto; }
+.join-hero-stamp{
+  background:transparent !important;
+  color:var(--gold) !important;
+  border:1px solid rgba(212,168,74,.4) !important;
+  border-radius:999px !important;
+  padding:5px 12px !important;
+  font-size:10px !important;
+  letter-spacing:2px !important;
+  font-weight:600 !important;
+  display:inline-block !important;
+  margin-bottom:14px;
+}
+.join-hero h2{
+  font-family:var(--serif) !important;
+  font-weight:500 !important;
+  font-size:64px !important;
+  line-height:1.02 !important;
+  letter-spacing:-.018em !important;
+  text-transform:none !important;
+  color:var(--text) !important;
+}
+.join-hero h2 .accent{
+  color:var(--gold-bright) !important;
+  font-style:italic;
+  font-weight:400;
+}
+.join-hero p{
+  color:var(--text-mid) !important;
+  font-size:16px !important;
+  line-height:1.7 !important;
+  max-width:640px !important;
+}
+.join-hero p strong{ color:var(--text) !important; }
+@media (max-width:900px){
+  .join-hero h2{ font-size:42px !important; }
+  .join-hero-inner{ padding:44px 22px 36px !important; }
+}
+
 </style>
 </head>
 <body>
