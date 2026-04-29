@@ -5936,31 +5936,7 @@ body.is-scrolled header.masthead{
   color: var(--paper) !important;
 }
 
-/* ---- 4.3  GRID ---- */
-.grid, .cards-grid, [class*="cardGrid"], [class*="rules-grid"]{
-  display: grid !important;
-  grid-template-columns: repeat(12, 1fr) !important;
-  gap: 18px !important;
-}
-.grid > *, .cards-grid > *, [class*="cardGrid"] > *{
-  grid-column: span 4;
-  min-height: 180px;
-}
-.grid > *:nth-child(7n+1){ grid-column: span 5; }
-.grid > *:nth-child(7n+2){ grid-column: span 4; }
-.grid > *:nth-child(7n+3){ grid-column: span 3; }
-.grid > *:nth-child(7n+4){ grid-column: span 3; }
-.grid > *:nth-child(7n+5){ grid-column: span 5; }
-.grid > *:nth-child(7n+6){ grid-column: span 4; }
-.grid > *:nth-child(7n+7){ grid-column: span 4; }
-@media (max-width: 1100px){
-  .grid > *{ grid-column: span 6 !important; }
-}
-@media (max-width: 720px){
-  .grid > *{ grid-column: span 12 !important; }
-}
-
-/* ---- 4.4  Section heads ---- */
+4.4  Section heads ---- */
 section > header, .section-head, [class*="sectionHead"]{
   padding: 62px 0 18px !important;
   border-bottom: 1px solid rgba(201,161,74,.14);
@@ -6071,8 +6047,30 @@ button, .btn, [class*="button"]{
   padding: 0 32px !important;
 }
 
-/* ---- 4.10  About panel ---- */
-[class*="about"]{
+
+
+
+/* ---- 4.X CORRECTIVE ---- */
+.rules-grid, .powers-grid, .houses-grid, .cards-grid{
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+}
+.rules-grid > *, .powers-grid > *, .houses-grid > *, .cards-grid > *{
+  grid-column: auto !important;
+  min-height: 0 !important;
+}
+@media (max-width: 1280px){
+  .rules-grid, .powers-grid, .houses-grid{ grid-template-columns: repeat(4, minmax(0,1fr)) !important; }
+}
+@media (max-width: 980px){
+  .rules-grid, .powers-grid, .houses-grid{ grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+}
+@media (max-width: 640px){
+  .rules-grid, .powers-grid, .houses-grid{ grid-template-columns: 1fr !important; }
+}
+.card{ min-height: 0 !important; }
+.about-panel{
   background: linear-gradient(180deg, rgba(201,161,74,.04), transparent 60%) !important;
   border-top: 1px solid rgba(201,161,74,.14);
   border-bottom: 1px solid rgba(201,161,74,.14);
