@@ -3273,8 +3273,8 @@ function JoinTab(){
       case "student":    return [...base, "house", "year", "track", "tier", ...power];
       case "faculty":    return [...base, "facultyRole", ...power];
       case "strata":     return [...base, "alias", "tier", ...power];
-      case "club":       return [...base, "clubPosition", ...power];
-      case "gov":        return [...base, "govSeat", ...power];
+      case "club":       return [...base, "clubPosition"];
+      case "gov":        return [...base, "govSeat"];
       case "collective": return [...base, "alias", "collectiveName", "collectiveRole", ...power];
       case "outside":    return [...base, "outsideOrg", "outsideRole", ...power];
       default: return base;
@@ -3518,16 +3518,18 @@ function JoinTab(){
 }
 
 /* Reusable, universal Powers block. Any role can be powered or fully human. */
-function PowerFields({form, set}){
-  const isHuman = !!form.fullyHuman;
+function PowerFields({form, set, allowHuman = true}){
+  const isHuman = allowHuman ? !!form.fullyHuman : false;
   return (
     <>
-      <Field label="Powers" full hint="Tick the box if this character is fully human (no powers). Otherwise, fill in the five fields below.">
-        <label className="join-checkbox">
-          <input type="checkbox" checked={isHuman} onChange={e => set("fullyHuman", e.target.checked)}/>
-          <span>This character is fully human — no powers.</span>
-        </label>
-      </Field>
+      {allowHuman && (
+        <Field label="Powers" full hint="Tick the box if this character is fully human (no powers). Otherwise, fill in the five fields below.">
+          <label className="join-checkbox">
+            <input type="checkbox" checked={isHuman} onChange={e => set("fullyHuman", e.target.checked)}/>
+            <span>This character is fully human — no powers.</span>
+          </label>
+        </Field>
+      )}
       {!isHuman && (
         <>
           <Field label="Power Type" required hint="The category — e.g. Pyrokinesis, Telekinesis, Phasing." full>
@@ -3670,7 +3672,7 @@ function JoinFieldset({type, form, set}){
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
-        <PowerFields form={form} set={set}/>
+        <PowerFields form={form} set={set} allowHuman={false}/>
         <StudentExtras form={form} set={set}/>
         <TailFields form={form} set={set}/>
       </div>
@@ -3754,7 +3756,6 @@ function JoinFieldset({type, form, set}){
             ))}
           </select>
         </Field>
-        <PowerFields form={form} set={set}/>
         <TailFields form={form} set={set}/>
       </div>
     );
@@ -3785,7 +3786,6 @@ function JoinFieldset({type, form, set}){
             ))}
           </select>
         </Field>
-        <PowerFields form={form} set={set}/>
         <TailFields form={form} set={set}/>
       </div>
     );
