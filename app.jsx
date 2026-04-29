@@ -2097,11 +2097,11 @@ function StrataTalent(){
                           fontFamily:"var(--display)",
                           fontSize:15,
                           letterSpacing:".04em",
-                          color: s.char ? "var(--ink)" : "var(--faint)"
+                          color: s.char ? "var(--text)" : "var(--text-low)"
                         }}>{s.alias}</span>
                       </td>
                       <td>{s.char ? <CLink name={s.char} link={s.link||null}/> : <EmptyState/>}</td>
-                      <td style={{fontSize:13, color:"var(--ink-2)", fontWeight:600}}>
+                      <td style={{fontSize:13, color:"var(--text-mid)", fontWeight:600}}>
                         {s.power || <EmptyState label="N/A"/>}
                       </td>
                     </tr>
