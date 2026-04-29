@@ -611,6 +611,7 @@ powers: [
     alias: "PARAGON",
     npc: true,
     expression: "The sun feeds him. Nothing measurable runs him down. His strength has no documented ceiling and his flight is officially uncatalogued because every piece of equipment that tries to clock him fails at full speed. Heat vision in coherent ranged beams, calibrated by something the medical wing has elected to call intent because no one has come up with a better word. His senses run well beyond baseline — he can pick a single conversation out of a crowded street from above, read a license plate at altitude, hear a heartbeat through a wall. Whether that's a separate ability or simply what comes with the rest of him, the medical wing has stopped trying to settle. In person: quiet, unfailingly polite, stands up when you walk into a room.",
+    drawbacks: "Performance scales with sunlight; prolonged darkness, deep underground operations, or heavy cloud cover dampen output. Heat vision needs line of sight and a coherent ranged beam — useless around corners. Enhanced senses cut both ways: dense crowds, loud rooms, and overlapping conversations can become disorienting noise without conscious filtering.",
   },
   {
     status: "vanguard",
@@ -620,6 +621,7 @@ powers: [
     alias: "VIGIL",
     npc: true,
     expression: "A precognitive window ninety seconds wide and roughly thirty metres deep. He sees every branch of every possible action laid out around him with the clarity of sheet music — the bullet leaving the barrel, the door opening, the word leaving the mouth — and picks the branch he wants. The other branches collapse and are not. Fights with a folded-steel longsword Switchboard made him in 2018, which he has never named. Cost: migraines. Wrong twice in eleven years.",
+    drawbacks: "Foresight window is roughly ninety seconds wide and thirty metres deep — beyond that range or timeframe he is blind. Sustained use produces migraines that can put him out of action for hours afterward. His record is twice wrong in eleven years; the branches he reads are probabilistic, not certain. No advantage against an opponent who acts without intent.",
   },
   {
     status: "vanguard",
@@ -629,6 +631,7 @@ powers: [
     alias: "AEGIS",
     npc: true,
     expression: "Her body does not break the way bodies break. Blades go in, bullets go in, but the damage does not propagate outward the way damage is supposed to. She bleeds, but the bleeding stops sooner than it ought. Heals six times faster than is decent. Cruises at three hundred miles an hour, holds position indefinitely, lifts roughly four hundred kilograms without breaking a sweat. Field-condition endurance record: fifty-one hours. She broke nine bones during it and did not notice until the third day.",
+    drawbacks: "Damage doesn't propagate the way it should, but it still happens — she still bleeds, breaks, and feels it. Field record was fifty-one hours and nine broken bones unnoticed until day three, which the medical wing has flagged as a risk pattern, not a feature. Healing is six times faster than baseline, not instant; lifting cap sits around four hundred kilograms.",
   },
   {
     status: "vanguard",
@@ -638,6 +641,7 @@ powers: [
     alias: "SWITCHBOARD",
     npc: true,
     expression: "She speaks to electronics by thought, in a range that has no precise edge but seems to extend as far as she can perceive a device. She does not need to touch them. She does not need to see them. They listen. Not physically superhuman in any other respect — strength, durability, and reflexes are baseline human, and her health is, if anything, slightly under because she forgets to eat. Every piece of gear the Vanguard carries is hers: Vigil's sword, Aegis's flight harness, Paragon's gauntlets.",
+    drawbacks: "Range is bounded by what she can perceive as a device; out of perception, out of reach. No physical augmentation — strength, durability, and reflexes are baseline human, and her health runs slightly under because she forgets to eat. Cannot interface with anything that isn't electronic. If she's incapacitated, every piece of Vanguard gear she's tuned goes silent.",
   },
   {
     status: "faculty",
@@ -647,6 +651,7 @@ powers: [
     alias: null,
     npc: true,
     expression: "Spherical fifteen-metre nullification field, manually toggled. Inside the field, registered abilities are completely suspended — the nullification does not distinguish between hostile and friendly, and includes her own. Sustained activation produces severe migraines; she rarely holds the field for more than ten minutes at a stretch. The Dean's primary tool for de-escalating campus crises and the reason she does not contract as an active hero.",
+    drawbacks: "The nullification field is indiscriminate: it suspends every registered ability inside it, hostile or friendly, which makes it as much a hazard to allies as to opponents. Devika herself isn't immune — her own abilities don't switch off entirely, but inside the field she runs weaker and noticeably more vulnerable than her usual baseline. Sustained activation produces severe migraines; she rarely holds the field for more than ten minutes at a stretch. Range is fixed at a fifteen-metre sphere, manually toggled, no fine-grained targeting. The reason she does not contract as an active hero.",
   },
 ],
 
