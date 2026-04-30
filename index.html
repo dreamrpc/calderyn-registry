@@ -338,10 +338,11 @@ body{
   min-height:60vh;
 }
 
-/* page entry animation */
+/* page entry animation. opacity-only so the transformed ancestor
+   doesn't break the sticky positioning of the sub-nav inside .pg. */
 @keyframes page-enter{
-  from{ opacity:0; transform:translateY(6px); }
-  to{ opacity:1; transform:translateY(0); }
+  from{ opacity:0; }
+  to{ opacity:1; }
 }
 .pg{ animation:page-enter .25s ease-out; }
 
@@ -6243,10 +6244,13 @@ span.cname{ color:var(--text); }
 /* Hide the original masthead red bottom border (replaced by gold gradient) */
 .masthead{ border-bottom-color:var(--rule-soft); }
 
-/* Page-enter animation, smoother */
+/* Page-enter animation, smoother.
+   Note: transform on an ancestor of a sticky element creates a containing
+   block that can break sticky behaviour (the sticky element sticks within
+   the transformed ancestor rather than the viewport). Use opacity only. */
 @keyframes page-enter{
-  from{ opacity:0; transform:translateY(8px); }
-  to{ opacity:1; transform:translateY(0); }
+  from{ opacity:0; }
+  to{ opacity:1; }
 }
 .pg{ animation:page-enter .4s var(--ease); }
 
@@ -9749,7 +9753,50 @@ body, .pg, .page{
 <script src="data.js"></script>
 
 <!-- 2. Application code — Babel transforms JSX in the browser. Don't edit unless changing behaviour. -->
-<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w13"></script>
+<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w14"></script>
+
+<!-- 3. Sticky-offset auto-sync.
+     The CSS uses --hdr-h and --tabs-h to position the sticky sub-nav directly
+     below the tabs strip. Hardcoded values drift the moment the masthead or
+     tabs are re-styled (it has happened across "wave" overrides). Measure the
+     actual rendered heights and write them back into the CSS variables so
+     the sticky nav always lands flush against the bottom of the tabs. -->
+<script>
+(function(){
+  function syncStickyOffsets(){
+    var masthead = document.querySelector('.masthead');
+    var tabs     = document.querySelector('.tabs');
+    if (!masthead || !tabs) return;
+    var hdrH  = Math.round(masthead.getBoundingClientRect().height);
+    var tabsH = Math.round(tabs.getBoundingClientRect().height);
+    var root  = document.documentElement;
+    root.style.setProperty('--hdr-h',  hdrH  + 'px');
+    root.style.setProperty('--tabs-h', tabsH + 'px');
+  }
+  // Initial sync runs once React has painted; ResizeObserver keeps things in
+  // sync when fonts load, the viewport resizes, or a wave style takes effect.
+  function init(){
+    syncStickyOffsets();
+    if (typeof ResizeObserver === 'function'){
+      var ro = new ResizeObserver(syncStickyOffsets);
+      var masthead = document.querySelector('.masthead');
+      var tabs     = document.querySelector('.tabs');
+      if (masthead) ro.observe(masthead);
+      if (tabs)     ro.observe(tabs);
+    }
+    window.addEventListener('resize', syncStickyOffsets);
+  }
+  // React mounts asynchronously via babel-standalone; poll briefly.
+  var tries = 0;
+  (function waitForChrome(){
+    if (document.querySelector('.masthead') && document.querySelector('.tabs')){
+      init();
+    } else if (tries++ < 100){
+      setTimeout(waitForChrome, 50);
+    }
+  })();
+})();
+</script>
 
 </body>
 </html>
