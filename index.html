@@ -10366,16 +10366,77 @@ body, .pg, .page{
   .kb-teams{ grid-template-columns:1fr !important; }
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 15 — assorted contrast fixes                                      ║
+   ║  • .office-prez-term ("2026–27") read as dark on amber after WAVE 13    ║
+   ║    rebound --ink to light text. Convert it to a white pill on a dark    ║
+   ║    gold-bordered chip so it's high-contrast either way.                 ║
+   ║  • The Powers / Faculty VIEW button used color:var(--gold) which isn't  ║
+   ║    a defined custom property — the !important declaration was invalid   ║
+   ║    and the cascade fell through to color:var(--ink). Switch to the      ║
+   ║    real variable (--gold-bright) and tighten the chip styling.          ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* Student Body President — term chip */
+.office-prez-term{
+  color:#ffffff !important;
+  background:rgba(212,168,74,.16) !important;
+  border:1px solid rgba(212,168,74,.45) !important;
+  border-radius:999px !important;
+  padding:4px 12px !important;
+  font-family:var(--mono) !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  letter-spacing:1.6px !important;
+  text-transform:uppercase !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+}
+
+/* Powers Registry + Faculty Curriculum VIEW button */
+.preg-view-btn,
+.class-chip-btn,
+button.class-chip-btn{
+  color:var(--gold-bright) !important;
+  background:rgba(212,168,74,.10) !important;
+  border:1px solid rgba(212,168,74,.45) !important;
+  border-radius:999px !important;
+  padding:6px 14px !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.5px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  transition:background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease) !important;
+}
+.preg-view-btn:hover,
+.class-chip-btn:not(:disabled):hover{
+  background:rgba(212,168,74,.20) !important;
+  color:#ffffff !important;
+  border-color:var(--gold-bright) !important;
+}
+.preg-row.is-clickable:hover .preg-view-btn,
+.preg-row.is-open .preg-view-btn,
+.class-chip.is-open .class-chip-btn{
+  background:var(--gold-bright) !important;
+  color:#0e0e10 !important;
+  border-color:var(--gold-bright) !important;
+  text-shadow:none !important;
+}
+.preg-view-arrow{ font-size:8px !important; }
+
 </style>
 </head>
 <body>
 <div class="page"><div id="root"></div></div>
 
 <!-- 1. Registry data — edit this file to add characters, faculty, clubs etc. -->
-<script src="data.js"></script>
+<script src="data.js?v=2026-04-30-w19"></script>
 
 <!-- 2. Application code — Babel transforms JSX in the browser. Don't edit unless changing behaviour. -->
-<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w18"></script>
+<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w19"></script>
 
 <!-- 3. Sticky-offset auto-sync.
      The CSS uses --hdr-h and --tabs-h to position the sticky sub-nav directly
