@@ -9744,6 +9744,29 @@ body, .pg, .page{
   --ink: #0e0e10;
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  BANNED bay — stamp readability + REJECTED tag contrast                 ║
+   ║  Wave 10 collapsed every mono label to 11.5px which crushed the BANNED  ║
+   ║  stamp on the Powers page; wave 2 muted the REJECTED tag to text-low    ║
+   ║  grey. Restore the stamp to a display size and force the tag to white   ║
+   ║  bold so it reads at a glance against the red badge background.         ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+.banned-bay-stamp{
+  font-size:26px !important;
+  letter-spacing:.04em !important;
+  font-weight:600 !important;
+  font-family:var(--display) !important;
+  color:#fff !important;
+}
+.banned-bay-tag{
+  color:#ffffff !important;
+  font-weight:800 !important;
+  letter-spacing:1.6px !important;
+  background:linear-gradient(180deg, var(--red), var(--red-deep)) !important;
+  border:1px solid rgba(255,255,255,.15) !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+}
+
 </style>
 </head>
 <body>
@@ -9753,7 +9776,7 @@ body, .pg, .page{
 <script src="data.js"></script>
 
 <!-- 2. Application code — Babel transforms JSX in the browser. Don't edit unless changing behaviour. -->
-<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w14"></script>
+<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w15"></script>
 
 <!-- 3. Sticky-offset auto-sync.
      The CSS uses --hdr-h and --tabs-h to position the sticky sub-nav directly
