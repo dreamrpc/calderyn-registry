@@ -230,6 +230,10 @@ body{
   color:rgba(255,255,255,.15);
 }
 
+   @keyframes pulse-green{
+        0%,100%{ box-shadow:0 0 0 0 rgba(22,163,74,.5); }
+        50%{ box-shadow:0 0 0 6px rgba(22,163,74,0); }
+   }
 .mast-search{
   display:flex;
   align-items:center;
@@ -1693,9 +1697,10 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.4px;
   text-transform:uppercase;
-  background:var(--yellow);
-  color:var(--ink);
+  background:#16a34a;
+    color:#fff;
   padding:3px 8px;
+   animation:pulse-green 2s ease-in-out infinite;
 }
 .freg-col-toggle{
   text-align:right;
@@ -7061,6 +7066,7 @@ button.class-chip-btn{
   font-weight:700 !important;
   text-transform:uppercase !important;
   margin-right:10px;
+  background:#0e0e10 !important;
 }
 .dean-card-bio{
   color:var(--text-mid) !important;
