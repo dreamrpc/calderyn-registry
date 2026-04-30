@@ -10427,16 +10427,62 @@ button.class-chip-btn{
 }
 .preg-view-arrow{ font-size:8px !important; }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 16 — character names: single line, no ellipsis, no truncation     ║
+   ║  Several registry tables (.preg-tbl every cell, the older students      ║
+   ║  layout, the powerball staff block, etc.) used                          ║
+   ║      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;       ║
+   ║  on the character/stage-name cells. Long names like "Montgomery         ║
+   ║  Farthing III" got cut off or tucked behind ellipses. Force every       ║
+   ║  character / stage-name cell to render full-width on one line with no   ║
+   ║  clipping; the surrounding columns will reflow around them.             ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+.preg-tbl tbody td,
+.preg-col-char,
+.preg-col-alias,
+.preg-col-alias .preg-alias,
+.freg-col-char,
+.freg-col-char .clink,
+.freg-col-char .cname,
+.cp-rgroup-char,
+.cp-staff-block table td,
+.kb-team-tbl td,
+.tw table td,
+.tw table td .clink,
+.tw table td .cname,
+.tw table td .stage-name,
+.preg-col-char .clink,
+.preg-col-char .cname,
+.preg-col-alias .clink,
+.preg-col-alias .cname{
+  white-space:nowrap !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+.preg-tbl,
+.preg-tbl table,
+.tw,
+.tw table{
+  table-layout:auto !important;
+  width:100% !important;
+}
+/* Allow the broader registry tables to scroll horizontally if a name pushes
+   them past the viewport, so we never clip and never wrap. */
+.tw,
+.preg-tbl{
+  overflow-x:auto !important;
+}
+
 </style>
 </head>
 <body>
 <div class="page"><div id="root"></div></div>
 
 <!-- 1. Registry data — edit this file to add characters, faculty, clubs etc. -->
-<script src="data.js?v=2026-04-30-w19"></script>
+<script src="data.js?v=2026-04-30-w20"></script>
 
 <!-- 2. Application code — Babel transforms JSX in the browser. Don't edit unless changing behaviour. -->
-<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w19"></script>
+<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w20"></script>
 
 <!-- 3. Sticky-offset auto-sync.
      The CSS uses --hdr-h and --tabs-h to position the sticky sub-nav directly
