@@ -3272,7 +3272,7 @@ function JoinTab(){
     if (!type) return [];
     const base = ["rpcLink", "char", "rulesAgree"];
     // Power fields are universal: any role can be powered unless explicitly "fully human"
-    const power = form.fullyHuman ? [] : ["power", "powerExpression", "powerFunctions", "drawbacks"];
+    const power = form.fullyHuman ? [] : ["power", "powerExpression", "drawbacks"];
     switch (type) {
       case "student":    return [...base, "house", "year", "track", "tier", ...power];
       case "faculty":    return [...base, "facultyRole", ...power];
@@ -3296,7 +3296,7 @@ function JoinTab(){
     const link = form.rpcLink ? `, link: ${s(form.rpcLink)}` : "";
     const human = form.fullyHuman ? `, human: true` : "";
     const powerFrag = form.fullyHuman ? "" :
-      `, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, functions: ${s(form.powerFunctions)}, drawbacks: ${s(form.drawbacks)}`;
+      `, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}`;
 
     let main = "";
     switch (type) {
@@ -3378,7 +3378,6 @@ function JoinTab(){
     } else {
       if (form.power)           fields.push({ name: "Power / Ability",  value: form.power, inline: true });
       if (form.powerExpression) fields.push({ name: "Power Expression", value: form.powerExpression.slice(0, 1024), inline: false });
-      if (form.powerFunctions)  fields.push({ name: "How It Functions", value: form.powerFunctions.slice(0, 1024), inline: false });
       if (form.drawbacks)       fields.push({ name: "Drawbacks",        value: form.drawbacks.slice(0, 1024), inline: false });
     }
 
@@ -3540,11 +3539,8 @@ function PowerFields({form, set, allowHuman = true}){
           <Field label="Power / Ability" required hint="The category and the specific ability — e.g. Pyrokinesis · Heat shaping, Telekinesis · Mass-shift." full>
             <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Electromagnetic field manipulation · Photosphere control"/>
           </Field>
-          <Field label="Power Expression" required hint="What it looks like — visual and physical manifestation." full>
-            <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How it presents — what others see, hear, feel."/>
-          </Field>
-          <Field label="How It Functions" required hint="The mechanics — the rules of how the power works." full>
-            <textarea className="join-textarea is-medium" value={form.powerFunctions || ""} onChange={e => set("powerFunctions", e.target.value)} placeholder="The internal logic. What it does, how it does it, what it costs."/>
+          <Field label="Power Expression" required hint="What it looks like and how it works — the visual manifestation and the internal mechanics." full>
+            <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How it presents — what others see, hear, feel — and what it does, how it does it, what it costs."/>
           </Field>
           <Field label="Drawbacks" required hint="Costs, weaknesses, hard limits, things that turn it off." full>
             <textarea className="join-textarea is-medium" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value)} placeholder="Even broken-tier characters need limits — be honest."/>
