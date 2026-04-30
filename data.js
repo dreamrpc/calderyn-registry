@@ -666,7 +666,8 @@ powerStatuses: [
 
 bannedPowers: [
   "Full reality rewriting or universal creation/erasure",
-  "Time travel or paradox-creating temporal manipulation",
+  "Time travel or paradox-creating temporal manipulation — plot-locked: only one slot for this ability exists, and it is taken.",
+  "Power absorption — plot-locked: only one slot for this ability exists, and it is taken.",
   "Permanent complete mind destruction or total memory wiping",
   "Mass resurrection or wide-scale death negation",
   "Universal simultaneous telepathy — every mind at once",
