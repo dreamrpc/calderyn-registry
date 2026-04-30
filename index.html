@@ -9767,6 +9767,605 @@ body, .pg, .page{
   text-shadow:0 1px 2px rgba(0,0,0,.5);
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 14 — CLUBS PAGE OVERHAUL                                          ║
+   ║  Repaints every surface inside the Clubs tab and the slide-in detail    ║
+   ║  panel for the dark canvas. Earlier waves hit the tile cards but left   ║
+   ║  the schedule, court note, staff block, group rosters, and the         ║
+   ║  Powerball-style team tables on the original light theme — which read  ║
+   ║  as black text on dark surfaces once the global theme inverted. This   ║
+   ║  wave forces the lot onto a unified dark-glass treatment with gold     ║
+   ║  accent labels and serif headings to match the rest of the registry.   ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* ── tile grid — refine spacing and typography ─────────────────────────── */
+.clubs-grid{
+  grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)) !important;
+  gap:18px !important;
+}
+.clubs-wrap{ padding:36px 32px !important; }
+.club{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:14px !important;
+  overflow:hidden !important;
+  color:var(--text) !important;
+  transition:transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease) !important;
+}
+.club:hover{
+  transform:translateY(-2px) !important;
+  box-shadow:0 18px 32px -22px rgba(0,0,0,.7), 0 0 0 1px rgba(212,168,74,.25) !important;
+  border-color:rgba(212,168,74,.35) !important;
+}
+.club.on{
+  transform:translateY(-2px) !important;
+  box-shadow:0 18px 32px -22px rgba(0,0,0,.7), 0 0 0 1px var(--gold) !important;
+  border-color:var(--gold) !important;
+}
+.club-hd{
+  border-bottom:none !important;
+  padding:22px 22px 18px !important;
+  position:relative !important;
+  isolation:isolate !important;
+}
+.club-hd::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.35));
+  pointer-events:none;
+  z-index:-1;
+}
+.club-hd .club-name,
+.club-hd .club-tag{
+  color:#ffffff !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.85), 0 0 1px rgba(0,0,0,.55) !important;
+}
+.club-hd .club-name{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:26px !important;
+  letter-spacing:-.005em !important;
+  text-transform:none !important;
+  line-height:1.05 !important;
+}
+.club-hd .club-tag{
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  opacity:.95 !important;
+}
+.club-meta{
+  background:rgba(255,255,255,.025) !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  padding:11px 22px !important;
+  gap:10px !important;
+}
+.club-cat-pip{
+  background:rgba(212,168,74,.10) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.35) !important;
+  border-radius:999px !important;
+  padding:3px 10px !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.4px !important;
+  font-weight:700 !important;
+}
+.club-access{
+  color:var(--text-mid) !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.4px !important;
+  font-weight:600 !important;
+  margin-left:auto !important;
+}
+.club-access::before{
+  content:"·";
+  margin-right:8px;
+  color:var(--text-low);
+}
+.club-desc{
+  color:var(--text-mid) !important;
+  background:transparent !important;
+  font-family:var(--sans) !important;
+  font-size:14px !important;
+  line-height:1.65 !important;
+  padding:16px 22px 20px !important;
+}
+
+/* ── slide-in detail panel ─────────────────────────────────────────────── */
+.club-side-panel{
+  background:var(--paper) !important;
+  border-left:1px solid var(--rule-soft) !important;
+  box-shadow:-12px 0 32px -12px rgba(0,0,0,.8) !important;
+}
+.club-side-hd{
+  border-bottom:none !important;
+  padding:28px 32px 24px !important;
+  position:relative !important;
+  isolation:isolate !important;
+}
+.club-side-hd::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.45));
+  pointer-events:none;
+  z-index:-1;
+}
+.club-side-hd .club-side-cat{
+  background:rgba(0,0,0,.45) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.35) !important;
+  border-radius:999px !important;
+  padding:4px 12px !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.6px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  display:inline-block;
+  margin-bottom:14px !important;
+  text-shadow:none !important;
+}
+.club-side-hd .club-side-name{
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:38px !important;
+  letter-spacing:-.012em !important;
+  line-height:1.05 !important;
+  text-transform:none !important;
+  color:#fff !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.85), 0 0 1px rgba(0,0,0,.55) !important;
+  margin-bottom:6px !important;
+}
+.club-side-hd .club-side-tag{
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  color:rgba(255,255,255,.85) !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.7) !important;
+}
+
+/* tabs */
+.cp-tabs{
+  background:var(--paper-3) !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  padding:0 12px !important;
+}
+.cp-tab{
+  background:transparent !important;
+  color:var(--text-mid) !important;
+  border:none !important;
+  border-bottom:2px solid transparent !important;
+  padding:14px 18px !important;
+  font-family:var(--sans) !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+  cursor:pointer !important;
+  transition:color var(--dur) var(--ease), border-color var(--dur) var(--ease) !important;
+}
+.cp-tab:hover{ color:var(--text) !important; }
+.cp-tab.on{
+  color:var(--text) !important;
+  border-bottom-color:var(--gold) !important;
+  background:transparent !important;
+}
+.cp-tab .ico{ color:var(--gold-bright) !important; opacity:.7; }
+.cp-tab.on .ico{ opacity:1; }
+
+.club-side-body{
+  background:var(--paper-2) !important;
+  color:var(--text) !important;
+  padding:24px 32px !important;
+}
+
+/* about pane — schedule, output, meta strip */
+.cp-about p,
+.cp-about .club-side-desc{
+  color:var(--text-mid) !important;
+  font-family:var(--sans) !important;
+  font-size:15px !important;
+  line-height:1.7 !important;
+}
+.club-side-stats{
+  display:flex !important;
+  gap:14px !important;
+  margin-bottom:22px !important;
+}
+.club-side-stat{
+  flex:1 !important;
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:12px !important;
+  padding:16px 18px !important;
+  text-align:center !important;
+}
+.club-side-stat-num{
+  color:var(--gold-bright) !important;
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:24px !important;
+  line-height:1.1 !important;
+  letter-spacing:-.005em !important;
+  text-transform:none !important;
+}
+.club-side-stat-lbl{
+  color:var(--text-low) !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.6px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  margin-top:6px !important;
+}
+
+.cp-schedule{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:12px !important;
+  padding:18px 22px !important;
+  margin-bottom:18px !important;
+}
+.cp-schedule-row{
+  display:flex !important;
+  align-items:flex-start !important;
+  gap:14px !important;
+  padding:8px 0 !important;
+}
+.cp-schedule-row + .cp-schedule-row{
+  border-top:1px solid var(--rule-faint) !important;
+  margin-top:6px !important;
+  padding-top:12px !important;
+}
+.cp-schedule-tag,
+.cp-staff-tag,
+.cp-courtnote-tag,
+.cp-rgroup-tag,
+.cp-about-career-tag{
+  background:rgba(212,168,74,.10) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.35) !important;
+  border-radius:999px !important;
+  padding:4px 11px !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.5px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  flex-shrink:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:5px !important;
+}
+.cp-schedule-tag .ico,
+.cp-staff-tag .ico,
+.cp-courtnote-tag .ico,
+.cp-about-career-tag .ico{ color:var(--gold-bright) !important; }
+.cp-schedule-slots{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:6px !important;
+  flex:1 !important;
+}
+.cp-schedule-slot{
+  background:rgba(255,255,255,.04) !important;
+  border:1px solid var(--rule-soft) !important;
+  color:var(--text-mid) !important;
+  border-radius:6px !important;
+  padding:5px 9px !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.2px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+}
+.cp-schedule-output{
+  color:var(--text-mid) !important;
+  font-family:var(--sans) !important;
+  font-size:14px !important;
+  line-height:1.65 !important;
+  flex:1 !important;
+  padding-top:3px !important;
+}
+
+.cp-about-career{
+  background:linear-gradient(180deg, rgba(212,168,74,.06), rgba(212,168,74,.02)) !important;
+  border:1px solid rgba(212,168,74,.25) !important;
+  border-radius:12px !important;
+  padding:20px 22px !important;
+  margin-top:18px !important;
+}
+.cp-about-career-title{
+  color:var(--text) !important;
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:22px !important;
+  letter-spacing:-.005em !important;
+  text-transform:none !important;
+  margin:8px 0 !important;
+  line-height:1.2 !important;
+}
+.cp-about-career p{
+  color:var(--text-mid) !important;
+  font-family:var(--sans) !important;
+  font-size:14px !important;
+  line-height:1.7 !important;
+}
+
+/* roster pane — group + flat tables, court note, staff block */
+.cp-courtnote{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:12px !important;
+  padding:14px 18px !important;
+  margin-bottom:16px !important;
+  color:var(--text-mid) !important;
+  font-family:var(--sans) !important;
+  font-size:13.5px !important;
+  line-height:1.6 !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:14px !important;
+}
+.cp-courtnote span:not(.cp-courtnote-tag):not(.ico){ color:var(--text-mid) !important; }
+
+.cp-rgroup{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:12px !important;
+  margin-bottom:14px !important;
+  overflow:hidden !important;
+}
+.cp-rgroup-hd{
+  padding:12px 18px !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  background:rgba(255,255,255,.02) !important;
+}
+.cp-rgroup-tbl{ width:100% !important; border-collapse:collapse !important; }
+.cp-rgroup-tbl tr:nth-child(even){ background:rgba(255,255,255,.02) !important; }
+.cp-rgroup-tbl tr:hover{ background:rgba(212,168,74,.06) !important; }
+.cp-rgroup-tbl tr:last-child td{ border-bottom:none !important; }
+.cp-rgroup-pos{
+  color:var(--gold-bright) !important;
+  font-family:var(--mono) !important;
+  font-size:11px !important;
+  letter-spacing:1.5px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  padding:11px 18px !important;
+  border-bottom:1px solid var(--rule-faint) !important;
+  width:200px !important;
+  white-space:nowrap !important;
+}
+.cp-rgroup-char{
+  color:var(--text) !important;
+  font-family:var(--sans) !important;
+  font-size:14px !important;
+  padding:11px 18px !important;
+  border-bottom:1px solid var(--rule-faint) !important;
+}
+
+.cp-staff-block{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:12px !important;
+  padding:18px 22px !important;
+  margin-top:18px !important;
+}
+.cp-staff-block table{ width:100% !important; border-collapse:collapse !important; margin-top:14px !important; }
+.cp-staff-block table tr{ border-bottom:1px solid var(--rule-faint) !important; }
+.cp-staff-block table tr:last-child{ border-bottom:none !important; }
+.cp-staff-block table td{
+  padding:10px 0 !important;
+  color:var(--text) !important;
+  font-family:var(--sans) !important;
+  font-size:14px !important;
+}
+.cp-staff-block table td:first-child{
+  color:var(--gold-bright) !important;
+  font-family:var(--mono) !important;
+  font-size:11px !important;
+  letter-spacing:1.5px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  width:200px !important;
+  white-space:nowrap !important;
+}
+
+/* fallback flat roster table */
+.cp-roster > table{
+  width:100% !important;
+  border-collapse:collapse !important;
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:12px !important;
+  overflow:hidden !important;
+}
+.cp-roster > table thead tr th{
+  background:rgba(255,255,255,.02) !important;
+  color:var(--gold-bright) !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.5px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  padding:12px 18px !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  text-align:left !important;
+}
+.cp-roster > table tbody tr:nth-child(even){ background:rgba(255,255,255,.02) !important; }
+.cp-roster > table tbody tr:hover{ background:rgba(212,168,74,.06) !important; }
+.cp-roster > table tbody tr td{
+  padding:11px 18px !important;
+  color:var(--text) !important;
+  font-family:var(--sans) !important;
+  font-size:14px !important;
+  border-bottom:1px solid var(--rule-faint) !important;
+}
+.cp-roster > table tbody tr:last-child td{ border-bottom:none !important; }
+.cp-roster > table tbody tr td:first-child{
+  color:var(--gold-bright) !important;
+  font-family:var(--mono) !important;
+  font-size:11px !important;
+  letter-spacing:1.5px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+}
+
+/* ── powerball-style team grid (Cheer Squad / Powerball) ───────────────── */
+.kb-teams{
+  display:grid !important;
+  grid-template-columns:repeat(2, 1fr) !important;
+  gap:14px !important;
+}
+.kb-team{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:12px !important;
+  overflow:hidden !important;
+}
+.kb-team-hd{
+  padding:14px 18px !important;
+  position:relative !important;
+  isolation:isolate !important;
+}
+.kb-team-hd::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.4));
+  pointer-events:none;
+  z-index:-1;
+}
+.kb-team-hd .kb-team-name{
+  color:#fff !important;
+  font-family:var(--serif) !important;
+  font-weight:600 !important;
+  font-size:20px !important;
+  letter-spacing:-.005em !important;
+  text-transform:uppercase !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.85), 0 0 1px rgba(0,0,0,.55) !important;
+}
+.kb-team-meta{
+  background:rgba(255,255,255,.025) !important;
+  border-bottom:1px solid var(--rule-faint) !important;
+  padding:10px 16px !important;
+  gap:8px !important;
+}
+.kb-team-meta-tag,
+.kb-team-meta-c-tag{
+  background:rgba(212,168,74,.10) !important;
+  color:var(--gold-bright) !important;
+  border:1px solid rgba(212,168,74,.35) !important;
+  border-radius:999px !important;
+  padding:3px 10px !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.4px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+}
+.kb-team-meta-c-tag{ padding:3px 8px !important; }
+.kb-team-meta-slot{
+  background:rgba(255,255,255,.04) !important;
+  border:1px solid var(--rule-soft) !important;
+  color:var(--text-mid) !important;
+  border-radius:6px !important;
+  padding:3px 8px !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.2px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+}
+.kb-team-meta-name{
+  color:var(--text) !important;
+  font-family:var(--sans) !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+}
+.kb-team-tbl{ width:100% !important; border-collapse:collapse !important; }
+.kb-team-tbl tr{ border-bottom:1px solid var(--rule-faint) !important; }
+.kb-team-tbl tr:last-child{ border-bottom:none !important; }
+.kb-team-tbl tr:hover{ background:rgba(212,168,74,.04) !important; }
+.kb-team-tbl td{
+  padding:10px 16px !important;
+  color:var(--text) !important;
+  font-family:var(--sans) !important;
+  font-size:13.5px !important;
+}
+.kb-team-pos-cell{
+  color:var(--gold-bright) !important;
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:1.4px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  width:160px !important;
+  white-space:nowrap !important;
+}
+.kb-row-reserve td{
+  background:rgba(255,255,255,.015) !important;
+  color:var(--text-low) !important;
+}
+.kb-row-reserve .kb-team-pos-cell{ color:var(--text-low) !important; }
+.kb-team-c-badge{
+  background:rgba(228,50,74,.18) !important;
+  color:var(--red-bright) !important;
+  border:1px solid rgba(228,50,74,.45) !important;
+  border-radius:4px !important;
+  padding:2px 6px !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  letter-spacing:0 !important;
+  margin-right:6px !important;
+  text-transform:uppercase !important;
+}
+
+/* category dividers inside the team table */
+.kb-starters-hd td{
+  background:linear-gradient(180deg, rgba(228,50,74,.20), rgba(228,50,74,.10)) !important;
+  color:#fff !important;
+  border-top:1px solid rgba(228,50,74,.35) !important;
+  border-bottom:1px solid rgba(228,50,74,.35) !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.8px !important;
+  text-transform:uppercase !important;
+  font-weight:800 !important;
+  padding:8px 16px !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.6) !important;
+}
+.kb-reserves-hd td{
+  background:rgba(255,255,255,.04) !important;
+  color:var(--text-low) !important;
+  border-top:1px solid var(--rule-soft) !important;
+  border-bottom:1px solid var(--rule-faint) !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.8px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  padding:8px 16px !important;
+}
+
+/* mobile tightening */
+@media (max-width: 720px){
+  .clubs-wrap{ padding:24px 16px !important; }
+  .clubs-grid{ gap:14px !important; }
+  .club-side-body{ padding:18px 18px !important; }
+  .club-side-hd{ padding:22px 22px 18px !important; }
+  .club-side-hd .club-side-name{ font-size:30px !important; }
+  .kb-teams{ grid-template-columns:1fr !important; }
+}
+
 </style>
 </head>
 <body>
@@ -9776,7 +10375,7 @@ body, .pg, .page{
 <script src="data.js"></script>
 
 <!-- 2. Application code — Babel transforms JSX in the browser. Don't edit unless changing behaviour. -->
-<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w17"></script>
+<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w18"></script>
 
 <!-- 3. Sticky-offset auto-sync.
      The CSS uses --hdr-h and --tabs-h to position the sticky sub-nav directly
