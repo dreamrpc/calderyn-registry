@@ -677,6 +677,16 @@ powers: [
     expression: "Spherical fifteen-metre nullification field, manually toggled. Inside the field, registered abilities are completely suspended — the nullification does not distinguish between hostile and friendly, and includes her own. Sustained activation produces severe migraines; she rarely holds the field for more than ten minutes at a stretch. The Dean's primary tool for de-escalating campus crises and the reason she does not contract as an active hero.",
     drawbacks: "The nullification field is indiscriminate: it suspends every registered ability inside it, hostile or friendly, which makes it as much a hazard to allies as to opponents. Devika herself isn't immune — her own abilities don't switch off entirely, but inside the field she runs weaker and noticeably more vulnerable than her usual baseline. Sustained activation produces severe migraines; she rarely holds the field for more than ten minutes at a stretch. Range is fixed at a fifteen-metre sphere, manually toggled, no fine-grained targeting. The reason she does not contract as an active hero.",
   },
+  {
+    status: "student",
+    tier: "C",
+    power: "Regurgitive storage, mucus armour, and belch sonics",
+    char: "Montgomery Farthing III",
+    alias: "Upchuck",
+    expression: "Monty's ability currently manifests as a gross biological defence system. He can store small objects inside his body and regurgitate them later, coat himself in slippery mucus armour, and release short-range sonic belches that can disorient opponents. These powers are humiliating, messy, and unreliable, but useful for distraction, survival, smuggling, and support work.",
+    drawbacks: "Monty's powers make him nauseous, weak, dehydrated, and physically disgusting to be around. His mucus can be dried, frozen, burned, or washed away. His belch sonics are short range and can affect allies. His storage has strict size limits and can injure him if he swallows anything sharp, toxic, or unstable.",
+    link: "https://roleplay.chat/profile.php?user=upchuck",
+  },
 ],
 
 powerStatuses: [
