@@ -816,6 +816,8 @@ function PowersRegistry(){
                               <p className="preg-detail-text">{p.expression}</p>
                               {p.drawbacks && <span className="preg-detail-label">Drawbacks / Limits</span>}
                               {p.drawbacks && <p className="preg-detail-text">{p.drawbacks}</p>}
+                               {p.note && <span className="preg-detail-label preg-detail-label--note">Admin Note</span>}
+                               {p.note && <p className="preg-detail-text preg-detail-note">{p.note}</p>}
                             </div>
                           </td>
                         </tr>
