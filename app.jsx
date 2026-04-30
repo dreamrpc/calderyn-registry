@@ -3578,23 +3578,26 @@ function StudentExtras({form, set}){
       <Field label="Optional · Club Position" hint="If this student also wants to join a club. Skip if you'll decide later." full>
         <select
           className="join-select"
-          value={form.optClubPosition || ""}
+          value={form.optClubPositionKey ?? ""}
           onChange={e => {
-            const idx = e.target.selectedIndex - 1;
-            const found = openPos[idx];
-            set("optClubPosition", e.target.value);
+            const raw = e.target.value;
+            const idx = raw === "" ? -1 : parseInt(raw, 10);
+            const found = idx >= 0 ? openPos[idx] : null;
+            set("optClubPositionKey", raw);
             if (found){
-              set("optClubName", found.club);
-              set("optClubTeam", found.team || "");
+              set("optClubPosition", found.position);
+              set("optClubName",     found.club);
+              set("optClubTeam",     found.team || "");
             } else {
-              set("optClubName", "");
-              set("optClubTeam", "");
+              set("optClubPosition", "");
+              set("optClubName",     "");
+              set("optClubTeam",     "");
             }
           }}
         >
           <option value="">— None —</option>
           {openPos.map((p, i) => (
-            <option key={i} value={p.position}>
+            <option key={i} value={i}>
               {p.club}{p.team ? ` · ${p.team}` : ""} — {p.position}
             </option>
           ))}
@@ -3603,23 +3606,26 @@ function StudentExtras({form, set}){
       <Field label="Optional · Student Government Seat" hint="If this student also wants to run for office. Skip if you'll decide later." full>
         <select
           className="join-select"
-          value={form.optGovSeat || ""}
+          value={form.optGovSeatKey ?? ""}
           onChange={e => {
-            const idx = e.target.selectedIndex - 1;
-            const found = openSeats[idx];
-            set("optGovSeat", e.target.value);
+            const raw = e.target.value;
+            const idx = raw === "" ? -1 : parseInt(raw, 10);
+            const found = idx >= 0 ? openSeats[idx] : null;
+            set("optGovSeatKey", raw);
             if (found){
+              set("optGovSeat",    found.position);
               set("optGovSection", found.section);
-              set("optGovTerm", found.term);
+              set("optGovTerm",    found.term);
             } else {
+              set("optGovSeat",    "");
               set("optGovSection", "");
-              set("optGovTerm", "");
+              set("optGovTerm",    "");
             }
           }}
         >
           <option value="">— None —</option>
           {openSeats.map((s, i) => (
-            <option key={i} value={s.position}>{s.section} — {s.position}{s.term ? ` (${s.term})` : ""}</option>
+            <option key={i} value={i}>{s.section} — {s.position}{s.term ? ` (${s.term})` : ""}</option>
           ))}
         </select>
       </Field>
@@ -3756,20 +3762,26 @@ function JoinFieldset({type, form, set}){
         <Field label="Open Club Position" required hint="Only open positions are listed" full>
           <select
             className="join-select"
-            value={form.clubPosition || ""}
+            value={form.clubPositionKey ?? ""}
             onChange={e => {
-              const idx = e.target.selectedIndex - 1;
-              const found = openPos[idx];
-              set("clubPosition", e.target.value);
+              const raw = e.target.value;
+              const idx = raw === "" ? -1 : parseInt(raw, 10);
+              const found = idx >= 0 ? openPos[idx] : null;
+              set("clubPositionKey", raw);
               if (found){
-                set("clubName", found.club);
-                set("clubTeam", found.team || "");
+                set("clubPosition", found.position);
+                set("clubName",     found.club);
+                set("clubTeam",     found.team || "");
+              } else {
+                set("clubPosition", "");
+                set("clubName",     "");
+                set("clubTeam",     "");
               }
             }}
           >
             <option value="">Select position…</option>
             {openPos.map((p, i) => (
-              <option key={i} value={p.position}>
+              <option key={i} value={i}>
                 {p.club}{p.team ? ` · ${p.team}` : ""} — {p.position}
               </option>
             ))}
@@ -3788,20 +3800,26 @@ function JoinFieldset({type, form, set}){
         <Field label="Open Government Seat" required hint="Only open seats are listed" full>
           <select
             className="join-select"
-            value={form.govSeat || ""}
+            value={form.govSeatKey ?? ""}
             onChange={e => {
-              const idx = e.target.selectedIndex - 1;
-              const found = openSeats[idx];
-              set("govSeat", e.target.value);
+              const raw = e.target.value;
+              const idx = raw === "" ? -1 : parseInt(raw, 10);
+              const found = idx >= 0 ? openSeats[idx] : null;
+              set("govSeatKey", raw);
               if (found){
+                set("govSeat",    found.position);
                 set("govSection", found.section);
-                set("govTerm", found.term);
+                set("govTerm",    found.term);
+              } else {
+                set("govSeat",    "");
+                set("govSection", "");
+                set("govTerm",    "");
               }
             }}
           >
             <option value="">Select seat…</option>
             {openSeats.map((s, i) => (
-              <option key={i} value={s.position}>{s.section} — {s.position}{s.term ? ` (${s.term})` : ""}</option>
+              <option key={i} value={i}>{s.section} — {s.position}{s.term ? ` (${s.term})` : ""}</option>
             ))}
           </select>
         </Field>
@@ -3846,17 +3864,24 @@ function JoinFieldset({type, form, set}){
         <Field label="Organisation" required full>
           <select
             className="join-select"
-            value={form.outsideOrg || ""}
+            value={form.outsideOrgKey ?? ""}
             onChange={e => {
-              const idx = e.target.selectedIndex - 1;
-              const found = orgs[idx];
-              set("outsideOrg", e.target.value);
-              if (found) set("outsideSection", found.section);
+              const raw = e.target.value;
+              const idx = raw === "" ? -1 : parseInt(raw, 10);
+              const found = idx >= 0 ? orgs[idx] : null;
+              set("outsideOrgKey", raw);
+              if (found){
+                set("outsideOrg",     found.name);
+                set("outsideSection", found.section);
+              } else {
+                set("outsideOrg",     "");
+                set("outsideSection", "");
+              }
             }}
           >
             <option value="">Select organisation…</option>
             {orgs.map((o, i) => (
-              <option key={i} value={o.name}>{o.section} — {o.name}</option>
+              <option key={i} value={i}>{o.section} — {o.name}</option>
             ))}
           </select>
         </Field>
