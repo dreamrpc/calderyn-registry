@@ -685,7 +685,8 @@ powers: [
     alias: "Upchuck",
     expression: "Monty's ability currently manifests as a gross biological defence system. He can store small objects inside his body and regurgitate them later, coat himself in slippery mucus armour, and release short-range sonic belches that can disorient opponents. These powers are humiliating, messy, and unreliable, but useful for distraction, survival, smuggling, and support work.",
     drawbacks: "Monty's powers make him nauseous, weak, dehydrated, and physically disgusting to be around. His mucus can be dried, frozen, burned, or washed away. His belch sonics are short range and can affect allies. His storage has strict size limits and can injure him if he swallows anything sharp, toxic, or unstable.",
-    link: "https://roleplay.chat/profile.php?user=upchuck",
+        note: "Monty's real ability has not properly activated because he has never killed another powered person. If he kills a supe, his body can absorb and permanently integrate aspects of their power. Until then, his body is misfiring, which is why his ability expresses as mucus, regurgitation, and stomach-pressure attacks.",
+     link: "https://roleplay.chat/profile.php?user=upchuck",
   },
 ],
 
