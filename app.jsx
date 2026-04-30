@@ -3272,7 +3272,7 @@ function JoinTab(){
     if (!type) return [];
     const base = ["rpcLink", "char", "rulesAgree"];
     // Power fields are universal: any role can be powered unless explicitly "fully human"
-    const power = form.fullyHuman ? [] : ["power", "ability", "powerExpression", "powerFunctions", "drawbacks"];
+    const power = form.fullyHuman ? [] : ["power", "powerExpression", "powerFunctions", "drawbacks"];
     switch (type) {
       case "student":    return [...base, "house", "year", "track", "tier", ...power];
       case "faculty":    return [...base, "facultyRole", ...power];
@@ -3296,7 +3296,7 @@ function JoinTab(){
     const link = form.rpcLink ? `, link: ${s(form.rpcLink)}` : "";
     const human = form.fullyHuman ? `, human: true` : "";
     const powerFrag = form.fullyHuman ? "" :
-      `, power: ${s(form.power)}, ability: ${s(form.ability)}, expression: ${s(form.powerExpression)}, functions: ${s(form.powerFunctions)}, drawbacks: ${s(form.drawbacks)}`;
+      `, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, functions: ${s(form.powerFunctions)}, drawbacks: ${s(form.drawbacks)}`;
 
     let main = "";
     switch (type) {
@@ -3376,8 +3376,7 @@ function JoinTab(){
     if (form.fullyHuman){
       fields.push({ name: "Powers",         value: "Fully human — no powers.", inline: false });
     } else {
-      if (form.power)           fields.push({ name: "Power Type",       value: form.power, inline: true });
-      if (form.ability)         fields.push({ name: "Ability",          value: form.ability, inline: true });
+      if (form.power)           fields.push({ name: "Power / Ability",  value: form.power, inline: true });
       if (form.powerExpression) fields.push({ name: "Power Expression", value: form.powerExpression.slice(0, 1024), inline: false });
       if (form.powerFunctions)  fields.push({ name: "How It Functions", value: form.powerFunctions.slice(0, 1024), inline: false });
       if (form.drawbacks)       fields.push({ name: "Drawbacks",        value: form.drawbacks.slice(0, 1024), inline: false });
@@ -3538,11 +3537,8 @@ function PowerFields({form, set, allowHuman = true}){
       )}
       {!isHuman && (
         <>
-          <Field label="Power Type" required hint="The category — e.g. Pyrokinesis, Telekinesis, Phasing." full>
-            <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Electromagnetic field manipulation"/>
-          </Field>
-          <Field label="Ability" required hint="The specific ability or codename — what they can actually do." full>
-            <input className="join-input" type="text" value={form.ability || ""} onChange={e => set("ability", e.target.value)} placeholder="e.g. Mass-shift, Photosphere control"/>
+          <Field label="Power / Ability" required hint="The category and the specific ability — e.g. Pyrokinesis · Heat shaping, Telekinesis · Mass-shift." full>
+            <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Electromagnetic field manipulation · Photosphere control"/>
           </Field>
           <Field label="Power Expression" required hint="What it looks like — visual and physical manifestation." full>
             <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How it presents — what others see, hear, feel."/>

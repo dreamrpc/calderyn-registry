@@ -61,9 +61,14 @@
   --display:    'Bebas Neue', 'Inter', sans-serif;     /* bold caps display ONLY */
   --mono:       'JetBrains Mono', monospace;
 
-  /* ─── header heights ─── */
-  --hdr-h:      72px;
-  --tabs-h:     56px;
+  /* ─── header heights ───
+     Must match the rendered heights of .mast-inner and the .tab strip
+     (.tab height + 1px border-bottom). The dark theme override sets
+     .mast-inner{height:84px} and .tab{height:52px}, so the sticky-offset
+     vars below have to add up to 84 + (52+1) = 137px or the sub-nav
+     lands with a gap below the tabs strip. */
+  --hdr-h:      84px;
+  --tabs-h:     53px;
   --sticky-tabs-top:   var(--hdr-h);
   --sticky-subnav-top: calc(var(--hdr-h) + var(--tabs-h));
   --hdr-subnav-h:      60px;
@@ -333,10 +338,11 @@ body{
   min-height:60vh;
 }
 
-/* page entry animation */
+/* page entry animation. opacity-only so the transformed ancestor
+   doesn't break the sticky positioning of the sub-nav inside .pg. */
 @keyframes page-enter{
-  from{ opacity:0; transform:translateY(6px); }
-  to{ opacity:1; transform:translateY(0); }
+  from{ opacity:0; }
+  to{ opacity:1; }
 }
 .pg{ animation:page-enter .25s ease-out; }
 
@@ -6238,10 +6244,13 @@ span.cname{ color:var(--text); }
 /* Hide the original masthead red bottom border (replaced by gold gradient) */
 .masthead{ border-bottom-color:var(--rule-soft); }
 
-/* Page-enter animation, smoother */
+/* Page-enter animation, smoother.
+   Note: transform on an ancestor of a sticky element creates a containing
+   block that can break sticky behaviour (the sticky element sticks within
+   the transformed ancestor rather than the viewport). Use opacity only. */
 @keyframes page-enter{
-  from{ opacity:0; transform:translateY(8px); }
-  to{ opacity:1; transform:translateY(0); }
+  from{ opacity:0; }
+  to{ opacity:1; }
 }
 .pg{ animation:page-enter .4s var(--ease); }
 
@@ -9704,6 +9713,60 @@ body, .pg, .page{
   font-style:normal !important;
 }
 
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 13 — FINAL CONTRAST SWEEP                                         ║
+   ║  Original CSS used color:var(--ink) (near-black) for body text on a     ║
+   ║  white --paper canvas. The dark-theme override flipped --paper dark but ║
+   ║  left ~167 color:var(--ink) declarations untouched, producing dark-on-  ║
+   ║  dark text that survived the earlier wave overrides. This wave rebinds  ║
+   ║  --ink → --text on text-bearing elements inside the content panel, so   ║
+   ║  any color:var(--ink) declaration resolves to readable light text.      ║
+   ║  Custom-property scoping means we don't disturb the borders / panel     ║
+   ║  backgrounds that legitimately use --ink as a structural dark colour.   ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+.pg :is(p, li, dd, dt, span, strong, em, b, i, u, small, mark, time, abbr,
+        cite, q, sub, sup, h1, h2, h3, h4, h5, h6,
+        td, th, caption, figcaption, blockquote, summary, details, label,
+        legend, address, code, kbd, samp, pre, a){
+  --ink: var(--text);
+}
+
+/* Re-darken --ink where the element actually paints a yellow / white surface
+   (chips, badges, the few light-bg pills that survived the dark sweep). */
+.pg .chip-yellow, .pg .chip-gold,
+.pg [style*="background:var(--yellow)"],
+.pg [style*="background: var(--yellow)"],
+.pg [style*="background:#ffcc00"], .pg [style*="background: #ffcc00"],
+.pg [style*="background:#d4a84a"], .pg [style*="background: #d4a84a"],
+.pg [style*="background:#ffffff"], .pg [style*="background: #ffffff"],
+.pg [style*="background:#fff "], .pg [style*="background: #fff "],
+.pg [style*="background:#fff;"], .pg [style*="background: #fff;"]{
+  --ink: #0e0e10;
+}
+
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  BANNED bay — stamp readability + REJECTED tag contrast                 ║
+   ║  Wave 10 collapsed every mono label to 11.5px which crushed the BANNED  ║
+   ║  stamp on the Powers page; wave 2 muted the REJECTED tag to text-low    ║
+   ║  grey. Restore the stamp to a display size and force the tag to white   ║
+   ║  bold so it reads at a glance against the red badge background.         ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+.banned-bay-stamp{
+  font-size:26px !important;
+  letter-spacing:.04em !important;
+  font-weight:600 !important;
+  font-family:var(--display) !important;
+  color:#fff !important;
+}
+.banned-bay-tag{
+  color:#ffffff !important;
+  font-weight:800 !important;
+  letter-spacing:1.6px !important;
+  background:linear-gradient(180deg, var(--red), var(--red-deep)) !important;
+  border:1px solid rgba(255,255,255,.15) !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+}
+
 </style>
 </head>
 <body>
@@ -9713,7 +9776,50 @@ body, .pg, .page{
 <script src="data.js"></script>
 
 <!-- 2. Application code — Babel transforms JSX in the browser. Don't edit unless changing behaviour. -->
-<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-29-w12"></script>
+<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w15"></script>
+
+<!-- 3. Sticky-offset auto-sync.
+     The CSS uses --hdr-h and --tabs-h to position the sticky sub-nav directly
+     below the tabs strip. Hardcoded values drift the moment the masthead or
+     tabs are re-styled (it has happened across "wave" overrides). Measure the
+     actual rendered heights and write them back into the CSS variables so
+     the sticky nav always lands flush against the bottom of the tabs. -->
+<script>
+(function(){
+  function syncStickyOffsets(){
+    var masthead = document.querySelector('.masthead');
+    var tabs     = document.querySelector('.tabs');
+    if (!masthead || !tabs) return;
+    var hdrH  = Math.round(masthead.getBoundingClientRect().height);
+    var tabsH = Math.round(tabs.getBoundingClientRect().height);
+    var root  = document.documentElement;
+    root.style.setProperty('--hdr-h',  hdrH  + 'px');
+    root.style.setProperty('--tabs-h', tabsH + 'px');
+  }
+  // Initial sync runs once React has painted; ResizeObserver keeps things in
+  // sync when fonts load, the viewport resizes, or a wave style takes effect.
+  function init(){
+    syncStickyOffsets();
+    if (typeof ResizeObserver === 'function'){
+      var ro = new ResizeObserver(syncStickyOffsets);
+      var masthead = document.querySelector('.masthead');
+      var tabs     = document.querySelector('.tabs');
+      if (masthead) ro.observe(masthead);
+      if (tabs)     ro.observe(tabs);
+    }
+    window.addEventListener('resize', syncStickyOffsets);
+  }
+  // React mounts asynchronously via babel-standalone; poll briefly.
+  var tries = 0;
+  (function waitForChrome(){
+    if (document.querySelector('.masthead') && document.querySelector('.tabs')){
+      init();
+    } else if (tries++ < 100){
+      setTimeout(waitForChrome, 50);
+    }
+  })();
+})();
+</script>
 
 </body>
 </html>
