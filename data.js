@@ -105,7 +105,31 @@ houses: [
   },
 ],
 
-students: [],
+students: [
+  // Monty's secret ability (dormant power absorption through death) is
+  // narrative-locked and intentionally omitted from the public power /
+  // expression / drawbacks fields below. Admin-side note only:
+  //   "Monty's real ability has not properly activated because he has
+  //    never killed another powered person. If he kills a supe, his
+  //    body can absorb and permanently integrate aspects of their power.
+  //    Until then, his body is misfiring, which is why his ability
+  //    expresses as mucus, regurgitation, and stomach-pressure attacks."
+  // Player notes: Valaris embarrassment in power presentation, not in
+  //   ambition. Talked his way into Student Body President + Debate
+  //   Club Captain despite the most unmarketable ability on campus.
+  {
+    char: "Montgomery Farthing III",
+    alias: "Upchuck",
+    house: "valaris",
+    year: "Junior",
+    track: "hero",
+    tier: "C-List",
+    power: "Regurgitive storage, mucus armour, and belch sonics",
+    expression: "Monty's ability currently manifests as a gross biological defence system. He can store small objects inside his body and regurgitate them later, coat himself in slippery mucus armour, and release short-range sonic belches that can disorient opponents. These powers are humiliating, messy, and unreliable, but useful for distraction, survival, smuggling, and support work.",
+    drawbacks: "Monty's powers make him nauseous, weak, dehydrated, and physically disgusting to be around. His mucus can be dried, frozen, burned, or washed away. His belch sonics are short range and can affect allies. His storage has strict size limits and can injure him if he swallows anything sharp, toxic, or unstable.",
+    link: "https://roleplay.chat/profile.php?user=upchuck",
+  },
+],
 
 faculty: [
   {
@@ -899,7 +923,8 @@ clubs: [
       { label: "Novice", roles: ["Novice"] },
     ],
     positions: [
-      { pos: "Captain", group: "leadership" }, { pos: "Vice Captain", group: "leadership" },
+      { pos: "Captain", group: "leadership", char: "Montgomery Farthing III", link: "https://roleplay.chat/profile.php?user=upchuck" },
+      { pos: "Vice Captain", group: "leadership" },
       { pos: "Research Lead", group: "leadership" },
       { pos: "Policy", group: "varsity" }, { pos: "Policy", group: "varsity" },
       { pos: "Parliamentary", group: "varsity" }, { pos: "Parliamentary", group: "varsity" },
@@ -942,7 +967,7 @@ studentGov: [
     type: "elected",
     note: "Campus-wide ballot. One-year term. The Student Body President leads the government and chairs the Student Council. Real budget. Administration overrides routinely and without explanation.",
     seats: [
-      { pos: "Student Body President", term: "2026–27" },
+      { pos: "Student Body President", term: "2026–27", char: "Montgomery Farthing III", link: "https://roleplay.chat/profile.php?user=upchuck" },
       { pos: "Treasurer",              term: "2026–27" },
       { pos: "Secretary",              term: "2026–27" },
     ],
