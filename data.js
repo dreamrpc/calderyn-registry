@@ -129,6 +129,30 @@ students: [
     drawbacks: "Monty's powers make him nauseous, weak, dehydrated, and physically disgusting to be around. His mucus can be dried, frozen, burned, or washed away. His belch sonics are short range and can affect allies. His storage has strict size limits and can injure him if he swallows anything sharp, toxic, or unstable.",
     link: "https://roleplay.chat/profile.php?user=upchuck",
   },
+  {
+    char: "Cesare Delgado",
+    alias: "NANO",
+    house: "grimere",
+    year: "Junior",
+    track: "hero",
+    tier: "A-List",
+    power: "Technorganic Integration — fused cybernetic / nanotech body system",
+    expression: "Cesare's body is a fused technorganic platform — armour plating, an integrated arm-cannon, deployable shielding, mechanical limbs, thrusters for short-burst mobility, neural-interface tech tools, and active self-repair routines. He can read and command compatible electronics through direct contact and operates in close coordination with BYTE's network support.",
+    drawbacks: "Heavy use causes overheating, phantom pain, system strain, and mechanical lockups. EMPs, malware, and hostile tech intrusion affect him directly because his cybernetics are part of his body, not equipment. The arm-cannon overheats and locks in cannon form after sustained firing. Full mechanical-limb deployment frightens onlookers. Shielding sacrifices mobility and offence; thrusters cannot sustain flight. His organic systems still need rest, oxygen, pain management, and cooling cycles. Major repairs require parts, time, and specialist help. His deepest weakness is ownership: significant parts of him may be classified as experimental STRATA-linked medical technology, blurring the line between Cesare and the asset.",
+    link: "https://roleplay.chat/profile.php?user=delgado"
+  },
+  {
+    char: "Vecna Ravindrakumar",
+    alias: "BYTE",
+    house: "grimere",
+    year: "Junior",
+    track: "sidekick",
+    tier: "B-List",
+    power: "Technopathic Intrusion — mental interface with electronic systems",
+    expression: "BYTE mentally interfaces with electronics within close range — reading device states, commanding compatible hardware, monitoring and countering surveillance, and influencing environmental tech (lights, doors, screens, comms). She specialises in digital forensics: reconstructing deleted files, tracing comms, identifying tampering. In the field she runs live systems support for NANO and the team, and operates Trojan, a small companion drone that acts as a mobile relay and lets her extend her range and senses through it.",
+    drawbacks: "Her power needs systems to work — she's effectively powerless in low-tech, shielded, or analog environments. Heavy intrusion causes sensory overstimulation, migraines, and nosebleeds; cascading networks can overload her if she pushes too hard. She processes commands literally, so unclear instructions to systems can produce dangerous results. Trojan is a single point of failure: if the drone is destroyed, jammed, or compromised, her effective range collapses, and a hostile actor with the right counter-tools could ride her connection back to her.",
+    link: "https://roleplay.chat/profile.php?user=vecna"
+  },
 ],
 
 faculty: [
@@ -687,6 +711,26 @@ powers: [
     drawbacks: "Monty's powers make him nauseous, weak, dehydrated, and physically disgusting to be around. His mucus can be dried, frozen, burned, or washed away. His belch sonics are short range and can affect allies. His storage has strict size limits and can injure him if he swallows anything sharp, toxic, or unstable.",
         note: "Monty's real ability has not properly activated because he has never killed another powered person. If he kills a supe, his body can absorb and permanently integrate aspects of their power. Until then, his body is misfiring, which is why his ability expresses as mucus, regurgitation, and stomach-pressure attacks.",
      link: "https://roleplay.chat/profile.php?user=upchuck",
+  },
+  {
+    char: "Cesare Delgado",
+    alias: "NANO",
+    status: "student",
+    tier: "A",
+    power: "Technorganic Integration",
+    expression: "A fused technorganic body — adaptive armour plating, an integrated arm-cannon, deployable shielding, mechanical limbs, short-burst thrusters, neural-interface tools, and active self-repair routines. He can read and command compatible electronics on contact and operates in tight coordination with BYTE's network support.",
+    drawbacks: "Heavy use causes overheating, phantom pain, system strain, and mechanical lockups. EMPs and malware affect him directly because his cybernetics are part of his body. The arm-cannon overheats and can lock in cannon form. Full mechanical-limb deployment frightens onlookers. Shielding sacrifices mobility; thrusters cannot sustain flight. His organic systems still need rest, oxygen, pain management, and cooling cycles. Major repairs require parts, time, and specialist help. Deepest weakness: significant parts of him may be classified as experimental STRATA-linked medical technology, blurring the line between Cesare and the asset.",
+    link: "https://roleplay.chat/profile.php?user=delgado"
+  },
+  {
+    char: "Vecna Ravindrakumar",
+    alias: "BYTE",
+    status: "student",
+    tier: "B",
+    power: "Technopathic Intrusion",
+    expression: "Mental interface with electronic systems within close range — reading device states, commanding compatible hardware, countering surveillance, and influencing environmental tech. Specialises in digital forensics: reconstructing deleted files, tracing comms, identifying tampering. Runs live systems support for NANO in the field. Operates Trojan, a small companion drone that acts as a mobile relay and extends her range and senses through it.",
+    drawbacks: "Powerless in low-tech, shielded, or analog environments. Heavy intrusion causes sensory overstimulation, migraines, and nosebleeds; cascading networks can overload her if she pushes too hard. Processes commands literally, so unclear instructions to systems can produce dangerous results. Trojan is a single point of failure: if the drone is destroyed, jammed, or compromised, her effective range collapses, and a hostile actor with the right counter-tools could ride her connection back to her.",
+    link: "https://roleplay.chat/profile.php?user=vecna"
   },
 ],
 
