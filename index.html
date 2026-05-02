@@ -3593,36 +3593,41 @@ span.cname{ font-weight:600; color:var(--ink); }
 /* CLUB RULES — Powerball How To Play tab */
 .kbr{ background:var(--paper); }
 .kbr-hd{
-  background:var(--paper);
-  border-bottom:2px solid var(--ink);
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2));
+  border-bottom:1px solid var(--rule-soft);
   position:sticky;
   top:0;
   z-index:5;
 }
-.kbr-tabs{ display:flex; }
+.kbr-tabs{ display:flex; gap:0; }
 .kbr-tab{
   flex:1;
   background:transparent;
-  color:var(--muted);
+  color:var(--text-low);
   border:none;
   border-bottom:3px solid transparent;
-  padding:13px 14px;
+  padding:14px 14px;
   font-family:var(--sans);
   font-size:12px;
   font-weight:700;
   letter-spacing:.04em;
   text-transform:uppercase;
   cursor:pointer;
-  transition:color .12s, background .12s, border-color .12s;
+  transition:color .15s ease, background .15s ease, border-color .15s ease;
   border-right:1px solid var(--rule-soft);
 }
 .kbr-tab:last-child{ border-right:none; }
-.kbr-tab:hover{ color:var(--ink); background:#fff5d4; }
-.kbr-tab.on{
-  color:var(--ink);
-  border-bottom-color:var(--yellow);
-  background:#fff5d4;
+.kbr-tab:hover{
+  color:var(--text);
+  background:rgba(212,168,74,0.08);
 }
+.kbr-tab.on{
+  color:var(--text);
+  background:var(--paper-3);
+  border-bottom-color:var(--yellow);
+  box-shadow:inset 0 -3px 0 var(--yellow), inset 0 1px 0 rgba(212,168,74,0.18);
+}
+.kbr-tab.on:hover{ background:var(--paper-3); }
 .kbr-body{ padding:20px 28px 24px; }
 
 .kbr-arena-tile{
