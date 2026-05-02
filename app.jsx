@@ -3542,7 +3542,7 @@ function PowerFields({form, set, allowHuman = true}){
             <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Electromagnetic field manipulation · Photosphere control"/>
           </Field>
           <Field label="Power Expression" required hint="What it looks like and how it works — the visual manifestation and the internal mechanics." full>
-            <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How it presents — what others see, hear, feel — and what it does, how it does it, what it costs."/>
+            <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How it presents — what others see, hear, feel — and what it does, how it does it."/>
           </Field>
           <Field label="Drawbacks" required hint="Costs, weaknesses, hard limits, things that turn it off." full>
             <textarea className="join-textarea is-medium" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value)} placeholder="Even broken-tier characters need limits — be honest."/>
@@ -3660,7 +3660,7 @@ function JoinFieldset({type, form, set}){
             {JOIN_HOUSES.map(h => <option key={h} value={h}>{h}</option>)}
           </select>
         </Field>
-        <Field label="Year" required>
+        <Field label="Year" required hint="Fr 18–19 · So 19–20 · Jr 20–21 · Sr 21–22">
           <select className="join-select" value={form.year || ""} onChange={e => set("year", e.target.value)}>
             <option value="">Select year…</option>
             {JOIN_YEARS.map(y => <option key={y} value={y}>{y}</option>)}
