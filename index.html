@@ -3594,353 +3594,294 @@ span.cname{ font-weight:600; color:var(--ink); }
 .kb-row-reserve .kb-team-pos-cell{ color:var(--faint); }
 
 /* CLUB RULES — Powerball How To Play tab */
-.kbr{ background:var(--paper); }
-.kbr-hd{
-  background:linear-gradient(180deg, var(--paper-3), var(--paper-2));
-  border-bottom:1px solid var(--rule-soft);
-  position:sticky;
-  top:0;
-  z-index:5;
-}
-.kbr-tabs{ display:flex; gap:0; }
-.kbr-tab{
-  flex:1;
+/* CLUB RULES — dark restyle (Powerball "How To Play" / All clubs) */
+.kbr{
   background:transparent;
-  color:var(--text-low);
+  color:#f1ede4;
+}
+
+/* Old tabs strip is no longer rendered; hide if anything resurrects it */
+.kbr-hd, .kbr-tabs, .kbr-tab{ display:none !important; }
+
+.kbr-body{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+/* ---- Section dividers (Overview / Roles / Rulebook) ---- */
+.kbr-section{
+  margin:0 0 28px;
+  padding:0;
   border:none;
-  border-bottom:3px solid transparent;
-  padding:14px 14px;
-  font-family:var(--sans);
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  cursor:pointer;
-  transition:color .15s ease, background .15s ease, border-color .15s ease;
-  border-right:1px solid var(--rule-soft);
 }
-.kbr-tab:last-child{ border-right:none; }
-.kbr-tab:hover{
-  color:var(--text);
-  background:rgba(212,168,74,0.08);
+.kbr-section + .kbr-section{
+  padding-top:24px;
+  border-top:1px solid #1f1f26;
 }
-.kbr-tab.on{
-  color:var(--text);
-  background:var(--paper-3);
-  border-bottom-color:var(--yellow);
-  box-shadow:inset 0 -3px 0 var(--yellow), inset 0 1px 0 rgba(212,168,74,0.18);
-}
-.kbr-tab.on:hover{ background:var(--paper-3); }
-.kbr-body{ padding:20px 28px 24px; }
-
-.kbr-arena-tile{
-  width:100%;
-  display:grid;
-  grid-template-columns:160px 1fr;
-  gap:0;
-  background:var(--ink);
-  border:2px solid var(--ink);
-  cursor:pointer;
-  text-align:left;
-  font:inherit;
-  color:inherit;
-  transition:transform .12s, box-shadow .12s;
-  margin-top:18px;
-}
-.kbr-arena-tile:hover{
-  transform:translateY(-2px);
-  box-shadow:4px 4px 0 var(--yellow);
-}
-.kbr-arena-tile-img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-.kbr-arena-tile-body{
-  padding:14px 18px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.kbr-arena-tile-eyebrow{
-  font-family:var(--mono);
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  color:var(--ink);
-  background:var(--yellow);
-  padding:3px 8px;
-  align-self:flex-start;
-  margin-bottom:4px;
-}
-.kbr-arena-tile-title{
-  font-family:var(--display);
-  font-size:20px;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  color:#fff;
-  line-height:1.1;
-  font-weight:400;
-}
-.kbr-arena-tile-meta{
-  font-family:var(--mono);
-  font-size:10.5px;
-  font-weight:700;
-  letter-spacing:1.3px;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.65);
-}
-.kbr-arena-tile-action{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-family:var(--mono);
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:1.4px;
-  text-transform:uppercase;
-  color:var(--yellow);
-  margin-top:4px;
-}
-
-.kbr-lightbox{
-  position:fixed;
-  inset:0;
-  background:rgba(14,14,16,.95);
-  z-index:2000;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:40px;
-  cursor:zoom-out;
-  animation:cs-fade .15s ease-out;
-}
-.kbr-lightbox-img{
-  max-width:100%;
-  max-height:calc(100vh - 140px);
-  object-fit:contain;
-  display:block;
-  border:3px solid var(--yellow);
-  cursor:default;
-}
-.kbr-lightbox-close{
-  position:absolute;
-  top:24px; right:24px;
-  background:transparent;
-  color:#fff;
-  border:2px solid rgba(255,255,255,.4);
-  font-size:18px;
-  width:48px;
-  height:48px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:background .12s, color .12s, border-color .12s;
-}
-.kbr-lightbox-close:hover{
-  background:var(--yellow);
-  color:var(--ink);
-  border-color:var(--yellow);
-}
-.kbr-lightbox-hint{
-  margin-top:18px;
+.kbr-section-tag{
+  display:inline-block;
   font-family:var(--mono);
   font-size:11px;
-  font-weight:600;
-  letter-spacing:1.4px;
+  font-weight:700;
+  letter-spacing:1.8px;
   text-transform:uppercase;
-  color:rgba(255,255,255,.7);
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.kbr-lightbox-hint kbd{
-  font-family:var(--mono);
-  font-size:10px;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.2);
-  padding:2px 6px;
-  color:#fff;
+  color:#fbbf24;
+  margin:0 0 18px;
+  padding:6px 10px;
+  background:rgba(251,191,36,.08);
+  border-left:3px solid #fbbf24;
 }
 
+/* ---- Overview ---- */
 .kbr-summary{
   font-family:var(--sans);
-  font-size:14px;
-  line-height:1.7;
-  color:var(--ink);
-  margin:0 0 18px;
+  font-size:15px;
+  line-height:1.6;
+  color:#e6e2d8 !important;
+  margin:0 0 22px;
+  max-width:900px;
 }
 
 .kbr-keypoints{
   display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:14px;
+  margin:0 0 22px;
 }
 .kbr-keypoint{
-  display:grid;
-  grid-template-columns:auto 1fr;
-  gap:16px;
-  align-items:center;
-  border:2px solid var(--ink);
-  background:var(--paper);
-  padding:12px 14px;
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  padding:16px 18px;
+  background:#14141a;
+  border:1px solid #1f1f26;
+  border-left:3px solid #fbbf24;
 }
 .kbr-keypoint-num{
-  font-family:var(--display);
-  font-size:32px;
-  line-height:1;
-  letter-spacing:.02em;
-  color:var(--red);
-  text-transform:uppercase;
-  min-width:54px;
-  text-align:center;
-  font-weight:400;
-}
-.kbr-keypoint-lbl{
-  font-family:var(--sans);
-  font-size:12px;
+  font-family:var(--mono);
+  font-size:18px;
   font-weight:700;
+  color:#fbbf24 !important;
   letter-spacing:.04em;
-  text-transform:uppercase;
-  color:var(--ink);
-  margin-bottom:4px;
+  flex-shrink:0;
+  min-width:36px;
 }
-.kbr-keypoint-lbl .ico{ color:var(--red); margin-right:5px; }
+.kbr-keypoint-body{ flex:1; min-width:0; }
+.kbr-keypoint-lbl{
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  color:#f1ede4 !important;
+  margin-bottom:6px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.kbr-keypoint-lbl .ico{
+  color:#fbbf24;
+  font-size:13px;
+}
 .kbr-keypoint-body p{
   font-family:var(--sans);
-  font-size:13px;
+  font-size:13.5px;
   line-height:1.55;
-  color:var(--ink);
+  color:#cfcabc !important;
   margin:0;
 }
 
-.kbr-roles{
-  list-style:none;
-  margin:0; padding:0;
+/* ---- Arena tile (clickable diagram) ---- */
+.kbr-arena-tile{
+  display:flex;
+  align-items:stretch;
+  gap:0;
+  width:100%;
+  padding:0;
+  margin:0 0 4px;
+  background:#0e0e10;
+  border:1px solid #1f1f26;
+  border-left:3px solid #fbbf24;
+  cursor:pointer;
+  text-align:left;
+  color:inherit;
+  transition:background .15s, border-color .15s;
+}
+.kbr-arena-tile:hover{
+  background:#14141a;
+  border-color:#2a2a32;
+  border-left-color:#fbbf24;
+}
+.kbr-arena-tile-img{
+  display:block;
+  width:200px;
+  max-width:35%;
+  object-fit:cover;
+  background:#000;
+  flex-shrink:0;
+}
+.kbr-arena-tile-body{
+  flex:1;
+  min-width:0;
+  padding:18px 22px;
   display:flex;
   flex-direction:column;
-  gap:14px;
+  justify-content:center;
+  gap:6px;
 }
-.kbr-role{
-  border:2px solid var(--ink);
-  background:var(--paper);
-  padding:14px 16px;
-}
-.kbr-role-hd{
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-  margin-bottom:8px;
-}
-/* Flattened Rules: section dividers replace the old Overview/Roles/Rulebook sub-tabs */
-.kbr-section{
-  margin-bottom:28px;
-  padding-top:18px;
-  border-top:1px solid var(--rule-faint);
-}
-.kbr-section:first-of-type{
-  border-top:none;
-  padding-top:0;
-}
-.kbr-section-tag{
-  font-family:var(--mono);
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:1.6px;
-  text-transform:uppercase;
-  color:var(--yellow);
-  margin-bottom:14px;
-}
-
-.kbr-role-num{
-  font-family:var(--mono);
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:1.4px;
-  background:var(--yellow);
-  color:var(--ink);
-  padding:4px 8px;
-  flex-shrink:0;
-  margin-top:2px;
-}
-.kbr-role-name{
-  font-family:var(--display);
-  font-size:22px;
-  letter-spacing:.04em;
-  line-height:1;
-  text-transform:uppercase;
-  color:var(--ink);
-  margin-bottom:4px;
-  font-weight:400;
-}
-.kbr-role-tagline{
+.kbr-arena-tile-eyebrow{
   font-family:var(--mono);
   font-size:10.5px;
   font-weight:700;
-  letter-spacing:1.3px;
+  letter-spacing:1.6px;
   text-transform:uppercase;
-  color:var(--muted);
+  color:#fbbf24 !important;
+  display:flex;
+  align-items:center;
+  gap:6px;
 }
-.kbr-role-desc{
-  font-family:var(--sans);
-  font-size:13.5px;
-  line-height:1.65;
-  color:var(--ink);
-  margin:0 0 10px;
+.kbr-arena-tile-title{
+  font-family:var(--display, var(--sans));
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:.02em;
+  color:#f1ede4 !important;
+  line-height:1.2;
 }
-.kbr-role-best{
-  background:#fff5d4;
-  border-left:4px solid var(--yellow);
-  padding:9px 12px;
-  font-family:var(--sans);
-  font-size:12.5px;
-  line-height:1.55;
-}
-.kbr-role-best-tag{
+.kbr-arena-tile-meta{
   font-family:var(--mono);
-  font-size:9.5px;
+  font-size:10.5px;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  color:#8a8a92 !important;
+}
+.kbr-arena-tile-action{
+  font-family:var(--mono);
+  font-size:10.5px;
   font-weight:700;
   letter-spacing:1.4px;
   text-transform:uppercase;
-  color:var(--ink);
-  margin-right:6px;
+  color:#fbbf24 !important;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:4px;
 }
-.kbr-role-best-text{ color:var(--ink); }
 
-/* Fix: force readable dark text on cream/yellow surfaces inside .kbr-role (beats [class$="-text"] !important and .pg li --ink override) */
-.kbr-role-best,
-.kbr-role .kbr-role-best,
-.kbr-role-best .kbr-role-best-tag,
-.kbr-role-best .kbr-role-best-text,
-.kbr-role .kbr-role-best-tag,
-.kbr-role .kbr-role-best-text,
-.kbr-role .kbr-role-num,
-.kbr-roles .kbr-role .kbr-role-num{ color:#07070a !important; }
+/* ---- Roles list ---- */
+.kbr-roles{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+.kbr-role{
+  position:relative;
+  padding:18px 20px 18px 64px;
+  background:#14141a;
+  border:1px solid #1f1f26;
+  border-left:3px solid #fbbf24;
+}
+.kbr-role-hd{
+  display:block;
+  margin-bottom:8px;
+}
+.kbr-role-num{
+  position:absolute;
+  top:18px;
+  left:16px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:34px;
+  height:24px;
+  padding:0 6px;
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  background:#fbbf24;
+  color:#07070a !important;
+}
+.kbr-role-name{
+  font-family:var(--display, var(--sans));
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:#f1ede4 !important;
+  line-height:1.15;
+  margin-bottom:4px;
+}
+.kbr-role-tagline{
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  color:#cfcabc !important;
+}
+.kbr-role-desc{
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.55;
+  color:#e6e2d8 !important;
+  margin:8px 0 12px;
+}
+.kbr-role-best{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px 14px;
+  background:rgba(251,191,36,.06);
+  border-left:2px solid #fbbf24;
+  font-family:var(--sans);
+  font-size:13px;
+  line-height:1.5;
+}
+.kbr-role-best-tag{
+  flex-shrink:0;
+  font-family:var(--mono);
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  color:#fbbf24 !important;
+}
+.kbr-role-best-text{
+  color:#e6e2d8 !important;
+}
 
-.kbr-block{ margin-bottom:18px; }
+/* ---- Rulebook blocks ---- */
+.kbr-block{
+  padding:18px 20px;
+  background:#14141a;
+  border:1px solid #1f1f26;
+  border-left:3px solid #fbbf24;
+  margin-bottom:12px;
+}
 .kbr-block:last-child{ margin-bottom:0; }
 .kbr-block-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
   font-family:var(--mono);
   font-size:11px;
   font-weight:700;
   letter-spacing:1.6px;
   text-transform:uppercase;
-  color:var(--ink);
-  background:var(--yellow);
-  padding:5px 11px;
-  display:inline-block;
-  margin-bottom:10px;
+  color:#fbbf24 !important;
+  margin-bottom:12px;
 }
-.kbr-block-tag .ico{ font-size:.95em; margin-right:5px; }
+.kbr-block-tag .ico{ color:#fbbf24; }
 .kbr-block p{
   font-family:var(--sans);
-  font-size:13.5px;
-  line-height:1.7;
-  color:var(--ink);
+  font-size:14px;
+  line-height:1.6;
+  color:#e6e2d8 !important;
   margin:0;
 }
 .kbr-list{
@@ -3949,70 +3890,123 @@ span.cname{ font-weight:600; color:var(--ink); }
   padding:0;
 }
 .kbr-list li{
-  font-family:var(--sans);
-  font-size:13.5px;
-  line-height:1.65;
-  color:var(--ink);
-  padding:8px 0 8px 20px;
-  border-bottom:1px dashed var(--rule-soft);
   position:relative;
+  padding:8px 0 8px 18px;
+  border-bottom:1px solid #1f1f26;
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.55;
+  color:#e6e2d8 !important;
 }
 .kbr-list li::before{
-  content:'●';
+  content:"";
   position:absolute;
+  top:15px;
   left:0;
-  color:var(--red);
-  font-size:11px;
-  top:9px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#fbbf24;
 }
 .kbr-list li:last-child{ border-bottom:none; }
 
+/* ---- Career stats (used in About section, kept consistent) ---- */
 .kbr-career-stats{
   display:grid;
-  grid-template-columns:1fr;
+  grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
   gap:10px;
-  margin-top:14px;
+  margin:14px 0 0;
 }
 .kbr-career-stat{
-  border:2px solid var(--ink);
-  background:var(--paper);
-  padding:12px 14px;
-  display:grid;
-  grid-template-columns:auto 1fr;
-  gap:16px;
-  align-items:center;
+  padding:14px 16px;
+  background:#14141a;
+  border:1px solid #1f1f26;
+  border-left:3px solid #ef4444;
 }
 .kbr-career-stat-num{
-  font-family:var(--display);
-  font-size:36px;
-  line-height:1;
+  font-family:var(--display, var(--sans));
+  font-size:24px;
+  font-weight:700;
+  color:#ef4444 !important;
   letter-spacing:.02em;
-  color:var(--red);
-  font-weight:400;
+  line-height:1;
+  margin-bottom:6px;
 }
 .kbr-career-stat-lbl{
-  font-family:var(--sans);
-  font-size:12px;
+  font-family:var(--mono);
+  font-size:10.5px;
   font-weight:700;
-  letter-spacing:.04em;
+  letter-spacing:1.4px;
   text-transform:uppercase;
-  color:var(--ink);
+  color:#f1ede4 !important;
   margin-bottom:4px;
 }
 .kbr-career-stat-sub{
   font-family:var(--sans);
-  font-size:13px;
-  color:var(--muted);
+  font-size:12.5px;
   line-height:1.45;
+  color:#cfcabc !important;
 }
 
-@media (max-width: 720px){
-  .kb-teams{ grid-template-columns:1fr; }
-  .kb-team{ border-right:none; }
-  .club-side-panel{ max-width:100%; box-shadow:none; border-left:none; }
-  .club-side-name{ font-size:36px; }
-  .kbr-arena-tile{ grid-template-columns:1fr; }
-  .kbr-arena-tile-img{ height:140px; }
+/* ---- Lightbox (arena fullscreen) ---- */
+.kbr-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(0,0,0,.92);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px;
+  cursor:zoom-out;
+}
+.kbr-lightbox-img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  background:#000;
+}
+.kbr-lightbox-close{
+  position:absolute;
+  top:20px;
+  right:20px;
+  width:40px;
+  height:40px;
+  background:#14141a;
+  border:1px solid #2a2a32;
+  color:#f1ede4;
+  font-size:20px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.kbr-lightbox-close:hover{
+  background:#fbbf24;
+  color:#07070a;
+  border-color:#fbbf24;
+}
+.kbr-lightbox-hint{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  color:#8a8a92;
+}
+.kbr-lightbox-hint kbd{
+  font-family:inherit;
+  background:#1f1f26;
+  color:#f1ede4;
+  padding:2px 6px;
+  border:1px solid #2a2a32;
+  margin:0 2px;
+}
+
+/* End CLUB RULES dark restyle */
 }
 
 /* ════════════════════════════════════════════════════════════════════════
