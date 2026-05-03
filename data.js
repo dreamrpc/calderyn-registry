@@ -748,6 +748,16 @@ powers: [
     drawbacks: "Powerless in low-tech, shielded, or analog environments. Heavy intrusion causes sensory overstimulation, migraines, and nosebleeds; cascading networks can overload her if she pushes too hard. Processes commands literally, so unclear instructions to systems can produce dangerous results. Trojan is a single point of failure: if the drone is destroyed, jammed, or compromised, her effective range collapses, and a hostile actor with the right counter-tools could ride her connection back to her.",
     link: "https://roleplay.chat/profile.php?user=vecna"
   },
+  {
+    char: "Celestia \"Stella\" Starling",
+    alias: "Mirage",
+    status: "student",
+    tier: "A",
+    power: "Mirage — Light Bending & Illusion Projection",
+    expression: "Stella manipulates visible light around her body in motion. She can throw false doubles, stage glamour disguises, weave shimmer-fields and visual distortions, decoy her own movement, and drop into short bursts of near-invisibility. The work is at its sharpest while she is moving — flipping, dancing, kicking, acting — where her gymnastics, Drama Club training, and taekwondo footwork weaponise misdirection. Years of cheer captaincy and stage performance have given her the timing, presence, and discipline to sell every illusion as the real thing while she sets up the actual hit.",
+    drawbacks: "Her illusions are visual only — they cannot strike, hold, or block on their own. They lose ground against darkness, smoke, heavy rain, thermal tracking, sound-based senses, scent tracking, and any opponent who refuses to trust their eyes. Overuse triggers migraines, eye strain, nausea, vertigo, nosebleeds, and afterimages that make her own vision unreliable; pushed too hard, she becomes the easiest target on the field. Her reputation is also a liability — people consistently underestimate her until she has already won, but the same image makes her a sponsorship target whose every move is recorded.",
+    link: "https://roleplay.chat/profile.php?user=illuminate"
+  }
 ],
 
 powerStatuses: [
@@ -1077,7 +1087,7 @@ heroLists: [
     req: "A-List tier. Capped at 10 slots — application requires admin conversation before submission.",
     color: "#e31b23",
     slots: [
-      { alias: "Mirage", role: "Headline Hero", char: "Celestia \"Stella\" Starling", power: "Mirage — visible-light bending / illusion projection" },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
       { alias: "[Open]", role: "Headline Hero", char: null, power: null },
       { alias: "[Open]", role: "Headline Hero", char: null, power: null },
       { alias: "[Open]", role: "Headline Hero", char: null, power: null },
