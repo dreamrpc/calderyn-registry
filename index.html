@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
@@ -9,7 +11,7 @@
 <title>CALDERYN COLLEGE — Central Registry</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Bungee&family=Bungee+Shade&family=Archivo+Black&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js" crossorigin="anonymous"></script>
@@ -10490,6 +10492,2211 @@ button.class-chip-btn{
   overflow-x:auto !important;
 }
    .preg-tbl tbody tr.preg-detail-row td{white-space:normal !important;overflow:visible !important;text-overflow:clip !important;}
+
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 8 — COMIC LAYER (final cascade winner)                            ║
+   ║  Push display moments toward comic-book panel feel without touching     ║
+   ║  body copy. Targets: headlines, panel chrome, chips, tab strip, hovers, ║
+   ║  hero banners, footer wordmark. Body copy + a11y layer untouched.       ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+:root{
+  /* Alias missing token: the existing system uses --yellow / --gold-bright
+     but earlier waves never declared a plain --gold. Several Wave 8 rules
+     reference var(--gold); alias it to --yellow so they resolve. */
+  --gold:         #d4a84a;
+
+  --comic:        'Bungee', 'Bebas Neue', 'Archivo Black', 'Inter', sans-serif;
+  --comic-shade:  'Bungee Shade', 'Bungee', 'Bebas Neue', sans-serif;
+
+  /* hard panel ink — slightly off-true-black for warmth */
+  --panel-ink:    #07070b;
+  --panel-stroke: 2px;
+  --panel-stroke-strong: 3px;
+
+  /* chromatic shadow stack used on display headlines */
+  --comic-shadow:
+      3px 3px 0 rgba(193,26,44,.95),
+      6px 6px 0 rgba(212,168,74,.55),
+      8px 8px 24px rgba(0,0,0,.55);
+  --comic-shadow-tight:
+      2px 2px 0 rgba(193,26,44,.9),
+      4px 4px 0 rgba(212,168,74,.5);
+
+  /* hard panel pop on hover */
+  --comic-pop:    -3px 3px 0 var(--panel-ink), -6px 6px 0 rgba(193,26,44,.85);
+  --comic-pop-gold: -3px 3px 0 var(--panel-ink), -6px 6px 0 rgba(212,168,74,.7);
+}
+
+/* ─── halftone: bump density + opacity so heroes read as printed paper ─── */
+.pg-hd::after,
+.lore-block.lore-intro::after,
+.about-bay::after,
+.join-confirm::after{
+  background-image: radial-gradient(rgba(241,205,114,.22) 1.2px, transparent 1.6px) !important;
+  background-size: 11px 11px !important;
+  opacity:.7 !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   HERO HEADLINES — comic display + chromatic shadow stack
+   Page-head h2, lore-intro-title, join-hero h2.
+   ──────────────────────────────────────────────────────────────────── */
+.pg-hd h2,
+.lore-intro-title,
+.join-hero h2{
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  font-style:normal !important;
+  text-transform:uppercase !important;
+  letter-spacing:.005em !important;
+  line-height:.98 !important;
+  text-shadow: var(--comic-shadow) !important;
+  color:#fffdf3 !important;
+}
+/* The italic accent fragments inside hero headlines — turn them into
+   yellow stamped accents instead of italic serif */
+.pg-hd-accent,
+.lore-intro-title .accent,
+.lore-h .accent{
+  font-style:normal !important;
+  font-family:var(--comic) !important;
+  color:var(--gold-bright) !important;
+  text-shadow:
+      2px 2px 0 var(--red-deep),
+      4px 4px 0 rgba(0,0,0,.6) !important;
+  display:inline-block;
+  transform:rotate(-1.5deg);
+  padding:0 .04em;
+}
+
+/* slightly smaller hero h2 to compensate for shadow stack */
+.pg-hd h2{ font-size:60px !important; }
+.lore-intro-title{ font-size:74px !important; }
+@media (max-width:900px){
+  .pg-hd h2{ font-size:40px !important; }
+  .lore-intro-title{ font-size:42px !important; text-shadow: var(--comic-shadow-tight) !important; }
+}
+
+/* Lore section headers — comic but no shadow stack (used many times) */
+.lore-h{
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  text-transform:uppercase !important;
+  letter-spacing:.005em !important;
+  font-style:normal !important;
+  color:var(--text) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   MASTHEAD — wordmark gets comic display, sub-line stays mono
+   ──────────────────────────────────────────────────────────────────── */
+.mast-brand-name{
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  font-size:21px !important;
+  letter-spacing:.02em !important;
+  text-transform:uppercase !important;
+  color:#fffdf3 !important;
+  text-shadow: 1.5px 1.5px 0 var(--red-deep) !important;
+}
+.masthead{
+  border-bottom:var(--panel-stroke) solid var(--red) !important;
+  box-shadow:
+      0 var(--panel-stroke) 0 var(--gold),
+      0 calc(var(--panel-stroke) * 2) 0 var(--panel-ink),
+      0 18px 32px -28px rgba(0,0,0,.9) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   TABS — bigger, bolder, comic numbering plate
+   Keep nav usable; just give the active state more punch.
+   ──────────────────────────────────────────────────────────────────── */
+.tab{
+  font-family:var(--sans) !important;
+  font-weight:800 !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  font-size:12px !important;
+}
+.tab-num{
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  font-size:11px !important;
+  letter-spacing:.04em !important;
+  background:rgba(212,168,74,.10);
+  border:1px solid rgba(212,168,74,.3);
+  padding:2px 5px;
+  border-radius:3px;
+  margin-right:6px;
+}
+.tab.on .tab-num{
+  background:var(--gold-bright) !important;
+  color:var(--ink) !important;
+  border-color:var(--gold-bright) !important;
+  box-shadow: 1.5px 1.5px 0 var(--panel-ink);
+}
+.tab.on::after{
+  height:3px !important;
+  background:var(--red-bright) !important;
+  box-shadow: 0 2px 0 var(--gold) !important;
+}
+.tab:hover{ background:rgba(228,50,74,.06) !important; }
+
+/* sub-nav follow */
+.subnav-btn{ font-weight:800 !important; text-transform:uppercase !important; letter-spacing:.10em !important; font-size:12px !important; }
+.subnav-btn.on::after{ height:3px !important; background:var(--gold-bright) !important; }
+
+/* ────────────────────────────────────────────────────────────────────
+   PANEL CARDS — bring back the comic black-line border on dark cards.
+   These are the "comic panels" of the page.
+   ──────────────────────────────────────────────────────────────────── */
+.lore-vg,
+.lore-house,
+.rule,
+.tier-card,
+.prog-phase,
+.dean-card,
+.club-card,
+.kb-team,
+.case-dossier,
+.curr-yeartab,
+.about-bay{
+  border-radius:6px !important;
+  border:var(--panel-stroke) solid var(--panel-ink) !important;
+  box-shadow:
+      -3px 3px 0 var(--panel-ink),
+      0 18px 40px -32px rgba(0,0,0,.9) !important;
+  transition:transform 140ms var(--ease), box-shadow 140ms var(--ease) !important;
+}
+/* keep the existing top-color accent stripe but make it thicker */
+.lore-vg{ border-top:6px solid var(--vg-color, var(--gold)) !important; }
+.lore-house{ border-top:6px solid var(--h-color, var(--gold)) !important; }
+.tier-card{ border-top:8px solid var(--tier-color, var(--red)) !important; }
+.prog-phase{ border-top:8px solid var(--red) !important; }
+.dean-card{ border-bottom:6px solid var(--gold) !important; }
+
+/* hover: pop forward like a panel lifting off the page */
+.lore-vg:hover,
+.lore-house:hover,
+.rule:hover,
+.tier-card:hover,
+.prog-phase:hover,
+.dean-card:hover,
+.club-card:hover,
+.kb-team:hover,
+.case-dossier:hover{
+  transform:translate(2px,-2px) !important;
+  box-shadow:
+      -5px 5px 0 var(--panel-ink),
+      -8px 8px 0 rgba(193,26,44,.6),
+      0 28px 60px -28px rgba(0,0,0,.95) !important;
+}
+
+/* lore-vg / lore-house alias-name — comic display */
+.lore-vg-alias,
+.lore-house-name,
+.dean-card-name,
+.club-name,
+.club-side-name,
+.bay-hd-title,
+.curr-overview-name,
+.tier-card-letter,
+.case-dossier-hd-l{
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  text-transform:uppercase !important;
+  letter-spacing:.005em !important;
+  font-style:normal !important;
+}
+/* the giant tier-card letter gets the chromatic shadow */
+.tier-card-letter{
+  text-shadow: var(--comic-shadow-tight) !important;
+  color:#fffdf3 !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   TABLE SEC-ROW — "BAM" comic banner across the table
+   ──────────────────────────────────────────────────────────────────── */
+.sec-row td{
+  background:
+      repeating-linear-gradient(
+        135deg,
+        var(--red) 0 14px,
+        var(--red-deep) 14px 28px) !important;
+  color:#fffdf3 !important;
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  font-style:normal !important;
+  font-size:18px !important;
+  text-transform:uppercase !important;
+  letter-spacing:.04em !important;
+  border-top:var(--panel-stroke) solid var(--panel-ink) !important;
+  border-bottom:var(--panel-stroke) solid var(--gold) !important;
+  text-shadow:
+      2px 2px 0 var(--panel-ink),
+      0 0 1px rgba(0,0,0,.6) !important;
+  padding:14px 22px !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   CHIPS / BADGES — square corners, hard ink edges, no glassmorphism
+   ──────────────────────────────────────────────────────────────────── */
+.chip,
+.tier-pill,
+.track-tag,
+.lore-eyebrow,
+.lore-intro-stamp,
+.pg-hd-stamp,
+.about-bay-stamp,
+.npc-badge,
+.curr-yearhead-tag,
+.curr-classes-tag{
+  border-radius:3px !important;
+  border:1.5px solid var(--panel-ink) !important;
+  font-family:var(--mono) !important;
+  font-weight:700 !important;
+  letter-spacing:.14em !important;
+  text-transform:uppercase !important;
+  box-shadow:1.5px 1.5px 0 var(--panel-ink) !important;
+}
+
+/* The pill stamps (formerly thin gold pill) — make them look like a
+   stamped permit. Yellow plate, black ink, tilted slightly. */
+.pg-hd-stamp,
+.lore-intro-stamp,
+.about-bay-stamp{
+  background:var(--gold) !important;
+  color:var(--panel-ink) !important;
+  border-color:var(--panel-ink) !important;
+  padding:6px 12px !important;
+  transform:rotate(-1.5deg);
+  font-size:10px !important;
+  letter-spacing:.18em !important;
+}
+.pg-hd-stamp-mark,
+.lore-eyebrow::before{ color:var(--red) !important; }
+
+/* eyebrow lines — keep small, kill diamond glyph swap if any */
+.lore-eyebrow{
+  border:none !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  padding:0 !important;
+  color:var(--gold-bright) !important;
+}
+
+/* chip variants restated to win cascade against Wave 5 */
+.chip-yellow{
+  background:var(--gold-bright) !important;
+  color:var(--panel-ink) !important;
+  border-color:var(--panel-ink) !important;
+  text-shadow:none !important;
+}
+.chip-red{
+  background:var(--red) !important;
+  color:#fffdf3 !important;
+  border-color:var(--panel-ink) !important;
+  text-shadow:1px 1px 0 var(--red-deep) !important;
+}
+.track-tag-hero{
+  background:var(--red) !important;
+  color:#fffdf3 !important;
+  border:1.5px solid var(--panel-ink) !important;
+  box-shadow:1.5px 1.5px 0 var(--panel-ink) !important;
+}
+.track-tag-sidekick{
+  background:var(--ink-3) !important;
+  color:var(--gold-bright) !important;
+  border:1.5px solid var(--panel-ink) !important;
+  box-shadow:1.5px 1.5px 0 var(--panel-ink) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   SEARCH FIELD — comic-stamped border
+   ──────────────────────────────────────────────────────────────────── */
+.mast-search{
+  border-radius:4px !important;
+  border:1.5px solid var(--rule-soft) !important;
+  box-shadow: 2px 2px 0 var(--panel-ink) !important;
+}
+.mast-search:hover, .mast-search:focus-visible{
+  border-color:var(--gold-bright) !important;
+  box-shadow: 2px 2px 0 var(--gold) !important;
+}
+.mast-search-kbd{
+  border-radius:3px !important;
+  border:1px solid var(--rule-soft) !important;
+  font-family:var(--mono) !important;
+  font-weight:700 !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   BUTTONS / TOGGLES generally — square them up
+   ──────────────────────────────────────────────────────────────────── */
+.curr-yeartab{ border-radius:6px !important; }
+.curr-yeartab.on{
+  background:var(--gold) !important;
+  color:var(--panel-ink) !important;
+  border-color:var(--panel-ink) !important;
+  box-shadow:
+      -2px 2px 0 var(--panel-ink),
+      -4px 4px 0 rgba(193,26,44,.6) !important;
+}
+.curr-yeartab.on .curr-yeartab-num,
+.curr-yeartab.on .curr-yeartab-label{ color:var(--panel-ink) !important; }
+
+/* Tier pill — keep colour-coded but add panel ink edge */
+.tier-pill{
+  padding:3px 9px !important;
+  letter-spacing:.16em !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   FOOTER — wordmark gets the full comic shadow treatment
+   ──────────────────────────────────────────────────────────────────── */
+.footer{
+  border-top:var(--panel-stroke) solid var(--gold) !important;
+  box-shadow: 0 -3px 0 var(--red) inset !important;
+}
+.footer-brand{
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  font-size:42px !important;
+  letter-spacing:.02em !important;
+  text-transform:uppercase !important;
+  color:#fffdf3 !important;
+  text-shadow: var(--comic-shadow-tight) !important;
+}
+.footer-line{ font-family:var(--mono) !important; }
+
+/* ────────────────────────────────────────────────────────────────────
+   SECTION-OPENER strips — display rows on the larger group cards
+   (faculty, powered registry, clubs toolbar, orgs toolbar)
+   give them a thin yellow under-rule so they feel printed.
+   ──────────────────────────────────────────────────────────────────── */
+.freg-group-name,
+.preg-group-name,
+.orgs-group-name,
+.strc-group-name,
+.group-name,
+.curr-track-title,
+.curr-overview-name,
+.kb-team-name,
+.cp-about-career-title,
+.kbr-arena-tile-title,
+.kbr-keypoint-num,
+.kbr-role-name,
+.kbr-career-stat-num,
+.block-title,
+.office-prez-title,
+.office-prez-holder,
+.office-staff-role,
+.council-rep-house,
+.club-side-stat-num,
+.preg-alias,
+.fine-print-text,
+.case-stat-n,
+.case-col-h,
+.case-quote,
+.banned-bay-stamp,
+.status-card-tag,
+.house-glance-name,
+.curr-yeartab-label,
+.stage-name{
+  font-family:var(--comic), var(--display), var(--sans) !important;
+  font-weight:400 !important;
+  letter-spacing:.005em !important;
+  text-transform:uppercase !important;
+}
+
+/* class-chip / freg / preg row name labels — keep sans (these are dense
+   tables, comic font would hurt readability). Just bold them. */
+.class-chip-name,
+.freg-col-subj,
+.house-cell-name{
+  font-family:var(--sans) !important;
+  font-weight:800 !important;
+  letter-spacing:.005em !important;
+  text-transform:none !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   TILT ACCENTS — give a couple specific stamps a real comic tilt.
+   Subtle: -2deg max so it doesn't trigger motion sickness.
+   ──────────────────────────────────────────────────────────────────── */
+.banned-bay-stamp,
+.fine-print-stamp{
+  transform:rotate(-2deg);
+  display:inline-block;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   FOCUS — comic-yellow glow ring + black ink offset
+   ──────────────────────────────────────────────────────────────────── */
+*:focus-visible{
+  outline:3px solid var(--gold-bright) !important;
+  outline-offset:2px !important;
+  box-shadow: 2px 2px 0 var(--panel-ink) !important;
+}
+
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 9 — CLUBS DIRECTORY LAYOUT (replaces tile grid + side overlay)    ║
+   ║  Two-pane directory: rail of all clubs on the left, full detail on      ║
+   ║  the right. No modal, no overlay — inline like the rest of the registry.║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* Hide the old grid in case any cached state still mounts it */
+.clubs-wrap, .clubs-grid, .club-side-overlay, .club-side-panel{ display:none !important; }
+
+.clubs-dir{
+  display:grid !important;
+  grid-template-columns: 320px 1fr !important;
+  gap:24px !important;
+  max-width:1500px !important;
+  margin:0 auto !important;
+  padding:8px 28px 64px !important;
+  align-items:start !important;
+}
+
+/* ─── LEFT RAIL ──────────────────────────────────────────────────── */
+.clubs-dir-rail{
+  position:sticky !important;
+  top:calc(var(--hdr-h, 84px) + var(--tabs-h, 56px) + 56px) !important;
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:var(--panel-stroke) solid var(--panel-ink) !important;
+  border-radius:6px !important;
+  box-shadow:-3px 3px 0 var(--panel-ink), 0 18px 40px -32px rgba(0,0,0,.9) !important;
+  overflow:hidden !important;
+}
+.clubs-dir-rail-hd{
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:center !important;
+  padding:14px 16px 12px !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  background:rgba(255,255,255,.02) !important;
+}
+.clubs-dir-rail-label{
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  color:var(--gold-bright) !important;
+}
+.clubs-dir-rail-count{
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.4px !important;
+  color:var(--text-low) !important;
+}
+
+.clubs-dir-list{
+  list-style:none !important;
+  padding:6px !important;
+  margin:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:4px !important;
+}
+.clubs-dir-item{
+  display:flex !important;
+  width:100% !important;
+  align-items:stretch !important;
+  gap:10px !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:1px solid transparent !important;
+  border-radius:5px !important;
+  cursor:pointer !important;
+  text-align:left !important;
+  transition:background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur) var(--ease) !important;
+  overflow:hidden !important;
+}
+.clubs-dir-item-stripe{
+  width:5px !important;
+  flex-shrink:0 !important;
+  background:var(--accent, var(--gold)) !important;
+  border-radius:2px !important;
+  margin:8px 0 !important;
+  opacity:.55 !important;
+  transition:opacity var(--dur) var(--ease), width var(--dur) var(--ease) !important;
+}
+.clubs-dir-item-body{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:5px !important;
+  padding:10px 12px 10px 0 !important;
+  flex:1 1 auto !important;
+  min-width:0 !important;
+}
+.clubs-dir-item-name{
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  font-size:18px !important;
+  letter-spacing:.005em !important;
+  text-transform:uppercase !important;
+  color:var(--text) !important;
+  line-height:1.05 !important;
+}
+.clubs-dir-item-meta{
+  display:flex !important;
+  gap:10px !important;
+  align-items:center !important;
+  flex-wrap:wrap !important;
+}
+.clubs-dir-item-cat{
+  font-family:var(--mono) !important;
+  font-size:9px !important;
+  letter-spacing:1.4px !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  color:var(--gold-bright) !important;
+  background:rgba(212,168,74,.10) !important;
+  border:1px solid rgba(212,168,74,.3) !important;
+  padding:2px 6px !important;
+  border-radius:3px !important;
+}
+.clubs-dir-item-roster{
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:.8px !important;
+  color:var(--text-low) !important;
+  display:inline-flex !important;
+  align-items:baseline !important;
+  gap:2px !important;
+}
+.clubs-dir-item-roster-num{ color:var(--text) !important; font-weight:700 !important; }
+.clubs-dir-item-roster-sep{ opacity:.5 !important; }
+.clubs-dir-item-roster-tot{ color:var(--text-mid) !important; }
+.clubs-dir-item-roster-lbl{ margin-left:5px !important; opacity:.7 !important; }
+
+.clubs-dir-item:hover{
+  background:rgba(255,255,255,.025) !important;
+  border-color:var(--rule-soft) !important;
+}
+.clubs-dir-item:hover .clubs-dir-item-stripe{ opacity:.85 !important; }
+.clubs-dir-item.on{
+  /* Neutral white-tint surface so the active highlight doesn't clash with
+     red/orange/gold accent stripes. Panel-ink offset shadow does the work. */
+  background:rgba(255,255,255,.05) !important;
+  border-color:var(--panel-ink) !important;
+  box-shadow:-2px 2px 0 var(--panel-ink) !important;
+  transform:translate(1px,-1px) !important;
+}
+.clubs-dir-item.on .clubs-dir-item-stripe{
+  opacity:1 !important;
+  width:7px !important;
+  margin:6px 0 !important;
+}
+.clubs-dir-item.on .clubs-dir-item-name{ color:#fffdf3 !important; }
+
+/* ─── RIGHT DETAIL PANE ──────────────────────────────────────────── */
+.clubs-dir-detail{
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:var(--panel-stroke) solid var(--panel-ink) !important;
+  border-radius:6px !important;
+  box-shadow:-3px 3px 0 var(--panel-ink), 0 24px 60px -36px rgba(0,0,0,.95) !important;
+  overflow:hidden !important;
+  min-width:0 !important;
+}
+
+/* Hero band — uses the club's accent color */
+.clubs-dir-hero{
+  position:relative !important;
+  background:var(--accent, var(--red)) !important;
+  border-bottom:var(--panel-stroke) solid var(--panel-ink) !important;
+  /* Black ink under-rule reads against every accent color (gold disappeared
+     on the orange Drama Society hero). */
+  box-shadow:0 4px 0 var(--panel-ink) !important;
+  padding:28px 32px !important;
+  overflow:hidden !important;
+}
+.clubs-dir-hero::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background-image: radial-gradient(rgba(0,0,0,.22) 1.2px, transparent 1.6px) !important;
+  background-size:11px 11px !important;
+  mask-image:linear-gradient(180deg, rgba(0,0,0,.7), transparent) !important;
+  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.7), transparent) !important;
+  pointer-events:none !important;
+}
+.clubs-dir-hero-inner{ position:relative !important; z-index:1 !important; }
+.clubs-dir-hero-cat{
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:1.8px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  /* Universal high-contrast plate: yellow on ink. Reads on every club bg. */
+  color:var(--panel-ink) !important;
+  background:var(--gold-bright) !important;
+  border:1.5px solid var(--panel-ink) !important;
+  box-shadow:1.5px 1.5px 0 var(--panel-ink) !important;
+  padding:4px 9px !important;
+  border-radius:3px !important;
+  display:inline-block !important;
+  margin-bottom:14px !important;
+  text-shadow:none !important;
+}
+.clubs-dir-hero-name{
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  font-size:48px !important;
+  line-height:.98 !important;
+  letter-spacing:.005em !important;
+  text-transform:uppercase !important;
+  color:#fffdf3 !important;
+  margin:0 0 10px !important;
+  /* Single hard black-ink shadow — readable on every accent color, no
+     gold-on-orange clash from the chromatic stack. */
+  text-shadow:
+      3px 3px 0 var(--panel-ink),
+      0 2px 6px rgba(0,0,0,.4) !important;
+}
+.clubs-dir-hero-tag{
+  font-family:var(--mono) !important;
+  font-size:11px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  color:#ffffff !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.85), 0 0 1px rgba(0,0,0,.6) !important;
+}
+
+/* "At a glance" 3-cell strip */
+.clubs-dir-glance{
+  display:grid !important;
+  grid-template-columns:repeat(3, 1fr) !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  background:rgba(0,0,0,.18) !important;
+}
+.clubs-dir-glance-cell{
+  padding:16px 22px !important;
+  border-right:1px solid var(--rule-soft) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:6px !important;
+  min-width:0 !important;
+}
+.clubs-dir-glance-cell:last-child{ border-right:none !important; }
+.clubs-dir-glance-lbl{
+  font-family:var(--mono) !important;
+  font-size:9.5px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  color:var(--gold-bright) !important;
+}
+.clubs-dir-glance-val{
+  font-family:var(--sans) !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  color:var(--text) !important;
+  line-height:1.4 !important;
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:6px !important;
+  align-items:baseline !important;
+}
+.clubs-dir-glance-chip{
+  font-family:var(--mono) !important;
+  font-size:11px !important;
+  font-weight:600 !important;
+  letter-spacing:.4px !important;
+  color:var(--text-mid) !important;
+  background:rgba(255,255,255,.04) !important;
+  border:1px solid var(--rule-soft) !important;
+  padding:2px 7px !important;
+  border-radius:3px !important;
+}
+.clubs-dir-glance-num{
+  font-family:var(--comic) !important;
+  font-size:22px !important;
+  color:var(--gold-bright) !important;
+  font-weight:400 !important;
+  letter-spacing:.005em !important;
+}
+.clubs-dir-glance-tot{ color:var(--text-mid) !important; font-size:14px !important; font-weight:600 !important; }
+.clubs-dir-glance-sub{ color:var(--text-low) !important; font-size:11px !important; font-weight:500 !important; margin-left:4px !important; }
+
+/* In-pane tabs */
+.clubs-dir-tabs{
+  display:flex !important;
+  gap:0 !important;
+  background:rgba(0,0,0,.22) !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  padding:0 22px !important;
+}
+.clubs-dir-tab{
+  position:relative !important;
+  background:transparent !important;
+  border:none !important;
+  padding:14px 20px !important;
+  font-family:var(--sans) !important;
+  font-weight:800 !important;
+  font-size:12px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  color:var(--text-mid) !important;
+  cursor:pointer !important;
+  transition:color var(--dur) var(--ease), background var(--dur) var(--ease) !important;
+}
+.clubs-dir-tab:hover{ color:var(--text) !important; background:rgba(255,255,255,.025) !important; }
+.clubs-dir-tab.on{ color:#fffdf3 !important; }
+.clubs-dir-tab.on::after{
+  content:"" !important;
+  position:absolute !important;
+  left:14px; right:14px; bottom:0 !important;
+  height:3px !important;
+  background:var(--red-bright) !important;
+  box-shadow:0 2px 0 var(--gold) !important;
+}
+
+/* Body — keep the existing inner components' styles untouched, just frame */
+.clubs-dir-body{
+  padding:28px 32px 36px !important;
+}
+.clubs-dir-body .cp-about,
+.clubs-dir-body .cp-roster,
+.clubs-dir-body .cp-rules,
+.clubs-dir-body .club-rules{
+  max-width:none !important;
+}
+/* The inline body uses ClubPanelAbout which renders .club-side-stats — hide
+   the redundant Access stat since we're already showing it in the glance bar */
+.clubs-dir-body .club-side-stats{ display:none !important; }
+/* And the schedule row, since meets is shown in the glance bar */
+.clubs-dir-body .cp-schedule{ display:none !important; }
+
+/* Responsive: stack at narrower widths */
+@media (max-width: 1100px){
+  .clubs-dir{ grid-template-columns:1fr !important; }
+  .clubs-dir-rail{ position:static !important; }
+  .clubs-dir-list{
+    display:grid !important;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)) !important;
+  }
+}
+@media (max-width: 700px){
+  .clubs-dir{ padding:8px 16px 48px !important; }
+  .clubs-dir-hero{ padding:22px 20px !important; }
+  .clubs-dir-hero-name{ font-size:32px !important; }
+  .clubs-dir-glance{ grid-template-columns:1fr !important; }
+  .clubs-dir-glance-cell{ border-right:none !important; border-bottom:1px solid var(--rule-soft) !important; }
+  .clubs-dir-glance-cell:last-child{ border-bottom:none !important; }
+  .clubs-dir-tabs{ padding:0 12px !important; overflow-x:auto !important; }
+  .clubs-dir-tab{ padding:12px 14px !important; white-space:nowrap !important; }
+  .clubs-dir-body{ padding:20px 18px 28px !important; }
+}
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 10 — STAMP & PLATE READABILITY                                    ║
+   ║  Wave 5/6 added blanket [class*="-text"], [class*="-desc"] selectors    ║
+   ║  that paint EVERY descendant of those names a mid-grey "safety" colour. ║
+   ║  Inside a yellow stamp plate ("DOC · 01 · NON-NEGOTIABLE · ARCHIVE")    ║
+   ║  the cream-grey-on-yellow segment becomes invisible. Force every child  ║
+   ║  of a coloured plate to inherit the plate's own ink colour.             ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* All children of a yellow/coloured stamp plate inherit the plate's ink.
+   Targets every page-head stamp, lore-intro stamp, about-bay stamp, the
+   clubs hero category pip, banned-bay stamp, and the fine-print stamp.
+   `color: inherit` beats every blanket [class*="-text"] / [class*="-desc"]
+   / etc safety-net selector because of pure rule-cascade specificity here
+   (we're matching by ancestor, and using !important). */
+.pg-hd-stamp *,
+.lore-intro-stamp *,
+.about-bay-stamp *,
+.clubs-dir-hero-cat *,
+.banned-bay-stamp *,
+.fine-print-stamp *,
+.chip-yellow *,
+.curr-yeartab.on *,
+.club-side-stat-num *{
+  color: inherit !important;
+}
+
+/* The mark glyph (red square) inside the page-head stamp should still be
+   red — restore it explicitly, but make it noticeably bigger so it doesn't
+   read as a stray pixel on the yellow plate. */
+.pg-hd-stamp .pg-hd-stamp-mark{
+  color: var(--red) !important;
+  font-size: 11px !important;
+  margin-right: 2px !important;
+  line-height: 1 !important;
+}
+
+/* Spacer dot — slightly muted but still inky, never lighter than the plate
+   text or it'll fade out. */
+.pg-hd-stamp .pg-hd-stamp-spacer{
+  color: var(--panel-ink) !important;
+  opacity: .55 !important;
+  margin: 0 6px !important;
+}
+
+/* "ARCHIVE" status segment — sits at the trailing edge of the stamp.
+   Make it visually distinct from the body without dropping contrast: a
+   mini ink-on-yellow chip with a thin ink underline accent. */
+.pg-hd-stamp .pg-hd-stamp-status{
+  color: var(--panel-ink) !important;
+  font-weight: 800 !important;
+  letter-spacing: .14em !important;
+  background: rgba(0,0,0,.12) !important;
+  padding: 1px 6px !important;
+  border-radius: 2px !important;
+  margin-left: 2px !important;
+}
+
+/* Equivalent fix for the other plates that include text spans inside —
+   any "-text" / "-name" / "-status" descendant must read as the plate ink. */
+.lore-intro-stamp [class*="-text"],
+.lore-intro-stamp [class*="-name"],
+.about-bay-stamp [class*="-text"],
+.clubs-dir-hero-cat [class*="-text"]{
+  color: var(--panel-ink) !important;
+}
+
+/* ─── BROAD SAFETY NET FOR COLOURED PLATES ───────────────────────────
+   Any element whose own background is a saturated colour AND that contains
+   children painted by the [class*="-text"] / -desc / -note / -blurb safety
+   net needs to override that net. Add classes here as the issue surfaces.
+   List of known coloured-plate containers: */
+.club-hd [class*="-text"],
+.club-hd [class*="-tag"],
+.club-side-hd [class*="-text"],
+.club-side-hd [class*="-tag"],
+.kb-team-hd [class*="-text"],
+.lore-house-hd [class*="-text"],
+.clubs-dir-hero [class*="-text"],
+.clubs-dir-hero [class*="-name"]{
+  color: inherit !important;
+}
+
+/* Sec-row banner already enforces white in Wave 8 — make sure no nested
+   span gets repainted by the safety net. */
+.sec-row td *,
+.sec-row td [class*="-text"],
+.sec-row td [class*="-name"]{
+  color: inherit !important;
+}
+
+/* Tier-pill text: enforce white inheritance through any nested span */
+.tier-pill *{ color: inherit !important; }
+
+/* Chip variants: same — children inherit chip color */
+.chip *,
+.chip-red *,
+.chip-yellow *,
+.chip-ghost *,
+.chip-ink *,
+.chip-classified *,
+.track-tag-hero *,
+.track-tag-sidekick *,
+.npc-badge *{
+  color: inherit !important;
+}
+
+/* Hero list requirement chip (Wave 5) */
+.hero-list-req *{ color: inherit !important; }
+
+/* Status-card tags (Powers Guide) */
+.status-card-tag *{ color: inherit !important; }
+
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  KBR CAREER STATS — fix dark-on-dark labels                             ║
+   ║  Base CSS (line ~3937) styled these for cream paper. On the dark club   ║
+   ║  rules panel the panel goes dark but labels stayed `var(--ink)` (near-  ║
+   ║  black), so "DRAFTED PER YEAR" / "AVG CAREER LENGTH" / "TOP PICKS SIGN  ║
+   ║  FOR" disappeared into the panel. Rebuild for dark surface.             ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+.kbr-career-stats{
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  margin-top: 16px !important;
+}
+.kbr-career-stat{
+  /* Card chrome: black plate, hairline ink rule, faint left red accent. */
+  background: #0a0a0d !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-left: 3px solid var(--red) !important;
+  padding: 14px 18px 14px 16px !important;
+  display: grid !important;
+  grid-template-columns: 84px 1fr !important;
+  gap: 18px !important;
+  align-items: center !important;
+  border-radius: 0 !important;
+}
+.kbr-career-stat-num{
+  /* The big red value — keep red but compress so 7-FIG / -40 fit one line. */
+  font-family: var(--display) !important;
+  font-size: 36px !important;
+  line-height: 1 !important;
+  letter-spacing: .01em !important;
+  color: var(--red) !important;
+  font-weight: 400 !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+.kbr-career-stat-lbl{
+  /* The previously-invisible label. Bring to bright cream on dark, mono
+     for the eyebrow feel, generous tracking for typographic gravity. */
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,.92) !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+}
+.kbr-career-stat-sub{
+  /* Secondary descriptive line — readable mid-grey, not the safety-net dim. */
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  color: rgba(255,255,255,.7) !important;
+  line-height: 1.45 !important;
+}
+
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 11 — POWERS REGISTRY UNIFICATION                                  ║
+   ║  Five layers of overrides have stacked on .preg-* over time. The result ║
+   ║  is a hint banner styled like a header, a stray red bar above each      ║
+   ║  group, the active "ALL" pill blasting yellow, and an awkward toolbar.  ║
+   ║  This wave rewrites the registry chrome from the ground up — readable,  ║
+   ║  cohesive with the rest of the dark theme, no inherited oddities.       ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* Container — sits inside the standard page-content frame. */
+.preg{
+  padding: 0 32px 40px !important;
+  color: var(--text) !important;
+  background: transparent !important;
+}
+
+/* ─── Hint line: small subtle tip, NOT a header banner ─── */
+.preg-hint{
+  background: transparent !important;
+  color: var(--text-mid) !important;
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  padding: 14px 0 4px !important;
+  border: none !important;
+  font-weight: 400 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.preg-hint::before{
+  content: "✦";
+  color: var(--gold) !important;
+  font-size: 11px;
+  flex: 0 0 auto;
+}
+
+/* ─── Toolbar: filters + search stacked, no red bar ─── */
+.preg-toolbar{
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 14px !important;
+  align-items: stretch !important;
+  padding: 14px 0 18px !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255,255,255,.06) !important;
+  margin-bottom: 18px !important;
+}
+
+.preg-filters{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 0 !important;
+}
+
+/* Pills — ghost by default, gold-ink when active. */
+.preg-pill{
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  background: rgba(255,255,255,.03) !important;
+  color: var(--text-mid) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: 999px !important;
+  padding: 8px 14px !important;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s !important;
+}
+.preg-pill:hover{
+  background: rgba(212,168,74,.06) !important;
+  color: var(--text) !important;
+  border-color: rgba(212,168,74,.32) !important;
+}
+.preg-pill.on{
+  background: rgba(212,168,74,.14) !important;
+  color: var(--gold-bright, var(--gold)) !important;
+  border-color: var(--gold) !important;
+}
+
+/* Search row */
+.preg-search-wrap{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: nowrap !important;
+}
+.preg-search{
+  flex: 1 1 auto !important;
+  min-width: 220px !important;
+  max-width: 100% !important;
+  background: rgba(255,255,255,.03) !important;
+  color: var(--text) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+}
+.preg-search:focus{
+  outline: none !important;
+  border-color: var(--gold) !important;
+  background: rgba(255,255,255,.05) !important;
+}
+.preg-search::placeholder{ color: var(--text-low) !important; }
+.preg-clear{
+  flex: 0 0 auto !important;
+  background: transparent !important;
+  color: var(--text-mid) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+}
+.preg-clear:hover{
+  color: var(--text) !important;
+  border-color: var(--red) !important;
+  background: rgba(193,26,44,.1) !important;
+}
+.preg-count{
+  flex: 0 0 auto !important;
+  margin-left: 0 !important;
+  color: var(--text-low) !important;
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+
+/* ─── Status group: clean card, no stray red rules ─── */
+.preg-group{
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 12px !important;
+  margin-bottom: 16px !important;
+  overflow: hidden !important;
+}
+
+.preg-group-hd{
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 16px 22px !important;
+  border-top: none !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  background: rgba(255,255,255,.02) !important;
+}
+.preg-group-name{
+  font-family: var(--display) !important;
+  font-size: 22px !important;
+  font-weight: 400 !important;
+  color: var(--text) !important;
+  letter-spacing: .02em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+}
+.preg-group-count{
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  color: var(--text-low) !important;
+  font-weight: 700 !important;
+}
+
+/* ─── Table ─── */
+.preg-tbl-wrap{
+  background: transparent !important;
+  padding: 0 !important;
+}
+.preg-tbl{
+  width: 100% !important;
+  border-collapse: collapse !important;
+  table-layout: auto !important;
+}
+.preg-tbl thead th{
+  background: transparent !important;
+  color: var(--gold) !important;
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  padding: 12px 18px !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  text-align: left !important;
+}
+.preg-tbl tbody tr td,
+.preg-tbl tbody tr:nth-child(even) td,
+.preg-tbl tbody tr:nth-child(odd) td{
+  background: transparent !important;
+  color: var(--text) !important;
+  padding: 14px 18px !important;
+  border-bottom: 1px solid rgba(255,255,255,.05) !important;
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+}
+.preg-tbl tbody tr:last-child td{ border-bottom: none !important; }
+
+.preg-row.is-clickable{ cursor: pointer; }
+.preg-tbl tbody tr.preg-row.is-clickable:hover td,
+.preg-tbl tbody tr.preg-row.is-clickable:hover:nth-child(even) td,
+.preg-tbl tbody tr.preg-row.is-clickable:hover:nth-child(odd) td{
+  background: rgba(212,168,74,.06) !important;
+}
+.preg-tbl tbody tr.preg-row.is-open td,
+.preg-tbl tbody tr.preg-row.is-open:nth-child(even) td,
+.preg-tbl tbody tr.preg-row.is-open:nth-child(odd) td{
+  background: rgba(212,168,74,.08) !important;
+  border-bottom-color: transparent !important;
+}
+
+.preg-col-char{
+  font-weight: 600 !important;
+  color: var(--text) !important;
+}
+.preg-col-char a,
+.preg-col-char .clink,
+.preg-col-char .cname{
+  color: var(--text) !important;
+  font-weight: 600 !important;
+}
+.preg-col-alias{ white-space: nowrap !important; }
+.preg-col-alias .preg-alias{
+  font-family: var(--display) !important;
+  font-size: 14px !important;
+  letter-spacing: .03em !important;
+  color: var(--text-mid) !important;
+  font-weight: 400 !important;
+  text-transform: uppercase !important;
+}
+.preg-col-power{
+  color: var(--text-mid) !important;
+  font-weight: 500 !important;
+  font-size: 13.5px !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  line-height: 1.45 !important;
+}
+.preg-na{
+  font-family: var(--mono) !important;
+  color: var(--text-low) !important;
+  font-style: italic !important;
+  font-size: 11px !important;
+}
+
+.preg-col-toggle{
+  text-align: right !important;
+  white-space: nowrap !important;
+  width: 92px !important;
+}
+.preg-view-btn{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: transparent !important;
+  color: var(--gold) !important;
+  border: 1px solid rgba(212,168,74,.36) !important;
+  border-radius: 999px !important;
+  padding: 5px 10px !important;
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  transition: background .15s, color .15s, border-color .15s !important;
+}
+.preg-row.is-clickable:hover .preg-view-btn,
+.preg-row.is-open .preg-view-btn{
+  background: rgba(212,168,74,.14) !important;
+  color: var(--gold-bright, var(--gold)) !important;
+  border-color: var(--gold) !important;
+}
+.preg-view-arrow{ font-size: 9px !important; }
+
+/* Detail row */
+.preg-tbl tbody tr.preg-detail-row td,
+.preg-tbl tbody tr.preg-detail-row:nth-child(even) td,
+.preg-tbl tbody tr.preg-detail-row:nth-child(odd) td{
+  background: rgba(255,255,255,.02) !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  padding: 0 !important;
+}
+.preg-detail{
+  padding: 16px 22px 22px !important;
+  display: grid !important;
+  grid-template-columns: max-content 1fr !important;
+  column-gap: 18px !important;
+  row-gap: 4px !important;
+  align-items: start !important;
+}
+.preg-detail-label{
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase !important;
+  color: var(--gold) !important;
+  font-weight: 700 !important;
+  padding-top: 4px !important;
+  white-space: nowrap !important;
+}
+.preg-detail-label--note{ color: var(--red) !important; }
+.preg-detail-text{
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  color: var(--text) !important;
+  line-height: 1.55 !important;
+  margin: 0 0 8px !important;
+}
+.preg-detail-note{
+  color: var(--text-mid) !important;
+  font-style: italic !important;
+  border-left: 2px solid var(--red) !important;
+  padding-left: 10px !important;
+}
+
+/* Empty state */
+.preg-empty{
+  padding: 48px 32px !important;
+  text-align: center !important;
+  color: var(--text-low) !important;
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  background: rgba(255,255,255,.02) !important;
+  border: 1px dashed rgba(255,255,255,.1) !important;
+  border-radius: 12px !important;
+  font-style: italic !important;
+}
+
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 12 — JOIN-NOW FORM POLISH                                         ║
+   ║  Form had layered overrides from 5 waves: cream-base → dark theme →     ║
+   ║  comic stamp → editorial hero → wave 8/10 type fixes. Result is OK but  ║
+   ║  inconsistent: type cards feel boxy, fieldset is dense, labels are      ║
+   ║  weak, no rhythm between sections. This wave tightens the form chrome.  ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* ─── Form wrap: more breathing room, max-width tighter for legibility ─── */
+.join-form-wrap{
+  max-width: 1080px !important;
+  padding: 36px 40px 64px !important;
+}
+
+/* ─── Step header: gold eyebrow + display-font question ─── */
+.join-step{ margin-bottom: 32px !important; }
+.join-step-tag{
+  display: inline-block !important;
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  color: var(--gold) !important;
+  background: rgba(212,168,74,.08) !important;
+  border: 1px solid rgba(212,168,74,.28) !important;
+  border-radius: 999px !important;
+  padding: 5px 12px !important;
+  margin-bottom: 14px !important;
+}
+.join-step-title{
+  font-family: var(--display) !important;
+  font-size: 36px !important;
+  font-weight: 400 !important;
+  letter-spacing: .01em !important;
+  color: var(--text) !important;
+  text-transform: uppercase !important;
+  line-height: 1.05 !important;
+  margin-bottom: 8px !important;
+  text-wrap: balance;
+}
+.join-step-blurb{
+  font-family: var(--sans) !important;
+  font-size: 14.5px !important;
+  color: var(--text-mid) !important;
+  line-height: 1.55 !important;
+  max-width: 680px !important;
+  margin-bottom: 22px !important;
+}
+
+/* ─── Type-grid cards: clean, scannable, calmer active state ─── */
+.join-typegrid{
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 12px !important;
+  margin-top: 18px !important;
+}
+.join-typegrid > button,
+.join-type{
+  position: relative !important;
+  background: rgba(255,255,255,.025) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 10px !important;
+  padding: 18px 18px 18px 56px !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: background .15s, border-color .15s, transform .15s !important;
+  box-shadow: none !important;
+  width: 100% !important;
+  display: block !important;
+  font-family: inherit !important;
+}
+.join-typegrid > button:hover,
+.join-type:hover{
+  background: rgba(212,168,74,.05) !important;
+  border-color: rgba(212,168,74,.32) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+.join-typegrid > button.on,
+.join-type.on{
+  background: linear-gradient(180deg, rgba(212,168,74,.12), rgba(212,168,74,.04)) !important;
+  border-color: var(--gold) !important;
+  box-shadow: inset 0 0 0 1px rgba(212,168,74,.25) !important;
+}
+/* Number badge — absolutely positioned, big & confident */
+.join-type-num{
+  position: absolute !important;
+  top: 18px !important;
+  left: 18px !important;
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: .14em !important;
+  color: var(--text-low) !important;
+  margin: 0 !important;
+}
+.join-typegrid > button.on .join-type-num,
+.join-type.on .join-type-num{
+  color: var(--gold-bright, var(--gold)) !important;
+}
+.join-type-name{
+  font-family: var(--display) !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  letter-spacing: .025em !important;
+  color: var(--text) !important;
+  text-transform: uppercase !important;
+  line-height: 1.2 !important;
+  margin: 0 0 6px !important;
+}
+.join-type-desc{
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  color: var(--text-mid) !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+  text-transform: none !important;
+}
+.join-typegrid > button.on .join-type-desc,
+.join-type.on .join-type-desc{
+  color: var(--text) !important;
+}
+
+/* ─── Step divider between Step 1 and Step 2 ─── */
+.join-divider{
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin: 40px 0 24px !important;
+}
+.join-divider-rule{
+  flex: 1 !important;
+  height: 1px !important;
+  background: rgba(255,255,255,.1) !important;
+}
+.join-divider-tag{
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  color: var(--gold) !important;
+  white-space: nowrap !important;
+}
+
+/* ─── Fieldset: open card with internal grid, no thick border ─── */
+.join-fieldset{
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+  gap: 22px !important;
+  background: rgba(255,255,255,.02) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 12px !important;
+  padding: 28px !important;
+  margin: 0 !important;
+}
+@media (max-width: 720px){
+  .join-fieldset{ grid-template-columns: 1fr !important; padding: 20px 18px !important; gap: 18px !important; }
+}
+
+.join-field{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+.join-field.full{ grid-column: 1 / -1 !important; }
+
+/* Field label: gold-accented mono caps, with required dot */
+.join-field-label{
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 !important;
+}
+.join-field-required{
+  color: var(--red) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 400 !important;
+}
+.join-field-hint{
+  font-family: var(--sans) !important;
+  font-size: 12.5px !important;
+  color: var(--text-low) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  line-height: 1.5 !important;
+  margin: 0 !important;
+  font-style: italic !important;
+}
+
+/* Inputs / selects / textareas — unified surface */
+.join-input,
+.join-select,
+.join-textarea{
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  background: rgba(0,0,0,.25) !important;
+  color: var(--text) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: 8px !important;
+  padding: 11px 14px !important;
+  font-weight: 400 !important;
+  transition: background .15s, border-color .15s !important;
+  width: 100% !important;
+}
+.join-input:focus,
+.join-select:focus,
+.join-textarea:focus{
+  outline: none !important;
+  border-color: var(--gold) !important;
+  background: rgba(0,0,0,.35) !important;
+  box-shadow: 0 0 0 3px rgba(212,168,74,.12) !important;
+}
+.join-input::placeholder,
+.join-textarea::placeholder{ color: var(--text-low) !important; }
+.join-select{
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23d4a84a' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  background-size: 12px 8px !important;
+  padding-right: 38px !important;
+}
+.join-select option{ background: #0a0a0d; color: var(--text); }
+.join-textarea{
+  min-height: 120px !important;
+  resize: vertical !important;
+  line-height: 1.55 !important;
+}
+.join-textarea.is-medium{ min-height: 130px !important; }
+.join-textarea.is-tall{ min-height: 180px !important; }
+
+/* Checkbox rows — readable, larger hit target */
+.join-checkbox{
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  padding: 14px 16px !important;
+  background: rgba(255,255,255,.03) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-family: var(--sans) !important;
+  font-size: 13.5px !important;
+  color: var(--text-mid) !important;
+  line-height: 1.5 !important;
+  transition: background .15s, border-color .15s !important;
+}
+.join-checkbox:hover{
+  background: rgba(212,168,74,.05) !important;
+  border-color: rgba(212,168,74,.28) !important;
+}
+.join-checkbox input[type="checkbox"]{
+  flex-shrink: 0 !important;
+  width: 18px !important;
+  height: 18px !important;
+  accent-color: var(--gold) !important;
+  margin: 1px 0 0 !important;
+  cursor: pointer !important;
+}
+.join-checkbox span{ flex: 1 !important; color: inherit !important; }
+.join-checkbox input[type="checkbox"]:checked + span{
+  color: var(--text) !important;
+  font-weight: 500 !important;
+}
+
+/* Action row */
+.join-actions{
+  margin-top: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+}
+.join-submit{
+  font-family: var(--display) !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  letter-spacing: .04em !important;
+  text-transform: uppercase !important;
+  background: linear-gradient(180deg, var(--red-bright, #e31b23), var(--red)) !important;
+  color: #fff !important;
+  border: 1px solid var(--red) !important;
+  border-radius: 8px !important;
+  padding: 14px 28px !important;
+  cursor: pointer !important;
+  transition: transform .12s, box-shadow .15s, background .15s !important;
+  box-shadow: 0 4px 0 0 var(--red-deep, #8a1018), 0 12px 30px -16px rgba(193,26,44,.5) !important;
+}
+.join-submit:hover:not(:disabled),
+.join-submit:focus-visible:not(:disabled){
+  transform: translateY(-1px) !important;
+  box-shadow: 0 5px 0 0 var(--red-deep, #8a1018), 0 16px 36px -14px rgba(193,26,44,.7) !important;
+  background: linear-gradient(180deg, #f12128, var(--red-bright, #e31b23)) !important;
+}
+.join-submit:active:not(:disabled){
+  transform: translateY(2px) !important;
+  box-shadow: 0 2px 0 0 var(--red-deep, #8a1018) !important;
+}
+.join-submit:disabled{
+  background: rgba(255,255,255,.04) !important;
+  color: var(--text-low) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.join-cancel{
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+  color: var(--text-mid) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  border-radius: 6px !important;
+  padding: 12px 18px !important;
+  cursor: pointer !important;
+  transition: border-color .15s, color .15s !important;
+}
+.join-cancel:hover{
+  border-color: var(--red) !important;
+  color: var(--text) !important;
+  background: rgba(193,26,44,.08) !important;
+}
+.join-status{
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+}
+.join-status.is-error{ color: var(--red) !important; }
+.join-status.is-loading{ color: var(--gold) !important; }
+
+/* Confirmation card */
+.join-confirm{
+  background: linear-gradient(180deg, rgba(212,168,74,.06), rgba(255,255,255,.02)) !important;
+  border: 1px solid var(--gold) !important;
+  border-radius: 14px !important;
+  padding: 48px 40px !important;
+  color: var(--text) !important;
+  text-align: left !important;
+  margin: 24px 0 !important;
+}
+.join-confirm-stamp{
+  display: inline-block !important;
+  background: rgba(212,168,74,.14) !important;
+  color: var(--gold-bright, var(--gold)) !important;
+  border: 1px solid var(--gold) !important;
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  padding: 5px 12px !important;
+  border-radius: 999px !important;
+  margin-bottom: 20px !important;
+}
+.join-confirm h3{
+  font-family: var(--display) !important;
+  font-size: 44px !important;
+  font-weight: 400 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .02em !important;
+  color: var(--text) !important;
+  line-height: 1 !important;
+  margin: 0 0 16px !important;
+}
+.join-confirm h3 .accent{
+  color: var(--gold-bright, var(--gold)) !important;
+  font-style: normal !important;
+}
+.join-confirm p{
+  font-family: var(--sans) !important;
+  font-size: 15px !important;
+  color: var(--text-mid) !important;
+  line-height: 1.65 !important;
+  max-width: 640px !important;
+  margin: 0 0 24px !important;
+}
+.join-confirm-again{
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+  color: var(--text) !important;
+  border: 1px solid var(--gold) !important;
+  border-radius: 8px !important;
+  padding: 12px 22px !important;
+  cursor: pointer !important;
+  transition: background .15s, color .15s !important;
+}
+.join-confirm-again:hover{
+  background: var(--gold) !important;
+  color: #0a0a0d !important;
+}
+
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 13 — CAMPUS MAP TAB (gazetteer + master-map placeholder)           ║
+   ║  List-first. A big plate-style placeholder block sits at the top where   ║
+   ║  the master campus map artwork will go. Below: districts as section      ║
+   ║  headers, with a grid of expandable location cards.                      ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+/* ────────────────────────────────────────────────────────────────────
+   CAMPUS MAP — quiet redesign
+
+   Goals: one accent (gold), neutral cards, typographic hierarchy
+   carries the structure. No per-district colour, no rainbow chips,
+   no decorative master placeholder. Districts read by number + name.
+   ──────────────────────────────────────────────────────────────────── */
+
+/* ════════════════════════════════════════════════════════════════════
+   CAMPUS MAP — editorial gazetteer
+
+   Built on top of the existing site language (lore-eyebrow, lore-h,
+   lore-house, curr-row patterns). Only what the map needs is defined
+   here: the district index plates, the district section heads, and
+   the location row list. Houses reuse .lore-house wholesale; the
+   only override is to pad the card and host the row list inside.
+
+   Accent: the page uses red+gold like everywhere else. No per-district
+   colour. House identity is carried by the existing crest + border-top
+   stripe + virtue type that already define the lore page.
+   ════════════════════════════════════════════════════════════════════ */
+
+.map-page{
+  padding: 8px 28px 80px !important;
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+}
+
+/* ─── INDEX OF THE GROUNDS ──────────────────────────────────────────── */
+.map-index{
+  margin: 0 0 64px !important;
+  padding: 0 !important;
+}
+.map-index .lore-eyebrow{
+  margin-bottom: 14px !important;
+}
+.map-index-h{
+  font-family: var(--serif) !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+  font-size: clamp(36px, 4.4vw, 56px) !important;
+  letter-spacing: -.012em !important;
+  color: var(--text) !important;
+  line-height: 1.02 !important;
+  margin: 0 0 16px !important;
+}
+.map-index-lead{
+  font-family: var(--serif) !important;
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid) !important;
+  max-width: 720px !important;
+  margin: 0 0 28px !important;
+  text-wrap: pretty !important;
+}
+.map-index-lead em{
+  font-style: italic !important;
+  color: var(--gold) !important;
+  font-weight: 600 !important;
+}
+
+.map-index-grid{
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  gap: 0 !important;
+  border-top: 2px solid var(--ink) !important;
+  border-left: 2px solid var(--ink) !important;
+  background: var(--ink) !important;
+}
+.map-index-card{
+  position: relative !important;
+  display: grid !important;
+  grid-template-rows: auto 1fr auto !important;
+  align-items: start !important;
+  gap: 6px !important;
+  padding: 18px 20px 16px !important;
+  background: linear-gradient(180deg, var(--paper-3, #1a1a22), var(--paper-2, #14141a)) !important;
+  border: 0 !important;
+  border-right: 2px solid var(--ink) !important;
+  border-bottom: 2px solid var(--ink) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  color: inherit !important;
+  transition: background .15s, transform .15s !important;
+  min-height: 110px !important;
+}
+.map-index-card::after{
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border: 1px solid transparent !important;
+  pointer-events: none !important;
+  transition: border-color .15s !important;
+}
+.map-index-card:hover{
+  background: linear-gradient(180deg, rgba(212,168,74,.08), rgba(212,168,74,.03)) !important;
+}
+.map-index-card:hover::after{
+  border-color: rgba(212,168,74,.5) !important;
+}
+.map-index-card-num{
+  font-family: var(--display) !important;
+  font-size: 28px !important;
+  font-weight: 400 !important;
+  letter-spacing: .04em !important;
+  color: var(--red-bright) !important;
+  line-height: 1 !important;
+}
+.map-index-card-name{
+  font-family: var(--serif) !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  line-height: 1.15 !important;
+  color: var(--text) !important;
+  letter-spacing: -.005em !important;
+  text-wrap: balance !important;
+}
+.map-index-card-count{
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  color: var(--text-low) !important;
+}
+.map-index-card:hover .map-index-card-count{
+  color: var(--gold-bright, var(--gold)) !important;
+}
+
+/* ─── DISTRICT SECTIONS ─────────────────────────────────────────────── */
+.map-district{
+  margin: 0 0 72px !important;
+  scroll-margin-top: 96px !important;
+}
+.map-district-head{
+  margin: 0 0 24px !important;
+  padding: 0 0 18px !important;
+  border-bottom: 2px solid var(--ink) !important;
+  position: relative !important;
+}
+.map-district-head::after{
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; right: 0 !important; bottom: -2px !important;
+  height: 2px !important;
+  background: var(--gold) !important;
+  width: 64px !important;
+}
+.map-district .lore-eyebrow{
+  margin-bottom: 8px !important;
+}
+.map-district-h{
+  font-family: var(--serif) !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+  font-size: clamp(34px, 3.8vw, 48px) !important;
+  letter-spacing: -.012em !important;
+  line-height: 1.05 !important;
+  color: var(--text) !important;
+  margin: 0 0 12px !important;
+  text-wrap: balance !important;
+}
+.map-district-blurb{
+  font-family: var(--serif) !important;
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid) !important;
+  max-width: 680px !important;
+  margin: 0 0 14px !important;
+  text-wrap: pretty !important;
+  font-style: italic !important;
+  opacity: .85 !important;
+}
+.map-district-meta{
+  display: flex !important;
+  gap: 14px !important;
+}
+.map-district-count{
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: .22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-low) !important;
+}
+
+/* ─── LOCATION ROW LIST ─────────────────────────────────────────────── */
+.map-rows{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+.map-row{
+  background: linear-gradient(180deg, var(--paper-3, #1a1a22), var(--paper-2, #14141a)) !important;
+  border: 1px solid var(--rule-soft, rgba(255,255,255,.08)) !important;
+  border-left: 3px solid var(--rule-soft, rgba(255,255,255,.08)) !important;
+  border-radius: 0 !important;
+  transition: border-color .18s, background .18s !important;
+}
+.map-row:hover{
+  border-color: rgba(212,168,74,.35) !important;
+  border-left-color: var(--gold) !important;
+}
+.map-row.is-open{
+  border-color: var(--gold) !important;
+  border-left-color: var(--gold-bright, var(--gold)) !important;
+  background: linear-gradient(180deg, rgba(212,168,74,.06), rgba(212,168,74,.02)) !important;
+}
+.map-row.is-classified{
+  border-left-color: var(--red) !important;
+}
+.map-row.is-classified.is-open{
+  border-color: var(--red-bright) !important;
+}
+.map-row-btn{
+  display: grid !important;
+  grid-template-columns: 56px 1fr auto !important;
+  gap: 16px !important;
+  align-items: center !important;
+  width: 100% !important;
+  padding: 14px 18px !important;
+  background: transparent !important;
+  border: 0 !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  font-family: inherit !important;
+  color: inherit !important;
+}
+.map-row-num{
+  font-family: var(--display) !important;
+  font-size: 22px !important;
+  font-weight: 400 !important;
+  letter-spacing: .04em !important;
+  color: var(--gold) !important;
+  line-height: 1 !important;
+  align-self: center !important;
+}
+.map-row.is-open .map-row-num{
+  color: var(--gold-bright, var(--gold)) !important;
+}
+.map-row.is-classified .map-row-num{
+  color: var(--red-bright) !important;
+}
+.map-row-body{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+}
+.map-row-name{
+  font-family: var(--serif) !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  color: var(--text) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -.005em !important;
+  display: inline-flex !important;
+  align-items: baseline !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+.map-row-cls{
+  display: inline-block !important;
+  font-family: var(--mono) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: .22em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  background: linear-gradient(180deg, var(--red-bright), var(--red)) !important;
+  border: 1px solid rgba(0,0,0,.3) !important;
+  padding: 3px 8px !important;
+  text-shadow: 0 1px 1px rgba(0,0,0,.5) !important;
+}
+.map-row-sub{
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+  color: var(--text-low) !important;
+  line-height: 1.4 !important;
+}
+.map-row-toggle{
+  font-family: var(--mono) !important;
+  font-size: 22px !important;
+  font-weight: 300 !important;
+  color: var(--text-low) !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid var(--rule-soft, rgba(255,255,255,.1)) !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+  transition: all .15s !important;
+}
+.map-row-btn:hover .map-row-toggle{
+  border-color: var(--gold) !important;
+  color: var(--gold-bright, var(--gold)) !important;
+  background: rgba(212,168,74,.1) !important;
+}
+.map-row.is-open .map-row-toggle{
+  border-color: var(--gold) !important;
+  color: var(--gold-bright, var(--gold)) !important;
+  background: rgba(212,168,74,.15) !important;
+}
+
+.map-row-desc{
+  padding: 0 22px 18px 90px !important;
+  border-top: 1px solid var(--rule-soft, rgba(255,255,255,.06)) !important;
+  margin-top: 0 !important;
+  padding-top: 14px !important;
+}
+.map-row-desc > p{
+  font-family: var(--serif) !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  color: var(--text) !important;
+  margin: 0 0 12px !important;
+  text-wrap: pretty !important;
+}
+.map-row-desc em{
+  color: var(--gold-bright, var(--gold)) !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+}
+.map-row-tags{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+.map-row-tag{
+  font-family: var(--mono) !important;
+  font-size: 9.5px !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase !important;
+  padding: 4px 8px !important;
+  background: rgba(255,255,255,.03) !important;
+  border: 1px solid var(--rule-soft, rgba(255,255,255,.1)) !important;
+  color: var(--text-mid) !important;
+  border-radius: 0 !important;
+}
+
+/* ─── RESIDENCE: HOUSE BLOCKS ───────────────────────────────────────── */
+.map-residence{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 28px !important;
+}
+.map-house{
+  padding: 24px !important;
+  border-top-width: 6px !important;
+  border-top-style: solid !important;
+}
+.map-house .lore-house-hd{
+  display: grid !important;
+  grid-template-columns: 64px 1fr auto !important;
+  gap: 16px !important;
+  align-items: start !important;
+  padding-bottom: 16px !important;
+  margin-bottom: 18px !important;
+  border-bottom: 1px solid var(--rule-soft, rgba(255,255,255,.08)) !important;
+}
+.map-house .lore-house-crest{
+  width: 64px !important;
+  height: 64px !important;
+}
+.map-house-shared-mark{
+  width: 64px !important;
+  height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 36px !important;
+  color: var(--gold) !important;
+  background: rgba(212,168,74,.06) !important;
+  border: 1px solid rgba(212,168,74,.3) !important;
+  flex-shrink: 0 !important;
+}
+.map-house-count{
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 2px !important;
+  align-self: center !important;
+  flex-shrink: 0 !important;
+}
+.map-house-count-n{
+  font-family: var(--display) !important;
+  font-size: 32px !important;
+  font-weight: 400 !important;
+  letter-spacing: .04em !important;
+  line-height: 1 !important;
+  color: var(--h-color, var(--gold)) !important;
+}
+.map-house-count-l{
+  font-family: var(--mono) !important;
+  font-size: 9.5px !important;
+  letter-spacing: .22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-low) !important;
+}
+.map-house-blurb{
+  font-family: var(--serif) !important;
+  font-size: 14px !important;
+  font-style: italic !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid) !important;
+  margin: 0 0 18px !important;
+  max-width: 720px !important;
+  text-wrap: pretty !important;
+  opacity: .85 !important;
+}
+
+/* ─── FOOTNOTE ──────────────────────────────────────────────────────── */
+.map-footnote{
+  margin: 64px 0 0 !important;
+  padding: 24px 0 0 !important;
+  border-top: 1px solid var(--rule-soft, rgba(255,255,255,.08)) !important;
+  max-width: 800px !important;
+}
+.map-footnote p{
+  font-family: var(--serif) !important;
+  font-size: 13.5px !important;
+  font-style: italic !important;
+  line-height: 1.7 !important;
+  color: var(--text-low) !important;
+  margin: 0 !important;
+}
+.map-footnote strong{
+  font-family: var(--mono) !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  letter-spacing: .14em !important;
+  color: var(--gold) !important;
+  text-transform: uppercase !important;
+  font-size: 11.5px !important;
+}
+.map-footnote em{
+  color: var(--red-bright) !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+}
+
+/* ─── RESPONSIVE ────────────────────────────────────────────────────── */
+@media (max-width: 720px){
+  .map-page{ padding: 8px 18px 56px !important; }
+  .map-index-grid{ grid-template-columns: 1fr 1fr !important; }
+  .map-row-btn{
+    grid-template-columns: 44px 1fr auto !important;
+    gap: 12px !important;
+    padding: 12px 14px !important;
+  }
+  .map-row-num{ font-size: 18px !important; }
+  .map-row-name{ font-size: 16px !important; }
+  .map-row-desc{ padding: 14px 16px 16px 70px !important; }
+  .map-house{ padding: 18px !important; }
+  .map-house .lore-house-hd{
+    grid-template-columns: 56px 1fr !important;
+    gap: 14px !important;
+  }
+  .map-house .lore-house-crest,
+  .map-house-shared-mark{ width: 56px !important; height: 56px !important; }
+  .map-house-count{
+    grid-column: 1 / -1 !important;
+    flex-direction: row !important;
+    align-items: baseline !important;
+    gap: 8px !important;
+    align-self: start !important;
+    margin-top: 4px !important;
+  }
+  .map-house-count-n{ font-size: 24px !important; }
+}
 
 </style>
 </head>
