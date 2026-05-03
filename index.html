@@ -3890,6 +3890,11 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 .kbr-role-best-text{ color:var(--ink); }
 
+/* Fix: force readable dark text on cream Best-For row (overrides .pg :is(...li...) ink override) */
+.kbr-role-best,
+.kbr-role-best-tag,
+.kbr-role-best-text{ color:#07070a !important; }
+
 .kbr-block{ margin-bottom:18px; }
 .kbr-block:last-child{ margin-bottom:0; }
 .kbr-block-tag{
