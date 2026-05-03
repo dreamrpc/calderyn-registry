@@ -2515,19 +2515,8 @@ function ClubRules({rules}){
 
   return (
     <div className="kbr">
-      <div className="kbr-hd">
-        <div className="kbr-tabs">
-          {tabs.map(t => (
-            <button
-              key={t.id}
-              className={"kbr-tab" + (view === t.id ? " on" : "")}
-              onClick={() => setView(t.id)}
-            >{t.label}</button>
-          ))}
-        </div>
-      </div>
-
-      {view === "overview" && (
+      <div className="kbr-section">
+        <div className="kbr-section-tag">Overview</div>
         <div className="kbr-body">
           <p className="kbr-summary">{rules.summary}</p>
 
@@ -2578,9 +2567,10 @@ function ClubRules({rules}){
             </div>
           </button>
         </div>
-      )}
+      </div>
 
-      {view === "roles" && (
+      <div className="kbr-section">
+        <div className="kbr-section-tag">Roles</div>
         <div className="kbr-body">
           <ol className="kbr-roles">
             {rules.roles.map((r, i) => (
@@ -2603,9 +2593,10 @@ function ClubRules({rules}){
             ))}
           </ol>
         </div>
-      )}
+      </div>
 
-      {view === "rulebook" && (
+      <div className="kbr-section">
+        <div className="kbr-section-tag">Rulebook</div>
         <div className="kbr-body">
           {rules.format && (
             <div className="kbr-block">
@@ -2624,7 +2615,7 @@ function ClubRules({rules}){
             </div>
           )}
         </div>
-      )}
+      </div>
 
       {lightbox && (
         <div
