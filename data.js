@@ -36,6 +36,10 @@ houseColors: {
   grimere: { primary: "#1e40af", secondary: "#9B6A2F", trim: "#D6D8E1" },
 },
 
+houseLore: {
+  rebrand2020: "In 2020, Calderyn’s four houses were rebranded around the active Vanguard. Each house was renamed for, and aligned to the virtue of, a sitting Vanguard member: Valaris (Paragon — Justice), Orenne (Aegis — Fortitude), Saberis (Vigil — Prudence), and Grimere (Switchboard — Temperance). The rebrand reframed house identity around STRATA’s flagship operators rather than founding-era figures, and the established: \"2020\" tag on each house records the date of that change."
+},
+
 houses: [
   {
     id: "valaris", name: "VALARIS", bg: "#c41a1a", animal: "Falcon",
@@ -1224,13 +1228,13 @@ mapDistricts: [
   {
     id: "strata",
     name: "STRATA Wing",
-    blurb: "The corporate end of the compound. Liaison offices, briefing theatres, the medical wing, and the corridor with the door nobody photographs.",
+    blurb: "The corporate end of the compound. Liaison offices, briefing theatres, the Diagnostic Wing, and the corridor with the door nobody photographs.",
     color: "#1e40af",
   },
   {
     id: "athletics",
     name: "Athletics & Grounds",
-    blurb: "The Powerball court, the regulation arena, the practice pitches. Where students burn energy in ways insurance approves of.",
+    blurb: "The Powerball Arena, the regulation arena, the practice pitches. Where students burn energy in ways insurance approves of.",
     color: "#7a1a4a",
   },
   {
@@ -1258,7 +1262,7 @@ mapLocations: [
   { id: "calderyn-hall", district: "academic", n: "A1",
     name: "Calderyn Hall",
     sub: "Main lecture building · 1965",
-    desc: "The original Institute building. Sandstone, ivy, a clock tower that's been three minutes fast since 1981. First- and second-year lectures all happen here. The brass plaque at the front entrance still reads MEDICAL RESEARCH COMPOUND — DEFENCE — the hall was renamed twice and the plaque was never replaced.",
+    desc: "Built over the original Institute site. Sandstone, ivy, a clock tower that's been three minutes fast since 1981. First- and second-year lectures all happen here. The brass plaque at the front entrance still reads MEDICAL RESEARCH COMPOUND — DEFENCE — the hall was renamed twice and the plaque was never replaced.",
     tags: ["Lectures", "FR/SO core"],
   },
   { id: "founders-stair", district: "academic", n: "A2",
@@ -1527,7 +1531,7 @@ mapLocations: [
 
   /* ═══ ATHLETICS & GROUNDS ═════════════════════════════════════════ */
   { id: "powerball-court", district: "athletics", n: "B1",
-    name: "Powerball Court",
+    name: "Powerball Arena",
     sub: "Regulation-spec PBL practice court",
     desc: "Glass-walled, regulation dimensions, cleared for league-spec practice. Six on six, one Playmaker, two Attack, two Defence, one Goalkeeper. The Calderyn varsity team practices here. Junior scouts from Berlin, Tokyo, and Madrid have been seen in the upper gallery on more than one occasion.",
     tags: ["Powerball", "League-spec"],
@@ -1573,7 +1577,7 @@ mapLocations: [
   { id: "campus-shop", district: "commons", n: "K3",
     name: "The Calderyn Shop",
     sub: "General store · ground floor, by the refectory",
-    desc: "Officially: stationery, toiletries, energy drinks, the school-branded hoodies that cost more than they should. Unofficially: where you can also buy a passable bottle of red, the back-issue editorial magazines the library doesn't stock, and — from a glass cabinet behind the counter — STRATA-licensed merchandise in the brand colours of whichever alumni are currently being marketed. Run by a woman called Bea who has been there longer than the headmaster.",
+    desc: "Officially: stationery, toiletries, energy drinks, the school-branded hoodies that cost more than they should. Unofficially: where you can also buy a passable bottle of red, the back-issue editorial magazines the library doesn't stock, and — from a glass cabinet behind the counter — STRATA-licensed merchandise in the brand colours of whichever alumni are currently being marketed. Run by a woman called Bea who has been there longer than the Dean.",
     tags: ["Open 07:00–22:00", "Cash & badge"],
   },
   { id: "common-table", district: "commons", n: "K4",
@@ -1670,6 +1674,12 @@ mapLocations: [
     sub: "Teaching hospital · river road",
     desc: "Main civilian trauma centre, on the river road past the Cutty Sark. Has a dedicated Powered-Injury Wing on the third floor that no civilian patient ever sees. Calderyn medical referrals route here when the on-campus infirmary won't cover it.",
     tags: ["Hospital", "Powered wing"],
+  },
+  { id: "strata-tower", district: "outside", n: "X8",
+    name: "STRATA Tower",
+    sub: "International operator HQ · off-campus",
+    desc: "STRATA’s flagship corporate tower, off-campus and across the river. International operator HQ, mission dispatch, and senior STRATA leadership all sit above the student-facing floors. Crisis monitoring runs around the clock. Calderyn students see the lobby on supervised visits and nowhere else unless someone has already decided their day for them.",
+    tags: ["Corporate HQ", "Off-campus"],
   },
 ],
 
