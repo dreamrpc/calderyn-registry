@@ -4170,9 +4170,9 @@ function MapTab(){
              Comic-frame plates, numbered 01–07, each clickable. */}
         <section className="map-index">
           <div className="lore-eyebrow">◆ Index of the grounds</div>
-          <h2 className="map-index-h">Seven districts.</h2>
+          <h2 className="map-index-h">Eight districts.</h2>
           <p className="map-index-lead">
-            The compound divides cleanly. <em>Four main zones</em> — academic, training, residences, STRATA — sit inside the wall. Three more reach beyond it: the playing fields, the perimeter strip, and the slice of Greenwich the school treats as overflow.
+            The compound divides cleanly. <em>Four main zones</em> — academic, training, residences, STRATA — sit inside the wall. Four more reach beyond it: athletics &amp; grounds, the campus commons, the perimeter strip, and the slice of Greenwich the school treats as overflow.
           </p>
           <div className="map-index-grid">
             {districts.map((d, i) => {
