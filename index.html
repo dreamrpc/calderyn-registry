@@ -3890,10 +3890,13 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 .kbr-role-best-text{ color:var(--ink); }
 
-/* Fix: force readable dark text on cream Best-For row (overrides .pg :is(...li...) ink override) */
+/* Fix: force readable dark text on cream Best-For row (beats [class$="-text"] !important) */
 .kbr-role-best,
-.kbr-role-best-tag,
-.kbr-role-best-text{ color:#07070a !important; }
+.kbr-role .kbr-role-best,
+.kbr-role-best .kbr-role-best-tag,
+.kbr-role-best .kbr-role-best-text,
+.kbr-role .kbr-role-best-tag,
+.kbr-role .kbr-role-best-text{ color:#07070a !important; }
 
 .kbr-block{ margin-bottom:18px; }
 .kbr-block:last-child{ margin-bottom:0; }
