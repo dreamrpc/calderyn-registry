@@ -909,7 +909,7 @@ clubs: [
       { label: "Reserves", roles: ["Alternate"] },
     ],
     positions: [
-      { pos: "Captain", group: "leadership" }, { pos: "Co-Captain", group: "leadership" },
+      { pos: "Captain", group: "leadership", char: "Celestia \"Stella\" Starling", link: "https://roleplay.chat/profile.php?user=illuminate" }, { pos: "Co-Captain", group: "leadership" },
       { pos: "Flyer", group: "squad" }, { pos: "Flyer", group: "squad" },
       { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
       { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" },
@@ -967,7 +967,7 @@ clubs: [
       { pos: "President", group: "leadership" },
       { pos: "Artistic Director", group: "leadership" },
       { pos: "Stage Manager", group: "leadership" },
-      { pos: "Actor", group: "cast" }, { pos: "Actor", group: "cast" },
+      { pos: "Actor", group: "cast", char: "Celestia \"Stella\" Starling", link: "https://roleplay.chat/profile.php?user=illuminate" }, { pos: "Actor", group: "cast" },
       { pos: "Actor", group: "cast" }, { pos: "Actor", group: "cast" },
       { pos: "Actor", group: "cast" }, { pos: "Actor", group: "cast" },
       { pos: "Technical Director", group: "tech" },
