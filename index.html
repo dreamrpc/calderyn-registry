@@ -3836,6 +3836,26 @@ span.cname{ font-weight:600; color:var(--ink); }
   gap:12px;
   margin-bottom:8px;
 }
+/* Flattened Rules: section dividers replace the old Overview/Roles/Rulebook sub-tabs */
+.kbr-section{
+  margin-bottom:28px;
+  padding-top:18px;
+  border-top:1px solid var(--rule-faint);
+}
+.kbr-section:first-of-type{
+  border-top:none;
+  padding-top:0;
+}
+.kbr-section-tag{
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  color:var(--yellow);
+  margin-bottom:14px;
+}
+
 .kbr-role-num{
   font-family:var(--mono);
   font-size:11px;
@@ -3891,13 +3911,15 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 .kbr-role-best-text{ color:var(--ink); }
 
-/* Fix: force readable dark text on cream Best-For row (beats [class$="-text"] !important) */
+/* Fix: force readable dark text on cream/yellow surfaces inside .kbr-role (beats [class$="-text"] !important and .pg li --ink override) */
 .kbr-role-best,
 .kbr-role .kbr-role-best,
 .kbr-role-best .kbr-role-best-tag,
 .kbr-role-best .kbr-role-best-text,
 .kbr-role .kbr-role-best-tag,
-.kbr-role .kbr-role-best-text{ color:#07070a !important; }
+.kbr-role .kbr-role-best-text,
+.kbr-role .kbr-role-num,
+.kbr-roles .kbr-role .kbr-role-num{ color:#07070a !important; }
 
 .kbr-block{ margin-bottom:18px; }
 .kbr-block:last-child{ margin-bottom:0; }
