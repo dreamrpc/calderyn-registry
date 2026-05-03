@@ -10,7 +10,7 @@
 
 const WORKER_URL = "https://calderyn-registry-relay.dreamroleplaywriter.workers.dev";
 
-const {useState, useMemo, useEffect, useCallback} = React;
+const {useState, useMemo, useEffect, useCallback, useRef} = React;
 const D = window.CALDERYN;
 
 /* DATA BINDINGS ─────────────────────────────────────────────────────────── */
@@ -2656,9 +2656,8 @@ function ClubRules({rules}){
 }
 
 function ClubsTab(){
-  const [openIdx, setOpenIdx] = useState(null);
   const [filter, setFilter] = useState("All");
-  const open = openIdx != null ? CLUBS[openIdx] : null;
+  const [openIdx, setOpenIdx] = useState(0);
 
   const categories = useMemo(() => {
     const cats = ["All"];
@@ -2673,12 +2672,34 @@ function ClubsTab(){
     return CLUBS.map((c, i) => c.category === filter ? {c, i} : null).filter(Boolean);
   }, [filter]);
 
+  // Keep selection valid when filter changes
+  useEffect(() => {
+    if (visible.length === 0) return;
+    if (!visible.some(v => v.i === openIdx)) {
+      setOpenIdx(visible[0].i);
+    }
+  }, [filter, visible, openIdx]);
+
+  const open = CLUBS[openIdx] || CLUBS[0];
+
+  // Reset detail tab when switching clubs
+  const [detailTab, setDetailTab] = useState("about");
+  useEffect(() => { setDetailTab("about"); }, [openIdx]);
+
+  const hasRules = !!(open && open.rules);
+  const hasTeams = !!(open && open.teams);
+  const detailTabs = [
+    {id: "about",  label: "About"},
+    ...(hasRules ? [{id: "rules", label: "Rules"}] : []),
+    {id: "roster", label: "Roster"},
+  ];
+
   return (
     <div>
       <PageHead
         stamp="DOC · 05 · CAMPUS ORGS"
         title={<>Clubs &amp; societies</>}
-        body="Six campus clubs. Filter by category, then click a tile to view its full roster. Leadership is one role per player. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval."
+        body="Six campus clubs. Pick one from the directory to view its full roster, rules, and post-graduation pathway. Leadership is one role per player. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval."
         pageNum="P. 005 / VIII"
       />
       <div className="club-filters-band">
@@ -2700,37 +2721,107 @@ function ClubsTab(){
           ))}
         </div>
       </div>
-      <div className="clubs-wrap">
-        {visible.length === 0 && (
-          <div style={{padding:"40px 0", textAlign:"center"}}>
-            <EmptyState label={`No clubs in ${filter}`}/>
-          </div>
-        )}
-        <div className="clubs-grid">
-          {visible.map(({c, i}) => (
-            <button
-              key={i}
-              className={"club" + (openIdx === i ? " on" : "")}
-              onClick={() => setOpenIdx(i)}
-              aria-expanded={openIdx === i}
-            >
-              <div className="club-hd" style={{background:c.bg}}>
-                <div className="club-name">{c.name}</div>
-                {c.tag && <div className="club-tag">{c.tag}</div>}
-              </div>
-              <div className="club-meta">
-                {c.category && <span className="club-cat-pip">{c.category}</span>}
-                <span className="club-access">{c.access}</span>
-              </div>
-              <div className="club-desc">{c.desc}</div>
-            </button>
-          ))}
-        </div>
-      </div>
 
-      {open && (
-        <ClubPanel club={open} onClose={() => setOpenIdx(null)}/>
-      )}
+      <div className="clubs-dir">
+        {/* LEFT — directory rail */}
+        <aside className="clubs-dir-rail" aria-label="Club directory">
+          <div className="clubs-dir-rail-hd">
+            <span className="clubs-dir-rail-label">Directory</span>
+            <span className="clubs-dir-rail-count">{visible.length} / {CLUBS.length}</span>
+          </div>
+          {visible.length === 0 && (
+            <div style={{padding:"24px 16px"}}>
+              <EmptyState label={`No clubs in ${filter}`}/>
+            </div>
+          )}
+          <ul className="clubs-dir-list">
+            {visible.map(({c, i}) => {
+              const total = clubTotal(c);
+              const filled = clubFilled(c);
+              return (
+                <li key={i}>
+                  <button
+                    className={"clubs-dir-item" + (openIdx === i ? " on" : "")}
+                    onClick={() => setOpenIdx(i)}
+                    aria-current={openIdx === i ? "true" : undefined}
+                    style={{"--accent": c.bg}}
+                  >
+                    <span className="clubs-dir-item-stripe" aria-hidden="true"/>
+                    <span className="clubs-dir-item-body">
+                      <span className="clubs-dir-item-name">{c.name}</span>
+                      <span className="clubs-dir-item-meta">
+                        {c.category && <span className="clubs-dir-item-cat">{c.category}</span>}
+                        <span className="clubs-dir-item-roster">
+                          <span className="clubs-dir-item-roster-num">{filled}</span>
+                          <span className="clubs-dir-item-roster-sep">/</span>
+                          <span className="clubs-dir-item-roster-tot">{total}</span>
+                          <span className="clubs-dir-item-roster-lbl">filled</span>
+                        </span>
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </aside>
+
+        {/* RIGHT — detail pane */}
+        {open && (
+          <section className="clubs-dir-detail" aria-label={open.name}>
+            <header className="clubs-dir-hero" style={{"--accent": open.bg}}>
+              <div className="clubs-dir-hero-inner">
+                {open.category && <div className="clubs-dir-hero-cat">{open.category}</div>}
+                <h2 className="clubs-dir-hero-name">{open.name}</h2>
+                {open.tag && <div className="clubs-dir-hero-tag">{open.tag}</div>}
+              </div>
+            </header>
+
+            <div className="clubs-dir-glance">
+              <div className="clubs-dir-glance-cell">
+                <div className="clubs-dir-glance-lbl">Access</div>
+                <div className="clubs-dir-glance-val">{open.access}</div>
+              </div>
+              {open.meets && open.meets.length > 0 && (
+                <div className="clubs-dir-glance-cell">
+                  <div className="clubs-dir-glance-lbl">Meets</div>
+                  <div className="clubs-dir-glance-val">
+                    {open.meets.map((m, mi) => (
+                      <span key={mi} className="clubs-dir-glance-chip">{m}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="clubs-dir-glance-cell">
+                <div className="clubs-dir-glance-lbl">Roster</div>
+                <div className="clubs-dir-glance-val">
+                  <span className="clubs-dir-glance-num">{clubFilled(open)}</span>
+                  <span className="clubs-dir-glance-tot"> / {clubTotal(open)}</span>
+                  <span className="clubs-dir-glance-sub"> active</span>
+                </div>
+              </div>
+            </div>
+
+            <nav className="clubs-dir-tabs" role="tablist">
+              {detailTabs.map(t => (
+                <button
+                  key={t.id}
+                  role="tab"
+                  aria-selected={detailTab === t.id}
+                  className={"clubs-dir-tab" + (detailTab === t.id ? " on" : "")}
+                  onClick={() => setDetailTab(t.id)}
+                >{t.label}</button>
+              ))}
+            </nav>
+
+            <div className="clubs-dir-body">
+              {detailTab === "about"  && <ClubPanelAbout club={open}/>}
+              {detailTab === "rules"  && hasRules && <ClubRules rules={open.rules}/>}
+              {detailTab === "roster" && <ClubPanelRoster club={open} hasTeams={hasTeams}/>}
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 }
@@ -3923,12 +4014,246 @@ function Honeypot({form, set}){
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   CAMPUS MAP TAB — editorial gazetteer
+
+   Built using the site's existing comic-editorial vocabulary
+   (lore-eyebrow, lore-h, lore-house-hd, curr-row pattern). No
+   per-district rainbow colours; red+gold like everywhere else.
+   Houses get their proper crests + virtue + display caps.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const HOUSE_LORE_META = {
+  valaris: { name: "VALARIS", virtue: "House of Justice",     namesake: "Adrian Valaris · Paragon",   color: "#c41a1a", crest: "https://i.ibb.co/G4q9m34x/Valaris.png"  },
+  orenne:  { name: "ORENNE",  virtue: "House of Fortitude",   namesake: "Margery Orenne · Aegis",     color: "#d4901a", crest: "https://i.ibb.co/0RQXNgXg/Orenne.png"   },
+  saberis: { name: "SABERIS", virtue: "House of Prudence",    namesake: "Caius Saberis · Vigil",      color: "#15803d", crest: "https://i.ibb.co/qMry0fF2/Saberis.png"  },
+  grimere: { name: "GRIMERE", virtue: "House of Temperance",  namesake: "Iris Grimere · Switchboard", color: "#1e40af", crest: "https://i.ibb.co/PGhrJBBm/Grimere.png" },
+};
+
+/* A single location row — modelled on the curriculum row pattern.
+   Number on left, name + sub in the middle, expand chevron on right.
+   Click reveals description + tags inline. */
+function MapRow({loc, isOpen, onToggle}){
+  return (
+    <article
+      className={"map-row" + (isOpen ? " is-open" : "") + (loc.classified ? " is-classified" : "")}
+    >
+      <button
+        className="map-row-btn"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+      >
+        <span className="map-row-num">{loc.n}</span>
+        <span className="map-row-body">
+          <span className="map-row-name">
+            {loc.name}
+            {loc.classified && <span className="map-row-cls">CLASSIFIED</span>}
+          </span>
+          <span className="map-row-sub">{loc.sub}</span>
+        </span>
+        <span className="map-row-toggle" aria-hidden="true">{isOpen ? "−" : "+"}</span>
+      </button>
+      {isOpen && (
+        <div className="map-row-desc">
+          <p dangerouslySetInnerHTML={{__html: loc.desc}}/>
+          {loc.tags && loc.tags.length > 0 && (
+            <div className="map-row-tags">
+              {loc.tags.map((t,i) => (<span key={i} className="map-row-tag">{t}</span>))}
+            </div>
+          )}
+        </div>
+      )}
+    </article>
+  );
+}
+
+function MapRowList({items, openId, setOpenId}){
+  return (
+    <div className="map-rows">
+      {items.map(loc => (
+        <MapRow
+          key={loc.id}
+          loc={loc}
+          isOpen={openId === loc.id}
+          onToggle={() => setOpenId(openId === loc.id ? null : loc.id)}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* Residence section — each house presented in the lore-house pattern
+   (crest + virtue + display name + namesake), with its rooms as a
+   numbered row list underneath. Communal spaces follow as a fifth panel. */
+function ResidenceBlocks({items, openId, setOpenId}){
+  const houseOrder = ["valaris", "orenne", "saberis", "grimere"];
+  const byHouse = {};
+  const communal = [];
+  items.forEach(loc => {
+    if (loc.house && houseOrder.includes(loc.house)) {
+      (byHouse[loc.house] = byHouse[loc.house] || []).push(loc);
+    } else {
+      communal.push(loc);
+    }
+  });
+
+  return (
+    <div className="map-residence">
+      {houseOrder.map(houseId => {
+        const list = byHouse[houseId];
+        if (!list || !list.length) return null;
+        const m = HOUSE_LORE_META[houseId];
+        return (
+          <article
+            key={houseId}
+            className="map-house lore-house"
+            style={{"--h-color": m.color, borderTopColor: m.color}}
+          >
+            <div className="lore-house-hd">
+              <img src={m.crest} alt={m.name + " crest"} className="lore-house-crest" loading="lazy"/>
+              <div>
+                <div className="lore-house-virtue">{m.virtue}</div>
+                <h3 className="lore-house-name">{m.name}</h3>
+                <div className="lore-house-namesake">{m.namesake}</div>
+              </div>
+              <div className="map-house-count">
+                <span className="map-house-count-n">{list.length}</span>
+                <span className="map-house-count-l">{list.length === 1 ? "ROOM" : "ROOMS"}</span>
+              </div>
+            </div>
+            <MapRowList items={list} openId={openId} setOpenId={setOpenId}/>
+          </article>
+        );
+      })}
+
+      {communal.length > 0 && (
+        <article className="map-house map-house-communal lore-house" style={{"--h-color":"#d4a84a", borderTopColor:"#d4a84a"}}>
+          <div className="lore-house-hd">
+            <div className="map-house-shared-mark" aria-hidden="true">◆</div>
+            <div>
+              <div className="lore-house-virtue">Shared · All four houses</div>
+              <h3 className="lore-house-name">COMMUNAL</h3>
+              <div className="lore-house-namesake">The residential quad — neutral ground</div>
+            </div>
+            <div className="map-house-count">
+              <span className="map-house-count-n">{communal.length}</span>
+              <span className="map-house-count-l">{communal.length === 1 ? "PLACE" : "PLACES"}</span>
+            </div>
+          </div>
+          <p className="map-house-blurb">
+            Houses are private; the residential quad is not. The lawn between the four buildings, the kitchen, the laundry, the snug and the garden courtyard belong to everyone — house colours come off at the door.
+          </p>
+          <MapRowList items={communal} openId={openId} setOpenId={setOpenId}/>
+        </article>
+      )}
+    </div>
+  );
+}
+
+function MapTab(){
+  const districts = D.mapDistricts;
+  const locations = D.mapLocations;
+  const [openId, setOpenId] = useState(null);
+  const sectionRefs = useRef({});
+
+  const jumpTo = (dId) => {
+    const el = sectionRefs.current[dId];
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 96;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
+  const countFor = (id) => locations.filter(l => l.district === id).length;
+
+  return (
+    <div>
+      <PageHead
+        stamp="DOC · 03 · GROUNDS"
+        title={<>Campus map &amp; <em style={{fontFamily: 'var(--display)', fontStyle: 'normal'}}>grounds</em></>}
+        body="Greenwich, London. The compound runs from Trafalgar Road to the Thames, with Greenwich Park at the eastern wall. What follows is the gazetteer — every door, room, and corner the registry will commit to in writing."
+        pageNum="P. 003 / VIII"
+      />
+
+      <div className="map-page">
+
+        {/* ── DISTRICT INDEX ─────────────────────────────────
+             Comic-frame plates, numbered 01–07, each clickable. */}
+        <section className="map-index">
+          <div className="lore-eyebrow">◆ Index of the grounds</div>
+          <h2 className="map-index-h">Seven districts.</h2>
+          <p className="map-index-lead">
+            The compound divides cleanly. <em>Four main zones</em> — academic, training, residences, STRATA — sit inside the wall. Three more reach beyond it: the playing fields, the perimeter strip, and the slice of Greenwich the school treats as overflow.
+          </p>
+          <div className="map-index-grid">
+            {districts.map((d, i) => {
+              const n = String(i+1).padStart(2,"0");
+              return (
+                <button
+                  key={d.id}
+                  className="map-index-card"
+                  onClick={() => jumpTo(d.id)}
+                  aria-label={"Jump to " + d.name}
+                >
+                  <div className="map-index-card-num">{n}</div>
+                  <div className="map-index-card-name">{d.name}</div>
+                  <div className="map-index-card-count">{countFor(d.id)} locations</div>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ── DISTRICT SECTIONS ──────────────────────────────
+             Each district uses the lore-eyebrow / lore-h pattern
+             so the page reads as part of the editorial spread. */}
+        {districts.map((d, i) => {
+          const items = locations.filter(l => l.district === d.id);
+          if (!items.length) return null;
+          const isResidence = d.id === "residence";
+          const n = String(i+1).padStart(2,"0");
+
+          return (
+            <section
+              key={d.id}
+              className="map-district"
+              ref={el => { sectionRefs.current[d.id] = el; }}
+            >
+              <header className="map-district-head">
+                <div className="lore-eyebrow">◆ District {n}</div>
+                <h2 className="lore-h map-district-h">{d.name}.</h2>
+                <p className="map-district-blurb">{d.blurb}</p>
+                <div className="map-district-meta">
+                  <span className="map-district-count">{items.length} {items.length === 1 ? "location" : "locations"}</span>
+                </div>
+              </header>
+
+              {isResidence
+                ? <ResidenceBlocks items={items} openId={openId} setOpenId={setOpenId}/>
+                : <MapRowList items={items} openId={openId} setOpenId={setOpenId}/>
+              }
+            </section>
+          );
+        })}
+
+        {/* ── FOOTNOTE ───────────────────────────────────── */}
+        <div className="map-footnote">
+          <p>
+            <strong>End gazetteer.</strong> Locations marked <em>CLASSIFIED</em> appear in this index by name only; access is restricted by Tier and by the discretion of the Dean's office. Off-campus venues are listed for reference and are not affiliated with the Institute except where noted.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
    APP SHELL
 ═══════════════════════════════════════════════════════════════════════════ */
 const TAB_MAP = {
   rules:      <RulesTab/>,
   faculty:    <FacultyTab/>,
   lore:       <HousesTab/>,
+  map:        <MapTab/>,
   students:   <StudentsTab/>,
   strata:     <StrataTab/>,
   outside:    <OutsideTab/>,
