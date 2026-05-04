@@ -180,6 +180,18 @@ students: [
     expression: "Gorgon-like serpentine mutation: faint pearlescent scales, vertical pupils when active, two living white serpents in her hair (nervous-system extensions, react to heat/scent/threat).\n\nPRIMARY — Petrifying Gaze: direct eye contact triggers temporary calcifying paralysis. Stiffness, numbness, slowed reactions, pale stone-like skin. Glance = hesitation; sustained = full immobilisation. Temporary mineralised stasis, NOT permanent stone.\n\nSECONDARY — Pheromone Trance: subtle close-range pheromones don't control alone, but make targets fixate on her voice/scent/eyes — drowsy, fascinated, compliant. Sets up the gaze.\n\nTERTIARY — Venom Command: a hair-serpent bite injects venom that creates a temporary obedience state. Numbness, dulled emotion, heightened suggestibility. Target follows simple spoken commands (stop, drop it, stay quiet). NOT full puppetry, NOT mind-rewrite.\n\nPHYSICAL — Snake-like flexibility, balance, and recovery. Effective evasive support fighter and cheer flyer.",
     drawbacks: "GAZE — Needs direct eye contact. Blocked by mirrored lenses, visors, blindfolds, smoke, darkness, camera feeds, reflections, trained look-aways. One target at a time; multi-target attempts strain her and weaken the effect. Breaks if she blinks, looks away, is startled, or struck. Stronger or trained targets resist faster.\n\nVENOM — Requires a successful bite. Armour, sealed suits, healing factors, toxin resistance, antivenom block it. Lasts only minutes per dose. One bitten target reliably commanded at a time. Self-destructive or morally opposed commands can be resisted.\n\nPHEROMONES — Close range only. Killed by wind, rain, open air, respirators, sealed helmets, smoke, strong chemicals.\n\nCOSTS — Overuse: migraines, eye pain, nosebleeds, nausea, light sensitivity, joint stiffness. Pushed too hard, painful stone patches surface on her own skin. No super-strength, no invulnerability. Cold and dehydration slow her. Hair-serpents are sensitive; if grabbed, cut, burned, or frozen, she feels it as her own pain.",
     link: "https://roleplay.chat/profile.php?user=serpentina"
+  },
+  {
+    char: "Lyrica Malaya Song",
+    alias: "Siren",
+    house: "valaris",
+    year: "Senior",
+    track: "hero",
+    tier: "B-List",
+    power: "Sonic Resonance — Pain-Driven Vocal Projection",
+    expression: "Lyrica's voice generates controlled resonance waves shaped by pitch, volume, melody, breath control, and rhythm. A spoken phrase creates subtle vibration or unease; a hum disrupts balance; a sung note can shatter glass, rattle bones, or strike with compressed sonic force; a scream becomes a wide blast that throws people back and damages structures. She is strongest when working through music — singing lets her layer harmonies into pressure waves, sonic shields, silence pockets, focused attacks, and area-denial fields. She can hijack speakers, microphones, phones, intercoms, and PA systems to carry or amplify her voice, cancel sound in a small radius via counter-frequency waves, and use low-level resonance to nudge a room's mood — calmer, braver, angrier, tense — without crossing into mind control.",
+    drawbacks: "Lyrica's vocal cords are permanently damaged from a previous supe-related attack. Speaking causes pain, singing causes severe pain, and screaming risks bleeding, voice loss, and collapse — the stronger the effect, the more damage she risks. Overuse causes throat pain, coughing blood, migraines, vertigo, tinnitus, nosebleeds, chest tightness, temporary deafness, and temporary loss of voice; pushing too far risks permanent vocal damage. Her power can be weakened or blocked by soundproofing, gags, throat restraints, sonic dampeners, silence fields, sealed helmets, heavy audio interference, or injuries that stop her breathing or vocalising. Chaotic noise breaks her precision unless she can establish a rhythm, and her strongest attacks need build-up — interrupted mid-note, startled, struck in the throat, or forced into panic, her power misfires or cuts out.",
+    link: "https://roleplay.chat/profile.php?user=lyrica"
   }
 ],
 
@@ -779,6 +791,16 @@ powers: [
     expression: "Gorgon-like serpentine mutation: faint pearlescent scales, vertical pupils when active, two living white serpents in her hair (nervous-system extensions, react to heat/scent/threat).\n\nPRIMARY — Petrifying Gaze: direct eye contact triggers temporary calcifying paralysis. Stiffness, numbness, slowed reactions, pale stone-like skin. Glance = hesitation; sustained = full immobilisation. Temporary mineralised stasis, NOT permanent stone.\n\nSECONDARY — Pheromone Trance: subtle close-range pheromones don't control alone, but make targets fixate on her voice/scent/eyes — drowsy, fascinated, compliant. Sets up the gaze.\n\nTERTIARY — Venom Command: a hair-serpent bite injects venom that creates a temporary obedience state. Numbness, dulled emotion, heightened suggestibility. Target follows simple spoken commands (stop, drop it, stay quiet). NOT full puppetry, NOT mind-rewrite.\n\nPHYSICAL — Snake-like flexibility, balance, and recovery. Effective evasive support fighter and cheer flyer.",
     drawbacks: "GAZE — Needs direct eye contact. Blocked by mirrored lenses, visors, blindfolds, smoke, darkness, camera feeds, reflections, trained look-aways. One target at a time; multi-target attempts strain her and weaken the effect. Breaks if she blinks, looks away, is startled, or struck. Stronger or trained targets resist faster.\n\nVENOM — Requires a successful bite. Armour, sealed suits, healing factors, toxin resistance, antivenom block it. Lasts only minutes per dose. One bitten target reliably commanded at a time. Self-destructive or morally opposed commands can be resisted.\n\nPHEROMONES — Close range only. Killed by wind, rain, open air, respirators, sealed helmets, smoke, strong chemicals.\n\nCOSTS — Overuse: migraines, eye pain, nosebleeds, nausea, light sensitivity, joint stiffness. Pushed too hard, painful stone patches surface on her own skin. No super-strength, no invulnerability. Cold and dehydration slow her. Hair-serpents are sensitive; if grabbed, cut, burned, or frozen, she feels it as her own pain.",
     link: "https://roleplay.chat/profile.php?user=serpentina"
+  },
+  {
+    char: "Lyrica Malaya Song",
+    alias: "Siren",
+    status: "student",
+    tier: "B",
+    power: "Sonic Resonance — Pain-Driven Vocal Projection",
+    expression: "Voice-driven resonance shaped by pitch, volume, melody, breath, and rhythm. Spoken phrases create vibration or unease; hums disrupt balance; sung notes shatter glass, rattle bones, or strike with compressed sonic force; screams blast outward and damage structures. Music is her precision tool — harmonies layer into pressure waves, sonic shields, silence pockets, focused attacks, and area-denial fields. She can hijack speakers, microphones, phones, intercoms, and PA systems, cancel sound in a small radius via counter-frequency waves, and nudge a room's mood — calmer, braver, angrier, tense — without crossing into mind control.",
+    drawbacks: "Permanently damaged vocal cords from a prior supe-related attack. Speaking hurts, singing hurts more, screaming risks bleeding and collapse. Overuse causes throat pain, coughing blood, migraines, vertigo, tinnitus, nosebleeds, chest tightness, temporary deafness, and voice loss; pushed too far, damage becomes permanent. Blocked by soundproofing, gags, throat restraints, sonic dampeners, silence fields, sealed helmets, audio interference, or anything that stops her breathing. Chaotic noise breaks precision; interruption mid-note, throat strikes, startle, or panic make her power misfire.",
+    link: "https://roleplay.chat/profile.php?user=lyrica"
   }
 ],
 
@@ -975,7 +997,7 @@ clubs: [
       { pos: "Alto Lead", group: "choir-leads" },
       { pos: "Tenor Lead", group: "choir-leads" },
       { pos: "Bass Lead", group: "choir-leads" },
-      { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
+      { pos: "Member", group: "members", char: "Lyrica Malaya Song", link: "https://roleplay.chat/profile.php?user=lyrica" }, { pos: "Member", group: "members" },
       { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
     ],
   },
