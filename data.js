@@ -938,14 +938,14 @@ clubs: [
     groups: [
       { label: "Leadership", roles: ["Captain"] },
       { label: "Squad", roles: ["Flyer", "Base", "Tumbler"] },
-      { label: "Reserves", roles: ["Alternate"] },
+      { label: "Reserves", roles: ["Alternate Flyer", "Alternate Base", "Alternate Tumbler"] },
     ],
     positions: [
       { pos: "Captain", group: "leadership", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" },
-      { pos: "Flyer", group: "squad", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" }, { pos: "Flyer", group: "squad" },
-      { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
-      { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" },
-      { pos: "Alternate", group: "reserves" },
+      { pos: "Flyer", group: "squad", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" }, { pos: "Flyer", group: "squad" }, { pos: "Flyer", group: "squad" },
+      { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
+      { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" },
+      { pos: "Alternate Flyer", group: "reserves" }, { pos: "Alternate Base", group: "reserves" }, { pos: "Alternate Tumbler", group: "reserves" },
     ],
   },
   {
