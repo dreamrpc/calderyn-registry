@@ -887,7 +887,7 @@ clubs: [
         { pos: "Reserve · Goalkeeper" },
       ]},
       { house: "Grimere", bg: "#1e40af", train: ["FRI · 6:00 AM", "TUE · 7:00 PM"], positions: [
-        { pos: "Playmaker" },
+        { pos: "Playmaker", captain: true, char: "Cesare Delgado", link: "https://roleplay.chat/profile.php?user=delgado" },
         { pos: "Attack" }, { pos: "Attack" },
         { pos: "Defence" }, { pos: "Defence" },
         { pos: "Goalkeeper" },
