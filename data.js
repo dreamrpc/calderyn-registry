@@ -936,12 +936,12 @@ clubs: [
     meets: ["TUE · 5:00 PM", "THU · 5:00 PM", "GAME DAYS"],
     output: "Performs at every home Powerball match · STRATA campus events · Annual showcase",
     groups: [
-      { label: "Leadership", roles: ["Captain", "Co-Captain"] },
+      { label: "Leadership", roles: ["Captain"] },
       { label: "Squad", roles: ["Flyer", "Base", "Tumbler"] },
       { label: "Reserves", roles: ["Alternate"] },
     ],
     positions: [
-      { pos: "Captain", group: "leadership", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" }, { pos: "Co-Captain", group: "leadership" },
+      { pos: "Captain", group: "leadership", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" },
       { pos: "Flyer", group: "squad", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" }, { pos: "Flyer", group: "squad" },
       { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
       { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" },
