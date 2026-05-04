@@ -1,19 +1,19 @@
-/* ════════════════════════════════════════════════════════════════════════
-   CALDERYN COLLEGE — APPLICATION CODE
-   ────────────────────────────────────────────────────────────────────────
+/* ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   CALDERYN COLLEGE â APPLICATION CODE
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    This file is the React app. You don't normally need to edit it.
    For adding/removing characters, see data.js instead.
 
    Application submissions are routed through a Cloudflare Worker proxy
    so that webhook URLs are never exposed in client code.
-   ════════════════════════════════════════════════════════════════════════ */
+   ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 const WORKER_URL = "https://calderyn-registry-relay.dreamroleplaywriter.workers.dev";
 
 const {useState, useMemo, useEffect, useCallback, useRef} = React;
 const D = window.CALDERYN;
 
-/* DATA BINDINGS ─────────────────────────────────────────────────────────── */
+/* DATA BINDINGS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 const HC             = D.houseColors;
 const HC_PRIMARY     = Object.fromEntries(
   Object.entries(D.houseColors).map(([k, v]) => [k, v.primary])
@@ -35,13 +35,13 @@ const GROUPS         = D.groups;
 const TABS           = D.tabs;
 const TIER_COLOR     = {A:"#e31b23", B:"#1e40af", C:"#15803d", D:"#54545c"};
 
-/* RegistryContext — used by global search to deep-link into subviewed tabs */
+/* RegistryContext â used by global search to deep-link into subviewed tabs */
 const RegContext = React.createContext({
   targetSubview: null,
   consumeSubview: () => {},
 });
 
-/* REUSABLE COMPONENTS ───────────────────────────────────────────────────── */
+/* REUSABLE COMPONENTS âââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function CLink({name, link, cls}){
   if(!name) return null;
   const cn = "clink" + (cls ? " " + cls : "");
@@ -77,7 +77,7 @@ function hay(...parts){
   return parts.filter(Boolean).join(" ").toLowerCase();
 }
 
-/* GLOBAL SEARCH INDEX ─────────────────────────────────────────────────── */
+/* GLOBAL SEARCH INDEX âââââââââââââââââââââââââââââââââââââââââââââââââââ */
 const SEARCH_INDEX = (() => {
   const out = [];
   const push = (i) => out.push(i);
@@ -86,7 +86,7 @@ const SEARCH_INDEX = (() => {
     push({
       kind: "Student",
       label: s.char,
-      sub: [s.alias && `"${s.alias}"`, s.house, s.year, s.tier].filter(Boolean).join(" · "),
+      sub: [s.alias && `"${s.alias}"`, s.house, s.year, s.tier].filter(Boolean).join(" Â· "),
       tab: "students",
       subview: (s.track || "").toLowerCase() === "sidekick" ? "sidekicks" : "heroes",
       link: s.link || null,
@@ -99,7 +99,7 @@ const SEARCH_INDEX = (() => {
     push({
       kind: "Faculty",
       label: r.char || r.role,
-      sub: r.char ? r.role : `${sec.section} · open`,
+      sub: r.char ? r.role : `${sec.section} Â· open`,
       tab: "faculty",
       link: r.link || null,
       keys: hay(r.role, r.char, sec.section),
@@ -111,7 +111,7 @@ const SEARCH_INDEX = (() => {
     push({
       kind: "STRATA",
       label: r.char || r.role,
-      sub: r.char ? r.role : `${sec.section} · open`,
+      sub: r.char ? r.role : `${sec.section} Â· open`,
       tab: "strata",
       subview: "corporate",
       link: r.link || null,
@@ -123,7 +123,7 @@ const SEARCH_INDEX = (() => {
     push({
       kind: "Hero",
       label: s.char || s.alias,
-      sub: s.char ? `${s.alias} · ${list.label}` : `${list.label} · open`,
+      sub: s.char ? `${s.alias} Â· ${list.label}` : `${list.label} Â· open`,
       tab: "strata",
       subview: "talent",
       link: s.link || null,
@@ -135,7 +135,7 @@ const SEARCH_INDEX = (() => {
     push({
       kind: "Group",
       label: g.name,
-      sub: `${g.type} · ${g.status}`,
+      sub: `${g.type} Â· ${g.status}`,
       tab: "strata",
       subview: "groups",
       link: null,
@@ -144,7 +144,7 @@ const SEARCH_INDEX = (() => {
     g.members.forEach(m => push({
       kind: "Group Member",
       label: m.char || m.alias,
-      sub: m.char ? `${m.alias} · ${g.name}` : `${g.name} · open`,
+      sub: m.char ? `${m.alias} Â· ${g.name}` : `${g.name} Â· open`,
       tab: "strata",
       subview: "groups",
       link: m.link || null,
@@ -156,8 +156,8 @@ const SEARCH_INDEX = (() => {
     if (r.clf) return;
     push({
       kind: "Outside",
-      label: r.char || `${r.role} · ${org.name}`,
-      sub: r.char ? `${r.role} · ${org.name}` : `${org.name} · open`,
+      label: r.char || `${r.role} Â· ${org.name}`,
+      sub: r.char ? `${r.role} Â· ${org.name}` : `${org.name} Â· open`,
       tab: "outside",
       link: r.link || null,
       keys: hay(r.role, r.char, org.name, org.type, sec.section),
@@ -176,7 +176,7 @@ const SEARCH_INDEX = (() => {
     (c.positions || []).forEach(p => push({
       kind: "Club Role",
       label: p.char || p.pos,
-      sub: p.char ? `${p.pos} · ${c.name}` : `${c.name} · ${p.pos} · open`,
+      sub: p.char ? `${p.pos} Â· ${c.name}` : `${c.name} Â· ${p.pos} Â· open`,
       tab: "clubs",
       link: p.link || null,
       keys: hay(p.pos, p.char, c.name),
@@ -185,8 +185,8 @@ const SEARCH_INDEX = (() => {
       kind: "Team Player",
       label: p.char || p.pos,
       sub: p.char
-        ? `${p.pos} · ${t.house} · ${c.name}`
-        : `${t.house} ${c.name} · ${p.pos} · open`,
+        ? `${p.pos} Â· ${t.house} Â· ${c.name}`
+        : `${t.house} ${c.name} Â· ${p.pos} Â· open`,
       tab: "clubs",
       link: p.link || null,
       keys: hay(p.pos, p.char, t.house, c.name),
@@ -197,7 +197,7 @@ const SEARCH_INDEX = (() => {
     push({
       kind: "Govt",
       label: s.char || s.pos,
-      sub: s.char ? `${s.pos} · ${sec.section}` : `${sec.section} · open`,
+      sub: s.char ? `${s.pos} Â· ${sec.section}` : `${sec.section} Â· open`,
       tab: "students",
       subview: "govt",
       link: s.link || null,
@@ -208,7 +208,7 @@ const SEARCH_INDEX = (() => {
   POWERS.forEach(p => push({
     kind: "Power",
     label: p.char || p.alias,
-    sub: [p.alias && `"${p.alias}"`, p.power, p.tier && `${p.tier}-List`].filter(Boolean).join(" · "),
+    sub: [p.alias && `"${p.alias}"`, p.power, p.tier && `${p.tier}-List`].filter(Boolean).join(" Â· "),
     tab: "powers",
     subview: "registry",
     link: p.link || null,
@@ -227,7 +227,7 @@ function TierChip({tier}){
   );
 }
 
-/* ─── PageHead ─────────────────────────────────────────────────────────
+/* âââ PageHead âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    New cinematic layout: page-number registration mark top-right,
    crosshair top-left, prestige stamp + serif headline + italic body. */
 function PageHead({stamp, title, body, note, noteVariant, pageNum}){
@@ -237,9 +237,9 @@ function PageHead({stamp, title, body, note, noteVariant, pageNum}){
         <div className="pg-hd-title">
           {stamp && (
             <div className="pg-hd-stamp">
-              <span className="pg-hd-stamp-mark">█</span>
+              <span className="pg-hd-stamp-mark">â</span>
               <span className="pg-hd-stamp-text">{stamp}</span>
-              <span className="pg-hd-stamp-spacer">·</span>
+              <span className="pg-hd-stamp-spacer">Â·</span>
               <span className="pg-hd-stamp-status">ARCHIVE</span>
             </div>
           )}
@@ -287,7 +287,7 @@ function SectionedTable({data, positionHeader = "Position", mode = "default"}){
                               {r.tracks.includes("hero") && <span className="track-tag track-tag-hero">Heroes</span>}
                               {r.tracks.includes("sidekick") && <span className="track-tag track-tag-sidekick">Sidekicks</span>}
                             </span>
-                          : <span className="track-tag-empty">—</span>}
+                          : <span className="track-tag-empty">â</span>}
                       </td>
                     )}
                     {isFaculty ? (
@@ -297,22 +297,22 @@ function SectionedTable({data, positionHeader = "Position", mode = "default"}){
                               {r.subjects.map((s, sj) => {
                                 const isObj = typeof s === "object";
                                 const year  = isObj ? s.year  : (s.match(/^(FR|SO|JR|SR)/) || [])[1];
-                                const title = isObj ? s.title : s.replace(/^(FR|SO|JR|SR)\s*·\s*/, "");
+                                const title = isObj ? s.title : s.replace(/^(FR|SO|JR|SR)\s*Â·\s*/, "");
                                 const desc  = isObj ? s.desc  : null;
                                 return (
                                   <li key={sj}>
-                                    <span className="subject-line">{year} · {title}</span>
+                                    <span className="subject-line">{year} Â· {title}</span>
                                     {desc && <span className="subject-desc">{desc}</span>}
                                   </li>
                                 );
                               })}
                             </ul>
-                          : <span className="subject-list-empty">—</span>}
+                          : <span className="subject-list-empty">â</span>}
                       </td>
                     ) : (
                       <td>
                         {r.clf
-                          ? <Chip variant="classified">■ CLASSIFIED</Chip>
+                          ? <Chip variant="classified">â  CLASSIFIED</Chip>
                           : r.char
                             ? <><CLink name={r.char} link={r.link||null}/>{r.npc && <NpcBadge/>}</>
                             : <EmptyState/>}
@@ -322,14 +322,14 @@ function SectionedTable({data, positionHeader = "Position", mode = "default"}){
                       <>
                         <td>
                           {r.clf
-                            ? <Chip variant="classified">■ CLASSIFIED</Chip>
+                            ? <Chip variant="classified">â  CLASSIFIED</Chip>
                             : r.char
                               ? <><CLink name={r.char} link={r.link||null}/>{r.npc && <NpcBadge/>}</>
                               : <EmptyState/>}
                         </td>
                         <td>
                           {r.clf
-                            ? <span className="stage-empty">—</span>
+                            ? <span className="stage-empty">â</span>
                             : r.stage
                               ? <span className="stage-name">{r.stage}</span>
                               : <span className="stage-na">N/A</span>}
@@ -337,7 +337,7 @@ function SectionedTable({data, positionHeader = "Position", mode = "default"}){
                       </>
                     ) : (
                       <td style={{fontSize:13, color: r.power ? "var(--char)" : "var(--faint)"}}>
-                        {r.clf ? <span style={{color:"var(--faint)", fontFamily:"var(--mono)", fontSize:11, letterSpacing:"1px"}}>—</span> : (r.power || <span style={{fontFamily:"var(--mono)", fontSize:11, letterSpacing:"1.2px", textTransform:"uppercase"}}>N/A</span>)}
+                        {r.clf ? <span style={{color:"var(--faint)", fontFamily:"var(--mono)", fontSize:11, letterSpacing:"1px"}}>â</span> : (r.power || <span style={{fontFamily:"var(--mono)", fontSize:11, letterSpacing:"1.2px", textTransform:"uppercase"}}>N/A</span>)}
                       </td>
                     )}
                   </tr>
@@ -351,16 +351,16 @@ function SectionedTable({data, positionHeader = "Position", mode = "default"}){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    RULES
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function RulesTab(){
   return (
     <div>
       <PageHead
-        stamp="DOC · 01 · NON-NEGOTIABLE"
+        stamp="DOC Â· 01 Â· NON-NEGOTIABLE"
         title={<>Rules &amp; conduct</>}
-        body="Read these before you apply. Short. Non-negotiable. If something isn't covered, use common sense — when in doubt, ask admin first."
+        body="Read these before you apply. Short. Non-negotiable. If something isn't covered, use common sense â when in doubt, ask admin first."
         pageNum="P. 001 / VIII"
       />
       <div className="rules-grid">
@@ -378,7 +378,7 @@ function RulesTab(){
       <section className="about-bay">
         <div className="about-bay-stamp">About This RP</div>
         <p className="about-bay-text">
-          Calderyn is an original world drawn from the parts of capes-and-cowls fiction we love, recombined into something new. STRATA, the Vanguard, the houses, the curriculum — all original. Any resemblance to existing characters or storylines is influence, not a port of canon.
+          Calderyn is an original world drawn from the parts of capes-and-cowls fiction we love, recombined into something new. STRATA, the Vanguard, the houses, the curriculum â all original. Any resemblance to existing characters or storylines is influence, not a port of canon.
         </p>
         <p className="about-bay-text about-bay-text-quiet">
           A fan-made roleplay setting for collaborative storytelling. No infringement of any existing intellectual property is intended.
@@ -388,9 +388,9 @@ function RulesTab(){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    CURRICULUM
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function CurriculumView(){
   const tracks = D.curriculumTracks;
   const [yearIdx, setYearIdx] = useState(0);
@@ -415,7 +415,7 @@ function CurriculumView(){
         r.subjects.forEach(subj => {
           let year, title, desc;
           if (typeof subj === "string"){
-            const m = subj.match(/^(FR|SO|JR|SR)\s*·\s*(.+)$/);
+            const m = subj.match(/^(FR|SO|JR|SR)\s*Â·\s*(.+)$/);
             if (!m) return;
             year = m[1]; title = m[2].trim(); desc = null;
           } else {
@@ -484,7 +484,7 @@ function CurriculumView(){
 
   return (
     <div className="curr">
-      {/* Year tabs — clean strip */}
+      {/* Year tabs â clean strip */}
       <div className="curr-yeartabs" role="tablist" aria-label="Choose a year">
         {YEAR_TABS.map(yt => (
           <button
@@ -501,9 +501,9 @@ function CurriculumView(){
         ))}
       </div>
 
-      {/* Year head — single condensed band */}
+      {/* Year head â single condensed band */}
       <header className="curr-yearhead">
-        <div className="curr-yearhead-eyebrow">Year {yearIdx+1} · {YEAR_TABS[yearIdx].label}</div>
+        <div className="curr-yearhead-eyebrow">Year {yearIdx+1} Â· {YEAR_TABS[yearIdx].label}</div>
         <h3 className="curr-yearhead-title">
           {heroYr?.t && sidekickYr?.t && heroYr.t === sidekickYr.t
             ? heroYr.t
@@ -517,13 +517,13 @@ function CurriculumView(){
         )}
       </header>
 
-      {/* Toolbar — counts + track filter */}
+      {/* Toolbar â counts + track filter */}
       <div className="curr-toolbar">
         <div className="curr-counts">
           <strong>{allSubs.length}</strong> classes
-          <span className="curr-counts-sep">·</span>
+          <span className="curr-counts-sep">Â·</span>
           <strong>{requiredCount}</strong> required
-          <span className="curr-counts-sep">·</span>
+          <span className="curr-counts-sep">Â·</span>
           <strong>{electiveCount}</strong> elective{electiveCount === 1 ? "" : "s"}
         </div>
         <div className="curr-filter">
@@ -546,7 +546,7 @@ function CurriculumView(){
       {/* Unified class list */}
       <ul className="curr-list">
         {filtered.length === 0 ? (
-          <li className="curr-row-empty">— No classes match this filter —</li>
+          <li className="curr-row-empty">â No classes match this filter â</li>
         ) : filtered.map((s, i) => <ClassRow key={i} subject={s} />)}
       </ul>
 
@@ -583,7 +583,7 @@ function ClassRow({subject}){
           <span className={"curr-row-track t-" + trackKind}>{trackLabel}</span>
         )}
         {hasDesc && (
-          <span className="curr-row-toggle" aria-hidden="true">{open ? "−" : "+"}</span>
+          <span className="curr-row-toggle" aria-hidden="true">{open ? "â" : "+"}</span>
         )}
       </button>
       {open && hasDesc && (
@@ -593,9 +593,9 @@ function ClassRow({subject}){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    POWERS
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function PowersGuide(){
   return (
     <div className="pg-guide">
@@ -603,16 +603,16 @@ function PowersGuide(){
         <header className="bay-hd">
           <div className="bay-hd-tag">00 / Read First</div>
           <h3 className="bay-hd-title">How the Registry Works</h3>
-          <p className="bay-hd-blurb">One tier · One status · One expression</p>
+          <p className="bay-hd-blurb">One tier Â· One status Â· One expression</p>
         </header>
         <div className="intro-bay-body">
           <div className="intro-bay-col intro-bay-col-main">
             <div className="intro-bay-eyebrow">The Core Rule</div>
             <p className="intro-bay-text">
-              Every powered person on record gets <strong>one tier</strong> (A–D) and <strong>one status</strong>. Tier answers <em>how marketable are you.</em> Status answers <em>whose payroll are you on.</em>
+              Every powered person on record gets <strong>one tier</strong> (AâD) and <strong>one status</strong>. Tier answers <em>how marketable are you.</em> Status answers <em>whose payroll are you on.</em>
             </p>
             <p className="intro-bay-text">
-              Two characters can share the same broad power — pyrokinesis, telepathy, technokinesis — but each character's <strong>specific expression</strong> of that power must be unique. No duplicates. That's how the registry works.
+              Two characters can share the same broad power â pyrokinesis, telepathy, technokinesis â but each character's <strong>specific expression</strong> of that power must be unique. No duplicates. That's how the registry works.
             </p>
           </div>
           <div className="intro-bay-col intro-bay-col-canon">
@@ -631,7 +631,7 @@ function PowersGuide(){
       <section className="tier-bay">
         <header className="bay-hd">
           <div className="bay-hd-tag">01 / Tiers</div>
-          <h3 className="bay-hd-title">A → D List · Market Value</h3>
+          <h3 className="bay-hd-title">A â D List Â· Market Value</h3>
           <p className="bay-hd-blurb">Not raw strength. How sellable you are.</p>
         </header>
         <div className="tier-ladder">
@@ -652,7 +652,7 @@ function PowersGuide(){
       <section className="status-bay">
         <header className="bay-hd">
           <div className="bay-hd-tag">02 / Statuses</div>
-          <h3 className="bay-hd-title">Six Roles · Same Spectrum</h3>
+          <h3 className="bay-hd-title">Six Roles Â· Same Spectrum</h3>
           <p className="bay-hd-blurb">Tier is what you are. Status is what you're doing about it.</p>
         </header>
         <div className="status-cards">
@@ -731,7 +731,7 @@ function PowersRegistry(){
         <div className="preg-search-wrap">
           <input
             type="text"
-            placeholder="Search name, alias, power, expression…"
+            placeholder="Search name, alias, power, expressionâ¦"
             value={q}
             onChange={e => setQ(e.target.value)}
             className="preg-search"
@@ -796,14 +796,14 @@ function PowersRegistry(){
                         <td className="preg-col-alias">
                           {p.alias
                             ? <span className="preg-alias">{p.alias}</span>
-                            : <span className="preg-na">—</span>}
+                            : <span className="preg-na">â</span>}
                         </td>
                         <td className="preg-col-power">{p.power || "N/A"}</td>
                         <td className="preg-col-toggle">
                           {hasExpr && (
                             <span className="preg-view-btn" aria-hidden="true">
                               {isOpen ? "Hide" : "View"}
-                              <span className="preg-view-arrow">{isOpen ? "▲" : "▼"}</span>
+                              <span className="preg-view-arrow">{isOpen ? "â²" : "â¼"}</span>
                             </span>
                           )}
                         </td>
@@ -846,10 +846,10 @@ function PowersTab(){
   return (
     <div className="subnav-host">
       <PageHead
-        stamp="DOC · 08 · POWER REGISTRY"
+        stamp="DOC Â· 08 Â· POWER REGISTRY"
         title={<>The powered</>}
-        body={<>One tier system (A–D). Six statuses. Read the <strong>Guide</strong> first; the <strong>Registry</strong> is the cast.</>}
-        note={<>{POWERS.length} on file<br/>Same type is fine — same expression is not</>}
+        body={<>One tier system (AâD). Six statuses. Read the <strong>Guide</strong> first; the <strong>Registry</strong> is the cast.</>}
+        note={<>{POWERS.length} on file<br/>Same type is fine â same expression is not</>}
         pageNum="P. 008 / VIII"
       />
       <div className="subnav">
@@ -872,9 +872,9 @@ function PowersTab(){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    STUDENTS
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function StudentRoster({track}){
   const list = useMemo(() => {
     const arr = STUDENTS.filter(s => (s.track || "").toLowerCase() === track);
@@ -941,7 +941,7 @@ function StudentsTab(){
   return (
     <div className="subnav-host">
       <PageHead
-        stamp="DOC · 04 · STUDENTS"
+        stamp="DOC Â· 04 Â· STUDENTS"
         title={<>Student registry</>}
         body="All enrolled students, sorted by curriculum track. Click any character name to visit their profile."
         note={<>No cap on student numbers<br/>New characters always welcome</>}
@@ -973,9 +973,9 @@ function StudentsTab(){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    FACULTY
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function FacultyTab(){
   const ctx = React.useContext(RegContext);
   const [view, setView] = useState("curriculum");
@@ -992,13 +992,13 @@ function FacultyTab(){
   };
   const bodyMap = {
     curriculum: "Two tracks. One meat grinder. Every student at Calderyn is sorted into one of the two, and both of them serve the same machine. There is no third option. There is no neutral enrolment. Pick your poison.",
-    registry: "All institutional staff. Calderyn College is run by Dean Ravindrakumar — every department reports through her. Unfilled positions run as background NPCs until claimed.",
+    registry: "All institutional staff. Calderyn College is run by Dean Ravindrakumar â every department reports through her. Unfilled positions run as background NPCs until claimed.",
   };
 
   return (
     <div className="subnav-host">
       <PageHead
-        stamp="DOC · 03 · FACULTY"
+        stamp="DOC Â· 03 Â· FACULTY"
         title={titleMap[view]}
         body={bodyMap[view]}
         pageNum="P. 003 / VIII"
@@ -1006,8 +1006,8 @@ function FacultyTab(){
       <div className="subnav">
         <div className="subnav-inner">
           {[
-            ["curriculum", "Curriculum",       "Two tracks · Four years"],
-            ["registry",   "Faculty Registry", "Subjects · People"],
+            ["curriculum", "Curriculum",       "Two tracks Â· Four years"],
+            ["registry",   "Faculty Registry", "Subjects Â· People"],
           ].map(([id, lbl, sub]) => (
             <button
               key={id}
@@ -1031,7 +1031,7 @@ function FacultyRegistryView(){
   const [openIdx, setOpenIdx] = useState({});
   const toggleRow = (key) => setOpenIdx(prev => ({...prev, [key]: !prev[key]}));
 
-  // Find the dean — first row in the Office of the Dean section, role === "Dean"
+  // Find the dean â first row in the Office of the Dean section, role === "Dean"
   const deanSection = FACULTY.find(s => /office of the dean/i.test(s.section));
   const deanRow = deanSection ? deanSection.rows.find(r => /dean/i.test(r.role) && r.char) : null;
 
@@ -1052,7 +1052,7 @@ function FacultyRegistryView(){
               <CLink name={deanRow.char} link={deanRow.link||null}/>
             </div>
             <div className="dean-card-stage">
-              {deanRow.stage ? deanRow.stage : "STAGE NAME · N/A"}
+              {deanRow.stage ? deanRow.stage : "STAGE NAME Â· N/A"}
             </div>
             {deanRow.power && (
               <div className="dean-card-power">
@@ -1070,7 +1070,7 @@ function FacultyRegistryView(){
       )}
 
       {FACULTY.map((sec, si) => {
-        // Skip rendering the dean row in its normal table — it's promoted to the card above
+        // Skip rendering the dean row in its normal table â it's promoted to the card above
         const rowsToShow = sec.rows.filter(r => !(deanRow && r === deanRow));
         if (rowsToShow.length === 0) return null;
 
@@ -1103,7 +1103,7 @@ function FacultyRegistryView(){
                     const isOpen = !!openIdx[key];
                     const subs = (r.subjects || []).map(s => {
                       if (typeof s === "string"){
-                        const m = s.match(/^(FR|SO|JR|SR)\s*·\s*(.+)$/);
+                        const m = s.match(/^(FR|SO|JR|SR)\s*Â·\s*(.+)$/);
                         return m ? { year: m[1], title: m[2].trim() } : null;
                       }
                       return s;
@@ -1132,7 +1132,7 @@ function FacultyRegistryView(){
                           </td>
                           <td className="freg-col-prof">
                             {r.clf ? (
-                              <Chip variant="classified">■ CLASSIFIED</Chip>
+                              <Chip variant="classified">â  CLASSIFIED</Chip>
                             ) : r.char ? (
                               <>
                                 <CLink name={r.char} link={r.link||null}/>
@@ -1156,7 +1156,7 @@ function FacultyRegistryView(){
                             {hasArc && (
                               <span className="freg-view-btn" aria-hidden="true">
                                 {isOpen ? "Hide" : "View"}
-                                <span className="freg-view-arrow">{isOpen ? "▲" : "▼"}</span>
+                                <span className="freg-view-arrow">{isOpen ? "â²" : "â¼"}</span>
                               </span>
                             )}
                           </td>
@@ -1191,9 +1191,9 @@ function FacultyRegistryView(){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    LORE TABS
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 const LORE_TABS = [
   { id: "world",     label: "The World" },
   { id: "history",   label: "The Programme" },
@@ -1227,19 +1227,19 @@ function HousesTab(){
   const bodyMap = {
     world:     "Eleven years on, the world has not been the same since the first hero team walked out onto a stage in west London. STRATA owns most of them. Calderyn trains the rest.",
     history:   "Sixty years of preparation for a war that never came. Project Cradle, Strathogen, the pipeline that shaped almost every working superhuman in Britain.",
-    vanguard:  "Four members. The most powerful superhumans alive. Paragon, Vigil, Aegis, Switchboard — and the politics keeping them on the same team.",
+    vanguard:  "Four members. The most powerful superhumans alive. Paragon, Vigil, Aegis, Switchboard â and the politics keeping them on the same team.",
     houses:    "Four houses, four virtues, four namesakes. Pick the one that matches the character you want to play.",
     dean:      "Dr. Devika Ravindrakumar. Fifty-three. Field nullification at fifteen metres. Students are afraid of her before they meet her, and more afraid afterwards.",
-    incidents: "The MV Cassandra. February 2024. A press cycle no one survived intact — and the contingency plans Felix Strathe quietly began developing the day after.",
+    incidents: "The MV Cassandra. February 2024. A press cycle no one survived intact â and the contingency plans Felix Strathe quietly began developing the day after.",
   };
 
   return (
     <div className="subnav-host">
       <PageHead
-        stamp="DOC · 02 · LORE"
+        stamp="DOC Â· 02 Â· LORE"
         title={titleWithItalic}
         body={bodyMap[view] || bodyMap.world}
-        note={<>Public record · IC-visible<br/>Plot-locked content lives elsewhere</>}
+        note={<>Public record Â· IC-visible<br/>Plot-locked content lives elsewhere</>}
         pageNum="P. 002 / VIII"
       />
       <div className="subnav house-subnav">
@@ -1270,11 +1270,11 @@ function LoreWorld(){
   return (
     <div className="lore">
       <section className="lore-block lore-intro">
-        <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
+        <div className="lore-intro-stamp">PUBLIC RECORD Â· ORIENTATION READING</div>
         <h2 className="lore-intro-title">It is 2026, and there are <span className="accent">gods</span> walking around.</h2>
         <p className="lore-lead">
-          Nobody calls them gods, of course. They are called superhumans, or supes, or — if
-          the papers are feeling poetic — the powered. But people pray to them. There are
+          Nobody calls them gods, of course. They are called superhumans, or supes, or â if
+          the papers are feeling poetic â the powered. But people pray to them. There are
           letters that begin <em>we prayed for someone like you</em>, and small shrines in
           suburban hallways with their photographs in them, and the distinction between a
           god and a thing-people-pray-to has always been thinner than theologians like to
@@ -1335,8 +1335,8 @@ function LoreWorld(){
         <h3 className="lore-h">The pipeline closed before it ever <span className="accent">opened</span>.</h3>
         <p className="lore-p">
           For sixty years, Calderyn's reason to exist was a war that never came. Powered
-          persons were prepared for armed conflict — trained, conditioned, classified into
-          tiers, slotted into doctrine — but no signatory state ever actually deployed one.
+          persons were prepared for armed conflict â trained, conditioned, classified into
+          tiers, slotted into doctrine â but no signatory state ever actually deployed one.
           The Cold War ended without the call coming. The post-Soviet decades produced
           incidents, never mobilisations. By 2009, the world's governments looked at what
           had been quietly built and signed the <strong>Geneva Powered Persons
@@ -1344,7 +1344,7 @@ function LoreWorld(){
           first one had fought in one.
         </p>
         <p className="lore-p">
-          Heroes do civilian work now — disasters, hostage situations, the rescue of cats
+          Heroes do civilian work now â disasters, hostage situations, the rescue of cats
           from particularly tall trees. <em>Officially</em> is doing a great deal of work
           in that sentence. What the Convention closed was a <em>future</em>, not a past.
           The supes Calderyn had been making for sixty years had been made for a use that
@@ -1359,7 +1359,7 @@ function LoreVanguard(){
   return (
     <div className="lore">
       <section className="lore-block lore-intro">
-        <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
+        <div className="lore-intro-stamp">PUBLIC RECORD Â· ORIENTATION READING</div>
         <h2 className="lore-intro-title">The <span className="accent">Vanguard.</span></h2>
         <p className="lore-lead">
           There are four of them. They have been a team since March 2015, and by every public
@@ -1376,7 +1376,7 @@ function LoreVanguard(){
             </div>
             <div className="lore-vg-text">
               <div className="lore-vg-alias">PARAGON</div>
-            <div className="lore-vg-name">Adrian Valaris · 45</div>
+            <div className="lore-vg-name">Adrian Valaris Â· 45</div>
             <div className="lore-vg-tag">The symbol</div>
             <p className="lore-vg-desc">
               The sun feeds him. Nothing measurable runs him down. His strength has no
@@ -1384,7 +1384,7 @@ function LoreVanguard(){
               equipment that tries to clock him fails when he reaches full speed. Heat
               vision in coherent ranged beams, calibrated by something the medical wing has
               elected to call <em>intent</em> because no one has come up with a better word.
-              His senses run well beyond baseline — he can pick a single conversation out of
+              His senses run well beyond baseline â he can pick a single conversation out of
               a crowded street from above, read a license plate at altitude, hear a heartbeat
               through a wall. Whether that's a separate ability or simply what comes with the
               rest of him, the medical wing has stopped trying to settle.
@@ -1401,7 +1401,7 @@ function LoreVanguard(){
             </div>
             <div className="lore-vg-text">
               <div className="lore-vg-alias">VIGIL</div>
-            <div className="lore-vg-name">Caius Saberis · 42</div>
+            <div className="lore-vg-name">Caius Saberis Â· 42</div>
             <div className="lore-vg-tag">The strategist</div>
             <p className="lore-vg-desc">
               Precognition, in a window ninety seconds wide and roughly thirty metres deep.
@@ -1424,7 +1424,7 @@ function LoreVanguard(){
             </div>
             <div className="lore-vg-text">
               <div className="lore-vg-alias">AEGIS</div>
-            <div className="lore-vg-name">Margery Orenne · 39</div>
+            <div className="lore-vg-name">Margery Orenne Â· 39</div>
             <div className="lore-vg-tag">The rescuer</div>
             <p className="lore-vg-desc">
               Her body does not break the way bodies break. Blades go in. Bullets go in.
@@ -1447,7 +1447,7 @@ function LoreVanguard(){
             </div>
             <div className="lore-vg-text">
               <div className="lore-vg-alias">SWITCHBOARD</div>
-            <div className="lore-vg-name">Iris Grimere · 35</div>
+            <div className="lore-vg-name">Iris Grimere Â· 35</div>
             <div className="lore-vg-tag">The architect</div>
             <p className="lore-vg-desc">
               Technokinesis. She speaks to electronics, by thought, in a range that has no
@@ -1476,7 +1476,7 @@ function LoreHouses(){
   return (
     <div className="lore">
       <section className="lore-block lore-intro">
-        <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
+        <div className="lore-intro-stamp">PUBLIC RECORD Â· ORIENTATION READING</div>
         <h2 className="lore-intro-title">The <span className="accent">Houses.</span></h2>
         <p className="lore-lead">
           There are four of them, named in 2020 after the four members of the Vanguard.
@@ -1491,11 +1491,11 @@ function LoreHouses(){
       </section>
 
       <section className="lore-block">
-        <div className="lore-eyebrow">2020 · Branding Initiative</div>
+        <div className="lore-eyebrow">2020 Â· Branding Initiative</div>
         <h3 className="lore-h">Older than your <span className="accent">memory</span> of them. Younger than the <span className="accent">school.</span></h3>
         <p className="lore-p">
           Calderyn did not have houses before 2020. The house system was created after the
-          Vanguard became the most famous heroes in the world — partly as a student-organisation
+          Vanguard became the most famous heroes in the world â partly as a student-organisation
           framework the institution genuinely needed, and partly as STRATA propaganda. Each
           house was named after one member of the Vanguard, turning four <strong>living
           corporate assets</strong> into campus tradition almost overnight.
@@ -1510,7 +1510,7 @@ function LoreHouses(){
         </p>
         <p className="lore-p">
           The students don't care. Six years is enough. The rivalries are real. The pride is
-          real. The branding worked exactly as intended — which is, perhaps, the most STRATA
+          real. The branding worked exactly as intended â which is, perhaps, the most STRATA
           thing about the entire system.
         </p>
       </section>
@@ -1544,7 +1544,7 @@ function LoreHouses(){
                     </td>
                     <td>
                       <span className="house-glance-traits">
-                        {h.traits.join(" · ")}
+                        {h.traits.join(" Â· ")}
                       </span>
                     </td>
                     <td>
@@ -1565,7 +1565,7 @@ function LoreHouses(){
             <div>
               <div className="lore-house-virtue">House of Justice</div>
               <h3 className="lore-house-name">VALARIS</h3>
-              <div className="lore-house-namesake">Adrian Valaris · Paragon</div>
+              <div className="lore-house-namesake">Adrian Valaris Â· Paragon</div>
             </div>
           </div>
           <p className="lore-house-desc">
@@ -1586,7 +1586,7 @@ function LoreHouses(){
             <div>
               <div className="lore-house-virtue">House of Prudence</div>
               <h3 className="lore-house-name">SABERIS</h3>
-              <div className="lore-house-namesake">Caius Saberis · Vigil</div>
+              <div className="lore-house-namesake">Caius Saberis Â· Vigil</div>
             </div>
           </div>
           <p className="lore-house-desc">
@@ -1606,7 +1606,7 @@ function LoreHouses(){
             <div>
               <div className="lore-house-virtue">House of Fortitude</div>
               <h3 className="lore-house-name">ORENNE</h3>
-              <div className="lore-house-namesake">Margery Orenne · Aegis</div>
+              <div className="lore-house-namesake">Margery Orenne Â· Aegis</div>
             </div>
           </div>
           <p className="lore-house-desc">
@@ -1627,7 +1627,7 @@ function LoreHouses(){
             <div>
               <div className="lore-house-virtue">House of Temperance</div>
               <h3 className="lore-house-name">GRIMERE</h3>
-              <div className="lore-house-namesake">Iris Grimere · Switchboard</div>
+              <div className="lore-house-namesake">Iris Grimere Â· Switchboard</div>
             </div>
           </div>
           <p className="lore-house-desc">
@@ -1635,7 +1635,7 @@ function LoreHouses(){
             honest about it, the strange. The labs run all night.
           </p>
           <p className="lore-house-desc">
-            Iris Grimere was here from 2009 to 2013, and never quite left — she runs the
+            Iris Grimere was here from 2009 to 2013, and never quite left â she runs the
             diagnostic wing now, which has, by the most conservative count, saved four
             hundred student lives. Grimere is the only house with a living relationship
             with its namesake, and the Grimere students are insufferable about it.
@@ -1652,7 +1652,7 @@ function LoreDean(){
       <section className="lore-block lore-intro lore-intro-portrait">
         <div className="lore-intro-portrait-wrap">
           <div className="lore-intro-portrait-text">
-            <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
+            <div className="lore-intro-stamp">PUBLIC RECORD Â· ORIENTATION READING</div>
             <h2 className="lore-intro-title">The <span className="accent">Dean.</span></h2>
             <p className="lore-lead">
               Her name is <strong>Dr. Devika Ravindrakumar</strong>. She is fifty-three, born in
@@ -1661,7 +1661,7 @@ function LoreDean(){
             </p>
           </div>
           <figure className="lore-intro-portrait-fig">
-            <img src="https://i.ibb.co/sJ5Cpr33/d3e97bef-2645-43b0-ae16-fddf2256890f.png" alt="Dr. Devika Ravindrakumar — Dean of Calderyn" loading="lazy"/>
+            <img src="https://i.ibb.co/sJ5Cpr33/d3e97bef-2645-43b0-ae16-fddf2256890f.png" alt="Dr. Devika Ravindrakumar â Dean of Calderyn" loading="lazy"/>
             <figcaption>
               <span className="lore-intro-portrait-cap">Dean</span>
               <span className="lore-intro-portrait-name">Devika Ravindrakumar</span>
@@ -1671,7 +1671,7 @@ function LoreDean(){
       </section>
 
       <section className="lore-block">
-        <div className="lore-eyebrow">Power · Field Nullification</div>
+        <div className="lore-eyebrow">Power Â· Field Nullification</div>
         <h3 className="lore-h">Within fifteen metres, the line is <span className="accent">drawn</span>.</h3>
         <p className="lore-p">
           Within fifteen metres of her, when she projects the field, no superhuman ability
@@ -1695,7 +1695,7 @@ function LoreDean(){
       </section>
 
       <section className="lore-block">
-        <div className="lore-eyebrow">2014 — The Vanguard Shortlist</div>
+        <div className="lore-eyebrow">2014 â The Vanguard Shortlist</div>
         <h3 className="lore-h">Rejected by <span className="accent">marketing.</span></h3>
         <p className="lore-p">
           She was on the shortlist for the Vanguard in 2014. The marketing team rejected
@@ -1712,7 +1712,7 @@ function LoreHistory(){
   return (
     <div className="lore">
       <section className="lore-block lore-intro">
-        <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
+        <div className="lore-intro-stamp">PUBLIC RECORD Â· ORIENTATION READING</div>
         <h2 className="lore-intro-title">Where the <span className="accent">powered</span> come from.</h2>
         <p className="lore-lead">
           Powered people are not born randomly. They are made. Across three quarters of
@@ -1724,7 +1724,7 @@ function LoreHistory(){
         </p>
         <p className="lore-lead">
           The compound is called <strong>Strathogen</strong>. It does not give a foetus
-          powers. It removes the body's habit of saying no — stops the genetic instructions
+          powers. It removes the body's habit of saying no â stops the genetic instructions
           a foetus carries from being edited down. Whatever the child might have been at
           the outermost edge of its possibility is what the child becomes. The results are
           enormously variable. That is, eventually, the point.
@@ -1732,7 +1732,7 @@ function LoreHistory(){
         <p className="lore-lead">
           The reason it was made is the part the brochures most carefully do not mention.
           For the first sixty years of the programme, supes were being prepared for
-          armed service — Cold War contingency, defence-pipeline thinking, a strategic
+          armed service â Cold War contingency, defence-pipeline thinking, a strategic
           asset class no government wanted to be the second to develop. None of them were
           ever actually deployed. The wars the programme was built for did not come, and
           the wars that did come arrived in formats supes could not legally be used in.
@@ -1742,7 +1742,7 @@ function LoreHistory(){
       </section>
 
       <section className="lore-block">
-        <div className="lore-eyebrow">1948 — 1953 · Pre-Cradle</div>
+        <div className="lore-eyebrow">1948 â 1953 Â· Pre-Cradle</div>
         <h3 className="lore-h">Three institutions. <span className="accent">No consent worth the paper.</span></h3>
         <p className="lore-p">
           Eldred Strathe's earliest trials ran out of three institutions Calderyn either
@@ -1783,26 +1783,26 @@ function LoreHistory(){
 
         <div className="prog-phases" role="list">
           <article className="prog-phase" role="listitem">
-            <div className="prog-phase-era">Phase I · Eldred</div>
+            <div className="prog-phase-era">Phase I Â· Eldred</div>
             <div className="prog-phase-name">Cradle I</div>
-            <div className="prog-phase-years">1968 — 1975</div>
+            <div className="prog-phase-years">1968 â 1975</div>
             <p className="prog-phase-body">
               Built for a war that never came. <strong>STG-1</strong> proved too aggressive
-              — it killed nearly all foetuses carried to term. <strong>STG-7</strong> was
+              â it killed nearly all foetuses carried to term. <strong>STG-7</strong> was
               stabilised by the trial's end. The few surviving Cradle I children became the
               first generation of British supes, conditioned from childhood for a defence
               role that the Cold War never actually called on them to fill. The original
               Vanguard came out of late Cradle I.
             </p>
             <div className="prog-phase-stat">
-              <span><span className="prog-phase-stat-k">Compound:</span> STG-1 → STG-7</span>
+              <span><span className="prog-phase-stat-k">Compound:</span> STG-1 â STG-7</span>
             </div>
           </article>
 
           <article className="prog-phase" role="listitem">
-            <div className="prog-phase-era">Phase II · Silas</div>
+            <div className="prog-phase-era">Phase II Â· Silas</div>
             <div className="prog-phase-name">Cradle II</div>
-            <div className="prog-phase-years">1980 — 1995</div>
+            <div className="prog-phase-years">1980 â 1995</div>
             <p className="prog-phase-body">
               Silas, growing into the role of his father's successor, refined and expanded
               the programme. Cradle II reached further: <strong>NHS-affiliated maternity
@@ -1818,9 +1818,9 @@ function LoreHistory(){
           </article>
 
           <article className="prog-phase" role="listitem">
-            <div className="prog-phase-era">Phase III · Felix</div>
+            <div className="prog-phase-era">Phase III Â· Felix</div>
             <div className="prog-phase-name">Cradle III</div>
-            <div className="prog-phase-years">2000 — present</div>
+            <div className="prog-phase-years">2000 â present</div>
             <p className="prog-phase-body">
               The modern programme. Administered globally through <strong>Aldwell Reproductive
               Health</strong>, a STRATA-owned chain of around forty fertility clinics across
@@ -1834,9 +1834,9 @@ function LoreHistory(){
           </article>
 
           <article className="prog-phase" role="listitem">
-            <div className="prog-phase-era">Phase IV · TBA</div>
+            <div className="prog-phase-era">Phase IV Â· TBA</div>
             <div className="prog-phase-name">Cradle IV</div>
-            <div className="prog-phase-years">— · in board memoranda</div>
+            <div className="prog-phase-years">â Â· in board memoranda</div>
             <p className="prog-phase-body">
               Not formally launched. Mentioned in board minutes from 2024 onward, never
               with detail. Felix is for. Silas is undecided. The proposed jurisdiction is
@@ -1852,13 +1852,13 @@ function LoreHistory(){
       </section>
 
       <section className="lore-block">
-        <div className="lore-eyebrow">2009 — Geneva</div>
+        <div className="lore-eyebrow">2009 â Geneva</div>
         <h3 className="lore-h">The pivot from <span className="accent">soldiers</span> to celebrities.</h3>
         <p className="lore-p">
           The <strong>Geneva Powered Persons Convention</strong> banned superhuman
           participation in armed conflict and required national registration. The
-          intended end-use that had been Cradle's whole point for forty years —
-          deployment in war — was outlawed before it had ever occurred. Forty years of
+          intended end-use that had been Cradle's whole point for forty years â
+          deployment in war â was outlawed before it had ever occurred. Forty years of
           children had been raised, trained, classified, and maintained for a role no
           government had ever quite been willing to give them, and which was now legally
           impossible. Most adult Cradle I and II graduates had spent their careers in
@@ -1869,8 +1869,8 @@ function LoreHistory(){
         </p>
         <p className="lore-p">
           Six years later, Silas handed his son the company so Felix could be the public
-          face of the new era. The Vanguard launched the same year. The old guard — the
-          Cradle I and II adults who had been raised for a war that never arrived —
+          face of the new era. The Vanguard launched the same year. The old guard â the
+          Cradle I and II adults who had been raised for a war that never arrived â
           understood exactly what was being signalled. The institution that had spent
           their childhoods preparing them for armed service was now choosing, for the
           generation behind them, to make celebrities instead.
@@ -1899,7 +1899,7 @@ function LoreIncidents(){
   return (
     <div className="lore">
       <section className="lore-block lore-intro">
-        <div className="lore-intro-stamp">RESTRICTED · BOARD-LEVEL CIRCULATION</div>
+        <div className="lore-intro-stamp">RESTRICTED Â· BOARD-LEVEL CIRCULATION</div>
         <h2 className="lore-intro-title">The MV <span className="accent">Cassandra.</span></h2>
         <p className="lore-lead">
           October 2023. A North Sea ferry running its overnight Newcastle to Amsterdam
@@ -1916,7 +1916,7 @@ function LoreIncidents(){
       </section>
 
       <section className="lore-block">
-        <div className="lore-eyebrow">Casefile · 23-OCT-CASS</div>
+        <div className="lore-eyebrow">Casefile Â· 23-OCT-CASS</div>
         <h3 className="lore-h">By the <span className="accent">numbers.</span></h3>
         <div className="case-stats" role="list">
           <div className="case-stat" role="listitem">
@@ -1929,11 +1929,11 @@ function LoreIncidents(){
           </div>
           <div className="case-stat" role="listitem">
             <div className="case-stat-n">43</div>
-            <div className="case-stat-l">Survivors · upper decks</div>
+            <div className="case-stat-l">Survivors Â· upper decks</div>
           </div>
           <div className="case-stat" role="listitem">
             <div className="case-stat-n">04:47</div>
-            <div className="case-stat-l">GMT · ship lost</div>
+            <div className="case-stat-l">GMT Â· ship lost</div>
           </div>
         </div>
       </section>
@@ -1967,7 +1967,7 @@ function LoreIncidents(){
           </article>
 
           <article className="case-col">
-            <div className="case-col-tag">Internal · Iris File</div>
+            <div className="case-col-tag">Internal Â· Iris File</div>
             <div className="case-col-h">There were no <em>explosives.</em></div>
             <p className="case-col-p">
               There may not have been fifteen hijackers. There may not have been hijackers
@@ -1997,7 +1997,7 @@ function LoreIncidents(){
           <div className="case-stamp">EYES ONLY</div>
           <div className="case-dossier-hd">
             <div className="case-dossier-hd-l">What set him off.</div>
-            <div className="case-dossier-hd-r">Strathe / Saberis · Closed</div>
+            <div className="case-dossier-hd-r">Strathe / Saberis Â· Closed</div>
           </div>
           <div className="case-dossier-body">
             <p>
@@ -2013,14 +2013,14 @@ function LoreIncidents(){
             </p>
             <div className="case-quote">
               I need to come home now.
-              <span className="case-quote-attr">— Adrian, on STRATA crisis line, 19 minutes after the ship went down</span>
+              <span className="case-quote-attr">â Adrian, on STRATA crisis line, 19 minutes after the ship went down</span>
             </div>
           </div>
         </div>
       </section>
 
       <section className="lore-block">
-        <div className="lore-eyebrow">Aftermath · Public</div>
+        <div className="lore-eyebrow">Aftermath Â· Public</div>
         <h3 className="lore-h">The most successful crisis-management operation STRATA has ever <span className="accent">run.</span></h3>
         <p className="lore-p">
           The cover story was assembled in under twelve hours. There are now three
@@ -2039,7 +2039,7 @@ function LoreIncidents(){
       </section>
 
       <section className="lore-block">
-        <div className="lore-eyebrow">Aftermath · Internal</div>
+        <div className="lore-eyebrow">Aftermath Â· Internal</div>
         <h3 className="lore-h">Nobody who knows the truth feels <span className="accent">safe.</span></h3>
         <p className="lore-p">
           <strong>Felix Strathe</strong> spent the week after the Cassandra privately
@@ -2067,9 +2067,9 @@ function LoreIncidents(){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   STRATA — corporate, talent, groups
-═══════════════════════════════════════════════════════════════════════════ */
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   STRATA â corporate, talent, groups
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function StrataTalent(){
   return (
     <div>
@@ -2127,7 +2127,7 @@ function StrataGroups(){
       <div className="groups-intro">
         <div className="groups-intro-title">SANCTIONED & INDEPENDENT</div>
         <div className="groups-intro-body">
-          STRATA's flagship Vanguard unit at the top — invitation-only, A-List tier only. Below: independent collectives of unsanctioned heroes (B-List tier and below) operating outside STRATA's contract system. Propose new collectives to admin — typical size is 3–6 members with a shared goal or origin.
+          STRATA's flagship Vanguard unit at the top â invitation-only, A-List tier only. Below: independent collectives of unsanctioned heroes (B-List tier and below) operating outside STRATA's contract system. Propose new collectives to admin â typical size is 3â6 members with a shared goal or origin.
         </div>
       </div>
       <div className="groups-list">
@@ -2166,7 +2166,7 @@ function StrataGroups(){
                 </table>
               </div>
             ) : (
-              <div className="group-empty">↳ No members assigned yet. Propose this collective to admin.</div>
+              <div className="group-empty">â³ No members assigned yet. Propose this collective to admin.</div>
             )}
           </div>
         ))}
@@ -2193,10 +2193,10 @@ function StrataCorporateView(){
             {sec.rows.map((r, ri) => (
               <li key={ri} className={"strc-role" + (!r.char && !r.clf ? " is-vacant" : "")}>
                 <span className="strc-role-label">{r.role}</span>
-                <span className="strc-role-sep">·</span>
+                <span className="strc-role-sep">Â·</span>
                 <span className="strc-role-who">
                   {r.clf ? (
-                    <Chip variant="classified">■ CLASSIFIED</Chip>
+                    <Chip variant="classified">â  CLASSIFIED</Chip>
                   ) : r.char ? (
                     <><CLink name={r.char} link={r.link||null}/>{r.npc && <NpcBadge/>}</>
                   ) : (
@@ -2212,7 +2212,7 @@ function StrataCorporateView(){
   );
 }
 
-/* ─── Unified STRATA dashboard — one organisation, three faces ─── */
+/* âââ Unified STRATA dashboard â one organisation, three faces âââ */
 function StrataOverview({onJump}){
   // Aggregate counts
   const corpRoles = STRATA.reduce((n, s) => n + s.rows.length, 0);
@@ -2223,7 +2223,7 @@ function StrataOverview({onJump}){
   const sanctioned = GROUPS.filter(g => g.sanctioned).length;
   const groupMembers = GROUPS.reduce((n, g) => n + g.members.filter(m => m.char).length, 0);
 
-  // Unified directory — every named person under STRATA's umbrella, with their role-type
+  // Unified directory â every named person under STRATA's umbrella, with their role-type
   const directory = [];
   STRATA.forEach(sec => sec.rows.forEach(r => {
     if (r.char) directory.push({ kind: "Corporate", section: sec.section, role: r.role, char: r.char, link: r.link || null, npc: r.npc });
@@ -2246,24 +2246,24 @@ function StrataOverview({onJump}){
         <button className="strata-stat" onClick={() => onJump("corporate")}>
           <div className="strata-stat-num">{corpFilled}<span className="strata-stat-of">/{corpRoles}</span></div>
           <div className="strata-stat-label">Corporate roles filled</div>
-          <div className="strata-stat-sub">Internal structure ↗</div>
+          <div className="strata-stat-sub">Internal structure â</div>
         </button>
         <button className="strata-stat" onClick={() => onJump("talent")}>
           <div className="strata-stat-num">{heroFilled}<span className="strata-stat-of">/{heroSlots}</span></div>
           <div className="strata-stat-label">Heroes on the roster</div>
-          <div className="strata-stat-sub">A → D-list talent ↗</div>
+          <div className="strata-stat-sub">A â D-list talent â</div>
         </button>
         <button className="strata-stat" onClick={() => onJump("groups")}>
           <div className="strata-stat-num">{groupCount}</div>
-          <div className="strata-stat-label">{sanctioned} sanctioned · {groupCount - sanctioned} independent · {groupMembers} {groupMembers === 1 ? "member" : "members"} on file</div>
-          <div className="strata-stat-sub">Vanguard & collectives ↗</div>
+          <div className="strata-stat-label">{sanctioned} sanctioned Â· {groupCount - sanctioned} independent Â· {groupMembers} {groupMembers === 1 ? "member" : "members"} on file</div>
+          <div className="strata-stat-sub">Vanguard & collectives â</div>
         </button>
       </section>
 
       <section className="strata-directory">
         <div className="strata-directory-hd">
           <div>
-            <div className="strata-directory-eyebrow">◆ Unified Directory</div>
+            <div className="strata-directory-eyebrow">â Unified Directory</div>
             <h3 className="strata-directory-title">Every name on the STRATA books.</h3>
             <p className="strata-directory-blurb">Corporate, talent, and group affiliations in one place. Names with cross-affiliation are flagged.</p>
           </div>
@@ -2283,10 +2283,10 @@ function StrataOverview({onJump}){
                   <td>
                     <CLink name={d.char} link={d.link}/>
                     {d.npc && <NpcBadge/>}
-                    {d.crossRef && <span className="strata-crossref" title="Appears in multiple STRATA sections">⇄</span>}
+                    {d.crossRef && <span className="strata-crossref" title="Appears in multiple STRATA sections">â</span>}
                   </td>
                   <td><Chip variant={d.kind === "Corporate" ? "ink" : d.kind === "Sanctioned Group" ? "gold" : d.kind === "Collective" ? "ghost" : "red"}>{d.kind}</Chip></td>
-                  <td><span style={{color:"var(--text-mid)"}}>{d.section}</span> <span style={{color:"var(--text-low)", margin:"0 6px"}}>·</span> <span style={{color:"var(--text)", fontWeight:600}}>{d.role}</span></td>
+                  <td><span style={{color:"var(--text-mid)"}}>{d.section}</span> <span style={{color:"var(--text-low)", margin:"0 6px"}}>Â·</span> <span style={{color:"var(--text)", fontWeight:600}}>{d.role}</span></td>
                 </tr>
               ))}
             </tbody>
@@ -2316,17 +2316,17 @@ function StrataTab(){
   const bodyMap = {
     overview:  "One organisation, three faces. Corporate, talent, and sanctioned groups in a single directory. Click any tile to drill in.",
     corporate: "Corporate employees, field agents, and PR. Executive identities are classified at Level 4+. Contact admin to claim a senior role.",
-    talent:    "STRATA's contracted heroes — A-list down to D-list. Tier reflects roster prominence and contract value, not raw power.",
-    groups:    "The sanctioned Vanguard at the top. Independent collectives below — unsanctioned heroes operating outside STRATA's contract system.",
+    talent:    "STRATA's contracted heroes â A-list down to D-list. Tier reflects roster prominence and contract value, not raw power.",
+    groups:    "The sanctioned Vanguard at the top. Independent collectives below â unsanctioned heroes operating outside STRATA's contract system.",
   };
 
   return (
     <div className="subnav-host">
       <PageHead
-        stamp="DOC · 06 · STRATA"
+        stamp="DOC Â· 06 Â· STRATA"
         title={titleMap[view]}
         body={bodyMap[view]}
-        note={<>⚠ Viewing this section is logged<br/>Executive records: Level 4+ only</>}
+        note={<>â  Viewing this section is logged<br/>Executive records: Level 4+ only</>}
         noteVariant="warn"
         pageNum="P. 006 / VIII"
       />
@@ -2335,7 +2335,7 @@ function StrataTab(){
           {[
             ["overview","Overview","Unified directory"],
             ["corporate","Corporate","Internal structure"],
-            ["talent","Talent","A → D-list heroes"],
+            ["talent","Talent","A â D-list heroes"],
             ["groups","Groups","Vanguard & collectives"]
           ].map(([id, lbl, sub]) => (
             <button
@@ -2359,9 +2359,9 @@ function StrataTab(){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   OUTSIDE — orgs-first, collapsible sections
-═══════════════════════════════════════════════════════════════════════════ */
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   OUTSIDE â orgs-first, collapsible sections
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function OrgsTable({data, startCollapsed}){
   const [openSecs, setOpenSecs] = useState(() => {
     const init = {};
@@ -2395,7 +2395,7 @@ function OrgsTable({data, startCollapsed}){
                   {orgCount} {orgCount === 1 ? "entry" : "entries"}
                 </span>
                 <span className="orgs-group-toggle" aria-hidden="true">
-                  {isOpen ? "▲" : "▼"}
+                  {isOpen ? "â²" : "â¼"}
                 </span>
               </span>
             </button>
@@ -2417,7 +2417,7 @@ function OrgsTable({data, startCollapsed}){
                           {org.roles.map((r, ri) => (
                             <li key={ri} className={"orgs-role" + (!r.char ? " is-vacant" : "")}>
                               <span className="orgs-role-label">{r.role}</span>
-                              <span className="orgs-role-sep">·</span>
+                              <span className="orgs-role-sep">Â·</span>
                               <span className="orgs-role-who">
                                 {r.char
                                   ? <><CLink name={r.char} link={r.link||null}/>{r.npc && <NpcBadge/>}</>
@@ -2458,9 +2458,9 @@ function OutsideTab(){
   return (
     <div>
       <PageHead
-        stamp="DOC · 07 · EXTERNAL"
+        stamp="DOC Â· 07 Â· EXTERNAL"
         title={<>Outside Calderyn</>}
-        body="Characters who live and work in Greenwich, London — the borough Calderyn College leases its campus from. Organised by the institutions they belong to. One character may appear in multiple rows."
+        body="Characters who live and work in Greenwich, London â the borough Calderyn College leases its campus from. Organised by the institutions they belong to. One character may appear in multiple rows."
         pageNum="P. 007 / VIII"
       />
       <div className="orgs-toolbar">
@@ -2483,9 +2483,9 @@ function OutsideTab(){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    CLUBS
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function clubTotal(c){
   let n = (c.positions || []).length;
   if(c.teams) n += c.teams.reduce((a, t) => a + t.positions.length, 0);
@@ -2524,21 +2524,21 @@ function ClubRules({rules}){
             <div className="kbr-keypoint">
               <div className="kbr-keypoint-num">4s</div>
               <div className="kbr-keypoint-body">
-                <div className="kbr-keypoint-lbl"><span className="ico" aria-hidden="true">⧖</span> The Pass Clock</div>
+                <div className="kbr-keypoint-lbl"><span className="ico" aria-hidden="true">â§</span> The Pass Clock</div>
                 <p>Catching the ball freezes you in place. Four seconds to release a pass, or possession drops.</p>
               </div>
             </div>
             <div className="kbr-keypoint">
-              <div className="kbr-keypoint-num">∞</div>
+              <div className="kbr-keypoint-num">â</div>
               <div className="kbr-keypoint-body">
-                <div className="kbr-keypoint-lbl"><span className="ico" aria-hidden="true">○</span> The Ball</div>
+                <div className="kbr-keypoint-lbl"><span className="ico" aria-hidden="true">â</span> The Ball</div>
                 <p>Indestructible engineered composite. No registered power can vaporise, fracture, melt, or deform it. Only move it.</p>
               </div>
             </div>
             <div className="kbr-keypoint">
               <div className="kbr-keypoint-num">6v6</div>
               <div className="kbr-keypoint-body">
-                <div className="kbr-keypoint-lbl"><span className="ico" aria-hidden="true">▤</span> Three Elevations</div>
+                <div className="kbr-keypoint-lbl"><span className="ico" aria-hidden="true">â¤</span> Three Elevations</div>
                 <p>Ground, mid-tier (~10ft), upper-tier (~20ft) platforms connected by ramps, beams, and drop points.</p>
               </div>
             </div>
@@ -2557,11 +2557,11 @@ function ClubRules({rules}){
               loading="lazy"
             />
             <div className="kbr-arena-tile-body">
-              <div className="kbr-arena-tile-eyebrow"><span className="ico" aria-hidden="true">▦</span> Arena Diagram</div>
+              <div className="kbr-arena-tile-eyebrow"><span className="ico" aria-hidden="true">â¦</span> Arena Diagram</div>
               <div className="kbr-arena-tile-title">View the Powerball arena</div>
-              <div className="kbr-arena-tile-meta">Six-on-six · Three elevations · Annotated zones</div>
+              <div className="kbr-arena-tile-meta">Six-on-six Â· Three elevations Â· Annotated zones</div>
               <div className="kbr-arena-tile-action">
-                <span className="ico" aria-hidden="true">⛶</span>
+                <span className="ico" aria-hidden="true">â¶</span>
                 <span>Click to expand</span>
               </div>
             </div>
@@ -2600,7 +2600,7 @@ function ClubRules({rules}){
         <div className="kbr-body">
           {rules.format && (
             <div className="kbr-block">
-              <div className="kbr-block-tag"><span className="ico" aria-hidden="true">▤</span> Rules</div>
+              <div className="kbr-block-tag"><span className="ico" aria-hidden="true">â¤</span> Rules</div>
               <ul className="kbr-list">
                 {rules.format.map((line, i) => (
                   <li key={i}>{line}</li>
@@ -2610,7 +2610,7 @@ function ClubRules({rules}){
           )}
           {rules.violence && (
             <div className="kbr-block">
-              <div className="kbr-block-tag"><span className="ico" aria-hidden="true">▲</span> Powers, Violence &amp; Fouls</div>
+              <div className="kbr-block-tag"><span className="ico" aria-hidden="true">â²</span> Powers, Violence &amp; Fouls</div>
               <p>{rules.violence}</p>
             </div>
           )}
@@ -2630,7 +2630,7 @@ function ClubRules({rules}){
             className="kbr-lightbox-close"
             onClick={(e) => { e.stopPropagation(); setLightbox(false); }}
             aria-label="Close arena diagram"
-          ><span className="ico" aria-hidden="true">×</span></button>
+          ><span className="ico" aria-hidden="true">Ã</span></button>
           <img
             className="kbr-lightbox-img"
             src="https://files.catbox.moe/h3hq2p.png"
@@ -2638,7 +2638,7 @@ function ClubRules({rules}){
             onClick={(e) => e.stopPropagation()}
           />
           <div className="kbr-lightbox-hint">
-            <span className="ico" aria-hidden="true">ⓘ</span> Click anywhere outside the image or press <kbd>Esc</kbd> to close
+            <span className="ico" aria-hidden="true">â</span> Click anywhere outside the image or press <kbd>Esc</kbd> to close
           </div>
         </div>
       )}
@@ -2688,9 +2688,9 @@ function ClubsTab(){
   return (
     <div>
       <PageHead
-        stamp="DOC · 05 · CAMPUS ORGS"
+        stamp="DOC Â· 05 Â· CAMPUS ORGS"
         title={<>Clubs &amp; societies</>}
-        body="Six campus clubs. Pick one from the directory to view its full roster, rules, and post-graduation pathway. Leadership is one role per player. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval."
+        body="Six campus clubs. Pick one from the directory to view its full roster, rules, and post-graduation pathway. Leadership is one role per player. New clubs go through your house RA â if there's enough interest, the Student Body President considers it for approval."
         pageNum="P. 005 / VIII"
       />
       <div className="club-filters-band">
@@ -2714,7 +2714,7 @@ function ClubsTab(){
       </div>
 
       <div className="clubs-dir">
-        {/* LEFT — directory rail */}
+        {/* LEFT â directory rail */}
         <aside className="clubs-dir-rail" aria-label="Club directory">
           <div className="clubs-dir-rail-hd">
             <span className="clubs-dir-rail-label">Directory</span>
@@ -2757,7 +2757,7 @@ function ClubsTab(){
           </ul>
         </aside>
 
-        {/* RIGHT — detail pane */}
+        {/* RIGHT â detail pane */}
         {open && (
           <section className="clubs-dir-detail" aria-label={open.name}>
             <header className="clubs-dir-hero" style={{"--accent": open.bg}}>
@@ -2849,7 +2849,7 @@ function ClubPanel({club, onClose}){
             className="club-side-close"
             onClick={onClose}
             aria-label="Close panel"
-          ><span className="ico" aria-hidden="true">×</span></button>
+          ><span className="ico" aria-hidden="true">Ã</span></button>
         </div>
 
         <div className="cp-tabs">
@@ -2859,7 +2859,7 @@ function ClubPanel({club, onClose}){
               className={"cp-tab" + (tab === t.id ? " on" : "")}
               onClick={() => setTab(t.id)}
             >
-              <span className="ico" aria-hidden="true">●</span>
+              <span className="ico" aria-hidden="true">â</span>
               <span>{t.label}</span>
             </button>
           ))}
@@ -2890,7 +2890,7 @@ function ClubPanelAbout({club}){
         <div className="cp-schedule">
           {club.meets && (
             <div className="cp-schedule-row">
-              <span className="cp-schedule-tag"><span className="ico" aria-hidden="true">◫</span> Meets</span>
+              <span className="cp-schedule-tag"><span className="ico" aria-hidden="true">â«</span> Meets</span>
               <div className="cp-schedule-slots">
                 {club.meets.map((m, i) => <span key={i} className="cp-schedule-slot">{m}</span>)}
               </div>
@@ -2898,7 +2898,7 @@ function ClubPanelAbout({club}){
           )}
           {club.output && (
             <div className="cp-schedule-row">
-              <span className="cp-schedule-tag"><span className="ico" aria-hidden="true">◖</span> Output</span>
+              <span className="cp-schedule-tag"><span className="ico" aria-hidden="true">â</span> Output</span>
               <div className="cp-schedule-output">{club.output}</div>
             </div>
           )}
@@ -2907,7 +2907,7 @@ function ClubPanelAbout({club}){
 
       {club.rules && club.rules.career && (
         <div className="cp-about-career">
-          <div className="cp-about-career-tag"><span className="ico" aria-hidden="true">▪</span> Post-Graduation</div>
+          <div className="cp-about-career-tag"><span className="ico" aria-hidden="true">âª</span> Post-Graduation</div>
           <div className="cp-about-career-title">The Professional League</div>
           <p>{club.rules.career}</p>
           <div className="kbr-career-stats" style={{marginTop:14}}>
@@ -2945,7 +2945,7 @@ function ClubPanelRoster({club, hasTeams}){
       <div className="cp-roster">
         {club.courtNote && (
           <div className="cp-courtnote">
-            <span className="cp-courtnote-tag"><span className="ico" aria-hidden="true">▥</span> Open Court</span>
+            <span className="cp-courtnote-tag"><span className="ico" aria-hidden="true">â¥</span> Open Court</span>
             <span>{club.courtNote}</span>
           </div>
         )}
@@ -2989,7 +2989,7 @@ function ClubPanelRoster({club, hasTeams}){
                       <tr className="kb-reserves-hd"><td colSpan={2}>Reserves</td></tr>
                     )}
                     {reserves.map((p, pi) => {
-                      const posDisplay = p.pos.replace(/^reserve\s*[·\-—]?\s*/i, "");
+                      const posDisplay = p.pos.replace(/^reserve\s*[Â·\-â]?\s*/i, "");
                       return (
                         <tr key={"r"+pi} className="kb-row-reserve">
                           <td className="kb-team-pos-cell">
@@ -3007,7 +3007,7 @@ function ClubPanelRoster({club, hasTeams}){
         </div>
 
         <div className="cp-staff-block">
-          <div className="cp-staff-tag"><span className="ico" aria-hidden="true">▤</span> League Staff</div>
+          <div className="cp-staff-tag"><span className="ico" aria-hidden="true">â¤</span> League Staff</div>
           <table>
             <tbody>
               {club.positions.map((p, pi) => (
@@ -3081,9 +3081,9 @@ function ClubPanelRoster({club, hasTeams}){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    STUDENT GOVERNMENT
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 const HOUSE_FROM_REP = (pos) => {
   const first = (pos || "").split(/\s+/)[0].toLowerCase();
   return ["valaris","orenne","saberis","grimere"].includes(first) ? first : null;
@@ -3100,14 +3100,14 @@ function OfficeOfPresident({president, staff}){
       <div className="office-card">
         <div className={"office-prez" + (presFilled ? " filled" : "")}>
           <div className="office-prez-eyebrow">
-            <span>Calderyn · 2026</span>
+            <span>Calderyn Â· 2026</span>
             <span className="office-prez-term">{president && president.term ? president.term : "N/A"}</span>
           </div>
           <div className="office-prez-title">Student Body President</div>
           <div className="office-prez-holder">
             {presFilled
               ? <CLink name={president.char} link={president.link||null} cls="office-prez-name"/>
-              : <span className="office-prez-empty">— Position Open —</span>}
+              : <span className="office-prez-empty">â Position Open â</span>}
           </div>
         </div>
         <div className="office-staff">
@@ -3121,7 +3121,7 @@ function OfficeOfPresident({president, staff}){
                     ? <CLink name={s.char} link={s.link||null}/>
                     : <span style={{color:"var(--faint)", fontStyle:"italic"}}>Awaiting holder</span>}
                 </div>
-                {s.term && <div className="office-staff-term">Term · {s.term}</div>}
+                {s.term && <div className="office-staff-term">Term Â· {s.term}</div>}
               </div>
             );
           })}
@@ -3139,7 +3139,7 @@ function Mandate(){
         <span className="mandate-rule"/>
       </div>
       <p className="mandate-body">
-        The Student Body President leads the government and chairs the Student Council. The Council is staffed by elected House Representatives who double as senior Resident Assistants — they answer to the President and answer for everyone below them. Real budget. Administration retains final approval and exercises that authority routinely and without explanation. <strong>Run anyway.</strong>
+        The Student Body President leads the government and chairs the Student Council. The Council is staffed by elected House Representatives who double as senior Resident Assistants â they answer to the President and answer for everyone below them. Real budget. Administration retains final approval and exercises that authority routinely and without explanation. <strong>Run anyway.</strong>
       </p>
     </div>
   );
@@ -3150,7 +3150,7 @@ function CouncilGrid({seats, note}){
     <section className="council">
       <div className="block-hd">
         <div className="block-title">The Student Council</div>
-        <div className="block-meta">{seats.length} House Reps · Senior Resident Assistants</div>
+        <div className="block-meta">{seats.length} House Reps Â· Senior Resident Assistants</div>
       </div>
       {note && <div className="block-note">{note}</div>}
       <div className="council-grid">
@@ -3164,13 +3164,13 @@ function CouncilGrid({seats, note}){
               <div className="council-rep-bar" style={{background:houseColor}}/>
               <div className="council-rep-body">
                 <div className="council-rep-house">{houseName}</div>
-                <div className="council-rep-role">House Rep · Senior RA</div>
+                <div className="council-rep-role">House Rep Â· Senior RA</div>
                 <div className="council-rep-holder">
                   {filled
                     ? <CLink name={s.char} link={s.link||null}/>
                     : <span style={{color:"var(--faint)", fontStyle:"italic"}}>Awaiting holder</span>}
                 </div>
-                {s.term && <div className="council-rep-term">Term · {s.term}</div>}
+                {s.term && <div className="council-rep-term">Term Â· {s.term}</div>}
               </div>
             </div>
           );
@@ -3200,7 +3200,7 @@ function EventCommittee({seats, note}){
                   : <span style={{color:"var(--faint)", fontStyle:"italic"}}>Awaiting holder</span>}
               </div>
               <span className={"committee-stamp" + (filled ? "" : " open")}>
-                {filled ? "● Appointed" : "○ Open"}
+                {filled ? "â Appointed" : "â Open"}
               </span>
             </div>
           );
@@ -3213,7 +3213,7 @@ function EventCommittee({seats, note}){
 function StudentGovInner(){
   const findSec = (name) => STUDENT_GOV.find(s => s.section === name);
   const office  = findSec("OFFICE OF THE PRESIDENT");
-  const council = findSec("STUDENT COUNCIL — RESIDENT ASSISTANTS");
+  const council = findSec("STUDENT COUNCIL â RESIDENT ASSISTANTS");
   const events  = findSec("EVENT COMMITTEE");
 
   const president = office ? office.seats.find(s => /president/i.test(s.pos)) : null;
@@ -3229,9 +3229,9 @@ function StudentGovInner(){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   JOIN NOW — APPLICATION FORM
-═══════════════════════════════════════════════════════════════════════════ */
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   JOIN NOW â APPLICATION FORM
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 const APPLICATION_TYPES = [
   {
@@ -3247,12 +3247,12 @@ const APPLICATION_TYPES = [
   {
     id: "strata",
     name: "STRATA (Talent or Corporate)",
-    desc: "Apply to STRATA International. Talent = hero roster (A→D-list). Corporate = executive, field, or PR.",
+    desc: "Apply to STRATA International. Talent = hero roster (AâD-list). Corporate = executive, field, or PR.",
   },
   {
     id: "club",
     name: "Club Position",
-    desc: "Lead or play in a campus club — Powerball, Drama, Council, Press, etc.",
+    desc: "Lead or play in a campus club â Powerball, Drama, Council, Press, etc.",
   },
   {
     id: "gov",
@@ -3262,12 +3262,12 @@ const APPLICATION_TYPES = [
   {
     id: "collective",
     name: "Hero Collective",
-    desc: "Independent collectives — unsanctioned heroes operating outside STRATA contracts.",
+    desc: "Independent collectives â unsanctioned heroes operating outside STRATA contracts.",
   },
   {
     id: "outside",
     name: "Outside Calderyn",
-    desc: "Greenwich resident — police, council, press, NHS, civilian. Living outside the school.",
+    desc: "Greenwich resident â police, council, press, NHS, civilian. Living outside the school.",
   },
 ];
 
@@ -3331,7 +3331,7 @@ const JOIN_HOUSES = ["Valaris", "Orenne", "Saberis", "Grimere"];
 const JOIN_YEARS = ["Freshman", "Sophomore", "Junior", "Senior"];
 const JOIN_TIERS = ["A-List", "B-List", "C-List", "D-List"];
 const JOIN_TRACKS = ["Heroes", "Sidekicks"];
-const JOIN_STRATA_DEPTS = ["Executive", "Field — Handlers & Agents", "PR & Intelligence"];
+const JOIN_STRATA_DEPTS = ["Executive", "Field â Handlers & Agents", "PR & Intelligence"];
 
 function JoinTab(){
   const [type, setType]   = useState(null);
@@ -3385,27 +3385,27 @@ function JoinTab(){
         main = `{ char: ${s(form.char)}, alias: ${s(form.alias) || '""'}, house: ${s((form.house||"").toLowerCase())}, year: ${s(form.year)}, track: ${s((form.track||"").toLowerCase())}, tier: ${s(form.tier)}${powerFrag}${human}${link} },`;
         break;
       case "faculty":
-        main = `// → goes in FACULTY → "${form.facultySection || ''}" section
+        main = `// â goes in FACULTY â "${form.facultySection || ''}" section
 { role: ${s(form.facultyRole)}, char: ${s(form.char)}, stage: ${s(form.alias) || '""'}${powerFrag}${human}${link} },`;
         break;
       case "strata":
-        main = `// → goes in HERO_LISTS → ${form.tier} list, fills first open slot
+        main = `// â goes in HERO_LISTS â ${form.tier} list, fills first open slot
 { alias: ${s(form.alias)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
         break;
       case "club":
-        main = `// → goes in CLUBS → "${form.clubName || ''}" → ${form.clubTeam ? 'team "' + form.clubTeam + '"' : 'positions'}
+        main = `// â goes in CLUBS â "${form.clubName || ''}" â ${form.clubTeam ? 'team "' + form.clubTeam + '"' : 'positions'}
 { pos: ${s(form.clubPosition)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
         break;
       case "gov":
-        main = `// → goes in STUDENT_GOV → "${form.govSection || ''}" → seats
+        main = `// â goes in STUDENT_GOV â "${form.govSection || ''}" â seats
 { pos: ${s(form.govSeat)}, char: ${s(form.char)}, term: ${s(form.govTerm) || '"2026-27"'}${powerFrag}${human}${link} },`;
         break;
       case "collective":
-        main = `// → goes in GROUPS → "${form.collectiveName || ''}" → members
+        main = `// â goes in GROUPS â "${form.collectiveName || ''}" â members
 { alias: ${s(form.alias)}, role: ${s(form.collectiveRole)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
         break;
       case "outside":
-        main = `// → goes in OUTSIDE → "${form.outsideSection || ''}" → org "${form.outsideOrg || ''}" → roles
+        main = `// â goes in OUTSIDE â "${form.outsideSection || ''}" â org "${form.outsideOrg || ''}" â roles
 { role: ${s(form.outsideRole)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
         break;
       default: return "";
@@ -3414,33 +3414,67 @@ function JoinTab(){
     // Optional cross-references for student form (clubs / gov)
     const extras = [];
     if (type === "student" && form.optClubPosition){
-      extras.push(`// → also add to CLUBS → "${form.optClubName || ''}" → ${form.optClubTeam ? 'team "' + form.optClubTeam + '"' : 'positions'}
+      extras.push(`// â also add to CLUBS â "${form.optClubName || ''}" â ${form.optClubTeam ? 'team "' + form.optClubTeam + '"' : 'positions'}
 { pos: ${s(form.optClubPosition)}, char: ${s(form.char)}${link} },`);
     }
     if (type === "student" && form.optGovSeat){
-      extras.push(`// → also add to STUDENT_GOV → "${form.optGovSection || ''}" → seats
+      extras.push(`// â also add to STUDENT_GOV â "${form.optGovSection || ''}" â seats
 { pos: ${s(form.optGovSeat)}, char: ${s(form.char)}, term: ${s(form.optGovTerm) || '"2026-27"'}${link} },`);
     }
     return [main, ...extras].join("\n\n");
   };
 
   const submit = async () => {
-    // Honeypot check — if the hidden field has a value, silently 'succeed' but don't ship
+    // Honeypot check â if the hidden field has a value, silently 'succeed' but don't ship
     if (form.hp){
       setConfirmed(true);
       return;
     }
     if (!canSubmit) return;
-    setStatus({ state: "loading", msg: "Sending…" });
+    setStatus({ state: "loading", msg: "Sendingâ¦" });
 
     const typeName = APPLICATION_TYPES.find(t => t.id === type)?.name || type;
     const snippet = buildSnippet();
 
-    // Build the Discord embed — only the info admin actually needs to update the site
+    /* --- Discord embed helpers ----------------------------------------
+       Embed field values are capped at 1024 chars by Discord. splitField()
+       word-aware splits long values across multiple fields ("Field (1/2)",
+       "Field (2/2)") instead of hard-truncating mid-word. */
+    const FIELD_VALUE_MAX = 1024;
+    const splitField = (name, value, inline = false) => {
+      if (!value) return [];
+      const v = String(value);
+      if (v.length <= FIELD_VALUE_MAX) return [{ name, value: v, inline }];
+      const parts = [];
+      let rest = v;
+      while (rest.length > FIELD_VALUE_MAX) {
+        let cut = rest.lastIndexOf("\n", FIELD_VALUE_MAX);
+        if (cut < 600) cut = rest.lastIndexOf(" ", FIELD_VALUE_MAX);
+        if (cut < 600) cut = FIELD_VALUE_MAX;
+        parts.push(rest.slice(0, cut).trim());
+        rest = rest.slice(cut).trim();
+      }
+      if (rest) parts.push(rest);
+      return parts.map((value, i) => ({
+        name: parts.length > 1 ? `${name} (${i + 1}/${parts.length})` : name,
+        value, inline,
+      }));
+    };
+    /* safeBlock() - word-aware truncate for the data-file snippet code block.
+       Discord embed description max is 4096; leave headroom for the fence. */
+    const safeBlock = (s, max = 3900) => {
+      if (!s || s.length <= max) return s || "";
+      let cut = s.lastIndexOf("\n", max);
+      if (cut < max - 400) cut = s.lastIndexOf(" ", max);
+      if (cut < 0) cut = max;
+      return s.slice(0, cut) + "\n// ...trimmed";
+    };
+
+    // Build the Discord embed â only the info admin actually needs to update the site
     const fields = [
       { name: "Type",          value: typeName, inline: true },
-      { name: "Character",     value: form.char || "—", inline: true },
-      { name: "RPC Profile",   value: form.rpcLink || "—", inline: false },
+      { name: "Character",     value: form.char || "â", inline: true },
+      { name: "RPC Profile",   value: form.rpcLink || "â", inline: false },
     ];
     if (form.alias)            fields.push({ name: "Stage Name / Alias", value: form.alias, inline: true });
     if (form.house)            fields.push({ name: "House",       value: form.house, inline: true });
@@ -3448,41 +3482,41 @@ function JoinTab(){
     if (form.track)            fields.push({ name: "Track",       value: form.track, inline: true });
     if (form.tier)             fields.push({ name: "Tier",        value: form.tier, inline: true });
     if (form.facultyRole)      fields.push({ name: "Faculty Role",     value: `${form.facultyRole} (${form.facultySection || '?'})`, inline: false });
-    if (form.clubPosition)     fields.push({ name: "Club Position",    value: `${form.clubName || '?'} — ${form.clubPosition}${form.clubTeam ? ' (' + form.clubTeam + ')' : ''}`, inline: false });
+    if (form.clubPosition)     fields.push({ name: "Club Position",    value: `${form.clubName || '?'} â ${form.clubPosition}${form.clubTeam ? ' (' + form.clubTeam + ')' : ''}`, inline: false });
     if (form.govSeat)          fields.push({ name: "Gov Seat",         value: `${form.govSeat} (${form.govSection || '?'})`, inline: false });
-    if (form.collectiveRole)   fields.push({ name: "Collective",       value: `${form.collectiveName || '?'} — ${form.collectiveRole}`, inline: false });
-    if (form.outsideRole)      fields.push({ name: "Outside Role",     value: `${form.outsideOrg || '?'} — ${form.outsideRole}`, inline: false });
+    if (form.collectiveRole)   fields.push({ name: "Collective",       value: `${form.collectiveName || '?'} â ${form.collectiveRole}`, inline: false });
+    if (form.outsideRole)      fields.push({ name: "Outside Role",     value: `${form.outsideOrg || '?'} â ${form.outsideRole}`, inline: false });
 
     // Powers (only if not fully human)
     if (form.fullyHuman){
-      fields.push({ name: "Powers",         value: "Fully human — no powers.", inline: false });
+      fields.push({ name: "Powers",         value: "Fully human â no powers.", inline: false });
     } else {
       if (form.power)           fields.push({ name: "Power / Ability",  value: form.power, inline: true });
-      if (form.powerExpression) fields.push({ name: "Power Expression", value: form.powerExpression.slice(0, 1024), inline: false });
-      if (form.drawbacks)       fields.push({ name: "Drawbacks",        value: form.drawbacks.slice(0, 1024), inline: false });
+      if (form.powerExpression) fields.push(...splitField("Power Expression", form.powerExpression));
+      if (form.drawbacks)       fields.push(...splitField("Drawbacks", form.drawbacks));
     }
 
     // Optional cross-references (student only)
-    if (form.optClubPosition)  fields.push({ name: "Optional Club",    value: `${form.optClubName || '?'} — ${form.optClubPosition}${form.optClubTeam ? ' (' + form.optClubTeam + ')' : ''}`, inline: false });
+    if (form.optClubPosition)  fields.push({ name: "Optional Club",    value: `${form.optClubName || '?'} â ${form.optClubPosition}${form.optClubTeam ? ' (' + form.optClubTeam + ')' : ''}`, inline: false });
     if (form.optGovSeat)       fields.push({ name: "Optional Gov Seat", value: `${form.optGovSeat} (${form.optGovSection || '?'})`, inline: false });
 
-    if (form.notes)            fields.push({ name: "Additional Notes",  value: form.notes.slice(0, 1024), inline: false });
-    fields.push({ name: "Rules Acknowledged", value: form.rulesAgree ? "✅ Confirmed read & agreed" : "✗ Not confirmed", inline: false });
+    if (form.notes)            fields.push(...splitField("Additional Notes", form.notes));
+    fields.push({ name: "Rules Acknowledged", value: form.rulesAgree ? "â Confirmed read & agreed" : "â Not confirmed", inline: false });
 
     const payload = {
-      username: "Calderyn Registry — Applications",
+      username: "Calderyn Registry â Applications",
       content: "<@&1498799678551101451>",
       allowed_mentions: { roles: ["1498799678551101451"] },
       embeds: [{
-        title: `New Application · ${typeName}`,
-        description: `**${form.char}**${form.alias ? ` — *${form.alias}*` : ''}`,
+        title: `New Application Â· ${typeName}`,
+        description: `**${form.char}**${form.alias ? ` â *${form.alias}*` : ''}`,
         color: 0xe31b23,
         fields,
-        footer: { text: "Calderyn College · Central Registry · 2026" },
+        footer: { text: "Calderyn College Â· Central Registry Â· 2026" },
         timestamp: new Date().toISOString(),
       }, {
         title: "Data-file snippet",
-        description: "```js\n" + snippet.slice(0, 1500) + "\n```",
+        description: "```js\n" + safeBlock(snippet) + "\n```",
         color: 0xffcc00,
       }],
     };
@@ -3500,7 +3534,7 @@ function JoinTab(){
       setConfirmed(true);
       setStatus({ state: "idle", msg: "" });
     } catch (err) {
-      setStatus({ state: "error", msg: "Failed to send — " + (err.message || String(err)) });
+      setStatus({ state: "error", msg: "Failed to send â " + (err.message || String(err)) });
     }
   };
 
@@ -3509,12 +3543,12 @@ function JoinTab(){
       <div className="join">
         <div className="join-form-wrap">
           <div className="join-confirm">
-            <div className="join-confirm-stamp">⚑ APPLICATION RECEIVED</div>
+            <div className="join-confirm-stamp">â APPLICATION RECEIVED</div>
             <h3>Application <span className="accent">sent.</span></h3>
             <p>
               Your application has been forwarded to the admin channel.
               We'll reach out via the RPC profile you linked with a decision and any
-              follow-up questions. Sit tight — usually within a few days.
+              follow-up questions. Sit tight â usually within a few days.
             </p>
             <button className="join-confirm-again" onClick={reset}>
               Submit Another Application
@@ -3529,18 +3563,18 @@ function JoinTab(){
     <div className="join">
       <div className="join-hero">
         <div className="join-hero-inner">
-          <div className="join-hero-stamp">⚑ INTAKE · 2026 INTAKE OPEN</div>
+          <div className="join-hero-stamp">â INTAKE Â· 2026 INTAKE OPEN</div>
           <h2>Join the <span className="accent">registry.</span></h2>
           <p>
-            Calderyn is open. Pick what you're applying for, fill in the details, we'll review on Discord. <strong>One form per character</strong> — submit multiples separately.
+            Calderyn is open. Pick what you're applying for, fill in the details, we'll review on Discord. <strong>One form per character</strong> â submit multiples separately.
           </p>
         </div>
       </div>
 
       <div className="join-form-wrap">
-        {/* Step 1 — type picker */}
+        {/* Step 1 â type picker */}
         <div className="join-step">
-          <span className="join-step-tag">Step 01 · Application Type</span>
+          <span className="join-step-tag">Step 01 Â· Application Type</span>
           <div className="join-step-title">What are you applying for?</div>
           <div className="join-step-blurb">
             Pick a role. The form adjusts to ask only what's needed. Switching types resets your inputs.
@@ -3561,12 +3595,12 @@ function JoinTab(){
           </div>
         </div>
 
-        {/* Step 2 — fields specific to chosen type */}
+        {/* Step 2 â fields specific to chosen type */}
         {type && (
           <>
             <div className="join-divider">
               <span className="join-divider-rule"/>
-              <span className="join-divider-tag">Step 02 · Details</span>
+              <span className="join-divider-tag">Step 02 Â· Details</span>
               <span className="join-divider-rule"/>
             </div>
 
@@ -3579,7 +3613,7 @@ function JoinTab(){
                 onClick={submit}
                 disabled={!canSubmit}
               >
-                {status.state === "loading" ? "Sending…" : "Submit Application"}
+                {status.state === "loading" ? "Sendingâ¦" : "Submit Application"}
               </button>
               <button type="button" className="join-cancel" onClick={reset}>
                 Cancel
@@ -3611,21 +3645,21 @@ function PowerFields({form, set, allowHuman = true}){
         <Field label="Powers" full hint="Tick the box if this character is fully human (no powers). Otherwise, fill in the five fields below.">
           <label className="join-checkbox">
             <input type="checkbox" checked={isHuman} onChange={e => set("fullyHuman", e.target.checked)}/>
-            <span>This character is fully human — no powers.</span>
+            <span>This character is fully human â no powers.</span>
           </label>
         </Field>
       )}
       {!isHuman && (
         <>
-          <Field label="Power / Ability" required hint="The category and the specific ability — e.g. Pyrokinesis · Heat shaping, Telekinesis · Mass-shift." full>
-            <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Electromagnetic field manipulation · Photosphere control"/>
+          <Field label="Power / Ability" required hint="The category and the specific ability â e.g. Pyrokinesis Â· Heat shaping, Telekinesis Â· Mass-shift." full>
+            <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Electromagnetic field manipulation Â· Photosphere control"/>
           </Field>
-          <Field label="Power Expression" required hint="What it looks like and how it works — the visual manifestation and the internal mechanics." full>
-            <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value.slice(0, 1000))} placeholder="How it presents — what others see, hear, feel — and what it does, how it does it." maxLength={1000}/>
+          <Field label="Power Expression" required hint="What it looks like and how it works â the visual manifestation and the internal mechanics." full>
+            <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value.slice(0, 1000))} placeholder="How it presents â what others see, hear, feel â and what it does, how it does it." maxLength={1000}/>
             <div style={{textAlign:"right",fontSize:"11px",opacity:0.6,marginTop:"4px",fontFamily:"monospace"}}>{(form.powerExpression || "").length} / 1000</div>
           </Field>
           <Field label="Drawbacks" required hint="Costs, weaknesses, hard limits, things that turn it off." full>
-            <textarea className="join-textarea is-medium" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value.slice(0, 1000))} placeholder="Even broken-tier characters need limits — be honest." maxLength={1000}/>
+            <textarea className="join-textarea is-medium" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value.slice(0, 1000))} placeholder="Even broken-tier characters need limits â be honest." maxLength={1000}/>
             <div style={{textAlign:"right",fontSize:"11px",opacity:0.6,marginTop:"4px",fontFamily:"monospace"}}>{(form.drawbacks || "").length} / 1000</div>
           </Field>
         </>
@@ -3634,7 +3668,7 @@ function PowerFields({form, set, allowHuman = true}){
   );
 }
 
-/* Tail block — Notes + Rules + Honeypot. Used by every form. */
+/* Tail block â Notes + Rules + Honeypot. Used by every form. */
 function TailFields({form, set}){
   return (
     <>
@@ -3659,7 +3693,7 @@ function StudentExtras({form, set}){
   const openSeats = getOpenGovSeats();
   return (
     <>
-      <Field label="Optional · Club Position" hint="If this student also wants to join a club. Skip if you'll decide later." full>
+      <Field label="Optional Â· Club Position" hint="If this student also wants to join a club. Skip if you'll decide later." full>
         <select
           className="join-select"
           value={form.optClubPositionKey ?? ""}
@@ -3679,15 +3713,15 @@ function StudentExtras({form, set}){
             }
           }}
         >
-          <option value="">— None —</option>
+          <option value="">â None â</option>
           {openPos.map((p, i) => (
             <option key={i} value={i}>
-              {p.club}{p.team ? ` · ${p.team}` : ""} — {p.position}
+              {p.club}{p.team ? ` Â· ${p.team}` : ""} â {p.position}
             </option>
           ))}
         </select>
       </Field>
-      <Field label="Optional · Student Government Seat" hint="If this student also wants to run for office. Skip if you'll decide later." full>
+      <Field label="Optional Â· Student Government Seat" hint="If this student also wants to run for office. Skip if you'll decide later." full>
         <select
           className="join-select"
           value={form.optGovSeatKey ?? ""}
@@ -3707,9 +3741,9 @@ function StudentExtras({form, set}){
             }
           }}
         >
-          <option value="">— None —</option>
+          <option value="">â None â</option>
           {openSeats.map((s, i) => (
-            <option key={i} value={i}>{s.section} — {s.position}{s.term ? ` (${s.term})` : ""}</option>
+            <option key={i} value={i}>{s.section} â {s.position}{s.term ? ` (${s.term})` : ""}</option>
           ))}
         </select>
       </Field>
@@ -3738,25 +3772,25 @@ function JoinFieldset({type, form, set}){
         </Field>
         <Field label="House" required>
           <select className="join-select" value={form.house || ""} onChange={e => set("house", e.target.value)}>
-            <option value="">Select house…</option>
+            <option value="">Select houseâ¦</option>
             {JOIN_HOUSES.map(h => <option key={h} value={h}>{h}</option>)}
           </select>
         </Field>
-        <Field label="Year" required hint="Fr 18–19 · So 19–20 · Jr 20–21 · Sr 21–22">
+        <Field label="Year" required hint="Fr 18â19 Â· So 19â20 Â· Jr 20â21 Â· Sr 21â22">
           <select className="join-select" value={form.year || ""} onChange={e => set("year", e.target.value)}>
-            <option value="">Select year…</option>
+            <option value="">Select yearâ¦</option>
             {JOIN_YEARS.map(y => <option key={y} value={y}>{y}</option>)}
           </select>
         </Field>
         <Field label="Track" required>
           <select className="join-select" value={form.track || ""} onChange={e => set("track", e.target.value)}>
-            <option value="">Select track…</option>
+            <option value="">Select trackâ¦</option>
             {JOIN_TRACKS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
         <Field label="Tier" required hint="A through D">
           <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
-            <option value="">Select tier…</option>
+            <option value="">Select tierâ¦</option>
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
@@ -3786,9 +3820,9 @@ function JoinFieldset({type, form, set}){
               set("facultySection", found ? found.section : "");
             }}
           >
-            <option value="">Select role…</option>
+            <option value="">Select roleâ¦</option>
             {openRoles.map((r, i) => (
-              <option key={i} value={r.role}>{r.section} — {r.role}</option>
+              <option key={i} value={r.role}>{r.section} â {r.role}</option>
             ))}
           </select>
         </Field>
@@ -3805,7 +3839,7 @@ function JoinFieldset({type, form, set}){
         {Common}
         <Field label="STRATA Role" required hint="Talent = hero roster. Corporate = executive, field, or PR.">
           <select className="join-select" value={form.strataRole || ""} onChange={e => set("strataRole", e.target.value)}>
-            <option value="">Select role…</option>
+            <option value="">Select roleâ¦</option>
             <option value="talent">Talent (Hero)</option>
             <option value="corporate">Corporate</option>
           </select>
@@ -3816,7 +3850,7 @@ function JoinFieldset({type, form, set}){
         </Field>
         <Field label="Tier" required hint="A-list = top of roster">
           <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
-            <option value="">Select tier…</option>
+            <option value="">Select tierâ¦</option>
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
@@ -3824,7 +3858,7 @@ function JoinFieldset({type, form, set}){
         {isCorporate && (<>
         <Field label="Department" required hint="Which division they work in">
           <select className="join-select" value={form.strataDept || ""} onChange={e => set("strataDept", e.target.value)}>
-            <option value="">Select department…</option>
+            <option value="">Select departmentâ¦</option>
             {JOIN_STRATA_DEPTS.map(d => <option key={d} value={d}>{d}</option>)}
           </select>
         </Field>
@@ -3863,10 +3897,10 @@ function JoinFieldset({type, form, set}){
               }
             }}
           >
-            <option value="">Select position…</option>
+            <option value="">Select positionâ¦</option>
             {openPos.map((p, i) => (
               <option key={i} value={i}>
-                {p.club}{p.team ? ` · ${p.team}` : ""} — {p.position}
+                {p.club}{p.team ? ` Â· ${p.team}` : ""} â {p.position}
               </option>
             ))}
           </select>
@@ -3901,9 +3935,9 @@ function JoinFieldset({type, form, set}){
               }
             }}
           >
-            <option value="">Select seat…</option>
+            <option value="">Select seatâ¦</option>
             {openSeats.map((s, i) => (
-              <option key={i} value={i}>{s.section} — {s.position}{s.term ? ` (${s.term})` : ""}</option>
+              <option key={i} value={i}>{s.section} â {s.position}{s.term ? ` (${s.term})` : ""}</option>
             ))}
           </select>
         </Field>
@@ -3926,7 +3960,7 @@ function JoinFieldset({type, form, set}){
             value={form.collectiveName || ""}
             onChange={e => set("collectiveName", e.target.value)}
           >
-            <option value="">Select collective…</option>
+            <option value="">Select collectiveâ¦</option>
             {collectives.map((c, i) => <option key={i} value={c}>{c}</option>)}
             <option value="[New / Proposed]">[Propose new collective]</option>
           </select>
@@ -3963,9 +3997,9 @@ function JoinFieldset({type, form, set}){
               }
             }}
           >
-            <option value="">Select organisation…</option>
+            <option value="">Select organisationâ¦</option>
             {orgs.map((o, i) => (
-              <option key={i} value={i}>{o.section} — {o.name}</option>
+              <option key={i} value={i}>{o.section} â {o.name}</option>
             ))}
           </select>
         </Field>
@@ -4004,23 +4038,23 @@ function Honeypot({form, set}){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   CAMPUS MAP TAB — editorial gazetteer
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+   CAMPUS MAP TAB â editorial gazetteer
 
    Built using the site's existing comic-editorial vocabulary
    (lore-eyebrow, lore-h, lore-house-hd, curr-row pattern). No
    per-district rainbow colours; red+gold like everywhere else.
    Houses get their proper crests + virtue + display caps.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
 const HOUSE_LORE_META = {
-  valaris: { name: "VALARIS", virtue: "House of Justice",     namesake: "Adrian Valaris · Paragon",   color: "#c41a1a", crest: "https://i.ibb.co/G4q9m34x/Valaris.png"  },
-  orenne:  { name: "ORENNE",  virtue: "House of Fortitude",   namesake: "Margery Orenne · Aegis",     color: "#d4901a", crest: "https://i.ibb.co/0RQXNgXg/Orenne.png"   },
-  saberis: { name: "SABERIS", virtue: "House of Prudence",    namesake: "Caius Saberis · Vigil",      color: "#15803d", crest: "https://i.ibb.co/qMry0fF2/Saberis.png"  },
-  grimere: { name: "GRIMERE", virtue: "House of Temperance",  namesake: "Iris Grimere · Switchboard", color: "#1e40af", crest: "https://i.ibb.co/PGhrJBBm/Grimere.png" },
+  valaris: { name: "VALARIS", virtue: "House of Justice",     namesake: "Adrian Valaris Â· Paragon",   color: "#c41a1a", crest: "https://i.ibb.co/G4q9m34x/Valaris.png"  },
+  orenne:  { name: "ORENNE",  virtue: "House of Fortitude",   namesake: "Margery Orenne Â· Aegis",     color: "#d4901a", crest: "https://i.ibb.co/0RQXNgXg/Orenne.png"   },
+  saberis: { name: "SABERIS", virtue: "House of Prudence",    namesake: "Caius Saberis Â· Vigil",      color: "#15803d", crest: "https://i.ibb.co/qMry0fF2/Saberis.png"  },
+  grimere: { name: "GRIMERE", virtue: "House of Temperance",  namesake: "Iris Grimere Â· Switchboard", color: "#1e40af", crest: "https://i.ibb.co/PGhrJBBm/Grimere.png" },
 };
 
-/* A single location row — modelled on the curriculum row pattern.
+/* A single location row â modelled on the curriculum row pattern.
    Number on left, name + sub in the middle, expand chevron on right.
    Click reveals description + tags inline. */
 function MapRow({loc, isOpen, onToggle}){
@@ -4041,7 +4075,7 @@ function MapRow({loc, isOpen, onToggle}){
           </span>
           <span className="map-row-sub">{loc.sub}</span>
         </span>
-        <span className="map-row-toggle" aria-hidden="true">{isOpen ? "−" : "+"}</span>
+        <span className="map-row-toggle" aria-hidden="true">{isOpen ? "â" : "+"}</span>
       </button>
       {isOpen && (
         <div className="map-row-desc">
@@ -4072,7 +4106,7 @@ function MapRowList({items, openId, setOpenId}){
   );
 }
 
-/* Residence section — each house presented in the lore-house pattern
+/* Residence section â each house presented in the lore-house pattern
    (crest + virtue + display name + namesake), with its rooms as a
    numbered row list underneath. Communal spaces follow as a fifth panel. */
 function ResidenceBlocks({items, openId, setOpenId}){
@@ -4119,11 +4153,11 @@ function ResidenceBlocks({items, openId, setOpenId}){
       {communal.length > 0 && (
         <article className="map-house map-house-communal lore-house" style={{"--h-color":"#d4a84a", borderTopColor:"#d4a84a"}}>
           <div className="lore-house-hd">
-            <div className="map-house-shared-mark" aria-hidden="true">◆</div>
+            <div className="map-house-shared-mark" aria-hidden="true">â</div>
             <div>
-              <div className="lore-house-virtue">Shared · All four houses</div>
+              <div className="lore-house-virtue">Shared Â· All four houses</div>
               <h3 className="lore-house-name">COMMUNAL</h3>
-              <div className="lore-house-namesake">The residential quad — neutral ground</div>
+              <div className="lore-house-namesake">The residential quad â neutral ground</div>
             </div>
             <div className="map-house-count">
               <span className="map-house-count-n">{communal.length}</span>
@@ -4131,7 +4165,7 @@ function ResidenceBlocks({items, openId, setOpenId}){
             </div>
           </div>
           <p className="map-house-blurb">
-            Houses are private; the residential quad is not. The lawn between the four buildings, the kitchen, the laundry, the snug and the garden courtyard belong to everyone — house colours come off at the door.
+            Houses are private; the residential quad is not. The lawn between the four buildings, the kitchen, the laundry, the snug and the garden courtyard belong to everyone â house colours come off at the door.
           </p>
           <MapRowList items={communal} openId={openId} setOpenId={setOpenId}/>
         </article>
@@ -4158,21 +4192,21 @@ function MapTab(){
   return (
     <div>
       <PageHead
-        stamp="DOC · 03 · GROUNDS"
+        stamp="DOC Â· 03 Â· GROUNDS"
         title={<>Campus map &amp; <em style={{fontFamily: 'var(--display)', fontStyle: 'normal'}}>grounds</em></>}
-        body="Greenwich, London. The compound runs from Trafalgar Road to the Thames, with Greenwich Park at the eastern wall. What follows is the gazetteer — every door, room, and corner the registry will commit to in writing."
+        body="Greenwich, London. The compound runs from Trafalgar Road to the Thames, with Greenwich Park at the eastern wall. What follows is the gazetteer â every door, room, and corner the registry will commit to in writing."
         pageNum="P. 003 / VIII"
       />
 
       <div className="map-page">
 
-        {/* ── DISTRICT INDEX ─────────────────────────────────
-             Comic-frame plates, numbered 01–07, each clickable. */}
+        {/* ââ DISTRICT INDEX âââââââââââââââââââââââââââââââââ
+             Comic-frame plates, numbered 01â07, each clickable. */}
         <section className="map-index">
-          <div className="lore-eyebrow">◆ Index of the grounds</div>
+          <div className="lore-eyebrow">â Index of the grounds</div>
           <h2 className="map-index-h">Eight districts.</h2>
           <p className="map-index-lead">
-            The compound divides cleanly. <em>Four main zones</em> — academic, training, residences, STRATA — sit inside the wall. Four more reach beyond it: athletics &amp; grounds, the campus commons, the perimeter strip, and the slice of Greenwich the school treats as overflow.
+            The compound divides cleanly. <em>Four main zones</em> â academic, training, residences, STRATA â sit inside the wall. Four more reach beyond it: athletics &amp; grounds, the campus commons, the perimeter strip, and the slice of Greenwich the school treats as overflow.
           </p>
           <div className="map-index-grid">
             {districts.map((d, i) => {
@@ -4193,7 +4227,7 @@ function MapTab(){
           </div>
         </section>
 
-        {/* ── DISTRICT SECTIONS ──────────────────────────────
+        {/* ââ DISTRICT SECTIONS ââââââââââââââââââââââââââââââ
              Each district uses the lore-eyebrow / lore-h pattern
              so the page reads as part of the editorial spread. */}
         {districts.map((d, i) => {
@@ -4209,7 +4243,7 @@ function MapTab(){
               ref={el => { sectionRefs.current[d.id] = el; }}
             >
               <header className="map-district-head">
-                <div className="lore-eyebrow">◆ District {n}</div>
+                <div className="lore-eyebrow">â District {n}</div>
                 <h2 className="lore-h map-district-h">{d.name}.</h2>
                 <p className="map-district-blurb">{d.blurb}</p>
                 <div className="map-district-meta">
@@ -4225,7 +4259,7 @@ function MapTab(){
           );
         })}
 
-        {/* ── FOOTNOTE ───────────────────────────────────── */}
+        {/* ââ FOOTNOTE âââââââââââââââââââââââââââââââââââââ */}
         <div className="map-footnote">
           <p>
             <strong>End gazetteer.</strong> Locations marked <em>CLASSIFIED</em> appear in this index by name only; access is restricted by Tier and by the discretion of the Dean's office. Off-campus venues are listed for reference and are not affiliated with the Institute except where noted.
@@ -4237,9 +4271,9 @@ function MapTab(){
 }
 
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    APP SHELL
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 const TAB_MAP = {
   rules:      <RulesTab/>,
   faculty:    <FacultyTab/>,
@@ -4255,9 +4289,9 @@ const TAB_MAP = {
 // Legacy hash redirect: anyone with #houses in their URL gets sent to #lore
 const TAB_ALIAS = { houses: "lore" };
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    GLOBAL SEARCH
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function GlobalSearch({open, onClose, onJump}){
   const [q, setQ] = useState("");
   const ql = q.trim().toLowerCase();
@@ -4299,12 +4333,12 @@ function GlobalSearch({open, onClose, onJump}){
     <div className="gs-overlay" onClick={onClose}>
       <div className="gs-panel" onClick={e => e.stopPropagation()}>
         <div className="gs-panel-hd">
-          <span className="gs-panel-icon" aria-hidden="true"><span className="ico" aria-hidden="true">⌕</span></span>
+          <span className="gs-panel-icon" aria-hidden="true"><span className="ico" aria-hidden="true">â</span></span>
           <input
             id="gs-input"
             type="text"
             className="gs-panel-input"
-            placeholder="Search the entire registry…"
+            placeholder="Search the entire registryâ¦"
             value={q}
             onChange={e => setQ(e.target.value)}
             aria-label="Global search"
@@ -4321,13 +4355,13 @@ function GlobalSearch({open, onClose, onJump}){
         <div className="gs-panel-body">
           {!ql && (
             <div className="gs-empty">
-              <div className="gs-empty-icon"><span className="ico" aria-hidden="true">⌕</span></div>
-              Type to search · Records will appear here
+              <div className="gs-empty-icon"><span className="ico" aria-hidden="true">â</span></div>
+              Type to search Â· Records will appear here
             </div>
           )}
           {ql && totalMatches === 0 && (
             <div className="gs-empty">
-              <div className="gs-empty-icon"><span className="ico" aria-hidden="true">○</span></div>
+              <div className="gs-empty-icon"><span className="ico" aria-hidden="true">â</span></div>
               No records found for "{q}"
             </div>
           )}
@@ -4358,22 +4392,22 @@ function GlobalSearch({open, onClose, onJump}){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    FOOTER
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function Footer(){
   return (
     <footer className="footer">
       <div className="footer-inner">
         <div>
           <div className="footer-brand">CALDERYN</div>
-          <div className="footer-line">STRATA INTERNAL · REGISTRY ARCHIVE · 2026</div>
+          <div className="footer-line">STRATA INTERNAL Â· REGISTRY ARCHIVE Â· 2026</div>
           <div className="footer-meta">
             This document is the property of STRATA International. Distribution beyond Level&nbsp;II access is a Class&nbsp;III violation. The names, faces, and abilities recorded here are subject to non-disclosure under the same paperwork you signed when you walked through the gate.
           </div>
         </div>
         <div className="footer-stamp">
-          <span className="footer-stamp-mark">⊠</span>
+          <span className="footer-stamp-mark">â </span>
           Confidential<br/>
           Internal Only
         </div>
@@ -4382,9 +4416,9 @@ function Footer(){
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
    APP
-═══════════════════════════════════════════════════════════════════════════ */
+âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 function App(){
   const validIds = TABS.map(t => t.id);
 
@@ -4464,14 +4498,14 @@ function App(){
             <div className="mast-brand-mark" aria-label="Calderyn College">CC</div>
             <div className="mast-brand-text">
               <div className="mast-brand-name">Calderyn College</div>
-              <div className="mast-brand-sub">Central Registry · Greenwich</div>
+              <div className="mast-brand-sub">Central Registry Â· Greenwich</div>
             </div>
           </div>
           <div className="mast-meta">
             <span className="mast-meta-cell">
               <span className="dot live"/>
               <strong>Live</strong>
-              <span>2026 · Vol. XI</span>
+              <span>2026 Â· Vol. XI</span>
             </span>
             <span className="mast-meta-sep">/</span>
             <span className="mast-meta-cell">
@@ -4486,15 +4520,15 @@ function App(){
             onClick={() => setGsOpen(true)}
             aria-label="Open global search"
           >
-            <span className="mast-search-icon" aria-hidden="true"><span className="ico" aria-hidden="true">⌕</span></span>
-            <span className="mast-search-text">Search the registry…</span>
-            <span className="mast-search-kbd">⌘K</span>
+            <span className="mast-search-icon" aria-hidden="true"><span className="ico" aria-hidden="true">â</span></span>
+            <span className="mast-search-text">Search the registryâ¦</span>
+            <span className="mast-search-kbd">âK</span>
           </button>
-          <div className="mast-strata" aria-label="STRATA International — operator">
+          <div className="mast-strata" aria-label="STRATA International â operator">
             <div className="mast-strata-logo" aria-hidden="true"/>
             <div className="mast-strata-text">
               <div className="mast-strata-name">STRATA</div>
-              <div className="mast-strata-sub">International · Operator</div>
+              <div className="mast-strata-sub">International Â· Operator</div>
             </div>
           </div>
         </div>
