@@ -2958,8 +2958,17 @@ function ClubPanelRoster({club, hasTeams}){
             return (
               <div key={ti} className="kb-team">
                 <div className="kb-team-hd" style={{background:t.bg}}>
-                  <div className="kb-team-name">{t.house.toUpperCase()}</div>
+              <div className="kb-team-name">{t.house.toUpperCase()}</div>
+              {captain && (
+                <div className="kb-team-hd-cap">
+                  <span className="kb-team-hd-cap-medal" title="Team Captain">C</span>
+                  <span className="kb-team-hd-cap-text">
+                    <span className="kb-team-hd-cap-eyebrow">Team Captain</span>
+                    <span className="kb-team-hd-cap-name"><CLink name={captain.char} link={captain.link||null}/></span>
+                  </span>
                 </div>
+              )}
+            </div>
                 {t.train && t.train.length > 0 && (
                   <div className="kb-team-meta">
                     <span className="kb-team-meta-tag">Training</span>
@@ -2968,13 +2977,7 @@ function ClubPanelRoster({club, hasTeams}){
                     ))}
                   </div>
                 )}
-                {captain && (
-                  <div className="kb-team-meta">
-                    <span className="kb-team-meta-c-tag">C</span>
-                    <span className="kb-team-meta-name"><CLink name={captain.char} link={captain.link||null}/></span>
-                  </div>
-                )}
-                <table className="kb-team-tbl">
+                                <table className="kb-team-tbl">
                   <tbody>
                     {starters.length > 0 && (
                       <tr className="kb-starters-hd"><td colSpan={2}>Starting Six</td></tr>
