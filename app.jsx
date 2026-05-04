@@ -3621,10 +3621,12 @@ function PowerFields({form, set, allowHuman = true}){
             <input className="join-input" type="text" value={form.power || ""} onChange={e => set("power", e.target.value)} placeholder="e.g. Electromagnetic field manipulation · Photosphere control"/>
           </Field>
           <Field label="Power Expression" required hint="What it looks like and how it works — the visual manifestation and the internal mechanics." full>
-            <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value)} placeholder="How it presents — what others see, hear, feel — and what it does, how it does it."/>
+            <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value.slice(0, 1000))} placeholder="How it presents — what others see, hear, feel — and what it does, how it does it." maxLength={1000}/>
+            <div style={{textAlign:"right",fontSize:"11px",opacity:0.6,marginTop:"4px",fontFamily:"monospace"}}>{(form.powerExpression || "").length} / 1000</div>
           </Field>
           <Field label="Drawbacks" required hint="Costs, weaknesses, hard limits, things that turn it off." full>
-            <textarea className="join-textarea is-medium" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value)} placeholder="Even broken-tier characters need limits — be honest."/>
+            <textarea className="join-textarea is-medium" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value.slice(0, 1000))} placeholder="Even broken-tier characters need limits — be honest." maxLength={1000}/>
+            <div style={{textAlign:"right",fontSize:"11px",opacity:0.6,marginTop:"4px",fontFamily:"monospace"}}>{(form.drawbacks || "").length} / 1000</div>
           </Field>
         </>
       )}
@@ -3637,7 +3639,8 @@ function TailFields({form, set}){
   return (
     <>
       <Field label="Additional Notes" hint="Content warnings, plot hooks, connections wanted, triggers, etc. Optional." full>
-        <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value)} placeholder="Optional"/>
+        <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value.slice(0, 1000))} placeholder="Optional" maxLength={1000}/>
+            <div style={{textAlign:"right",fontSize:"11px",opacity:0.6,marginTop:"4px",fontFamily:"monospace"}}>{(form.notes || "").length} / 1000</div>
       </Field>
       <Field label="Rules Acknowledgment" required full>
         <label className="join-checkbox">
