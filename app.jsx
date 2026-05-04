@@ -2960,13 +2960,7 @@ function ClubPanelRoster({club, hasTeams}){
                 <div className="kb-team-hd" style={{background:t.bg}}>
               <div className="kb-team-name">{t.house.toUpperCase()}</div>
               {captain && (
-                <div className="kb-team-hd-cap">
-                  <span className="kb-team-hd-cap-medal" title="Team Captain">C</span>
-                  <span className="kb-team-hd-cap-text">
-                    <span className="kb-team-hd-cap-eyebrow">Team Captain</span>
-                    <span className="kb-team-hd-cap-name"><CLink name={captain.char} link={captain.link||null}/></span>
-                  </span>
-                </div>
+                <div className="kb-team-cap"><i className="fa-solid fa-star kb-team-cap-icon" aria-hidden="true"></i><span className="kb-team-cap-label">Captain:</span> <CLink name={captain.char} link={captain.link||null}/></div>
               )}
             </div>
                 {t.train && t.train.length > 0 && (
