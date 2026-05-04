@@ -158,7 +158,7 @@ students: [
     link: "https://roleplay.chat/profile.php?user=vecna"
   },
   {
-    char: "Celestia \"Stella\" Starling",
+    char: "Celestia \"Stella\" Starkov",
     alias: "Mirage",
     house: "saberis",
     year: "Sophomore",
@@ -749,7 +749,7 @@ powers: [
     link: "https://roleplay.chat/profile.php?user=vecna"
   },
   {
-    char: "Celestia \"Stella\" Starling",
+    char: "Celestia \"Stella\" Starkov",
     alias: "Mirage",
     status: "student",
     tier: "A",
@@ -919,7 +919,7 @@ clubs: [
       { label: "Reserves", roles: ["Alternate"] },
     ],
     positions: [
-      { pos: "Captain", group: "leadership", char: "Celestia \"Stella\" Starling", link: "https://roleplay.chat/profile.php?user=illuminate" }, { pos: "Co-Captain", group: "leadership" },
+      { pos: "Captain", group: "leadership", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" }, { pos: "Co-Captain", group: "leadership" },
       { pos: "Flyer", group: "squad" }, { pos: "Flyer", group: "squad" },
       { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
       { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" },
@@ -977,7 +977,7 @@ clubs: [
       { pos: "President", group: "leadership" },
       { pos: "Artistic Director", group: "leadership" },
       { pos: "Stage Manager", group: "leadership" },
-      { pos: "Actor", group: "cast", char: "Celestia \"Stella\" Starling", link: "https://roleplay.chat/profile.php?user=illuminate" }, { pos: "Actor", group: "cast" },
+      { pos: "Actor", group: "cast", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" }, { pos: "Actor", group: "cast" },
       { pos: "Actor", group: "cast" }, { pos: "Actor", group: "cast" },
       { pos: "Actor", group: "cast" }, { pos: "Actor", group: "cast" },
       { pos: "Technical Director", group: "tech" },
