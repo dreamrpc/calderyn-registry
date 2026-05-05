@@ -192,6 +192,54 @@ students: [
     expression: "Lyrica's voice generates controlled resonance waves shaped by pitch, volume, melody, breath control, and rhythm. A spoken phrase creates subtle vibration or unease; a hum disrupts balance; a sung note can shatter glass, rattle bones, or strike with compressed sonic force; a scream becomes a wide blast that throws people back and damages structures. She is strongest when working through music — singing lets her layer harmonies into pressure waves, sonic shields, silence pockets, focused attacks, and area-denial fields. She can hijack speakers, microphones, phones, intercoms, and PA systems to carry or amplify her voice, cancel sound in a small radius via counter-frequency waves, and use low-level resonance to nudge a room's mood — calmer, braver, angrier, tense — without crossing into mind control.",
     drawbacks: "Lyrica's vocal cords are permanently damaged from a previous supe-related attack. Speaking causes pain, singing causes severe pain, and screaming risks bleeding, voice loss, and collapse — the stronger the effect, the more damage she risks. Overuse causes throat pain, coughing blood, migraines, vertigo, tinnitus, nosebleeds, chest tightness, temporary deafness, and temporary loss of voice; pushing too far risks permanent vocal damage. Her power can be weakened or blocked by soundproofing, gags, throat restraints, sonic dampeners, silence fields, sealed helmets, heavy audio interference, or injuries that stop her breathing or vocalising. Chaotic noise breaks her precision unless she can establish a rhythm, and her strongest attacks need build-up — interrupted mid-note, startled, struck in the throat, or forced into panic, her power misfires or cuts out.",
     link: "https://roleplay.chat/profile.php?user=lyrica"
+  },
+  {
+    char: "Katniss Saunders",
+    alias: "None Yet",
+    house: "valaris",
+    year: "Freshman",
+    track: "hero",
+    tier: "A-List",
+    power: "Form Manipulation - Shape-Shifting; Aura Manipulation - Energy Weapons, Tools, Constructs",
+    expression: "Katniss has only two single powers but they are incredibly strong, especially in the hands of a young adult who doesn't know how to utilize them properly and could easily become a dangerous villain if left alone. Her first is shape-shifting. Kat has two available forms, one being a 'disguise' of sorts that could be utilized for stealth purposes - that of an orange and black striped tabby cat. The other form is the one that makes her dangerous and puts her on the A-list without even realizing it - a tiger anthropomorphic type form in which all her human traits (strength, hearing, speed, sight, taste) are boosted into vastly superhuman proportions. In either human or anthropomorphic form she also has the curious ability to control the energy of her own aura. It can be used to mimic the shape of and be used as almost anything she has seen such as weapons, tools, vehicles, etc.",
+    drawbacks: "There are costs to her power. The longer and longer she uses either, the more and more fatigued she grows. Her shifting power in particular has a special give and take as needed condition: her enhanced abilities can be pushed even further than they are in her initial transformation. How far exactly she can push her limits is not known since it's not been tested either by herself or others. But the more and more she pushes herself, the more and quicker she tires out and the more rest or medical attention she will need. Science suggests that were she to keep pushing hard enough, her own powers could potentially even kill her. Kat has a very flawed personality; a bad childhood and a troubled young adult who dropped out of high school, she pushes everyone away and is, most the time, a bitch to others. That wall around her heart seems almost like solid steel and impassable, making her quite unfriendly and mean in social settings.",
+    link: "https://roleplay.chat/profile.php?user=Katniss"
+  },
+  {
+    char: "Orion Sterling",
+    alias: "n/a",
+    house: "saberis",
+    year: "Junior",
+    track: "hero",
+    tier: "C-List",
+    power: "Chronal Displacement · Spatial Decoy",
+    expression: "Orion's power manifests as nine brilliant, sapphire-hued points of light that hover in a fixed \"Great Hunter\" formation behind his back, acting as tethered anchors for his physical presence. Internally, these stars serve as stabilizers for nine \"latent selves\" folded into his immediate personal space; when he sustains a strike that would otherwise be terminal, the internal pressure of the incoming kinetic force triggers an automatic sub-dimensional swap. The real Orion is momentarily displaced—shifting slightly out of phase—while a discarded anchor surges forward to form a \"Glass Shatter\" phantom that solidifies instantly to absorb the trauma. This decoy then erupts into a cloud of razor-sharp, crystalline stardust as it disintegrates, signaling the permanent erasure of one anchor and leaving the real Orion exposed and one step closer to his inevitable, final mortality.",
+    drawbacks: "The most glaring drawback is the power's absolute entropy; each shattered phantom is a permanent loss of a non-renewable biological resource, meaning Orion is effectively a \"terminal\" hero whose career—and life—has a hard, visible expiration date. Mechanically, the \"Glass Shatter\" only triggers for fatal trauma, leaving him entirely vulnerable to non-lethal injuries like broken bones, exhaustion, or blood loss that can weaken him without activating his safety net. Furthermore, because multiple fatal strikes (such as a hail of high-caliber gunfire or a sustained explosion) consume multiple lives simultaneously, he lacks the \"invincibility frames\" typical of most protectors, making him exceptionally fragile in high-volume combat scenarios. Finally, the Celestial Guard constellation acts as a glowing tactical liability, broadcasting his remaining \"health bar\" to any enemy savvy enough to count the stars and wait for the final, flickering light to go dark.",
+    link: "https://roleplay.chat/profile.php?user=odyssey"
+  },
+  {
+    char: "Rhode Sterling",
+    alias: "n/a",
+    house: "valaris",
+    year: "Junior",
+    track: "hero",
+    tier: "A-List",
+    power: "Kinetic Conversion · Absorption & Redirection",
+    expression: "Rhode's power manifests internally as a physiological \"battery\" centered in his chest and shoulders, where his body absorbs the kinetic energy from physical impacts and stores it within his muscular structure. This internal mechanic allows him to double the force of incoming strikes and redirect them through his limbs, boosting his physical output far beyond human limits. Visually, this expression is characterized by a vibrant golden aura that causes his skin to glow and his muscles to surge with energy, particularly around the \"X\" scar on his chest. When he releases this stored energy, it erupts in explosive, graphic shockwaves and stylized golden bursts.",
+    drawbacks: "Rhode's power has a finite storage capacity, meaning that if he absorbs too much force too quickly without redirecting it, he risks a \"Kinetic Overload\" that can cause internal physical strain or unintentional explosive discharges. Because his ability is purely reactive and categorized as Absorption and Redirection, it is inherently ineffective against non-physical or elemental attacks, such as mental manipulation or energy-based strikes that lack mass. Furthermore, he cannot generate his own kinetic energy from a standstill; he requires an initial external impact or a \"jumpstart\" to begin doubling his striking power. These hard limits mean that if he is isolated from physical combat or unable to maintain his focus during high-intensity fights, his golden kinetic glow fades, leaving him reliant solely on his natural physical strength.",
+    link: "https://roleplay.chat/profile.php?user=chronicles"
+  },
+  {
+    char: "Candiope Sterling",
+    alias: "MONOLITH",
+    house: "orenne",
+    year: "Freshman",
+    track: "sidekick",
+    tier: "B-List",
+    power: "Density Manipulation · Inertia Reinforcement",
+    expression: "Visually, Candiope's power manifests as the pale, shattering pattern of scars across her skin, glowing with a dull, subterranean amber light as she draws her molecular structure tighter, making her skin appear as unyielding as forged industrial steel. Internally, she exerts a subconscious command over the Higgs field interaction within her own mass, effectively locking her particles into a high-density lattice that refuses to be displaced by outside kinetic energy. When she is active, she doesn't just feel heavy; she creates a localized gravitational anchor that causes the ground to crack beneath her feet and projectiles to simply pancake against her skin as if hitting a mountain.",
+    drawbacks: "While her density provides near-invulnerability, the massive increase in mass causes Candiope to become exceptionally slow and cumbersome, often resulting in her sinking through floorboards or pavement not rated for such extreme weight. The internal physical strain of \"anchoring\" her molecules is visible through the stress fractures on her skin, which deepen and cause searing neural pain if she maintains her maximum density for too long, eventually leading to a forced \"shutdown\" that leaves her physically exhausted and fragile as a glass pane. Additionally, because her power is tied to structural integrity, she is highly vulnerable to sonic frequencies or vibrations that can destabilize her molecular lattice, potentially causing her density to collapse prematurely or backfire painfully against her own skeletal system.",
+    link: "https://roleplay.chat/profile.php?user=monolith"
   }
 ],
 
@@ -801,6 +849,46 @@ powers: [
     expression: "Voice-driven resonance shaped by pitch, volume, melody, breath, and rhythm. Spoken phrases create vibration or unease; hums disrupt balance; sung notes shatter glass, rattle bones, or strike with compressed sonic force; screams blast outward and damage structures. Music is her precision tool — harmonies layer into pressure waves, sonic shields, silence pockets, focused attacks, and area-denial fields. She can hijack speakers, microphones, phones, intercoms, and PA systems, cancel sound in a small radius via counter-frequency waves, and nudge a room's mood — calmer, braver, angrier, tense — without crossing into mind control.",
     drawbacks: "Permanently damaged vocal cords from a prior supe-related attack. Speaking hurts, singing hurts more, screaming risks bleeding and collapse. Overuse causes throat pain, coughing blood, migraines, vertigo, tinnitus, nosebleeds, chest tightness, temporary deafness, and voice loss; pushed too far, damage becomes permanent. Blocked by soundproofing, gags, throat restraints, sonic dampeners, silence fields, sealed helmets, audio interference, or anything that stops her breathing. Chaotic noise breaks precision; interruption mid-note, throat strikes, startle, or panic make her power misfire.",
     link: "https://roleplay.chat/profile.php?user=lyrica"
+  },
+  {
+    status: "student",
+    tier: "A",
+    power: "Form Manipulation - Shape-Shifting; Aura Manipulation - Energy Weapons, Tools, Constructs",
+    char: "Katniss Saunders",
+    alias: "None Yet",
+    expression: "Katniss has only two single powers but they are incredibly strong, especially in the hands of a young adult who doesn't know how to utilize them properly and could easily become a dangerous villain if left alone. Her first is shape-shifting. Kat has two available forms, one being a 'disguise' of sorts that could be utilized for stealth purposes - that of an orange and black striped tabby cat. The other form is the one that makes her dangerous and puts her on the A-list without even realizing it - a tiger anthropomorphic type form in which all her human traits (strength, hearing, speed, sight, taste) are boosted into vastly superhuman proportions. In either human or anthropomorphic form she also has the curious ability to control the energy of her own aura. It can be used to mimic the shape of and be used as almost anything she has seen such as weapons, tools, vehicles, etc.",
+    drawbacks: "There are costs to her power. The longer and longer she uses either, the more and more fatigued she grows. Her shifting power in particular has a special give and take as needed condition: her enhanced abilities can be pushed even further than they are in her initial transformation. How far exactly she can push her limits is not known since it's not been tested either by herself or others. But the more and more she pushes herself, the more and quicker she tires out and the more rest or medical attention she will need. Science suggests that were she to keep pushing hard enough, her own powers could potentially even kill her. Kat has a very flawed personality; a bad childhood and a troubled young adult who dropped out of high school, she pushes everyone away and is, most the time, a bitch to others. That wall around her heart seems almost like solid steel and impassable, making her quite unfriendly and mean in social settings.",
+    link: "https://roleplay.chat/profile.php?user=Katniss"
+  },
+  {
+    status: "student",
+    tier: "C",
+    power: "Chronal Displacement · Spatial Decoy",
+    char: "Orion Sterling",
+    alias: "n/a",
+    expression: "Orion's power manifests as nine brilliant, sapphire-hued points of light that hover in a fixed \"Great Hunter\" formation behind his back, acting as tethered anchors for his physical presence. Internally, these stars serve as stabilizers for nine \"latent selves\" folded into his immediate personal space; when he sustains a strike that would otherwise be terminal, the internal pressure of the incoming kinetic force triggers an automatic sub-dimensional swap. The real Orion is momentarily displaced—shifting slightly out of phase—while a discarded anchor surges forward to form a \"Glass Shatter\" phantom that solidifies instantly to absorb the trauma. This decoy then erupts into a cloud of razor-sharp, crystalline stardust as it disintegrates, signaling the permanent erasure of one anchor and leaving the real Orion exposed and one step closer to his inevitable, final mortality.",
+    drawbacks: "The most glaring drawback is the power's absolute entropy; each shattered phantom is a permanent loss of a non-renewable biological resource, meaning Orion is effectively a \"terminal\" hero whose career—and life—has a hard, visible expiration date. Mechanically, the \"Glass Shatter\" only triggers for fatal trauma, leaving him entirely vulnerable to non-lethal injuries like broken bones, exhaustion, or blood loss that can weaken him without activating his safety net. Furthermore, because multiple fatal strikes (such as a hail of high-caliber gunfire or a sustained explosion) consume multiple lives simultaneously, he lacks the \"invincibility frames\" typical of most protectors, making him exceptionally fragile in high-volume combat scenarios. Finally, the Celestial Guard constellation acts as a glowing tactical liability, broadcasting his remaining \"health bar\" to any enemy savvy enough to count the stars and wait for the final, flickering light to go dark.",
+    link: "https://roleplay.chat/profile.php?user=odyssey"
+  },
+  {
+    status: "student",
+    tier: "A",
+    power: "Kinetic Conversion · Absorption & Redirection",
+    char: "Rhode Sterling",
+    alias: "n/a",
+    expression: "Rhode's power manifests internally as a physiological \"battery\" centered in his chest and shoulders, where his body absorbs the kinetic energy from physical impacts and stores it within his muscular structure. This internal mechanic allows him to double the force of incoming strikes and redirect them through his limbs, boosting his physical output far beyond human limits. Visually, this expression is characterized by a vibrant golden aura that causes his skin to glow and his muscles to surge with energy, particularly around the \"X\" scar on his chest. When he releases this stored energy, it erupts in explosive, graphic shockwaves and stylized golden bursts.",
+    drawbacks: "Rhode's power has a finite storage capacity, meaning that if he absorbs too much force too quickly without redirecting it, he risks a \"Kinetic Overload\" that can cause internal physical strain or unintentional explosive discharges. Because his ability is purely reactive and categorized as Absorption and Redirection, it is inherently ineffective against non-physical or elemental attacks, such as mental manipulation or energy-based strikes that lack mass. Furthermore, he cannot generate his own kinetic energy from a standstill; he requires an initial external impact or a \"jumpstart\" to begin doubling his striking power. These hard limits mean that if he is isolated from physical combat or unable to maintain his focus during high-intensity fights, his golden kinetic glow fades, leaving him reliant solely on his natural physical strength.",
+    link: "https://roleplay.chat/profile.php?user=chronicles"
+  },
+  {
+    status: "student",
+    tier: "B",
+    power: "Density Manipulation · Inertia Reinforcement",
+    char: "Candiope Sterling",
+    alias: "MONOLITH",
+    expression: "Visually, Candiope's power manifests as the pale, shattering pattern of scars across her skin, glowing with a dull, subterranean amber light as she draws her molecular structure tighter, making her skin appear as unyielding as forged industrial steel. Internally, she exerts a subconscious command over the Higgs field interaction within her own mass, effectively locking her particles into a high-density lattice that refuses to be displaced by outside kinetic energy. When she is active, she doesn't just feel heavy; she creates a localized gravitational anchor that causes the ground to crack beneath her feet and projectiles to simply pancake against her skin as if hitting a mountain.",
+    drawbacks: "While her density provides near-invulnerability, the massive increase in mass causes Candiope to become exceptionally slow and cumbersome, often resulting in her sinking through floorboards or pavement not rated for such extreme weight. The internal physical strain of \"anchoring\" her molecules is visible through the stress fractures on her skin, which deepen and cause searing neural pain if she maintains her maximum density for too long, eventually leading to a forced \"shutdown\" that leaves her physically exhausted and fragile as a glass pane. Additionally, because her power is tied to structural integrity, she is highly vulnerable to sonic frequencies or vibrations that can destabilize her molecular lattice, potentially causing her density to collapse prematurely or backfire painfully against her own skeletal system.",
+    link: "https://roleplay.chat/profile.php?user=monolith"
   }
 ],
 
@@ -902,7 +990,7 @@ clubs: [
     teams: [
       { house: "Valaris", bg: "#c41a1a", train: ["MON · 6:00 AM", "WED · 7:00 PM"], positions: [
         { pos: "Playmaker" },
-        { pos: "Attack" }, { pos: "Attack" },
+        { pos: "Attack", char: "Katniss Saunders", link: "https://roleplay.chat/profile.php?user=Katniss" }, { pos: "Attack", char: "Rhode Sterling", link: "https://roleplay.chat/profile.php?user=chronicles" },
         { pos: "Defence" }, { pos: "Defence" },
         { pos: "Goalkeeper" },
         { pos: "Reserve · Playmaker" },
@@ -1077,7 +1165,7 @@ clubs: [
       { pos: "Investigative Editor", group: "section-editors" },
       { pos: "Features Editor", group: "section-editors" },
       { pos: "Sports Editor", group: "section-editors" },
-      { pos: "Photo Editor", group: "section-editors" },
+      { pos: "Photo Editor", group: "section-editors", char: "Orion Sterling", link: "https://roleplay.chat/profile.php?user=odyssey" },
       { pos: "Copy Editor", group: "section-editors" },
       { pos: "Staff Reporter", group: "reporters" }, { pos: "Staff Reporter", group: "reporters" },
       { pos: "Staff Reporter", group: "reporters" },
