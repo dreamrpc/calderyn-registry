@@ -195,7 +195,7 @@ students: [
   },
   {
     char: "Katniss Saunders",
-    alias: "None Yet",
+    alias: "Schrödinger",
     house: "valaris",
     year: "Freshman",
     track: "hero",
@@ -915,7 +915,7 @@ powers: [
     tier: "A",
     power: "Form Manipulation - Shape-Shifting; Aura Manipulation - Energy Weapons, Tools, Constructs",
     char: "Katniss Saunders",
-    alias: "None Yet",
+    alias: "Schrödinger",
     expression: "Katniss has only two single powers but they are incredibly strong, especially in the hands of a young adult who doesn't know how to utilize them properly and could easily become a dangerous villain if left alone. Her first is shape-shifting. Kat has two available forms, one being a 'disguise' of sorts that could be utilized for stealth purposes - that of an orange and black striped tabby cat. The other form is the one that makes her dangerous and puts her on the A-list without even realizing it - a tiger anthropomorphic type form in which all her human traits (strength, hearing, speed, sight, taste) are boosted into vastly superhuman proportions. In either human or anthropomorphic form she also has the curious ability to control the energy of her own aura. It can be used to mimic the shape of and be used as almost anything she has seen such as weapons, tools, vehicles, etc.",
     drawbacks: "There are costs to her power. The longer and longer she uses either, the more and more fatigued she grows. Her shifting power in particular has a special give and take as needed condition: her enhanced abilities can be pushed even further than they are in her initial transformation. How far exactly she can push her limits is not known since it's not been tested either by herself or others. But the more and more she pushes herself, the more and quicker she tires out and the more rest or medical attention she will need. Science suggests that were she to keep pushing hard enough, her own powers could potentially even kill her. Kat has a very flawed personality; a bad childhood and a troubled young adult who dropped out of high school, she pushes everyone away and is, most the time, a bitch to others. That wall around her heart seems almost like solid steel and impassable, making her quite unfriendly and mean in social settings.",
     link: "https://roleplay.chat/profile.php?user=Katniss"
