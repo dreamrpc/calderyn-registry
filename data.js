@@ -240,6 +240,66 @@ students: [
     expression: "Visually, Candiope's power manifests as the pale, shattering pattern of scars across her skin, glowing with a dull, subterranean amber light as she draws her molecular structure tighter, making her skin appear as unyielding as forged industrial steel. Internally, she exerts a subconscious command over the Higgs field interaction within her own mass, effectively locking her particles into a high-density lattice that refuses to be displaced by outside kinetic energy. When she is active, she doesn't just feel heavy; she creates a localized gravitational anchor that causes the ground to crack beneath her feet and projectiles to simply pancake against her skin as if hitting a mountain.",
     drawbacks: "While her density provides near-invulnerability, the massive increase in mass causes Candiope to become exceptionally slow and cumbersome, often resulting in her sinking through floorboards or pavement not rated for such extreme weight. The internal physical strain of \"anchoring\" her molecules is visible through the stress fractures on her skin, which deepen and cause searing neural pain if she maintains her maximum density for too long, eventually leading to a forced \"shutdown\" that leaves her physically exhausted and fragile as a glass pane. Additionally, because her power is tied to structural integrity, she is highly vulnerable to sonic frequencies or vibrations that can destabilize her molecular lattice, potentially causing her density to collapse prematurely or backfire painfully against her own skeletal system.",
     link: "https://roleplay.chat/profile.php?user=monolith"
+  },
+  {
+    char: "Ariana Ferreira",
+    alias: "Morpha",
+    house: "orenne",
+    year: "Junior",
+    track: "sidekick",
+    tier: "A-List",
+    power: "Kinetic Morphology — Adaptive Elastic Physiology",
+    expression: "Highly elastic physiology that lets Ariana stretch, compress, inflate, and redistribute her body's mass and density at will. Elastic extension grants precise long-reach grappling and ranged strikes; mass redistribution shifts her between low-density inflation (cushioning, buoyancy, partial lift, crowd control) and high-density compression (heavier strikes, rolling momentum, crushing force). Impact distribution and adaptive durability spread blunt force across her elastic structure, partly resisting bullets, electricity, and heat. Conditional strength scales with her form — weakest stretched, peak when compressed. Enhanced baseline attributes and instinctive kinetic awareness let her redirect momentum and use the environment as leverage.",
+    drawbacks: "Overextension and repeated deformation cause structural fatigue and loss of control. Each density mode has a tradeoff — inflated is pierce-vulnerable and weaker, compressed is slower and less shock-absorbent. Her control depends on focus; electric shock, fatigue, or stress reduces precision. Cold makes her stiff and brittle; heat over-softens her. Absorbing too much force risks over-dispersion and delayed reactions. Maintaining altered forms drains her metabolism quickly, and her recovery has a hard ceiling — severe trauma, repeated damage, and especially acid or corrosives bypass her elasticity entirely.",
+    link: "https://roleplay.chat/profile.php?user=Morpha"
+  },
+  {
+    char: "Enzo Krüger",
+    alias: "Breakpoint",
+    house: "valaris",
+    year: "Senior",
+    track: "hero",
+    tier: "A-List",
+    power: "Tension Manipulation — Structural & Kinetic Control",
+    expression: "Enzo perceives, amplifies, stores, and releases tension in his own body and the world around him — he doesn't generate force, he loads existing strain and chooses when it breaks. Recoil acceleration loads tension into his musculature for explosive snapped bursts of speed and repositioning. Chained propulsion strings those bursts together into a sustained pseudo-flight — controlled falling, not lift. Structural targeting reads stress points in objects, surfaces, and bodies and induces precise failure (snapping restraints, disrupting weapons, collapsing structures, striking joints and balance). Kinetic redirection absorbs and reroutes incoming force into counter-attacks. Passive enhanced physiology lets him survive the strain of his own ability, and tension awareness reads body mechanics for exceptional timing.",
+    drawbacks: "Every major action requires a brief tension build-up — interrupt that window and his timing collapses. Repeated use accumulates muscle fatigue and joint damage that he routinely pushes through and pays for later. Excessive build-up misfires, overshoots, or causes unintended structural damage; precision drops as output rises. He is built for short, controlled engagements — the longer the fight runs, the less efficient he becomes as strain stacks and recovery windows shrink.",
+    link: "https://roleplay.chat/profile.php?user=Breakpoint"
+  },
+  {
+    char: "Quinn O'Hare",
+    alias: "Kestrel",
+    house: "valaris",
+    year: "Senior",
+    track: "hero",
+    tier: "A-List",
+    power: "Predator Sync — Counter-Adaptive Mimicry",
+    expression: "Rather than copying powers, Quinn aligns her physiology, perception, and combat style to directly counter a target. Sustained engagement lets her read movement, timing, and power usage and incrementally transform into the opponent's worst matchup. A primary mark deepens that adaptation — sharper reactions, refined movement, tailored counter-strategy — and lets her close the gap on stronger fighters. Enhanced physical attributes are balanced toward speed, agility, and reaction over raw strength. Her physiology processes toxins at an accelerated rate (poisons, venoms, chemical agents are reduced, not negated), and her nervous system rapidly recalibrates after stuns or paralysis. Adaptation visibly escalates through Mark, Read, and Adapt phases.",
+    drawbacks: "Adaptation isn't instant — she needs a brief engagement window before her ability takes effect. Only one primary target can be fully marked at a time, and switching focus requires a reset period. Tracking multiple threats while maintaining adaptive states is mentally taxing and fails under cognitive overload. Adaptation lowers an opponent's effectiveness but doesn't grant immunity — damage still lands. Prolonged combat or repeated toxin and disruption exposure drains her metabolic reserves, slowing reactions and reducing adaptation efficiency.",
+    link: "https://roleplay.chat/profile.php?user=Kestrel"
+  },
+  {
+    char: "Velora Virelli",
+    alias: "Filament",
+    house: "grimere",
+    year: "Sophomore",
+    track: "hero",
+    tier: "A-List",
+    power: "Adaptive Silk Manipulation · Perceptual Influence",
+    expression: "Velora generates and controls living filament strands through her hair, shifting them between soft silk and reinforced high-tension fibre. Tensile reinforcement supports her body weight or others, anchors to structures, and suspends or immobilises targets. Weave constructs interlace strands into shields, barriers, and protective wraps that absorb and disperse force (stronger against blunt than piercing). Filament strikes deliver whip-like hits and sweeps that trip, displace, or redirect momentum. Zone control places strands across an area to dictate movement and dominate space. Layered on top is Soft Focus — a passive perceptual influence that lowers her perceived threat level, draws attention to her face, creates micro reaction-delays, and softens emotional tone. It is misdirection, not mind control.",
+    drawbacks: "Filament growth and reinforcement consume significant energy; prolonged use brings fatigue and weaker, less responsive strands. Managing multiple strands raises mental load and drops precision under pressure. Heat weakens fibre integrity and cluttered environments interfere with control. Greater length costs precision and response speed. She can't out-muscle physically dominant opponents and is vulnerable when restrained. Soft Focus loses ground against trained or alert targets and breaks down in chaos or under overwhelming stimuli.",
+    link: "https://roleplay.chat/profile.php?user=Filament!"
+  },
+  {
+    char: "Elias Nyström",
+    alias: "Corrode",
+    house: "saberis",
+    year: "Junior",
+    track: "hero",
+    tier: "A-List",
+    power: "Caustic Secretion Physiology · Chemical Perception · Micro-Pressure Control · Accelerated Tissue Recovery",
+    expression: "Elias produces a reactive corrosive compound through several biological systems; the compound activates on air exposure and varies in potency by source. His sinus system is the primary high-pressure, high-potency output — cutting stream, adhesive resin, or aerosol mist. The oral system is moderate, close-range, and quiet. Lacrimal secretion (tears) is emotionally triggered and low potency. Circulatory exposure is unstable and reserved as a last resort. An internal pressure system continuously builds chemical pressure that he must regulate, vent, and release in controlled bursts, cycling through Controlled, Elevated, and Critical states. Refined olfactory chemical perception detects toxins, airborne agents, and chemical signatures; micro-pressure control allows fine valve work; accelerated tissue recovery offsets the damage his own compounds inflict on him.",
+    drawbacks: "Chronic sinus inflammation and chemical nosebleeds. Dehydration sharply reduces output. Emotional triggers disrupt control and force unwanted lacrimal discharge. His chemical perception can tip into sensory overload. Regenerative strain is fatiguing, and constant internal regulation is mentally exhausting. He is dangerous to allies at close range, suffers cumulative overuse strain, has unstable blood-state failure modes, and an energy drain from sustained regeneration.",
+    link: "https://roleplay.chat/profile.php?user=Corrode"
   }
 ],
 
@@ -889,6 +949,56 @@ powers: [
     expression: "Visually, Candiope's power manifests as the pale, shattering pattern of scars across her skin, glowing with a dull, subterranean amber light as she draws her molecular structure tighter, making her skin appear as unyielding as forged industrial steel. Internally, she exerts a subconscious command over the Higgs field interaction within her own mass, effectively locking her particles into a high-density lattice that refuses to be displaced by outside kinetic energy. When she is active, she doesn't just feel heavy; she creates a localized gravitational anchor that causes the ground to crack beneath her feet and projectiles to simply pancake against her skin as if hitting a mountain.",
     drawbacks: "While her density provides near-invulnerability, the massive increase in mass causes Candiope to become exceptionally slow and cumbersome, often resulting in her sinking through floorboards or pavement not rated for such extreme weight. The internal physical strain of \"anchoring\" her molecules is visible through the stress fractures on her skin, which deepen and cause searing neural pain if she maintains her maximum density for too long, eventually leading to a forced \"shutdown\" that leaves her physically exhausted and fragile as a glass pane. Additionally, because her power is tied to structural integrity, she is highly vulnerable to sonic frequencies or vibrations that can destabilize her molecular lattice, potentially causing her density to collapse prematurely or backfire painfully against her own skeletal system.",
     link: "https://roleplay.chat/profile.php?user=monolith"
+  },
+  {
+    char: "Ariana Ferreira",
+    alias: "Morpha",
+    status: "student",
+    tier: "A",
+    power: "Kinetic Morphology — Adaptive Elastic Physiology",
+    expression: "Elastic physiology that stretches, compresses, inflates, and redistributes mass and density at will. Precision elastic extension grapples and strikes at long reach. Mass redistribution shifts between low-density inflation (cushioning, lift, crowd control) and high-density compression (heavier strikes, crushing momentum). Impact distribution and adaptive durability spread blunt force across her body — partial resistance to bullets, electricity, and heat; vulnerability to acid and corrosives. Conditional strength scales with form. Enhanced baseline attributes and instinctive kinetic awareness for environmental leverage.",
+    drawbacks: "Overextension causes structural fatigue. Inflated form is pierce-vulnerable and weaker; compressed is slow and less shock-absorbent. Control fails under shock, fatigue, or stress. Cold makes her stiff and brittle; heat over-softens. Excessive force absorption risks over-dispersion. Heavy metabolic strain and a hard recovery ceiling against severe trauma or corrosive damage.",
+    link: "https://roleplay.chat/profile.php?user=Morpha"
+  },
+  {
+    char: "Enzo Krüger",
+    alias: "Breakpoint",
+    status: "student",
+    tier: "A",
+    power: "Tension Manipulation — Structural & Kinetic Control",
+    expression: "Loads and releases existing tension in his body and the world around him. Recoil acceleration produces explosive snapped bursts of speed and repositioning. Chained propulsion strings bursts into a sustained pseudo-flight (controlled falling, not lift). Structural targeting reads stress points to snap restraints, disrupt weapons, collapse structures, and strike joints and balance. Kinetic redirection absorbs and reroutes incoming force. Passive enhanced physiology and tension-awareness perception for reading body mechanics and timing.",
+    drawbacks: "Every major action requires a brief tension build-up — interrupting it stalls him. Repeated use accumulates muscle fatigue and joint damage. Excessive build-up misfires or overshoots; precision drops as output rises. Built for short engagements — efficiency falls as fights run long.",
+    link: "https://roleplay.chat/profile.php?user=Breakpoint"
+  },
+  {
+    char: "Quinn O'Hare",
+    alias: "Kestrel",
+    status: "student",
+    tier: "A",
+    power: "Predator Sync — Counter-Adaptive Mimicry",
+    expression: "Doesn't copy abilities — aligns her physiology, perception, and combat style to directly counter a target. Sustained engagement reads patterns and turns her into the opponent's worst matchup. Primary mark deepens adaptation against one designated target for sharper reactions and tailored counter-strategy. Balanced enhanced attributes favour speed, agility, and reaction over raw strength. Toxic resilience neutralises poisons, venoms, and chemical agents at an accelerated rate. Shock recovery rapidly recalibrates her nervous system after stuns or paralysis. Visible escalation through Mark, Read, and Adapt phases.",
+    drawbacks: "Adaptation needs an engagement window — it isn't instant. Only one primary target can be marked at a time; switching focus requires a reset. Cognitive load is high when tracking multiple threats. Reduces opponent effectiveness but does not negate damage. Metabolic strain over long fights or repeated toxin exposure slows reactions and adaptation.",
+    link: "https://roleplay.chat/profile.php?user=Kestrel"
+  },
+  {
+    char: "Velora Virelli",
+    alias: "Filament",
+    status: "student",
+    tier: "A",
+    power: "Adaptive Silk Manipulation · Perceptual Influence",
+    expression: "Generates and controls living filament strands through her hair, shifting between soft silk and reinforced high-tension fibre. Tensile reinforcement supports her weight or others, anchors to structures, and immobilises targets. Weave constructs form shields, barriers, and protective wraps (better against blunt than piercing). Filament strikes deliver whip motion, sweeps, and momentum redirection. Zone control places strands across an area to dictate movement. Soft Focus is a passive perceptual influence that lowers perceived threat, draws attention to her face, creates micro reaction-delays, and softens emotional tone — misdirection, not mind control.",
+    drawbacks: "Filament growth and reinforcement drain energy; prolonged use brings fatigue and weaker strands. Managing multiple strands raises mental load and drops precision. Heat weakens fibres; cluttered spaces interfere with control. Greater length costs precision and response speed. Can't out-muscle physically dominant opponents and is vulnerable if restrained. Soft Focus breaks against trained or alert targets and under chaotic stimuli.",
+    link: "https://roleplay.chat/profile.php?user=Filament!"
+  },
+  {
+    char: "Elias Nyström",
+    alias: "Corrode",
+    status: "student",
+    tier: "A",
+    power: "Caustic Secretion Physiology · Chemical Perception · Micro-Pressure Control · Accelerated Tissue Recovery",
+    expression: "Reactive corrosive compound produced through multiple biological systems, activating on air exposure. Sinus system is primary — high-pressure cutting stream, adhesive resin, or aerosol mist. Oral system is moderate, close-range, and quiet. Tears (lacrimal) are emotionally triggered and low potency. Blood (circulatory) is unstable and last resort. An internal pressure system continuously builds chemical pressure that he must regulate, vent, and release through Controlled, Elevated, and Critical states. Refined olfactory chemical perception detects toxins, airborne agents, and chemical signatures. Micro-pressure control enables fine valve work. Accelerated tissue recovery offsets self-inflicted damage from his own compounds.",
+    drawbacks: "Chronic sinus inflammation and chemical nosebleeds. Dehydration cuts output. Emotional triggers disrupt control and force lacrimal discharge. Sensory overload from chemical perception. Fatigue from regenerative strain. Constant need for internal regulation. Dangerous to allies at close range. Cumulative overuse strain, blood-state instability, and energy drain from sustained regeneration.",
+    link: "https://roleplay.chat/profile.php?user=Corrode"
   }
 ],
 
@@ -992,7 +1102,7 @@ clubs: [
         { pos: "Playmaker" },
         { pos: "Attack", char: "Katniss Saunders", link: "https://roleplay.chat/profile.php?user=Katniss" }, { pos: "Attack", char: "Rhode Sterling", link: "https://roleplay.chat/profile.php?user=chronicles" },
         { pos: "Defence" }, { pos: "Defence" },
-        { pos: "Goalkeeper" },
+        { pos: "Goalkeeper", captain: true, char: "Enzo Krüger", link: "https://roleplay.chat/profile.php?user=Breakpoint" },
         { pos: "Reserve · Playmaker" },
         { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
         { pos: "Reserve · Defence" }, { pos: "Reserve · Defence" },
@@ -1001,7 +1111,7 @@ clubs: [
       { house: "Orenne", bg: "#d4901a", train: ["TUE · 6:00 AM", "THU · 7:00 PM"], positions: [
         { pos: "Playmaker" },
         { pos: "Attack" }, { pos: "Attack" },
-        { pos: "Defence" }, { pos: "Defence" },
+        { pos: "Defence", char: "Ariana Ferreira", link: "https://roleplay.chat/profile.php?user=Morpha" }, { pos: "Defence" },
         { pos: "Goalkeeper" },
         { pos: "Reserve · Playmaker" },
         { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
@@ -1052,7 +1162,7 @@ clubs: [
     ],
     positions: [
       { pos: "Captain", group: "leadership", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" },
-      { pos: "Flyer", group: "squad", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" }, { pos: "Flyer", group: "squad" }, { pos: "Flyer", group: "squad" },
+      { pos: "Flyer", group: "squad", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" }, { pos: "Flyer", group: "squad", char: "Velora Virelli", link: "https://roleplay.chat/profile.php?user=Filament!" }, { pos: "Flyer", group: "squad" },
       { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
       { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" },
       { pos: "Alternate Flyer", group: "reserves" }, { pos: "Alternate Base", group: "reserves" }, { pos: "Alternate Tumbler", group: "reserves" },
@@ -1109,7 +1219,7 @@ clubs: [
       { pos: "President", group: "leadership" },
       { pos: "Artistic Director", group: "leadership" },
       { pos: "Stage Manager", group: "leadership" },
-      { pos: "Actor", group: "cast", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" }, { pos: "Actor", group: "cast" },
+      { pos: "Actor", group: "cast", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" }, { pos: "Actor", group: "cast", char: "Velora Virelli", link: "https://roleplay.chat/profile.php?user=Filament!" },
       { pos: "Actor", group: "cast" }, { pos: "Actor", group: "cast" },
       { pos: "Actor", group: "cast" }, { pos: "Actor", group: "cast" },
       { pos: "Technical Director", group: "tech" },
@@ -1167,7 +1277,7 @@ clubs: [
       { pos: "Sports Editor", group: "section-editors" },
       { pos: "Photo Editor", group: "section-editors", char: "Orion Sterling", link: "https://roleplay.chat/profile.php?user=odyssey" },
       { pos: "Copy Editor", group: "section-editors" },
-      { pos: "Staff Reporter", group: "reporters" }, { pos: "Staff Reporter", group: "reporters" },
+      { pos: "Staff Reporter", group: "reporters", char: "Quinn O'Hare", link: "https://roleplay.chat/profile.php?user=Kestrel", note: "Photographer · Anonymous tipline" }, { pos: "Staff Reporter", group: "reporters" },
       { pos: "Staff Reporter", group: "reporters" },
       { pos: "Columnist", group: "reporters" }, { pos: "Columnist", group: "reporters" },
     ],
@@ -1190,7 +1300,7 @@ studentGov: [
     type: "elected",
     note: "One House Representative per house, doubling as senior Resident Assistant for that house's dorms. They run house meetings, mediate dorm disputes, oversee underclassman conduct, and report to the President. New club proposals start here — pitch your idea to your RA, and if there's enough demonstrated interest, it gets raised to the President for approval. Term: one academic year.",
     seats: [
-      { pos: "Valaris Rep · Senior RA", term: "2026–27" },
+      { pos: "Valaris Rep · Senior RA", term: "2026–27", char: "Enzo Krüger", link: "https://roleplay.chat/profile.php?user=Breakpoint" },
       { pos: "Orenne Rep · Senior RA",  term: "2026–27" },
       { pos: "Saberis Rep · Senior RA", term: "2026–27" },
       { pos: "Grimere Rep · Senior RA", term: "2026–27" },
@@ -1205,7 +1315,7 @@ studentGov: [
       { pos: "Vice Chair" },
       { pos: "Logistics Lead" },
       { pos: "Programming Lead" },
-      { pos: "Committee Member" },
+      { pos: "Committee Member", char: "Ariana Ferreira", link: "https://roleplay.chat/profile.php?user=Morpha" },
       { pos: "Committee Member" },
     ],
   },
