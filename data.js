@@ -300,7 +300,31 @@ students: [
     expression: "Elias produces a reactive corrosive compound through several biological systems; the compound activates on air exposure and varies in potency by source. His sinus system is the primary high-pressure, high-potency output — cutting stream, adhesive resin, or aerosol mist. The oral system is moderate, close-range, and quiet. Lacrimal secretion (tears) is emotionally triggered and low potency. Circulatory exposure is unstable and reserved as a last resort. An internal pressure system continuously builds chemical pressure that he must regulate, vent, and release in controlled bursts, cycling through Controlled, Elevated, and Critical states. Refined olfactory chemical perception detects toxins, airborne agents, and chemical signatures; micro-pressure control allows fine valve work; accelerated tissue recovery offsets the damage his own compounds inflict on him.",
     drawbacks: "Chronic sinus inflammation and chemical nosebleeds. Dehydration sharply reduces output. Emotional triggers disrupt control and force unwanted lacrimal discharge. His chemical perception can tip into sensory overload. Regenerative strain is fatiguing, and constant internal regulation is mentally exhausting. He is dangerous to allies at close range, suffers cumulative overuse strain, has unstable blood-state failure modes, and an energy drain from sustained regeneration.",
     link: "https://roleplay.chat/profile.php?user=Corrode"
-  }
+  },
+  {
+    char: "Jason McTavish",
+    alias: "Storm",
+    house: "orenne",
+    year: "Senior",
+    track: "hero",
+    tier: "A-List",
+    power: "Weather Manipulation · Electrokinetic",
+    expression: "Storm-pattern weather generation — rain, wind, thunder, and lightning at varying scales — plus electric-based phenomena generated within and around his own body. Effective range scales with effort and recovery time.",
+    drawbacks: "Internal electrical use causes muscle deterioration and chronic insomnia even with natural resistances. Frequent infirmary visits for physical recovery; horrendous sleep cycle constrains heavy operation windows.",
+    link: "https://roleplay.chat/profile.php?user=stormcaller"
+  },
+  {
+    char: "Issac Whitman",
+    alias: "Swapper",
+    house: "grimere",
+    year: "Junior",
+    track: "hero",
+    tier: "B-List",
+    power: "Relay Shift — Selective Teleportation",
+    expression: "On touch, Issac registers a person or object onto his Shift List. From there he can teleport to any registered target, swap positions with a registered object, or perform combinations of the two. No apparent distance limit.",
+    drawbacks: "Shift List capped at twenty-five active registrations. One teleport or swap may be executed at a time — no chained jumps. Registration requires direct skin/object contact.",
+    link: "https://roleplay.chat/profile.php?user=Swapper"
+  },
 ],
 
 faculty: [
@@ -999,7 +1023,27 @@ powers: [
     expression: "Reactive corrosive compound produced through multiple biological systems, activating on air exposure. Sinus system is primary — high-pressure cutting stream, adhesive resin, or aerosol mist. Oral system is moderate, close-range, and quiet. Tears (lacrimal) are emotionally triggered and low potency. Blood (circulatory) is unstable and last resort. An internal pressure system continuously builds chemical pressure that he must regulate, vent, and release through Controlled, Elevated, and Critical states. Refined olfactory chemical perception detects toxins, airborne agents, and chemical signatures. Micro-pressure control enables fine valve work. Accelerated tissue recovery offsets self-inflicted damage from his own compounds.",
     drawbacks: "Chronic sinus inflammation and chemical nosebleeds. Dehydration cuts output. Emotional triggers disrupt control and force lacrimal discharge. Sensory overload from chemical perception. Fatigue from regenerative strain. Constant need for internal regulation. Dangerous to allies at close range. Cumulative overuse strain, blood-state instability, and energy drain from sustained regeneration.",
     link: "https://roleplay.chat/profile.php?user=Corrode"
-  }
+  },
+  {
+    char: "Jason McTavish",
+    alias: "Storm",
+    status: "student",
+    tier: "A",
+    power: "Weather Manipulation · Electrokinetic",
+    expression: "Storm-system generation (rain, wind, thunder, lightning) plus body-centered electric phenomena. Output scales with effort and recovery window.",
+    drawbacks: "Self-routing of muscle electricity causes deterioration; chronic insomnia and disrupted sleep cycle; recurring infirmary attendance for physical training and recovery.",
+    link: "https://roleplay.chat/profile.php?user=stormcaller"
+  },
+  {
+    char: "Issac Whitman",
+    alias: "Swapper",
+    status: "student",
+    tier: "B",
+    power: "Relay Shift — Selective Teleportation",
+    expression: "Touch-registers people or objects to a Shift List, then teleports to or swaps with any registered target. Combinations of teleport and swap permitted.",
+    drawbacks: "Twenty-five active registrations max. One operation at a time — no chained shifts. Registration requires skin/surface contact.",
+    link: "https://roleplay.chat/profile.php?user=Swapper"
+  },
 ],
 
 powerStatuses: [
@@ -1109,7 +1153,7 @@ clubs: [
         { pos: "Reserve · Goalkeeper" },
       ]},
       { house: "Orenne", bg: "#d4901a", train: ["TUE · 6:00 AM", "THU · 7:00 PM"], positions: [
-        { pos: "Playmaker" },
+        { pos: "Playmaker", captain: true, char: "Jason McTavish", link: "https://roleplay.chat/profile.php?user=stormcaller" },
         { pos: "Attack" }, { pos: "Attack" },
         { pos: "Defence", char: "Ariana Ferreira", link: "https://roleplay.chat/profile.php?user=Morpha" }, { pos: "Defence" },
         { pos: "Goalkeeper" },
@@ -1272,7 +1316,7 @@ clubs: [
       { pos: "Editor-in-Chief", group: "masthead" },
       { pos: "Managing Editor", group: "masthead" },
       { pos: "News Editor", group: "section-editors" },
-      { pos: "Investigative Editor", group: "section-editors" },
+      { pos: "Investigative Editor", group: "section-editors", char: "Issac Whitman", link: "https://roleplay.chat/profile.php?user=Swapper" },
       { pos: "Features Editor", group: "section-editors" },
       { pos: "Sports Editor", group: "section-editors" },
       { pos: "Photo Editor", group: "section-editors", char: "Orion Sterling", link: "https://roleplay.chat/profile.php?user=odyssey" },
