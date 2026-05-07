@@ -325,6 +325,30 @@ students: [
     drawbacks: "Shift List capped at twenty-five active registrations. One teleport or swap may be executed at a time — no chained jumps. Registration requires direct skin/object contact.",
     link: "https://roleplay.chat/profile.php?user=Swapper"
   },
+  {
+    char: "Emery Bloom",
+    alias: "Sweet Spot",
+    house: "orenne",
+    year: "Sophomore",
+    track: "sidekick",
+    tier: "B-List",
+    power: "Bio-Confection Manipulation — Living Floss Generation",
+    expression: "Converts her body into a cotton-candy-like bio-organic substance and produces consumable floss infused with tailored biochemical effects. Power leans toward support, enhancement and influence rather than direct combat — soft and inviting in presentation, but capable of significant impact depending on application.",
+    drawbacks: "Requires high caloric intake; energy depletion drops output quality. Mood and emotional state alter results — instability skews intended effects. Heat destabilises structure, moisture disrupts cohesion, wind affects dispersion. Not suited for direct combat. Overuse risks others becoming dependent on her output.",
+    link: "https://roleplay.chat/profile.php?user=Sweet+Spot"
+  },
+  {
+    char: "Angelique Pierce",
+    alias: "ANGEL",
+    house: "orenne",
+    year: "Sophomore",
+    track: "hero",
+    tier: "C-List",
+    power: "Wing Manifestation · Energy Projection · Rapid-Pulse Conduits",
+    expression: "Possesses 15-foot iridescent wings that shift through purples, teals and golds, biologically anchored to her spine. Vents stored thermal energy as strobing white-hot pulses fired from her palms; uses the recoil tactically as a thruster system to execute jagged mid-air pivots.",
+    drawbacks: "Despite her power, Angel is still just a girl — no healing factor or superhuman durability. Wings are biological extensions of her spine: damage causes immense pain, can induce shock and prevents flight, with healing slow and natural. Energy use spikes internal temperature; rapid-fire causes heat exhaustion, migraines and tremors, and a full thermal drain leaves her lethargic and weak.",
+    link: "https://roleplay.chat/profile.php?user=iridescence"
+  },
 ],
 
 faculty: [
@@ -1044,6 +1068,26 @@ powers: [
     drawbacks: "Twenty-five active registrations max. One operation at a time — no chained shifts. Registration requires skin/surface contact.",
     link: "https://roleplay.chat/profile.php?user=Swapper"
   },
+  {
+    char: "Emery Bloom",
+    alias: "Sweet Spot",
+    status: "student",
+    tier: "B",
+    power: "Bio-Confection Manipulation — Living Floss Generation",
+    expression: "Body-converts into a cotton-candy-like bio-organic substance, producing consumable floss infused with tailored biochemical effects. Power skews to support, enhancement and influence rather than direct combat.",
+    drawbacks: "Hungry power — high caloric intake required; depletion drops output quality. Mood-reactive: instability skews intended effects. Vulnerable to heat, moisture and wind. Not suited for direct combat.",
+    link: "https://roleplay.chat/profile.php?user=Sweet+Spot"
+  },
+  {
+    char: "Angelique Pierce",
+    alias: "ANGEL",
+    status: "student",
+    tier: "C",
+    power: "Wing Manifestation · Energy Projection · Rapid-Pulse Conduits",
+    expression: "15-foot iridescent wings biologically anchored to her spine, plus thermal energy vented as strobing white-hot palm-pulses. Discharge recoil is used tactically as a thruster system for instant, jagged mid-air pivots.",
+    drawbacks: "No healing factor or superhuman durability — wings can break, bleed and disable her. Rapid-fire energy use causes heat exhaustion, migraines and physical tremors; a full thermal drain leaves her lethargic and weak.",
+    link: "https://roleplay.chat/profile.php?user=iridescence"
+  },
 ],
 
 powerStatuses: [
@@ -1209,7 +1253,7 @@ clubs: [
       { pos: "Flyer", group: "squad", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" }, { pos: "Flyer", group: "squad", char: "Velora Virelli", link: "https://roleplay.chat/profile.php?user=Filament!" }, { pos: "Flyer", group: "squad" },
       { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
       { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" },
-      { pos: "Alternate Flyer", group: "reserves" }, { pos: "Alternate Base", group: "reserves" }, { pos: "Alternate Tumbler", group: "reserves" },
+      { pos: "Alternate Flyer", group: "reserves", char: "Emery Bloom", link: "https://roleplay.chat/profile.php?user=Sweet+Spot" }, { pos: "Alternate Base", group: "reserves" }, { pos: "Alternate Tumbler", group: "reserves" },
     ],
   },
   {
