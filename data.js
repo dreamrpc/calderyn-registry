@@ -255,15 +255,15 @@ students: [
   },
   {
     char: "Enzo Krüger",
-    alias: "Breakpoint",
+    alias: "Starboy",
     house: "valaris",
     year: "Senior",
     track: "hero",
     tier: "A-List",
-    power: "Tension Manipulation — Structural & Kinetic Control",
-    expression: "Enzo perceives, amplifies, stores, and releases tension in his own body and the world around him — he doesn't generate force, he loads existing strain and chooses when it breaks. Recoil acceleration loads tension into his musculature for explosive snapped bursts of speed and repositioning. Chained propulsion strings those bursts together into a sustained pseudo-flight — controlled falling, not lift. Structural targeting reads stress points in objects, surfaces, and bodies and induces precise failure (snapping restraints, disrupting weapons, collapsing structures, striking joints and balance). Kinetic redirection absorbs and reroutes incoming force into counter-attacks. Passive enhanced physiology lets him survive the strain of his own ability, and tension awareness reads body mechanics for exceptional timing.",
-    drawbacks: "Every major action requires a brief tension build-up — interrupt that window and his timing collapses. Repeated use accumulates muscle fatigue and joint damage that he routinely pushes through and pays for later. Excessive build-up misfires, overshoots, or causes unintended structural damage; precision drops as output rises. He is built for short, controlled engagements — the longer the fight runs, the less efficient he becomes as strain stacks and recovery windows shrink.",
-    link: "https://roleplay.chat/profile.php?user=Breakpoint"
+    power: "Stellar Compression, Stellar Flight, Diamond State, Starburst Release, Event Horizon Perception, Enhanced Physicality",
+    expression: "Enzo’s body functions like a living gravitational reactor, absorbing, compressing, and redistributing force through his system. He doesn’t generate energy from nothing — kinetic impact, atmospheric resistance, momentum, and physical strain convert into volatile stellar energy. The more force he absorbs, the more dangerous he becomes. Manifests through glowing fracture-lines beneath the skin, prism-like refractions, compressed air distortions, and bursts of gold-white stellar light. At lower tiers his output looks elegant and controlled; at peak it turns violent and unstable, resembling a star approaching collapse.",
+    drawbacks: "Overcompression Syndrome — absorbed force can rupture his own structure when reserves outpace his capacity. Momentum Dependency means he relies on incoming force to fuel output, leaving him vulnerable in low-pressure standoffs. Sustained release builds Extreme Heat that scalds skin and warps gear. Emotional Amplification destabilizes precision, while Self-Sacrificial Tendencies and Fear of Failure push him to keep absorbing past safe limits.",
+    link: "https://roleplay.chat/profile.php?user=Starboy!"
   },
   {
     char: "Quinn O'Hare",
@@ -1107,13 +1107,13 @@ powers: [
   },
   {
     char: "Enzo Krüger",
-    alias: "Breakpoint",
+    alias: "Starboy",
     status: "student",
     tier: "A",
-    power: "Tension Manipulation — Structural & Kinetic Control",
-    expression: "Loads and releases existing tension in his body and the world around him. Recoil acceleration produces explosive snapped bursts of speed and repositioning. Chained propulsion strings bursts into a sustained pseudo-flight (controlled falling, not lift). Structural targeting reads stress points to snap restraints, disrupt weapons, collapse structures, and strike joints and balance. Kinetic redirection absorbs and reroutes incoming force. Passive enhanced physiology and tension-awareness perception for reading body mechanics and timing.",
-    drawbacks: "Every major action requires a brief tension build-up — interrupting it stalls him. Repeated use accumulates muscle fatigue and joint damage. Excessive build-up misfires or overshoots; precision drops as output rises. Built for short engagements — efficiency falls as fights run long.",
-    link: "https://roleplay.chat/profile.php?user=Breakpoint"
+    power: "Stellar Compression — Pressure-Loaded Stellar Output",
+    expression: "Living gravitational reactor: absorbs, compresses, and redistributes external force into volatile stellar energy. Kinetic impact, atmospheric drag, momentum, and physical strain all charge his reserves. Output ranges from controlled stellar flight, diamond-state hardening, and event-horizon perception to starburst releases of gold-white stellar light. Enhanced physicality scales with absorbed pressure.",
+    drawbacks: "Overcompression can rupture his own structure when reserves outpace capacity. Momentum dependency leaves him underpowered in low-pressure standoffs. Sustained release generates extreme heat that scalds skin and warps gear. Emotional amplification destabilizes precision; self-sacrificial tendencies and fear of failure push him past safe limits.",
+    link: "https://roleplay.chat/profile.php?user=Starboy!"
   },
   {
     char: "Quinn O'Hare",
