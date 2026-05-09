@@ -349,6 +349,103 @@ students: [
     drawbacks: "Despite her power, Angel is still just a girl — no healing factor or superhuman durability. Wings are biological extensions of her spine: damage causes immense pain, can induce shock and prevents flight, with healing slow and natural. Energy use spikes internal temperature; rapid-fire causes heat exhaustion, migraines and tremors, and a full thermal drain leaves her lethargic and weak.",
     link: "https://roleplay.chat/profile.php?user=iridescence"
   },
+
+  {
+    char: "Cassian Marrow",
+    alias: "the Abyss",
+    house: "grimere",
+    year: "Senior",
+    track: "hero",
+    tier: "A-List",
+    power: "Amphibious Physiology · Pressure Manipulation · Hydrosensory Awareness",
+    expression: "Deep-sea biology gives Cassian modified lungs and gills, peak performance in water, plus enhanced strength and accelerated regeneration. He compresses and pressurises water for offence, senses bioelectric fields, and communicates with marine life.",
+    drawbacks: "Heavily dependent on moisture — heat and dry air sap stamina, sensory range, and regeneration. Electrical attacks are far more dangerous to him than most supers, especially while submerged. Long stretches at depth amplify predatory, instinct-driven behaviour.",
+    link: "https://roleplay.chat/profile.php?user=the+Abyss"
+  },
+  {
+    char: "Malachi Castellano",
+    alias: "WILDKIN",
+    house: "orenne",
+    year: "Freshman",
+    track: "sidekick",
+    tier: "C-List",
+    power: "Primal Empathy · Animal Communication",
+    expression: "Reads and projects emotional states across non-human animals, can calm or rouse a herd, and holds two-way 'conversations' through imagery and feeling. Larger or more intelligent species respond more cleanly than insects or simple reptiles.",
+    drawbacks: "No combat application; he panics under direct violence. Sustained empathic contact bleeds animal instinct into his own mood, leaving him jumpy, territorial, or exhausted. Crowded human environments are sensory overload.",
+    link: "https://roleplay.chat/profile.php?user=advocate"
+  },
+  {
+    char: "Philip Chang",
+    alias: "Blackout",
+    house: "orenne",
+    year: "Senior",
+    track: "hero",
+    tier: "A-List",
+    power: "Reactive Adaptive Morphogenesis · Enhanced Strength · Durability · Agility · Accelerated Recovery",
+    expression: "Under stress, fear, or protectiveness, Philip's body rapidly evolves to meet a perceived threat — strength, durability, agility, and reflex all spike alongside reactive black biomechanical plating. The stronger the emotional trigger, the more powerful and unstable the transformation.",
+    drawbacks: "Emotional escalation drives the power, so high-stakes situations are also when control fails. Aggression intensity scales with intensity — over-triggering risks collateral damage and identity dissociation. Calm, controlled engagement leaves him no stronger than baseline.",
+    link: "https://roleplay.chat/profile.php?user=Blackout!"
+  },
+  {
+    char: "Daphne Callas",
+    alias: "Verdant",
+    house: "saberis",
+    year: "Freshman",
+    track: "hero",
+    tier: "A-List",
+    power: "Botanical Bio-Manipulation · Plant Growth · Solar Regeneration · Toxic Immunity",
+    expression: "Accelerates and shapes plant life — coaxing growth, weaving constructs, and triggering targeted mutations. She photosynthesises in sunlight for fast healing and stamina, and is immune to most plant-based toxins.",
+    drawbacks: "Sterile or barren environments leave her without ammunition. Extreme cold slows responsiveness; fire annihilates her constructs. Sustained sunlight deprivation cripples regeneration, stamina, and hydration; heavy ability use burns through nutrient reserves.",
+    link: "https://roleplay.chat/profile.php?user=Verdant!"
+  },
+  {
+    char: "Marceline Ward",
+    alias: "Ghoulfriend",
+    house: "saberis",
+    year: "Junior",
+    track: "hero",
+    tier: "A-List",
+    power: "Adaptive Bioreconstruction · Enhanced Physical Attributes · Pain Conversion",
+    expression: "Marceline's body actively rebuilds itself through accelerated biological adaptation — torn tissue reroutes, organs reconnect, and her physiology can absorb and integrate features from injury or contact. She converts pain into temporary physical performance.",
+    drawbacks: "Reconstruction is visible, painful, and metabolically expensive. Excessive damage triggers psychological fragmentation and donor-memory bleed. Adaptive immunity has limits, and she remains vulnerable mid-reconstruction; emotional spikes can hijack the process.",
+    link: "https://roleplay.chat/profile.php?user=ghoulfriend"
+  },
+  {
+    char: "Tyler Caldwell",
+    alias: "BLACK VEIN",
+    house: "valaris",
+    year: "Senior",
+    track: "hero",
+    tier: "A-List",
+    power: "Adaptive Mutation · Organic Weaponization",
+    expression: "Tyler shapes his own biology in real time — growing claws, blades, plating, or spurs of dense organic tissue, and reconfiguring limbs to meet whatever fight he's in. Mutations adapt mid-engagement based on the threat he's facing.",
+    drawbacks: "Heavy mutation is calorically punishing and leaves him visibly disfigured for hours afterward. Shifts cost time he doesn't always have, and complex shapes degrade under sustained punishment. Cold and toxin exposure slow the mutation engine to a crawl.",
+    link: "https://roleplay.chat/profile.php?user=BLACK+VEIN"
+  },
+  {
+    char: "Lucrecia Sofìa Avalos-Perez",
+    alias: "Rosetta",
+    house: "valaris",
+    year: "Freshman",
+    track: "sidekick",
+    tier: "C-List",
+    power: "Omnilingualism",
+    expression: "Instinctively understands, interprets, speaks, reads, and writes virtually any language she encounters — spoken, dialectal, coded, symbolic, or invented. Rather than memorising, her mind processes communication as natural intent, capturing emotional context and rhetoric at remarkable speed.",
+    drawbacks: "No combat application. Cognitive load and hyperawareness leave her prone to overstimulation in crowded or multilingual environments. Constant contextual translation creates emotional vulnerability and a morally complicated perspective on whose meaning to prioritise.",
+    link: "https://roleplay.chat/profile.php?user=Rosetta!"
+  },
+  {
+    char: "Manuel \"Manny\" Glint",
+    alias: "BurnOut",
+    house: "orenne",
+    year: "Senior",
+    track: "hero",
+    tier: "B-List",
+    power: "Superspeed · Hypermetabolism",
+    expression: "Converts anything edible into pure caloric output, then burns those calories to move and think at lightning speed. Reaction time, sprint speed, and combat tempo all scale with how much he's eaten in the last hour.",
+    drawbacks: "Constantly needs to eat. Long fights drain him; once calories run out, his body begins to autophage — cannibalising muscle and organ tissue to keep going. Vulnerable to anything that disrupts digestion or appetite.",
+    link: "https://roleplay.chat/profile.php?user=Crashnburn"
+  },
 ],
 
 faculty: [
@@ -365,7 +462,7 @@ faculty: [
     section: "HEROES TRACK FACULTY",
     note: "Professors who teach exclusively on the Heroes track (Track One). Combat, deployment, public-facing capability. Each prof tracks their students through all four years — the freshman instructor is the senior instructor.",
     rows: [
-      { role: "Combat Training", tracks: ["hero"], subjects: [
+      { role: "Combat Training", char: "Theron", stage: "THERON", power: "Biokinetic Augmentation · Kinetic Absorption & Release", expression: "Theron's body absorbs and redistributes incoming force, dampening damage and channelling that energy into momentum. Strength scales with motion, favouring charges, grapples, and sustained pressure. In Break State his biological inhibitors fail, deepening output at the cost of self-damage.", drawbacks: "Not invulnerable — repeated impacts, piercing attacks, and concentrated force still fracture and bleed him. Heavy absorption strains his system, slowing reactions and pushing him toward overheating, fatigue, and eventual shutdown. Break State worsens injury suppression and risks collapse.", link: "https://roleplay.chat/profile.php?user=bulk", tracks: ["hero"], subjects: [
         { year: "FR", title: "Combat Training I",   desc: "Unarmed basics, conditioning, controlled-arena sparring. Most physical washouts come out of this class — STRATA wants the unwillable broken early." },
         { year: "SO", title: "Combat Training II",  desc: "Weapon familiarisation, formation work with track partners, sustained-engagement endurance. First time you fight someone who fights back at full intent." },
         { year: "JR", title: "Combat Training III", desc: "Multi-opponent engagement, terrain exploitation, integrating power use into combat reflex rather than treating it as a separate tool. Live sparring against juniors from rival houses." },
@@ -1088,6 +1185,97 @@ powers: [
     drawbacks: "No healing factor or superhuman durability — wings can break, bleed and disable her. Rapid-fire energy use causes heat exhaustion, migraines and physical tremors; a full thermal drain leaves her lethargic and weak.",
     link: "https://roleplay.chat/profile.php?user=iridescence"
   },
+
+  {
+    char: "Cassian Marrow",
+    alias: "the Abyss",
+    status: "student",
+    tier: "A",
+    power: "Amphibious Physiology · Pressure Manipulation · Hydrosensory Awareness",
+    expression: "Deep-sea biology gives Cassian modified lungs and gills, peak performance in water, plus enhanced strength and accelerated regeneration. He compresses and pressurises water for offence, senses bioelectric fields, and communicates with marine life.",
+    drawbacks: "Heavily dependent on moisture — heat and dry air sap stamina, sensory range, and regeneration. Electrical attacks are far more dangerous to him than most supers, especially while submerged. Long stretches at depth amplify predatory, instinct-driven behaviour.",
+    link: "https://roleplay.chat/profile.php?user=the+Abyss"
+  },
+  {
+    char: "Malachi Castellano",
+    alias: "WILDKIN",
+    status: "student",
+    tier: "C",
+    power: "Primal Empathy · Animal Communication",
+    expression: "Reads and projects emotional states across non-human animals, can calm or rouse a herd, and holds two-way 'conversations' through imagery and feeling. Larger or more intelligent species respond more cleanly than insects or simple reptiles.",
+    drawbacks: "No combat application; he panics under direct violence. Sustained empathic contact bleeds animal instinct into his own mood, leaving him jumpy, territorial, or exhausted. Crowded human environments are sensory overload.",
+    link: "https://roleplay.chat/profile.php?user=advocate"
+  },
+  {
+    char: "Philip Chang",
+    alias: "Blackout",
+    status: "student",
+    tier: "A",
+    power: "Reactive Adaptive Morphogenesis · Enhanced Strength · Durability · Agility · Accelerated Recovery",
+    expression: "Under stress, fear, or protectiveness, Philip's body rapidly evolves to meet a perceived threat — strength, durability, agility, and reflex all spike alongside reactive black biomechanical plating. The stronger the emotional trigger, the more powerful and unstable the transformation.",
+    drawbacks: "Emotional escalation drives the power, so high-stakes situations are also when control fails. Aggression intensity scales with intensity — over-triggering risks collateral damage and identity dissociation. Calm, controlled engagement leaves him no stronger than baseline.",
+    link: "https://roleplay.chat/profile.php?user=Blackout!"
+  },
+  {
+    char: "Daphne Callas",
+    alias: "Verdant",
+    status: "student",
+    tier: "A",
+    power: "Botanical Bio-Manipulation · Plant Growth · Solar Regeneration · Toxic Immunity",
+    expression: "Accelerates and shapes plant life — coaxing growth, weaving constructs, and triggering targeted mutations. She photosynthesises in sunlight for fast healing and stamina, and is immune to most plant-based toxins.",
+    drawbacks: "Sterile or barren environments leave her without ammunition. Extreme cold slows responsiveness; fire annihilates her constructs. Sustained sunlight deprivation cripples regeneration, stamina, and hydration; heavy ability use burns through nutrient reserves.",
+    link: "https://roleplay.chat/profile.php?user=Verdant!"
+  },
+  {
+    char: "Marceline Ward",
+    alias: "Ghoulfriend",
+    status: "student",
+    tier: "A",
+    power: "Adaptive Bioreconstruction · Enhanced Physical Attributes · Pain Conversion",
+    expression: "Marceline's body actively rebuilds itself through accelerated biological adaptation — torn tissue reroutes, organs reconnect, and her physiology can absorb and integrate features from injury or contact. She converts pain into temporary physical performance.",
+    drawbacks: "Reconstruction is visible, painful, and metabolically expensive. Excessive damage triggers psychological fragmentation and donor-memory bleed. Adaptive immunity has limits, and she remains vulnerable mid-reconstruction; emotional spikes can hijack the process.",
+    link: "https://roleplay.chat/profile.php?user=ghoulfriend"
+  },
+  {
+    char: "Tyler Caldwell",
+    alias: "BLACK VEIN",
+    status: "student",
+    tier: "A",
+    power: "Adaptive Mutation · Organic Weaponization",
+    expression: "Tyler shapes his own biology in real time — growing claws, blades, plating, or spurs of dense organic tissue, and reconfiguring limbs to meet whatever fight he's in. Mutations adapt mid-engagement based on the threat he's facing.",
+    drawbacks: "Heavy mutation is calorically punishing and leaves him visibly disfigured for hours afterward. Shifts cost time he doesn't always have, and complex shapes degrade under sustained punishment. Cold and toxin exposure slow the mutation engine to a crawl.",
+    link: "https://roleplay.chat/profile.php?user=BLACK+VEIN"
+  },
+  {
+    char: "Lucrecia Sofìa Avalos-Perez",
+    alias: "Rosetta",
+    status: "student",
+    tier: "C",
+    power: "Omnilingualism",
+    expression: "Instinctively understands, interprets, speaks, reads, and writes virtually any language she encounters — spoken, dialectal, coded, symbolic, or invented. Rather than memorising, her mind processes communication as natural intent, capturing emotional context and rhetoric at remarkable speed.",
+    drawbacks: "No combat application. Cognitive load and hyperawareness leave her prone to overstimulation in crowded or multilingual environments. Constant contextual translation creates emotional vulnerability and a morally complicated perspective on whose meaning to prioritise.",
+    link: "https://roleplay.chat/profile.php?user=Rosetta!"
+  },
+  {
+    char: "Manuel \"Manny\" Glint",
+    alias: "BurnOut",
+    status: "student",
+    tier: "B",
+    power: "Superspeed · Hypermetabolism",
+    expression: "Converts anything edible into pure caloric output, then burns those calories to move and think at lightning speed. Reaction time, sprint speed, and combat tempo all scale with how much he's eaten in the last hour.",
+    drawbacks: "Constantly needs to eat. Long fights drain him; once calories run out, his body begins to autophage — cannibalising muscle and organ tissue to keep going. Vulnerable to anything that disrupts digestion or appetite.",
+    link: "https://roleplay.chat/profile.php?user=Crashnburn"
+  },
+  {
+    char: "Theron",
+    alias: "THERON",
+    status: "faculty",
+    tier: "A",
+    power: "Biokinetic Augmentation · Kinetic Absorption & Release",
+    expression: "Theron's body absorbs and redistributes incoming force, dampening damage and channelling that energy into momentum. Strength scales with motion, favouring charges, grapples, and sustained pressure. In Break State his biological inhibitors fail, deepening output at the cost of self-damage.",
+    drawbacks: "Not invulnerable — repeated impacts, piercing attacks, and concentrated force still fracture and bleed him. Heavy absorption strains his system, slowing reactions and pushing him toward overheating, fatigue, and eventual shutdown. Break State worsens injury suppression and risks collapse.",
+    link: "https://roleplay.chat/profile.php?user=bulk"
+  },
 ],
 
 powerStatuses: [
@@ -1187,7 +1375,7 @@ clubs: [
     },
     teams: [
       { house: "Valaris", bg: "#c41a1a", train: ["MON · 6:00 AM", "WED · 7:00 PM"], positions: [
-        { pos: "Playmaker" },
+        { pos: "Playmaker", char: "Tyler Caldwell", link: "https://roleplay.chat/profile.php?user=BLACK+VEIN" },
         { pos: "Attack", char: "Katniss Saunders", link: "https://roleplay.chat/profile.php?user=Katniss" }, { pos: "Attack", char: "Rhode Sterling", link: "https://roleplay.chat/profile.php?user=chronicles" },
         { pos: "Defence" }, { pos: "Defence" },
         { pos: "Goalkeeper", captain: true, char: "Enzo Krüger", link: "https://roleplay.chat/profile.php?user=Breakpoint" },
@@ -1251,9 +1439,9 @@ clubs: [
     positions: [
       { pos: "Captain", group: "leadership", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" },
       { pos: "Flyer", group: "squad", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" }, { pos: "Flyer", group: "squad", char: "Velora Virelli", link: "https://roleplay.chat/profile.php?user=Filament!" }, { pos: "Flyer", group: "squad" },
-      { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
+      { pos: "Base", group: "squad", char: "Manuel \"Manny\" Glint", link: "https://roleplay.chat/profile.php?user=Crashnburn" }, { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
       { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" },
-      { pos: "Alternate Flyer", group: "reserves", char: "Emery Bloom", link: "https://roleplay.chat/profile.php?user=Sweet+Spot" }, { pos: "Alternate Base", group: "reserves" }, { pos: "Alternate Tumbler", group: "reserves" },
+      { pos: "Alternate Flyer", group: "reserves", char: "Emery Bloom", link: "https://roleplay.chat/profile.php?user=Sweet+Spot" }, { pos: "Alternate Base", group: "reserves" }, { pos: "Alternate Tumbler", group: "reserves", char: "Daphne Callas", link: "https://roleplay.chat/profile.php?user=Verdant!" },
     ],
   },
   {
@@ -1339,7 +1527,7 @@ clubs: [
       { pos: "Research Lead", group: "leadership" },
       { pos: "Policy", group: "varsity" }, { pos: "Policy", group: "varsity" },
       { pos: "Parliamentary", group: "varsity" }, { pos: "Parliamentary", group: "varsity" },
-      { pos: "Novice", group: "novice" }, { pos: "Novice", group: "novice" },
+      { pos: "Novice", group: "novice", char: "Lucrecia Sofìa Avalos-Perez", link: "https://roleplay.chat/profile.php?user=Rosetta!" }, { pos: "Novice", group: "novice" },
     ],
   },
   {
@@ -1404,7 +1592,7 @@ studentGov: [
       { pos: "Logistics Lead" },
       { pos: "Programming Lead" },
       { pos: "Committee Member", char: "Ariana Ferreira", link: "https://roleplay.chat/profile.php?user=Morpha" },
-      { pos: "Committee Member" },
+      { pos: "Committee Member", char: "Lucrecia Sofìa Avalos-Perez", link: "https://roleplay.chat/profile.php?user=Rosetta!" },
     ],
   },
 ],
