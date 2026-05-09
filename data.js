@@ -522,7 +522,7 @@ faculty: [
         { year: "JR", title: "Crisis Management III", desc: "Multi-vector incidents — a fire and a hostage and a power outage at the same time. Triage of crises, not just casualties. After-action reviews, witness coordination, the architecture of cleanup. Joint sessions with Media & PR juniors." },
         { year: "SR", title: "Crisis Management IV",  desc: "Leadership at a crisis scene. Commanding junior responders, coordinating with civilian emergency services, owning the incident report. Most senior thesis incidents come out of this class." },
       ]},
-      { role: "Media & Public Relations", tracks: ["hero", "sidekick"], subjects: [
+      { role: "Media & Public Relations", char: "Reserved by Owner", npc: true, tracks: ["hero", "sidekick"], subjects: [
         { year: "FR", title: "Media & PR I",   desc: "Camera presence, interview basics, the press kit. Sitting still under hot lights without flinching. Transcript analysis of historical incidents — learning the difference between what gets said and what gets cleared." },
         { year: "SO", title: "Media & PR II",  desc: "Identity management — public name, working alias, the legal architecture of a hero identity. Case study: Paragon, the world's most famous no-separation supe. Plus on-camera discipline at scale: scripted appearances, sponsor obligations, when to refuse a question and when to refuse it visibly." },
         { year: "JR", title: "Media & PR III", desc: "Damage control and live drafting. Crisis comms after a real incident, drafted in real time, with real consequences. You write press releases for the graduating cohort's first live ops and watch which lines survive into print. Joint sessions with Crisis Management juniors." },
