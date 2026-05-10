@@ -1853,15 +1853,7 @@ function LoreHistory(){
       <section className="lore-block">
         <div className="lore-eyebrow">Casting Rule · Strict</div>
         <h3 className="lore-h">Cradle bands are <span className="accent">hard limits.</span></h3>
-        <p className="lore-p">
-          Powered characters must fall inside the age range of their Cradle phase.
-          Cradle III runs roughly ages 0–26, Cradle II 31–46, and Cradle I 51–58.
-          Submissions outside those bands will not be accepted.
-        </p>
-        <p className="lore-p">
-          The <strong>only</strong> powered characters permitted above the age of 46 are <strong>Paragon</strong>, <strong>the Dean</strong>, and <strong>Vale</strong>.
-          No other Cradle‑I‑aged powered characters will be approved. If your concept needs to be older than 46 and powered, it doesn't fit this game — rework the age, or pitch it as a non‑powered Outside Calderyn role instead.
-        </p>
+        <p className="lore-p">Cradle bands are hard limits. A character's age must fall inside the age range of their Cradle phase — Cradle III runs roughly ages 0–26, Cradle II 31–46, and Cradle I 51–58. Powers normally track the phase a character was born into, so anyone with abilities is expected to sit in the band that matches their Cradle. The one in-world exception is <strong>Paragon</strong>, who was born inside the Cradle II generation but received the same injection given to Cradle I — his age stays in the 31–46 range even though his power profile reads as Cradle I. Beyond Paragon, the only powered characters permitted above 46 are <strong>the Dean</strong> and <strong>Vale</strong>. Submissions outside those bands will not be accepted.</p>
       </section>                                                                                                                
 
       <section className="lore-block">
@@ -3619,7 +3611,7 @@ function JoinTab(){
           {["student","faculty","strata","collective"].includes(type) && (
             <aside className="join-age-note" style={{margin:"16px 0 24px",padding:"14px 18px",border:"1px solid #c83030",borderLeft:"4px solid #c83030",background:"rgba(200,48,48,0.08)",borderRadius:"6px",fontSize:"0.92rem",lineHeight:"1.5"}}>
               <strong style={{textTransform:"uppercase",letterSpacing:"0.08em",color:"#c83030"}}>Age & Cradle requirement — strict.</strong>{" "}
-              Your character's age must fall inside the age range of their Cradle phase (Cradle III: 0–26 · Cradle II: 31–46 · Cradle I: 51–58). The <strong>only</strong> powered characters permitted above the age of 46 are <strong>Paragon</strong>, <strong>the Dean</strong>, and <strong>Vale</strong> — no other powered characters above 46 will be accepted.
+            Your character's age must fall inside the age range of their Cradle phase (Cradle III: 0–26 · Cradle II: 31–46 · Cradle I: 51–58), and a powered character is normally expected to sit in the band that matches the Cradle they were born into. The lone in-world exception is <strong>Paragon</strong> — he was born in the Cradle II generation, so his age stays in the 31–46 range, but he received the same injection given to Cradle I, which is why his power profile reads as Cradle I on a Cradle II-aged body. The only other powered characters permitted above the age of 46 are <strong>the Dean</strong> and <strong>Vale</strong> — no other powered characters above 46 will be accepted.
             </aside>
           )}                                                                          
 
