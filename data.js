@@ -1693,6 +1693,7 @@ rules: [
   { n: "06", title: "Three-day cooldown between applications.", body: "There is no cap on how many characters you can play, but the room is run by a single mod. To keep applications reviewable, please wait three days after submitting one character application before submitting your next. Patience here keeps the queue moving and the reviews thorough." },
   { n: "07", title: "Power applications require approval.",   body: "All powers must be registered in the Powers tab before play begins. A-List applications require a separate conversation with admin before submission. Do not play an unregistered ability." },
   { n: "08", title: "Admin decisions are final.",             body: "Disagreements with admin decisions should be raised calmly and in private. Public disputes, callouts, or attempts to rally other players against a ruling will not be entertained and may result in removal." },
+    { n: "09", title: "Age & cradle bands are hard limits.",     body: "Powered characters must fall inside the age range of their Cradle phase. Cradle III is roughly ages 0-26, Cradle II is 31-46, and Cradle I is 51-58. Powers above the age of 46 are reserved for Paragon, the Dean, and Vale only -- no other powered characters above 46 will be accepted." },  
 ],
 
 curriculumTracks: [
