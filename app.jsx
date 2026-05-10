@@ -1850,6 +1850,19 @@ function LoreHistory(){
           </article>
         </div>
       </section>
+      <section className="lore-block">
+        <div className="lore-eyebrow">Casting Rule · Strict</div>
+        <h3 className="lore-h">Cradle bands are <span className="accent">hard limits.</span></h3>
+        <p className="lore-p">
+          Powered characters must fall inside the age range of their Cradle phase.
+          Cradle III runs roughly ages 0–26, Cradle II 31–46, and Cradle I 51–58.
+          Submissions outside those bands will not be accepted.
+        </p>
+        <p className="lore-p">
+          The <strong>only</strong> powered characters permitted above the age of 46 are <strong>Paragon</strong>, <strong>the Dean</strong>, and <strong>Vale</strong>.
+          No other Cradle‑I‑aged powered characters will be approved. If your concept needs to be older than 46 and powered, it doesn't fit this game — rework the age, or pitch it as a non‑powered Outside Calderyn role instead.
+        </p>
+      </section>                                                                                                                
 
       <section className="lore-block">
         <div className="lore-eyebrow">2009 — Geneva</div>
@@ -3603,6 +3616,12 @@ function JoinTab(){
               <span className="join-divider-tag">Step 02 · Details</span>
               <span className="join-divider-rule"/>
             </div>
+          {["student","faculty","strata","collective"].includes(type) && (
+            <aside className="join-age-note" style={{margin:"16px 0 24px",padding:"14px 18px",border:"1px solid #c83030",borderLeft:"4px solid #c83030",background:"rgba(200,48,48,0.08)",borderRadius:"6px",fontSize:"0.92rem",lineHeight:"1.5"}}>
+              <strong style={{textTransform:"uppercase",letterSpacing:"0.08em",color:"#c83030"}}>Age & Cradle requirement — strict.</strong>{" "}
+              Your character's age must fall inside the age range of their Cradle phase (Cradle III: 0–26 · Cradle II: 31–46 · Cradle I: 51–58). The <strong>only</strong> powered characters permitted above the age of 46 are <strong>Paragon</strong>, <strong>the Dean</strong>, and <strong>Vale</strong> — no other powered characters above 46 will be accepted.
+            </aside>
+          )}                                                                          
 
             <JoinFieldset type={type} form={form} set={set}/>
 
