@@ -2133,6 +2133,12 @@ mapLocations: [
     desc: "The campus pub, in a vaulted brick cellar under the refectory. Carded properly — over-eighteens only, and the bar staff know every face. Six taps, a piano nobody admits to playing, and a back booth that is by long convention reserved for whichever faculty member arrived first. Named for the founding alumna Eleanor Vesper, whose portrait hangs over the bar and whose initials are still cut into the wood of the booth.",
     tags: ["18+", "Termtime nightly"],
   },
+  { id: "chapel", district: "commons", n: "K6",
+    name: "The Chapel",
+    sub: "Non-denominational chapel · Memorial Garden",
+    desc: "A small stone chapel at the quiet end of the commons, kept non-denominational since the 1980s and used mostly for the annual memorial service and the occasional faculty wedding. The doors are unlocked from dawn to dusk and the back pew is, by a tradition nobody legislated, where students sit when they need somewhere that isn't a counsellor's office. <strong>The Memorial Garden to the Fallen Heroes</strong> runs the length of the chapel's east wall — a walled walk of pale stone, planted with white roses and a single ancient yew, with the names of Calderyn alumni lost in the field cut into the inner wall. The newest panel of the wall is the <em>Cassandra panel</em>: a memorial to the alumni heroes who answered the call and did not come back, commissioned by <a href=\"https://roleplay.chat/profile.php?user=illuminate\" target=\"_blank\" rel=\"noopener noreferrer\">Celestia &quot;Stella&quot; Starkov</a> in memory of <strong>Solas Strathe</strong> &mdash; her boyfriend, and nephew to the current CEO of STRATA &mdash; and the others who fell with him. The names beside Solas's are kept by the school but not by the public registry; the family asked, and the school agreed.",
+    tags: ["Open dawn–dusk", "Memorial"],
+  },
 
   /* ═══ PERIMETER ════════════════════════════════════════════════════ */
   { id: "main-gate", district: "perimeter", n: "P1",

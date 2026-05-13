@@ -3597,6 +3597,14 @@ span.cname{ font-weight:600; color:var(--ink); }
 /* CLUB RULES — Powerball How To Play tab */
 /* CLUB RULES — dark restyle (Powerball "How To Play" / All clubs) */
 .kbr{
+  /* Powerball cleanup: scope a single accent var to the rules block so every
+     yellow/gold reference resolves to Powerball red. Replaces the previous
+     mixed yellow/grey palette that fought the dark page background. */
+  --pb-accent: #c41a1a;
+  --pb-accent-soft: rgba(196,26,26,.10);
+  --pb-accent-faint: rgba(196,26,26,.05);
+  --pb-surface: rgba(255,255,255,.025);
+  --pb-surface-2: rgba(255,255,255,.04);
   background:transparent;
   color:#f1ede4;
 }
@@ -3618,7 +3626,7 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 .kbr-section + .kbr-section{
   padding-top:24px;
-  border-top:1px solid #1f1f26;
+  border-top:1px solid var(--rule-soft, rgba(255,255,255,.06));
 }
 .kbr-section-tag{
   display:inline-block;
@@ -3627,11 +3635,11 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.8px;
   text-transform:uppercase;
-  color:#fbbf24;
+  color:var(--pb-accent);
   margin:0 0 18px;
   padding:6px 10px;
-  background:rgba(251,191,36,.08);
-  border-left:3px solid #fbbf24;
+  background:var(--pb-accent-soft);
+  border-left:3px solid var(--pb-accent);
 }
 
 /* ---- Overview ---- */
@@ -3655,15 +3663,15 @@ span.cname{ font-weight:600; color:var(--ink); }
   align-items:flex-start;
   gap:14px;
   padding:16px 18px;
-  background:#14141a;
-  border:1px solid #1f1f26;
-  border-left:3px solid #fbbf24;
+  background:var(--pb-surface);
+  border:none;
+  border-left:3px solid var(--pb-accent);
 }
 .kbr-keypoint-num{
   font-family:var(--mono);
   font-size:18px;
   font-weight:700;
-  color:#fbbf24 !important;
+  color:var(--pb-accent) !important;
   letter-spacing:.04em;
   flex-shrink:0;
   min-width:36px;
@@ -3682,7 +3690,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   gap:6px;
 }
 .kbr-keypoint-lbl .ico{
-  color:#fbbf24;
+  color:var(--pb-accent);
   font-size:13px;
 }
 .kbr-keypoint-body p{
@@ -3701,18 +3709,17 @@ span.cname{ font-weight:600; color:var(--ink); }
   width:100%;
   padding:0;
   margin:0 0 4px;
-  background:#0e0e10;
-  border:1px solid #1f1f26;
-  border-left:3px solid #fbbf24;
+  background:var(--pb-surface);
+  border:none;
+  border-left:3px solid var(--pb-accent);
   cursor:pointer;
   text-align:left;
   color:inherit;
   transition:background .15s, border-color .15s;
 }
 .kbr-arena-tile:hover{
-  background:#14141a;
-  border-color:#2a2a32;
-  border-left-color:#fbbf24;
+  background:var(--pb-surface-2);
+  border-left-color:var(--pb-accent);
 }
 .kbr-arena-tile-img{
   display:block;
@@ -3737,7 +3744,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.6px;
   text-transform:uppercase;
-  color:#fbbf24 !important;
+  color:var(--pb-accent) !important;
   display:flex;
   align-items:center;
   gap:6px;
@@ -3763,7 +3770,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.4px;
   text-transform:uppercase;
-  color:#fbbf24 !important;
+  color:var(--pb-accent) !important;
   display:flex;
   align-items:center;
   gap:6px;
@@ -3784,17 +3791,17 @@ span.cname{ font-weight:600; color:var(--ink); }
   display:grid;
   grid-template-columns:64px 1fr;
   gap:0;
-  background:#14141a;
-  border:1px solid #1f1f26;
-  border-left:3px solid #fbbf24;
+  background:var(--pb-surface);
+  border:none;
+  border-left:3px solid var(--pb-accent);
   overflow:hidden;
 }
 .kbr-role::before{
   content:"";
   grid-column:1;
   grid-row:1 / span 3;
-  background:linear-gradient(180deg, rgba(251,191,36,.10) 0%, rgba(251,191,36,.02) 100%);
-  border-right:1px solid #1f1f26;
+  background:linear-gradient(180deg, rgba(196,26,26,.14) 0%, rgba(196,26,26,.03) 100%);
+  border-right:none;
 }
 .kbr-role-num{
   position:absolute;
@@ -3806,7 +3813,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-size:18px;
   font-weight:700;
   letter-spacing:1px;
-  color:#fbbf24 !important;
+  color:var(--pb-accent) !important;
   background:transparent;
   padding:0;
   line-height:1;
@@ -3817,7 +3824,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   display:block;
   width:24px;
   height:2px;
-  background:#fbbf24;
+  background:var(--pb-accent);
   margin:0 auto 10px;
   opacity:.85;
 }
@@ -3865,8 +3872,8 @@ span.cname{ font-weight:600; color:var(--ink); }
   flex-wrap:wrap;
   gap:12px;
   padding:11px 22px 11px 64px;
-  background:#0e0e12;
-  border-top:1px solid #1f1f26;
+  background:rgba(0,0,0,.18);
+  border-top:none;
   font-family:var(--sans);
   font-size:13px;
   line-height:1.5;
@@ -3880,8 +3887,8 @@ span.cname{ font-weight:600; color:var(--ink); }
   top:0;
   bottom:0;
   width:3px;
-  background:#fbbf24;
-  opacity:.6;
+  background:var(--pb-accent);
+  opacity:.7;
 }
 .kbr-role-best-tag{
   flex-shrink:0;
@@ -3894,8 +3901,8 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.5px;
   text-transform:uppercase;
-  color:#07070a !important;
-  background:#fbbf24;
+  color:#fff !important;
+  background:var(--pb-accent);
 }
 .kbr-role-best-text{
   color:#e6e2d8 !important;
@@ -3915,9 +3922,9 @@ span.cname{ font-weight:600; color:var(--ink); }
 /* ---- Rulebook blocks ---- */
 .kbr-block{
   padding:18px 20px;
-  background:#14141a;
-  border:1px solid #1f1f26;
-  border-left:3px solid #fbbf24;
+  background:var(--pb-surface);
+  border:none;
+  border-left:3px solid var(--pb-accent);
   margin-bottom:12px;
 }
 .kbr-block:last-child{ margin-bottom:0; }
@@ -3930,10 +3937,10 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.6px;
   text-transform:uppercase;
-  color:#fbbf24 !important;
+  color:var(--pb-accent) !important;
   margin-bottom:12px;
 }
-.kbr-block-tag .ico{ color:#fbbf24; }
+.kbr-block-tag .ico{ color:var(--pb-accent); }
 .kbr-block p{
   font-family:var(--sans);
   font-size:14px;
@@ -3949,7 +3956,7 @@ span.cname{ font-weight:600; color:var(--ink); }
 .kbr-list li{
   position:relative;
   padding:8px 0 8px 18px;
-  border-bottom:1px solid #1f1f26;
+  border-bottom:1px solid rgba(255,255,255,.04);
   font-family:var(--sans);
   font-size:14px;
   line-height:1.55;
@@ -3963,7 +3970,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   width:6px;
   height:6px;
   border-radius:50%;
-  background:#fbbf24;
+  background:var(--pb-accent);
 }
 .kbr-list li:last-child{ border-bottom:none; }
 
@@ -3976,15 +3983,15 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 .kbr-career-stat{
   padding:14px 16px;
-  background:#14141a;
-  border:1px solid #1f1f26;
-  border-left:3px solid #ef4444;
+  background:var(--pb-surface);
+  border:none;
+  border-left:3px solid var(--pb-accent);
 }
 .kbr-career-stat-num{
   font-family:var(--display, var(--sans));
   font-size:24px;
   font-weight:700;
-  color:#ef4444 !important;
+  color:var(--pb-accent) !important;
   letter-spacing:.02em;
   line-height:1;
   margin-bottom:6px;
@@ -4039,9 +4046,9 @@ span.cname{ font-weight:600; color:var(--ink); }
   justify-content:center;
 }
 .kbr-lightbox-close:hover{
-  background:#fbbf24;
-  color:#07070a;
-  border-color:#fbbf24;
+  background:var(--pb-accent);
+  color:#fff;
+  border-color:var(--pb-accent);
 }
 .kbr-lightbox-hint{
   position:absolute;
@@ -7666,8 +7673,8 @@ button.class-chip-btn{
 .orgs-group-meta{ display:flex; align-items:center; gap:14px; }
 .orgs-group-count{ color:var(--text-low) !important; font-family:var(--mono) !important; font-size:11px !important; letter-spacing:1.5px !important; }
 .orgs-group-toggle{ color:var(--gold) !important; font-size:14px; }
-.orgs-group-note{ color:var(--text-mid) !important; padding:0 24px 14px !important; font-size:14px; line-height:1.7; margin:0; }
-.orgs-list{ padding:0 24px 24px; display:grid; gap:14px; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); }
+.orgs-group-note{ color:var(--text-mid) !important; padding:0 24px !important; font-size:14px; line-height:1.7; margin:0; }
+.orgs-list{ padding:18px 24px; display:grid; gap:14px; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); }
 .orgs-item{
   background:rgba(255,255,255,.02) !important;
   border:1px solid var(--rule-soft) !important;
