@@ -2651,9 +2651,81 @@ function ClubRules({rules}){
   );
 }
 
+function ClubModal({club, onClose}){
+  const [tab, setTab] = useState("about");
+  const hasRules = !!club.rules;
+  const hasTeams = !!club.teams;
+  const tabs = [
+    {id: "about",  label: "About"},
+    ...(hasRules ? [{id: "rules", label: "Rules"}] : []),
+    {id: "roster", label: "Roster"},
+  ];
+
+  // Reset to About whenever the modal opens on a different club.
+  useEffect(() => { setTab("about"); }, [club]);
+
+  // Esc closes; lock page scroll while the modal is mounted.
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="club-modal-overlay"
+      onClick={onClose}
+      role="presentation"
+    >
+      <div
+        className="club-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label={club.name}
+        onClick={e => e.stopPropagation()}
+      >
+        <header className="club-modal-hd" style={{background: club.bg}}>
+          <div className="club-modal-hd-body">
+            {club.category && <div className="club-modal-cat">{club.category}</div>}
+            <h2 className="club-modal-name">{club.name}</h2>
+            {club.tag && <div className="club-modal-tag">{club.tag}</div>}
+          </div>
+          <button
+            type="button"
+            className="club-modal-close"
+            onClick={onClose}
+            aria-label="Close"
+          ><span aria-hidden="true">×</span></button>
+        </header>
+        <nav className="club-modal-tabs" role="tablist">
+          {tabs.map(t => (
+            <button
+              key={t.id}
+              role="tab"
+              aria-selected={tab === t.id}
+              className={"club-modal-tab" + (tab === t.id ? " on" : "")}
+              onClick={() => setTab(t.id)}
+            >{t.label}</button>
+          ))}
+        </nav>
+        <div className="club-modal-body">
+          {tab === "about"  && <ClubPanelAbout club={club}/>}
+          {tab === "rules"  && hasRules && <ClubRules rules={club.rules}/>}
+          {tab === "roster" && <ClubPanelRoster club={club} hasTeams={hasTeams}/>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ClubsTab(){
   const [filter, setFilter] = useState("All");
-  const [openIdx, setOpenIdx] = useState(0);
+  const [openIdx, setOpenIdx] = useState(null);
 
   const categories = useMemo(() => {
     const cats = ["All"];
@@ -2668,34 +2740,14 @@ function ClubsTab(){
     return CLUBS.map((c, i) => c.category === filter ? {c, i} : null).filter(Boolean);
   }, [filter]);
 
-  // Keep selection valid when filter changes
-  useEffect(() => {
-    if (visible.length === 0) return;
-    if (!visible.some(v => v.i === openIdx)) {
-      setOpenIdx(visible[0].i);
-    }
-  }, [filter, visible, openIdx]);
-
-  const open = CLUBS[openIdx] || CLUBS[0];
-
-  // Reset detail tab when switching clubs
-  const [detailTab, setDetailTab] = useState("about");
-  useEffect(() => { setDetailTab("about"); }, [openIdx]);
-
-  const hasRules = !!(open && open.rules);
-  const hasTeams = !!(open && open.teams);
-  const detailTabs = [
-    {id: "about",  label: "About"},
-    ...(hasRules ? [{id: "rules", label: "Rules"}] : []),
-    {id: "roster", label: "Roster"},
-  ];
+  const open = openIdx !== null ? CLUBS[openIdx] : null;
 
   return (
     <div>
       <PageHead
         stamp="DOC · 05 · CAMPUS ORGS"
         title={<>Clubs &amp; societies</>}
-        body="Six campus clubs. Pick one from the directory to view its full roster, rules, and post-graduation pathway. Leadership is one role per player. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval."
+        body="Six campus clubs. Pick one to view its full roster, rules, and post-graduation pathway. Leadership is one role per player. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval."
         pageNum="P. 005 / VIII"
       />
       <div className="club-filters-band">
@@ -2718,108 +2770,45 @@ function ClubsTab(){
         </div>
       </div>
 
-      <div className="clubs-dir">
-        {/* LEFT — directory rail */}
-        <aside className="clubs-dir-rail" aria-label="Club directory">
-          <div className="clubs-dir-rail-hd">
-            <span className="clubs-dir-rail-label">Directory</span>
-            <span className="clubs-dir-rail-count">{visible.length} / {CLUBS.length}</span>
-          </div>
-          {visible.length === 0 && (
-            <div style={{padding:"24px 16px"}}>
-              <EmptyState label={`No clubs in ${filter}`}/>
-            </div>
-          )}
-          <ul className="clubs-dir-list">
-            {visible.map(({c, i}) => {
-              const total = clubTotal(c);
-              const filled = clubFilled(c);
-              return (
-                <li key={i}>
-                  <button
-                    className={"clubs-dir-item" + (openIdx === i ? " on" : "")}
-                    onClick={() => setOpenIdx(i)}
-                    aria-current={openIdx === i ? "true" : undefined}
-                    style={{"--accent": c.bg}}
-                  >
-                    <span className="clubs-dir-item-stripe" aria-hidden="true"/>
-                    <span className="clubs-dir-item-body">
-                      {c.tag && <span className="clubs-dir-item-tag">{c.tag}</span>}
-                      <span className="clubs-dir-item-name">{c.name}</span>
-                      {c.desc && <span className="clubs-dir-item-desc">{c.desc}</span>}
-                      <span className="clubs-dir-item-meta">
-                        {c.category && <span className="clubs-dir-item-cat">{c.category}</span>}
-                        <span className="clubs-dir-item-roster">
-                          <span className="clubs-dir-item-roster-num">{filled}</span>
-                          <span className="clubs-dir-item-roster-sep">/</span>
-                          <span className="clubs-dir-item-roster-tot">{total}</span>
-                          <span className="clubs-dir-item-roster-lbl">filled</span>
-                        </span>
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </aside>
-
-        {/* RIGHT — detail pane */}
-        {open && (
-          <section className="clubs-dir-detail" aria-label={open.name}>
-            <header className="clubs-dir-hero" style={{"--accent": open.bg}}>
-              <div className="clubs-dir-hero-inner">
-                {open.category && <div className="clubs-dir-hero-cat">{open.category}</div>}
-                <h2 className="clubs-dir-hero-name">{open.name}</h2>
-                {open.tag && <div className="clubs-dir-hero-tag">{open.tag}</div>}
-              </div>
-            </header>
-
-            <div className="clubs-dir-glance">
-              <div className="clubs-dir-glance-cell">
-                <div className="clubs-dir-glance-lbl">Access</div>
-                <div className="clubs-dir-glance-val">{open.access}</div>
-              </div>
-              {open.meets && open.meets.length > 0 && (
-                <div className="clubs-dir-glance-cell">
-                  <div className="clubs-dir-glance-lbl">Meets</div>
-                  <div className="clubs-dir-glance-val">
-                    {open.meets.map((m, mi) => (
-                      <span key={mi} className="clubs-dir-glance-chip">{m}</span>
-                    ))}
-                  </div>
+      {visible.length === 0 ? (
+        <div className="clubs-grid-empty">
+          <EmptyState label={`No clubs in ${filter}`}/>
+        </div>
+      ) : (
+        <div className="clubs-grid">
+          {visible.map(({c, i}) => {
+            const total = clubTotal(c);
+            const filled = clubFilled(c);
+            return (
+              <button
+                key={i}
+                type="button"
+                className="club-card"
+                onClick={() => setOpenIdx(i)}
+                style={{"--accent": c.bg}}
+                aria-label={`Open ${c.name}`}
+              >
+                {c.tag && <div className="club-card-tag">{c.tag}</div>}
+                <div className="club-card-name">{c.name}</div>
+                {c.desc && <p className="club-card-desc">{c.desc}</p>}
+                <div className="club-card-meta">
+                  {c.category && <span className="club-card-cat">{c.category}</span>}
+                  <span className="club-card-roster">
+                    <span className="club-card-roster-num">{filled}</span>
+                    <span className="club-card-roster-sep">/</span>
+                    <span className="club-card-roster-tot">{total}</span>
+                    <span className="club-card-roster-lbl">filled</span>
+                  </span>
                 </div>
-              )}
-              <div className="clubs-dir-glance-cell">
-                <div className="clubs-dir-glance-lbl">Roster</div>
-                <div className="clubs-dir-glance-val">
-                  <span className="clubs-dir-glance-num">{clubFilled(open)}</span>
-                  <span className="clubs-dir-glance-tot"> / {clubTotal(open)}</span>
-                  <span className="clubs-dir-glance-sub"> active</span>
-                </div>
-              </div>
-            </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
-            <nav className="clubs-dir-tabs" role="tablist">
-              {detailTabs.map(t => (
-                <button
-                  key={t.id}
-                  role="tab"
-                  aria-selected={detailTab === t.id}
-                  className={"clubs-dir-tab" + (detailTab === t.id ? " on" : "")}
-                  onClick={() => setDetailTab(t.id)}
-                >{t.label}</button>
-              ))}
-            </nav>
-
-            <div className="clubs-dir-body">
-              {detailTab === "about"  && <ClubPanelAbout club={open}/>}
-              {detailTab === "rules"  && hasRules && <ClubRules rules={open.rules}/>}
-              {detailTab === "roster" && <ClubPanelRoster club={open} hasTeams={hasTeams}/>}
-            </div>
-          </section>
-        )}
-      </div>
+      {open && (
+        <ClubModal club={open} onClose={() => setOpenIdx(null)}/>
+      )}
     </div>
   );
 }
