@@ -446,6 +446,79 @@ students: [
     drawbacks: "Constantly needs to eat. Long fights drain him; once calories run out, his body begins to autophage — cannibalising muscle and organ tissue to keep going. Vulnerable to anything that disrupts digestion or appetite.",
     link: "https://roleplay.chat/profile.php?user=Crashnburn"
   },
+  {
+    char: "Winifred Finch",
+    alias: "Swarm",
+    house: "grimere",
+    year: "Freshman",
+    track: "sidekick",
+    tier: "C-List",
+    power: "Entomantic Hive-Link, Swarm Command, Distributed Awareness, Environmental Attraction, Quiet Movement, Emotional Escalation Response",
+    expression: "Entomantic Hive-Link\nWinnie possesses a rare biological-psychic connection to insects and similar small crawling creatures, allowing her to communicate with, influence, and command them through instinctive emotional and mental impulses. The connection extends across nearly all species — from moths and beetles to spiders, crickets, centipedes, bees, wasps, flies, slugs, and more. While commands begin simple, her control becomes increasingly precise under focus or emotional stress. Unlike traditional telepathy, the connection feels deeply sensory and collective. Winnie does not merely “control” insects; she experiences them as part of a living network surrounding her at all times.\n\nhttps://docs.google.com/document/d/1XV-7nfcYdo7qYiNc-hQiJVygViY__m4Nib4KeDVZSAs/edit?usp=sharing",
+    drawbacks: "Sensory Overload, Sensory Overload, Physically Vulnerable, Cold Temperatures, Fire & Chemical Exposure, Hoarding & Attachment Tendencies",
+    link: "https://roleplay.chat/profile.php?user=Swarm!"
+  },
+  {
+    char: "Ramona Vey",
+    alias: "Marionette",
+    house: "valaris",
+    year: "Freshman",
+    track: "sidekick",
+    tier: "C-List",
+    power: "Clothing Manipulation, Fabric Awareness",
+    expression: "Clothing Manipulation\nRomy can manipulate clothing currently being worn by herself or others, controlling tension, movement, and directional force through fabric. She uses the ability to restrict movement, disrupt balance, redirect limbs, reinforce fabric, or create temporary restraints and chokeholds. Heavy clothing, tactical gear, scarves, jackets, and layered outfits provide more opportunities for control. Her fighting style relies on precision, improvisation, and disruption rather than brute strength.\n\nFabric Awareness\nRomy possesses an instinctive understanding of textiles and fabric construction. Through touch or proximity, she can identify material blends, damaged seams, residue, repairs, and signs of wear almost instantly. The ability is especially useful for investigative work, allowing her to detect transferred fibers, spot disguise inconsistencies, and reconstruct struggles or movement through clothing damage and fabric stress.",
+    drawbacks: "Limited Target Scope, Physically Outmatched, Overstimulation & Sensory Strain, Curiosity Overrides Caution, Emotional Transparency, Attachment & Protective Instincts",
+    link: "https://roleplay.chat/profile.php?user=Marionette%21"
+  },
+  {
+    char: "Riley Carter",
+    alias: "VICE",
+    house: "valaris",
+    year: "Junior",
+    track: "hero",
+    tier: "A-List",
+    power: "Pressure Manipulation · Biological Pressure Control",
+    expression: "Vice’s power manifests through localized pressure distortion within biological systems. When activated, subtle visual effects appear around the target: faint air warping, trembling fabric, pulsing veins, brief condensation, and low-frequency vibrations in the surrounding space. Riley manipulates pressure by applying focused compression or imbalance to specific physiological systems, including muscles, lungs, joints, blood flow, and equilibrium centers. This allows her to induce heaviness, pain, dizziness, breath restriction, muscular disruption, or temporary loss of coordination without causing visible external force. Precision and proximity are critical. The closer Riley is to a target, the more accurate and effective her control becomes.",
+    drawbacks: "Vice’s power requires intense concentration and precise anatomical awareness. Emotional instability, panic, exhaustion, or sensory overload can make her control dangerously inconsistent. Her effectiveness rapidly decreases with distance, making close-range engagement essential for accurate pressure application. Affecting multiple targets at once significantly increases mental strain and reduces precision. Excessive use places severe stress on Riley’s own body, often causing migraines, nosebleeds, tremors, muscle fatigue, elevated heart rate, and temporary loss of fine motor control. Improper pressure placement can result in unintended serious injury, forcing her to constantly restrain herself during combat. Her abilities are also less effective against non-biological targets, heavily armored opponents, or individuals with abnormal internal physiology. Sedatives, disorientation, or direct disruption of her focus can weaken or interrupt activation entirely.",
+    link: "https://roleplay.chat/profile.php?user=pressure"
+  },
+  {
+    char: "Mavis Kingsman",
+    alias: "Savior",
+    house: "grimere",
+    year: "Freshman",
+    track: "hero",
+    tier: "A-List",
+    power: "Psionic Dominion, Telekinesis, Telepathy, Empathic Link, Flight, Psionic Barriers",
+    expression: "PSIONIC DOMINION\nMavis’ abilities operate through an interconnected psionic field tied directly to her mind, emotions, and nervous system. Unlike supers who separate powers into isolated categories, Mavis experiences telepathy, telekinesis, empathy, and flight as extensions of the same core phenomenon. Her thoughts influence matter, her emotions affect force output, and her awareness constantly brushes against the mental and emotional presence of others. STRATA classifies her as an exceptionally dangerous psionic because her power scales through cognition and emotional processing rather than purely physical limitation.\n\n(Ran out of room again: https://docs.google.com/document/d/1QyYVgRM0G7F2TXenGoq6yZvBadI_eVvJOL4WzAsrVlM/edit?usp=sharing)",
+    drawbacks: "Emotional Overload, Thought Intrusion, Precision vs Power, Mental Fatigue, Responsibility Complex, Social Detachment",
+    link: "https://roleplay.chat/profile.php?user=Savior"
+  },
+  {
+    char: "Baldor Kingsman",
+    alias: "King",
+    house: "valaris",
+    year: "Freshman",
+    track: "hero",
+    tier: "B-List",
+    power: "Momentum Physiology (\"Underdog Syndrome\")",
+    expression: "Baldor’s body continuously escalates in:\nphysical strength\ndurability\npain tolerance\nstamina\nrecovery efficiency\nforce output\n\n…based on active exertion duration.\n\nThe longer he remains physically engaged:\n\nfighting\nlifting\nrunning\nresisting damage\npushing through exhaustion\n\n…the stronger and tougher he becomes. He essentially turns sustained struggle into fuel.",
+    drawbacks: "1. Slow Start — He is strongest in prolonged engagements. Ambushes and quick overwhelming attacks are dangerous because he hasn’t ramped yet.\n\n2. Massive Caloric Burn — He burns absurd calories. He is CONSTANTLY hungry. This boy destroys barbecue, biscuits, burgers, sweet tea, protein shakes, and home cooking. STRATA nutritionists probably hate him.\n\n3. Internal Damage — His pain tolerance masks serious injury. He may continue fighting on torn ligaments, cracked bones, internal bleeding… and collapse afterward.\n\n4. Heat Buildup — Long activation causes dangerous overheating. Too long in escalation can lead to heat stroke, organ stress, tunnel vision, aggression spikes, and blackouts. Ice baths and recovery protocols become mandatory.\n\n5. Emotional Trigger Risk — His escalation responds strongly to emotional stress: humiliation, anger, fear for others, desperation. This means emotional manipulation can unintentionally push him into unstable overdrive.",
+    link: "https://roleplay.chat/profile.php?user=Kingsman"
+  },
+  {
+    char: "McKenna Doyle",
+    alias: "Menagerie",
+    house: "orenne",
+    year: "Junior",
+    track: "hero",
+    tier: "B-List",
+    power: "Biological Echo Mimicry, Partial Manifestation, Enhanced Physicality, Animal Communication & Instinct Recognition",
+    expression: "Biological Echo Mimicry\nMcKenna’s primary ability allows her to physically transform into animal species she has previously “imprinted” through direct skin-to-living-creature contact. Once contact is established, she retains the species within her biological memory and can access it again later without repeated exposure. Transformations are not illusionary; they are complete biological shifts that alter musculature, organs, senses, instincts, movement patterns, and neurological processing. She can perform either full-body transformations or partial adaptations, allowing her to selectively borrow traits from different species without committing entirely to a single form.\n\n(Ran out of room: https://docs.google.com/document/d/1AiO8XXAzmuKbnJBkoyUyY5gnoxQKHrE2TrgGRuyyBgA/edit?usp=sharing)",
+    drawbacks: "Instinct Drift, Identity Degradation, Physical Energy Consumption, Emotional & Instinctive Triggers, Overadaptation, Non-Specialist Ceiling",
+    link: "https://roleplay.chat/profile.php?user=Menagerie!",
+    note: "Banned from Powerball. During a sophomore-year intramural scrimmage McKenna entered partial-manifestation while playing Defence and inflicted bite injuries on three opposing players that required hospital triage. Athletics director and Powerball coaching staff ruled her out of all Powerball play — league, scrimmage, and practice — for the remainder of her time at Calderyn. Other powered contact sports unaffected.",
+  },
 ],
 
 faculty: [
@@ -1276,6 +1349,68 @@ powers: [
     drawbacks: "Not invulnerable — repeated impacts, piercing attacks, and concentrated force still fracture and bleed him. Heavy absorption strains his system, slowing reactions and pushing him toward overheating, fatigue, and eventual shutdown. Break State worsens injury suppression and risks collapse.",
     link: "https://roleplay.chat/profile.php?user=bulk"
   },
+  {
+    status: "student",
+    tier: "C",
+    power: "Entomantic Hive-Link, Swarm Command, Distributed Awareness, Environmental Attraction, Quiet Movement, Emotional Escalation Response",
+    char: "Winifred Finch",
+    alias: "Swarm",
+    expression: "Entomantic Hive-Link\nWinnie possesses a rare biological-psychic connection to insects and similar small crawling creatures, allowing her to communicate with, influence, and command them through instinctive emotional and mental impulses. The connection extends across nearly all species — from moths and beetles to spiders, crickets, centipedes, bees, wasps, flies, slugs, and more. While commands begin simple, her control becomes increasingly precise under focus or emotional stress. Unlike traditional telepathy, the connection feels deeply sensory and collective. Winnie does not merely “control” insects; she experiences them as part of a living network surrounding her at all times.\n\nhttps://docs.google.com/document/d/1XV-7nfcYdo7qYiNc-hQiJVygViY__m4Nib4KeDVZSAs/edit?usp=sharing",
+    drawbacks: "Sensory Overload, Sensory Overload, Physically Vulnerable, Cold Temperatures, Fire & Chemical Exposure, Hoarding & Attachment Tendencies",
+    link: "https://roleplay.chat/profile.php?user=Swarm!"
+  },
+  {
+    status: "student",
+    tier: "C",
+    power: "Clothing Manipulation, Fabric Awareness",
+    char: "Ramona Vey",
+    alias: "Marionette",
+    expression: "Clothing Manipulation\nRomy can manipulate clothing currently being worn by herself or others, controlling tension, movement, and directional force through fabric. She uses the ability to restrict movement, disrupt balance, redirect limbs, reinforce fabric, or create temporary restraints and chokeholds. Heavy clothing, tactical gear, scarves, jackets, and layered outfits provide more opportunities for control. Her fighting style relies on precision, improvisation, and disruption rather than brute strength.\n\nFabric Awareness\nRomy possesses an instinctive understanding of textiles and fabric construction. Through touch or proximity, she can identify material blends, damaged seams, residue, repairs, and signs of wear almost instantly. The ability is especially useful for investigative work, allowing her to detect transferred fibers, spot disguise inconsistencies, and reconstruct struggles or movement through clothing damage and fabric stress.",
+    drawbacks: "Limited Target Scope, Physically Outmatched, Overstimulation & Sensory Strain, Curiosity Overrides Caution, Emotional Transparency, Attachment & Protective Instincts",
+    link: "https://roleplay.chat/profile.php?user=Marionette%21"
+  },
+  {
+    status: "student",
+    tier: "A",
+    power: "Pressure Manipulation · Biological Pressure Control",
+    char: "Riley Carter",
+    alias: "VICE",
+    expression: "Vice’s power manifests through localized pressure distortion within biological systems. When activated, subtle visual effects appear around the target: faint air warping, trembling fabric, pulsing veins, brief condensation, and low-frequency vibrations in the surrounding space. Riley manipulates pressure by applying focused compression or imbalance to specific physiological systems, including muscles, lungs, joints, blood flow, and equilibrium centers. This allows her to induce heaviness, pain, dizziness, breath restriction, muscular disruption, or temporary loss of coordination without causing visible external force. Precision and proximity are critical. The closer Riley is to a target, the more accurate and effective her control becomes.",
+    drawbacks: "Vice’s power requires intense concentration and precise anatomical awareness. Emotional instability, panic, exhaustion, or sensory overload can make her control dangerously inconsistent. Her effectiveness rapidly decreases with distance, making close-range engagement essential for accurate pressure application. Affecting multiple targets at once significantly increases mental strain and reduces precision. Excessive use places severe stress on Riley’s own body, often causing migraines, nosebleeds, tremors, muscle fatigue, elevated heart rate, and temporary loss of fine motor control. Improper pressure placement can result in unintended serious injury, forcing her to constantly restrain herself during combat. Her abilities are also less effective against non-biological targets, heavily armored opponents, or individuals with abnormal internal physiology. Sedatives, disorientation, or direct disruption of her focus can weaken or interrupt activation entirely.",
+    link: "https://roleplay.chat/profile.php?user=pressure"
+  },
+  {
+    status: "student",
+    tier: "A",
+    power: "Psionic Dominion, Telekinesis, Telepathy, Empathic Link, Flight, Psionic Barriers",
+    char: "Mavis Kingsman",
+    alias: "Savior",
+    expression: "PSIONIC DOMINION\nMavis’ abilities operate through an interconnected psionic field tied directly to her mind, emotions, and nervous system. Unlike supers who separate powers into isolated categories, Mavis experiences telepathy, telekinesis, empathy, and flight as extensions of the same core phenomenon. Her thoughts influence matter, her emotions affect force output, and her awareness constantly brushes against the mental and emotional presence of others. STRATA classifies her as an exceptionally dangerous psionic because her power scales through cognition and emotional processing rather than purely physical limitation.\n\n(Ran out of room again: https://docs.google.com/document/d/1QyYVgRM0G7F2TXenGoq6yZvBadI_eVvJOL4WzAsrVlM/edit?usp=sharing)",
+    drawbacks: "Emotional Overload, Thought Intrusion, Precision vs Power, Mental Fatigue, Responsibility Complex, Social Detachment",
+    link: "https://roleplay.chat/profile.php?user=Savior",
+    note: "Banned-power check passes: Mavis's telepathy is bounded — line-of-contact reach, single-target or small-group focus, conscious activation. Not a universal-simultaneous-telepathy expression. Admin-approved."
+  },
+  {
+    status: "student",
+    tier: "B",
+    power: "Momentum Physiology (\"Underdog Syndrome\")",
+    char: "Baldor Kingsman",
+    alias: "King",
+    expression: "Baldor’s body continuously escalates in physical strength, durability, pain tolerance, stamina, recovery efficiency, and force output based on active exertion duration. The longer he remains physically engaged — fighting, lifting, running, resisting damage, pushing through exhaustion — the stronger and tougher he becomes. He essentially turns sustained struggle into fuel.",
+    drawbacks: "1. Slow Start — strongest in prolonged engagements; ambushes and quick overwhelming attacks are dangerous before he has ramped. 2. Massive Caloric Burn — constantly hungry; STRATA nutritionists probably hate him. 3. Internal Damage — pain tolerance masks serious injury; he may continue fighting on torn ligaments, cracked bones, or internal bleeding and collapse afterward. 4. Heat Buildup — long activation causes dangerous overheating, with risk of heat stroke, organ stress, tunnel vision, aggression spikes, and blackouts. 5. Emotional Trigger Risk — escalation responds strongly to emotional stress (humiliation, anger, fear for others, desperation), which means emotional manipulation can push him into unstable overdrive.",
+    link: "https://roleplay.chat/profile.php?user=Kingsman"
+  },
+  {
+    status: "student",
+    tier: "B",
+    power: "Biological Echo Mimicry, Partial Manifestation, Enhanced Physicality, Animal Communication & Instinct Recognition",
+    char: "McKenna Doyle",
+    alias: "Menagerie",
+    expression: "Biological Echo Mimicry\nMcKenna’s primary ability allows her to physically transform into animal species she has previously “imprinted” through direct skin-to-living-creature contact. Once contact is established, she retains the species within her biological memory and can access it again later without repeated exposure. Transformations are not illusionary; they are complete biological shifts that alter musculature, organs, senses, instincts, movement patterns, and neurological processing. She can perform either full-body transformations or partial adaptations, allowing her to selectively borrow traits from different species without committing entirely to a single form.\n\n(Ran out of room: https://docs.google.com/document/d/1AiO8XXAzmuKbnJBkoyUyY5gnoxQKHrE2TrgGRuyyBgA/edit?usp=sharing)",
+    drawbacks: "Instinct Drift, Identity Degradation, Physical Energy Consumption, Emotional & Instinctive Triggers, Overadaptation, Non-Specialist Ceiling",
+    link: "https://roleplay.chat/profile.php?user=Menagerie!",
+    note: "Athletics flag: McKenna is permanently banned from Powerball after a sophomore-year mauling incident during partial-manifestation Defence. See her Students entry for the full ruling."
+  },
 ],
 
 powerStatuses: [
@@ -1377,7 +1512,7 @@ clubs: [
       { house: "Valaris", bg: "#c41a1a", train: ["MON · 6:00 AM", "WED · 7:00 PM"], positions: [
         { pos: "Playmaker", char: "Tyler Caldwell", link: "https://roleplay.chat/profile.php?user=BLACK+VEIN" },
         { pos: "Attack", char: "Katniss Saunders", link: "https://roleplay.chat/profile.php?user=Katniss" }, { pos: "Attack", char: "Rhode Sterling", link: "https://roleplay.chat/profile.php?user=chronicles" },
-        { pos: "Defence" }, { pos: "Defence" },
+        { pos: "Defence", char: "Riley Carter", link: "https://roleplay.chat/profile.php?user=pressure" }, { pos: "Defence" },
         { pos: "Goalkeeper", captain: true, char: "Enzo Krüger", link: "https://roleplay.chat/profile.php?user=Breakpoint" },
         { pos: "Reserve · Playmaker" },
         { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
@@ -1503,7 +1638,7 @@ clubs: [
       { pos: "Sound", group: "tech" },
       { pos: "Set", group: "tech" }, { pos: "Set", group: "tech" },
       { pos: "H&M Lead", group: "hair-makeup" },
-      { pos: "H&M Artist", group: "hair-makeup" }, { pos: "H&M Artist", group: "hair-makeup" },
+      { pos: "H&M Artist", group: "hair-makeup", char: "Ramona Vey", link: "https://roleplay.chat/profile.php?user=Marionette%21" }, { pos: "H&M Artist", group: "hair-makeup" },
       { pos: "Ensemble", group: "ensemble" }, { pos: "Ensemble", group: "ensemble" },
     ],
   },
@@ -1605,8 +1740,8 @@ heroLists: [
     req: "A-List tier. Capped at 10 slots — application requires admin conversation before submission.",
     color: "#e31b23",
     slots: [
-      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
-      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "VICE",   role: "Headline Hero", char: "Riley Carter",   power: "Pressure Manipulation · Biological Pressure Control" },
+      { alias: "Savior", role: "Headline Hero", char: "Mavis Kingsman", power: "Psionic Dominion, Telekinesis, Telepathy, Empathic Link, Flight, Psionic Barriers" },
       { alias: "[Open]", role: "Headline Hero", char: null, power: null },
       { alias: "[Open]", role: "Headline Hero", char: null, power: null },
       { alias: "[Open]", role: "Headline Hero", char: null, power: null },
