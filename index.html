@@ -5569,7 +5569,74 @@ span.cname{ font-weight:600; color:var(--ink); }
   border-style:solid;
 }
 
-.join-actions{
+/* ──────────────────────────────────────────────────────────────────────
+   JOIN FORM REBALANCE — themed age-cradle warning + width-capped fulls
+   + smoother spacing between stacked .join-fieldset blocks (collective
+   flow). Comic chrome (hero stripes, type-card offset shadows, big
+   step title) is kept verbatim — this just calms the in-fieldset noise.
+   ────────────────────────────────────────────────────────────────────── */
+.join-warn{
+  margin:16px 0 24px;
+  padding:14px 18px 14px 20px;
+  background:rgba(196,26,26,.06);
+  border:1px solid rgba(196,26,26,.30);
+  border-left:4px solid var(--red, #c41a1a);
+  border-radius:6px;
+  color:var(--text, var(--ink));
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.6;
+}
+.join-warn-tag{
+  display:block;
+  font-family:var(--mono);
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--red, #c41a1a);
+  margin-bottom:6px;
+}
+.join-warn p{
+  margin:0;
+  color:inherit;
+}
+.join-warn strong{
+  color:var(--text, var(--ink));
+  font-weight:700;
+}
+.join-warn-link{
+  color:var(--red, #c41a1a);
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.join-warn-link:hover{ text-decoration:none; }
+
+/* When a short select/input is marked .full (Tier, Faction, Role/Title,
+   Role within Collective), cap its rendered width so the control stays
+   tidy instead of stretching across the whole fieldset. The label and
+   field box still own the row. */
+.join-field.full > .join-select,
+.join-field.full > .join-input[type="text"],
+.join-field.full > .join-input[type="url"]{
+  max-width:380px;
+}
+/* Textareas + checkboxes + the founding-members repeater + the .ico-
+   based wide controls inside .full should still flex to full width. */
+.join-field.full > .join-textarea,
+.join-field.full > .join-checkbox,
+.join-field.full > .join-members,
+.join-field.full > .join-typegrid{
+  max-width:none;
+}
+
+/* When two .join-fieldset blocks stack (Collective flow's flow picker
+   panel + sub-flow fieldset), space them apart cleanly so they don't
+   read as a single squished block. Also gives the inner Flow header
+   some breathing room above the type-grid. */
+.join-fieldset + .join-fieldset{
+  margin-top:14px;
+}
   margin-top:24px;
   display:flex;
   gap:12px;
