@@ -5431,6 +5431,137 @@ span.cname{ font-weight:600; color:var(--ink); }
   pointer-events:none !important;
 }
 
+/* ──────────────────────────────────────────────────────────────────────
+   COLLECTIVE FORM — 3-flow sub-picker + founding members repeater
+   ────────────────────────────────────────────────────────────────────── */
+.join-flow-panel{
+  /* Use the standard fieldset chrome but lay out as a stacked panel. */
+  display:block !important;
+  margin-bottom:14px;
+}
+.join-flow-hd{ margin-bottom:14px; }
+.join-flow-tag{
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:6px;
+}
+.join-flow-title{
+  font-family:var(--display);
+  font-size:24px;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+.join-flow-blurb{
+  font-family:var(--sans);
+  font-size:13px;
+  line-height:1.55;
+  color:var(--muted);
+}
+.join-flowgrid{
+  /* Three flow buttons read better side-by-side on wider viewports. */
+  grid-template-columns:repeat(3, 1fr);
+}
+@media (max-width:900px){
+  .join-flowgrid{ grid-template-columns:1fr; }
+}
+
+/* Founding-members repeater */
+.join-members{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.join-members-empty{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding:10px 12px;
+  border:1px dashed var(--ink);
+  background:rgba(0,0,0,.02);
+}
+.join-member-row{
+  display:grid;
+  grid-template-columns:36px 1fr 1.2fr 1fr 36px;
+  gap:8px;
+  align-items:center;
+}
+@media (max-width:720px){
+  .join-member-row{
+    grid-template-columns:36px 1fr 36px;
+    grid-template-areas:
+      "num alias  remove"
+      "num char   char"
+      "num role   role";
+  }
+  .join-member-row > .join-member-num    { grid-area:num; }
+  .join-member-row > .join-member-input:nth-of-type(1){ grid-area:alias; }
+  .join-member-row > .join-member-input:nth-of-type(2){ grid-area:char; }
+  .join-member-row > .join-member-input:nth-of-type(3){ grid-area:role; }
+  .join-member-row > .join-member-remove { grid-area:remove; }
+}
+.join-member-num{
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.4px;
+  color:var(--red);
+  text-align:center;
+}
+.join-member-input{
+  /* Slightly tighter padding than the standard .join-input so a 3-up row
+     still feels comfortable. .join-input already supplies most styles. */
+  padding:8px 10px !important;
+  font-size:13px !important;
+}
+.join-member-remove{
+  width:32px; height:32px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--mono);
+  font-size:20px;
+  line-height:1;
+  background:var(--paper);
+  border:1.5px solid var(--ink);
+  color:var(--ink);
+  cursor:pointer;
+  transition:background .12s, color .12s, transform .12s;
+}
+.join-member-remove:hover{
+  background:var(--red);
+  border-color:var(--red);
+  color:#fff;
+  transform:translateY(-1px);
+}
+.join-member-add{
+  align-self:flex-start;
+  margin-top:4px;
+  padding:8px 14px;
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  background:var(--paper);
+  border:1.5px dashed var(--ink);
+  color:var(--ink);
+  cursor:pointer;
+  transition:background .12s, color .12s, border-style .12s;
+}
+.join-member-add:hover{
+  background:var(--ink);
+  color:#fff;
+  border-style:solid;
+}
+
 .join-actions{
   margin-top:24px;
   display:flex;
