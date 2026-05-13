@@ -13186,18 +13186,33 @@ button.class-chip-btn{
     grid-template-columns: 1fr !important;
   }
 }
+/* Bring map cards in line with .club-card chrome — gradient surface, 4px
+   left accent stripe in the district's signature colour (--accent is set
+   on .map-district via JSX), 6px border-radius, and a subtle border-shift
+   hover. Stays an <article>, no translate / cursor / shadow lift — map
+   cards aren't clickable, so the hover affordance stays honest. */
+.map-house{ --accent: var(--h-color, var(--gold)); }
+
 .map-loc-card{
-  background: rgba(255,255,255,.02) !important;
+  background: linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
   border: 1px solid var(--rule-soft, rgba(255,255,255,.06)) !important;
-  border-radius: 10px !important;
-  padding: 18px 20px !important;
+  border-left: 4px solid var(--accent, var(--gold)) !important;
+  border-radius: 6px !important;
+  padding: 18px 20px 16px 22px !important;
   color: var(--text) !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 10px !important;
+  transition: border-color var(--dur, .18s) var(--ease, ease-out), background var(--dur, .18s) var(--ease, ease-out) !important;
 }
+.map-loc-card:hover{
+  background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02)) !important;
+  border-color: var(--panel-ink, rgba(0,0,0,.6)) !important;
+}
+/* Classified flag still wins — overrides whatever district accent the
+   parent .map-district set. */
 .map-loc-card.is-classified{
-  border-left: 3px solid var(--red, #c41a1a) !important;
+  border-left-color: var(--red, #c41a1a) !important;
 }
 .map-loc-card-hd{
   display: flex !important;
@@ -13226,11 +13241,15 @@ button.class-chip-btn{
   color: var(--red-bright, #ef4444) !important;
 }
 .map-loc-card-name{
-  font-family: var(--serif) !important;
-  font-weight: 600 !important;
-  font-size: 17px !important;
-  line-height: 1.2 !important;
-  letter-spacing: -.005em !important;
+  /* Match .club-card-name treatment: comic display, uppercase, generous
+     size. Smaller than clubs (22 vs 26) so the denser map cards still
+     fit two lines of name without crowding the desc. */
+  font-family: var(--comic, var(--display, var(--sans))) !important;
+  font-weight: 400 !important;
+  font-size: 22px !important;
+  line-height: 1.05 !important;
+  letter-spacing: .005em !important;
+  text-transform: uppercase !important;
   color: var(--text) !important;
   margin: 0 !important;
   display: inline-flex !important;
