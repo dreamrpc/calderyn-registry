@@ -70,7 +70,7 @@
      .mast-inner{height:84px} and .tab{height:52px}, so the sticky-offset
      vars below have to add up to 84 + (52+1) = 137px or the sub-nav
      lands with a gap below the tabs strip. */
-  --hdr-h:      84px;
+  --hdr-h:      100px;
   --tabs-h:     53px;
   --sticky-tabs-top:   var(--hdr-h);
   --sticky-subnav-top: calc(var(--hdr-h) + var(--tabs-h));
@@ -5698,17 +5698,23 @@ body{
   border-bottom:1px solid var(--rule-soft);
   box-shadow:0 1px 0 rgba(212,168,74,.18), 0 18px 32px -28px rgba(0,0,0,.9);
 }
-.mast-inner{ height:84px; gap:28px; padding:0 28px; max-width:1680px; }
+.mast-inner{ height:100px; gap:28px; padding:0 28px; max-width:1680px; }
 
 .mast-brand{ gap:14px; }
 .mast-brand-mark{
   background:transparent !important;
-  width:60px; height:60px;
+  /* Was 60x60 with background-size:contain — the source PNG has heavy
+     transparent padding so the visible shield was much shorter than the
+     adjacent wordmark. Bump the container and over-scale the image so the
+     visible artwork sits closer to the wordmark's height. The masthead
+     height (--hdr-h) is bumped in tandem below so the shield still has
+     breathing room top and bottom. */
+  width:80px; height:80px;
   padding:0; border:none;
   font-size:0 !important;
   color:transparent !important;
   background-image:url('https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png') !important;
-  background-size:contain;
+  background-size:115% auto;
   background-position:center;
   background-repeat:no-repeat;
   filter:drop-shadow(0 4px 14px rgba(193,26,44,.35));
