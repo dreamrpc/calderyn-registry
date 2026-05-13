@@ -3258,7 +3258,7 @@ const APPLICATION_TYPES = [
   {
     id: "collective",
     name: "Hero Collective",
-    desc: "Independent collectives — unsanctioned heroes operating outside STRATA contracts.",
+    desc: "Join an existing collective as a hero or villain, or propose a brand-new collective. Pick a flow on the next step.",
   },
   {
     id: "outside",
@@ -3307,9 +3307,21 @@ function getOpenGovSeats(){
   return out;
 }
 
-// Helper: list of collectives
-function getCollectives(){
-  return GROUPS.filter(g => !g.sanctioned).map(g => g.name);
+// Helper: list of collectives. Optionally filter by faction.
+// Existing GROUPS entries don't carry a `faction` field — non-sanctioned
+// groups are treated as hero-side by default, which matches how the
+// existing collectives copy is written ("unsanctioned heroes, B-List
+// tier and below"). New villain-side collectives created through the
+// 3-flow form will land with `faction: "villain"` on the data snippet.
+function getCollectives(faction){
+  return GROUPS
+    .filter(g => !g.sanctioned)
+    .filter(g => {
+      if (!faction) return true;
+      const gf = ((g.faction || "hero") + "").toLowerCase();
+      return gf === faction;
+    })
+    .map(g => g.name);
 }
 
 // Helper: list of outside organisations
@@ -3358,14 +3370,46 @@ function JoinTab(){
                                 : [...base, "strataRole", "alias", "tier", ...power];
       case "club":       return [...base, "clubPosition"];
       case "gov":        return [...base, "govSeat"];
-      case "collective": return [...base, "alias", "collectiveName", "collectiveRole", ...power];
+      case "collective": {
+        // Three sub-flows: joinHero, joinVillain, createNew.
+        // Validation branches accordingly.
+        const flow = form.collectiveFlow;
+        if (flow === "createNew"){
+          // Power on a "create" submission is optional — the creator may
+          // not be a member themselves, or the founding-member list captures
+          // it. Skip the universal power requirement here.
+          return [...base, "collectiveFlow", "newCollectiveName", "newCollectiveType", "newCollectiveFaction", "newCollectiveDesc"];
+        }
+        if (flow === "joinHero" || flow === "joinVillain"){
+          return [...base, "collectiveFlow", "alias", "collectiveName", "collectiveRole", ...power];
+        }
+        // No flow chosen yet → only require the flow itself; the rest
+        // becomes required after the user picks one.
+        return [...base, "collectiveFlow"];
+      }
       case "outside":    return [...base, "outsideOrg", "outsideRole", ...power];
       default: return base;
     }
   }, [type, form.fullyHuman]);
 
   const missing = requiredFields.filter(k => !form[k] || !String(form[k]).trim());
-  const canSubmit = type && missing.length === 0 && status.state !== "loading";
+
+  // Collective "createNew" flow needs at least one valid founding member
+  // (alias + char + role). The members array isn't a string field, so
+  // it can't be caught by the simple requiredFields filter above —
+  // surface it as a separate missing-flag the submit handler respects.
+  const needsFoundingMember = type === "collective"
+    && form.collectiveFlow === "createNew";
+  const foundingMembers = Array.isArray(form.newCollectiveMembers) ? form.newCollectiveMembers : [];
+  const hasValidFoundingMember = foundingMembers.some(m =>
+    m && (m.alias || "").trim() && (m.char || "").trim() && (m.role || "").trim()
+  );
+  const foundingMemberMissing = needsFoundingMember && !hasValidFoundingMember;
+
+  const canSubmit = type
+    && missing.length === 0
+    && !foundingMemberMissing
+    && status.state !== "loading";
 
   // Build the data-file-shaped JS snippet for admin to paste into the data
   const buildSnippet = () => {
@@ -3396,10 +3440,38 @@ function JoinTab(){
         main = `// → goes in STUDENT_GOV → "${form.govSection || ''}" → seats
 { pos: ${s(form.govSeat)}, char: ${s(form.char)}, term: ${s(form.govTerm) || '"2026-27"'}${powerFrag}${human}${link} },`;
         break;
-      case "collective":
-        main = `// → goes in GROUPS → "${form.collectiveName || ''}" → members
+      case "collective": {
+        const flow = form.collectiveFlow;
+        if (flow === "createNew"){
+          // Build a full GROUPS entry. Founding members get the same
+          // { alias, role, char } shape as existing entries.
+          const fac = ((form.newCollectiveFaction || "hero") + "").toLowerCase();
+          const members = (form.newCollectiveMembers || [])
+            .filter(m => m && (m.alias || "").trim() && (m.char || "").trim() && (m.role || "").trim())
+            .map(m => `    { alias: ${s(m.alias)}, role: ${s(m.role)}, char: ${s(m.char)} },`)
+            .join("\n");
+          const optColor  = form.newCollectiveColor  ? `,\n  color: ${s(form.newCollectiveColor)}`   : "";
+          const optBanner = form.newCollectiveBanner ? `,\n  banner: ${s(form.newCollectiveBanner)}` : "";
+          main = `// → goes in GROUPS (append a new entry)
+{
+  name: ${s(form.newCollectiveName)},
+  type: ${s(form.newCollectiveType)},
+  status: "Concept",
+  faction: ${s(fac)},
+  desc: ${s(form.newCollectiveDesc)}${optColor}${optBanner},
+  members: [
+${members}
+  ],
+},`;
+        } else {
+          // joinHero / joinVillain — same shape, faction recorded as a
+          // leading comment so admin can route to the right collective.
+          const fac = flow === "joinVillain" ? "villain" : "hero";
+          main = `// → goes in GROUPS → "${form.collectiveName || ''}" → members  (faction: ${fac})
 { alias: ${s(form.alias)}, role: ${s(form.collectiveRole)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
+        }
         break;
+      }
       case "outside":
         main = `// → goes in OUTSIDE → "${form.outsideSection || ''}" → org "${form.outsideOrg || ''}" → roles
 { role: ${s(form.outsideRole)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
@@ -3480,7 +3552,40 @@ function JoinTab(){
     if (form.facultyRole)      fields.push({ name: "Faculty Role",     value: `${form.facultyRole} (${form.facultySection || '?'})`, inline: false });
     if (form.clubPosition)     fields.push({ name: "Club Position",    value: `${form.clubName || '?'} — ${form.clubPosition}${form.clubTeam ? ' (' + form.clubTeam + ')' : ''}`, inline: false });
     if (form.govSeat)          fields.push({ name: "Gov Seat",         value: `${form.govSeat} (${form.govSection || '?'})`, inline: false });
-    if (form.collectiveRole)   fields.push({ name: "Collective",       value: `${form.collectiveName || '?'} — ${form.collectiveRole}`, inline: false });
+    // Collective flow: emit a dedicated header + per-flow fields so admin
+    // can route the application at a glance.
+    if (type === "collective" && form.collectiveFlow){
+      const flow = form.collectiveFlow;
+      const flowLabel =
+        flow === "joinHero"    ? "Join (Hero-side)" :
+        flow === "joinVillain" ? "Join (Villain-side)" :
+        flow === "createNew"   ? "Create New Collective" : flow;
+      fields.push({ name: "Collective Flow", value: flowLabel, inline: true });
+
+      if (flow === "joinHero" || flow === "joinVillain"){
+        const fac = flow === "joinVillain" ? "Villain" : "Hero";
+        fields.push({ name: "Faction",  value: fac, inline: true });
+        fields.push({ name: "Collective", value: `${form.collectiveName || '?'} — ${form.collectiveRole || '?'}`, inline: false });
+      } else if (flow === "createNew"){
+        const fac = (form.newCollectiveFaction === "villain") ? "Villain" : "Hero";
+        fields.push({ name: "Faction",          value: fac, inline: true });
+        fields.push({ name: "New Collective",   value: form.newCollectiveName || '—', inline: true });
+        if (form.newCollectiveType)   fields.push({ name: "Kind",     value: form.newCollectiveType, inline: true });
+        if (form.newCollectiveColor)  fields.push({ name: "Colour",   value: form.newCollectiveColor, inline: true });
+        if (form.newCollectiveBanner) fields.push({ name: "Banner",   value: form.newCollectiveBanner, inline: false });
+        if (form.newCollectiveDesc)   fields.push(...splitField("Description", form.newCollectiveDesc));
+        const foundingList = (form.newCollectiveMembers || [])
+          .filter(m => m && (m.alias || "").trim() && (m.char || "").trim() && (m.role || "").trim())
+          .map((m, i) => `${i+1}. ${m.alias} — ${m.role} (${m.char})`)
+          .join("\n");
+        if (foundingList) fields.push(...splitField("Founding Members", foundingList));
+      }
+    } else if (form.collectiveRole){
+      // Legacy single-flow fallback for any callers that still set the
+      // old fields without a collectiveFlow (kept so backwards-compat
+      // submissions don't silently lose data).
+      fields.push({ name: "Collective", value: `${form.collectiveName || '?'} — ${form.collectiveRole}`, inline: false });
+    }
     if (form.outsideRole)      fields.push({ name: "Outside Role",     value: `${form.outsideOrg || '?'} — ${form.outsideRole}`, inline: false });
 
     // Powers (only if not fully human)
@@ -3505,8 +3610,12 @@ function JoinTab(){
       allowed_mentions: { roles: ["1498799678551101451"] },
       embeds: [{
         title: `New Application · ${typeName}`,
-        description: `**${form.char}**${form.alias ? ` — *${form.alias}*` : ''}`,
-        color: 0xe31b23,
+        description: (type === "collective" && form.collectiveFlow === "createNew")
+          ? `Proposing **${form.newCollectiveName || '(unnamed collective)'}** — ${(form.newCollectiveFaction === "villain") ? "villain" : "hero"}-side · submitted by ${form.char || '(unknown)'}`
+          : `**${form.char}**${form.alias ? ` — *${form.alias}*` : ''}`,
+        color: (type === "collective" && (form.collectiveFlow === "joinVillain" || form.newCollectiveFaction === "villain"))
+          ? 0x4a1a1a
+          : 0xe31b23,
         fields,
         footer: { text: "Calderyn College · Central Registry · 2026" },
         timestamp: new Date().toISOString(),
@@ -3630,6 +3739,11 @@ function JoinTab(){
                   Missing: {missing.length} required field{missing.length === 1 ? "" : "s"}
                 </span>
               )}
+              {foundingMemberMissing && missing.length === 0 && status.state === "idle" && (
+                <span className="join-status is-error">
+                  Add at least one founding member with alias, character, and role.
+                </span>
+              )}
             </div>
           </>
         )}
@@ -3749,6 +3863,276 @@ function StudentExtras({form, set}){
           ))}
         </select>
       </Field>
+    </>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   COLLECTIVE FIELDSET — 3 flows on one form
+   ──────────────────────────────────────────────────────────────────────
+   Flow A — Join an existing hero collective.
+   Flow B — Join an existing villain collective.
+   Flow C — Create a new collective (hero or villain), seed members.
+
+   The flow picker uses the same .join-typegrid / .join-type chrome as the
+   top-level application-type picker so it matches the rest of the form
+   visually. All three flows share the universal Common + Power + Tail
+   blocks. Create-flow has a small founding-members repeater (alias /
+   char / role) that lives entirely in form state — admin pastes the
+   resulting GROUPS snippet into data.js.
+   ────────────────────────────────────────────────────────────────────── */
+const COLLECTIVE_FLOWS = [
+  { id: "joinHero",    num: "01", name: "Join · Hero-side",
+    desc: "Apply to an existing hero collective. Unsanctioned heroes operating outside STRATA contracts." },
+  { id: "joinVillain", num: "02", name: "Join · Villain-side",
+    desc: "Apply to an existing villain collective. Underworld crews, cults, organised antagonists." },
+  { id: "createNew",   num: "03", name: "Create · New collective",
+    desc: "Propose a brand-new collective and its founding members. Hero-side or villain-side." },
+];
+
+function CollectiveFieldset({form, set, Common}){
+  const flow = form.collectiveFlow;
+  const faction = flow === "joinVillain" ? "villain" : flow === "joinHero" ? "hero" : null;
+  const collectives = getCollectives(faction);
+
+  // Kind taxonomy is whatever distinct .type values data.js already uses.
+  const kinds = useMemo(() => {
+    const seen = new Set();
+    GROUPS.forEach(g => { if (g.type) seen.add(g.type); });
+    return Array.from(seen);
+  }, []);
+
+  const members = Array.isArray(form.newCollectiveMembers) ? form.newCollectiveMembers : [];
+  const setMembers = (arr) => set("newCollectiveMembers", arr);
+  const updateMember = (i, key, value) => {
+    const arr = members.slice();
+    arr[i] = { ...(arr[i] || {}), [key]: value };
+    setMembers(arr);
+  };
+  const addMember = () => setMembers([...members, { alias: "", char: "", role: "" }]);
+  const removeMember = (i) => {
+    const arr = members.slice();
+    arr.splice(i, 1);
+    setMembers(arr);
+  };
+
+  return (
+    <>
+      {/* Flow picker — full width, gold-accent panel that matches the top-level type picker */}
+      <div className="join-fieldset is-narrow join-flow-panel">
+        <div className="join-flow-hd">
+          <div className="join-flow-tag">Step 02a · Collective Flow</div>
+          <div className="join-flow-title">Pick a flow.</div>
+          <div className="join-flow-blurb">
+            Three paths on one form. Switching flow keeps your character &amp; profile, but resets flow-specific fields.
+          </div>
+        </div>
+        <div className="join-typegrid join-flowgrid">
+          {COLLECTIVE_FLOWS.map(opt => (
+            <button
+              key={opt.id}
+              type="button"
+              className={"join-type" + (flow === opt.id ? " on" : "")}
+              onClick={() => {
+                set("collectiveFlow", opt.id);
+                // Clear the other flow's fields so a stale value can't
+                // leak into the snippet/embed if the user switches.
+                if (opt.id === "createNew"){
+                  set("collectiveName", "");
+                  set("collectiveRole", "");
+                } else {
+                  set("newCollectiveName", "");
+                  set("newCollectiveType", "");
+                  set("newCollectiveFaction", "");
+                  set("newCollectiveDesc", "");
+                  set("newCollectiveColor", "");
+                  set("newCollectiveBanner", "");
+                  set("newCollectiveMembers", []);
+                }
+              }}
+            >
+              <div className="join-type-num">{opt.num}</div>
+              <div className="join-type-name">{opt.name}</div>
+              <div className="join-type-desc">{opt.desc}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* JOIN — A & B share the same field layout, only the labels and
+          the collective dropdown's faction filter differ. */}
+      {(flow === "joinHero" || flow === "joinVillain") && (
+        <div className="join-fieldset">
+          {Common}
+          <Field label="Stage Name / Alias" required>
+            <input
+              className="join-input"
+              type="text"
+              value={form.alias || ""}
+              onChange={e => set("alias", e.target.value)}
+              placeholder={flow === "joinVillain" ? "WRAITH, MAW, etc." : "HEX, NULL, etc."}
+            />
+          </Field>
+          <Field
+            label={flow === "joinVillain" ? "Villain Collective" : "Hero Collective"}
+            required
+            hint={collectives.length === 0
+              ? "None registered yet — type the collective name, or switch to Create to propose one."
+              : "Pick from registered collectives, or type a new name if a player has proposed one off-registry."}
+          >
+            {collectives.length > 0 ? (
+              <select
+                className="join-select"
+                value={form.collectiveName || ""}
+                onChange={e => set("collectiveName", e.target.value)}
+              >
+                <option value="">Select collective…</option>
+                {collectives.map((c, i) => <option key={i} value={c}>{c}</option>)}
+              </select>
+            ) : (
+              <input
+                className="join-input"
+                type="text"
+                value={form.collectiveName || ""}
+                onChange={e => set("collectiveName", e.target.value)}
+                placeholder={flow === "joinVillain"
+                  ? "e.g. The Iron Sigil"
+                  : "e.g. Nightwatch Collective"}
+              />
+            )}
+          </Field>
+          <Field label="Role within Collective" required hint="Leader, Specialist, Field, etc.">
+            <input
+              className="join-input"
+              type="text"
+              value={form.collectiveRole || ""}
+              onChange={e => set("collectiveRole", e.target.value)}
+              placeholder="e.g. Field Operative"
+            />
+          </Field>
+          <PowerFields form={form} set={set}/>
+          <TailFields form={form} set={set}/>
+        </div>
+      )}
+
+      {/* CREATE — defining a brand-new collective. */}
+      {flow === "createNew" && (
+        <div className="join-fieldset">
+          {Common}
+          <Field label="Collective Name" required>
+            <input
+              className="join-input"
+              type="text"
+              value={form.newCollectiveName || ""}
+              onChange={e => set("newCollectiveName", e.target.value)}
+              placeholder="e.g. The Iron Sigil"
+            />
+          </Field>
+          <Field label="Kind" required hint="Taxonomy taken from data.js groups[].type">
+            <select
+              className="join-select"
+              value={form.newCollectiveType || ""}
+              onChange={e => set("newCollectiveType", e.target.value)}
+            >
+              <option value="">Select kind…</option>
+              {kinds.map((k, i) => <option key={i} value={k}>{k}</option>)}
+            </select>
+          </Field>
+          <Field label="Faction" required>
+            <select
+              className="join-select"
+              value={form.newCollectiveFaction || ""}
+              onChange={e => set("newCollectiveFaction", e.target.value)}
+            >
+              <option value="">Select faction…</option>
+              <option value="hero">Hero</option>
+              <option value="villain">Villain</option>
+            </select>
+          </Field>
+          <Field label="Description" required full hint="One paragraph. Structure, motive, public face.">
+            <textarea
+              className="join-textarea is-medium"
+              value={form.newCollectiveDesc || ""}
+              onChange={e => set("newCollectiveDesc", e.target.value.slice(0, 1000))}
+              placeholder="Who they are, what they do, why they're a unit."
+              maxLength={1000}
+            />
+            <div style={{textAlign:"right",fontSize:"11px",opacity:0.6,marginTop:"4px",fontFamily:"monospace"}}>
+              {(form.newCollectiveDesc || "").length} / 1000
+            </div>
+          </Field>
+          <Field label="Brand Colour" hint="Optional hex (e.g. #c41a1a). Admin may or may not wire it through.">
+            <input
+              className="join-input"
+              type="text"
+              value={form.newCollectiveColor || ""}
+              onChange={e => set("newCollectiveColor", e.target.value)}
+              placeholder="#c41a1a"
+            />
+          </Field>
+          <Field label="Banner URL" hint="Optional image URL. Same caveat as colour.">
+            <input
+              className="join-input"
+              type="url"
+              value={form.newCollectiveBanner || ""}
+              onChange={e => set("newCollectiveBanner", e.target.value)}
+              placeholder="https://i.ibb.co/…"
+            />
+          </Field>
+
+          <Field label="Founding Members" required full hint="At least one row with alias, character, and role.">
+            <div className="join-members">
+              {members.length === 0 && (
+                <div className="join-members-empty">No members yet — add the first founder below.</div>
+              )}
+              {members.map((m, i) => (
+                <div className="join-member-row" key={i}>
+                  <div className="join-member-num">{String(i+1).padStart(2,"0")}</div>
+                  <input
+                    className="join-input join-member-input"
+                    type="text"
+                    value={m.alias || ""}
+                    onChange={e => updateMember(i, "alias", e.target.value)}
+                    placeholder="Alias"
+                    aria-label={`Member ${i+1} alias`}
+                  />
+                  <input
+                    className="join-input join-member-input"
+                    type="text"
+                    value={m.char || ""}
+                    onChange={e => updateMember(i, "char", e.target.value)}
+                    placeholder="Character name"
+                    aria-label={`Member ${i+1} character`}
+                  />
+                  <input
+                    className="join-input join-member-input"
+                    type="text"
+                    value={m.role || ""}
+                    onChange={e => updateMember(i, "role", e.target.value)}
+                    placeholder="Role (e.g. Leader)"
+                    aria-label={`Member ${i+1} role`}
+                  />
+                  <button
+                    type="button"
+                    className="join-member-remove"
+                    onClick={() => removeMember(i)}
+                    aria-label={`Remove member ${i+1}`}
+                  >×</button>
+                </div>
+              ))}
+              <button type="button" className="join-member-add" onClick={addMember}>
+                + Add founding member
+              </button>
+            </div>
+          </Field>
+
+          {/* Power block is optional on create: the creator might not be
+              a member themselves. PowerFields stays so they can attach
+              their own power if they're founding-and-playing. */}
+          <PowerFields form={form} set={set}/>
+          <TailFields form={form} set={set}/>
+        </div>
+      )}
     </>
   );
 }
@@ -3949,31 +4333,7 @@ function JoinFieldset({type, form, set}){
   }
 
   if (type === "collective"){
-    const collectives = getCollectives();
-    return (
-      <div className="join-fieldset">
-        {Common}
-        <Field label="Stage Name / Alias" required>
-          <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="HEX, NULL, etc."/>
-        </Field>
-        <Field label="Collective" required>
-          <select
-            className="join-select"
-            value={form.collectiveName || ""}
-            onChange={e => set("collectiveName", e.target.value)}
-          >
-            <option value="">Select collective…</option>
-            {collectives.map((c, i) => <option key={i} value={c}>{c}</option>)}
-            <option value="[New / Proposed]">[Propose new collective]</option>
-          </select>
-        </Field>
-        <Field label="Role within Collective" required hint="Leader, Specialist, Field, etc.">
-          <input className="join-input" type="text" value={form.collectiveRole || ""} onChange={e => set("collectiveRole", e.target.value)} placeholder="e.g. Field Operative"/>
-        </Field>
-        <PowerFields form={form} set={set}/>
-        <TailFields form={form} set={set}/>
-      </div>
-    );
+    return <CollectiveFieldset form={form} set={set} Common={Common}/>;
   }
 
   if (type === "outside"){
