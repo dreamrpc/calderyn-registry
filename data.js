@@ -790,7 +790,7 @@ outside: [
     note: "Criminal enterprises, fixers, fences. The ecosystem powered crime feeds into.",
     orgs: [
       {
-        name: "The Sokol Family",
+        name: "The Marlowe Family",
         type: "Organised Crime Syndicate",
         note: "Old money, old methods. Three generations deep. Don't accept new initiates from outside the family unless STRATA is involved.",
         roles: [

@@ -11078,57 +11078,88 @@ button.class-chip-btn{
 
 .clubs-dir-list{
   list-style:none !important;
-  padding:6px !important;
+  padding:10px !important;
   margin:0 !important;
   display:flex !important;
   flex-direction:column !important;
-  gap:4px !important;
+  gap:10px !important;
 }
 .clubs-dir-item{
   display:flex !important;
   width:100% !important;
   align-items:stretch !important;
-  gap:10px !important;
+  gap:12px !important;
   padding:0 !important;
-  background:transparent !important;
-  border:1px solid transparent !important;
-  border-radius:5px !important;
+  background:rgba(255,255,255,.015) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:6px !important;
   cursor:pointer !important;
   text-align:left !important;
-  transition:background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur) var(--ease) !important;
+  transition:background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease) !important;
   overflow:hidden !important;
+  position:relative !important;
 }
 .clubs-dir-item-stripe{
   width:5px !important;
   flex-shrink:0 !important;
   background:var(--accent, var(--gold)) !important;
-  border-radius:2px !important;
-  margin:8px 0 !important;
-  opacity:.55 !important;
-  transition:opacity var(--dur) var(--ease), width var(--dur) var(--ease) !important;
+  border-radius:0 !important;
+  margin:0 !important;
+  opacity:1 !important;
+  transition:width var(--dur) var(--ease) !important;
 }
 .clubs-dir-item-body{
   display:flex !important;
   flex-direction:column !important;
-  gap:5px !important;
-  padding:10px 12px 10px 0 !important;
+  gap:8px !important;
+  padding:14px 14px 12px 4px !important;
   flex:1 1 auto !important;
   min-width:0 !important;
+}
+.clubs-dir-item-tag{
+  font-family:var(--mono) !important;
+  font-size:9px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  color:var(--text-low) !important;
+  line-height:1.2 !important;
+  /* one-line ellipsis so long tags don't push the card height around */
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
 }
 .clubs-dir-item-name{
   font-family:var(--comic) !important;
   font-weight:400 !important;
-  font-size:18px !important;
+  font-size:22px !important;
   letter-spacing:.005em !important;
   text-transform:uppercase !important;
   color:var(--text) !important;
   line-height:1.05 !important;
 }
+.clubs-dir-item-desc{
+  font-family:var(--sans) !important;
+  font-size:12.5px !important;
+  line-height:1.45 !important;
+  color:var(--text-mid) !important;
+  /* 2-line clamp */
+  display:-webkit-box !important;
+  -webkit-box-orient:vertical !important;
+  -webkit-line-clamp:2 !important;
+  line-clamp:2 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
 .clubs-dir-item-meta{
   display:flex !important;
   gap:10px !important;
   align-items:center !important;
+  justify-content:space-between !important;
   flex-wrap:wrap !important;
+  padding-top:4px !important;
+  border-top:1px solid var(--rule-soft) !important;
+  margin-top:2px !important;
 }
 .clubs-dir-item-cat{
   font-family:var(--mono) !important;
@@ -11139,7 +11170,7 @@ button.class-chip-btn{
   color:var(--gold-bright) !important;
   background:rgba(212,168,74,.10) !important;
   border:1px solid rgba(212,168,74,.3) !important;
-  padding:2px 6px !important;
+  padding:3px 7px !important;
   border-radius:3px !important;
 }
 .clubs-dir-item-roster{
@@ -11151,30 +11182,31 @@ button.class-chip-btn{
   align-items:baseline !important;
   gap:2px !important;
 }
-.clubs-dir-item-roster-num{ color:var(--text) !important; font-weight:700 !important; }
+.clubs-dir-item-roster-num{ color:var(--text) !important; font-weight:700 !important; font-size:12px !important; }
 .clubs-dir-item-roster-sep{ opacity:.5 !important; }
 .clubs-dir-item-roster-tot{ color:var(--text-mid) !important; }
 .clubs-dir-item-roster-lbl{ margin-left:5px !important; opacity:.7 !important; }
 
 .clubs-dir-item:hover{
-  background:rgba(255,255,255,.025) !important;
-  border-color:var(--rule-soft) !important;
+  background:rgba(255,255,255,.04) !important;
+  border-color:var(--panel-ink) !important;
+  transform:translateY(-1px) !important;
+  box-shadow:-2px 2px 0 var(--panel-ink) !important;
 }
-.clubs-dir-item:hover .clubs-dir-item-stripe{ opacity:.85 !important; }
+.clubs-dir-item:hover .clubs-dir-item-stripe{ width:7px !important; }
 .clubs-dir-item.on{
   /* Neutral white-tint surface so the active highlight doesn't clash with
      red/orange/gold accent stripes. Panel-ink offset shadow does the work. */
-  background:rgba(255,255,255,.05) !important;
+  background:rgba(255,255,255,.07) !important;
   border-color:var(--panel-ink) !important;
-  box-shadow:-2px 2px 0 var(--panel-ink) !important;
+  box-shadow:-3px 3px 0 var(--panel-ink) !important;
   transform:translate(1px,-1px) !important;
 }
 .clubs-dir-item.on .clubs-dir-item-stripe{
-  opacity:1 !important;
-  width:7px !important;
-  margin:6px 0 !important;
+  width:9px !important;
 }
 .clubs-dir-item.on .clubs-dir-item-name{ color:#fffdf3 !important; }
+.clubs-dir-item.on .clubs-dir-item-tag{ color:var(--gold-bright) !important; }
 
 /* ─── RIGHT DETAIL PANE ──────────────────────────────────────────── */
 .clubs-dir-detail{
@@ -11361,7 +11393,7 @@ button.class-chip-btn{
   .clubs-dir-rail{ position:static !important; }
   .clubs-dir-list{
     display:grid !important;
-    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)) !important;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)) !important;
   }
 }
 @media (max-width: 700px){

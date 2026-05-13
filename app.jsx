@@ -2744,7 +2744,9 @@ function ClubsTab(){
                   >
                     <span className="clubs-dir-item-stripe" aria-hidden="true"/>
                     <span className="clubs-dir-item-body">
+                      {c.tag && <span className="clubs-dir-item-tag">{c.tag}</span>}
                       <span className="clubs-dir-item-name">{c.name}</span>
+                      {c.desc && <span className="clubs-dir-item-desc">{c.desc}</span>}
                       <span className="clubs-dir-item-meta">
                         {c.category && <span className="clubs-dir-item-cat">{c.category}</span>}
                         <span className="clubs-dir-item-roster">
