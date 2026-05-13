@@ -3615,83 +3615,81 @@ span.cname{ font-weight:600; color:var(--ink); }
 .kbr-body{
   display:flex;
   flex-direction:column;
-  gap:20px;
+  gap:24px;
 }
 
-/* ---- Section dividers (Overview / Roles / Rulebook) ---- */
+/* ---- Section dividers (Overview / Roles / Rulebook) ----
+   Tighter / cleaner / less busy pass:
+   - Section tag becomes a plain mono caps label (no bg pill, no left rule);
+     the section's own content owns the red accent.
+   - Bigger breathing room between sections (mb 36 vs 28; gap 24 vs 20). */
 .kbr-section{
-  margin:0 0 28px;
+  margin:0 0 36px;
   padding:0;
   border:none;
 }
 .kbr-section + .kbr-section{
-  padding-top:24px;
+  padding-top:32px;
   border-top:1px solid var(--rule-soft, rgba(255,255,255,.06));
 }
 .kbr-section-tag{
   display:inline-block;
   font-family:var(--mono);
-  font-size:11px;
+  font-size:10.5px;
   font-weight:700;
-  letter-spacing:1.8px;
+  letter-spacing:.22em;
   text-transform:uppercase;
   color:var(--pb-accent);
-  margin:0 0 18px;
-  padding:6px 10px;
-  background:var(--pb-accent-soft);
-  border-left:3px solid var(--pb-accent);
+  margin:0 0 16px;
+  padding:0;
+  background:transparent;
+  border:none;
 }
 
 /* ---- Overview ---- */
 .kbr-summary{
   font-family:var(--sans);
   font-size:15px;
-  line-height:1.6;
+  line-height:1.65;
   color:#e6e2d8 !important;
-  margin:0 0 22px;
-  max-width:900px;
+  margin:0 0 28px;
+  max-width:780px;
 }
 
+/* Keypoint cards — number + label + body line, all in one column.
+   Less padding (12/14 vs 16/18), no leading icon column, looser block gap. */
 .kbr-keypoints{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
-  gap:14px;
-  margin:0 0 22px;
+  grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  gap:12px;
+  margin:0 0 28px;
 }
 .kbr-keypoint{
   display:flex;
-  align-items:flex-start;
-  gap:14px;
-  padding:16px 18px;
+  flex-direction:column;
+  gap:6px;
+  padding:14px 16px;
   background:var(--pb-surface);
   border:none;
   border-left:3px solid var(--pb-accent);
 }
 .kbr-keypoint-num{
   font-family:var(--mono);
-  font-size:18px;
+  font-size:13px;
   font-weight:700;
   color:var(--pb-accent) !important;
-  letter-spacing:.04em;
-  flex-shrink:0;
-  min-width:36px;
+  letter-spacing:.16em;
+  line-height:1;
 }
-.kbr-keypoint-body{ flex:1; min-width:0; }
+.kbr-keypoint-body{ display:contents; }
 .kbr-keypoint-lbl{
-  font-family:var(--mono);
-  font-size:11px;
+  font-family:var(--sans);
+  font-size:15px;
   font-weight:700;
-  letter-spacing:1.4px;
-  text-transform:uppercase;
+  letter-spacing:0;
+  text-transform:none;
   color:#f1ede4 !important;
-  margin-bottom:6px;
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-.kbr-keypoint-lbl .ico{
-  color:var(--pb-accent);
-  font-size:13px;
+  line-height:1.2;
 }
 .kbr-keypoint-body p{
   font-family:var(--sans);
@@ -3701,7 +3699,9 @@ span.cname{ font-weight:600; color:var(--ink); }
   margin:0;
 }
 
-/* ---- Arena tile (clickable diagram) ---- */
+/* ---- Arena tile (clickable diagram) ----
+   Stacks vertically below 640px so the image gets its own breathing
+   room and the body text doesn't get squeezed into a thin column. */
 .kbr-arena-tile{
   display:flex;
   align-items:stretch;
@@ -3723,8 +3723,8 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 .kbr-arena-tile-img{
   display:block;
-  width:200px;
-  max-width:35%;
+  width:180px;
+  max-width:32%;
   object-fit:cover;
   background:#000;
   flex-shrink:0;
@@ -3732,26 +3732,23 @@ span.cname{ font-weight:600; color:var(--ink); }
 .kbr-arena-tile-body{
   flex:1;
   min-width:0;
-  padding:18px 22px;
+  padding:16px 20px;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  gap:6px;
+  gap:4px;
 }
 .kbr-arena-tile-eyebrow{
   font-family:var(--mono);
   font-size:10.5px;
   font-weight:700;
-  letter-spacing:1.6px;
+  letter-spacing:.18em;
   text-transform:uppercase;
   color:var(--pb-accent) !important;
-  display:flex;
-  align-items:center;
-  gap:6px;
 }
 .kbr-arena-tile-title{
   font-family:var(--display, var(--sans));
-  font-size:20px;
+  font-size:19px;
   font-weight:700;
   letter-spacing:.02em;
   color:#f1ede4 !important;
@@ -3760,191 +3757,154 @@ span.cname{ font-weight:600; color:var(--ink); }
 .kbr-arena-tile-meta{
   font-family:var(--mono);
   font-size:10.5px;
-  letter-spacing:1.2px;
+  letter-spacing:.12em;
   text-transform:uppercase;
   color:#8a8a92 !important;
 }
-.kbr-arena-tile-action{
-  font-family:var(--mono);
-  font-size:10.5px;
-  font-weight:700;
-  letter-spacing:1.4px;
-  text-transform:uppercase;
-  color:var(--pb-accent) !important;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin-top:4px;
+@media (max-width: 640px){
+  .kbr-arena-tile{ flex-direction:column; }
+  .kbr-arena-tile-img{
+    width:100%;
+    max-width:none;
+    height:160px;
+    object-fit:cover;
+  }
+  .kbr-arena-tile-body{ padding:14px 16px; }
 }
 
-/* ---- Roles list ---- */
+/* ---- Roles list ----
+   Was a 64-col grid with an ::before gradient column and an absolutely-
+   positioned number — readable but visually heavy. Flatten to a single
+   column with the number inline above the name, then desc, then a
+   subtle "Best for" row underneath. */
 .kbr-roles{
   list-style:none;
   margin:0;
   padding:0;
   display:grid;
   grid-template-columns:1fr;
-  gap:14px;
+  gap:12px;
 }
 .kbr-role{
   position:relative;
-  display:grid;
-  grid-template-columns:64px 1fr;
-  gap:0;
+  display:block;
+  padding:16px 18px 14px;
   background:var(--pb-surface);
   border:none;
   border-left:3px solid var(--pb-accent);
-  overflow:hidden;
-}
-.kbr-role::before{
-  content:"";
-  grid-column:1;
-  grid-row:1 / span 3;
-  background:linear-gradient(180deg, rgba(196,26,26,.14) 0%, rgba(196,26,26,.03) 100%);
-  border-right:none;
-}
-.kbr-role-num{
-  position:absolute;
-  top:18px;
-  left:0;
-  width:64px;
-  text-align:center;
-  font-family:var(--mono);
-  font-size:18px;
-  font-weight:700;
-  letter-spacing:1px;
-  color:var(--pb-accent) !important;
-  background:transparent;
-  padding:0;
-  line-height:1;
-  z-index:1;
-}
-.kbr-role-num::before{
-  content:"";
-  display:block;
-  width:24px;
-  height:2px;
-  background:var(--pb-accent);
-  margin:0 auto 10px;
-  opacity:.85;
 }
 .kbr-role-hd{
-  grid-column:2;
-  grid-row:1;
-  display:block;
-  padding:18px 22px 10px;
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:0 0 4px;
+}
+.kbr-role-num{
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.16em;
+  color:var(--pb-accent) !important;
+  line-height:1;
+  flex-shrink:0;
 }
 .kbr-role-name{
   font-family:var(--display, var(--sans));
-  font-size:22px;
+  font-size:20px;
   font-weight:700;
-  letter-spacing:.05em;
+  letter-spacing:.04em;
   text-transform:uppercase;
   color:#f1ede4 !important;
   line-height:1.1;
-  margin:0 0 6px;
+  margin:0;
 }
 .kbr-role-tagline{
+  flex-basis:100%;
   font-family:var(--mono);
   font-size:11px;
   font-weight:700;
-  letter-spacing:1.4px;
+  letter-spacing:.14em;
   text-transform:uppercase;
-  color:#cfcabc !important;
-  line-height:1.5;
-  display:block;
+  color:#a09a8a !important;
+  line-height:1.45;
+  margin-top:2px;
 }
 .kbr-role-desc{
-  grid-column:2;
-  grid-row:2;
   font-family:var(--sans);
-  font-size:14px;
-  line-height:1.65;
+  font-size:13.5px;
+  line-height:1.6;
   color:#e6e2d8 !important;
-  margin:0;
-  padding:0 22px 14px;
+  margin:6px 0 0;
 }
+/* "Best for" is now a quiet inline note under the desc rather than a
+   stripped-in panel with its own background + left bar. */
 .kbr-role-best{
-  grid-column:1 / -1;
-  grid-row:3;
   display:flex;
-  align-items:center;
+  align-items:baseline;
   flex-wrap:wrap;
-  gap:12px;
-  padding:11px 22px 11px 64px;
-  background:rgba(0,0,0,.18);
-  border-top:none;
+  gap:10px;
+  margin:10px 0 0;
+  padding:0;
+  background:transparent;
+  border:none;
   font-family:var(--sans);
-  font-size:13px;
+  font-size:12.5px;
   line-height:1.5;
-  margin:0;
-  position:relative;
+  position:static;
 }
-.kbr-role-best::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  bottom:0;
-  width:3px;
-  background:var(--pb-accent);
-  opacity:.7;
-}
+.kbr-role-best::before{ content:none; }
 .kbr-role-best-tag{
   flex-shrink:0;
-  display:inline-flex;
-  align-items:center;
-  height:22px;
-  padding:0 9px;
   font-family:var(--mono);
-  font-size:10.5px;
+  font-size:9.5px;
   font-weight:700;
-  letter-spacing:1.5px;
+  letter-spacing:.18em;
   text-transform:uppercase;
-  color:#fff !important;
-  background:var(--pb-accent);
+  color:var(--pb-accent) !important;
+  background:transparent;
+  padding:0;
+  height:auto;
 }
 .kbr-role-best-text{
-  color:#e6e2d8 !important;
+  color:#cfcabc !important;
   flex:1;
-  min-width:200px;
+  min-width:0;
 }
-@media (max-width: 720px){
-  .kbr-role{ grid-template-columns:48px 1fr; }
-  .kbr-role-num{ width:48px; font-size:15px; top:14px; }
-  .kbr-role-hd{ padding:14px 16px 8px; }
-  .kbr-role-desc{ padding:0 16px 12px; font-size:13.5px; }
-  .kbr-role-best{ padding:10px 16px 10px 48px; font-size:12.5px; }
-  .kbr-role-name{ font-size:18px; }
+@media (max-width: 640px){
+  .kbr-role{ padding:14px 14px 12px; }
+  .kbr-role-name{ font-size:17px; }
+  .kbr-role-hd{ gap:8px; }
+  .kbr-role-desc{ font-size:13px; }
+  .kbr-role-best{ font-size:12px; gap:6px; }
 }
 
-
-/* ---- Rulebook blocks ---- */
+/* ---- Rulebook blocks ----
+   Slightly tighter padding, plain caps label (no glyph), and the per-row
+   border on .kbr-list items removed so the bullets read as a tidy list,
+   not a striped table. */
 .kbr-block{
-  padding:18px 20px;
+  padding:14px 16px;
   background:var(--pb-surface);
   border:none;
   border-left:3px solid var(--pb-accent);
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 .kbr-block:last-child{ margin-bottom:0; }
 .kbr-block-tag{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
+  display:inline-block;
   font-family:var(--mono);
-  font-size:11px;
+  font-size:10.5px;
   font-weight:700;
-  letter-spacing:1.6px;
+  letter-spacing:.22em;
   text-transform:uppercase;
   color:var(--pb-accent) !important;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
-.kbr-block-tag .ico{ color:var(--pb-accent); }
 .kbr-block p{
   font-family:var(--sans);
   font-size:14px;
-  line-height:1.6;
+  line-height:1.65;
   color:#e6e2d8 !important;
   margin:0;
 }
@@ -3955,24 +3915,23 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 .kbr-list li{
   position:relative;
-  padding:8px 0 8px 18px;
-  border-bottom:1px solid rgba(255,255,255,.04);
+  padding:6px 0 6px 16px;
+  border-bottom:none;
   font-family:var(--sans);
-  font-size:14px;
+  font-size:13.5px;
   line-height:1.55;
   color:#e6e2d8 !important;
 }
 .kbr-list li::before{
   content:"";
   position:absolute;
-  top:15px;
+  top:13px;
   left:0;
-  width:6px;
-  height:6px;
+  width:5px;
+  height:5px;
   border-radius:50%;
   background:var(--pb-accent);
 }
-.kbr-list li:last-child{ border-bottom:none; }
 
 /* ---- Career stats (used in About section, kept consistent) ---- */
 .kbr-career-stats{
