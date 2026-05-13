@@ -3705,9 +3705,11 @@ ${members}
               <span className="join-divider-rule"/>
             </div>
           {["student","faculty","strata","collective"].includes(type) && (
-            <aside className="join-age-note" style={{margin:"16px 0 24px",padding:"14px 18px",border:"1px solid #c83030",borderLeft:"4px solid #c83030",background:"rgba(200,48,48,0.08)",borderRadius:"6px",fontSize:"0.92rem",lineHeight:"1.5"}}>
-              <strong style={{textTransform:"uppercase",letterSpacing:"0.08em",color:"#c83030"}}>Age & Cradle requirement — strict.</strong>{" "}
-                          Your character's age must fall inside the age range of their Cradle phase (Cradle III: 0–26 · Cradle II: 31–46 · Cradle I: 51–58). Powers track the Cradle a character was born into. <strong>The Dean</strong> and <strong>Vale</strong> are the only Cradle I characters above 46. <strong>Paragon</strong> is a Cradle II character (age 31–46) who received the Cradle I injection — Cradle II body, Cradle I powers. Please <a href="#lore" style={{color:"#c83030",textDecoration:"underline"}}>read the lore</a> (start with <em>The Programme</em>) before submitting.
+            <aside className="join-warn" role="note">
+              <div className="join-warn-tag">Age &amp; Cradle requirement — strict.</div>
+              <p>
+                Your character's age must fall inside the age range of their Cradle phase (Cradle III: 0–26 · Cradle II: 31–46 · Cradle I: 51–58). Powers track the Cradle a character was born into. <strong>The Dean</strong> and <strong>Vale</strong> are the only Cradle I characters above 46. <strong>Paragon</strong> is a Cradle II character (age 31–46) who received the Cradle I injection — Cradle II body, Cradle I powers. Please <a href="#lore" className="join-warn-link">read the lore</a> (start with <em>The Programme</em>) before submitting.
+              </p>
             </aside>
           )}                                                                          
 
@@ -3997,7 +3999,7 @@ function CollectiveFieldset({form, set, Common}){
               />
             )}
           </Field>
-          <Field label="Role within Collective" required hint="Leader, Specialist, Field, etc.">
+          <Field label="Role within Collective" required hint="Leader, Specialist, Field, etc." full>
             <input
               className="join-input"
               type="text"
@@ -4034,7 +4036,7 @@ function CollectiveFieldset({form, set, Common}){
               {kinds.map((k, i) => <option key={i} value={k}>{k}</option>)}
             </select>
           </Field>
-          <Field label="Faction" required>
+          <Field label="Faction" required full>
             <select
               className="join-select"
               value={form.newCollectiveFaction || ""}
@@ -4170,7 +4172,7 @@ function JoinFieldset({type, form, set}){
             {JOIN_TRACKS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
-        <Field label="Tier" required hint="A through D">
+        <Field label="Tier" required hint="A through D" full>
           <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
             <option value="">Select tier…</option>
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
@@ -4230,7 +4232,7 @@ function JoinFieldset({type, form, set}){
         <Field label="Stage Name / Alias" required hint="Their hero name">
           <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="ARCLIGHT, etc."/>
         </Field>
-        <Field label="Tier" required hint="A-list = top of roster">
+        <Field label="Tier" required hint="A-list = top of roster" full>
           <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
             <option value="">Select tier…</option>
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
@@ -4244,7 +4246,7 @@ function JoinFieldset({type, form, set}){
             {JOIN_STRATA_DEPTS.map(d => <option key={d} value={d}>{d}</option>)}
           </select>
         </Field>
-        <Field label="Role / Title" required hint="e.g. Board Member, Senior Handler, PR Director">
+        <Field label="Role / Title" required hint="e.g. Board Member, Senior Handler, PR Director" full>
           <input className="join-input" type="text" value={form.strataTitle || ""} onChange={e => set("strataTitle", e.target.value)} placeholder="e.g. Senior Handler"/>
         </Field>
         </>)}
