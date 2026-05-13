@@ -3597,6 +3597,14 @@ span.cname{ font-weight:600; color:var(--ink); }
 /* CLUB RULES — Powerball How To Play tab */
 /* CLUB RULES — dark restyle (Powerball "How To Play" / All clubs) */
 .kbr{
+  /* Powerball cleanup: scope a single accent var to the rules block so every
+     yellow/gold reference resolves to Powerball red. Replaces the previous
+     mixed yellow/grey palette that fought the dark page background. */
+  --pb-accent: #c41a1a;
+  --pb-accent-soft: rgba(196,26,26,.10);
+  --pb-accent-faint: rgba(196,26,26,.05);
+  --pb-surface: rgba(255,255,255,.025);
+  --pb-surface-2: rgba(255,255,255,.04);
   background:transparent;
   color:#f1ede4;
 }
@@ -3618,7 +3626,7 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 .kbr-section + .kbr-section{
   padding-top:24px;
-  border-top:1px solid #1f1f26;
+  border-top:1px solid var(--rule-soft, rgba(255,255,255,.06));
 }
 .kbr-section-tag{
   display:inline-block;
@@ -3627,11 +3635,11 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.8px;
   text-transform:uppercase;
-  color:#fbbf24;
+  color:var(--pb-accent);
   margin:0 0 18px;
   padding:6px 10px;
-  background:rgba(251,191,36,.08);
-  border-left:3px solid #fbbf24;
+  background:var(--pb-accent-soft);
+  border-left:3px solid var(--pb-accent);
 }
 
 /* ---- Overview ---- */
@@ -3655,15 +3663,15 @@ span.cname{ font-weight:600; color:var(--ink); }
   align-items:flex-start;
   gap:14px;
   padding:16px 18px;
-  background:#14141a;
-  border:1px solid #1f1f26;
-  border-left:3px solid #fbbf24;
+  background:var(--pb-surface);
+  border:none;
+  border-left:3px solid var(--pb-accent);
 }
 .kbr-keypoint-num{
   font-family:var(--mono);
   font-size:18px;
   font-weight:700;
-  color:#fbbf24 !important;
+  color:var(--pb-accent) !important;
   letter-spacing:.04em;
   flex-shrink:0;
   min-width:36px;
@@ -3682,7 +3690,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   gap:6px;
 }
 .kbr-keypoint-lbl .ico{
-  color:#fbbf24;
+  color:var(--pb-accent);
   font-size:13px;
 }
 .kbr-keypoint-body p{
@@ -3701,18 +3709,17 @@ span.cname{ font-weight:600; color:var(--ink); }
   width:100%;
   padding:0;
   margin:0 0 4px;
-  background:#0e0e10;
-  border:1px solid #1f1f26;
-  border-left:3px solid #fbbf24;
+  background:var(--pb-surface);
+  border:none;
+  border-left:3px solid var(--pb-accent);
   cursor:pointer;
   text-align:left;
   color:inherit;
   transition:background .15s, border-color .15s;
 }
 .kbr-arena-tile:hover{
-  background:#14141a;
-  border-color:#2a2a32;
-  border-left-color:#fbbf24;
+  background:var(--pb-surface-2);
+  border-left-color:var(--pb-accent);
 }
 .kbr-arena-tile-img{
   display:block;
@@ -3737,7 +3744,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.6px;
   text-transform:uppercase;
-  color:#fbbf24 !important;
+  color:var(--pb-accent) !important;
   display:flex;
   align-items:center;
   gap:6px;
@@ -3763,7 +3770,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.4px;
   text-transform:uppercase;
-  color:#fbbf24 !important;
+  color:var(--pb-accent) !important;
   display:flex;
   align-items:center;
   gap:6px;
@@ -3784,17 +3791,17 @@ span.cname{ font-weight:600; color:var(--ink); }
   display:grid;
   grid-template-columns:64px 1fr;
   gap:0;
-  background:#14141a;
-  border:1px solid #1f1f26;
-  border-left:3px solid #fbbf24;
+  background:var(--pb-surface);
+  border:none;
+  border-left:3px solid var(--pb-accent);
   overflow:hidden;
 }
 .kbr-role::before{
   content:"";
   grid-column:1;
   grid-row:1 / span 3;
-  background:linear-gradient(180deg, rgba(251,191,36,.10) 0%, rgba(251,191,36,.02) 100%);
-  border-right:1px solid #1f1f26;
+  background:linear-gradient(180deg, rgba(196,26,26,.14) 0%, rgba(196,26,26,.03) 100%);
+  border-right:none;
 }
 .kbr-role-num{
   position:absolute;
@@ -3806,7 +3813,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-size:18px;
   font-weight:700;
   letter-spacing:1px;
-  color:#fbbf24 !important;
+  color:var(--pb-accent) !important;
   background:transparent;
   padding:0;
   line-height:1;
@@ -3817,7 +3824,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   display:block;
   width:24px;
   height:2px;
-  background:#fbbf24;
+  background:var(--pb-accent);
   margin:0 auto 10px;
   opacity:.85;
 }
@@ -3865,8 +3872,8 @@ span.cname{ font-weight:600; color:var(--ink); }
   flex-wrap:wrap;
   gap:12px;
   padding:11px 22px 11px 64px;
-  background:#0e0e12;
-  border-top:1px solid #1f1f26;
+  background:rgba(0,0,0,.18);
+  border-top:none;
   font-family:var(--sans);
   font-size:13px;
   line-height:1.5;
@@ -3880,8 +3887,8 @@ span.cname{ font-weight:600; color:var(--ink); }
   top:0;
   bottom:0;
   width:3px;
-  background:#fbbf24;
-  opacity:.6;
+  background:var(--pb-accent);
+  opacity:.7;
 }
 .kbr-role-best-tag{
   flex-shrink:0;
@@ -3894,8 +3901,8 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.5px;
   text-transform:uppercase;
-  color:#07070a !important;
-  background:#fbbf24;
+  color:#fff !important;
+  background:var(--pb-accent);
 }
 .kbr-role-best-text{
   color:#e6e2d8 !important;
@@ -3915,9 +3922,9 @@ span.cname{ font-weight:600; color:var(--ink); }
 /* ---- Rulebook blocks ---- */
 .kbr-block{
   padding:18px 20px;
-  background:#14141a;
-  border:1px solid #1f1f26;
-  border-left:3px solid #fbbf24;
+  background:var(--pb-surface);
+  border:none;
+  border-left:3px solid var(--pb-accent);
   margin-bottom:12px;
 }
 .kbr-block:last-child{ margin-bottom:0; }
@@ -3930,10 +3937,10 @@ span.cname{ font-weight:600; color:var(--ink); }
   font-weight:700;
   letter-spacing:1.6px;
   text-transform:uppercase;
-  color:#fbbf24 !important;
+  color:var(--pb-accent) !important;
   margin-bottom:12px;
 }
-.kbr-block-tag .ico{ color:#fbbf24; }
+.kbr-block-tag .ico{ color:var(--pb-accent); }
 .kbr-block p{
   font-family:var(--sans);
   font-size:14px;
@@ -3949,7 +3956,7 @@ span.cname{ font-weight:600; color:var(--ink); }
 .kbr-list li{
   position:relative;
   padding:8px 0 8px 18px;
-  border-bottom:1px solid #1f1f26;
+  border-bottom:1px solid rgba(255,255,255,.04);
   font-family:var(--sans);
   font-size:14px;
   line-height:1.55;
@@ -3963,7 +3970,7 @@ span.cname{ font-weight:600; color:var(--ink); }
   width:6px;
   height:6px;
   border-radius:50%;
-  background:#fbbf24;
+  background:var(--pb-accent);
 }
 .kbr-list li:last-child{ border-bottom:none; }
 
@@ -3976,15 +3983,15 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 .kbr-career-stat{
   padding:14px 16px;
-  background:#14141a;
-  border:1px solid #1f1f26;
-  border-left:3px solid #ef4444;
+  background:var(--pb-surface);
+  border:none;
+  border-left:3px solid var(--pb-accent);
 }
 .kbr-career-stat-num{
   font-family:var(--display, var(--sans));
   font-size:24px;
   font-weight:700;
-  color:#ef4444 !important;
+  color:var(--pb-accent) !important;
   letter-spacing:.02em;
   line-height:1;
   margin-bottom:6px;
@@ -4039,9 +4046,9 @@ span.cname{ font-weight:600; color:var(--ink); }
   justify-content:center;
 }
 .kbr-lightbox-close:hover{
-  background:#fbbf24;
-  color:#07070a;
-  border-color:#fbbf24;
+  background:var(--pb-accent);
+  color:#fff;
+  border-color:var(--pb-accent);
 }
 .kbr-lightbox-hint{
   position:absolute;
@@ -7672,8 +7679,8 @@ button.class-chip-btn{
 .orgs-group-meta{ display:flex; align-items:center; gap:14px; }
 .orgs-group-count{ color:var(--text-low) !important; font-family:var(--mono) !important; font-size:11px !important; letter-spacing:1.5px !important; }
 .orgs-group-toggle{ color:var(--gold) !important; font-size:14px; }
-.orgs-group-note{ color:var(--text-mid) !important; padding:0 24px 14px !important; font-size:14px; line-height:1.7; margin:0; }
-.orgs-list{ padding:0 24px 24px; display:grid; gap:14px; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); }
+.orgs-group-note{ color:var(--text-mid) !important; padding:0 24px !important; font-size:14px; line-height:1.7; margin:0; }
+.orgs-list{ padding:18px 24px; display:grid; gap:14px; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); }
 .orgs-item{
   background:rgba(255,255,255,.02) !important;
   border:1px solid var(--rule-soft) !important;
@@ -11036,8 +11043,12 @@ button.class-chip-btn{
    ║  the right. No modal, no overlay — inline like the rest of the registry.║
    ╚══════════════════════════════════════════════════════════════════════════╝ */
 
-/* Hide the old grid in case any cached state still mounts it */
-.clubs-wrap, .clubs-grid, .club-side-overlay, .club-side-panel{ display:none !important; }
+/* Hide legacy layouts that are no longer rendered. .clubs-grid is now
+   the new card-grid layout (Wave 11), so it is intentionally absent. */
+.clubs-wrap, .club-side-overlay, .club-side-panel{ display:none !important; }
+/* The Wave 9 directory rail (.clubs-dir + children) is also no longer
+   rendered by ClubsTab; hide if anything caches and re-mounts it. */
+.clubs-dir{ display:none !important; }
 
 .clubs-dir{
   display:grid !important;
@@ -11084,57 +11095,88 @@ button.class-chip-btn{
 
 .clubs-dir-list{
   list-style:none !important;
-  padding:6px !important;
+  padding:10px !important;
   margin:0 !important;
   display:flex !important;
   flex-direction:column !important;
-  gap:4px !important;
+  gap:10px !important;
 }
 .clubs-dir-item{
   display:flex !important;
   width:100% !important;
   align-items:stretch !important;
-  gap:10px !important;
+  gap:12px !important;
   padding:0 !important;
-  background:transparent !important;
-  border:1px solid transparent !important;
-  border-radius:5px !important;
+  background:rgba(255,255,255,.015) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-radius:6px !important;
   cursor:pointer !important;
   text-align:left !important;
-  transition:background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur) var(--ease) !important;
+  transition:background var(--dur) var(--ease), border-color var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease) !important;
   overflow:hidden !important;
+  position:relative !important;
 }
 .clubs-dir-item-stripe{
   width:5px !important;
   flex-shrink:0 !important;
   background:var(--accent, var(--gold)) !important;
-  border-radius:2px !important;
-  margin:8px 0 !important;
-  opacity:.55 !important;
-  transition:opacity var(--dur) var(--ease), width var(--dur) var(--ease) !important;
+  border-radius:0 !important;
+  margin:0 !important;
+  opacity:1 !important;
+  transition:width var(--dur) var(--ease) !important;
 }
 .clubs-dir-item-body{
   display:flex !important;
   flex-direction:column !important;
-  gap:5px !important;
-  padding:10px 12px 10px 0 !important;
+  gap:8px !important;
+  padding:14px 14px 12px 4px !important;
   flex:1 1 auto !important;
   min-width:0 !important;
+}
+.clubs-dir-item-tag{
+  font-family:var(--mono) !important;
+  font-size:9px !important;
+  letter-spacing:1.6px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  color:var(--text-low) !important;
+  line-height:1.2 !important;
+  /* one-line ellipsis so long tags don't push the card height around */
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
 }
 .clubs-dir-item-name{
   font-family:var(--comic) !important;
   font-weight:400 !important;
-  font-size:18px !important;
+  font-size:22px !important;
   letter-spacing:.005em !important;
   text-transform:uppercase !important;
   color:var(--text) !important;
   line-height:1.05 !important;
 }
+.clubs-dir-item-desc{
+  font-family:var(--sans) !important;
+  font-size:12.5px !important;
+  line-height:1.45 !important;
+  color:var(--text-mid) !important;
+  /* 2-line clamp */
+  display:-webkit-box !important;
+  -webkit-box-orient:vertical !important;
+  -webkit-line-clamp:2 !important;
+  line-clamp:2 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
 .clubs-dir-item-meta{
   display:flex !important;
   gap:10px !important;
   align-items:center !important;
+  justify-content:space-between !important;
   flex-wrap:wrap !important;
+  padding-top:4px !important;
+  border-top:1px solid var(--rule-soft) !important;
+  margin-top:2px !important;
 }
 .clubs-dir-item-cat{
   font-family:var(--mono) !important;
@@ -11145,7 +11187,7 @@ button.class-chip-btn{
   color:var(--gold-bright) !important;
   background:rgba(212,168,74,.10) !important;
   border:1px solid rgba(212,168,74,.3) !important;
-  padding:2px 6px !important;
+  padding:3px 7px !important;
   border-radius:3px !important;
 }
 .clubs-dir-item-roster{
@@ -11157,30 +11199,31 @@ button.class-chip-btn{
   align-items:baseline !important;
   gap:2px !important;
 }
-.clubs-dir-item-roster-num{ color:var(--text) !important; font-weight:700 !important; }
+.clubs-dir-item-roster-num{ color:var(--text) !important; font-weight:700 !important; font-size:12px !important; }
 .clubs-dir-item-roster-sep{ opacity:.5 !important; }
 .clubs-dir-item-roster-tot{ color:var(--text-mid) !important; }
 .clubs-dir-item-roster-lbl{ margin-left:5px !important; opacity:.7 !important; }
 
 .clubs-dir-item:hover{
-  background:rgba(255,255,255,.025) !important;
-  border-color:var(--rule-soft) !important;
+  background:rgba(255,255,255,.04) !important;
+  border-color:var(--panel-ink) !important;
+  transform:translateY(-1px) !important;
+  box-shadow:-2px 2px 0 var(--panel-ink) !important;
 }
-.clubs-dir-item:hover .clubs-dir-item-stripe{ opacity:.85 !important; }
+.clubs-dir-item:hover .clubs-dir-item-stripe{ width:7px !important; }
 .clubs-dir-item.on{
   /* Neutral white-tint surface so the active highlight doesn't clash with
      red/orange/gold accent stripes. Panel-ink offset shadow does the work. */
-  background:rgba(255,255,255,.05) !important;
+  background:rgba(255,255,255,.07) !important;
   border-color:var(--panel-ink) !important;
-  box-shadow:-2px 2px 0 var(--panel-ink) !important;
+  box-shadow:-3px 3px 0 var(--panel-ink) !important;
   transform:translate(1px,-1px) !important;
 }
 .clubs-dir-item.on .clubs-dir-item-stripe{
-  opacity:1 !important;
-  width:7px !important;
-  margin:6px 0 !important;
+  width:9px !important;
 }
 .clubs-dir-item.on .clubs-dir-item-name{ color:#fffdf3 !important; }
+.clubs-dir-item.on .clubs-dir-item-tag{ color:var(--gold-bright) !important; }
 
 /* ─── RIGHT DETAIL PANE ──────────────────────────────────────────── */
 .clubs-dir-detail{
@@ -11367,7 +11410,7 @@ button.class-chip-btn{
   .clubs-dir-rail{ position:static !important; }
   .clubs-dir-list{
     display:grid !important;
-    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)) !important;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)) !important;
   }
 }
 @media (max-width: 700px){
@@ -11381,6 +11424,323 @@ button.class-chip-btn{
   .clubs-dir-tab{ padding:12px 14px !important; white-space:nowrap !important; }
   .clubs-dir-body{ padding:20px 18px 28px !important; }
 }
+
+/* ╔══════════════════════════════════════════════════════════════════════════╗
+   ║  WAVE 11 — CLUBS CARD GRID + MODAL                                      ║
+   ║  Replaces the Wave 9 directory rail with a responsive grid of clickable ║
+   ║  cards. Clicking a card opens ClubModal, which centres in the viewport  ║
+   ║  with a blurred backdrop and reuses ClubPanelAbout / ClubRules /        ║
+   ║  ClubPanelRoster as the panel content.                                  ║
+   ╚══════════════════════════════════════════════════════════════════════════╝ */
+
+.clubs-grid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)) !important;
+  gap:16px !important;
+  max-width:1500px !important;
+  margin:0 auto !important;
+  padding:8px 28px 64px !important;
+}
+@media (min-width: 1100px){
+  .clubs-grid{ grid-template-columns:repeat(3, 1fr) !important; }
+}
+@media (max-width: 760px){
+  .clubs-grid{ grid-template-columns:1fr !important; padding:8px 16px 48px !important; }
+}
+.clubs-grid-empty{
+  max-width:1500px;
+  margin:0 auto;
+  padding:32px 28px 64px;
+}
+
+.club-card{
+  position:relative !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  width:100% !important;
+  text-align:left !important;
+  padding:18px 20px 16px 22px !important;
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:1px solid var(--rule-soft) !important;
+  border-left:4px solid var(--accent, var(--gold)) !important;
+  border-radius:6px !important;
+  cursor:pointer !important;
+  color:var(--text) !important;
+  font-family:inherit !important;
+  overflow:hidden !important;
+  transition:transform var(--dur) var(--ease), border-color var(--dur) var(--ease), background var(--dur) var(--ease), box-shadow var(--dur) var(--ease) !important;
+  min-height:180px !important;
+}
+.club-card:hover{
+  background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02)) !important;
+  border-color:var(--panel-ink) !important;
+  transform:translateY(-2px) !important;
+  box-shadow:-3px 4px 0 var(--panel-ink) !important;
+}
+.club-card-tag{
+  font-family:var(--mono) !important;
+  font-size:9.5px !important;
+  letter-spacing:.18em !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  color:var(--text-low) !important;
+  line-height:1.3 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+.club-card-name{
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  font-size:26px !important;
+  letter-spacing:.005em !important;
+  text-transform:uppercase !important;
+  color:var(--text) !important;
+  line-height:1.05 !important;
+}
+.club-card-desc{
+  font-family:var(--sans) !important;
+  font-size:13.5px !important;
+  line-height:1.5 !important;
+  color:var(--text-mid) !important;
+  margin:0 !important;
+  display:-webkit-box !important;
+  -webkit-box-orient:vertical !important;
+  -webkit-line-clamp:2 !important;
+  line-clamp:2 !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.club-card-meta{
+  margin-top:auto !important;
+  padding-top:10px !important;
+  border-top:1px solid var(--rule-soft) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  flex-wrap:wrap !important;
+}
+.club-card-cat{
+  font-family:var(--mono) !important;
+  font-size:9.5px !important;
+  letter-spacing:.14em !important;
+  text-transform:uppercase !important;
+  font-weight:700 !important;
+  color:var(--gold-bright) !important;
+  background:rgba(212,168,74,.10) !important;
+  border:1px solid rgba(212,168,74,.3) !important;
+  padding:3px 8px !important;
+  border-radius:3px !important;
+}
+.club-card-roster{
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  letter-spacing:.08em !important;
+  color:var(--text-low) !important;
+  display:inline-flex !important;
+  align-items:baseline !important;
+  gap:2px !important;
+}
+.club-card-roster-num{ color:var(--text) !important; font-weight:700 !important; font-size:13px !important; }
+.club-card-roster-sep{ opacity:.5 !important; }
+.club-card-roster-tot{ color:var(--text-mid) !important; }
+.club-card-roster-lbl{ margin-left:6px !important; opacity:.7 !important; }
+
+/* ── MODAL OVERLAY ─────────────────────────────────────────────────── */
+.club-modal-overlay{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:9000 !important;
+  background:rgba(8,8,12,.78) !important;
+  backdrop-filter:blur(6px) !important;
+  -webkit-backdrop-filter:blur(6px) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:40px 24px !important;
+  animation:club-modal-fade var(--dur, .18s) var(--ease, ease-out) !important;
+}
+@keyframes club-modal-fade{
+  from{ opacity:0; }
+  to{ opacity:1; }
+}
+.club-modal{
+  position:relative !important;
+  width:100% !important;
+  max-width:980px !important;
+  max-height:calc(100vh - 80px) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  background:linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border:var(--panel-stroke) solid var(--panel-ink) !important;
+  border-radius:8px !important;
+  box-shadow:-4px 5px 0 var(--panel-ink), 0 32px 80px -32px rgba(0,0,0,.95) !important;
+  overflow:hidden !important;
+  animation:club-modal-rise var(--dur, .22s) var(--ease, ease-out) !important;
+}
+@keyframes club-modal-rise{
+  from{ opacity:0; transform:translateY(12px) scale(.985); }
+  to{   opacity:1; transform:translateY(0) scale(1); }
+}
+.club-modal-hd{
+  position:relative !important;
+  padding:24px 64px 22px 28px !important;
+  border-bottom:var(--panel-stroke) solid var(--panel-ink) !important;
+  box-shadow:0 4px 0 var(--panel-ink) !important;
+  color:#fff !important;
+}
+.club-modal-hd-body{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:6px !important;
+  min-width:0 !important;
+}
+.club-modal-cat{
+  display:inline-block !important;
+  align-self:flex-start !important;
+  font-family:var(--mono) !important;
+  font-size:10px !important;
+  font-weight:700 !important;
+  letter-spacing:.2em !important;
+  text-transform:uppercase !important;
+  color:#fffdf3 !important;
+  background:rgba(0,0,0,.32) !important;
+  border:1px solid rgba(255,255,255,.15) !important;
+  padding:3px 8px !important;
+  border-radius:3px !important;
+  text-shadow:0 1px 1px rgba(0,0,0,.5) !important;
+}
+.club-modal-name{
+  font-family:var(--comic) !important;
+  font-weight:400 !important;
+  font-size:38px !important;
+  letter-spacing:.005em !important;
+  text-transform:uppercase !important;
+  line-height:1.02 !important;
+  color:#fffdf3 !important;
+  margin:0 !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.5) !important;
+}
+.club-modal-tag{
+  font-family:var(--mono) !important;
+  font-size:10.5px !important;
+  letter-spacing:.18em !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  color:rgba(255,253,243,.85) !important;
+  text-shadow:0 1px 1px rgba(0,0,0,.4) !important;
+}
+.club-modal-close{
+  position:absolute !important;
+  top:16px !important;
+  right:16px !important;
+  width:36px !important;
+  height:36px !important;
+  border-radius:50% !important;
+  background:rgba(0,0,0,.35) !important;
+  border:1px solid rgba(255,255,255,.25) !important;
+  color:#fff !important;
+  font-size:22px !important;
+  font-weight:400 !important;
+  line-height:1 !important;
+  cursor:pointer !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  transition:background var(--dur) var(--ease), transform var(--dur) var(--ease), border-color var(--dur) var(--ease) !important;
+}
+.club-modal-close:hover{
+  background:rgba(0,0,0,.6) !important;
+  border-color:#fff !important;
+  transform:rotate(90deg) !important;
+}
+.club-modal-tabs{
+  display:flex !important;
+  gap:0 !important;
+  padding:0 28px !important;
+  border-bottom:1px solid var(--rule-soft) !important;
+  flex-shrink:0 !important;
+  overflow-x:auto !important;
+}
+.club-modal-tab{
+  position:relative !important;
+  background:transparent !important;
+  border:none !important;
+  padding:14px 18px !important;
+  font-family:var(--mono) !important;
+  font-size:12px !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  color:var(--text-mid) !important;
+  cursor:pointer !important;
+  white-space:nowrap !important;
+  transition:color var(--dur) var(--ease), background var(--dur) var(--ease) !important;
+}
+.club-modal-tab:hover{ color:var(--text) !important; background:rgba(255,255,255,.025) !important; }
+.club-modal-tab.on{ color:#fffdf3 !important; }
+.club-modal-tab.on::after{
+  content:"" !important;
+  position:absolute !important;
+  left:14px; right:14px; bottom:0 !important;
+  height:3px !important;
+  background:var(--red-bright) !important;
+  box-shadow:0 2px 0 var(--gold) !important;
+}
+.club-modal-body{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow-y:auto !important;
+  padding:28px 32px 36px !important;
+}
+/* Strip the existing inner panel components' redundant frames so they
+   sit cleanly inside the modal's own panel. Mirrors the Wave 9 detail
+   pane treatment. */
+.club-modal-body .cp-about,
+.club-modal-body .cp-roster,
+.club-modal-body .cp-rules,
+.club-modal-body .kbr{
+  background:transparent !important;
+  border:none !important;
+  padding:0 !important;
+}
+/* And the schedule row, since meets is shown in the glance bar (kept
+   here for parity with the directory layout — modal omits the glance
+   bar but the schedule row still reads fine). */
+
+/* ── MOBILE: near-fullscreen with sticky header ─────────────────────── */
+@media (max-width: 768px){
+  .club-modal-overlay{
+    padding:0 !important;
+  }
+  .club-modal{
+    width:100% !important;
+    height:100vh !important;
+    max-height:100vh !important;
+    max-width:none !important;
+    border-radius:0 !important;
+    border:none !important;
+    box-shadow:none !important;
+  }
+  .club-modal-hd{
+    position:sticky !important;
+    top:0 !important;
+    z-index:2 !important;
+    padding:18px 56px 16px 20px !important;
+  }
+  .club-modal-name{ font-size:28px !important; }
+  .club-modal-close{
+    top:12px !important;
+    right:12px !important;
+    width:34px !important;
+    height:34px !important;
+  }
+  .club-modal-tabs{ padding:0 16px !important; }
+  .club-modal-tab{ padding:12px 14px !important; }
+  .club-modal-body{ padding:20px 18px 36px !important; }
+}
+
 /* ╔══════════════════════════════════════════════════════════════════════════╗
    ║  WAVE 10 — STAMP & PLATE READABILITY                                    ║
    ║  Wave 5/6 added blanket [class*="-text"], [class*="-desc"] selectors    ║
@@ -12652,6 +13012,143 @@ button.class-chip-btn{
   color: var(--text-mid) !important;
   border-radius: 0 !important;
 }
+
+/* ─── LOCATION CARDS (Outside-style 2-col grid) ─────────────────────── */
+.map-grid{
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+  gap: 14px !important;
+}
+@media (min-width: 900px){
+  .map-grid{
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 600px){
+  .map-grid{
+    grid-template-columns: 1fr !important;
+  }
+}
+.map-loc-card{
+  background: rgba(255,255,255,.02) !important;
+  border: 1px solid var(--rule-soft, rgba(255,255,255,.06)) !important;
+  border-radius: 10px !important;
+  padding: 18px 20px !important;
+  color: var(--text) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+.map-loc-card.is-classified{
+  border-left: 3px solid var(--red, #c41a1a) !important;
+}
+.map-loc-card-hd{
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  margin: 0 !important;
+}
+.map-loc-card-hd-l{
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+.map-loc-card-num{
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: .14em !important;
+  color: var(--gold, #d4a84a) !important;
+  flex-shrink: 0 !important;
+  line-height: 1.2 !important;
+}
+.map-loc-card.is-classified .map-loc-card-num{
+  color: var(--red-bright, #ef4444) !important;
+}
+.map-loc-card-name{
+  font-family: var(--serif) !important;
+  font-weight: 600 !important;
+  font-size: 17px !important;
+  line-height: 1.2 !important;
+  letter-spacing: -.005em !important;
+  color: var(--text) !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: baseline !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+.map-loc-card-cls{
+  display: inline-block !important;
+  font-family: var(--mono) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: .22em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  background: var(--red, #c41a1a) !important;
+  padding: 2px 7px !important;
+  border-radius: 2px !important;
+}
+.map-loc-card-sub{
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  color: var(--gold, #d4a84a) !important;
+  flex-shrink: 0 !important;
+  text-align: right !important;
+  line-height: 1.4 !important;
+  max-width: 45% !important;
+}
+.map-loc-card-desc{
+  font-family: var(--serif) !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid) !important;
+  margin: 0 !important;
+  text-wrap: pretty !important;
+}
+.map-loc-card-desc em{
+  color: var(--gold-bright, var(--gold, #d4a84a)) !important;
+  font-style: italic !important;
+}
+.map-loc-card-desc strong{
+  color: var(--text) !important;
+  font-weight: 700 !important;
+}
+.map-loc-card-desc a{
+  color: var(--gold-bright, var(--gold, #d4a84a)) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px !important;
+}
+.map-loc-card-tags{
+  list-style: none !important;
+  margin: 2px 0 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+.map-loc-card-tag{
+  font-family: var(--mono) !important;
+  font-size: 9.5px !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase !important;
+  padding: 4px 8px !important;
+  background: rgba(255,255,255,.03) !important;
+  border: 1px solid var(--rule-soft, rgba(255,255,255,.1)) !important;
+  color: var(--text-mid) !important;
+  border-radius: 3px !important;
+}
+
+/* Hide the old map index quick-jump strip (JSX no longer renders it,
+   but the CSS rules remain — belt-and-braces in case anything resurrects it) */
+.map-index{ display: none !important; }
 
 /* ─── RESIDENCE: HOUSE BLOCKS ───────────────────────────────────────── */
 .map-residence{
