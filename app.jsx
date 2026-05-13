@@ -4070,59 +4070,41 @@ const HOUSE_LORE_META = {
 /* A single location row — modelled on the curriculum row pattern.
    Number on left, name + sub in the middle, expand chevron on right.
    Click reveals description + tags inline. */
-function MapRow({loc, isOpen, onToggle}){
+function MapLocCard({loc}){
   return (
-    <article
-      className={"map-row" + (isOpen ? " is-open" : "") + (loc.classified ? " is-classified" : "")}
-    >
-      <button
-        className="map-row-btn"
-        onClick={onToggle}
-        aria-expanded={isOpen}
-      >
-        <span className="map-row-num">{loc.n}</span>
-        <span className="map-row-body">
-          <span className="map-row-name">
+    <article className={"map-loc-card" + (loc.classified ? " is-classified" : "")}>
+      <header className="map-loc-card-hd">
+        <div className="map-loc-card-hd-l">
+          <span className="map-loc-card-num">{loc.n}</span>
+          <h4 className="map-loc-card-name">
             {loc.name}
-            {loc.classified && <span className="map-row-cls">CLASSIFIED</span>}
-          </span>
-          <span className="map-row-sub">{loc.sub}</span>
-        </span>
-        <span className="map-row-toggle" aria-hidden="true">{isOpen ? "−" : "+"}</span>
-      </button>
-      {isOpen && (
-        <div className="map-row-desc">
-          <p dangerouslySetInnerHTML={{__html: loc.desc}}/>
-          {loc.tags && loc.tags.length > 0 && (
-            <div className="map-row-tags">
-              {loc.tags.map((t,i) => (<span key={i} className="map-row-tag">{t}</span>))}
-            </div>
-          )}
+            {loc.classified && <span className="map-loc-card-cls">CLASSIFIED</span>}
+          </h4>
         </div>
+        {loc.sub && <span className="map-loc-card-sub">{loc.sub}</span>}
+      </header>
+      <p className="map-loc-card-desc" dangerouslySetInnerHTML={{__html: loc.desc}}/>
+      {loc.tags && loc.tags.length > 0 && (
+        <ul className="map-loc-card-tags">
+          {loc.tags.map((t,i) => (<li key={i} className="map-loc-card-tag">{t}</li>))}
+        </ul>
       )}
     </article>
   );
 }
 
-function MapRowList({items, openId, setOpenId}){
+function MapLocGrid({items}){
   return (
-    <div className="map-rows">
-      {items.map(loc => (
-        <MapRow
-          key={loc.id}
-          loc={loc}
-          isOpen={openId === loc.id}
-          onToggle={() => setOpenId(openId === loc.id ? null : loc.id)}
-        />
-      ))}
+    <div className="map-grid">
+      {items.map(loc => (<MapLocCard key={loc.id} loc={loc}/>))}
     </div>
   );
 }
 
 /* Residence section — each house presented in the lore-house pattern
    (crest + virtue + display name + namesake), with its rooms as a
-   numbered row list underneath. Communal spaces follow as a fifth panel. */
-function ResidenceBlocks({items, openId, setOpenId}){
+   card grid underneath. Communal spaces follow as a fifth panel. */
+function ResidenceBlocks({items}){
   const houseOrder = ["valaris", "orenne", "saberis", "grimere"];
   const byHouse = {};
   const communal = [];
@@ -4158,7 +4140,7 @@ function ResidenceBlocks({items, openId, setOpenId}){
                 <span className="map-house-count-l">{list.length === 1 ? "ROOM" : "ROOMS"}</span>
               </div>
             </div>
-            <MapRowList items={list} openId={openId} setOpenId={setOpenId}/>
+            <MapLocGrid items={list}/>
           </article>
         );
       })}
@@ -4180,7 +4162,7 @@ function ResidenceBlocks({items, openId, setOpenId}){
           <p className="map-house-blurb">
             Houses are private; the residential quad is not. The lawn between the four buildings, the kitchen, the laundry, the snug and the garden courtyard belong to everyone — house colours come off at the door.
           </p>
-          <MapRowList items={communal} openId={openId} setOpenId={setOpenId}/>
+          <MapLocGrid items={communal}/>
         </article>
       )}
     </div>
@@ -4190,17 +4172,6 @@ function ResidenceBlocks({items, openId, setOpenId}){
 function MapTab(){
   const districts = D.mapDistricts;
   const locations = D.mapLocations;
-  const [openId, setOpenId] = useState(null);
-  const sectionRefs = useRef({});
-
-  const jumpTo = (dId) => {
-    const el = sectionRefs.current[dId];
-    if (!el) return;
-    const y = el.getBoundingClientRect().top + window.scrollY - 96;
-    window.scrollTo({ top: y, behavior: "smooth" });
-  };
-
-  const countFor = (id) => locations.filter(l => l.district === id).length;
 
   return (
     <div>
@@ -4212,37 +4183,11 @@ function MapTab(){
       />
 
       <div className="map-page">
-
-        {/* ── DISTRICT INDEX ─────────────────────────────────
-             Comic-frame plates, numbered 01–07, each clickable. */}
-        <section className="map-index">
-          <div className="lore-eyebrow">◆ Index of the grounds</div>
-          <h2 className="map-index-h">Eight districts.</h2>
-          <p className="map-index-lead">
-            The compound divides cleanly. <em>Four main zones</em> — academic, training, residences, STRATA — sit inside the wall. Four more reach beyond it: athletics &amp; grounds, the campus commons, the perimeter strip, and the slice of Greenwich the school treats as overflow.
-          </p>
-          <div className="map-index-grid">
-            {districts.map((d, i) => {
-              const n = String(i+1).padStart(2,"0");
-              return (
-                <button
-                  key={d.id}
-                  className="map-index-card"
-                  onClick={() => jumpTo(d.id)}
-                  aria-label={"Jump to " + d.name}
-                >
-                  <div className="map-index-card-num">{n}</div>
-                  <div className="map-index-card-name">{d.name}</div>
-                  <div className="map-index-card-count">{countFor(d.id)} locations</div>
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
         {/* ── DISTRICT SECTIONS ──────────────────────────────
              Each district uses the lore-eyebrow / lore-h pattern
-             so the page reads as part of the editorial spread. */}
+             so the page reads as part of the editorial spread.
+             Locations render as always-open cards in a 2-col grid
+             (mirrors the Outside / Orgs visual language). */}
         {districts.map((d, i) => {
           const items = locations.filter(l => l.district === d.id);
           if (!items.length) return null;
@@ -4250,11 +4195,7 @@ function MapTab(){
           const n = String(i+1).padStart(2,"0");
 
           return (
-            <section
-              key={d.id}
-              className="map-district"
-              ref={el => { sectionRefs.current[d.id] = el; }}
-            >
+            <section key={d.id} className="map-district">
               <header className="map-district-head">
                 <div className="lore-eyebrow">◆ District {n}</div>
                 <h2 className="lore-h map-district-h">{d.name}.</h2>
@@ -4265,8 +4206,8 @@ function MapTab(){
               </header>
 
               {isResidence
-                ? <ResidenceBlocks items={items} openId={openId} setOpenId={setOpenId}/>
-                : <MapRowList items={items} openId={openId} setOpenId={setOpenId}/>
+                ? <ResidenceBlocks items={items}/>
+                : <MapLocGrid items={items}/>
               }
             </section>
           );
