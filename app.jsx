@@ -2529,21 +2529,21 @@ function ClubRules({rules}){
             <div className="kbr-keypoint">
               <div className="kbr-keypoint-num">4s</div>
               <div className="kbr-keypoint-body">
-                <div className="kbr-keypoint-lbl"><span className="ico" aria-hidden="true">⧖</span> The Pass Clock</div>
+                <div className="kbr-keypoint-lbl">The Pass Clock</div>
                 <p>Catching the ball freezes you in place. Four seconds to release a pass, or possession drops.</p>
               </div>
             </div>
             <div className="kbr-keypoint">
               <div className="kbr-keypoint-num">∞</div>
               <div className="kbr-keypoint-body">
-                <div className="kbr-keypoint-lbl"><span className="ico" aria-hidden="true">○</span> The Ball</div>
+                <div className="kbr-keypoint-lbl">The Ball</div>
                 <p>Indestructible engineered composite. No registered power can vaporise, fracture, melt, or deform it. Only move it.</p>
               </div>
             </div>
             <div className="kbr-keypoint">
               <div className="kbr-keypoint-num">6v6</div>
               <div className="kbr-keypoint-body">
-                <div className="kbr-keypoint-lbl"><span className="ico" aria-hidden="true">▤</span> Three Elevations</div>
+                <div className="kbr-keypoint-lbl">Three Elevations</div>
                 <p>Ground, mid-tier (~10ft), upper-tier (~20ft) platforms connected by ramps, beams, and drop points.</p>
               </div>
             </div>
@@ -2562,13 +2562,9 @@ function ClubRules({rules}){
               loading="lazy"
             />
             <div className="kbr-arena-tile-body">
-              <div className="kbr-arena-tile-eyebrow"><span className="ico" aria-hidden="true">▦</span> Arena Diagram</div>
+              <div className="kbr-arena-tile-eyebrow">Arena Diagram</div>
               <div className="kbr-arena-tile-title">View the Powerball arena</div>
               <div className="kbr-arena-tile-meta">Six-on-six · Three elevations · Annotated zones</div>
-              <div className="kbr-arena-tile-action">
-                <span className="ico" aria-hidden="true">⛶</span>
-                <span>Click to expand</span>
-              </div>
             </div>
           </button>
         </div>
@@ -2605,7 +2601,7 @@ function ClubRules({rules}){
         <div className="kbr-body">
           {rules.format && (
             <div className="kbr-block">
-              <div className="kbr-block-tag"><span className="ico" aria-hidden="true">▤</span> Rules</div>
+              <div className="kbr-block-tag">Rules</div>
               <ul className="kbr-list">
                 {rules.format.map((line, i) => (
                   <li key={i}>{line}</li>
@@ -2615,7 +2611,7 @@ function ClubRules({rules}){
           )}
           {rules.violence && (
             <div className="kbr-block">
-              <div className="kbr-block-tag"><span className="ico" aria-hidden="true">▲</span> Powers, Violence &amp; Fouls</div>
+              <div className="kbr-block-tag">Powers, Violence &amp; Fouls</div>
               <p>{rules.violence}</p>
             </div>
           )}
