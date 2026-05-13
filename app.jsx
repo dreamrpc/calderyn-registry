@@ -3047,7 +3047,7 @@ function ClubPanelRoster({club, hasTeams}){
           return (
             <div key={gi} className="cp-rgroup">
               <div className="cp-rgroup-hd">
-                <span className="cp-rgroup-tag">{g.label}</span>
+                <span className="cp-rgroup-tag">{g.label}</span><span className="cp-rgroup-count">{items.filter(p => p.char).length}/{items.length} filled</span>
               </div>
               <table className="cp-rgroup-tbl">
                 <tbody>
