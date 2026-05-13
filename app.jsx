@@ -4542,7 +4542,7 @@ function MapTab(){
           const n = String(i+1).padStart(2,"0");
 
           return (
-            <section key={d.id} className="map-district">
+            <section key={d.id} className="map-district" style={{"--accent": d.color}}>
               <header className="map-district-head">
                 <div className="lore-eyebrow">◆ District {n}</div>
                 <h2 className="lore-h map-district-h">{d.name}.</h2>
