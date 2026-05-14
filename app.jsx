@@ -4462,7 +4462,7 @@ function CollectiveFieldset({form, set, Common}){
         <div className="join-fieldset">
           <FieldGroup title="Character Profile"/>
           {Common}
-          <Field label="Stage Name / Alias" required>
+          <Field label="Stage Name / Alias" required full>
             <input
               className="join-input"
               type="text"
@@ -4474,6 +4474,7 @@ function CollectiveFieldset({form, set, Common}){
           <Field
             label={flow === "joinVillain" ? "Villain Collective" : "Hero Collective"}
             required
+            full
             hint={collectives.length === 0
               ? "None registered yet — type the collective name, or switch to Create to propose one."
               : "Pick from registered collectives, or type a new name if a player has proposed one off-registry."}
@@ -4647,7 +4648,7 @@ function JoinFieldset({type, form, set}){
       <Field label="Character Name" required>
         <input className="join-input" type="text" value={form.char || ""} onChange={e => set("char", e.target.value)} placeholder="Full name"/>
       </Field>
-      <Field label="RPC Profile Link" required hint="The roleplay.chat profile URL for this character">
+      <Field label="RPC Profile Link" required hint="roleplay.chat profile URL">
         <input className="join-input" type="url" value={form.rpcLink || ""} onChange={e => set("rpcLink", e.target.value)} placeholder="https://www.roleplay.chat/..."/>
       </Field>
     </>
@@ -4663,13 +4664,13 @@ function JoinFieldset({type, form, set}){
         </Field>
 
         <FieldGroup title="Enrollment"/>
-        <Field label="House" required>
+        <Field label="House" required full>
           <select className="join-select" value={form.house || ""} onChange={e => set("house", e.target.value)}>
             <option value="">Select house…</option>
             {JOIN_HOUSES.map(h => <option key={h} value={h}>{h}</option>)}
           </select>
         </Field>
-        <Field label="Year" required hint="Fr 18–19 · So 19–20 · Jr 20–21 · Sr 21–22">
+        <Field label="Year" required hint="Fr 18–19 · So 19–20 · Jr 20–21 · Sr 21–22" full>
           <select className="join-select" value={form.year || ""} onChange={e => set("year", e.target.value)}>
             <option value="">Select year…</option>
             {JOIN_YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -4749,10 +4750,10 @@ function JoinFieldset({type, form, set}){
           </select>
         </Field>
         {form.strataRole === "talent" && (<>
-        <Field label="Stage Name / Alias" required hint="Their hero name">
+        <Field label="Stage Name / Alias" required hint="Their hero name" full>
           <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="ARCLIGHT, etc."/>
         </Field>
-        <Field label="Tier" required hint="A-list = top of roster">
+        <Field label="Tier" required hint="A-list = top of roster" full>
           <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
             <option value="">Select tier…</option>
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
@@ -4760,7 +4761,7 @@ function JoinFieldset({type, form, set}){
         </Field>
         </>)}
         {isCorporate && (<>
-        <Field label="Department" required hint="Which division they work in">
+        <Field label="Department" required hint="Which division they work in" full>
           <select className="join-select" value={form.strataDept || ""} onChange={e => set("strataDept", e.target.value)}>
             <option value="">Select department…</option>
             {JOIN_STRATA_DEPTS.map(d => <option key={d} value={d}>{d}</option>)}
