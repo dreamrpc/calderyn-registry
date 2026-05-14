@@ -4582,3 +4582,21 @@ body {
      flex: none;
      white-space: nowrap;
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   POWER COLUMN WRAP — keep View pill / Tier chip on screen
+   A late universal rule (`.preg-tbl tbody td`, `.tw table td`) sets
+   white-space:nowrap !important, which beats the column-specific
+   `white-space:normal` declarations. With nowrap, long power
+   expressions stretch the table beyond the viewport and push the
+   View button (powers registry) and Tier pill (student registry)
+   into the horizontal-scroll region — so users don't see them.
+   Allow only the Power column to wrap.
+   ═════════════════════════════════════════════════════════════════ */
+.preg-tbl tbody td.preg-col-power,
+.tw table td.student-col-power {
+     white-space: normal !important;
+     overflow: visible !important;
+     text-overflow: clip !important;
+     word-break: break-word;
+}
