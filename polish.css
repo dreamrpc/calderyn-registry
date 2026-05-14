@@ -4649,3 +4649,12 @@ body {
      transform: translateX(3px);
 }
 
+/* Inline chip cluster in .group-hd (e.g. SANCTIONED + CONCEPT together) */
+.group-chips {
+     display: inline-flex;
+     align-items: center;
+     gap: 8px;
+     flex-wrap: wrap;
+}
+
+
