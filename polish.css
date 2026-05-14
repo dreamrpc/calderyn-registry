@@ -4514,3 +4514,42 @@ body {
   .curr-finenote-hit br { display: none; }
   .curr-finenote-hit-mark { right: -10px; top: -16px; }
 }
+
+
+/* ═════════════════════════════════════════════════════════════════
+   ROSTER VIEW BUTTON CLIPPING FIX
+   The .preg-tbl tbody td has overflow:hidden which clips the
+   .preg-view-btn pill at the right edge of the last column on
+   narrower viewports. Allow the toggle/action cell to overflow
+   visibly, give it a small minimum width, and add right padding
+   so the button never touches the table edge. Pure padding +
+   overflow override; no layout primitive changes.
+   ═════════════════════════════════════════════════════════════════ */
+.preg-tbl tbody td.preg-col-toggle {
+     overflow: visible;
+     text-overflow: clip;
+     min-width: 92px;
+     padding-right: 22px;
+}
+.preg-tbl thead th:last-child,
+.preg-tbl tbody td:last-child {
+     padding-right: 22px;
+}
+.preg-view-btn {
+     flex: none;
+}
+
+/* Same fix mirrored for the Faculty registry (.freg-tbl). */
+.freg-tbl tbody td.freg-col-toggle {
+     overflow: visible;
+     text-overflow: clip;
+     min-width: 92px;
+     padding-right: 22px;
+}
+.freg-tbl thead th:last-child,
+.freg-tbl tbody td:last-child {
+     padding-right: 22px;
+}
+.freg-view-btn {
+     flex: none;
+}
