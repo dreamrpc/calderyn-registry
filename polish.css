@@ -4702,4 +4702,258 @@ body {
 /* First section header sits flush with the top of the fieldset */
 .join-section-header:first-child { margin-top: 0; }
 
+/* ╔══════════════════════════════════════════════════════════════════════╗
+   ║  JOIN FORM — VISUAL UPGRADE (cohesive, less jarring)                ║
+   ║                                                                       ║
+   ║  Previous layer used hard 2px black ink borders on every fieldset,    ║
+   ║  input, and checkbox. On the dark theme that read as harsh dark       ║
+   ║  frames stacked one inside another. Soften by:                        ║
+   ║   • 1px gold-tinted hairline borders + layered shadow lift            ║
+   ║   • subtle gradient panel backgrounds w/ halftone overlay             ║
+   ║   • smooth focus ring (gold) replacing the inset yellow band          ║
+   ║   • char counter as a positioned pill chip                            ║
+   ║   • custom select caret, refined checkbox, animated section reveal    ║
+   ║                                                                       ║
+   ║  Same component structure, same class names — just better chrome.     ║
+   ╚══════════════════════════════════════════════════════════════════════╝ */
+
+/* ── Fieldset: softer comic panel + halftone overlay ───────────────── */
+.join-fieldset {
+     background:
+          radial-gradient(
+               1100px 480px at 20% -10%,
+               rgba(212, 168, 74, 0.06),
+               transparent 60%
+          ),
+          linear-gradient(180deg, var(--paper-3, #1a1812), var(--paper-2, #14120e)) !important;
+     border: 1px solid rgba(212, 168, 74, 0.18) !important;
+     border-radius: 14px !important;
+     padding: 28px 32px 30px !important;
+     box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.04) inset,
+          0 22px 60px -32px rgba(0, 0, 0, 0.95),
+          0 0 0 1px rgba(0, 0, 0, 0.35);
+     position: relative;
+     overflow: hidden;
+     gap: 20px !important;
+}
+.join-fieldset::before {
+     content: "";
+     position: absolute;
+     inset: 0;
+     pointer-events: none;
+     background-image: radial-gradient(rgba(212, 168, 74, 0.05) 1px, transparent 1.4px);
+     background-size: 14px 14px;
+     mask-image: linear-gradient(160deg, rgba(0, 0, 0, 0.7), transparent 55%);
+     -webkit-mask-image: linear-gradient(160deg, rgba(0, 0, 0, 0.7), transparent 55%);
+     opacity: 0.6;
+     z-index: 0;
+}
+.join-fieldset > * { position: relative; z-index: 1; }
+@media (max-width: 720px) {
+     .join-fieldset { padding: 22px 18px 24px !important; border-radius: 12px !important; }
+}
+
+/* Stacked fieldset blocks (Collective flow): subtle separator */
+.join-fieldset + .join-fieldset { margin-top: 18px; }
+
+/* ── Section headers: softer rhythm, less stamp-like ───────────────── */
+.join-section-header {
+     font-size: 10.5px !important;
+     letter-spacing: 0.26em !important;
+     color: var(--gold-bright, #f1cd72) !important;
+     margin: 24px 0 6px !important;
+     padding-bottom: 8px;
+     border-bottom: 1px dashed rgba(212, 168, 74, 0.22);
+     gap: 14px !important;
+}
+.join-section-header:first-child { margin-top: 4px !important; }
+.join-section-header::before {
+     content: "◆";
+     font-size: 9px;
+     color: rgba(212, 168, 74, 0.65);
+}
+.join-section-header::after { display: none; }
+
+/* ── Field rhythm + label refinement ───────────────────────────────── */
+.join-field { gap: 8px !important; }
+.join-field-label {
+     font-size: 10.5px !important;
+     letter-spacing: 0.16em !important;
+     color: var(--text-mid, #c7c1b3) !important;
+     font-weight: 600 !important;
+}
+.join-field-required {
+     color: var(--red-bright, #e64a55) !important;
+     font-size: 13px !important;
+     font-weight: 700;
+}
+.join-field-hint {
+     font-size: 11.5px !important;
+     color: var(--text-low, #8a8478) !important;
+     font-style: italic;
+}
+
+/* ── Inputs: softer hairline, gold focus ring, gentle hover ────────── */
+.join-input,
+.join-select,
+.join-textarea {
+     background: rgba(255, 255, 255, 0.02) !important;
+     color: var(--text, #ece6d6) !important;
+     border: 1px solid rgba(212, 168, 74, 0.16) !important;
+     border-radius: 8px !important;
+     padding: 12px 14px !important;
+     font-size: 14px !important;
+     transition:
+          border-color .18s ease,
+          background .18s ease,
+          box-shadow .18s ease,
+          transform .12s ease !important;
+}
+.join-input:hover:not(:focus),
+.join-select:hover:not(:focus),
+.join-textarea:hover:not(:focus) {
+     border-color: rgba(212, 168, 74, 0.35) !important;
+     background: rgba(255, 255, 255, 0.035) !important;
+}
+.join-input:focus,
+.join-select:focus,
+.join-textarea:focus {
+     border-color: var(--gold-bright, #f1cd72) !important;
+     background: rgba(212, 168, 74, 0.05) !important;
+     box-shadow: 0 0 0 3px rgba(212, 168, 74, 0.18) !important;
+     outline: none !important;
+}
+.join-input::placeholder,
+.join-textarea::placeholder {
+     color: rgba(200, 192, 175, 0.32) !important;
+     font-style: italic;
+}
+
+/* Custom caret for selects (replaces native bevel) */
+.join-select {
+     appearance: none !important;
+     -webkit-appearance: none !important;
+     background-image:
+          linear-gradient(45deg, transparent 50%, rgba(212, 168, 74, 0.7) 50%),
+          linear-gradient(135deg, rgba(212, 168, 74, 0.7) 50%, transparent 50%) !important;
+     background-position:
+          calc(100% - 18px) 50%,
+          calc(100% - 13px) 50% !important;
+     background-size: 5px 5px, 5px 5px !important;
+     background-repeat: no-repeat !important;
+     padding-right: 36px !important;
+}
+
+/* Textarea container + char counter as a floating pill */
+.join-field:has(> .join-textarea) {
+     position: relative;
+}
+.join-charcount {
+     position: absolute;
+     bottom: 10px;
+     right: 12px;
+     padding: 3px 9px;
+     font-family: var(--mono);
+     font-size: 10px;
+     letter-spacing: 0.08em;
+     color: var(--text-low, #8a8478) !important;
+     background: rgba(0, 0, 0, 0.5);
+     border: 1px solid rgba(212, 168, 74, 0.18);
+     border-radius: 999px;
+     pointer-events: none;
+     opacity: 0.85;
+     transition: opacity .18s ease, color .18s ease, border-color .18s ease;
+     margin-top: 0 !important;
+}
+.join-field:has(.join-textarea:focus) .join-charcount {
+     opacity: 1;
+     color: var(--gold-bright, #f1cd72) !important;
+     border-color: rgba(212, 168, 74, 0.5);
+}
+
+/* ── Checkbox: refined card, gold accent ───────────────────────────── */
+.join-checkbox {
+     background: rgba(255, 255, 255, 0.02) !important;
+     border: 1px solid rgba(212, 168, 74, 0.18) !important;
+     border-radius: 10px !important;
+     padding: 14px 16px !important;
+     transition: border-color .18s ease, background .18s ease;
+}
+.join-checkbox:hover {
+     border-color: rgba(212, 168, 74, 0.4) !important;
+     background: rgba(255, 255, 255, 0.035) !important;
+}
+.join-checkbox input[type="checkbox"] {
+     accent-color: var(--gold-bright, #f1cd72) !important;
+     width: 18px;
+     height: 18px;
+     margin-top: 2px;
+}
+.join-checkbox input[type="checkbox"]:checked ~ * { color: var(--text, #ece6d6); }
+
+/* ── Type / Flow picker cards: smoother lift, gold ring on select ──── */
+.join-type,
+.join-typegrid > button {
+     background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent) !important;
+     border: 1px solid rgba(212, 168, 74, 0.16) !important;
+     border-radius: 12px !important;
+     transition:
+          transform .18s ease,
+          border-color .18s ease,
+          background .18s ease,
+          box-shadow .18s ease !important;
+}
+.join-type:hover,
+.join-typegrid > button:hover {
+     transform: translateY(-2px) !important;
+     border-color: rgba(212, 168, 74, 0.4) !important;
+     box-shadow:
+          0 14px 32px -24px rgba(0, 0, 0, 0.95),
+          0 0 0 1px rgba(212, 168, 74, 0.18) !important;
+}
+.join-type.on,
+.join-typegrid > button.on {
+     transform: translateY(-1px) !important;
+     border-color: var(--gold-bright, #f1cd72) !important;
+     background: linear-gradient(
+          180deg,
+          rgba(193, 26, 44, 0.16),
+          rgba(212, 168, 74, 0.04)
+     ) !important;
+     box-shadow:
+          0 0 0 1px var(--gold-bright, #f1cd72),
+          0 18px 40px -22px rgba(193, 26, 44, 0.55) !important;
+}
+
+/* ── Section reveal animation ──────────────────────────────────────── */
+@keyframes joinFadeIn {
+     from { opacity: 0; transform: translateY(6px); }
+     to   { opacity: 1; transform: translateY(0); }
+}
+.join-section-header,
+.join-field {
+     animation: joinFadeIn .32s ease both;
+}
+/* Avoid stagger turning into a wall of motion if the user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+     .join-section-header,
+     .join-field { animation: none; }
+}
+
+/* ── Flow panel (Collective sub-picker) inherits same softening ────── */
+.join-flow-panel {
+     border-radius: 14px !important;
+     border: 1px solid rgba(212, 168, 74, 0.18) !important;
+}
+.join-flow-tag {
+     color: var(--gold-bright, #f1cd72) !important;
+     letter-spacing: 0.22em !important;
+}
+.join-flow-title {
+     font-family: var(--serif, Georgia, serif) !important;
+     letter-spacing: -0.01em !important;
+}
+
+
 
