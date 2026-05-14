@@ -871,6 +871,10 @@ outside: [
             drawbacks: "Emotional Combustion\n\"The fire listens too closely.\"\nAugust's hellfire is deeply linked to his emotional state. Strong feelings — especially rage, humiliation, grief, jealousy, or possessiveness — dramatically increase both the intensity and instability of his powers. The more emotional he becomes: the harder precise control becomes, the more aggressively hellfire spreads, the more autonomous the hellhounds behave, the more collateral damage occurs. At lower levels, this simply makes him more dangerous. At higher levels, it risks turning him into a catastrophe. This means psychologically provoking him can actually destabilize his combat efficiency, even if it increases raw destructive output.",
             link: "https://roleplay.chat/profile.php?user=Hellson",
           },
+          { role: "Boss" },
+          { role: "Underboss" },
+          { role: "Capo" },
+          { role: "Soldier" },
           {
             role: "Nightclub Singer",
             char: "Briar Musgraves",
@@ -879,10 +883,6 @@ outside: [
             drawbacks: "Emotional Overload, Difficulty Separating Her Emotions From Others, Silence Weakens Her, Emotional Blind Spots, Attachment Vulnerability, Hypervigilance & Control Issues, Physical Vulnerability",
             link: "https://roleplay.chat/profile.php?user=Reverie",
           },
-          { role: "Boss" },
-          { role: "Underboss" },
-          { role: "Capo" },
-          { role: "Soldier" },
         ],
       },
       {
