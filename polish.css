@@ -4657,4 +4657,49 @@ body {
      flex-wrap: wrap;
 }
 
+/* ═════════════════════════════════════════════════════════════════
+   JOIN FORM — character counter + section dividers
+   .join-charcount: replaces the repeated inline-styled char counters
+     under long textareas. Mono, low-emphasis, right-aligned.
+   .join-section-header: spans both columns of the .join-fieldset
+     grid (.join-fieldset is grid-template-columns: 1fr 1fr) and acts
+     as a visual divider between Identity / Affiliation / Powers /
+     Notes blocks. Eyebrow-style mono caps with a gold rule beneath.
+   ═════════════════════════════════════════════════════════════════ */
+.join-charcount {
+     text-align: right;
+     font-family: var(--mono);
+     font-size: 11px;
+     letter-spacing: 0.06em;
+     color: var(--muted, #8a8478);
+     opacity: 0.7;
+     margin-top: 4px;
+}
+.join-section-header {
+     grid-column: 1 / -1;
+     display: flex;
+     align-items: center;
+     gap: 12px;
+     margin: 18px 0 -2px;
+     font-family: var(--mono);
+     font-size: 11px;
+     font-weight: 700;
+     letter-spacing: 0.22em;
+     text-transform: uppercase;
+     color: var(--gold-bright, #f1cd72);
+}
+.join-section-header::after {
+     content: "";
+     flex: 1;
+     height: 1px;
+     background: linear-gradient(
+          90deg,
+          rgba(212, 168, 74, 0.45) 0%,
+          rgba(212, 168, 74, 0.10) 65%,
+          transparent 100%
+     );
+}
+/* First section header sits flush with the top of the fieldset */
+.join-section-header:first-child { margin-top: 0; }
+
 
