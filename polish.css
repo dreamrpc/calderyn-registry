@@ -4600,3 +4600,52 @@ body {
      text-overflow: clip !important;
      word-break: break-word;
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   POWER REGISTRY — "Read the full power doc" link
+   Inline "(Ran out of room: <url>)" inside expression text reads as
+   ugly raw-link copy. Players who supply an overflow doc get a
+   stylish chip below the expression body instead.
+   ═════════════════════════════════════════════════════════════════ */
+.preg-detail-doc {
+     grid-column: 2;
+     justify-self: start;
+     display: inline-flex;
+     align-items: center;
+     gap: 8px;
+     margin-top: -4px;
+     margin-bottom: 4px;
+     padding: 7px 14px;
+     font-family: var(--mono);
+     font-size: 11px;
+     font-weight: 700;
+     letter-spacing: 0.14em;
+     text-transform: uppercase;
+     text-decoration: none !important;
+     color: var(--gold-bright, #f1cd72) !important;
+     background: rgba(212, 168, 74, 0.08);
+     border: 1px solid rgba(212, 168, 74, 0.45);
+     border-radius: 999px;
+     transition: background .15s, border-color .15s, color .15s, transform .15s;
+}
+.preg-detail-doc:hover,
+.preg-detail-doc:focus-visible {
+     background: var(--gold-bright, #f1cd72);
+     border-color: var(--gold-bright, #f1cd72);
+     color: var(--panel-ink, #07070b) !important;
+     transform: translateY(-1px);
+     outline: none;
+}
+.preg-detail-doc-icon { font-size: 13px; line-height: 1; }
+.preg-detail-doc-arrow {
+     font-family: var(--sans);
+     font-size: 13px;
+     letter-spacing: 0;
+     transform: translateX(0);
+     transition: transform .15s;
+}
+.preg-detail-doc:hover .preg-detail-doc-arrow,
+.preg-detail-doc:focus-visible .preg-detail-doc-arrow {
+     transform: translateX(3px);
+}
+
