@@ -3850,9 +3850,30 @@ function JoinTab(){
 
     let main = "";
     switch (type) {
-      case "student":
-        main = `{ char: ${s(form.char)}, alias: ${s(form.alias) || '""'}, house: ${s((form.house||"").toLowerCase())}, year: ${s(form.year)}, track: ${s((form.track||"").toLowerCase())}, tier: ${s(form.tier)}${powerFrag}${human}${link} },`;
+      case "student": {
+        // Data convention: track is singular ("hero" / "sidekick"),
+        // tier is "A-List" form in STUDENTS but single letter ("A") in POWERS.
+        const trackVal = ((form.track || "").toLowerCase()
+          .replace(/^heroes$/, "hero")
+          .replace(/^sidekicks$/, "sidekick"));
+        const studentEntry = `{ char: ${s(form.char)}, alias: ${s(form.alias) || '""'}, house: ${s((form.house||"").toLowerCase())}, year: ${s(form.year)}, track: ${s(trackVal)}, tier: ${s(form.tier)}${powerFrag}${human}${link} },`;
+
+        // Also emit a POWERS Registry entry. Students live in both
+        // STUDENTS and POWERS arrays (the Powers Registry filters by status).
+        // Skip for fully-human students.
+        let powersEntry = "";
+        if (!form.fullyHuman) {
+          const aliasFrag = form.alias ? `, alias: ${s(form.alias)}` : "";
+          const tierLetter = form.tier ? form.tier.replace("-List", "") : "";
+          const tierFrag = tierLetter ? `, tier: ${s(tierLetter)}` : "";
+          powersEntry = `
+
+// → also goes in POWERS (Registry)
+{ char: ${s(form.char)}${aliasFrag}, status: "student"${tierFrag}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
+        }
+        main = studentEntry + powersEntry;
         break;
+      }
       case "faculty":
         main = `// → goes in FACULTY → "${form.facultySection || ''}" section
 { role: ${s(form.facultyRole)}, char: ${s(form.char)}, stage: ${s(form.alias) || '""'}${powerFrag}${human}${link} },`;
@@ -4077,6 +4098,7 @@ ${members}
 
     const payload = {
       username: "Calderyn Registry — Applications",
+      avatar_url: "https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png",
       content: "<@&1498799678551101451>",
       allowed_mentions: { roles: ["1498799678551101451"] },
       embeds: [{

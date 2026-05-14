@@ -507,6 +507,7 @@ students: [
     link: "https://roleplay.chat/profile.php?user=Menagerie!",
     note: "Banned from Powerball. During a sophomore-year intramural scrimmage McKenna entered partial-manifestation while playing Defence and inflicted bite injuries on three opposing players that required hospital triage. Athletics director and Powerball coaching staff ruled her out of all Powerball play — league, scrimmage, and practice — for the remainder of her time at Calderyn. Other powered contact sports unaffected.",
   },
+  { char: "Sven Skarsen", alias: "BLOOD EAGLE", house: "saberis", year: "Freshman", track: "hero", tier: "A-List", power: "Blood Iron · Hemo-metallurgy (close-range brawler)", expression: "Sven hardens his own blood-derived energy into stylised black-red metal constructs that form along his hands, forearms, shoulders, and back. Visually it reads as wet crimson-black iron, rusted steel, and glossy obsidian — never as open wounds or splatter. He can shape claws, hooked chains, jagged armour plates, axe-like weapons, sharp metallic shards, and jagged wing-blades from his shoulders (the Blood Eagle silhouette). Mechanically the constructs are physically real once formed: hard, heavy, dense, and capable of cutting, blocking, and dragging. In his overdrive 'War Vein' state his veins darken and armour spreads across arms, ribs, and jawline, increasing output and durability at the cost of fine control.", drawbacks: "Limited supply — output draws on his own reserves and burns him out fast under heavy use. Pain is real — armour blunts hits but every strike still hurts, and he keeps fighting through it. Reckless nature — his power scales with aggression, so it punishes patience and rewards bad decisions. Focus required — anger and adrenaline tank his shaping control, making constructs sloppy or unstable. Weight drag — large constructs (axe, full wings) slow him down and ruin agility. Medical risk — pushing too far in one fight leaves him weak, dizzy, and slow to recover afterwards.", link: "https://roleplay.chat/profile.php?user=blood+eagle" },
 ],
 
 faculty: [
@@ -1441,6 +1442,16 @@ powers: [
     drawbacks: "Emotional Combustion\n\"The fire listens too closely.\"\nAugust's hellfire is deeply linked to his emotional state. Strong feelings — especially rage, humiliation, grief, jealousy, or possessiveness — dramatically increase both the intensity and instability of his powers. The more emotional he becomes: the harder precise control becomes, the more aggressively hellfire spreads, the more autonomous the hellhounds behave, the more collateral damage occurs. At lower levels, this simply makes him more dangerous. At higher levels, it risks turning him into a catastrophe. This means psychologically provoking him can actually destabilize his combat efficiency, even if it increases raw destructive output.",
     link: "https://roleplay.chat/profile.php?user=Hellson"
   },
+  {
+    char: "Sven Skarsen",
+    alias: "BLOOD EAGLE",
+    status: "student",
+    tier: "A",
+    power: "Blood Iron · Hemo-metallurgy (close-range brawler)",
+    expression: "Sven hardens his own blood-derived energy into stylised black-red metal constructs that form along his hands, forearms, shoulders, and back. Visually it reads as wet crimson-black iron, rusted steel, and glossy obsidian — never as open wounds or splatter. He can shape claws, hooked chains, jagged armour plates, axe-like weapons, sharp metallic shards, and jagged wing-blades from his shoulders (the Blood Eagle silhouette). Mechanically the constructs are physically real once formed: hard, heavy, dense, and capable of cutting, blocking, and dragging. In his overdrive 'War Vein' state his veins darken and armour spreads across arms, ribs, and jawline, increasing output and durability at the cost of fine control.",
+    drawbacks: "Limited supply — output draws on his own reserves and burns him out fast under heavy use. Pain is real — armour blunts hits but every strike still hurts, and he keeps fighting through it. Reckless nature — his power scales with aggression, so it punishes patience and rewards bad decisions. Focus required — anger and adrenaline tank his shaping control, making constructs sloppy or unstable. Weight drag — large constructs (axe, full wings) slow him down and ruin agility. Medical risk — pushing too far in one fight leaves him weak, dizzy, and slow to recover afterwards.",
+    link: "https://roleplay.chat/profile.php?user=blood+eagle"
+  },
 ],
 
 powerStatuses: [
@@ -1561,7 +1572,7 @@ clubs: [
       ]},
       { house: "Saberis", bg: "#15803d", train: ["THU · 6:00 AM", "MON · 7:00 PM"], positions: [
         { pos: "Playmaker", captain: true },
-        { pos: "Attack" }, { pos: "Attack" },
+        { pos: "Attack", char: "Sven Skarsen", link: "https://roleplay.chat/profile.php?user=blood+eagle" }, { pos: "Attack" },
         { pos: "Defence" }, { pos: "Defence" },
         { pos: "Goalkeeper" },
         { pos: "Reserve · Playmaker" },
