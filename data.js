@@ -851,6 +851,14 @@ outside: [
         type: "Freelance Pool",
         note: "Solo operators with niche expertise. No firm, no overhead, no oversight.",
         roles: [
+          {
+            role: "Tracking Specialist",
+            char: "Eirik Aslund / BLÓÐHUNDR",
+            power: "Sensory Adaptation · Hyper-Predatory Perception",
+            expression: "Eirik's power expresses through extreme sensory adaptation and subconscious biological analysis rather than overt supernatural effects. His nervous system continuously processes environmental stimuli at an inhuman level, allowing him to identify microscopic disturbances in scent, heat, sound, movement, and behavior patterns almost instantly. When active, his focus becomes visibly intense and unnervingly still. His pupils subtly sharpen, his breathing slows, and he often tilts his head slightly while isolating specific stimuli from surrounding noise. He can track individuals through residual heat, adrenaline traces, blood particles, sweat composition, disturbed airflow, gait patterns, and micro-expressions. In combat, Hyper-Predatory Perception allows him to anticipate movement by reading involuntary muscle tension, weight distribution, breathing changes, and eye movement before actions occur, making his reactions appear nearly precognitive.",
+            drawbacks: "Eirik's sensory processing cannot fully \"shut off,\" forcing his brain to constantly absorb environmental information. Crowded or overstimulating areas with excessive noise, movement, strong odors, or emotional stress signals can overwhelm his nervous system, causing migraines, nausea, disorientation, irritability, and severe fatigue. Heavy smoke, industrial chemicals, biological contamination, or deliberately overwhelming scent sources can interfere with his tracking abilities and make target isolation significantly harder. His heightened perception also creates emotional and psychological strain. He unconsciously notices fear, stress, dishonesty, attraction, and hesitation in others, making normal social interaction exhausting and isolating. Because his brain remains hyper-alert even at rest, Eirik suffers from chronic insomnia, hypervigilance, and difficulty fully recovering physically or mentally after prolonged tracking or combat.",
+            link: "https://roleplay.chat/profile.php?user=blodhundr",
+          },
           { role: "Powered-Threat Consultant" },
           { role: "Contract Investigator" },
           { role: "Security Specialist" },
@@ -867,6 +875,14 @@ outside: [
         type: "Organised Crime Syndicate",
         note: "Old money, old methods. Three generations deep. Don't accept new initiates from outside the family unless STRATA is involved.",
         roles: [
+          {
+            role: "Leader",
+            char: "August Marlowe",
+            power: "Pyrokenisis",
+            expression: "Hellfire Pyrokinesis\n\"The flame does not forgive.\"\nAugust generates and controls a supernatural form of combustion known as Hellfire — a violet-black flame with properties similar to white phosphorus. Once ignited, the fire clings aggressively to surfaces, spreads unnaturally, and resists conventional extinguishing methods. Unlike ordinary fire, his flames appear semi-sentient at higher output, reacting to his emotional state and destructive impulses. His hellfire can: melt metal, ignite damp environments, spread across walls and ceilings, persist long after combat ends, scar victims permanently. The flames become strongest during moments of rage, humiliation, possessiveness, or grief.",
+            drawbacks: "Emotional Combustion\n\"The fire listens too closely.\"\nAugust's hellfire is deeply linked to his emotional state. Strong feelings — especially rage, humiliation, grief, jealousy, or possessiveness — dramatically increase both the intensity and instability of his powers. The more emotional he becomes: the harder precise control becomes, the more aggressively hellfire spreads, the more autonomous the hellhounds behave, the more collateral damage occurs. At lower levels, this simply makes him more dangerous. At higher levels, it risks turning him into a catastrophe. This means psychologically provoking him can actually destabilize his combat efficiency, even if it increases raw destructive output.",
+            link: "https://roleplay.chat/profile.php?user=Hellson",
+          },
           { role: "Boss" },
           { role: "Underboss" },
           { role: "Capo" },
@@ -878,6 +894,14 @@ outside: [
         type: "Powered Crew",
         note: "Newer crew, all powered, all unsanctioned. STRATA hasn't decided whether to recruit them or burn them down.",
         roles: [
+          {
+            role: "Nightclub Singer for The 2/4 Circle",
+            char: "Briar Musgraves",
+            power: "Resonant Aura Reading, Emotional Atmosphere Manipulation, Vocal Entrancement, Emotional Echoes",
+            expression: "Resonant Aura Reading\nBriar perceives emotional resonance through sound, rhythm, vocal inflection, and atmosphere. Music sharpens this perception dramatically, especially live singing. Emotional states manifest to her as layered sensory impressions: tones, textures, temperatures, pressure shifts, phantom tastes, or distortions in sound. Crowds become emotional symphonies, while individuals feel like isolated instruments she can tune into with frightening precision.\n\nShe can sense: attraction, grief, fear, guilt, obsession, deception, emotional instability, desperation, suppressed anger, and emotional attachment. The stronger the emotion, the \"louder\" the resonance. Direct singing creates the clearest readings, particularly if eye contact or emotional focus is maintained.\n\n(Ran out of room: https://docs.google.com/document/d/1PSqNwFZpLZTVDERTNYN-VJxPZxDOt1UgCZRB03r_ni4/edit?usp=sharing)",
+            drawbacks: "Emotional Overload, Difficulty Separating Her Emotions From Others, Silence Weakens Her, Emotional Blind Spots, Attachment Vulnerability, Hypervigilance & Control Issues, Physical Vulnerability",
+            link: "https://roleplay.chat/profile.php?user=Reverie",
+          },
           { role: "Crew Leader" },
           { role: "Operator" },
           { role: "Operator" },
