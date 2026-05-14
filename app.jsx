@@ -1011,7 +1011,7 @@ function StudentRosterFull(){
                   <td>
                     <span className={"track-tag track-tag-" + ((s.track || "").toLowerCase() === "hero" ? "hero" : "sidekick")}>{trackLbl}</span>
                   </td>
-                  <td style={{fontSize:13}}>{normalizePower(s.power)}</td>
+                  <td className="student-col-power" style={{fontSize:13}}>{normalizePower(s.power)}</td>
                   <td>
                     <span className="tier-pill" style={{background:TIER_C[s.tier] || "#555"}}>{s.tier}</span>
                   </td>
@@ -1064,7 +1064,7 @@ function StudentRoster({track}){
               </td>
               <td><HouseTag house={s.house}/></td>
               <td style={{textTransform:"capitalize", fontSize:13, color:"var(--muted)", fontStyle:"italic"}}>{s.year}</td>
-              <td style={{fontSize:13}}>{s.power}</td>
+              <td className="student-col-power" style={{fontSize:13}}>{s.power}</td>
               <td>
                 <span className="tier-pill" style={{background:TIER_C[s.tier] || "#555"}}>
                   {s.tier}
