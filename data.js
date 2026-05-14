@@ -1764,8 +1764,8 @@ heroLists: [
     req: "A-List tier. Capped at 10 slots — application requires admin conversation before submission.",
     color: "#e31b23",
     slots: [
-      { alias: "VICE",   role: "Headline Hero", char: "Riley Carter",   power: "Pressure Manipulation · Biological Pressure Control" },
-      { alias: "Savior", role: "Headline Hero", char: "Mavis Kingsman", power: "Psionic Dominion, Telekinesis, Telepathy, Empathic Link, Flight, Psionic Barriers" },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
+      { alias: "[Open]", role: "Headline Hero", char: null, power: null },
       { alias: "[Open]", role: "Headline Hero", char: null, power: null },
       { alias: "[Open]", role: "Headline Hero", char: null, power: null },
       { alias: "[Open]", role: "Headline Hero", char: null, power: null },
