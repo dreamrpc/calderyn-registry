@@ -13375,16 +13375,28 @@ button.class-chip-btn{
 }
 
 </style>
-<link rel="stylesheet" href="polish.css?v=2026-05-14-grpfix"/>
+<script>
+  /* Cache-bust polish.css / data.js / app.jsx on every load so a deploy
+     is always immediately visible without a manual hard-refresh.
+     document.write preserves load order: CSS before scripts; data.js
+     before app.jsx (app.jsx reads globals defined in data.js). */
+  (function () {
+    var v = '?v=' + Date.now();
+    document.write('<link rel="stylesheet" href="polish.css' + v + '"/>');
+  })();
+</script>
 </head>
 <body>
 <div class="page"><div id="root"></div></div>
 
 <!-- 1. Registry data — edit this file to add characters, faculty, clubs etc. -->
-<script src="data.js?v=2026-04-30-w20"></script>
-
-<!-- 2. Application code — Babel transforms JSX in the browser. Don't edit unless changing behaviour. -->
-<script type="text/babel" data-presets="react" src="app.jsx?v=2026-04-30-w20"></script>
+<script>
+  (function () {
+    var v = '?v=' + Date.now();
+    document.write('<script src="data.js' + v + '"><\/script>');
+    document.write('<script type="text/babel" data-presets="react" src="app.jsx' + v + '"><\/script>');
+  })();
+</script>
 
 <!-- 3. Sticky-offset auto-sync.
      The CSS uses --hdr-h and --tabs-h to position the sticky sub-nav directly
