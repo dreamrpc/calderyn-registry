@@ -4553,3 +4553,32 @@ body {
 .freg-view-btn {
      flex: none;
 }
+
+
+/* ─────────────────────────────────────────────────────────────────
+   ROSTER VIEW BUTTON — STRONGER OVERRIDE
+   Inline style={{width:90}} on the last <th> + table-layout:fixed
+   means CSS min-width on tbody td is ignored. Force the last
+   column wider via !important so the View pill has room.
+   ───────────────────────────────────────────────────────────────── */
+.preg-tbl thead th:last-child,
+.preg-tbl tbody td:last-child {
+     width: 130px !important;
+     min-width: 130px !important;
+     padding-right: 22px !important;
+     overflow: visible !important;
+     text-overflow: clip !important;
+}
+.freg-tbl thead th:last-child,
+.freg-tbl tbody td:last-child {
+     width: 130px !important;
+     min-width: 130px !important;
+     padding-right: 22px !important;
+     overflow: visible !important;
+     text-overflow: clip !important;
+}
+.preg-view-btn,
+.freg-view-btn {
+     flex: none;
+     white-space: nowrap;
+}
