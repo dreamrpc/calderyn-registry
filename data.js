@@ -459,18 +459,6 @@ students: [
     link: "https://roleplay.chat/profile.php?user=Swarm!"
   },
   {
-    char: "Ramona Vey",
-    alias: "Marionette",
-    house: "valaris",
-    year: "Freshman",
-    track: "sidekick",
-    tier: "C-List",
-    power: "Clothing Manipulation, Fabric Awareness",
-    expression: "Clothing Manipulation\nRomy can manipulate clothing currently being worn by herself or others, controlling tension, movement, and directional force through fabric. She uses the ability to restrict movement, disrupt balance, redirect limbs, reinforce fabric, or create temporary restraints and chokeholds. Heavy clothing, tactical gear, scarves, jackets, and layered outfits provide more opportunities for control. Her fighting style relies on precision, improvisation, and disruption rather than brute strength.\n\nFabric Awareness\nRomy possesses an instinctive understanding of textiles and fabric construction. Through touch or proximity, she can identify material blends, damaged seams, residue, repairs, and signs of wear almost instantly. The ability is especially useful for investigative work, allowing her to detect transferred fibers, spot disguise inconsistencies, and reconstruct struggles or movement through clothing damage and fabric stress.",
-    drawbacks: "Limited Target Scope, Physically Outmatched, Overstimulation & Sensory Strain, Curiosity Overrides Caution, Emotional Transparency, Attachment & Protective Instincts",
-    link: "https://roleplay.chat/profile.php?user=Marionette%21"
-  },
-  {
     char: "Riley Carter",
     alias: "VICE",
     house: "valaris",
@@ -1385,16 +1373,6 @@ powers: [
   },
   {
     status: "student",
-    tier: "C",
-    power: "Clothing Manipulation, Fabric Awareness",
-    char: "Ramona Vey",
-    alias: "Marionette",
-    expression: "Clothing Manipulation\nRomy can manipulate clothing currently being worn by herself or others, controlling tension, movement, and directional force through fabric. She uses the ability to restrict movement, disrupt balance, redirect limbs, reinforce fabric, or create temporary restraints and chokeholds. Heavy clothing, tactical gear, scarves, jackets, and layered outfits provide more opportunities for control. Her fighting style relies on precision, improvisation, and disruption rather than brute strength.\n\nFabric Awareness\nRomy possesses an instinctive understanding of textiles and fabric construction. Through touch or proximity, she can identify material blends, damaged seams, residue, repairs, and signs of wear almost instantly. The ability is especially useful for investigative work, allowing her to detect transferred fibers, spot disguise inconsistencies, and reconstruct struggles or movement through clothing damage and fabric stress.",
-    drawbacks: "Limited Target Scope, Physically Outmatched, Overstimulation & Sensory Strain, Curiosity Overrides Caution, Emotional Transparency, Attachment & Protective Instincts",
-    link: "https://roleplay.chat/profile.php?user=Marionette%21"
-  },
-  {
-    status: "student",
     tier: "A",
     power: "Pressure Manipulation · Biological Pressure Control",
     char: "Riley Carter",
@@ -1662,7 +1640,7 @@ clubs: [
       { pos: "Sound", group: "tech" },
       { pos: "Set", group: "tech" }, { pos: "Set", group: "tech" },
       { pos: "H&M Lead", group: "hair-makeup" },
-      { pos: "H&M Artist", group: "hair-makeup", char: "Ramona Vey", link: "https://roleplay.chat/profile.php?user=Marionette%21" }, { pos: "H&M Artist", group: "hair-makeup" },
+      { pos: "H&M Artist", group: "hair-makeup" }, { pos: "H&M Artist", group: "hair-makeup" },
       { pos: "Ensemble", group: "ensemble" }, { pos: "Ensemble", group: "ensemble" },
     ],
   },
