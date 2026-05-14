@@ -2318,9 +2318,30 @@ function LoreIncidents(){
    STRATA — corporate, talent, groups
 ═══════════════════════════════════════════════════════════════════════════ */
 function StrataTalent(){
+  // Vanguard members live in the POWERS array with status: "vanguard".
+  // Synthesize a Vanguard list at the top of the Talent page using the
+  // same hero-list layout, so each member is visible individually
+  // alongside the A → D lists.
+  const vanguardMembers = POWERS.filter(p => p.status === "vanguard");
+  const vanguardList = vanguardMembers.length > 0 ? {
+    tier: "V",
+    label: "VANGUARD",
+    desc: "STRATA's flagship unit. Invitation-only, contracts negotiated separately from the standard A-list slot. Every member is classified A-List for tier purposes — Vanguard is a role, not a tier. All four members are NPCs.",
+    req: "Vanguard role · four slots, capped · NPCs only.",
+    color: "#d4a84a",
+    isVanguard: true,
+    slots: vanguardMembers.map(p => ({
+      alias: p.alias,
+      char: p.char,
+      power: p.power,
+      link: p.link || null,
+      npc: p.npc,
+    })),
+  } : null;
+  const lists = vanguardList ? [vanguardList, ...HERO_LISTS] : HERO_LISTS;
   return (
     <div>
-      {HERO_LISTS.map((list, li) => {
+      {lists.map((list, li) => {
         const slots = list.slots;
         return (
           <div key={li} className="hero-list">
@@ -2352,7 +2373,11 @@ function StrataTalent(){
                           color: s.char ? "var(--text)" : "var(--text-low)"
                         }}>{s.alias}</span>
                       </td>
-                      <td>{s.char ? <CLink name={s.char} link={s.link||null}/> : <EmptyState/>}</td>
+                      <td>
+                        {s.char
+                          ? <><CLink name={s.char} link={s.link||null}/>{s.npc && <NpcBadge/>}</>
+                          : <EmptyState/>}
+                      </td>
                       <td style={{fontSize:13, color:"var(--text-mid)", fontWeight:600}}>
                         {s.power || <EmptyState label="N/A"/>}
                       </td>
