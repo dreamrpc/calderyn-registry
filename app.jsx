@@ -801,6 +801,18 @@ function PowersRegistry(){
                             <div className="preg-detail">
                               <span className="preg-detail-label">Expression</span>
                               <p className="preg-detail-text">{p.expression}</p>
+                              {p.expressionDoc && (
+                                <a
+                                  href={p.expressionDoc}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="preg-detail-doc"
+                                >
+                                  <span className="preg-detail-doc-icon" aria-hidden="true">📄</span>
+                                  <span className="preg-detail-doc-label">Read the full power doc</span>
+                                  <span className="preg-detail-doc-arrow" aria-hidden="true">→</span>
+                                </a>
+                              )}
                               {p.drawbacks && <span className="preg-detail-label">Drawbacks / Limits</span>}
                               {p.drawbacks && <p className="preg-detail-text">{p.drawbacks}</p>}
                                {p.note && <span className="preg-detail-label preg-detail-label--note">Admin Note</span>}
