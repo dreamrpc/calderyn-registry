@@ -1,0 +1,4516 @@
+/* ════════════════════════════════════════════════════════════════════════
+   CALDERYN — POLISH OVERRIDES
+   ────────────────────────────────────────────────────────────────────────
+   Loaded AFTER the inline <style> block. Same-specificity rules WIN
+   on later-in-source. Touches font-size, family, weight, letter-spacing
+   and a handful of padding/spacing values. Never touches layout
+   primitives (display / grid / flex / position) so behaviour is preserved.
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Strict type scale — every font-size below resolves to one of these. */
+  --t-micro:   10px;
+  --t-eyebrow: 11px;
+  --t-cap:     12px;
+  --t-small:   13px;
+  --t-base:    14px;
+  --t-body:    15px;
+  --t-lead:    17px;
+  --t-h5:      20px;
+  --t-h4:      26px;
+  --t-h3:      34px;
+  --t-h2:      44px;
+  --t-h1:      64px;
+
+  /* Uniform tracking for uppercase mono labels (was 1.2-1.8px raw). */
+  --ls-micro:   0.18em;
+  --ls-eyebrow: 0.16em;
+  --ls-cap:     0.06em;
+  --ls-display: 0.02em;
+}
+
+/* ─── BODY DEFAULT ──────────────────────────────────────────────────── */
+html { font-size: var(--t-body); }
+body {
+  font-family: var(--sans);
+  font-size: var(--t-body);
+  line-height: 1.6;
+}
+
+/* ═══ MASTHEAD ══════════════════════════════════════════════════════════ */
+.mast-brand-name { font-size: 20px; letter-spacing: 0.04em; }
+.mast-brand-sub  { font-size: var(--t-micro); letter-spacing: var(--ls-micro); }
+.mast-meta-cell  { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.mast-search     { font-size: var(--t-small); }
+.mast-search-icon{ font-size: var(--t-small); }
+.mast-search-kbd { font-size: var(--t-micro); letter-spacing: var(--ls-eyebrow); }
+
+/* ═══ TABS ══════════════════════════════════════════════════════════════ */
+.tab     { font-size: var(--t-small); letter-spacing: 0.06em; }
+.tab-num { font-size: var(--t-micro); letter-spacing: var(--ls-micro); }
+
+/* ═══ PAGE HEAD ═════════════════════════════════════════════════════════ */
+.pg-hd-stamp        { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); padding: 4px 10px; }
+.pg-hd-stamp-mark   { font-size: 8px; }
+.pg-hd h2           { font-size: var(--t-h1); letter-spacing: var(--ls-display); line-height: 0.95; }
+.pg-hd p            { font-size: var(--t-lead); line-height: 1.65; }
+.pg-hd-note         { font-size: var(--t-micro); letter-spacing: var(--ls-micro); }
+@media (max-width: 900px) { .pg-hd h2 { font-size: var(--t-h2); } }
+
+/* ═══ SUBNAV ════════════════════════════════════════════════════════════ */
+.subnav-btn .sn-num  { font-size: var(--t-micro); letter-spacing: var(--ls-eyebrow); }
+.subnav-btn .sn-label{ font-size: var(--t-small); letter-spacing: 0.04em; }
+.subnav-btn .sn-sub  { font-size: var(--t-eyebrow); letter-spacing: 0.04em; }
+
+/* ═══ CHIPS / TAGS / BADGES ═════════════════════════════════════════════ */
+.chip                { font-size: var(--t-micro); letter-spacing: var(--ls-eyebrow); padding: 3px 9px; }
+.npc-badge           { font-size: var(--t-micro); letter-spacing: var(--ls-eyebrow); }
+.track-tag           { font-size: var(--t-micro); letter-spacing: var(--ls-eyebrow); }
+.track-tag-empty     { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.subject-list-empty  { font-size: var(--t-eyebrow); }
+.stage-na, .stage-empty { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.tier-pill           { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.empty               { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+
+/* ═══ TABLES ════════════════════════════════════════════════════════════ */
+.tw                  { font-size: var(--t-base); }
+.tw thead th         { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.tw tbody td         { font-size: var(--t-base); line-height: 1.5; }
+.rn                  { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.house-cell-name     { font-size: var(--t-small); letter-spacing: 0.04em; }
+.subject-line        { font-size: var(--t-cap); letter-spacing: 0.04em; }
+.subject-desc        { font-size: var(--t-base); line-height: 1.6; }
+
+/* ═══ STAGE NAME (faculty alias) ═══════════════════════════════════════ */
+.stage-name          { font-size: var(--t-h5); letter-spacing: var(--ls-display); }
+
+/* ═══ RULES ═════════════════════════════════════════════════════════════ */
+.rule-num            { font-size: var(--t-h3); }
+.rule-title          { font-size: var(--t-body); line-height: 1.35; }
+.rule-text           { font-size: var(--t-base); line-height: 1.6; }
+
+/* ═══ ABOUT BAY ═════════════════════════════════════════════════════════ */
+.about-bay-stamp     { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.about-bay-text      { font-size: var(--t-base); line-height: 1.7; }
+.about-bay-text-quiet{ font-size: var(--t-small); }
+
+/* ═══ LORE — World, Vanguard, Houses, Programme, Incidents ═════════════ */
+.lore-intro-stamp    { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.lore-intro-title    { font-size: var(--t-h1); letter-spacing: var(--ls-display); line-height: 0.95; }
+.lore-lead           { font-size: var(--t-lead); line-height: 1.7; }
+.lore-eyebrow        { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.lore-h              { font-size: var(--t-h2); letter-spacing: var(--ls-display); line-height: 1; }
+.lore-p              { font-size: var(--t-body); line-height: 1.75; }
+@media (max-width: 900px) {
+  .lore-intro-title  { font-size: 40px; }
+  .lore-h            { font-size: 30px; }
+}
+
+/* Vanguard cards */
+.lore-vg-alias       { font-size: var(--t-h3); letter-spacing: var(--ls-display); }
+.lore-vg-name        { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.lore-vg-tag         { font-size: var(--t-small); }
+.lore-vg-desc        { font-size: var(--t-base); line-height: 1.65; }
+
+/* House cards (Lore) */
+.lore-house-virtue   { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.lore-house-name     { font-size: var(--t-h3); letter-spacing: var(--ls-display); }
+.lore-house-namesake { font-size: var(--t-cap); }
+.lore-house-desc     { font-size: var(--t-base); line-height: 1.65; }
+
+/* House-at-a-glance comparison */
+.house-glance-tbl thead th { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.house-glance-name   { font-size: var(--t-h4); letter-spacing: var(--ls-display); }
+.house-glance-virtue { font-size: var(--t-base); letter-spacing: 0.02em; }
+.house-glance-mascot { font-size: var(--t-base); }
+.house-glance-traits { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.house-glance-rival  { font-size: var(--t-cap); letter-spacing: 0.04em; }
+
+/* ═══ CURRICULUM ════════════════════════════════════════════════════════ */
+.curr-yeartab-num    { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.curr-yeartab-label  { font-size: var(--t-h4); letter-spacing: var(--ls-display); }
+.curr-overview-y     { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.curr-overview-name  { font-size: var(--t-h2); letter-spacing: var(--ls-display); }
+.curr-track-tag      { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.curr-track-title    { font-size: var(--t-h4); letter-spacing: var(--ls-display); }
+.curr-track-desc     { font-size: var(--t-base); line-height: 1.65; }
+.curr-classes-tag    { font-size: var(--t-h5); letter-spacing: var(--ls-display); }
+.curr-classes-blurb  { font-size: var(--t-small); }
+.curr-class-empty    { font-size: var(--t-cap); letter-spacing: var(--ls-eyebrow); }
+@media (max-width: 720px) {
+  .curr-overview-name { font-size: 30px; }
+  .curr-yeartab-label { font-size: var(--t-h5); }
+}
+
+.class-chip-name     { font-size: var(--t-small); letter-spacing: 0.02em; }
+.class-chip-desc     { font-size: var(--t-base); line-height: 1.65; }
+
+/* ═══ FINE PRINT (in rules tab) ═════════════════════════════════════════ */
+.fine-print-stamp    { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.fine-print-text     { font-size: var(--t-h3); line-height: 1.15; letter-spacing: var(--ls-display); }
+@media (max-width: 720px) { .fine-print-text { font-size: var(--t-h5); } }
+
+/* ═══ FACULTY REGISTRY ═════════════════════════════════════════════════ */
+.freg-group-name     { font-size: var(--t-h4); letter-spacing: var(--ls-display); }
+.freg-group-count    { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.freg-group-note     { font-size: var(--t-base); line-height: 1.6; }
+.freg-tbl            { font-size: var(--t-base); }
+.freg-tbl thead th   { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.freg-tbl td         { font-size: var(--t-base); line-height: 1.5; }
+.freg-col-tracks     { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.freg-na             { font-size: var(--t-eyebrow); }
+.freg-view-btn       { font-size: var(--t-micro); letter-spacing: var(--ls-eyebrow); }
+.freg-detail-label   { font-size: var(--t-micro); letter-spacing: var(--ls-micro); }
+.freg-arc-title      { font-size: var(--t-small); letter-spacing: 0.02em; }
+
+/* ═══ BAY HEADERS / INTRO BAYS (used across multiple tabs) ═════════════ */
+.bay-hd-tag          { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.bay-hd-title        { font-size: var(--t-h3); letter-spacing: var(--ls-display); }
+.bay-hd-blurb        { font-size: var(--t-small); }
+.intro-bay-eyebrow   { font-size: var(--t-eyebrow); letter-spacing: var(--ls-eyebrow); }
+.intro-bay-text      { font-size: var(--t-body); line-height: 1.7; }
+.intro-bay-rule-val  { font-size: var(--t-base); line-height: 1.6; }
+
+/* ═══ FORM FIELDS ══════════════════════════════════════════════════════ */
+.fld-lbl, .join-field-label { font-size: var(--t-micro); letter-spacing: var(--ls-micro); }
+.fld-hint, .join-field-hint { font-size: var(--t-eyebrow); letter-spacing: 0.04em; }
+.inp, .sel, .ta, input.join-input, select.join-select, textarea.join-textarea {
+  font-size: var(--t-body);
+}
+
+/* ═══ MOBILE TIGHTEN ═══════════════════════════════════════════════════ */
+@media (max-width: 720px) {
+  .lore-intro-title  { font-size: 40px; }
+  .lore-h            { font-size: 30px; }
+  .lore-vg-alias     { font-size: 28px; }
+  .lore-house-name   { font-size: 28px; }
+}
+
+/* ═══ FONT FAMILY DISCIPLINE ═══════════════════════════════════════════
+   The original loads 6 families (Inter, Bebas Neue, JetBrains Mono,
+   Fraunces, Bungee, Bungee Shade, Archivo Black). The body text and
+   headings only need 3 — sans, display, mono. Fraunces / Bungee /
+   Archivo Black are still loaded for any one-off feature copy, but we
+   stop them creeping into UI chrome by re-asserting families here.
+   ════════════════════════════════════════════════════════════════════ */
+.pg-hd h2, .lore-intro-title, .lore-h,
+.lore-vg-alias, .lore-house-name,
+.curr-overview-name, .curr-yeartab-label, .curr-track-title, .curr-classes-tag,
+.house-glance-name, .freg-group-name, .stage-name,
+.bay-hd-title, .fine-print-text {
+  font-family: var(--display);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.mast-brand-sub, .mast-meta-cell, .mast-search-kbd, .tab-num,
+.pg-hd-stamp, .pg-hd-note, .npc-badge, .chip, .track-tag,
+.lore-intro-stamp, .lore-eyebrow, .lore-vg-name, .lore-house-virtue,
+.curr-yeartab-num, .curr-overview-y, .curr-track-tag,
+.house-glance-traits, .about-bay-stamp,
+.freg-group-count, .freg-col-tracks, .freg-na, .freg-view-btn,
+.freg-detail-label, .bay-hd-tag, .intro-bay-eyebrow,
+.fld-lbl, .empty, .rn, .tier-pill, .tw thead th, .freg-tbl thead th,
+.house-glance-tbl thead th, .fine-print-stamp, .subject-list-empty,
+.stage-na, .stage-empty, .track-tag-empty, .curr-class-empty {
+  font-family: var(--mono);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ═══ COMPONENT PADDING NORMALIZATION ══════════════════════════════════
+   Original had .rule-body 18px/22px, .lore-vg 24px, .lore-house 24px,
+   .freg-tbl td variable, etc. Bring them to a consistent 16/20/24/28
+   spacing rhythm.
+   ════════════════════════════════════════════════════════════════════ */
+.rule-body              { padding: 20px 24px; }
+.lore-vg                { padding: 28px; }
+.lore-house             { padding: 28px; }
+.about-bay              { padding: 28px; }
+.freg-group-name-cell   { padding: 20px 24px; }
+.freg-tbl th, .freg-tbl td { padding: 14px 18px; }
+
+/* ═══ MASTHEAD — refined, editorial-professional
+   The dark theme + comic overlay leave the masthead heavy: 100+px tall,
+   oversized comic wordmark with a hard red drop-shadow, 88px crest, and
+   a 42px-tall search pill. Tone everything down a step so the bar reads
+   as professional editorial chrome, not a poster header. Keep the
+   crimson + gold language; reduce the dB. */
+
+.mast-meta,
+.mast-strata { display: none !important; }
+
+.masthead {
+  background: linear-gradient(180deg, #0a0a0e 0%, #07070b 100%) !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+  box-shadow: 0 1px 0 rgba(212, 168, 74, 0.22) !important;
+}
+
+.mast-inner {
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  gap: 24px !important;
+  height: 84px !important;
+  padding: 0 28px !important;
+  align-items: center !important;
+  max-width: 1680px !important;
+}
+
+.mast-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+/* Crest: tighter, contained, no crop. Sized to match the wordmark x-height. */
+.mast-brand-mark {
+  width: 60px !important;
+  height: 60px !important;
+  font-size: 0 !important;
+  background-size: contain !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5)) !important;
+}
+
+/* Wordmark: keep the comic family but kill the heavy red shadow.
+   A single 1px offset reads as ink, not as a logo. */
+.mast-brand-name {
+  font-family: 'Bungee', 'Bebas Neue', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 19px !important;
+  letter-spacing: 0.025em !important;
+  text-transform: uppercase !important;
+  color: #f5f1e4 !important;
+  text-shadow: none !important;
+  line-height: 1 !important;
+}
+
+/* Sub-line: mono caps, gold-deep — restrained metadata stamp */
+.mast-brand-sub {
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  margin-top: 6px !important;
+  line-height: 1 !important;
+}
+
+/* Search: refined, ghost border, smaller kbd badge */
+.mast-search {
+  justify-self: end !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  height: 34px !important;
+  padding: 0 14px !important;
+  min-width: 280px !important;
+  max-width: 360px !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-radius: 0 !important;
+  color: var(--text-mid, rgba(255, 255, 255, 0.55)) !important;
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.mast-search:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(212, 168, 74, 0.35) !important;
+  color: var(--text) !important;
+}
+.mast-search-icon { color: var(--gold-bright, var(--yellow)) !important; font-size: 13px !important; }
+.mast-search-text { font-family: var(--sans) !important; }
+.mast-search-kbd {
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  padding: 2px 6px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid var(--rule-soft) !important;
+  color: var(--text-mid, rgba(255, 255, 255, 0.55)) !important;
+  border-radius: 0 !important;
+}
+
+@media (max-width: 720px) {
+  .mast-inner { gap: 12px !important; padding: 0 14px !important; }
+  .mast-brand-text { display: none !important; }
+  .mast-search { min-width: 0 !important; padding: 0 10px !important; }
+  .mast-search-text, .mast-search-kbd { display: none !important; }
+}
+
+:root { --hdr-h: 84px !important; }
+
+/* ═══ FOOTER — bump inline crest ════════════════════════════════════ */
+.footer-brand::before {
+  width: 56px !important;
+  height: 56px !important;
+  vertical-align: middle !important;
+  margin-right: 14px !important;
+  background-size: contain !important;
+  background-position: center center !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   RULES PAGE — editorial card grid (no content changes, same 9 rules)
+   The dark theme renders rules as side-by-side panels with a heavy
+   red number column on the left. The number column eats horizontal
+   space and breaks the editorial flow. Redesign:
+     · 3-column auto-fill grid
+     · single-block card with the number as an outlined display watermark
+       sitting top-right at low opacity
+     · 3px red top-edge accent
+     · slight hover lift
+   ════════════════════════════════════════════════════════════════════════ */
+
+.rules-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important;
+  gap: 18px !important;
+}
+
+.rule {
+  position: relative !important;
+  display: block !important;
+  grid-template-columns: none !important;
+  padding: 28px 26px 26px !important;
+  background: linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-top: 3px solid var(--red) !important;
+  box-shadow: none !important;
+  transition: transform var(--dur, .15s) ease, border-color var(--dur, .15s) ease, box-shadow var(--dur, .15s) ease;
+  overflow: hidden;
+}
+.rule:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold-bright, var(--yellow));
+  box-shadow: 0 20px 40px -32px rgba(0, 0, 0, 0.9);
+}
+
+/* Number → outlined display watermark top-right */
+.rule-num {
+  position: absolute !important;
+  top: 12px !important;
+  right: 18px !important;
+  display: block !important;
+  background: transparent !important;
+  border: none !important;
+  border-right: none !important;
+  padding: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  font-family: var(--display) !important;
+  font-size: 64px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+  color: transparent !important;
+  -webkit-text-stroke: 1.5px var(--gold-bright, var(--yellow)) !important;
+  text-stroke: 1.5px var(--gold-bright, var(--yellow)) !important;
+  opacity: 0.55 !important;
+  pointer-events: none;
+}
+.rule:nth-child(even) .rule-num {
+  background: transparent !important;
+  color: transparent !important;
+}
+
+.rule-body {
+  position: relative;
+  padding: 0 !important;
+  padding-right: 60px !important;  /* leave room for the corner watermark */
+}
+.rule-title {
+  font-family: var(--sans) !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.005em !important;
+  color: var(--text) !important;
+  line-height: 1.25 !important;
+  margin-bottom: 12px !important;
+  padding-right: 0;
+}
+.rule-text {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+/* Make the rules section wrap full-bleed on a darker slab so the cards
+   pop a bit. Currently they sit on the body. Wrap them with extra padding. */
+.rules-page-wrap, /* in case some future container */
+.tab-host .rules-grid,
+.subnav-host .rules-grid {
+  padding: 16px 0 !important;
+}
+
+/* About-bay (kept) — give it a separator and matching surface */
+.about-bay {
+  margin-top: 48px !important;
+  background: linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-left: 4px solid var(--gold-bright, var(--yellow)) !important;
+}
+
+/* ═══ STAMP — outline variant looks cleaner ═══════════════════════════ */
+/* (No change to default; only used if author opts in via .pg-hd-stamp-outline) */
+
+/* ═══ DARK-THEME PG-HD H2 / LORE TITLES — keep yellow accent crisp ═════ */
+.lore-intro-title .accent { color: var(--yellow); font-weight: 400; }
+.lore-h .accent           { color: var(--red); font-weight: 400; }
+
+/* ═══ FOCUS RING — tidy ═══════════════════════════════════════════════ */
+*:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+
+/* ═══ SCROLLBAR — same on dark ═══════════════════════════════════════ */
+* { scrollbar-width: thin; }
+*::-webkit-scrollbar-thumb { border-radius: 0; }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   LORE — STICKY CONTENTS SIDEBAR LAYOUT
+   ────────────────────────────────────────────────────────────────────────
+   Two-column: numbered contents on the left (sticky, ~220px),
+   chapter content on the right. Dark-theme aware. Matches the
+   editorial "01 The World / 02 The Programme" navigation pattern.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.lore-shell {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 48px 32px 72px;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 64px;
+  align-items: flex-start;
+}
+@media (max-width: 960px) {
+  .lore-shell {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 20px 56px;
+  }
+}
+
+/* ── Contents sidebar ─────────────────────────────────────────────── */
+.lore-toc {
+  position: sticky;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + 24px);
+  align-self: start;
+}
+@media (max-width: 960px) {
+  .lore-toc {
+    position: static;
+    top: auto;
+  }
+}
+
+.lore-toc-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lore-toc-stamp {
+  font-family: var(--mono);
+  font-size: var(--t-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  font-weight: 700;
+  color: var(--text-mid, var(--muted));
+  text-transform: uppercase;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.lore-toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.lore-toc-item { display: block; }
+
+.lore-toc-btn {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  width: 100%;
+  padding: 12px 0 12px 14px;
+  background: transparent;
+  border: 0;
+  border-left: 2px solid transparent;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text-mid, var(--muted));
+  font-family: inherit;
+  transition: color var(--dur, .15s) ease,
+              border-left-color var(--dur, .15s) ease,
+              background var(--dur, .15s) ease,
+              padding-left var(--dur, .15s) ease;
+}
+
+.lore-toc-btn:hover {
+  color: var(--text);
+  border-left-color: var(--rule);
+  background: linear-gradient(90deg, rgba(255,255,255,.02), transparent);
+}
+
+.lore-toc-item.on .lore-toc-btn {
+  color: var(--text);
+  border-left-color: var(--red);
+  background: linear-gradient(90deg, rgba(193,26,44,.10), transparent 70%);
+}
+
+.lore-toc-n {
+  font-family: var(--mono);
+  font-size: var(--t-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  font-weight: 700;
+  color: var(--text-low, var(--faint));
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+.lore-toc-item.on .lore-toc-n { color: var(--red); }
+
+.lore-toc-label {
+  font-family: var(--sans);
+  font-size: var(--t-body);
+  font-weight: 500;
+  line-height: 1.5;
+  color: inherit;
+  letter-spacing: 0.005em;
+}
+.lore-toc-item.on .lore-toc-label {
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ── Main content column ──────────────────────────────────────────── */
+.lore-main { min-width: 0; }
+
+/* Inside the new shell, .lore-block is no longer a full-bleed slab —
+   it flows in a constrained column. Reset its full-width + padding so
+   it fills only the available column width. */
+.lore-main .lore-block {
+  width: 100%;
+  max-width: none;
+  margin: 0 0 48px;
+  padding: 0;
+}
+.lore-main .lore-block:last-child { margin-bottom: 0; }
+
+/* The original .lore-block-intro adds extra top/bottom padding and is
+   meant to be a section opener. Inside the new shell we want it to feel
+   like an editorial lede, not a full-bleed slab. */
+.lore-main .lore-block.lore-intro {
+  padding: 0 0 32px;
+  border-bottom: 1px solid var(--rule-soft);
+  margin-bottom: 40px;
+}
+.lore-main .lore-block.lore-intro::after { display: none; }
+
+/* Halftone overlays were tied to full-bleed blocks — disable in the
+   shell because the constrained column doesn't need the texture. */
+.lore-main .lore-block.lore-intro::after,
+.lore-main .about-bay::after { display: none; }
+
+/* Houses/Vanguard grids were sized assuming 1600px container width —
+   inside ~900-1100px column, the 2-col grid still works but tighten gap */
+.lore-main .lore-vanguard { gap: 16px; }
+.lore-main .lore-houses-grid { gap: 14px; }
+
+/* When the column is narrow, drop to single column */
+@media (max-width: 1240px) {
+  .lore-main .lore-vanguard,
+  .lore-main .lore-houses-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Curriculum reuses the lore-shell sidebar pattern. Override the
+   .curr card-styling defaults so the shell grid wins. ───────────── */
+.curr.lore-shell {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 48px 32px 72px !important;
+  max-width: 1600px !important;
+  margin: 0 auto !important;
+}
+.curr.lore-shell > .lore-toc .lore-toc-stamp { padding-bottom: 10px; }
+.curr.lore-shell > .lore-main { min-width: 0; }
+.curr.lore-shell .curr-yearhead {
+  padding: 0 0 24px !important;
+  margin-bottom: 28px !important;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.curr.lore-shell .curr-toolbar { padding: 0 !important; margin-bottom: 24px !important; }
+.curr.lore-shell .curr-list { padding: 0 !important; }
+.curr.lore-shell .curr-finenote { padding: 24px 0 0 !important; margin-top: 32px !important; }
+
+@media (max-width: 960px) {
+  .curr.lore-shell { padding: 24px 20px 56px !important; }
+}
+
+/* ── Curriculum: two-card per-year summary (Heroes / Sidekicks) ──── */
+.curr-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 880px) {
+  .curr-summary { grid-template-columns: 1fr; }
+}
+.curr-track {
+  background: linear-gradient(180deg, var(--paper-3), var(--paper-2));
+  border: 1px solid var(--rule-soft);
+  border-top: 4px solid var(--red);
+  padding: 26px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.curr-track-side { border-top-color: var(--gold-bright, var(--yellow)); }
+.curr-track-hd {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.curr-track .curr-track-tag {
+  align-self: flex-start;
+  background: transparent !important;
+  color: var(--text-mid, var(--muted)) !important;
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  padding: 0 !important;
+}
+.curr-track-hero .curr-track-tag { color: var(--red) !important; }
+.curr-track-side .curr-track-tag { color: var(--gold-bright, var(--yellow)) !important; }
+.curr-track-name {
+  font-family: var(--display) !important;
+  font-size: 28px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase;
+  color: var(--text) !important;
+  line-height: 1.05;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.curr-track-desc {
+  font-family: var(--sans) !important;
+  font-size: 14.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+  text-wrap: pretty;
+}
+.curr-track-stamps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule-soft);
+}
+.curr-stamp {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-low, var(--faint));
+  padding: 4px 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--rule-soft);
+}
+.curr-track-hero .curr-stamp { color: var(--red-bright, var(--red)); border-color: rgba(193,26,44,0.3); }
+.curr-track-side .curr-stamp { color: var(--gold-bright, var(--yellow)); border-color: rgba(212,168,74,0.3); }
+
+.curr.lore-shell .curr-finenote {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-low, var(--faint));
+  padding: 20px 0 0 !important;
+  margin: 32px 0 0 !important;
+  border-top: 1px solid var(--rule-faint);
+}
+.curr-finenote-hit { color: var(--text-mid, var(--muted)); }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   CAMPUS MAP — sidebar shell + compact location list
+   ════════════════════════════════════════════════════════════════════════ */
+
+.map-page.lore-shell {
+  padding: 48px 32px 72px !important;
+  max-width: 1600px !important;
+}
+@media (max-width: 960px) {
+  .map-page.lore-shell { padding: 24px 20px 56px !important; }
+}
+
+.map-page .map-district {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 0 24px !important;
+}
+.map-page .map-district-head {
+  padding: 0 0 24px !important;
+  margin-bottom: 24px !important;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.map-page .map-district-blurb {
+  font-size: 14.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  max-width: 64ch;
+  margin: 8px 0 12px !important;
+}
+.map-page .map-district-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  color: var(--text-low, var(--faint));
+  text-transform: uppercase;
+}
+
+/* ── Compact location list ────────────────────────────────────────── */
+.map-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.map-list-row {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule-faint);
+}
+.map-list-row:first-child { padding-top: 8px; }
+.map-list-row:last-child { border-bottom: 0; }
+.map-list-row.is-classified .map-list-name { color: var(--red); }
+.map-list-n {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  color: var(--gold-bright, var(--yellow));
+  text-transform: uppercase;
+  padding-top: 4px;
+}
+.map-list-body { min-width: 0; }
+.map-list-hd {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  margin-bottom: 4px;
+}
+.map-list-name {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+}
+.map-list-sub {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--text-mid, var(--muted));
+  text-transform: uppercase;
+}
+.map-list-cls {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  color: var(--red);
+  background: rgba(193,26,44,0.12);
+  border: 1px solid rgba(193,26,44,0.4);
+  padding: 2px 6px;
+  text-transform: uppercase;
+}
+.map-list-desc {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-mid, var(--muted));
+  margin: 0;
+  text-wrap: pretty;
+  /* Trim safety-net: even if the first-sentence regex misses, cap at
+     two lines so one rich entry never dwarfs the rest. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.map-list-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.map-list-tag {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: var(--text-low, var(--faint));
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid var(--rule-soft);
+  background: rgba(255,255,255,0.02);
+}
+
+/* Footnote sits cleanly at the bottom of the active district */
+.map-page .map-footnote {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule-faint);
+}
+.map-page .map-footnote p {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-low, var(--faint));
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   POWERBALL RULES (.kbr) — REDESIGN
+   Drop the 1px grey borders that read as out-of-place panel chrome.
+   Cards use subtle gradients + a red left-accent stripe (the Powerball
+   color), so the page reads as a single editorial spread.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════════════════════
+   CLUB MODAL (About / Rules / Roster) — UNIFIED EDITORIAL REDESIGN
+   ────────────────────────────────────────────────────────────────────────
+   The original three tabs each rendered through a different component set
+   with conflicting card chrome (stats blocks, schedule rows, sport
+   keypoint cards, role cards, team panels). That stack is what felt
+   jarring. Here we strip all those competing surfaces back to flat,
+   editorial sections — same eyebrow + heading + body pattern as Lore and
+   Curriculum elsewhere — separated by hairlines instead of boxes.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.club-modal {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: linear-gradient(180deg, var(--paper-2), var(--paper)) !important;
+  box-shadow: 0 32px 80px -32px rgba(0, 0, 0, 0.95) !important;
+}
+.club-modal-hd {
+  border-bottom: 1px solid var(--rule-soft) !important;
+  box-shadow: none !important;
+  padding: 28px 32px 22px !important;
+}
+.club-modal-body {
+  padding: 0 !important;
+  background: transparent !important;
+}
+.club-modal-tabs {
+  border-bottom: 1px solid var(--rule-soft) !important;
+  padding: 0 32px !important;
+  background: transparent !important;
+}
+.club-modal-tab {
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 2px solid transparent !important;
+  padding: 14px 18px !important;
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin-bottom: -1px;
+  transition: color .15s, border-color .15s;
+}
+.club-modal-tab:hover { color: var(--text) !important; }
+.club-modal-tab.on,
+.club-modal-tab[aria-selected="true"] {
+  color: var(--text) !important;
+  border-bottom-color: var(--red) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ── Shared section primitive used across all three tabs ─────────── */
+.club-modal-body .cp-about,
+.club-modal-body .kbr,
+.club-modal-body .cp-roster {
+  padding: 28px 32px 36px !important;
+  background: transparent !important;
+  border: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.club-modal-body .cp-about > *:not(:first-child),
+.club-modal-body .kbr > *:not(:first-child),
+.club-modal-body .cp-roster > *:not(:first-child) {
+  padding-top: 24px;
+  border-top: 1px solid var(--rule-faint);
+}
+
+/* ── ABOUT ─────────────────────────────────────────────────────── */
+
+/* Access stat collapses into the desc paragraph as a quiet mono label */
+.club-modal-body .club-side-stats {
+  display: inline-flex !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.club-modal-body .club-side-stat {
+  display: inline-flex !important;
+  align-items: baseline;
+  gap: 8px;
+  background: transparent !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+.club-modal-body .club-side-stat-lbl {
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, var(--muted)) !important;
+  order: 1;
+}
+.club-modal-body .club-side-stat-num {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  text-transform: uppercase !important;
+  background: rgba(212, 168, 74, 0.08) !important;
+  border: 1px solid rgba(212, 168, 74, 0.3) !important;
+  padding: 3px 9px !important;
+  order: 2;
+}
+
+.club-modal-body .club-side-desc {
+  font-family: var(--sans) !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  color: var(--text) !important;
+  margin: 0 !important;
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+
+.club-modal-body .cp-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.club-modal-body .cp-schedule-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+  align-items: baseline;
+}
+.club-modal-body .cp-schedule-tag {
+  font-family: var(--mono) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, var(--muted)) !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
+.club-modal-body .cp-schedule-slot {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid var(--rule-soft) !important;
+  padding: 4px 10px !important;
+  margin-right: 6px;
+}
+.club-modal-body .cp-schedule-output {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+/* The Sport (Powerball overview within About) */
+.club-modal-body .kbr {
+  /* Already gets the shared layout above; just normalize the inner blocks */
+}
+.club-modal-body .kbr-section {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+.club-modal-body .kbr-section + .kbr-section {
+  padding-top: 24px !important;
+  margin-top: 0 !important;
+  border-top: 1px solid var(--rule-faint) !important;
+}
+.club-modal-body .kbr-section-tag {
+  font-family: var(--mono) !important;
+  font-size: 13px !important;
+  letter-spacing: 0.2em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--red) !important;
+  margin: 0 0 18px !important;
+  padding: 0 0 10px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 2px solid var(--red) !important;
+  display: inline-block;
+}
+.club-modal-body .kbr-body {
+  display: flex !important;
+  flex-direction: column;
+  gap: 20px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.club-modal-body .kbr-summary {
+  font-family: var(--sans) !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  color: var(--text) !important;
+  margin: 0 !important;
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+
+/* Keypoints become a flat 3-up grid of inline definitions */
+.club-modal-body .kbr-keypoints {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+.club-modal-body .kbr-keypoint {
+  display: grid !important;
+  grid-template-columns: 38px 1fr !important;
+  gap: 14px !important;
+  align-items: baseline;
+  padding: 6px 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 0 !important;
+}
+.club-modal-body .kbr-keypoint-num {
+  font-family: var(--display) !important;
+  font-size: 28px !important;
+  color: var(--red) !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+.club-modal-body .kbr-keypoint-body { display: contents !important; }
+.club-modal-body .kbr-keypoint-body > * { grid-column: 2; }
+.club-modal-body .kbr-keypoint-lbl {
+  font-family: var(--sans) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+  letter-spacing: 0;
+  margin-bottom: 4px;
+}
+.club-modal-body .kbr-keypoint-body p {
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+  text-wrap: pretty;
+}
+
+/* club-modal arena tile removed */
+
+/* Post-Graduation career — flat with hairline above */
+.club-modal-body .cp-about-career {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
+.club-modal-body .cp-about-career-tag {
+  font-family: var(--mono) !important;
+  font-size: 13px !important;
+  letter-spacing: 0.2em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--red) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 2px solid var(--red) !important;
+  padding: 0 0 10px !important;
+  margin-bottom: 14px !important;
+  display: inline-block;
+}
+.club-modal-body .cp-about-career-title {
+  font-family: var(--display) !important;
+  font-size: 28px !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  color: var(--text) !important;
+  font-weight: 400 !important;
+  margin: 0 0 10px !important;
+  line-height: 1.1 !important;
+}
+.club-modal-body .cp-about-career p {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+  text-wrap: pretty;
+}
+.club-modal-body .kbr-career-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 18px !important;
+}
+@media (max-width: 640px) { .club-modal-body .kbr-career-stats { grid-template-columns: 1fr; } }
+.club-modal-body .kbr-career-stat {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+.club-modal-body .kbr-career-stat-num {
+  font-family: var(--display) !important;
+  font-size: 28px !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+}
+.club-modal-body .kbr-career-stat-lbl {
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+  margin-bottom: 2px;
+}
+.club-modal-body .kbr-career-stat-sub {
+  font-family: var(--sans) !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+/* ── RULES ─────────────────────────────────────────────────────── */
+
+/* Roles list: flat numbered entries, no boxed cards */
+.club-modal-body .kbr-roles {
+  display: flex !important;
+  flex-direction: column;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+.club-modal-body .kbr-role {
+  padding: 18px 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--rule-faint) !important;
+  border-left: 0 !important;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 16px 18px;
+  align-items: start;
+}
+.club-modal-body .kbr-role:last-child { border-bottom: 0 !important; }
+.club-modal-body .kbr-role-hd {
+  display: contents !important;
+}
+.club-modal-body .kbr-role-hd > div { grid-column: 2; }
+.club-modal-body .kbr-role-num {
+  font-family: var(--display) !important;
+  font-size: 32px !important;
+  color: var(--red) !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+  grid-row: 1 / span 3;
+  align-self: start;
+  padding-top: 2px;
+}
+.club-modal-body .kbr-role-name {
+  font-family: var(--display) !important;
+  font-size: 24px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  color: var(--text) !important;
+  line-height: 1.05 !important;
+  margin: 0 !important;
+}
+.club-modal-body .kbr-role-tagline {
+  font-family: var(--mono) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.16em !important;
+  font-weight: 700 !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.club-modal-body .kbr-role-desc {
+  grid-column: 2;
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+  text-wrap: pretty;
+}
+.club-modal-body .kbr-role-best {
+  grid-column: 2;
+  display: inline-flex !important;
+  align-items: baseline;
+  gap: 10px;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  border: 0 !important;
+}
+.club-modal-body .kbr-role-best-tag {
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 700 !important;
+  color: var(--red) !important;
+  text-transform: uppercase;
+}
+.club-modal-body .kbr-role-best-text {
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  font-style: italic;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+/* Rulebook blocks — flat with eyebrow + body, no boxes */
+.club-modal-body .kbr-block {
+  padding: 0 !important;
+  margin-bottom: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 0 !important;
+}
+.club-modal-body .kbr-block + .kbr-block {
+  padding-top: 20px !important;
+  margin-top: 20px !important;
+  border-top: 1px solid var(--rule-faint) !important;
+}
+.club-modal-body .kbr-block-tag {
+  font-family: var(--mono) !important;
+  font-size: 13px !important;
+  letter-spacing: 0.2em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--red) !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 0 10px !important;
+  margin-bottom: 14px !important;
+  border-bottom: 2px solid var(--red) !important;
+  display: inline-block;
+}
+.club-modal-body .kbr-block p {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+  text-wrap: pretty;
+}
+.club-modal-body .kbr-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.club-modal-body .kbr-list li {
+  position: relative;
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  padding: 0 0 0 18px !important;
+  border: 0 !important;
+}
+.club-modal-body .kbr-list li::before {
+  content: "" !important;
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 8px;
+  height: 2px;
+  background: var(--red) !important;
+  border-radius: 0 !important;
+}
+
+/* ── ROSTER ────────────────────────────────────────────────────── */
+
+.club-modal-body .cp-courtnote {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 14px 18px !important;
+  background: rgba(212, 168, 74, 0.06) !important;
+  border: 0 !important;
+  border-left: 3px solid var(--gold-bright, var(--yellow)) !important;
+  margin: 0 0 8px !important;
+}
+.club-modal-body .cp-courtnote-tag {
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 700 !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.club-modal-body .cp-courtnote span:last-child {
+  font-family: var(--sans) !important;
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+/* Teams stack in a 2×2 grid (4 houses); each panel is uniform height */
+.club-modal-body .kb-teams {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  margin: 0 !important;
+}
+@media (max-width: 720px) {
+  .club-modal-body .kb-teams { grid-template-columns: 1fr !important; }
+}
+.club-modal-body .kb-team {
+  background: var(--paper-2) !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+.club-modal-body .kb-team-hd {
+  padding: 14px 20px !important;
+  min-height: auto !important;
+  background-color: var(--team-bg, var(--paper-3)) !important;
+  background-image: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.05)) !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.club-modal-body .kb-team-hd::before,
+.club-modal-body .kb-team-hd::after { display: none !important; }
+.club-modal-body .kb-team-hd[style*="rgb(196, 26, 26)"]  { --team-bg: #c41a1a; }
+.club-modal-body .kb-team-hd[style*="rgb(212, 144, 26)"] { --team-bg: #d4901a; }
+.club-modal-body .kb-team-hd[style*="rgb(21, 128, 61)"]  { --team-bg: #15803d; }
+.club-modal-body .kb-team-hd[style*="rgb(30, 64, 175)"]  { --team-bg: #1e40af; }
+.club-modal-body .kb-team-hd[style*="#c41a1a"] { --team-bg: #c41a1a; }
+.club-modal-body .kb-team-hd[style*="#d4901a"] { --team-bg: #d4901a; }
+.club-modal-body .kb-team-hd[style*="#15803d"] { --team-bg: #15803d; }
+.club-modal-body .kb-team-hd[style*="#1e40af"] { --team-bg: #1e40af; }
+.club-modal-body .kb-team-hd .kb-team-name {
+  font-family: var(--display) !important;
+  font-size: 22px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
+  line-height: 1 !important;
+}
+.club-modal-body .kb-team-hd .kb-team-cap {
+  margin: 0 !important;
+  font-family: var(--sans) !important;
+  font-size: 12.5px !important;
+  color: rgba(255,255,255,0.95) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.35) !important;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+}
+.club-modal-body .kb-team-hd .kb-team-cap-icon { color: rgba(255,255,255,0.9) !important; }
+.club-modal-body .kb-team-hd .kb-team-cap-label {
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.16em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.85) !important;
+}
+
+.club-modal-body .kb-team-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 20px !important;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--rule-faint);
+}
+.club-modal-body .kb-team-meta-tag {
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, var(--muted)) !important;
+}
+.club-modal-body .kb-team-meta-slot {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.04em !important;
+  color: var(--text) !important;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--rule-soft);
+  padding: 3px 8px;
+}
+
+.club-modal-body .kb-team-tbl {
+  width: 100%;
+  border-collapse: collapse;
+}
+.club-modal-body .kb-team-tbl td {
+  padding: 10px 20px !important;
+  font-family: var(--sans) !important;
+  font-size: 13.5px !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--rule-faint) !important;
+  vertical-align: middle;
+}
+.club-modal-body .kb-team-tbl tr:last-child td { border-bottom: 0 !important; }
+.club-modal-body .kb-team-tbl .kb-team-pos-cell {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 700 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  text-transform: uppercase;
+  width: 40%;
+}
+.club-modal-body .kb-team-tbl .kb-starters-hd td,
+.club-modal-body .kb-team-tbl .kb-reserves-hd td {
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.2em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  background: rgba(255,255,255,0.02);
+  padding: 8px 20px !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+}
+.club-modal-body .kb-team-tbl .kb-row-reserve td { color: var(--text-mid, var(--muted)) !important; }
+.club-modal-body .kb-team-tbl .kb-team-c-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--gold-bright, var(--yellow));
+  background: rgba(212, 168, 74, 0.12);
+  border: 1px solid rgba(212, 168, 74, 0.4);
+  padding: 1px 5px;
+  margin-right: 8px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .club-modal-hd { padding: 22px 20px 18px !important; }
+  .club-modal-tabs { padding: 0 20px !important; }
+  .club-modal-body .cp-about,
+  .club-modal-body .kbr,
+  .club-modal-body .cp-roster { padding: 22px 20px 32px !important; }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   CLUB DETAIL — FULL-PAGE (replaces modal)
+   Cinematic hero in club color · sticky tab strip · editorial body.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.clubdf { background: var(--paper); color: var(--text); }
+
+.clubdf-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.85) 100%),
+    radial-gradient(120% 100% at 20% 0%, var(--accent) 0%, color-mix(in srgb, var(--accent) 40%, #000) 60%, #050508 100%);
+  border-bottom: 1px solid var(--rule-soft);
+  isolation: isolate;
+}
+.clubdf-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1.2px);
+  background-size: 14px 14px;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: -1;
+}
+.clubdf-hero-inner {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 36px 32px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.clubdf-back {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 8px;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.92);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.clubdf-back:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.4);
+  color: #fff;
+}
+
+.clubdf-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 5px 12px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.clubdf-name {
+  font-family: var(--display);
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 0.95;
+  margin: 4px 0 8px;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  text-wrap: balance;
+}
+.clubdf-desc {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.82);
+  margin: 0;
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+
+.clubdf-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin-top: 12px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+.clubdf-meta-item { display: flex; flex-direction: column; gap: 4px; }
+.clubdf-meta-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+}
+.clubdf-meta-val {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0;
+}
+.clubdf-meta-dim {
+  color: rgba(255,255,255,0.5);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* Sticky tab strip below hero */
+.clubdf-tabs {
+  position: sticky;
+  top: calc(var(--hdr-h, 84px) + var(--tabs-h, 53px));
+  z-index: 50;
+  display: flex;
+  gap: 0;
+  padding: 0 32px;
+  background: linear-gradient(180deg, #0a0a0e 0%, #0c0c10 100%);
+  border-bottom: 1px solid var(--rule-soft);
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.clubdf-tabs::-webkit-scrollbar { display: none; }
+.clubdf-tab {
+  padding: 16px 22px;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--text-mid, var(--muted));
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-bottom: -1px;
+  transition: color .15s, border-color .15s;
+}
+.clubdf-tab:hover { color: var(--text); }
+.clubdf-tab.on {
+  color: #fff;
+  border-bottom-color: var(--accent, var(--red));
+}
+
+/* Body: editorial column inside max-width 1600 */
+.clubdf-body {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+/* The inner About / Rules / Roster panels render through the same
+   components used for the old modal. The body styles below match those
+   sections to the new full-page surface, dropping any padding the modal
+   added. */
+.clubdf-body .cp-about,
+.clubdf-body .kbr,
+.clubdf-body .cp-roster {
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  max-width: 1100px;
+}
+
+.clubdf-body .cp-about > *:not(:first-child),
+.clubdf-body .kbr > *:not(:first-child),
+.clubdf-body .cp-roster > *:not(:first-child) {
+  padding-top: 32px;
+  border-top: 1px solid var(--rule-faint);
+}
+
+/* Re-apply the polished section primitives we built for the modal so
+   the body looks identical inside the full page. */
+.clubdf-body .club-side-stats {
+  display: inline-flex !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.clubdf-body .club-side-stat {
+  display: inline-flex !important;
+  align-items: baseline;
+  gap: 8px;
+  background: transparent !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+.clubdf-body .club-side-stat-lbl {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, var(--muted)) !important;
+  order: 1;
+}
+.clubdf-body .club-side-stat-num {
+  font-family: var(--mono) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  text-transform: uppercase !important;
+  background: rgba(212, 168, 74, 0.08) !important;
+  border: 1px solid rgba(212, 168, 74, 0.3) !important;
+  padding: 3px 9px !important;
+  order: 2;
+}
+.clubdf-body .club-side-desc {
+  font-family: var(--sans) !important;
+  font-size: 16px !important;
+  line-height: 1.7 !important;
+  color: var(--text) !important;
+  margin: 0 !important;
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+
+.clubdf-body .cp-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.clubdf-body .cp-schedule-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+  align-items: baseline;
+}
+.clubdf-body .cp-schedule-tag {
+  font-family: var(--mono) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, var(--muted)) !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
+.clubdf-body .cp-schedule-slot {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid var(--rule-soft) !important;
+  padding: 4px 10px !important;
+  margin-right: 6px;
+}
+.clubdf-body .cp-schedule-output {
+  font-family: var(--sans) !important;
+  font-size: 14.5px !important;
+  line-height: 1.55 !important;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+/* KBR sections — same eyebrow + red underline used in the modal */
+.clubdf-body .kbr-section,
+.clubdf-body .kbr-body { padding: 0 !important; margin: 0 !important; border: 0 !important; background: transparent !important; }
+.clubdf-body .kbr-body { display: flex !important; flex-direction: column; gap: 24px !important; }
+.clubdf-body .kbr-section + .kbr-section {
+  padding-top: 32px !important;
+  margin-top: 0 !important;
+  border-top: 1px solid var(--rule-faint) !important;
+}
+.clubdf-body .kbr-section-tag,
+.clubdf-body .kbr-block-tag,
+.clubdf-body .cp-about-career-tag {
+  font-family: var(--mono) !important;
+  font-size: 13px !important;
+  letter-spacing: 0.2em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--red) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 2px solid var(--red) !important;
+  padding: 0 0 10px !important;
+  margin: 0 0 16px !important;
+  display: inline-block;
+}
+.clubdf-body .kbr-summary {
+  font-family: var(--sans) !important;
+  font-size: 15.5px !important;
+  line-height: 1.7 !important;
+  color: var(--text) !important;
+  margin: 0 !important;
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+.clubdf-body .kbr-keypoints {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+.clubdf-body .kbr-keypoint {
+  display: grid !important;
+  grid-template-columns: 44px 1fr !important;
+  gap: 14px !important;
+  align-items: baseline;
+  padding: 8px 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 0 !important;
+}
+.clubdf-body .kbr-keypoint-num {
+  font-family: var(--display) !important;
+  font-size: 32px !important;
+  color: var(--red) !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+.clubdf-body .kbr-keypoint-body { display: contents !important; }
+.clubdf-body .kbr-keypoint-body > * { grid-column: 2; }
+.clubdf-body .kbr-keypoint-lbl {
+  font-family: var(--sans) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+  margin-bottom: 4px;
+}
+.clubdf-body .kbr-keypoint-body p {
+  font-family: var(--sans) !important;
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+  text-wrap: pretty;
+}
+
+/* Career section */
+.clubdf-body .cp-about-career { background: transparent !important; border: 0 !important; padding: 0 !important; }
+.clubdf-body .cp-about-career-title {
+  font-family: var(--display) !important;
+  font-size: 32px !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  color: var(--text) !important;
+  font-weight: 400 !important;
+  margin: 0 0 12px !important;
+  line-height: 1.05 !important;
+}
+.clubdf-body .cp-about-career p {
+  font-family: var(--sans) !important;
+  font-size: 14.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+.clubdf-body .kbr-career-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 20px !important;
+}
+@media (max-width: 720px) { .clubdf-body .kbr-career-stats { grid-template-columns: 1fr; } }
+.clubdf-body .kbr-career-stat {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 14px;
+  align-items: baseline;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+.clubdf-body .kbr-career-stat-num {
+  font-family: var(--display) !important;
+  font-size: 32px !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+}
+.clubdf-body .kbr-career-stat-lbl {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: var(--text) !important;
+  margin-bottom: 2px;
+}
+.clubdf-body .kbr-career-stat-sub {
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+/* RULES: roles list — flat, numbered, hairline between */
+.clubdf-body .kbr-roles {
+  list-style: none !important; margin: 0 !important; padding: 0 !important;
+  display: flex !important; flex-direction: column; gap: 0;
+}
+.clubdf-body .kbr-role {
+  padding: 22px 0 !important;
+  background: transparent !important; border: 0 !important; border-left: 0 !important;
+  border-bottom: 1px solid var(--rule-faint) !important;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 16px 20px;
+  align-items: start;
+}
+.clubdf-body .kbr-role:last-child { border-bottom: 0 !important; }
+.clubdf-body .kbr-role-hd { display: contents !important; }
+.clubdf-body .kbr-role-hd > div { grid-column: 2; }
+.clubdf-body .kbr-role-num {
+  font-family: var(--display) !important;
+  font-size: 40px !important;
+  color: var(--red) !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+  grid-row: 1 / span 3;
+  align-self: start;
+  padding-top: 2px;
+}
+.clubdf-body .kbr-role-name {
+  font-family: var(--display) !important;
+  font-size: 26px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  color: var(--text) !important;
+  line-height: 1.05 !important;
+  margin: 0 !important;
+}
+.clubdf-body .kbr-role-tagline {
+  font-family: var(--mono) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.16em !important;
+  font-weight: 700 !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+.clubdf-body .kbr-role-desc {
+  grid-column: 2;
+  font-family: var(--sans) !important;
+  font-size: 14.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+  text-wrap: pretty;
+}
+.clubdf-body .kbr-role-best {
+  grid-column: 2;
+  display: inline-flex !important;
+  align-items: baseline;
+  gap: 10px;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  border: 0 !important;
+}
+.clubdf-body .kbr-role-best-tag {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 700 !important;
+  color: var(--red) !important;
+  text-transform: uppercase;
+}
+.clubdf-body .kbr-role-best-text {
+  font-family: var(--sans) !important;
+  font-size: 13.5px !important;
+  font-style: italic;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+/* RULES: rulebook blocks — flat */
+.clubdf-body .kbr-block {
+  padding: 0 !important;
+  margin-bottom: 0 !important;
+  background: transparent !important;
+  border: 0 !important; border-left: 0 !important;
+}
+.clubdf-body .kbr-block + .kbr-block {
+  padding-top: 24px !important; margin-top: 24px !important;
+  border-top: 1px solid var(--rule-faint) !important;
+}
+.clubdf-body .kbr-block p {
+  font-family: var(--sans) !important;
+  font-size: 14.5px !important;
+  line-height: 1.7 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+.clubdf-body .kbr-list {
+  list-style: none !important; margin: 0 !important; padding: 0 !important;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.clubdf-body .kbr-list li {
+  position: relative;
+  font-family: var(--sans) !important;
+  font-size: 14.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  padding: 0 0 0 20px !important;
+  border: 0 !important;
+  max-width: 70ch;
+}
+.clubdf-body .kbr-list li::before {
+  content: "" !important; position: absolute; left: 0; top: 10px;
+  width: 10px; height: 2px; background: var(--red) !important; border-radius: 0 !important;
+}
+
+/* ROSTER: court note + 2×2 team grid */
+.clubdf-body .cp-courtnote {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 16px 20px !important;
+  background: rgba(212, 168, 74, 0.06) !important;
+  border: 0 !important;
+  border-left: 3px solid var(--gold-bright, var(--yellow)) !important;
+  margin: 0 0 8px !important;
+}
+.clubdf-body .cp-courtnote-tag {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 700 !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.clubdf-body .cp-courtnote span:last-child {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+.clubdf-body .kb-teams {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 24px !important;
+  margin: 0 !important;
+}
+@media (max-width: 900px) {
+  .clubdf-body .kb-teams { grid-template-columns: 1fr !important; }
+}
+.clubdf-body .kb-team {
+  background: var(--paper-2) !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+.clubdf-body .kb-team-hd {
+  padding: 18px 22px !important;
+  min-height: auto !important;
+  background-color: var(--team-bg, var(--paper-3)) !important;
+  background-image: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.05)) !important;
+  border: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.clubdf-body .kb-team-hd::before,
+.clubdf-body .kb-team-hd::after { display: none !important; }
+.clubdf-body .kb-team-hd[style*="rgb(196, 26, 26)"]  { --team-bg: #c41a1a; }
+.clubdf-body .kb-team-hd[style*="rgb(212, 144, 26)"] { --team-bg: #d4901a; }
+.clubdf-body .kb-team-hd[style*="rgb(21, 128, 61)"]  { --team-bg: #15803d; }
+.clubdf-body .kb-team-hd[style*="rgb(30, 64, 175)"]  { --team-bg: #1e40af; }
+.clubdf-body .kb-team-hd .kb-team-name {
+  font-family: var(--display) !important;
+  font-size: 26px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
+  line-height: 1 !important;
+}
+.clubdf-body .kb-team-hd .kb-team-cap {
+  margin: 0 !important;
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  color: rgba(255,255,255,0.95) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.35) !important;
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+}
+.clubdf-body .kb-team-hd .kb-team-cap-icon { color: rgba(255,255,255,0.9) !important; }
+.clubdf-body .kb-team-hd .kb-team-cap-label {
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.16em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.85) !important;
+}
+.clubdf-body .kb-team-meta {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 10px 22px !important;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--rule-faint);
+}
+.clubdf-body .kb-team-meta-tag {
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, var(--muted)) !important;
+}
+.clubdf-body .kb-team-meta-slot {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.04em !important;
+  color: var(--text) !important;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--rule-soft);
+  padding: 3px 8px;
+}
+.clubdf-body .kb-team-tbl { width: 100%; border-collapse: collapse; }
+.clubdf-body .kb-team-tbl td {
+  padding: 11px 22px !important;
+  font-family: var(--sans) !important;
+  font-size: 13.5px !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--rule-faint) !important;
+  vertical-align: middle;
+}
+.clubdf-body .kb-team-tbl tr:last-child td { border-bottom: 0 !important; }
+.clubdf-body .kb-team-tbl .kb-team-pos-cell {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  font-weight: 700 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  text-transform: uppercase;
+  width: 42%;
+}
+.clubdf-body .kb-team-tbl .kb-starters-hd td,
+.clubdf-body .kb-team-tbl .kb-reserves-hd td {
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.2em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  background: rgba(255,255,255,0.02);
+  padding: 9px 22px !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+}
+.clubdf-body .kb-team-tbl .kb-row-reserve td { color: var(--text-mid, var(--muted)) !important; }
+.clubdf-body .kb-team-tbl .kb-team-c-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--gold-bright, var(--yellow));
+  background: rgba(212, 168, 74, 0.12);
+  border: 1px solid rgba(212, 168, 74, 0.4);
+  padding: 2px 6px;
+  margin-right: 8px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .clubdf-hero-inner { padding: 28px 20px 36px; }
+  .clubdf-tabs { padding: 0 16px; }
+  .clubdf-body { padding: 28px 20px 56px; }
+}
+
+/* Restore the original Bungee tabs (we no longer render them, the dark
+   theme already had display:none) — left as a note in case the markup
+   ever resurrects. */
+
+.kbr {
+  --pb-accent: #c41a1a;
+  --pb-accent-bright: #e4324a;
+  --pb-surface: linear-gradient(180deg, var(--paper-3), var(--paper-2));
+  background: transparent !important;
+  color: var(--text);
+  padding: 8px 0 !important;
+}
+
+.kbr-body { gap: 28px !important; }
+
+/* Section dividers — quieter hairline only, no boxes */
+.kbr-section { margin: 0 0 28px !important; padding: 0 !important; border: 0 !important; }
+.kbr-section + .kbr-section {
+  padding-top: 28px !important;
+  border-top: 1px solid var(--rule-faint) !important;
+}
+.kbr-section-tag {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--pb-accent) !important;
+  margin: 0 0 14px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* When tabs drive the view, the per-section eyebrow + divider hairline
+   become redundant. Hide them so the tab is the only label. */
+.kbr-tabbed .kbr-section-tag { display: none !important; }
+.kbr-tabbed .kbr-section + .kbr-section { padding-top: 0 !important; border-top: 0 !important; }
+.kbr-tabbed .kbr-section { margin-bottom: 0 !important; }
+
+.kbr-summary {
+  font-family: var(--sans) !important;
+  font-size: 15.5px !important;
+  line-height: 1.7 !important;
+  color: var(--text) !important;
+  margin: 0 0 24px !important;
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+
+/* ── Keypoint cards: no border, accent stripe only ───────────────── */
+.kbr-keypoints {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 12px !important;
+  margin: 0 0 24px !important;
+}
+.kbr-keypoint {
+  padding: 18px 20px !important;
+  background: var(--pb-surface) !important;
+  border: 0 !important;
+  border-left: 3px solid var(--pb-accent) !important;
+  border-radius: 0 !important;
+  gap: 4px !important;
+}
+.kbr-keypoint-num {
+  font-family: var(--display) !important;
+  font-size: 28px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  color: var(--pb-accent) !important;
+  line-height: 1 !important;
+  margin-bottom: 6px !important;
+}
+.kbr-keypoint-lbl {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.005em !important;
+  color: var(--text) !important;
+}
+.kbr-keypoint-body p {
+  font-family: var(--sans) !important;
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+/* arena tile rules moved to .clubdf-body block */
+
+/* ── Roles list ─────────────────────────────────────────────────── */
+.kbr-roles {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+.kbr-role {
+  background: var(--pb-surface) !important;
+  border: 0 !important;
+  border-left: 3px solid var(--pb-accent) !important;
+  border-radius: 0 !important;
+  padding: 20px 22px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.kbr-role-hd {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 16px;
+  align-items: flex-start;
+}
+.kbr-role-num {
+  font-family: var(--display) !important;
+  font-size: 36px !important;
+  font-weight: 400 !important;
+  color: var(--pb-accent) !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+}
+.kbr-role-name {
+  font-family: var(--display) !important;
+  font-size: 22px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  color: var(--text) !important;
+  line-height: 1.05 !important;
+  margin: 0 0 2px !important;
+}
+.kbr-role-tagline {
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.16em !important;
+  font-weight: 700 !important;
+  color: var(--gold-bright, var(--yellow)) !important;
+  text-transform: uppercase;
+}
+.kbr-role-desc {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+  text-wrap: pretty;
+}
+.kbr-role-best {
+  display: inline-flex !important;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule-faint);
+}
+.kbr-role-best-tag {
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 700 !important;
+  color: var(--pb-accent) !important;
+  text-transform: uppercase;
+}
+.kbr-role-best-text {
+  font-family: var(--sans) !important;
+  font-size: 13.5px !important;
+  font-style: italic;
+  color: var(--text-mid, var(--muted)) !important;
+}
+
+/* ── Rulebook blocks ────────────────────────────────────────────── */
+.kbr-block {
+  background: var(--pb-surface) !important;
+  border: 0 !important;
+  border-left: 3px solid var(--pb-accent) !important;
+  border-radius: 0 !important;
+  padding: 18px 22px !important;
+  margin-bottom: 12px !important;
+}
+.kbr-block-tag {
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.2em !important;
+  font-weight: 700 !important;
+  color: var(--pb-accent) !important;
+  text-transform: uppercase;
+  margin: 0 0 12px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.kbr-block p {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  margin: 0 !important;
+}
+.kbr-list { list-style: none !important; margin: 0 !important; padding: 0 !important; }
+.kbr-list li {
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  padding: 6px 0 6px 18px !important;
+  border: 0 !important;
+}
+.kbr-list li::before {
+  content: "" !important;
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 8px;
+  height: 2px;
+  background: var(--pb-accent) !important;
+  border-radius: 0 !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   STUDENTS — INLINE FILTER BAR
+   ────────────────────────────────────────────────────────────────────────
+   Single horizontal row of search + filter pill groups + count.
+   Sticky below the subnav. Dark-theme aware.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.sfilter {
+  position: static;
+  z-index: 50;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 0;
+  padding: 14px 24px;
+  margin: 0 auto;
+  max-width: 1600px;
+  background: linear-gradient(180deg, var(--paper-3), var(--paper-2));
+  border-bottom: 1px solid var(--rule-soft);
+  border-top: 1px solid var(--rule-faint);
+  font-family: var(--sans);
+}
+
+/* ── search input ────────────────────────────────────────────────── */
+.sfilter-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 240px;
+  min-width: 200px;
+  padding: 6px 12px 6px 10px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--rule-soft);
+  transition: border-color var(--dur, .15s) ease, background var(--dur, .15s) ease;
+}
+.sfilter-search:focus-within {
+  border-color: var(--gold-bright, var(--yellow));
+  background: rgba(212,168,74,0.06);
+}
+.sfilter-search-icon {
+  font-size: 14px;
+  color: var(--text-mid, var(--muted));
+  line-height: 1;
+}
+.sfilter-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: var(--t-body);
+  padding: 6px 0;
+}
+.sfilter-input::placeholder { color: var(--text-low, var(--faint)); }
+.sfilter-clear {
+  background: transparent;
+  border: 0;
+  color: var(--text-mid, var(--muted));
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+.sfilter-clear:hover { color: var(--red); }
+
+/* ── filter group (label + pills) ──────────────────────────────── */
+.sfilter-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 18px;
+  margin-left: 18px;
+  border-left: 1px solid var(--rule-soft);
+  flex-shrink: 0;
+}
+.sfilter-lbl {
+  font-family: var(--mono);
+  font-size: var(--t-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  font-weight: 700;
+  color: var(--text-mid, var(--muted));
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+/* ── pill ──────────────────────────────────────────────────────── */
+.sf-pill {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-mid, var(--muted));
+  font-family: var(--sans);
+  font-size: var(--t-small);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background var(--dur, .15s) ease,
+              color var(--dur, .15s) ease,
+              border-color var(--dur, .15s) ease;
+  white-space: nowrap;
+}
+.sf-pill:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.04);
+}
+.sf-pill.on {
+  background: var(--red);
+  color: #fff;
+  font-weight: 700;
+  border-color: var(--red);
+}
+.sf-pill.on:hover { background: var(--red-bright, var(--red)); }
+
+/* ── count ──────────────────────────────────────────────────────── */
+.sfilter-count {
+  margin-left: auto;
+  padding-left: 18px;
+  font-family: var(--mono);
+  font-size: var(--t-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  font-weight: 700;
+  color: var(--text-mid, var(--muted));
+  text-transform: uppercase;
+}
+
+/* ── responsive — stack groups on narrow screens ───────────────── */
+@media (max-width: 1100px) {
+  .sfilter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 20px;
+  }
+  .sfilter-search { flex: 1 1 100%; }
+  .sfilter-group {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: 0;
+    flex-wrap: wrap;
+  }
+  .sfilter-count {
+    margin-left: 0;
+    padding-left: 0;
+    align-self: flex-end;
+  }
+}
+
+/* ── Table container: keep overflow contained so the wide roster
+   doesn't push past the viewport. The sticky thead inside the dark
+   theme's .tw scroll container can't actually stick (CSS spec: nested
+   sticky in a non-visible-overflow ancestor collapses). Accept a
+   non-sticky thead — keeps layout clean. */
+.tw { overflow: hidden !important; max-width: 100%; }
+.tw, .preg-tbl { overflow-x: auto !important; }
+
+.subnav-host .tw thead tr th {
+  position: static !important;
+  top: auto !important;
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   CLUBS — DIRECTORY + DETAIL (overhaul)
+   Two-column shell: sticky directory on the left, focus detail on
+   the right. Detail hero uses the club's accent color with a tonal
+   halftone pattern; meta strip (Access / Roster) sits directly under
+   the hero. Tabs + body reuse the existing .clubdf-body editorial
+   styles below.
+   ═════════════════════════════════════════════════════════════════ */
+
+.clubsx {
+  background: var(--paper);
+  color: var(--text);
+  padding: 0 28px 64px;
+}
+.clubs-split {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+@media (max-width: 980px) {
+  .clubsx { padding: 0 16px 48px; }
+  .clubs-split { grid-template-columns: 1fr; gap: 18px; }
+}
+
+/* ── Directory sidebar ───────────────────────────────────────────── */
+.cdir {
+  position: sticky;
+  top: calc(var(--hdr-h, 84px) + var(--tabs-h, 53px) + 16px);
+  align-self: start;
+  background: var(--paper-2);
+  border: 1px solid var(--rule-soft, rgba(255,255,255,0.06));
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 980px) {
+  .cdir { position: static; max-height: none; }
+}
+
+.cdir-hd {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--rule-soft, rgba(255,255,255,0.06));
+}
+.cdir-hd-lbl {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--text-low, #a8a298);
+}
+.cdir-hd-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-mid, #dcd6c8);
+  letter-spacing: 0.04em;
+}
+.cdir-hd-count em {
+  font-style: normal;
+  color: var(--text-low, #a8a298);
+  font-weight: 500;
+}
+
+.cdir-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cdir-row {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 6px 1fr;
+  gap: 12px;
+  align-items: stretch;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text);
+  padding: 12px 14px 12px 0;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s, border-color 0.12s;
+  font-family: var(--sans);
+}
+.cdir-row::before {
+  content: "";
+  display: block;
+  width: 4px;
+  background: var(--accent, var(--red));
+  opacity: 0.55;
+  transition: opacity 0.12s, width 0.12s;
+}
+.cdir-row:hover { background: rgba(255,255,255,0.025); }
+.cdir-row:hover::before { opacity: 0.85; }
+.cdir-row.on {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.08);
+}
+.cdir-row.on::before { opacity: 1; width: 5px; }
+
+.cdir-row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.cdir-row-name {
+  font-family: var(--comic, var(--display));
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  color: var(--text);
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.cdir-row.on .cdir-row-name { color: #fff; }
+
+.cdir-row-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cdir-row-cat {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--gold-bright, #f1cd72);
+  background: rgba(212, 168, 74, 0.10);
+  border: 1px solid rgba(212, 168, 74, 0.35);
+  padding: 3px 7px;
+}
+.cdir-row-stat {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-low, #a8a298);
+  letter-spacing: 0.04em;
+}
+.cdir-row-stat b {
+  font-weight: 700;
+  color: var(--text-mid, #dcd6c8);
+}
+.cdir-row-stat .sep { opacity: 0.5; margin: 0 1px; }
+.cdir-row-stat .lbl { margin-left: 4px; opacity: 0.85; }
+
+/* ── Detail column ───────────────────────────────────────────────── */
+.cdet {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Hero — club accent color with halftone dots, big centered name */
+.cdh {
+  position: relative;
+  overflow: hidden;
+  background: var(--accent, var(--red));
+  color: #fff;
+  padding: 22px 36px 26px;
+  isolation: isolate;
+}
+.cdh::before {
+  /* halftone pattern in the top-right (matches reference) */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(0,0,0,0.18) 1.2px, transparent 1.6px);
+  background-size: 12px 12px;
+  background-position: right -4px top -4px;
+  -webkit-mask-image: linear-gradient(245deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.12) 55%, transparent 80%);
+          mask-image: linear-gradient(245deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.12) 55%, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+.cdh::after {
+  /* subtle darkening at the bottom edge for hierarchy with the meta row */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.18) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.cdh-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+.cdh-cat {
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: var(--gold-bright, #f1cd72);
+  color: #1a1a1f;
+  padding: 5px 11px;
+  border: 1px solid rgba(0,0,0,0.18);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.20);
+}
+
+.cdh-name {
+  font-family: var(--comic, var(--display));
+  font-weight: 400;
+  font-size: clamp(36px, 5.2vw, 60px);
+  line-height: 0.96;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 2px 0 0;
+  text-align: left;
+  text-shadow:
+    2px 2px 0 rgba(0,0,0,0.30),
+    4px 4px 0 rgba(0,0,0,0.10);
+  text-wrap: balance;
+}
+
+.cdh-sub {
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  text-align: left;
+  max-width: 80ch;
+}
+
+/* Meta strip directly under the hero */
+.cdet-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: var(--paper-2);
+  border-bottom: 1px solid var(--rule-soft, rgba(255,255,255,0.06));
+}
+.cdet-meta-cell {
+  padding: 12px 22px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+}
+.cdet-meta-cell + .cdet-meta-cell {
+  border-left: 1px solid var(--rule-soft, rgba(255,255,255,0.06));
+}
+.cdet-meta-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold-bright, #f1cd72);
+}
+.cdet-meta-val {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+.cdet-meta-val .rn-big {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  padding: 1px 7px;
+  background: var(--gold-bright, #f1cd72);
+  color: #1a1a1f;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 16px;
+  margin-right: 4px;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+.cdet-meta-val .rn-tot {
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--text-mid, #dcd6c8);
+  margin: 0 6px;
+}
+.cdet-meta-val .rn-suf {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-low, #a8a298);
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+}
+
+@media (max-width: 720px) {
+  .cdh { padding: 18px 18px 22px; }
+  .cdh-name { font-size: clamp(32px, 8vw, 44px); }
+  .cdet-meta { grid-template-columns: 1fr; }
+  .cdet-meta-cell { padding: 10px 18px; }
+  .cdet-meta-cell + .cdet-meta-cell {
+    border-left: 0;
+    border-top: 1px solid var(--rule-soft, rgba(255,255,255,0.06));
+  }
+}
+
+/* The existing .clubdf-tabs and .clubdf-body styles in polish.css already
+   handle the tabs + editorial body. We re-anchor the sticky top so the
+   tab strip parks under the masthead/subnav inside the new layout. */
+.cdet .clubdf-tabs {
+  top: calc(var(--hdr-h, 84px) + var(--tabs-h, 53px));
+  background: var(--paper);
+}
+.cdet .clubdf-body {
+  max-width: none;
+  padding: 32px 36px 0;
+}
+@media (max-width: 720px) {
+  .cdet .clubdf-body { padding: 24px 18px 0; }
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   CLUBS — SECTION DIVIDERS (Rules + Career section headers)
+   Upgrade the limp "RULES / RULEBOOK / ROLES / POST-GRADUATION"
+   labels into proper editorial section dividers: numbered chip +
+   display-font label + accent rule that extends across the column.
+   ═════════════════════════════════════════════════════════════════ */
+
+/* Reset the inline-block + red-underline treatment we previously had,
+   then rebuild as a flex row that spans the full body width.
+   Higher specificity (.cdet .clubdf-body) wins against the existing
+   .clubdf-body block above. */
+.cdet .clubdf-body .kbr { counter-reset: kbr-section; }
+
+.cdet .clubdf-body .kbr-section-tag,
+.cdet .clubdf-body .cp-about-career-tag {
+  counter-increment: kbr-section;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  padding: 0 0 16px !important;
+  margin: 0 0 22px !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.22em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--text-low, #a8a298) !important;
+  background: transparent !important;
+}
+
+/* The numbered chip on the left */
+.cdet .clubdf-body .kbr-section-tag::before,
+.cdet .clubdf-body .cp-about-career-tag::before {
+  content: counter(kbr-section, decimal-leading-zero);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 5px 10px;
+  background: var(--gold-bright, #f1cd72);
+  color: #1a1a1f;
+  border: 1px solid rgba(0,0,0,0.18);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.20);
+  flex-shrink: 0;
+}
+
+/* The label itself — wrap the bare text node by treating it as the
+   stretching middle column. We can't add markup, so style :is the
+   element's own text via a hack: put display-font sizing directly on
+   the tag (after the ::before chip). */
+.cdet .clubdf-body .kbr-section-tag {
+  /* override the tiny font set on the row itself, then re-tighten
+     the chip's font-size via the ::before declaration above. */
+  font-family: var(--comic, var(--display)) !important;
+  font-size: 24px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  color: var(--text) !important;
+}
+.cdet .clubdf-body .cp-about-career-tag {
+  font-family: var(--comic, var(--display)) !important;
+  font-size: 24px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  color: var(--text) !important;
+}
+
+/* The hairline extension to the right side of the row */
+.cdet .clubdf-body .kbr-section-tag::after,
+.cdet .clubdf-body .cp-about-career-tag::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.20) 0%,
+    rgba(255,255,255,0.05) 70%,
+    transparent 100%
+  );
+  margin-left: 4px;
+}
+
+/* Hide the leading ▪ glyph in the JSX of cp-about-career-tag — the
+   numbered chip replaces it. */
+.cdet .clubdf-body .cp-about-career-tag .ico { display: none !important; }
+
+/* ── Block-tag (sub-sections inside Rulebook): "Rules" / "Powers,
+   Violence & Fouls". Lighter weight than the §-section row above. */
+.cdet .clubdf-body .kbr-block-tag {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  padding: 0 0 0 14px !important;
+  margin: 0 0 14px !important;
+  position: relative;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  font-family: var(--mono) !important;
+  font-size: 11.5px !important;
+  letter-spacing: 0.2em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  color: var(--gold-bright, #f1cd72) !important;
+  background: transparent !important;
+}
+.cdet .clubdf-body .kbr-block-tag::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  background: var(--red);
+}
+.cdet .clubdf-body .kbr-block-tag::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(212,168,74,0.30) 0%,
+    rgba(212,168,74,0.05) 70%,
+    transparent 100%
+  );
+  margin-left: 2px;
+}
+
+/* The first .kbr-section in a body shouldn't get a giant top-border
+   from the existing rule; the section divider line is enough. */
+.cdet .clubdf-body .kbr-section + .kbr-section {
+  padding-top: 28px !important;
+  margin-top: 4px !important;
+  border-top: 0 !important;
+}
+
+
+/* ── Hide duplicate Access stat in About body (lives in meta strip) ── */
+.cdet .clubdf-body .club-side-stats { display: none !important; }
+
+/* ── Arena diagram tile — compact CTA row (no image preview) ─────
+   Tile is a single horizontal bar: caption block on the left, yellow
+   stamp button on the right. No image; click opens the full-size
+   lightbox. Sized to fit on one row. */
+.clubdf-body .kbr-arena-tile {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  max-width: 720px !important;
+  padding: 14px 18px !important;
+  background: var(--paper-2) !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-left: 3px solid var(--red) !important;
+  border-top: 1px solid var(--rule-soft) !important;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color .15s, background .15s;
+  text-align: left;
+}
+.clubdf-body .kbr-arena-tile:hover {
+  background: rgba(196, 26, 26, 0.05) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  border-left-color: var(--red, #c41a1a) !important;
+}
+
+.clubdf-body .kbr-arena-tile-body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  flex: 1 1 280px !important;
+  min-width: 0;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.clubdf-body .kbr-arena-tile-body::after {
+  content: none !important;
+  display: none !important;
+}
+
+.clubdf-body .kbr-arena-tile-eyebrow {
+  display: inline-block !important;
+  font-family: var(--mono) !important;
+  font-size: 9.5px !important;
+  letter-spacing: 0.22em !important;
+  font-weight: 700 !important;
+  color: var(--red) !important;
+  text-transform: uppercase !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  align-self: flex-start;
+}
+
+.clubdf-body .kbr-arena-tile-title {
+  font-family: var(--comic, var(--display)) !important;
+  font-size: 20px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.03em !important;
+  color: var(--text) !important;
+  text-transform: uppercase !important;
+  line-height: 1.05 !important;
+  margin: 2px 0 0 !important;
+  text-align: left !important;
+}
+
+.clubdf-body .kbr-arena-tile-meta {
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.14em !important;
+  font-weight: 500 !important;
+  color: var(--text-mid, var(--muted)) !important;
+  text-transform: uppercase !important;
+  margin: 2px 0 0 !important;
+  text-align: left !important;
+}
+
+.clubdf-body .kbr-arena-tile-cta {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  flex-shrink: 0;
+  margin: 0 !important;
+  padding: 7px 12px !important;
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: #1a1a1f !important;
+  background: var(--gold-bright, #f1cd72) !important;
+  border: 1px solid rgba(0,0,0,0.20) !important;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.30) !important;
+  transition: transform .12s, box-shadow .12s;
+}
+.clubdf-body .kbr-arena-tile-cta i {
+  font-size: 11px !important;
+  color: #1a1a1f !important;
+}
+.clubdf-body .kbr-arena-tile:hover .kbr-arena-tile-cta {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.30) !important;
+}
+
+@media (max-width: 560px) {
+  .clubdf-body .kbr-arena-tile {
+    gap: 12px !important;
+    padding: 12px 14px !important;
+  }
+  .clubdf-body .kbr-arena-tile-cta { padding: 6px 10px !important; }
+}
+
+/* ── Club description (lead paragraph) — give it presence ─────────── */
+.cdet .clubdf-body .club-side-desc {
+  position: relative !important;
+  font-family: var(--sans) !important;
+  font-size: 17px !important;
+  line-height: 1.65 !important;
+  color: var(--text) !important;
+  margin: 0 !important;
+  padding: 6px 0 6px 22px !important;
+  max-width: 72ch !important;
+  border-left: 3px solid var(--red) !important;
+  font-weight: 400 !important;
+}
+.cdet .clubdf-body .club-side-desc::first-letter {
+  font-family: var(--comic, var(--display));
+  font-size: 1.6em;
+  color: var(--gold-bright, #f1cd72);
+  font-weight: 400;
+  margin-right: 2px;
+}
+
+
+
+/* ═════════════════════════════════════════════════════════════════
+   CLUBS — ROSTER REDESIGN (Court Note + House Team Panels)
+   The previous roster styling read as raw HTML tables stuffed under
+   a colored bar. Rebuild as proper editorial team dossiers with:
+   strong house-color top stripe, clean header block, training meta
+   strip, and a typographic roster table with section dividers.
+   Uses .cdet specificity to win over the earlier .clubdf-body rules.
+   ═════════════════════════════════════════════════════════════════ */
+
+/* ── COURT NOTE — full-width callout band ──────────────────────────── */
+.cdet .clubdf-body .cp-courtnote {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  gap: 12px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 1px solid var(--rule-soft) !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+  padding: 10px 0 !important;
+  margin: 0 0 18px !important;
+  position: relative;
+  overflow: visible;
+}
+.cdet .clubdf-body .cp-courtnote::before { content: none !important; display: none !important; }
+.cdet .clubdf-body .cp-courtnote-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--gold-bright, #f1cd72) !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.cdet .clubdf-body .cp-courtnote-tag i {
+  font-size: 13px !important;
+  color: var(--gold-bright, #f1cd72) !important;
+}
+.cdet .clubdf-body .cp-courtnote span:last-child {
+  display: inline-block !important;
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
+  color: var(--text-mid, #dcd6c8) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  text-wrap: pretty;
+  flex: 1 1 280px;
+}
+
+/* ── TEAMS GRID — 2×2 ──────────────────────────────────────────────── */
+.cdet .clubdf-body .kb-teams {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  padding: 0 !important;
+}
+@media (max-width: 980px) {
+  .cdet .clubdf-body .kb-teams { grid-template-columns: 1fr !important; }
+}
+
+/* ── INDIVIDUAL TEAM CARD ─────────────────────────────────────────── */
+.cdet .clubdf-body .kb-team {
+  position: relative;
+  background: var(--paper-2) !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-top: 4px solid var(--team-bg, var(--red)) !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* House color resolution — applies to the team card via parent
+   pulling from --team-bg set by the [style*=…] attr matchers below */
+.cdet .clubdf-body .kb-team:has(.kb-team-hd[style*="rgb(196, 26, 26)"])  { --team-bg: #c41a1a; }
+.cdet .clubdf-body .kb-team:has(.kb-team-hd[style*="rgb(212, 144, 26)"]) { --team-bg: #d4901a; }
+.cdet .clubdf-body .kb-team:has(.kb-team-hd[style*="rgb(21, 128, 61)"])  { --team-bg: #15803d; }
+.cdet .clubdf-body .kb-team:has(.kb-team-hd[style*="rgb(30, 64, 175)"])  { --team-bg: #1e40af; }
+
+/* ── TEAM HEADER (display name + captain) ─────────────────────────── */
+.cdet .clubdf-body .kb-team-hd {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  padding: 18px 22px !important;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.45)),
+    var(--team-bg, var(--red)) !important;
+  color: #fff !important;
+  border: 0 !important;
+  position: relative;
+}
+.cdet .clubdf-body .kb-team-hd::after {
+  /* faint dot-grid in upper-right of the header */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.16) 1px, transparent 1.4px);
+  background-size: 10px 10px;
+  background-position: right -2px top -2px;
+  -webkit-mask-image: linear-gradient(245deg, rgba(0,0,0,0.55) 0%, transparent 65%);
+          mask-image: linear-gradient(245deg, rgba(0,0,0,0.55) 0%, transparent 65%);
+  pointer-events: none;
+  display: block !important;
+}
+.cdet .clubdf-body .kb-team-hd .kb-team-name {
+  position: relative;
+  z-index: 1;
+  font-family: var(--comic, var(--display)) !important;
+  font-size: 28px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.04em !important;
+  line-height: 1 !important;
+  color: #fff !important;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+}
+.cdet .clubdf-body .kb-team-hd .kb-team-cap {
+  position: relative;
+  z-index: 1;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(255,255,255,0.20) !important;
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: rgba(255,255,255,0.95) !important;
+  flex-wrap: nowrap;
+}
+.cdet .clubdf-body .kb-team-hd .kb-team-cap-left {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-width: 0;
+}
+.cdet .clubdf-body .kb-team-hd .kb-team-cap-right {
+  display: inline-flex !important;
+  align-items: center !important;
+  text-align: right;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cdet .clubdf-body .kb-team-hd .kb-team-cap-open {
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.75) !important;
+  border: 1px solid rgba(255,255,255,0.35) !important;
+  padding: 3px 9px !important;
+  background: rgba(0,0,0,0.18) !important;
+}
+.cdet .clubdf-body .kb-team-hd .kb-team-cap-icon {
+  color: var(--gold-bright, #f1cd72) !important;
+  font-size: 11px !important;
+}
+.cdet .clubdf-body .kb-team-hd .kb-team-cap-label {
+  font-family: var(--mono) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.72) !important;
+}
+.cdet .clubdf-body .kb-team-hd .kb-team-cap a,
+.cdet .clubdf-body .kb-team-hd .kb-team-cap a:visited {
+  color: #fff !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  font-weight: 600 !important;
+}
+.cdet .clubdf-body .kb-team-hd .kb-team-cap a:hover {
+  color: var(--gold-bright, #f1cd72) !important;
+  border-bottom-color: var(--gold-bright, #f1cd72) !important;
+}
+
+/* ── TRAINING META STRIP ──────────────────────────────────────────── */
+.cdet .clubdf-body .kb-team-meta {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  padding: 10px 22px !important;
+  background: rgba(255,255,255,0.02) !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+}
+.cdet .clubdf-body .kb-team-meta-tag {
+  font-family: var(--mono) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--text-low, #a8a298) !important;
+  margin-right: 4px !important;
+}
+.cdet .clubdf-body .kb-team-meta-slot {
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  color: var(--text-mid, #dcd6c8) !important;
+  background: transparent !important;
+  border: 1px solid var(--rule-soft) !important;
+  padding: 3px 8px !important;
+}
+
+/* ── ROSTER TABLE ─────────────────────────────────────────────────── */
+.cdet .clubdf-body .kb-team-tbl {
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+.cdet .clubdf-body .kb-team-tbl tr { border-bottom: 1px solid var(--rule-soft); }
+.cdet .clubdf-body .kb-team-tbl tr:last-child { border-bottom: 0 !important; }
+.cdet .clubdf-body .kb-team-tbl tr:not(.kb-starters-hd):not(.kb-reserves-hd):hover td {
+  background: rgba(255,255,255,0.025) !important;
+}
+
+.cdet .clubdf-body .kb-team-tbl td {
+  padding: 11px 22px !important;
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--text) !important;
+  border-bottom: 0 !important;
+  vertical-align: middle !important;
+  background: transparent !important;
+}
+.cdet .clubdf-body .kb-team-tbl .kb-team-pos-cell {
+  font-family: var(--mono) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, #dcd6c8) !important;
+  width: 42% !important;
+  white-space: nowrap;
+}
+
+/* ── SECTION HEADERS — Starting Six / Reserves ────────────────────── */
+.cdet .clubdf-body .kb-team-tbl .kb-starters-hd td,
+.cdet .clubdf-body .kb-team-tbl .kb-reserves-hd td {
+  padding: 10px 22px 8px !important;
+  font-family: var(--mono) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--gold-bright, #f1cd72) !important;
+  background:
+    linear-gradient(90deg,
+      rgba(212,168,74,0.10) 0,
+      rgba(212,168,74,0.04) 50%,
+      transparent 100%) !important;
+  border-top: 1px solid var(--rule-soft) !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+  position: relative;
+}
+.cdet .clubdf-body .kb-team-tbl .kb-starters-hd:first-child td { border-top: 0 !important; }
+.cdet .clubdf-body .kb-team-tbl .kb-reserves-hd td {
+  color: var(--text-low, #a8a298) !important;
+  background:
+    linear-gradient(90deg,
+      rgba(255,255,255,0.04) 0,
+      rgba(255,255,255,0.01) 50%,
+      transparent 100%) !important;
+}
+
+/* Reserve rows — visually softer than starters */
+.cdet .clubdf-body .kb-team-tbl tr.kb-row-reserve td {
+  color: var(--text-mid, #dcd6c8) !important;
+  background: rgba(0,0,0,0.10) !important;
+}
+.cdet .clubdf-body .kb-team-tbl tr.kb-row-reserve .kb-team-pos-cell {
+  color: var(--text-low, #a8a298) !important;
+}
+
+/* Captain badge — proper pill, not a flat letter */
+.cdet .clubdf-body .kb-team-tbl .kb-team-c-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  padding: 0 5px !important;
+  margin-right: 8px !important;
+  font-family: var(--mono) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  color: #1a1a1f !important;
+  background: var(--gold-bright, #f1cd72) !important;
+  border: 1px solid rgba(0,0,0,0.20) !important;
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.30) !important;
+  vertical-align: middle;
+}
+
+/* Character-link styling inside roster — match the rest of the surface */
+.cdet .clubdf-body .kb-team-tbl td a {
+  font-family: var(--sans) !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(212,168,74,0.30);
+  transition: color .12s, border-color .12s;
+}
+.cdet .clubdf-body .kb-team-tbl td a:hover {
+  color: var(--gold-bright, #f1cd72) !important;
+  border-bottom-color: var(--gold-bright, #f1cd72) !important;
+}
+
+/* Empty-slot indicator — quiet hyphen-style instead of "open" word */
+.cdet .clubdf-body .kb-team-tbl td .empty {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--text-low, #a8a298) !important;
+  opacity: 0.7;
+  position: relative;
+  padding-left: 16px;
+}
+.cdet .clubdf-body .kb-team-tbl td .empty::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-low, #a8a298);
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   CLUBS — GROUPED ROSTER (non-Powerball clubs: Cheer, Choir, etc.)
+   The .cp-rgroup blocks render groups like "Leadership", "Squad",
+   "Reserves". Previously rendered as a narrow centered card. Push
+   them to full width and give each row real table-row styling.
+   ═════════════════════════════════════════════════════════════════ */
+
+.cdet .clubdf-body .cp-roster-grouped > .cp-rgroup:not(:first-child),
+.cdet .clubdf-body .cp-roster > .cp-rgroup:not(:first-child) {
+  padding-top: 0 !important;
+  border-top: 3px solid var(--gold-bright, #f1cd72) !important;
+  margin-top: 0 !important;
+}
+
+.cdet .clubdf-body .cp-roster-grouped {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 22px !important;
+  width: 100% !important;
+}
+
+.cdet .clubdf-body .cp-rgroup {
+  width: 100% !important;
+  background: var(--paper-2) !important;
+  background-image: none !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-top: 3px solid var(--gold-bright, #f1cd72) !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.cdet .clubdf-body .cp-rgroup-hd {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 14px 22px !important;
+  margin: 0 !important;
+  background: rgba(255,255,255,0.02) !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+}
+
+.cdet .clubdf-body .cp-rgroup-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--gold-bright, #f1cd72) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+.cdet .clubdf-body .cp-rgroup-hd::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(212,168,74,0.25) 0%,
+    rgba(212,168,74,0.05) 70%,
+    transparent 100%
+  );
+  margin-left: 4px;
+}
+
+.cdet .clubdf-body .cp-rgroup-tbl {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+}
+.cdet .clubdf-body .cp-rgroup-tbl tr {
+  border-bottom: 1px solid var(--rule-soft);
+}
+.cdet .clubdf-body .cp-rgroup-tbl tr:last-child { border-bottom: 0 !important; }
+.cdet .clubdf-body .cp-rgroup-tbl tr:hover td {
+  background: rgba(255,255,255,0.025) !important;
+}
+
+.cdet .clubdf-body .cp-rgroup-pos {
+  width: 38% !important;
+  padding: 12px 22px !important;
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, #dcd6c8) !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+  vertical-align: middle !important;
+  white-space: nowrap;
+}
+
+.cdet .clubdf-body .cp-rgroup-char {
+  padding: 12px 22px !important;
+  font-family: var(--sans) !important;
+  font-size: 14.5px !important;
+  font-weight: 500 !important;
+  color: var(--text) !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+  vertical-align: middle !important;
+}
+
+.cdet .clubdf-body .cp-rgroup-char a,
+.cdet .clubdf-body .cp-rgroup-char a:visited {
+  font-family: var(--sans) !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(212,168,74,0.30);
+  transition: color .12s, border-color .12s;
+}
+.cdet .clubdf-body .cp-rgroup-char a:hover {
+  color: var(--gold-bright, #f1cd72) !important;
+  border-bottom-color: var(--gold-bright, #f1cd72) !important;
+}
+
+/* Empty-slot indicator inside grouped tables */
+.cdet .clubdf-body .cp-rgroup-char .empty {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--text-low, #a8a298) !important;
+  opacity: 0.7;
+  position: relative;
+  padding-left: 16px;
+}
+.cdet .clubdf-body .cp-rgroup-char .empty::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-low, #a8a298);
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+/* ── Flat roster table (clubs with no groups & no teams) ─────────── */
+.cdet .clubdf-body .cp-roster > table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  background: var(--paper-2) !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-top: 3px solid var(--gold-bright, #f1cd72) !important;
+}
+.cdet .clubdf-body .cp-roster > table thead tr th {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--gold-bright, #f1cd72) !important;
+  background: rgba(255,255,255,0.02) !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+  padding: 12px 22px !important;
+  text-align: left !important;
+}
+.cdet .clubdf-body .cp-roster > table tbody tr {
+  border-bottom: 1px solid var(--rule-soft);
+}
+.cdet .clubdf-body .cp-roster > table tbody tr:last-child { border-bottom: 0 !important; }
+.cdet .clubdf-body .cp-roster > table tbody tr:hover td {
+  background: rgba(255,255,255,0.025) !important;
+}
+.cdet .clubdf-body .cp-roster > table tbody tr td {
+  padding: 12px 22px !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+}
+.cdet .clubdf-body .cp-roster > table tbody tr td:first-child {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, #dcd6c8) !important;
+  width: 38%;
+  white-space: nowrap;
+}
+.cdet .clubdf-body .cp-roster > table tbody tr td a,
+.cdet .clubdf-body .cp-roster > table tbody tr td a:visited {
+  font-family: var(--sans) !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(212,168,74,0.30);
+}
+.cdet .clubdf-body .cp-roster > table tbody tr td a:hover {
+  color: var(--gold-bright, #f1cd72) !important;
+  border-bottom-color: var(--gold-bright, #f1cd72) !important;
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   CLUBS — LEAGUE STAFF section
+   Aligned card matching the team-roster & rgroup styling. Gold top
+   accent, mono group label header, fixed-layout 2-col table.
+   ═════════════════════════════════════════════════════════════════ */
+
+.cdet .clubdf-body .cp-staff-block {
+  width: 100% !important;
+  background: var(--paper-2) !important;
+  background-image: none !important;
+  border: 1px solid var(--rule-soft) !important;
+  border-top: 3px solid var(--gold-bright, #f1cd72) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin-top: 24px !important;
+  overflow: hidden !important;
+}
+
+.cdet .clubdf-body .cp-staff-tag {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--gold-bright, #f1cd72) !important;
+  background: rgba(255,255,255,0.02) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+  padding: 14px 22px !important;
+  margin: 0 !important;
+}
+.cdet .clubdf-body .cp-staff-tag::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(212,168,74,0.25) 0%,
+    rgba(212,168,74,0.05) 70%,
+    transparent 100%
+  );
+  margin-left: 4px;
+}
+.cdet .clubdf-body .cp-staff-tag i {
+  font-size: 13px !important;
+  color: var(--gold-bright, #f1cd72) !important;
+}
+
+.cdet .clubdf-body .cp-staff-tbl,
+.cdet .clubdf-body .cp-staff-block table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+  margin: 0 !important;
+}
+.cdet .clubdf-body .cp-staff-tbl tr,
+.cdet .clubdf-body .cp-staff-block table tr {
+  border-bottom: 1px solid var(--rule-soft);
+}
+.cdet .clubdf-body .cp-staff-tbl tr:last-child,
+.cdet .clubdf-body .cp-staff-block table tr:last-child {
+  border-bottom: 0 !important;
+}
+.cdet .clubdf-body .cp-staff-tbl tr:hover td,
+.cdet .clubdf-body .cp-staff-block table tr:hover td {
+  background: rgba(255,255,255,0.025) !important;
+}
+.cdet .clubdf-body .cp-staff-pos,
+.cdet .clubdf-body .cp-staff-block table tr td:first-child {
+  width: 38% !important;
+  padding: 12px 22px !important;
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--text-mid, #dcd6c8) !important;
+  background: transparent !important;
+  border-bottom: 0 !important;
+  vertical-align: middle !important;
+  white-space: nowrap;
+}
+.cdet .clubdf-body .cp-staff-char,
+.cdet .clubdf-body .cp-staff-block table tr td:last-child {
+  padding: 12px 22px !important;
+  font-family: var(--sans) !important;
+  font-size: 14.5px !important;
+  font-weight: 500 !important;
+  color: var(--text) !important;
+  background: transparent !important;
+  border-bottom: 0 !important;
+  vertical-align: middle !important;
+}
+.cdet .clubdf-body .cp-staff-char a,
+.cdet .clubdf-body .cp-staff-char a:visited,
+.cdet .clubdf-body .cp-staff-block table td a,
+.cdet .clubdf-body .cp-staff-block table td a:visited {
+  font-family: var(--sans) !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(212,168,74,0.30);
+  transition: color .12s, border-color .12s;
+}
+.cdet .clubdf-body .cp-staff-char a:hover,
+.cdet .clubdf-body .cp-staff-block table td a:hover {
+  color: var(--gold-bright, #f1cd72) !important;
+  border-bottom-color: var(--gold-bright, #f1cd72) !important;
+}
+.cdet .clubdf-body .cp-staff-char .empty,
+.cdet .clubdf-body .cp-staff-block table td .empty {
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--text-low, #a8a298) !important;
+  opacity: 0.7;
+  position: relative;
+  padding-left: 16px;
+}
+.cdet .clubdf-body .cp-staff-char .empty::before,
+.cdet .clubdf-body .cp-staff-block table td .empty::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-low, #a8a298);
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   CAMPUS MAP — RESIDENCE SECTIONS (uniform with other districts)
+   Each house renders as a quiet section divider (display name +
+   virtue meta + count) atop the standard MapLocList. House identity
+   is carried entirely by the colored top stripe + ::before count
+   chip — no crest, no big article chrome.
+   ═════════════════════════════════════════════════════════════════ */
+
+.map-page .map-residence {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 36px !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.map-page .map-residence .map-house {
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 3px solid var(--h-color, var(--gold-bright)) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+
+.map-page .map-house-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  padding: 14px 0 16px !important;
+  margin: 0 0 8px !important;
+  border-bottom: 1px solid var(--rule-soft) !important;
+  background: transparent !important;
+}
+.map-page .map-house-hd-l {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.map-page .map-house-hd-name {
+  font-family: var(--comic, var(--display));
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--h-color, var(--text));
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.20);
+}
+.map-page .map-house-hd-virtue {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mid, #dcd6c8);
+}
+.map-page .map-house-hd-count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-low, #a8a298);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.map-page .map-house-hd-count b {
+  font-family: var(--display, var(--mono));
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--h-color, var(--text));
+  line-height: 1;
+}
+
+.map-page .map-house-communal .map-house-blurb {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-mid, #dcd6c8);
+  margin: 0 0 16px;
+  max-width: 80ch;
+  text-wrap: pretty;
+  padding: 0;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* Disable any inherited lore-house decorations that might leak in */
+.map-page .map-house::before,
+.map-page .map-house::after,
+.map-page .map-house-hd::before,
+.map-page .map-house-hd::after {
+  content: none !important;
+  display: none !important;
+}
+
+@media (max-width: 720px) {
+  .map-page .map-residence { gap: 28px !important; }
+  .map-page .map-house-hd { flex-wrap: wrap; gap: 10px !important; padding: 12px 0 !important; }
+  .map-page .map-house-hd-name { font-size: 26px; }
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   CAMPUS MAP — SEARCH BAR
+   Sticky search header above the district shell. Mono input on
+   paper-2 with gold focus state, FA magnifying-glass icon, clear
+   button, live match count.
+   ═════════════════════════════════════════════════════════════════ */
+
+.map-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 16px 32px 0;
+  background: transparent;
+}
+@media (max-width: 960px) {
+  .map-search-bar { padding: 12px 20px 0; gap: 12px; }
+}
+
+.map-search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 360px;
+  min-width: 0;
+  max-width: 520px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule-soft);
+  transition: border-color .15s, background .15s;
+}
+.map-search-input-wrap:focus-within {
+  border-color: var(--gold-bright, #f1cd72);
+  background: rgba(212,168,74,0.06);
+}
+.map-search-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 14px;
+  color: var(--text-mid, #dcd6c8);
+  pointer-events: none;
+}
+.map-search-input-wrap:focus-within .map-search-icon {
+  color: var(--gold-bright, #f1cd72);
+}
+
+.map-search-input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  padding: 12px 14px 12px 42px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--text);
+  caret-color: var(--gold-bright, #f1cd72);
+}
+.map-search-input::placeholder {
+  color: var(--text-low, #a8a298);
+  font-style: italic;
+}
+.map-search-input:focus { outline: 0; }
+
+.map-search-clear {
+  background: transparent;
+  border: 0;
+  color: var(--text-mid, #dcd6c8);
+  padding: 0 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color .12s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.map-search-clear:hover { color: var(--gold-bright, #f1cd72); }
+
+.map-search-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-low, #a8a298);
+  white-space: nowrap;
+}
+.map-search-count b {
+  font-family: var(--display, var(--mono));
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0;
+  color: var(--gold-bright, #f1cd72);
+  margin-right: 4px;
+}
+
+/* TOC dimming + count when search is active */
+.map-page .lore-toc-item.is-dim .lore-toc-btn {
+  opacity: 0.42;
+  cursor: default;
+}
+.map-page .lore-toc-item.is-dim .lore-toc-btn:hover { opacity: 0.55; }
+.lore-toc-count {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--gold-bright, #f1cd72);
+  background: rgba(212,168,74,0.10);
+  border: 1px solid rgba(212,168,74,0.35);
+  padding: 1px 6px;
+  min-width: 22px;
+  text-align: center;
+}
+.map-page .lore-toc-item.is-dim .lore-toc-count {
+  color: var(--text-low, #a8a298);
+  background: transparent;
+  border-color: var(--rule-soft);
+}
+
+/* Search results view */
+.map-search-results .map-district-head .lore-eyebrow {
+  color: var(--gold-bright, #f1cd72) !important;
+}
+.map-search-results .map-district-head .lore-eyebrow i {
+  margin-right: 8px;
+  font-size: 11px;
+}
+
+.map-search-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.map-search-group { display: flex; flex-direction: column; gap: 0; }
+.map-search-group-hd {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 0 12px;
+  margin: 0 0 8px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.map-search-group-name {
+  font-family: var(--comic, var(--display));
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.map-search-group-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--gold-bright, #f1cd72);
+  background: rgba(212,168,74,0.10);
+  border: 1px solid rgba(212,168,74,0.35);
+  padding: 3px 10px;
+}
+
+/* Empty state */
+.map-search-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 64px 24px;
+  text-align: center;
+  background: var(--paper-2);
+  border: 1px solid var(--rule-soft);
+  border-top: 2px solid var(--gold-bright, #f1cd72);
+}
+.map-search-empty-icon {
+  font-size: 32px;
+  color: var(--text-low, #a8a298);
+}
+.map-search-empty-label {
+  font-family: var(--comic, var(--display));
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.map-search-empty-sub {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--text-mid, #dcd6c8);
+  max-width: 56ch;
+}
+.map-search-empty-btn {
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #1a1a1f;
+  background: var(--gold-bright, #f1cd72);
+  border: 1px solid rgba(0,0,0,0.20);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.30);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s;
+}
+.map-search-empty-btn:hover {
+  transform: translate(-1px,-1px);
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.30);
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   CURRICULUM — CINEMATIC FOOTNOTE (redesign)
+   Dark panel · stamped eyebrow · three-line crescendo where the
+   final line lands as the loudest visual (red display, oversized,
+   underscored). No yellow text containers.
+   ═════════════════════════════════════════════════════════════════ */
+
+.curr-finenote,
+.curr.lore-shell .curr-finenote {
+  position: relative !important;
+  display: block !important;
+  margin: 56px 0 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  max-width: none !important;
+  font-style: normal !important;
+  overflow: visible !important;
+}
+
+.curr-finenote-inner {
+  position: relative;
+  background: #0a0a0e;
+  color: #f1ede4;
+  padding: 56px 64px 60px;
+  border: 1px solid var(--rule-soft);
+  border-left: 4px solid var(--red, #c41a1a);
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Halftone dots — top right, red */
+.curr-finenote-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(196, 26, 26, 0.55) 1.5px, transparent 2px);
+  background-size: 14px 14px;
+  background-position: right -6px top -6px;
+  -webkit-mask-image: linear-gradient(225deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 45%, transparent 70%);
+          mask-image: linear-gradient(225deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 45%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Faint vertical scan lines for extra texture */
+.curr-finenote-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,0.025) 0 1px,
+    transparent 1px 48px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Stamped eyebrow */
+.curr-finenote-stamp {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-bright, #f1cd72);
+  background: transparent;
+  padding: 5px 10px;
+  border: 1px solid var(--gold-bright, #f1cd72);
+  box-shadow: none;
+  margin: 0 0 36px;
+  transform: rotate(-1deg);
+}
+.curr-finenote-stamp i {
+  font-size: 12px;
+  color: var(--gold-bright, #f1cd72);
+}
+
+/* Three lines — escalating size, descending opacity, finishing in red */
+.curr-finenote-line {
+  position: relative;
+  z-index: 1;
+  font-family: var(--comic, var(--display));
+  font-weight: 400 !important;
+  font-style: normal !important;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin: 0 0 18px;
+  text-wrap: balance;
+  max-width: 22ch;
+}
+.curr-finenote-l1 {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1;
+  color: rgba(255,255,255,0.95);
+}
+.curr-finenote-l2 {
+  font-size: clamp(24px, 3.2vw, 36px);
+  line-height: 1.05;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 32px;
+}
+.curr-finenote-l2 br { display: inline; }
+
+/* The punchline — red display, large, with a yellow underline stroke
+   for a stamped-in feeling. No background fill. */
+.curr-finenote-hit {
+  position: relative;
+  z-index: 1;
+  display: inline-block !important;
+  font-family: var(--comic, var(--display)) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-size: clamp(26px, 3.6vw, 44px) !important;
+  line-height: 1.04;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  color: var(--red-bright, #ff2a32) !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  text-wrap: balance;
+  max-width: 32ch;
+  text-shadow:
+    2px 2px 0 rgba(0,0,0,0.55),
+    4px 4px 0 rgba(0,0,0,0.20);
+}
+/* Yellow underscore stroke, hand-drawn feel */
+.curr-finenote-hit::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--gold-bright, #f1cd72) 0%,
+    var(--gold-bright, #f1cd72) 88%,
+    transparent 100%
+  );
+  transform: skewX(-12deg);
+  opacity: 0.95;
+}
+
+/* The hit-mark "!" badge — repositioned beside the punchline */
+.curr-finenote-hit-mark {
+  position: absolute;
+  top: -8px;
+  right: -32px;
+  width: 38px;
+  height: 38px;
+  background: var(--red, #c41a1a);
+  border: 2px solid #1a1a1f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(8deg);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.45);
+  z-index: 2;
+}
+.curr-finenote-hit-mark::before {
+  content: "!";
+  font-family: var(--display);
+  font-weight: 700;
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+}
+
+@media (max-width: 720px) {
+  .curr-finenote-inner { padding: 36px 24px 40px; }
+  .curr-finenote-stamp { margin-bottom: 24px; }
+  .curr-finenote-l1 { font-size: 30px; }
+  .curr-finenote-l2 { font-size: 22px; margin-bottom: 24px; }
+  .curr-finenote-hit { font-size: 26px !important; }
+  .curr-finenote-line { max-width: none; }
+  .curr-finenote-l2 br,
+  .curr-finenote-hit br { display: none; }
+  .curr-finenote-hit-mark { right: -10px; top: -16px; }
+}

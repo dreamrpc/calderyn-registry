@@ -483,77 +483,64 @@ function CurriculumView(){
   });
 
   return (
-    <div className="curr">
-      {/* Year tabs — clean strip */}
-      <div className="curr-yeartabs" role="tablist" aria-label="Choose a year">
-        {YEAR_TABS.map(yt => (
-          <button
-            key={yt.idx}
-            type="button"
-            role="tab"
-            aria-selected={yt.idx === yearIdx}
-            className={"curr-yeartab" + (yt.idx === yearIdx ? " on" : "")}
-            onClick={() => setYearIdx(yt.idx)}
-          >
-            <span className="curr-yeartab-num">YR {yt.idx+1}</span>
-            <span className="curr-yeartab-label">{yt.label}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Year head — single condensed band */}
-      <header className="curr-yearhead">
-        <div className="curr-yearhead-eyebrow">Year {yearIdx+1} · {YEAR_TABS[yearIdx].label}</div>
-        <h3 className="curr-yearhead-title">
-          {heroYr?.t && sidekickYr?.t && heroYr.t === sidekickYr.t
-            ? heroYr.t
-            : <>The {YEAR_TABS[yearIdx].label.toLowerCase()} year</>}
-        </h3>
-        {(heroYr?.d || sidekickYr?.d) && (
-          <div className="curr-yearhead-tracks">
-            {heroYr?.d && <p className="curr-yearhead-line"><span className="curr-yearhead-tag t-hero">Heroes</span> {heroYr.d}</p>}
-            {sidekickYr?.d && <p className="curr-yearhead-line"><span className="curr-yearhead-tag t-sidekick">Sidekicks</span> {sidekickYr.d}</p>}
-          </div>
-        )}
-      </header>
-
-      {/* Toolbar — counts + track filter */}
-      <div className="curr-toolbar">
-        <div className="curr-counts">
-          <strong>{allSubs.length}</strong> classes
-          <span className="curr-counts-sep">·</span>
-          <strong>{requiredCount}</strong> required
-          <span className="curr-counts-sep">·</span>
-          <strong>{electiveCount}</strong> elective{electiveCount === 1 ? "" : "s"}
+    <div className="curr lore-shell">
+      <aside className="lore-toc">
+        <div className="lore-toc-inner">
+          <div className="lore-toc-stamp">CURRICULUM · YEARS</div>
+          <ol className="lore-toc-list">
+            {YEAR_TABS.map(yt => (
+              <li key={yt.idx} className={"lore-toc-item" + (yt.idx === yearIdx ? " on" : "")}>
+                <button
+                  type="button"
+                  className="lore-toc-btn"
+                  onClick={() => setYearIdx(yt.idx)}
+                  aria-current={yt.idx === yearIdx ? "page" : undefined}
+                >
+                  <span className="lore-toc-n">{String(yt.idx + 1).padStart(2, "0")}</span>
+                  <span className="lore-toc-label">{yt.label}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
         </div>
-        <div className="curr-filter">
-          {[
-            ["all", "All"],
-            ["hero", "Heroes"],
-            ["sidekick", "Sidekicks"],
-            ["shared", "Shared"],
-          ].map(([id, lbl]) => (
-            <button
-              key={id}
-              type="button"
-              className={"curr-filter-pill" + (filter === id ? " on" : "")}
-              onClick={() => setFilter(id)}
-            >{lbl}</button>
-          ))}
+      </aside>
+      <main className="lore-main">
+
+        <header className="curr-yearhead">
+          <div className="curr-yearhead-eyebrow">Year {yearIdx+1} · {YEAR_TABS[yearIdx].label}</div>
+          <h3 className="curr-yearhead-title">
+            What the {YEAR_TABS[yearIdx].label.toLowerCase()} year actually looks like.
+          </h3>
+        </header>
+
+        <div className="curr-summary">
+          <article className="curr-track curr-track-hero">
+            <div className="curr-track-hd">
+              <span className="curr-track-tag">Track One · Heroes</span>
+              <h4 className="curr-track-name">{heroYr?.t || "—"}</h4>
+            </div>
+            {heroYr?.d && <p className="curr-track-desc">{heroYr.d}</p>}
+            {heroTrack?.stamps && (
+              <div className="curr-track-stamps">
+                {heroTrack.stamps.map(s => <span key={s} className="curr-stamp">{s}</span>)}
+              </div>
+            )}
+          </article>
+
+          <article className="curr-track curr-track-side">
+            <div className="curr-track-hd">
+              <span className="curr-track-tag">Track Two · Sidekicks</span>
+              <h4 className="curr-track-name">{sidekickYr?.t || "—"}</h4>
+            </div>
+            {sidekickYr?.d && <p className="curr-track-desc">{sidekickYr.d}</p>}
+            {sidekickTrack?.stamps && (
+              <div className="curr-track-stamps">
+                {sidekickTrack.stamps.map(s => <span key={s} className="curr-stamp">{s}</span>)}
+              </div>
+            )}
+          </article>
         </div>
-      </div>
-
-      {/* Unified class list */}
-      <ul className="curr-list">
-        {filtered.length === 0 ? (
-          <li className="curr-row-empty">— No classes match this filter —</li>
-        ) : filtered.map((s, i) => <ClassRow key={i} subject={s} />)}
-      </ul>
-
-      {/* Quiet footnote */}
-      <p className="curr-finenote">
-        Both tracks serve the machine. Both tracks break you down and rebuild you as something useful. <span className="curr-finenote-hit">By the time you realise you're complicit, you're already too deep to walk away.</span>
-      </p>
+      </main>
     </div>
   );
 }
@@ -875,6 +862,169 @@ function PowersTab(){
 /* ═══════════════════════════════════════════════════════════════════════════
    STUDENTS
 ═══════════════════════════════════════════════════════════════════════════ */
+function StudentRosterFull(){
+  // Normalize power-signature separators so the column reads consistently:
+  // commas, em-dashes, en-dashes, semicolons, and " & " all collapse to " · ".
+  // Then Title-Case each segment so casing is uniform across rows.
+  const SMALL_WORDS = new Set(["a","an","and","as","at","but","by","for","in","of","on","or","the","to","via","with","vs","v"]);
+  const titleSegment = (seg) => {
+    const words = seg.trim().split(/\s+/);
+    return words.map((w, i) => {
+      // Preserve all-caps acronyms (3+ letters all uppercase) and hyphenated forms
+      if (/^[A-Z0-9]{2,}$/.test(w)) return w;
+      const parts = w.split("-").map((p, pi) => {
+        const low = p.toLowerCase();
+        if (i > 0 && pi === 0 && SMALL_WORDS.has(low)) return low;
+        return low.charAt(0).toUpperCase() + low.slice(1);
+      });
+      return parts.join("-");
+    }).join(" ");
+  };
+  const normalizePower = (s) => {
+    if (!s) return s;
+    const collapsed = s
+      .replace(/\s*[—–]\s*/g, " · ")
+      .replace(/\s+-\s+/g, " · ")
+      .replace(/\s*,\s*&\s*/g, " · ")
+      .replace(/\s+&\s+/g, " · ")
+      .replace(/\s*,\s*/g, " · ")
+      .replace(/\s*;\s*/g, " · ")
+      .replace(/\s*·\s*·\s*/g, " · ")
+      .replace(/\s+/g, " ")
+      .trim();
+    return collapsed.split(" · ").map(titleSegment).join(" · ");
+  };
+
+  const [q, setQ] = useState("");
+  const [house, setHouse] = useState("all");
+  const [tier, setTier]   = useState("all");
+  const [track, setTrack] = useState("all");
+
+  const filtered = useMemo(() => {
+    const ql = q.trim().toLowerCase();
+    return STUDENTS.filter(s => {
+      if (house !== "all" && (s.house || "").toLowerCase() !== house) return false;
+      if (track !== "all" && (s.track || "").toLowerCase() !== track) return false;
+      if (tier !== "all") {
+        const t = (s.tier || "").toUpperCase();
+        const letter = t[0] || "";
+        if (letter !== tier) return false;
+      }
+      if (ql) {
+        const hay = [s.char, s.alias, s.power, s.house, s.year, s.track].filter(Boolean).join(" ").toLowerCase();
+        if (!hay.includes(ql)) return false;
+      }
+      return true;
+    }).sort((a, b) => (a.char || "").split(" ").pop().localeCompare((b.char || "").split(" ").pop()));
+  }, [q, house, tier, track]);
+
+  const Pill = ({active, onClick, children}) => (
+    <button
+      type="button"
+      className={"sf-pill" + (active ? " on" : "")}
+      onClick={onClick}
+      aria-pressed={active}
+    >{children}</button>
+  );
+
+  return (
+    <div>
+      <div className="sfilter" role="search">
+        <div className="sfilter-search">
+          <span className="sfilter-search-icon" aria-hidden="true">⌕</span>
+          <input
+            type="text"
+            className="sfilter-input"
+            placeholder="Search by name, alias, or power…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            aria-label="Search students"
+          />
+          {q && (
+            <button type="button" className="sfilter-clear" onClick={() => setQ("")} aria-label="Clear search">×</button>
+          )}
+        </div>
+
+        <div className="sfilter-group">
+          <span className="sfilter-lbl">House</span>
+          <Pill active={house === "all"}     onClick={() => setHouse("all")}>All</Pill>
+          <Pill active={house === "valaris"} onClick={() => setHouse("valaris")}>Valaris</Pill>
+          <Pill active={house === "orenne"}  onClick={() => setHouse("orenne")}>Orenne</Pill>
+          <Pill active={house === "saberis"} onClick={() => setHouse("saberis")}>Saberis</Pill>
+          <Pill active={house === "grimere"} onClick={() => setHouse("grimere")}>Grimere</Pill>
+        </div>
+
+        <div className="sfilter-group">
+          <span className="sfilter-lbl">Tier</span>
+          <Pill active={tier === "all"} onClick={() => setTier("all")}>All</Pill>
+          <Pill active={tier === "A"}   onClick={() => setTier("A")}>A</Pill>
+          <Pill active={tier === "B"}   onClick={() => setTier("B")}>B</Pill>
+          <Pill active={tier === "C"}   onClick={() => setTier("C")}>C</Pill>
+          <Pill active={tier === "D"}   onClick={() => setTier("D")}>D</Pill>
+        </div>
+
+        <div className="sfilter-group">
+          <span className="sfilter-lbl">Track</span>
+          <Pill active={track === "all"}      onClick={() => setTrack("all")}>All</Pill>
+          <Pill active={track === "hero"}     onClick={() => setTrack("hero")}>Hero</Pill>
+          <Pill active={track === "sidekick"} onClick={() => setTrack("sidekick")}>Sidekick</Pill>
+        </div>
+
+        <div className="sfilter-count">{filtered.length} entr{filtered.length === 1 ? "y" : "ies"}</div>
+      </div>
+
+      <div className="tw">
+        <table>
+          <thead><tr>
+            <th className="rn">#</th>
+            <th>Character</th>
+            <th>Stage Name</th>
+            <th>House</th>
+            <th>Year</th>
+            <th>Track</th>
+            <th>Power / Ability</th>
+            <th>Tier</th>
+          </tr></thead>
+          <tbody>
+            {filtered.length === 0 && (
+              <tr>
+                <td colSpan={8} style={{padding:"60px 16px", textAlign:"center"}}>
+                  <div className="empty-state-block">
+                    <EmptyState label="No characters match these filters"/>
+                    <button type="button" className="empty-cta" onClick={() => {setQ(""); setHouse("all"); setTier("all"); setTrack("all");}}>Reset filters</button>
+                  </div>
+                </td>
+              </tr>
+            )}
+            {filtered.map((s, i) => {
+              const houseCol = s.house ? HC_PRIMARY[s.house.toLowerCase()] : null;
+              const trackLbl = (s.track || "").toLowerCase() === "hero" ? "Hero"
+                              : (s.track || "").toLowerCase() === "sidekick" ? "Sidekick"
+                              : "—";
+              return (
+                <tr key={i} className="student-row" style={houseCol ? {boxShadow:`inset 4px 0 0 ${houseCol}`} : null}>
+                  <td className="rn">{i+1}</td>
+                  <td><CLink name={s.char} link={s.link}/></td>
+                  <td><span className="stage-name">{s.alias}</span></td>
+                  <td><HouseTag house={s.house}/></td>
+                  <td style={{textTransform:"capitalize", fontSize:13, color:"var(--muted)", fontStyle:"italic"}}>{s.year}</td>
+                  <td>
+                    <span className={"track-tag track-tag-" + ((s.track || "").toLowerCase() === "hero" ? "hero" : "sidekick")}>{trackLbl}</span>
+                  </td>
+                  <td style={{fontSize:13}}>{normalizePower(s.power)}</td>
+                  <td>
+                    <span className="tier-pill" style={{background:TIER_C[s.tier] || "#555"}}>{s.tier}</span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 function StudentRoster({track}){
   const list = useMemo(() => {
     const arr = STUDENTS.filter(s => (s.track || "").toLowerCase() === track);
@@ -931,10 +1081,11 @@ function StudentRoster({track}){
 
 function StudentsTab(){
   const ctx = React.useContext(RegContext);
-  const [view, setView] = useState("heroes");
+  const [view, setView] = useState("roster");
   useEffect(() => {
-    if (ctx.targetSubview && ["heroes","sidekicks","govt"].includes(ctx.targetSubview)){
-      setView(ctx.targetSubview);
+    if (ctx.targetSubview) {
+      if (ctx.targetSubview === "govt") setView("govt");
+      else if (["heroes","sidekicks","roster"].includes(ctx.targetSubview)) setView("roster");
       ctx.consumeSubview();
     }
   }, [ctx]);
@@ -943,16 +1094,15 @@ function StudentsTab(){
       <PageHead
         stamp="DOC · 04 · STUDENTS"
         title={<>Student registry</>}
-        body="All enrolled students, sorted by curriculum track. Click any character name to visit their profile."
+        body="Every powered student currently enrolled. Filter by house, tier, or track — search anything. Click any character name to visit their profile."
         note={<>No cap on student numbers<br/>New characters always welcome</>}
         pageNum="P. 004 / VIII"
       />
       <div className="subnav">
         <div className="subnav-inner">
           {[
-            ["heroes",    "Heroes",          "Track One"],
-            ["sidekicks", "Sidekicks",       "Track Two"],
-            ["govt",      "Student Govt.",   "Elected & appointed"],
+            ["roster", "Roster",           "All students · filter & search"],
+            ["govt",   "Student Govt.",    "Elected & appointed"],
           ].map(([id, lbl, sub]) => (
             <button
               key={id}
@@ -966,9 +1116,8 @@ function StudentsTab(){
           ))}
         </div>
       </div>
-      {view === "heroes"    && <StudentRoster track="hero"/>}
-      {view === "sidekicks" && <StudentRoster track="sidekick"/>}
-      {view === "govt"      && <StudentGovInner/>}
+      {view === "roster" && <StudentRosterFull/>}
+      {view === "govt"   && <StudentGovInner/>}
     </div>
   );
 }
@@ -1242,26 +1391,107 @@ function HousesTab(){
         note={<>Public record · IC-visible<br/>Plot-locked content lives elsewhere</>}
         pageNum="P. 002 / VIII"
       />
-      <div className="subnav house-subnav">
-        <div className="subnav-inner">
-          {LORE_TABS.map(t => (
-            <button
-              key={t.id}
-              className={"subnav-btn house-subnav-btn" + (view === t.id ? " on" : "")}
-              onClick={() => setView(t.id)}
-              aria-pressed={view === t.id}
-            >
-              {t.label}
+      <div className="lore-shell">
+        <aside className="lore-toc">
+          <div className="lore-toc-inner">
+            <div className="lore-toc-stamp">CONTENTS</div>
+            <ol className="lore-toc-list">
+              {LORE_TABS.map((t, i) => (
+                <li key={t.id} className={"lore-toc-item" + (view === t.id ? " on" : "")}>
+                  <button
+                    type="button"
+                    className="lore-toc-btn"
+                    onClick={() => { setView(t.id); window.scrollTo({top: 0, behavior: 'instant'}); }}
+                    aria-current={view === t.id ? "page" : undefined}
+                  >
+                    <span className="lore-toc-n">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="lore-toc-label">{t.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </aside>
+        <main className="lore-main">
+          {view === "world" && <LoreWorld/>}
+          {view === "history" && <LoreHistory/>}
+          {view === "vanguard" && <LoreVanguard/>}
+          {view === "houses" && <LoreHouses/>}
+          {view === "dean" && <LoreDean/>}
+          {view === "incidents" && <LoreIncidents/>}
+        </main>
+      </div>
+    </div>
+  );
+}
+
+function LoreStart({onJump}){
+  const houses = D.houses;
+  const READ_ORDER = [
+    { id: "world",     n: "01", title: "The World",            blurb: "How supes went public. STRATA. The Convention. 2026." },
+    { id: "history",   n: "02", title: "The Programme",        blurb: "Sixty years of preparation. Project Cradle. The pipeline." },
+    { id: "vanguard",  n: "03", title: "The Vanguard",         blurb: "Paragon, Vigil, Aegis, Switchboard. The four." },
+    { id: "houses",    n: "04", title: "The Houses",           blurb: "Valaris, Orenne, Saberis, Grimere. Pick yours." },
+    { id: "dean",      n: "05", title: "The Dean",             blurb: "Dr. Devika Ravindrakumar. Fifteen metres. The line." },
+    { id: "incidents", n: "06", title: "Cassandra",            blurb: "Feb 2024. The press cycle no one survived." },
+  ];
+
+  return (
+    <div className="lore lore-start">
+      <section className="lore-block lore-start-grid">
+        <div className="ls-col ls-col-read">
+          <div className="lore-eyebrow">Six pages, in order &middot; click any to read</div>
+          <h3 className="lore-h">Read in <span className="accent">order.</span></h3>
+          <ol className="ls-read">
+            {READ_ORDER.map(r => (
+              <li key={r.id}>
+                <button className="ls-read-item" onClick={() => onJump(r.id)}>
+                  <span className="ls-read-n">{r.n}</span>
+                  <span className="ls-read-text">
+                    <strong>{r.title}</strong>
+                    <em>{r.blurb}</em>
+                  </span>
+                  <span className="ls-read-go">&rarr;</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div className="ls-col ls-col-pitch">
+          <div className="lore-eyebrow">If you have 30 seconds</div>
+          <h3 className="lore-h">The <span className="accent">pitch.</span></h3>
+          <p className="ls-pitch">
+            It is 2026. About two thousand registered superhumans live in the UK, owned in one sense or another by <strong>STRATA International</strong>. The four most famous are the <strong>Vanguard</strong>. Most came out of <strong>Calderyn College</strong> in Greenwich. You&rsquo;re about to play a student, a faculty member, or someone in the world around the school. Everyone is in the registry. That&rsquo;s the room.
+          </p>
+
+          <div className="lore-eyebrow" style={{marginTop:"24px"}}>Glossary &middot; the essentials</div>
+          <dl className="ls-gloss">
+            <div><dt>STRATA</dt><dd>UK&rsquo;s chartered authority over powered citizens. Owns the contracts.</dd></div>
+            <div><dt>Vanguard</dt><dd>The capped four-person flagship unit. Household names.</dd></div>
+            <div><dt>Cradle</dt><dd>A generation of supes. Cradle I (1968) &middot; II (1988) &middot; III (2008 &mdash; current students).</dd></div>
+            <div><dt>A&ndash;D List</dt><dd>STRATA&rsquo;s tier rating. A is primetime; D is regional. Locked in sophomore year.</dd></div>
+            <div><dt>Heroes / Sidekicks</dt><dd>The two academic tracks. Camera-facing weapon class vs partnered support class.</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section className="lore-block">
+        <div className="lore-eyebrow">Pick a house &middot; quick look</div>
+        <h3 className="lore-h">Four houses, four <span className="accent">virtues.</span></h3>
+        <div className="ls-houses">
+          {houses.map(h => (
+            <button key={h.id} className="ls-house" onClick={() => onJump("houses")} style={{"--hc": h.bg}}>
+              <img src={h.crest} alt={h.name + " crest"} loading="lazy"/>
+              <div className="ls-house-text">
+                <div className="ls-house-virtue">House of {h.virtue}</div>
+                <div className="ls-house-name">{h.name}</div>
+                <div className="ls-house-motto">&ldquo;{h.motto}&rdquo;</div>
+              </div>
             </button>
           ))}
         </div>
-      </div>
-      {view === "world" && <LoreWorld/>}
-      {view === "history" && <LoreHistory/>}
-      {view === "vanguard" && <LoreVanguard/>}
-      {view === "houses" && <LoreHouses/>}
-      {view === "dean" && <LoreDean/>}
-      {view === "incidents" && <LoreIncidents/>}
+      </section>
     </div>
   );
 }
@@ -2521,56 +2751,6 @@ function ClubRules({rules}){
   return (
     <div className="kbr">
       <div className="kbr-section">
-        <div className="kbr-section-tag">Overview</div>
-        <div className="kbr-body">
-          <p className="kbr-summary">{rules.summary}</p>
-
-          <div className="kbr-keypoints">
-            <div className="kbr-keypoint">
-              <div className="kbr-keypoint-num">4s</div>
-              <div className="kbr-keypoint-body">
-                <div className="kbr-keypoint-lbl">The Pass Clock</div>
-                <p>Catching the ball freezes you in place. Four seconds to release a pass, or possession drops.</p>
-              </div>
-            </div>
-            <div className="kbr-keypoint">
-              <div className="kbr-keypoint-num">∞</div>
-              <div className="kbr-keypoint-body">
-                <div className="kbr-keypoint-lbl">The Ball</div>
-                <p>Indestructible engineered composite. No registered power can vaporise, fracture, melt, or deform it. Only move it.</p>
-              </div>
-            </div>
-            <div className="kbr-keypoint">
-              <div className="kbr-keypoint-num">6v6</div>
-              <div className="kbr-keypoint-body">
-                <div className="kbr-keypoint-lbl">Three Elevations</div>
-                <p>Ground, mid-tier (~10ft), upper-tier (~20ft) platforms connected by ramps, beams, and drop points.</p>
-              </div>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="kbr-arena-tile"
-            onClick={() => setLightbox(true)}
-            aria-label="Open arena diagram in fullscreen"
-          >
-            <img
-              className="kbr-arena-tile-img"
-              src="https://files.catbox.moe/h3hq2p.png"
-              alt=""
-              loading="lazy"
-            />
-            <div className="kbr-arena-tile-body">
-              <div className="kbr-arena-tile-eyebrow">Arena Diagram</div>
-              <div className="kbr-arena-tile-title">View the Powerball arena</div>
-              <div className="kbr-arena-tile-meta">Six-on-six · Three elevations · Annotated zones</div>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <div className="kbr-section">
         <div className="kbr-section-tag">Roles</div>
         <div className="kbr-body">
           <ol className="kbr-roles">
@@ -2631,7 +2811,7 @@ function ClubRules({rules}){
             className="kbr-lightbox-close"
             onClick={(e) => { e.stopPropagation(); setLightbox(false); }}
             aria-label="Close arena diagram"
-          ><span className="ico" aria-hidden="true">×</span></button>
+          ><i className="fa-solid fa-xmark" aria-hidden="true"></i></button>
           <img
             className="kbr-lightbox-img"
             src="https://files.catbox.moe/h3hq2p.png"
@@ -2639,7 +2819,7 @@ function ClubRules({rules}){
             onClick={(e) => e.stopPropagation()}
           />
           <div className="kbr-lightbox-hint">
-            <span className="ico" aria-hidden="true">ⓘ</span> Click anywhere outside the image or press <kbd>Esc</kbd> to close
+            <i className="fa-solid fa-circle-info" aria-hidden="true"></i> Click anywhere outside the image or press <kbd>Esc</kbd> to close
           </div>
         </div>
       )}
@@ -2720,91 +2900,195 @@ function ClubModal({club, onClose}){
 }
 
 function ClubsTab(){
-  const [filter, setFilter] = useState("All");
-  const [openIdx, setOpenIdx] = useState(null);
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const [tab, setTab] = useState("about");
 
-  const categories = useMemo(() => {
-    const cats = ["All"];
-    CLUBS.forEach(c => {
-      if (c.category && !cats.includes(c.category)) cats.push(c.category);
-    });
-    return cats;
-  }, []);
+  // Reset to About whenever the user picks a different club.
+  useEffect(() => { setTab("about"); }, [selectedIdx]);
 
-  const visible = useMemo(() => {
-    if (filter === "All") return CLUBS.map((c, i) => ({c, i}));
-    return CLUBS.map((c, i) => c.category === filter ? {c, i} : null).filter(Boolean);
-  }, [filter]);
-
-  const open = openIdx !== null ? CLUBS[openIdx] : null;
+  const club = CLUBS[selectedIdx];
+  const hasRules = !!(club && club.rules);
+  const hasTeams = !!(club && club.teams && club.teams.length);
+  const total = club ? clubTotal(club) : 0;
+  const filled = club ? clubFilled(club) : 0;
+  const accent = (club && club.bg) || "#c41a1a";
 
   return (
     <div>
       <PageHead
         stamp="DOC · 05 · CAMPUS ORGS"
         title={<>Clubs &amp; societies</>}
-        body="Six campus clubs. Pick one to view its full roster, rules, and post-graduation pathway. Leadership is one role per player. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval."
+        body="Six campus clubs. Pick one from the directory to view its full roster, rules, and post-graduation pathway. Leadership is one role per player. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval."
         pageNum="P. 005 / VIII"
       />
-      <div className="club-filters-band">
-        <span className="club-filters-label">Filter by</span>
-        <div className="club-filters">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              className={"club-filter-pill" + (filter === cat ? " on" : "")}
-              onClick={() => setFilter(cat)}
-            >
-              {cat}
-              {cat !== "All" && (
-                <span className="club-filter-count">
-                  {CLUBS.filter(c => c.category === cat).length}
+
+      <div className="clubsx">
+        <div className="clubs-split">
+          {/* ── DIRECTORY ─────────────────────────────────────────── */}
+          <aside className="cdir" aria-label="Clubs directory">
+            <div className="cdir-hd">
+              <span className="cdir-hd-lbl">Directory</span>
+              <span className="cdir-hd-count">
+                {CLUBS.length} <em>/ {CLUBS.length}</em>
+              </span>
+            </div>
+            <ul className="cdir-list" role="tablist">
+              {CLUBS.map((c, i) => {
+                const t = clubTotal(c);
+                const f = clubFilled(c);
+                const active = i === selectedIdx;
+                return (
+                  <li key={i} role="presentation">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={active}
+                      className={"cdir-row" + (active ? " on" : "")}
+                      style={{"--accent": c.bg}}
+                      onClick={() => setSelectedIdx(i)}
+                    >
+                      <span className="cdir-row-body">
+                        <span className="cdir-row-name">{c.name}</span>
+                        <span className="cdir-row-foot">
+                          {c.category && (
+                            <span className="cdir-row-cat">{c.category}</span>
+                          )}
+                          <span className="cdir-row-stat">
+                            <b>{f}</b><span className="sep">/</span>{t}
+                            <span className="lbl">filled</span>
+                          </span>
+                        </span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </aside>
+
+          {/* ── DETAIL ────────────────────────────────────────────── */}
+          <main className="cdet" key={selectedIdx}>
+            <div className="cdh" style={{"--accent": accent}}>
+              <div className="cdh-inner">
+                {club.category && (
+                  <span className="cdh-cat">{club.category}</span>
+                )}
+                <h1 className="cdh-name">{club.name}</h1>
+                {club.tag && <div className="cdh-sub">{club.tag}</div>}
+              </div>
+            </div>
+
+            <div className="cdet-meta">
+              <div className="cdet-meta-cell">
+                <span className="cdet-meta-lbl">Access</span>
+                <span className="cdet-meta-val">{club.access || "Open"}</span>
+              </div>
+              <div className="cdet-meta-cell">
+                <span className="cdet-meta-lbl">Roster</span>
+                <span className="cdet-meta-val">
+                  <span className="rn-big">{filled}</span>
+                  <span className="rn-tot">/ {total}</span>
+                  <span className="rn-suf">active</span>
                 </span>
-              )}
-            </button>
-          ))}
+              </div>
+            </div>
+
+            <nav className="clubdf-tabs" role="tablist">
+              {[
+                {id: "about",  label: "About"},
+                ...(hasRules ? [{id: "rules", label: "Rules"}] : []),
+                {id: "roster", label: "Roster"},
+              ].map(t => (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === t.id}
+                  className={"clubdf-tab" + (tab === t.id ? " on" : "")}
+                  onClick={() => setTab(t.id)}
+                  style={{"--accent": accent}}
+                >{t.label}</button>
+              ))}
+            </nav>
+
+            <div className="clubdf-body">
+              {tab === "about"  && <ClubPanelAbout club={club}/>}
+              {tab === "rules"  && hasRules && <ClubRules rules={club.rules}/>}
+              {tab === "roster" && <ClubPanelRoster club={club} hasTeams={hasTeams}/>}
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Club detail — FULL-PAGE view (replaces the modal).
+   Cinematic hero (club color, oversized display name) + sticky tab
+   strip + flat editorial content. DC / Riot / League vocabulary.
+   ───────────────────────────────────────────────────────────────── */
+function ClubDetailFull({club, onBack}){
+  const [tab, setTab] = useState("about");
+  const hasRules = !!club.rules;
+  const hasTeams = !!(club.teams && club.teams.length);
+  const total = clubTotal(club);
+  const filled = clubFilled(club);
+  const accent = club.bg || "#c41a1a";
+
+  return (
+    <div className="clubdf">
+      <div className="clubdf-hero" style={{"--accent": accent}}>
+        <div className="clubdf-hero-inner">
+          <button className="clubdf-back" onClick={onBack} type="button">
+            <span aria-hidden="true">←</span> All clubs
+          </button>
+          {club.tag && <div className="clubdf-tag">{club.tag}</div>}
+          <h1 className="clubdf-name">{club.name}</h1>
+          {club.desc && <p className="clubdf-desc">{club.desc}</p>}
+          <div className="clubdf-meta">
+            {club.category && (
+              <div className="clubdf-meta-item">
+                <span className="clubdf-meta-lbl">Category</span>
+                <span className="clubdf-meta-val">{club.category}</span>
+              </div>
+            )}
+            <div className="clubdf-meta-item">
+              <span className="clubdf-meta-lbl">Roster</span>
+              <span className="clubdf-meta-val">{filled}<span className="clubdf-meta-dim">/{total} filled</span></span>
+            </div>
+            {club.access && (
+              <div className="clubdf-meta-item">
+                <span className="clubdf-meta-lbl">Access</span>
+                <span className="clubdf-meta-val">{club.access}</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {visible.length === 0 ? (
-        <div className="clubs-grid-empty">
-          <EmptyState label={`No clubs in ${filter}`}/>
-        </div>
-      ) : (
-        <div className="clubs-grid">
-          {visible.map(({c, i}) => {
-            const total = clubTotal(c);
-            const filled = clubFilled(c);
-            return (
-              <button
-                key={i}
-                type="button"
-                className="club-card"
-                onClick={() => setOpenIdx(i)}
-                style={{"--accent": c.bg}}
-                aria-label={`Open ${c.name}`}
-              >
-                {c.tag && <div className="club-card-tag">{c.tag}</div>}
-                <div className="club-card-name">{c.name}</div>
-                {c.desc && <p className="club-card-desc">{c.desc}</p>}
-                <div className="club-card-meta">
-                  {c.category && <span className="club-card-cat">{c.category}</span>}
-                  <span className="club-card-roster">
-                    <span className="club-card-roster-num">{filled}</span>
-                    <span className="club-card-roster-sep">/</span>
-                    <span className="club-card-roster-tot">{total}</span>
-                    <span className="club-card-roster-lbl">filled</span>
-                  </span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      )}
+      <nav className="clubdf-tabs" role="tablist">
+        {[
+          {id: "about",  label: "About"},
+          ...(hasRules ? [{id: "rules", label: "Rules"}] : []),
+          {id: "roster", label: "Roster"},
+        ].map(t => (
+          <button
+            key={t.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.id}
+            className={"clubdf-tab" + (tab === t.id ? " on" : "")}
+            onClick={() => setTab(t.id)}
+          >{t.label}</button>
+        ))}
+      </nav>
 
-      {open && (
-        <ClubModal club={open} onClose={() => setOpenIdx(null)}/>
-      )}
+      <div className="clubdf-body">
+        {tab === "about"  && <ClubPanelAbout club={club}/>}
+        {tab === "rules"  && hasRules && <ClubRules rules={club.rules}/>}
+        {tab === "roster" && <ClubPanelRoster club={club} hasTeams={hasTeams}/>}
+      </div>
     </div>
   );
 }
@@ -2841,7 +3125,7 @@ function ClubPanel({club, onClose}){
             className="club-side-close"
             onClick={onClose}
             aria-label="Close panel"
-          ><span className="ico" aria-hidden="true">×</span></button>
+          ><i className="fa-solid fa-xmark" aria-hidden="true"></i></button>
         </div>
 
         <div className="cp-tabs">
@@ -2851,7 +3135,7 @@ function ClubPanel({club, onClose}){
               className={"cp-tab" + (tab === t.id ? " on" : "")}
               onClick={() => setTab(t.id)}
             >
-              <span className="ico" aria-hidden="true">●</span>
+              <i className="fa-solid fa-circle-small" aria-hidden="true"></i>
               <span>{t.label}</span>
             </button>
           ))}
@@ -2868,6 +3152,13 @@ function ClubPanel({club, onClose}){
 }
 
 function ClubPanelAbout({club}){
+  const [lightbox, setLightbox] = useState(false);
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e) => { if (e.key === "Escape") setLightbox(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox]);
   return (
     <div className="cp-about">
       <div className="club-side-stats">
@@ -2882,7 +3173,7 @@ function ClubPanelAbout({club}){
         <div className="cp-schedule">
           {club.meets && (
             <div className="cp-schedule-row">
-              <span className="cp-schedule-tag"><span className="ico" aria-hidden="true">◫</span> Meets</span>
+              <span className="cp-schedule-tag"><i className="fa-solid fa-calendar-days" aria-hidden="true"></i> Meets</span>
               <div className="cp-schedule-slots">
                 {club.meets.map((m, i) => <span key={i} className="cp-schedule-slot">{m}</span>)}
               </div>
@@ -2890,8 +3181,66 @@ function ClubPanelAbout({club}){
           )}
           {club.output && (
             <div className="cp-schedule-row">
-              <span className="cp-schedule-tag"><span className="ico" aria-hidden="true">◖</span> Output</span>
+              <span className="cp-schedule-tag"><i className="fa-solid fa-bullhorn" aria-hidden="true"></i> Output</span>
               <div className="cp-schedule-output">{club.output}</div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {club.rules && (
+        <div className="kbr">
+          <div className="kbr-section">
+            <div className="kbr-section-tag">The Sport</div>
+            <div className="kbr-body">
+              <p className="kbr-summary">{club.rules.summary}</p>
+              <div className="kbr-keypoints">
+                <div className="kbr-keypoint">
+                  <div className="kbr-keypoint-num">4s</div>
+                  <div className="kbr-keypoint-body">
+                    <div className="kbr-keypoint-lbl">The Pass Clock</div>
+                    <p>Catching the ball freezes you in place. Four seconds to release a pass, or possession drops.</p>
+                  </div>
+                </div>
+                <div className="kbr-keypoint">
+                  <div className="kbr-keypoint-num">∞</div>
+                  <div className="kbr-keypoint-body">
+                    <div className="kbr-keypoint-lbl">The Ball</div>
+                    <p>Indestructible engineered composite. No registered power can vaporise, fracture, melt, or deform it. Only move it.</p>
+                  </div>
+                </div>
+                <div className="kbr-keypoint">
+                  <div className="kbr-keypoint-num">6v6</div>
+                  <div className="kbr-keypoint-body">
+                    <div className="kbr-keypoint-lbl">Three Elevations</div>
+                    <p>Ground, mid-tier (~10ft), upper-tier (~20ft) platforms connected by ramps, beams, and drop points.</p>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="kbr-arena-tile"
+                onClick={() => setLightbox(true)}
+                aria-label="Open arena diagram in fullscreen"
+              >
+                <span className="kbr-arena-tile-body">
+                  <span className="kbr-arena-tile-eyebrow">Arena Diagram</span>
+                  <span className="kbr-arena-tile-title">View the Powerball arena</span>
+                  <span className="kbr-arena-tile-meta">Six-on-six · Three elevations · Annotated zones</span>
+                </span>
+                <span className="kbr-arena-tile-cta">
+                  <i className="fa-solid fa-up-right-and-down-left-from-center" aria-hidden="true"></i>
+                  <span>Open diagram</span>
+                </span>
+              </button>
+            </div>
+          </div>
+          {lightbox && (
+            <div className="kbr-lightbox" role="dialog" aria-modal="true" aria-label="Powerball arena diagram" onClick={() => setLightbox(false)}>
+              <button type="button" className="kbr-lightbox-close" onClick={(e) => { e.stopPropagation(); setLightbox(false); }} aria-label="Close arena diagram"><i className="fa-solid fa-xmark" aria-hidden="true"></i></button>
+              <img className="kbr-lightbox-img" src="https://files.catbox.moe/h3hq2p.png" alt="Powerball arena diagram" onClick={(e) => e.stopPropagation()}/>
+              <div className="kbr-lightbox-hint"><i className="fa-solid fa-circle-info" aria-hidden="true"></i> Click anywhere outside the image or press <kbd>Esc</kbd> to close</div>
             </div>
           )}
         </div>
@@ -2899,7 +3248,7 @@ function ClubPanelAbout({club}){
 
       {club.rules && club.rules.career && (
         <div className="cp-about-career">
-          <div className="cp-about-career-tag"><span className="ico" aria-hidden="true">▪</span> Post-Graduation</div>
+          <div className="cp-about-career-tag"><i className="fa-solid fa-graduation-cap" aria-hidden="true"></i> Post-Graduation</div>
           <div className="cp-about-career-title">The Professional League</div>
           <p>{club.rules.career}</p>
           <div className="kbr-career-stats" style={{marginTop:14}}>
@@ -2937,14 +3286,14 @@ function ClubPanelRoster({club, hasTeams}){
       <div className="cp-roster">
         {club.courtNote && (
           <div className="cp-courtnote">
-            <span className="cp-courtnote-tag"><span className="ico" aria-hidden="true">▥</span> Open Court</span>
+            <span className="cp-courtnote-tag"><i className="fa-solid fa-people-group" aria-hidden="true"></i> Open Court</span>
             <span>{club.courtNote}</span>
           </div>
         )}
 
         <div className="kb-teams">
           {club.teams.map((t, ti) => {
-            const captain = t.positions.find(p => p.captain && p.char);
+            const captain = t.positions.find(p => p.captain);
             const starters = t.positions.filter(p => !((p.pos || "").toLowerCase().startsWith("reserve")));
             const reserves = t.positions.filter(p => (p.pos || "").toLowerCase().startsWith("reserve"));
             return (
@@ -2952,7 +3301,17 @@ function ClubPanelRoster({club, hasTeams}){
                 <div className="kb-team-hd" style={{background:t.bg}}>
               <div className="kb-team-name">{t.house.toUpperCase()}</div>
               {captain && (
-                <div className="kb-team-cap"><i className="fa-solid fa-star kb-team-cap-icon" aria-hidden="true"></i><span className="kb-team-cap-label">Captain:</span> <CLink name={captain.char} link={captain.link||null}/></div>
+                <div className="kb-team-cap">
+                  <span className="kb-team-cap-left">
+                    <i className="fa-solid fa-star kb-team-cap-icon" aria-hidden="true"></i>
+                    <span className="kb-team-cap-label">Captain</span>
+                  </span>
+                  <span className="kb-team-cap-right">
+                    {captain.char
+                      ? <CLink name={captain.char} link={captain.link||null}/>
+                      : <span className="kb-team-cap-open">Open</span>}
+                  </span>
+                </div>
               )}
             </div>
                 {t.train && t.train.length > 0 && (
@@ -2999,13 +3358,13 @@ function ClubPanelRoster({club, hasTeams}){
         </div>
 
         <div className="cp-staff-block">
-          <div className="cp-staff-tag"><span className="ico" aria-hidden="true">▤</span> League Staff</div>
-          <table>
+          <div className="cp-staff-tag"><i className="fa-solid fa-clipboard-user" aria-hidden="true"></i> League Staff</div>
+          <table className="cp-staff-tbl">
             <tbody>
               {club.positions.map((p, pi) => (
                 <tr key={pi}>
-                  <td style={{fontWeight:600, fontSize:13, width:200, whiteSpace:"nowrap"}}>{p.pos}</td>
-                  <td>{p.char ? <CLink name={p.char} link={p.link||null}/> : <EmptyState/>}</td>
+                  <td className="cp-staff-pos">{p.pos}</td>
+                  <td className="cp-staff-char">{p.char ? <CLink name={p.char} link={p.link||null}/> : <EmptyState/>}</td>
                 </tr>
               ))}
             </tbody>
@@ -4448,9 +4807,46 @@ function MapLocGrid({items}){
   );
 }
 
-/* Residence section — each house presented in the lore-house pattern
-   (crest + virtue + display name + namesake), with its rooms as a
-   card grid underneath. Communal spaces follow as a fifth panel. */
+/* Compact list variant — uniform row height, single-line description.
+   Used as the default for non-residence districts. Trades the full prose
+   of MapLocCard for a scannable gazetteer that doesn't feel jarring when
+   some entries are richer than others. */
+function MapLocList({items}){
+  // Strip the location desc down to the first sentence so chapel-length
+  // entries don't dwarf the one-liners next to them.
+  const trim = (s) => {
+    if (!s) return "";
+    const cleaned = String(s).replace(/<[^>]+>/g, "");
+    const m = cleaned.match(/^.+?[.!?](?=\s|$)/);
+    return (m ? m[0] : cleaned).trim();
+  };
+  return (
+    <ul className="map-list">
+      {items.map(loc => (
+        <li key={loc.id} className={"map-list-row" + (loc.classified ? " is-classified" : "")}>
+          <span className="map-list-n">{loc.n}</span>
+          <div className="map-list-body">
+            <div className="map-list-hd">
+              <h4 className="map-list-name">{loc.name}</h4>
+              {loc.sub && <span className="map-list-sub">{loc.sub}</span>}
+              {loc.classified && <span className="map-list-cls">CLASSIFIED</span>}
+            </div>
+            <p className="map-list-desc">{trim(loc.desc)}</p>
+            {loc.tags && loc.tags.length > 0 && (
+              <ul className="map-list-tags">
+                {loc.tags.map((t, i) => (<li key={i} className="map-list-tag">{t}</li>))}
+              </ul>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/* Residence section — house identity via a clean section divider
+   (color bar + name + virtue + count), with rooms in the same compact
+   MapLocList format used by every other district. */
 function ResidenceBlocks({items}){
   const houseOrder = ["valaris", "orenne", "saberis", "grimere"];
   const byHouse = {};
@@ -4470,47 +4866,43 @@ function ResidenceBlocks({items}){
         if (!list || !list.length) return null;
         const m = HOUSE_LORE_META[houseId];
         return (
-          <article
+          <section
             key={houseId}
-            className="map-house lore-house"
-            style={{"--h-color": m.color, borderTopColor: m.color}}
+            className="map-house"
+            style={{"--h-color": m.color}}
           >
-            <div className="lore-house-hd">
-              <img src={m.crest} alt={m.name + " crest"} className="lore-house-crest" loading="lazy"/>
-              <div>
-                <div className="lore-house-virtue">{m.virtue}</div>
-                <h3 className="lore-house-name">{m.name}</h3>
-                <div className="lore-house-namesake">{m.namesake}</div>
+            <header className="map-house-hd">
+              <div className="map-house-hd-l">
+                <span className="map-house-hd-name">{m.name}</span>
+                <span className="map-house-hd-virtue">{m.virtue}</span>
               </div>
-              <div className="map-house-count">
-                <span className="map-house-count-n">{list.length}</span>
-                <span className="map-house-count-l">{list.length === 1 ? "ROOM" : "ROOMS"}</span>
-              </div>
-            </div>
-            <MapLocGrid items={list}/>
-          </article>
+              <span className="map-house-hd-count">
+                <b>{list.length}</b>
+                <span>{list.length === 1 ? "room" : "rooms"}</span>
+              </span>
+            </header>
+            <MapLocList items={list}/>
+          </section>
         );
       })}
 
       {communal.length > 0 && (
-        <article className="map-house map-house-communal lore-house" style={{"--h-color":"#d4a84a", borderTopColor:"#d4a84a"}}>
-          <div className="lore-house-hd">
-            <div className="map-house-shared-mark" aria-hidden="true">◆</div>
-            <div>
-              <div className="lore-house-virtue">Shared · All four houses</div>
-              <h3 className="lore-house-name">COMMUNAL</h3>
-              <div className="lore-house-namesake">The residential quad — neutral ground</div>
+        <section className="map-house map-house-communal" style={{"--h-color": "#d4a84a"}}>
+          <header className="map-house-hd">
+            <div className="map-house-hd-l">
+              <span className="map-house-hd-name">COMMUNAL</span>
+              <span className="map-house-hd-virtue">Shared · All four houses</span>
             </div>
-            <div className="map-house-count">
-              <span className="map-house-count-n">{communal.length}</span>
-              <span className="map-house-count-l">{communal.length === 1 ? "PLACE" : "PLACES"}</span>
-            </div>
-          </div>
+            <span className="map-house-hd-count">
+              <b>{communal.length}</b>
+              <span>{communal.length === 1 ? "place" : "places"}</span>
+            </span>
+          </header>
           <p className="map-house-blurb">
             Houses are private; the residential quad is not. The lawn between the four buildings, the kitchen, the laundry, the snug and the garden courtyard belong to everyone — house colours come off at the door.
           </p>
-          <MapLocGrid items={communal}/>
-        </article>
+          <MapLocList items={communal}/>
+        </section>
       )}
     </div>
   );
@@ -4519,6 +4911,37 @@ function ResidenceBlocks({items}){
 function MapTab(){
   const districts = D.mapDistricts;
   const locations = D.mapLocations;
+  const districtsWithItems = districts.filter(d => locations.some(l => l.district === d.id));
+  const [activeId, setActiveId] = useState(districtsWithItems[0]?.id);
+  const [query, setQuery] = useState("");
+
+  const ql = query.trim().toLowerCase();
+  const matchLoc = (l) => {
+    if (!ql) return true;
+    const hay = [
+      l.name, l.sub, l.desc,
+      ...(l.tags || []),
+      l.classified ? "classified" : "",
+    ].filter(Boolean).join(" ").toLowerCase();
+    return hay.includes(ql);
+  };
+
+  const activeDistrict = districtsWithItems.find(d => d.id === activeId) || districtsWithItems[0];
+  const activeIdx = districtsWithItems.findIndex(d => d.id === activeDistrict?.id);
+  const activeItems = activeDistrict ? locations.filter(l => l.district === activeDistrict.id) : [];
+  const isResidence = activeDistrict?.id === "residence";
+
+  // Global search results — grouped by district
+  const searchActive = !!ql;
+  const searchGroups = searchActive
+    ? districtsWithItems
+        .map(d => ({
+          d,
+          items: locations.filter(l => l.district === d.id && matchLoc(l)),
+        }))
+        .filter(g => g.items.length > 0)
+    : [];
+  const searchTotal = searchGroups.reduce((a, g) => a + g.items.length, 0);
 
   return (
     <div>
@@ -4529,43 +4952,137 @@ function MapTab(){
         pageNum="P. 003 / VIII"
       />
 
-      <div className="map-page">
-        {/* ── DISTRICT SECTIONS ──────────────────────────────
-             Each district uses the lore-eyebrow / lore-h pattern
-             so the page reads as part of the editorial spread.
-             Locations render as always-open cards in a 2-col grid
-             (mirrors the Outside / Orgs visual language). */}
-        {districts.map((d, i) => {
-          const items = locations.filter(l => l.district === d.id);
-          if (!items.length) return null;
-          const isResidence = d.id === "residence";
-          const n = String(i+1).padStart(2,"0");
+      <div className="map-search-bar" role="search">
+        <div className="map-search-input-wrap">
+          <i className="fa-solid fa-magnifying-glass map-search-icon" aria-hidden="true"></i>
+          <input
+            type="text"
+            className="map-search-input"
+            placeholder="Search locations, rooms, tags…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search the campus map"
+          />
+          {query && (
+            <button
+              type="button"
+              className="map-search-clear"
+              onClick={() => setQuery("")}
+              aria-label="Clear search"
+            ><i className="fa-solid fa-xmark" aria-hidden="true"></i></button>
+          )}
+        </div>
+        {searchActive && (
+          <span className="map-search-count">
+            <b>{searchTotal}</b> {searchTotal === 1 ? "match" : "matches"} across {searchGroups.length} district{searchGroups.length === 1 ? "" : "s"}
+          </span>
+        )}
+      </div>
 
-          return (
-            <section key={d.id} className="map-district">
+      <div className="map-page lore-shell">
+        <aside className="lore-toc">
+          <div className="lore-toc-inner">
+            <div className="lore-toc-stamp">DISTRICTS</div>
+            <ol className="lore-toc-list">
+              {districtsWithItems.map((d, i) => {
+                const dCount = searchActive
+                  ? locations.filter(l => l.district === d.id && matchLoc(l)).length
+                  : null;
+                const dimmed = searchActive && dCount === 0;
+                return (
+                  <li
+                    key={d.id}
+                    className={
+                      "lore-toc-item"
+                      + (d.id === activeId && !searchActive ? " on" : "")
+                      + (dimmed ? " is-dim" : "")
+                    }
+                  >
+                    <button
+                      type="button"
+                      className="lore-toc-btn"
+                      onClick={() => {
+                        setQuery("");
+                        setActiveId(d.id);
+                        window.scrollTo({top: 0, behavior: 'instant'});
+                      }}
+                      aria-current={d.id === activeId && !searchActive ? "page" : undefined}
+                    >
+                      <span className="lore-toc-n">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="lore-toc-label">{d.name}</span>
+                      {searchActive && (
+                        <span className="lore-toc-count">{dCount}</span>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        </aside>
+
+        <main className="lore-main map-main">
+          {searchActive ? (
+            <section className="map-district map-search-results">
               <header className="map-district-head">
-                <div className="lore-eyebrow">◆ District {n}</div>
-                <h2 className="lore-h map-district-h">{d.name}.</h2>
-                <p className="map-district-blurb">{d.blurb}</p>
+                <div className="lore-eyebrow"><i className="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Search · {ql}</div>
+                <h2 className="lore-h map-district-h">Results.</h2>
+                <p className="map-district-blurb">
+                  Showing every location across every district whose name, subtitle, description, or tag matches your query. Clear the search to return to the gazetteer.
+                </p>
                 <div className="map-district-meta">
-                  <span className="map-district-count">{items.length} {items.length === 1 ? "location" : "locations"}</span>
+                  <span className="map-district-count">{searchTotal} {searchTotal === 1 ? "location" : "locations"}</span>
                 </div>
               </header>
-
-              {isResidence
-                ? <ResidenceBlocks items={items}/>
-                : <MapLocGrid items={items}/>
-              }
+              {searchGroups.length === 0 ? (
+                <div className="map-search-empty">
+                  <i className="fa-solid fa-circle-question map-search-empty-icon" aria-hidden="true"></i>
+                  <div className="map-search-empty-label">No locations match “{query}”</div>
+                  <div className="map-search-empty-sub">Try a different term, or clear the search to browse by district.</div>
+                  <button type="button" className="map-search-empty-btn" onClick={() => setQuery("")}>Clear search</button>
+                </div>
+              ) : (
+                <div className="map-search-groups">
+                  {searchGroups.map(g => (
+                    <div key={g.d.id} className="map-search-group">
+                      <header className="map-search-group-hd">
+                        <span className="map-search-group-name">{g.d.name}</span>
+                        <span className="map-search-group-count">{g.items.length}</span>
+                      </header>
+                      <MapLocList items={g.items}/>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
-          );
-        })}
+          ) : (
+            activeDistrict && (
+              <section className="map-district">
+                <header className="map-district-head">
+                  <div className="lore-eyebrow">◆ District {String(activeIdx + 1).padStart(2, "0")}</div>
+                  <h2 className="lore-h map-district-h">{activeDistrict.name}.</h2>
+                  <p className="map-district-blurb">{activeDistrict.blurb}</p>
+                  <div className="map-district-meta">
+                    <span className="map-district-count">{activeItems.length} {activeItems.length === 1 ? "location" : "locations"}</span>
+                  </div>
+                </header>
 
-        {/* ── FOOTNOTE ───────────────────────────────────── */}
-        <div className="map-footnote">
-          <p>
-            <strong>End gazetteer.</strong> Locations marked <em>CLASSIFIED</em> appear in this index by name only; access is restricted by Tier and by the discretion of the Dean's office. Off-campus venues are listed for reference and are not affiliated with the Institute except where noted.
-          </p>
-        </div>
+                {isResidence
+                  ? <ResidenceBlocks items={activeItems}/>
+                  : <MapLocList items={activeItems}/>
+                }
+              </section>
+            )
+          )}
+
+          {!searchActive && (
+            <div className="map-footnote">
+              <p>
+                <strong>End gazetteer.</strong> Locations marked <em>CLASSIFIED</em> appear in this index by name only; access is restricted by Tier and by the discretion of the Dean's office. Off-campus venues are listed for reference and are not affiliated with the Institute except where noted.
+              </p>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );
@@ -4634,7 +5151,7 @@ function GlobalSearch({open, onClose, onJump}){
     <div className="gs-overlay" onClick={onClose}>
       <div className="gs-panel" onClick={e => e.stopPropagation()}>
         <div className="gs-panel-hd">
-          <span className="gs-panel-icon" aria-hidden="true"><span className="ico" aria-hidden="true">⌕</span></span>
+          <span className="gs-panel-icon" aria-hidden="true"><i className="fa-solid fa-magnifying-glass" aria-hidden="true"></i></span>
           <input
             id="gs-input"
             type="text"
@@ -4656,13 +5173,13 @@ function GlobalSearch({open, onClose, onJump}){
         <div className="gs-panel-body">
           {!ql && (
             <div className="gs-empty">
-              <div className="gs-empty-icon"><span className="ico" aria-hidden="true">⌕</span></div>
+              <div className="gs-empty-icon"><i className="fa-solid fa-magnifying-glass" aria-hidden="true"></i></div>
               Type to search · Records will appear here
             </div>
           )}
           {ql && totalMatches === 0 && (
             <div className="gs-empty">
-              <div className="gs-empty-icon"><span className="ico" aria-hidden="true">○</span></div>
+              <div className="gs-empty-icon"><i className="fa-solid fa-circle-question" aria-hidden="true"></i></div>
               No records found for "{q}"
             </div>
           )}
@@ -4821,7 +5338,7 @@ function App(){
             onClick={() => setGsOpen(true)}
             aria-label="Open global search"
           >
-            <span className="mast-search-icon" aria-hidden="true"><span className="ico" aria-hidden="true">⌕</span></span>
+            <span className="mast-search-icon" aria-hidden="true"><i className="fa-solid fa-magnifying-glass" aria-hidden="true"></i></span>
             <span className="mast-search-text">Search the registry…</span>
             <span className="mast-search-kbd">⌘K</span>
           </button>

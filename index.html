@@ -3702,75 +3702,7 @@ span.cname{ font-weight:600; color:var(--ink); }
 /* ---- Arena tile (clickable diagram) ----
    Stacks vertically below 640px so the image gets its own breathing
    room and the body text doesn't get squeezed into a thin column. */
-.kbr-arena-tile{
-  display:flex;
-  align-items:stretch;
-  gap:0;
-  width:100%;
-  padding:0;
-  margin:0 0 4px;
-  background:var(--pb-surface);
-  border:none;
-  border-left:3px solid var(--pb-accent);
-  cursor:pointer;
-  text-align:left;
-  color:inherit;
-  transition:background .15s, border-color .15s;
-}
-.kbr-arena-tile:hover{
-  background:var(--pb-surface-2);
-  border-left-color:var(--pb-accent);
-}
-.kbr-arena-tile-img{
-  display:block;
-  width:180px;
-  max-width:32%;
-  object-fit:cover;
-  background:#000;
-  flex-shrink:0;
-}
-.kbr-arena-tile-body{
-  flex:1;
-  min-width:0;
-  padding:16px 20px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:4px;
-}
-.kbr-arena-tile-eyebrow{
-  font-family:var(--mono);
-  font-size:10.5px;
-  font-weight:700;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--pb-accent) !important;
-}
-.kbr-arena-tile-title{
-  font-family:var(--display, var(--sans));
-  font-size:19px;
-  font-weight:700;
-  letter-spacing:.02em;
-  color:#f1ede4 !important;
-  line-height:1.2;
-}
-.kbr-arena-tile-meta{
-  font-family:var(--mono);
-  font-size:10.5px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:#8a8a92 !important;
-}
-@media (max-width: 640px){
-  .kbr-arena-tile{ flex-direction:column; }
-  .kbr-arena-tile-img{
-    width:100%;
-    max-width:none;
-    height:160px;
-    object-fit:cover;
-  }
-  .kbr-arena-tile-body{ padding:14px 16px; }
-}
+/* arena tile rules consolidated to polish.css */
 
 /* ---- Roles list ----
    Was a 64-col grid with an ::before gradient column and an absolutely-
@@ -13443,6 +13375,7 @@ button.class-chip-btn{
 }
 
 </style>
+<link rel="stylesheet" href="polish.css?v=2026-05-14-grpfix"/>
 </head>
 <body>
 <div class="page"><div id="root"></div></div>

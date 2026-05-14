@@ -1530,7 +1530,7 @@ clubs: [
         { pos: "Reserve · Goalkeeper" },
       ]},
       { house: "Saberis", bg: "#15803d", train: ["THU · 6:00 AM", "MON · 7:00 PM"], positions: [
-        { pos: "Playmaker" },
+        { pos: "Playmaker", captain: true },
         { pos: "Attack" }, { pos: "Attack" },
         { pos: "Defence" }, { pos: "Defence" },
         { pos: "Goalkeeper" },
@@ -2271,7 +2271,7 @@ mapLocations: [
   { id: "chapel", district: "commons", n: "K6",
     name: "The Chapel",
     sub: "Non-denominational chapel · Memorial Garden",
-    desc: "A small stone chapel at the quiet end of the commons, kept non-denominational since the 1980s and used mostly for the annual memorial service and the occasional faculty wedding. The doors are unlocked from dawn to dusk and the back pew is, by a tradition nobody legislated, where students sit when they need somewhere that isn't a counsellor's office. <strong>The Memorial Garden to the Fallen Heroes</strong> runs the length of the chapel's east wall — a walled walk of pale stone, planted with white roses and a single ancient yew, with the names of Calderyn alumni lost in the field cut into the inner wall. The newest panel of the wall is the <em>Cassandra panel</em>: a memorial to the alumni heroes who answered the call and did not come back, commissioned by <a href=\"https://roleplay.chat/profile.php?user=illuminate\" target=\"_blank\" rel=\"noopener noreferrer\">Celestia &quot;Stella&quot; Starkov</a> in memory of <strong>Solas Strathe</strong> &mdash; her boyfriend, and nephew to the current CEO of STRATA &mdash; and the others who fell with him. The names beside Solas's are kept by the school but not by the public registry; the family asked, and the school agreed.",
+    desc: "A small stone chapel at the quiet end of the commons, kept non-denominational since the 1980s and used mostly for the annual memorial service and the occasional faculty wedding. The doors are unlocked from dawn to dusk and the back pew is, by a tradition nobody legislated, where students sit when they need somewhere that isn't a counsellor's office. <strong>The Memorial Garden to the Fallen Heroes</strong> runs the length of the chapel's east wall &mdash; a walled walk of pale stone, planted with white roses and a single ancient yew, with the names of Calderyn alumni heroes lost in the field cut into the inner wall. The newest panel is the <em>Cassandra panel</em>, commissioned by <a href=\"https://roleplay.chat/profile.php?user=illuminate\" target=\"_blank\" rel=\"noopener noreferrer\">Celestia &quot;Stella&quot; Starkov</a> in memory of <strong>SOLARIS</strong> &mdash; her boyfriend, former A-list STRATA hero and nephew to the current CEO of STRATA &mdash; and the other alumni heroes who answered the call and fell with him in the Cassandra incident. The names beside his are kept by the school but not by the public registry; the families asked, and the school agreed.",
     tags: ["Open dawn–dusk", "Memorial"],
   },
 
