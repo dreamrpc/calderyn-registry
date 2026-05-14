@@ -3711,6 +3711,40 @@ const JOIN_TIERS = ["A-List", "B-List", "C-List", "D-List"];
 const JOIN_TRACKS = ["Heroes", "Sidekicks"];
 const JOIN_STRATA_DEPTS = ["Executive", "Field — Handlers & Agents", "PR & Intelligence"];
 
+/* Outside Calderyn — STRATA registry status options.
+   Maps to the `status` field on Powers Registry entries
+   (see powerStatuses in data.js). */
+const JOIN_OUTSIDE_STATUSES = [
+  { id: "inactive",     label: "Civilian (registered, no contract)" },
+  { id: "unsanctioned", label: "Unsanctioned (no contract, operating regardless)" },
+  { id: "strata",       label: "STRATA (under active contract)" },
+];
+
+/* Outside Calderyn — tier options including N/A for civilians/non-combat. */
+const JOIN_OUTSIDE_TIERS = ["A-List", "B-List", "C-List", "D-List", "N/A"];
+
+/* Small helper rendered below every long textarea — replaces the
+   repeated inline-styled char-counter divs. */
+function CharCount({value, max}){
+  const len = (value || "").length;
+  return (
+    <div className="join-charcount" aria-live="polite">{len} / {max}</div>
+  );
+}
+
+/* Section divider inside a .join-fieldset grid. Spans both columns,
+   gives long forms visible breathing room between identity / role /
+   powers / notes blocks. */
+function FieldGroup({title, children}){
+  return (
+    <>
+      <div className="join-section-header">{title}</div>
+      {children}
+    </>
+  );
+}
+
+
 function JoinTab(){
   const [type, setType]   = useState(null);
   const [form, setForm]   = useState({});
@@ -3757,7 +3791,7 @@ function JoinTab(){
         // becomes required after the user picks one.
         return [...base, "collectiveFlow"];
       }
-      case "outside":    return [...base, "outsideOrg", "outsideRole", ...power];
+      case "outside":    return [...base, "outsideOrg", "outsideRole", "outsideStatus", "tier", ...power];
       default: return base;
     }
   }, [type, form.fullyHuman]);
@@ -3842,10 +3876,32 @@ ${members}
         }
         break;
       }
-      case "outside":
-        main = `// → goes in OUTSIDE → "${form.outsideSection || ''}" → org "${form.outsideOrg || ''}" → roles
+      case "outside": {
+        // OUTSIDE entry — the org-role record under the chosen section.
+        // alias is included only on the Powers Registry side (Outside view
+        // doesn't render alias for org roles), but power data lives on both
+        // entries so admin doesn't have to copy it twice.
+        const outsideEntry = `// → goes in OUTSIDE → "${form.outsideSection || ''}" → org "${form.outsideOrg || ''}" → roles
 { role: ${s(form.outsideRole)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
+
+        // POWERS Registry entry — skip for fully-human outside characters
+        // (they don't belong in the Powers Registry). tier "N/A" is emitted
+        // as an empty string so TierChip falls back to the N/A pill.
+        let powersEntry = "";
+        if (!form.fullyHuman) {
+          const aliasFrag  = form.alias ? `, alias: ${s(form.alias)}` : "";
+          const statusFrag = form.outsideStatus ? `, status: ${s(form.outsideStatus)}` : "";
+          const tierVal    = form.tier && form.tier !== "N/A" ? form.tier.replace("-List", "") : "";
+          const tierFrag   = tierVal ? `, tier: ${s(tierVal)}` : "";
+          powersEntry = `
+
+// → also goes in POWERS (Registry)
+{ char: ${s(form.char)}${aliasFrag}${statusFrag}${tierFrag}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
+        }
+
+        main = outsideEntry + powersEntry;
         break;
+      }
       default: return "";
     }
 
@@ -3957,6 +4013,10 @@ ${members}
       fields.push({ name: "Collective", value: `${form.collectiveName || '?'} — ${form.collectiveRole}`, inline: false });
     }
     if (form.outsideRole)      fields.push({ name: "Outside Role",     value: `${form.outsideOrg || '?'} — ${form.outsideRole}`, inline: false });
+    if (form.outsideStatus){
+      const statusLabel = (JOIN_OUTSIDE_STATUSES.find(s => s.id === form.outsideStatus) || {}).label || form.outsideStatus;
+      fields.push({ name: "Registry Status", value: statusLabel, inline: true });
+    }
 
     // Powers (only if not fully human)
     if (form.fullyHuman){
@@ -4129,8 +4189,9 @@ function PowerFields({form, set, allowHuman = true}){
   const isHuman = allowHuman ? !!form.fullyHuman : false;
   return (
     <>
+      <FieldGroup title="Powers"/>
       {allowHuman && (
-        <Field label="Powers" full hint="Tick the box if this character is fully human (no powers). Otherwise, fill in the five fields below.">
+        <Field label="Powers" full hint="Tick the box if this character is fully human (no powers). Otherwise, fill in the three fields below.">
           <label className="join-checkbox">
             <input type="checkbox" checked={isHuman} onChange={e => set("fullyHuman", e.target.checked)}/>
             <span>This character is fully human — no powers.</span>
@@ -4144,11 +4205,11 @@ function PowerFields({form, set, allowHuman = true}){
           </Field>
           <Field label="Power Expression" required hint="What it looks like and how it works — the visual manifestation and the internal mechanics." full>
             <textarea className="join-textarea is-medium" value={form.powerExpression || ""} onChange={e => set("powerExpression", e.target.value.slice(0, 1000))} placeholder="How it presents — what others see, hear, feel — and what it does, how it does it." maxLength={1000}/>
-            <div style={{textAlign:"right",fontSize:"11px",opacity:0.6,marginTop:"4px",fontFamily:"monospace"}}>{(form.powerExpression || "").length} / 1000</div>
+            <CharCount value={form.powerExpression} max={1000}/>
           </Field>
           <Field label="Drawbacks" required hint="Costs, weaknesses, hard limits, things that turn it off." full>
             <textarea className="join-textarea is-medium" value={form.drawbacks || ""} onChange={e => set("drawbacks", e.target.value.slice(0, 1000))} placeholder="Even broken-tier characters need limits — be honest." maxLength={1000}/>
-            <div style={{textAlign:"right",fontSize:"11px",opacity:0.6,marginTop:"4px",fontFamily:"monospace"}}>{(form.drawbacks || "").length} / 1000</div>
+            <CharCount value={form.drawbacks} max={1000}/>
           </Field>
         </>
       )}
@@ -4160,9 +4221,10 @@ function PowerFields({form, set, allowHuman = true}){
 function TailFields({form, set}){
   return (
     <>
+      <FieldGroup title="Notes & Confirmation"/>
       <Field label="Additional Notes" hint="Content warnings, plot hooks, connections wanted, triggers, etc. Optional." full>
         <textarea className="join-textarea is-medium" value={form.notes || ""} onChange={e => set("notes", e.target.value.slice(0, 1000))} placeholder="Optional" maxLength={1000}/>
-            <div style={{textAlign:"right",fontSize:"11px",opacity:0.6,marginTop:"4px",fontFamily:"monospace"}}>{(form.notes || "").length} / 1000</div>
+        <CharCount value={form.notes} max={1000}/>
       </Field>
       <Field label="Rules Acknowledgment" required full>
         <label className="join-checkbox">
@@ -4524,10 +4586,13 @@ function JoinFieldset({type, form, set}){
   if (type === "student"){
     return (
       <div className="join-fieldset">
+        <FieldGroup title="Character Profile"/>
         {Common}
-        <Field label="Stage Name / Alias" hint="If they have a hero name yet">
+        <Field label="Stage Name / Alias" hint="If they have a hero name yet" full>
           <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="VOLT, KESTREL, etc."/>
         </Field>
+
+        <FieldGroup title="Enrollment"/>
         <Field label="House" required>
           <select className="join-select" value={form.house || ""} onChange={e => set("house", e.target.value)}>
             <option value="">Select house…</option>
@@ -4546,14 +4611,18 @@ function JoinFieldset({type, form, set}){
             {JOIN_TRACKS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
-        <Field label="Tier" required hint="A through D" full>
+        <Field label="Tier" required hint="A through D">
           <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
             <option value="">Select tier…</option>
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
+
         <PowerFields form={form} set={set} allowHuman={false}/>
+
+        <FieldGroup title="Optional Extras"/>
         <StudentExtras form={form} set={set}/>
+
         <TailFields form={form} set={set}/>
       </div>
     );
@@ -4563,11 +4632,14 @@ function JoinFieldset({type, form, set}){
     const openRoles = getOpenFacultyRoles();
     return (
       <div className="join-fieldset">
+        <FieldGroup title="Character Profile"/>
         {Common}
-        <Field label="Stage Name / Alias" hint="Public-facing alias">
+        <Field label="Stage Name / Alias" hint="Public-facing alias. Optional." full>
           <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="Optional"/>
         </Field>
-        <Field label="Open Faculty Role" required hint="Only open roles are listed">
+
+        <FieldGroup title="Faculty Position"/>
+        <Field label="Open Faculty Role" required hint="Only open roles are listed" full>
           <select
             className="join-select"
             value={form.facultyRole || ""}
@@ -4584,6 +4656,7 @@ function JoinFieldset({type, form, set}){
             ))}
           </select>
         </Field>
+
         <PowerFields form={form} set={set}/>
         <TailFields form={form} set={set}/>
       </div>
@@ -4594,8 +4667,11 @@ function JoinFieldset({type, form, set}){
     const isCorporate = form.strataRole === "corporate";
     return (
       <div className="join-fieldset">
+        <FieldGroup title="Character Profile"/>
         {Common}
-        <Field label="STRATA Role" required hint="Talent = hero roster. Corporate = executive, field, or PR.">
+
+        <FieldGroup title="STRATA Position"/>
+        <Field label="STRATA Role" required hint="Talent = hero roster. Corporate = executive, field, or PR." full>
           <select className="join-select" value={form.strataRole || ""} onChange={e => set("strataRole", e.target.value)}>
             <option value="">Select role…</option>
             <option value="talent">Talent (Hero)</option>
@@ -4606,7 +4682,7 @@ function JoinFieldset({type, form, set}){
         <Field label="Stage Name / Alias" required hint="Their hero name">
           <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="ARCLIGHT, etc."/>
         </Field>
-        <Field label="Tier" required hint="A-list = top of roster" full>
+        <Field label="Tier" required hint="A-list = top of roster">
           <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
             <option value="">Select tier…</option>
             {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
@@ -4710,9 +4786,16 @@ function JoinFieldset({type, form, set}){
 
   if (type === "outside"){
     const orgs = getOutsideOrgs();
+    const isCivilianStatus = form.outsideStatus === "inactive";
     return (
       <div className="join-fieldset">
+        <FieldGroup title="Character Profile"/>
         {Common}
+        <Field label="Stage Name / Alias" hint="Hero name, codename, or working alias. Skip if they go by their real name." full>
+          <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="e.g. VULCAN, BLÓÐHUNDR — leave blank if none"/>
+        </Field>
+
+        <FieldGroup title="Affiliation"/>
         <Field label="Organisation" required full>
           <select
             className="join-select"
@@ -4737,9 +4820,26 @@ function JoinFieldset({type, form, set}){
             ))}
           </select>
         </Field>
-        <Field label="Role at Organisation" required hint="e.g. DCI, Councillor, Reporter" full>
-          <input className="join-input" type="text" value={form.outsideRole || ""} onChange={e => set("outsideRole", e.target.value)} placeholder="Job title"/>
+        <Field label="Role at Organisation" required hint="e.g. Boss, Capo, Singer, DCI, Councillor, Reporter, Fixer" full>
+          <input className="join-input" type="text" value={form.outsideRole || ""} onChange={e => set("outsideRole", e.target.value)} placeholder="Job title or rank"/>
         </Field>
+
+        <FieldGroup title="Registry Classification"/>
+        <Field label="STRATA Registry Status" required hint="How does STRATA classify this character on the Powers Registry?" full>
+          <select className="join-select" value={form.outsideStatus || ""} onChange={e => set("outsideStatus", e.target.value)}>
+            <option value="">Select status…</option>
+            {JOIN_OUTSIDE_STATUSES.map(s => (
+              <option key={s.id} value={s.id}>{s.label}</option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Tier" required hint={isCivilianStatus ? "Civilians typically register as N/A" : "Threat / capability tier — choose N/A if not applicable"} full>
+          <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
+            <option value="">Select tier…</option>
+            {JOIN_OUTSIDE_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </Field>
+
         <PowerFields form={form} set={set}/>
         <TailFields form={form} set={set}/>
       </div>
