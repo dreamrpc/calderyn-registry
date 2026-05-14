@@ -2372,9 +2372,9 @@ function StrataGroups(){
   return (
     <div>
       <div className="groups-intro">
-        <div className="groups-intro-title">SANCTIONED & INDEPENDENT</div>
+        <div className="groups-intro-title">SANCTIONED TEAMS</div>
         <div className="groups-intro-body">
-          STRATA's flagship Vanguard unit at the top — invitation-only, A-List tier only. Below: independent collectives of unsanctioned heroes (B-List tier and below) operating outside STRATA's contract system. Propose new collectives to admin — typical size is 3–6 members with a shared goal or origin.
+          STRATA's flagship Vanguard unit at the top — invitation-only, A-List tier only. Below: open sanctioned-team slots awaiting concept proposals. Pitch structure, remit, and a 3–6 member roster to admin to claim one.
         </div>
       </div>
       <div className="groups-list">
@@ -2385,12 +2385,15 @@ function StrataGroups(){
                 <div className="group-type">{g.type}</div>
                 <div className={"group-name" + (g.members.length ? "" : " empty-name")}>{g.name}</div>
               </div>
-              {g.sanctioned
-                ? <Chip variant="ink">SANCTIONED</Chip>
-                : g.status === "Active"  ? <Chip variant="red">ACTIVE</Chip>
-                : g.status === "Dormant" ? <Chip variant="ghost">DORMANT</Chip>
-                : g.status === "Concept" ? <Chip variant="ghost">CONCEPT</Chip>
-                : <Chip variant="ghost">{g.status.toUpperCase()}</Chip>}
+              <div className="group-chips">
+                {g.sanctioned && <Chip variant="ink">SANCTIONED</Chip>}
+                {g.status === "Active"  && <Chip variant="red">ACTIVE</Chip>}
+                {g.status === "Dormant" && <Chip variant="ghost">DORMANT</Chip>}
+                {g.status === "Concept" && <Chip variant="ghost">CONCEPT</Chip>}
+                {!g.sanctioned && !["Active","Dormant","Concept"].includes(g.status) && (
+                  <Chip variant="ghost">{g.status.toUpperCase()}</Chip>
+                )}
+              </div>
             </div>
             <div className="group-desc">{g.desc}</div>
             {g.members.length > 0 ? (
