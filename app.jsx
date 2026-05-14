@@ -3785,7 +3785,7 @@ function JoinTab(){
           return [...base, "collectiveFlow", "newCollectiveName", "newCollectiveType", "newCollectiveFaction", "newCollectiveDesc"];
         }
         if (flow === "joinHero" || flow === "joinVillain"){
-          return [...base, "collectiveFlow", "alias", "collectiveName", "collectiveRole", ...power];
+          return [...base, "collectiveFlow", "alias", "collectiveName", "collectiveRole", "tier", ...power];
         }
         // No flow chosen yet → only require the flow itself; the rest
         // becomes required after the user picks one.
@@ -3871,8 +3871,24 @@ ${members}
           // joinHero / joinVillain — same shape, faction recorded as a
           // leading comment so admin can route to the right collective.
           const fac = flow === "joinVillain" ? "villain" : "hero";
-          main = `// → goes in GROUPS → "${form.collectiveName || ''}" → members  (faction: ${fac})
+          const groupEntry = `// → goes in GROUPS → "${form.collectiveName || ''}" → members  (faction: ${fac})
 { alias: ${s(form.alias)}, role: ${s(form.collectiveRole)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
+
+          // Also emit a POWERS Registry entry — collectives (per their own
+          // flow description) are unsanctioned operators. Skip for fully-
+          // human members; emit empty tier for N/A so TierChip falls back
+          // to the N/A pill.
+          let powersEntry = "";
+          if (!form.fullyHuman) {
+            const aliasFrag = form.alias ? `, alias: ${s(form.alias)}` : "";
+            const tierVal   = form.tier && form.tier !== "N/A" ? form.tier.replace("-List", "") : "";
+            const tierFrag  = tierVal ? `, tier: ${s(tierVal)}` : "";
+            powersEntry = `
+
+// → also goes in POWERS (Registry)
+{ char: ${s(form.char)}${aliasFrag}, status: "unsanctioned"${tierFrag}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
+          }
+          main = groupEntry + powersEntry;
         }
         break;
       }
@@ -4397,6 +4413,7 @@ function CollectiveFieldset({form, set, Common}){
           the collective dropdown's faction filter differ. */}
       {(flow === "joinHero" || flow === "joinVillain") && (
         <div className="join-fieldset">
+          <FieldGroup title="Character Profile"/>
           {Common}
           <Field label="Stage Name / Alias" required>
             <input
@@ -4443,6 +4460,12 @@ function CollectiveFieldset({form, set, Common}){
               onChange={e => set("collectiveRole", e.target.value)}
               placeholder="e.g. Field Operative"
             />
+          </Field>
+          <Field label="Tier" required hint="Threat / capability tier — choose N/A if not applicable" full>
+            <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
+              <option value="">Select tier…</option>
+              {JOIN_OUTSIDE_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
           </Field>
           <PowerFields form={form} set={set}/>
           <TailFields form={form} set={set}/>
