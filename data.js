@@ -1432,6 +1432,7 @@ powers: [
   },
   {
     char: "August Marlowe",
+    alias: "Vulcan",
     status: "unsanctioned",
     power: "Pyrokinesis",
     expression: "Hellfire Pyrokinesis\n\"The flame does not forgive.\"\nAugust generates and controls a supernatural form of combustion known as Hellfire — a violet-black flame with properties similar to white phosphorus. Once ignited, the fire clings aggressively to surfaces, spreads unnaturally, and resists conventional extinguishing methods. Unlike ordinary fire, his flames appear semi-sentient at higher output, reacting to his emotional state and destructive impulses. His hellfire can: melt metal, ignite damp environments, spread across walls and ceilings, persist long after combat ends, scar victims permanently. The flames become strongest during moments of rage, humiliation, possessiveness, or grief.",
