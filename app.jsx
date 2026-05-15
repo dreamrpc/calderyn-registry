@@ -4098,7 +4098,7 @@ ${members}
 
     const payload = {
       username: "Calderyn Registry — Applications",
-      avatar_url: "https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png",
+      avatar_url: "https://dreamrpc.github.io/calderyn-registry/calderyn_college_logo_transparent.png",
       content: "<@&1498799678551101451>",
       allowed_mentions: { roles: ["1498799678551101451"] },
       embeds: [{
