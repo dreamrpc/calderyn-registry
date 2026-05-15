@@ -5503,24 +5503,6 @@ span.cname{ font-weight:600; color:var(--ink); }
 }
 .join-warn-link:hover{ text-decoration:none; }
 
-/* When a short select/input is marked .full (Tier, Faction, Role/Title,
-   Role within Collective), cap its rendered width so the control stays
-   tidy instead of stretching across the whole fieldset. The label and
-   field box still own the row. */
-.join-field.full > .join-select,
-.join-field.full > .join-input[type="text"],
-.join-field.full > .join-input[type="url"]{
-  max-width:380px;
-}
-/* Textareas + checkboxes + the founding-members repeater + the .ico-
-   based wide controls inside .full should still flex to full width. */
-.join-field.full > .join-textarea,
-.join-field.full > .join-checkbox,
-.join-field.full > .join-members,
-.join-field.full > .join-typegrid{
-  max-width:none;
-}
-
 /* When two .join-fieldset blocks stack (Collective flow's flow picker
    panel + sub-flow fieldset), space them apart cleanly so they don't
    read as a single squished block. Also gives the inner Flow header
