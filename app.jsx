@@ -4273,14 +4273,95 @@ function JoinTab(){
       <div className="join">
         <div className="join-form-wrap">
           <div className="join-confirm-aaa">
-            {/* The stamp drops in with a CSS animation — scale + rotate
-                + slight bounce on landing. The hatched red border and
-                offset shadow read as a rubber-stamp print. */}
-            <div className="join-confirm-stamp-area" aria-hidden="true">
-              <div className="join-confirm-stamp-mark">
-                <div className="join-confirm-stamp-line-1">RECEIVED</div>
-                <div className="join-confirm-stamp-line-2">UNDER REVIEW</div>
-                <div className="join-confirm-stamp-line-3">{submittedDate}</div>
+            {/* CINEMATIC MOMENT — the Vanguard has just been briefed.
+                The four portraits flicker in sequence for ~2s as if
+                STRATA were cycling through council attention, then
+                resolve to a spectral backdrop. Once the flicker
+                settles, the wax-seal stamp drops in. */}
+            <div className="join-confirm-stage" aria-hidden="true">
+              <div className="join-confirm-vanguard">
+                {HOME_VANGUARD.map((v, i) => (
+                  <div
+                    key={v.alias}
+                    className={"join-confirm-vg join-confirm-vg-" + (i + 1)}
+                    style={{ backgroundImage: `url(${v.portrait})` }}
+                  >
+                    <div className="join-confirm-vg-label">{v.alias}</div>
+                  </div>
+                ))}
+                <div className="join-confirm-vanguard-line">
+                  COUNCIL · BRIEFED · {submittedDate.toUpperCase()}
+                </div>
+              </div>
+
+              {/* WAX SEAL — drops in after the Vanguard flicker settles.
+                  Custom SVG for the irregular wax-edged circle so it
+                  reads as embossed wax and not a clean circular badge.
+                  The "STRATA" text + radial caption ring inside it. */}
+              <div className="join-confirm-wax">
+                <svg className="join-confirm-wax-svg" viewBox="0 0 240 240" aria-hidden="true">
+                  <defs>
+                    <filter id="wax-rough">
+                      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="7"/>
+                      <feDisplacementMap in="SourceGraphic" scale="6"/>
+                    </filter>
+                    <radialGradient id="wax-fill" cx="38%" cy="32%" r="70%">
+                      <stop offset="0%"   stopColor="#a82431"/>
+                      <stop offset="55%"  stopColor="#7a1521"/>
+                      <stop offset="100%" stopColor="#4a0c14"/>
+                    </radialGradient>
+                    <radialGradient id="wax-rim" cx="50%" cy="50%" r="50%">
+                      <stop offset="92%" stopColor="rgba(0,0,0,0)"/>
+                      <stop offset="98%" stopColor="rgba(0,0,0,0.45)"/>
+                      <stop offset="100%" stopColor="rgba(0,0,0,0.0)"/>
+                    </radialGradient>
+                    <path
+                      id="wax-ring-path"
+                      d="M 120 56 A 64 64 0 1 1 119.99 56"
+                    />
+                  </defs>
+                  {/* Outer scalloped wax body */}
+                  <circle
+                    cx="120" cy="120" r="100"
+                    fill="url(#wax-fill)"
+                    filter="url(#wax-rough)"
+                  />
+                  {/* Subtle inset rim shadow */}
+                  <circle cx="120" cy="120" r="100" fill="url(#wax-rim)"/>
+                  {/* Inner embossed ring */}
+                  <circle cx="120" cy="120" r="78" fill="none" stroke="rgba(255,210,180,0.18)" strokeWidth="1.5"/>
+                  <circle cx="120" cy="120" r="68" fill="none" stroke="rgba(0,0,0,0.35)" strokeWidth="1"/>
+                  {/* Central monogram + label */}
+                  <text x="120" y="118"
+                    textAnchor="middle"
+                    fontFamily="Druk, sans-serif"
+                    fontWeight="900"
+                    fontSize="42"
+                    fill="#f4d9b8"
+                    letterSpacing="2"
+                  >STRATA</text>
+                  <text x="120" y="142"
+                    textAnchor="middle"
+                    fontFamily="Söhne Mono, monospace"
+                    fontWeight="500"
+                    fontSize="9"
+                    fill="#f4d9b8"
+                    letterSpacing="3"
+                  >EST · MMIX</text>
+                  {/* Ring of caption text following the rim */}
+                  <text
+                    fontFamily="Söhne Mono, monospace"
+                    fontWeight="600"
+                    fontSize="9"
+                    fill="rgba(244, 217, 184, 0.7)"
+                    letterSpacing="4"
+                  >
+                    <textPath href="#wax-ring-path" startOffset="0">
+                      RECEIVED · UNDER REVIEW · CALDERYN COLLEGE ·
+                    </textPath>
+                  </text>
+                </svg>
+                <div className="join-confirm-wax-id">{submissionId}</div>
               </div>
             </div>
 
