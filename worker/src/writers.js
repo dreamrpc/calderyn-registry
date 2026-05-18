@@ -53,6 +53,11 @@ const RPC_TO_OOC_RAW = {
   "vecna":         "Dream",
   "Verdant!":      "Star",
   "Gremlin": "Skully",
+  // Pre-AUTO-INSERT additions for characters that pre-date the
+  // auto-mapping system (hand-seeded faculty/outside entries whose
+  // RPC accounts were never captured by a form approval).
+  "bulk":          "Wilder",
+  "Breakpoint":    "Star",
   // AUTO-INSERT:writers — newly-approved writer mappings get added
   // by the relay Worker directly above this marker (one line per RPC
   // account). Do not remove. See worker/src/writer-mapping.js for the

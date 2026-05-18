@@ -3825,7 +3825,7 @@ function JoinTab(){
     const power = form.fullyHuman ? [] : ["power", "powerExpression", "drawbacks"];
     switch (type) {
       case "student":    return [...base, "house", "year", "track", "tier", ...power];
-      case "faculty":    return [...base, "facultyRole", ...power];
+      case "faculty":    return [...base, "facultyRole", "tier", ...power];
       case "strata":     return form.strataRole === "corporate"
                                 ? [...base, "strataRole", "strataDept", "strataTitle", ...power]
                                 : [...base, "strataRole", "alias", "tier", ...power];
@@ -4605,6 +4605,12 @@ function JoinFieldset({type, form, set, quotaStats}){
             {openRoles.map((r, i) => (
               <option key={i} value={r.role}>{r.section} — {r.role}</option>
             ))}
+          </select>
+        </Field>
+        <Field label="Ranking" required hint="A-List · B-List · C-List · D-List — counts toward your adult-pool quota" full>
+          <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
+            <option value="">Select ranking…</option>
+            {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </Field>
 
