@@ -109,6 +109,23 @@ houses: [
   },
 ],
 
+// ────────────────────────────────────────────────────────────────────
+// REGISTRY RULE — A-LIST CAP PER WRITER
+//   Each writer (OOC identity) may have at most 5 A-List characters
+//   across the entire registry, counted across every RPC account.
+//   Exceptions were granted to early supporters during the room's
+//   opening weeks; no further exceptions will be made going forward.
+//
+//   Enforced automatically by the Discord approval bot at click time
+//   (worker/src/quota.js + worker/src/writers.js). The bot blocks any
+//   A-List approval that would push a writer past the cap and shows
+//   an amber "quota blocked" embed in the application channel.
+//
+//   Adding a *new role* for an existing A-List character (e.g. an
+//   existing A-Lister taking a faculty seat or a Powerball position
+//   on another form) does NOT count as a new A-List slot — the set
+//   only grows on a new char name.
+// ────────────────────────────────────────────────────────────────────
 students: [
   // Monty's secret ability (dormant power absorption through death) is
   // narrative-locked and intentionally omitted from the public power /
