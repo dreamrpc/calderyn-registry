@@ -1,0 +1,89 @@
+name: Deploy Pages
+
+# Deploys the static site (app.jsx, data.js, index.html, polish.css,
+# logo PNG, etc.) to Cloudflare Pages on every push to main that
+# touches a site file, and on demand via workflow_dispatch.
+#
+# GitHub Pages continues to deploy in parallel from the same branch
+# until you've verified the Cloudflare deployment, at which point you
+# can disable GH Pages in repo settings.
+#
+# Required repo secrets (same set as deploy-worker.yml):
+#   CLOUDFLARE_API_TOKEN  — must include "Cloudflare Pages — Edit" on
+#                           top of the Workers permission already in use.
+#   CLOUDFLARE_ACCOUNT_ID
+
+on:
+  push:
+    branches: [main]
+    # Site files live at the repo root. The two directories below are
+    # backend/CI and don't belong on the deployed site, so changes that
+    # *only* touch them shouldn't trigger a site deploy.
+    paths-ignore:
+      - 'worker/**'
+      - '.github/**'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage site files
+        # Copy only the public-facing files into a clean `dist/` so we
+        # don't ship `worker/`, `.github/`, README, etc. to the CDN.
+        run: |
+          mkdir -p dist
+          cp app.jsx data.js index.html polish.css dist/
+          cp calderyn_college_logo_transparent.png dist/
+          # .nojekyll is a GH Pages relic; harmless on CF Pages.
+          [ -f .nojekyll ] && cp .nojekyll dist/ || true
+
+      - name: Ensure Pages project exists
+        # `wrangler pages deploy` fails if the project doesn't exist.
+        # POST to the create endpoint idempotently: success → project
+        # created; 4xx with "already in use" / "duplicate" → already
+        # exists, continue; any other failure → bail with the body so
+        # the run logs make it obvious what went wrong.
+        env:
+          CLOUDFLARE_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -e
+          response=$(curl -s -w "\n%{http_code}" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -X POST \
+            -d '{"name":"calderyn-registry","production_branch":"main"}' \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects")
+          body=$(printf '%s' "$response" | sed '$d')
+          code=$(printf '%s' "$response" | tail -n1)
+          echo "Cloudflare API returned HTTP $code"
+          case "$code" in
+            200|201)
+              echo "Pages project 'calderyn-registry' created."
+              ;;
+            400|409)
+              if printf '%s' "$body" | grep -qiE 'already in use|already exists|duplicate|already taken'; then
+                echo "Pages project already exists — continuing."
+              else
+                echo "Unexpected ${code} body:"
+                echo "$body"
+                exit 1
+              fi
+              ;;
+            *)
+              echo "Unexpected HTTP $code body:"
+              echo "$body"
+              exit 1
+              ;;
+          esac
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=calderyn-registry --branch=main

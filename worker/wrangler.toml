@@ -45,5 +45,7 @@ GITHUB_REPO  = "calderyn-registry"
 GITHUB_BRANCH = "main"
 GITHUB_DATA_FILE = "data.js"
 
-# Allowed Origin for CORS on /submit. Pages site + any custom domain.
-CORS_ALLOWED_ORIGIN = "https://dreamrpc.github.io"
+# Comma-separated list of origins allowed to call /submit. Both the
+# current GitHub Pages URL and the new Cloudflare Pages URL are listed
+# so submissions work during the parallel-deploy migration window.
+CORS_ALLOWED_ORIGINS = "https://dreamrpc.github.io,https://calderyn-registry.pages.dev"
