@@ -376,19 +376,26 @@ body {
    ════════════════════════════════════════════════════════════════════ */
 
 .rules-grid {
-  display: block !important;
-  grid-template-columns: none !important;
-  gap: 0 !important;
-  max-width: 760px;
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  column-gap: 56px !important;
+  row-gap: 0 !important;
+  max-width: 1200px;
   margin: 0 auto;
+}
+@media (max-width: 760px) {
+  .rules-grid {
+    grid-template-columns: 1fr !important;
+    column-gap: 0 !important;
+  }
 }
 
 .rule {
   position: relative !important;
   display: grid !important;
-  grid-template-columns: 64px 1fr !important;
+  grid-template-columns: 56px 1fr !important;
   align-items: start;
-  column-gap: 22px !important;
+  column-gap: 20px !important;
   padding: 22px 4px !important;
   background: none !important;
   border: none !important;
@@ -398,9 +405,16 @@ body {
   transition: none !important;
   overflow: visible !important;
 }
-.rule:first-child {
+/* Suppress the top divider for the first row in either column. With
+   2 columns that's items 1 and 2; on narrow screens (1 column) the
+   media query below trims it back to item 1 only. */
+.rule:nth-child(-n+2) {
   border-top: none !important;
-  padding-top: 4px !important;
+  padding-top: 6px !important;
+}
+@media (max-width: 760px) {
+  .rule:nth-child(-n+2) { border-top: 1px solid var(--rule-soft) !important; padding-top: 22px !important; }
+  .rule:first-child     { border-top: none !important; padding-top: 6px !important; }
 }
 .rule:hover {
   transform: none !important;
