@@ -8178,3 +8178,126 @@ code, pre, kbd, samp, var, tt,
   margin: calc(-1 * var(--space-2)) 0 var(--space-4);
   max-width: 640px;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   AUDIT FIX · STUDENTS / POWERS FILTER BAR (sfilter)
+   The roster filter bar was rendering as a subtle gradient strip that
+   read as decoration. Re-skin as a premium HUD-style filter row: dark
+   bg, gold top accent, sharp pill design. Same chrome will be reused
+   on the Powers Registry toolbar (next push).
+   ════════════════════════════════════════════════════════════════════ */
+
+.sfilter {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px)) !important;
+  z-index: 40 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: var(--space-3) var(--space-5) !important;
+  padding: var(--space-3) var(--space-5) !important;
+  margin: 0 !important;
+  max-width: none !important;
+  /* HUD palette — dark base + gold top accent + subtle bottom hairline */
+  background: #0a0a0a !important;
+  border-top: 2px solid #c9a84c !important;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.18) !important;
+  box-shadow: 0 12px 32px -20px rgba(0, 0, 0, 0.85);
+}
+
+/* Search input — wider, mono-tinted feel, clear hierarchy */
+.sfilter-search {
+  flex: 0 1 320px !important;
+  padding: 8px 12px !important;
+  background: #14140e !important;
+  border: 1px solid rgba(201, 168, 76, 0.25) !important;
+  transition: border-color var(--motion-base, 180ms) ease, background-color var(--motion-base) ease !important;
+}
+.sfilter-search:focus-within {
+  border-color: var(--yellow, #d4a84a) !important;
+  background: #18180f !important;
+  box-shadow: 0 0 0 3px rgba(212, 168, 74, 0.16);
+}
+.sfilter-search-icon {
+  color: var(--yellow, #d4a84a) !important;
+  font-size: 14px !important;
+  opacity: 0.7;
+}
+.sfilter-input {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  color: var(--text-1, #f5f1e8) !important;
+  background: transparent !important;
+  border: none !important;
+}
+.sfilter-input::placeholder { color: var(--text-3, #948d80) !important; }
+.sfilter-clear {
+  color: var(--text-3, #948d80) !important;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+.sfilter-clear:hover { color: var(--yellow, #d4a84a) !important; }
+
+/* Group label + pills */
+.sfilter-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+.sfilter-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin-right: 4px !important;
+}
+.sf-pill {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  padding: 5px 9px !important;
+  background: #14140e !important;
+  border: 1px solid rgba(201, 168, 76, 0.18) !important;
+  color: var(--text-3, #948d80) !important;
+  cursor: pointer;
+  transition: background var(--motion-base, 180ms) ease, color var(--motion-base) ease, border-color var(--motion-base) ease !important;
+}
+.sf-pill:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  border-color: rgba(201, 168, 76, 0.45) !important;
+}
+.sf-pill.on {
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+
+/* Count badge on the right */
+.sfilter-count {
+  margin-left: auto !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  padding: 4px 10px !important;
+  border: 1px solid rgba(201, 168, 76, 0.45) !important;
+  background: rgba(201, 168, 76, 0.06);
+}
+
+@media (max-width: 760px) {
+  .sfilter {
+    position: static !important;
+    padding: var(--space-3) var(--space-4) !important;
+    gap: var(--space-2) var(--space-3) !important;
+  }
+  .sfilter-search { flex: 1 1 100% !important; }
+  .sfilter-count { margin-left: 0 !important; }
+}
