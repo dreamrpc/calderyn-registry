@@ -3840,146 +3840,6 @@ function JoinTab(){
     && !foundingMemberMissing
     && status.state !== "loading";
 
-  // Build the data-file-shaped JS snippet for admin to paste into the data
-  const buildSnippet = () => {
-    const s = (v) => v ? `"${String(v).replace(/"/g, '\\"')}"` : "";
-    const link = form.rpcLink ? `, link: ${s(form.rpcLink)}` : "";
-    const human = form.fullyHuman ? `, human: true` : "";
-    const powerFrag = form.fullyHuman ? "" :
-      `, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}`;
-
-    let main = "";
-    switch (type) {
-      case "student": {
-        // Data convention: track is singular ("hero" / "sidekick"),
-        // tier is "A-List" form in STUDENTS but single letter ("A") in POWERS.
-        const trackVal = ((form.track || "").toLowerCase()
-          .replace(/^heroes$/, "hero")
-          .replace(/^sidekicks$/, "sidekick"));
-        const studentEntry = `{ char: ${s(form.char)}, alias: ${s(form.alias) || '""'}, house: ${s((form.house||"").toLowerCase())}, year: ${s(form.year)}, track: ${s(trackVal)}, tier: ${s(form.tier)}${powerFrag}${human}${link} },`;
-
-        // Also emit a POWERS Registry entry. Students live in both
-        // STUDENTS and POWERS arrays (the Powers Registry filters by status).
-        // Skip for fully-human students.
-        let powersEntry = "";
-        if (!form.fullyHuman) {
-          const aliasFrag = form.alias ? `, alias: ${s(form.alias)}` : "";
-          const tierLetter = form.tier ? form.tier.replace("-List", "") : "";
-          const tierFrag = tierLetter ? `, tier: ${s(tierLetter)}` : "";
-          powersEntry = `
-
-// → also goes in POWERS (Registry)
-{ char: ${s(form.char)}${aliasFrag}, status: "student"${tierFrag}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
-        }
-        main = studentEntry + powersEntry;
-        break;
-      }
-      case "faculty":
-        main = `// → goes in FACULTY → "${form.facultySection || ''}" section
-{ role: ${s(form.facultyRole)}, char: ${s(form.char)}, stage: ${s(form.alias) || '""'}${powerFrag}${human}${link} },`;
-        break;
-      case "strata":
-        main = `// → goes in HERO_LISTS → ${form.tier} list, fills first open slot
-{ alias: ${s(form.alias)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
-        break;
-      case "club":
-        main = `// → goes in CLUBS → "${form.clubName || ''}" → ${form.clubTeam ? 'team "' + form.clubTeam + '"' : 'positions'}
-{ pos: ${s(form.clubPosition)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
-        break;
-      case "gov":
-        main = `// → goes in STUDENT_GOV → "${form.govSection || ''}" → seats
-{ pos: ${s(form.govSeat)}, char: ${s(form.char)}, term: ${s(form.govTerm) || '"2026-27"'}${powerFrag}${human}${link} },`;
-        break;
-      case "collective": {
-        const flow = form.collectiveFlow;
-        if (flow === "createNew"){
-          // Build a full GROUPS entry. Founding members get the same
-          // { alias, role, char } shape as existing entries.
-          const fac = ((form.newCollectiveFaction || "hero") + "").toLowerCase();
-          const members = (form.newCollectiveMembers || [])
-            .filter(m => m && (m.alias || "").trim() && (m.char || "").trim() && (m.role || "").trim())
-            .map(m => `    { alias: ${s(m.alias)}, role: ${s(m.role)}, char: ${s(m.char)} },`)
-            .join("\n");
-          const optColor  = form.newCollectiveColor  ? `,\n  color: ${s(form.newCollectiveColor)}`   : "";
-          const optBanner = form.newCollectiveBanner ? `,\n  banner: ${s(form.newCollectiveBanner)}` : "";
-          main = `// → goes in GROUPS (append a new entry)
-{
-  name: ${s(form.newCollectiveName)},
-  type: ${s(form.newCollectiveType)},
-  status: "Concept",
-  faction: ${s(fac)},
-  desc: ${s(form.newCollectiveDesc)}${optColor}${optBanner},
-  members: [
-${members}
-  ],
-},`;
-        } else {
-          // joinHero / joinVillain — same shape, faction recorded as a
-          // leading comment so admin can route to the right collective.
-          const fac = flow === "joinVillain" ? "villain" : "hero";
-          const groupEntry = `// → goes in GROUPS → "${form.collectiveName || ''}" → members  (faction: ${fac})
-{ alias: ${s(form.alias)}, role: ${s(form.collectiveRole)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
-
-          // Also emit a POWERS Registry entry — collectives (per their own
-          // flow description) are unsanctioned operators. Skip for fully-
-          // human members; emit empty tier for N/A so TierChip falls back
-          // to the N/A pill.
-          let powersEntry = "";
-          if (!form.fullyHuman) {
-            const aliasFrag = form.alias ? `, alias: ${s(form.alias)}` : "";
-            const tierVal   = form.tier && form.tier !== "N/A" ? form.tier.replace("-List", "") : "";
-            const tierFrag  = tierVal ? `, tier: ${s(tierVal)}` : "";
-            powersEntry = `
-
-// → also goes in POWERS (Registry)
-{ char: ${s(form.char)}${aliasFrag}, status: "unsanctioned"${tierFrag}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
-          }
-          main = groupEntry + powersEntry;
-        }
-        break;
-      }
-      case "outside": {
-        // OUTSIDE entry — the org-role record under the chosen section.
-        // alias is included only on the Powers Registry side (Outside view
-        // doesn't render alias for org roles), but power data lives on both
-        // entries so admin doesn't have to copy it twice.
-        const outsideEntry = `// → goes in OUTSIDE → "${form.outsideSection || ''}" → org "${form.outsideOrg || ''}" → roles
-{ role: ${s(form.outsideRole)}, char: ${s(form.char)}${powerFrag}${human}${link} },`;
-
-        // POWERS Registry entry — skip for fully-human outside characters
-        // (they don't belong in the Powers Registry). tier "N/A" is emitted
-        // as an empty string so TierChip falls back to the N/A pill.
-        let powersEntry = "";
-        if (!form.fullyHuman) {
-          const aliasFrag  = form.alias ? `, alias: ${s(form.alias)}` : "";
-          const statusFrag = form.outsideStatus ? `, status: ${s(form.outsideStatus)}` : "";
-          const tierVal    = form.tier && form.tier !== "N/A" ? form.tier.replace("-List", "") : "";
-          const tierFrag   = tierVal ? `, tier: ${s(tierVal)}` : "";
-          powersEntry = `
-
-// → also goes in POWERS (Registry)
-{ char: ${s(form.char)}${aliasFrag}${statusFrag}${tierFrag}, power: ${s(form.power)}, expression: ${s(form.powerExpression)}, drawbacks: ${s(form.drawbacks)}${link} },`;
-        }
-
-        main = outsideEntry + powersEntry;
-        break;
-      }
-      default: return "";
-    }
-
-    // Optional cross-references for student form (clubs / gov)
-    const extras = [];
-    if (type === "student" && form.optClubPosition){
-      extras.push(`// → also add to CLUBS → "${form.optClubName || ''}" → ${form.optClubTeam ? 'team "' + form.optClubTeam + '"' : 'positions'}
-{ pos: ${s(form.optClubPosition)}, char: ${s(form.char)}${link} },`);
-    }
-    if (type === "student" && form.optGovSeat){
-      extras.push(`// → also add to STUDENT_GOV → "${form.optGovSection || ''}" → seats
-{ pos: ${s(form.optGovSeat)}, char: ${s(form.char)}, term: ${s(form.optGovTerm) || '"2026-27"'}${link} },`);
-    }
-    return [main, ...extras].join("\n\n");
-  };
-
   const submit = async () => {
     // Honeypot check — if the hidden field has a value, silently 'succeed' but don't ship
     if (form.hp){
@@ -3990,17 +3850,14 @@ ${members}
     setStatus({ state: "loading", msg: "Sending…" });
 
     const typeName = APPLICATION_TYPES.find(t => t.id === type)?.name || type;
-    const snippet = buildSnippet();
 
     /* --- Discord embed helpers ----------------------------------------
-       Discord rejects messages (HTTP 400) whose embed total exceeds 6000
-       chars across all embed text, or any single embed with more than 25
-       fields, or any field value over 1024 chars. The helpers below
-       enforce each limit so a long-form Student application can't trip
-       the relay. */
+       Discord enforces per-field (1024 chars) and per-embed (25 fields)
+       limits. splitField() word-aware splits long values into multiple
+       fields; capFields() folds any overflow past 25 into one trailing
+       field so we never lose data silently. */
     const FIELD_VALUE_MAX = 1024;
     const FIELDS_PER_EMBED_MAX = 25;
-    const TOTAL_EMBED_CHARS_MAX = 6000;
     const splitField = (name, value, inline = false) => {
       if (!value) return [];
       const v = String(value);
@@ -4020,30 +3877,6 @@ ${members}
         value, inline,
       }));
     };
-    /* safeBlock() - word-aware truncate for the data-file snippet code block.
-       Discord embed description max is 4096; leave headroom for the fence. */
-    const safeBlock = (s, max = 3900) => {
-      if (!s || s.length <= max) return s || "";
-      let cut = s.lastIndexOf("\n", max);
-      if (cut < max - 400) cut = s.lastIndexOf(" ", max);
-      if (cut < 0) cut = max;
-      return s.slice(0, cut) + "\n// ...trimmed";
-    };
-    // Sum of embed text Discord counts toward the 6000-char message cap.
-    const embedCharCount = (e) => {
-      let n = 0;
-      if (e.title)        n += e.title.length;
-      if (e.description)  n += e.description.length;
-      if (e.footer?.text) n += e.footer.text.length;
-      if (e.author?.name) n += e.author.name.length;
-      for (const f of (e.fields || [])) {
-        n += (f.name || "").length + (f.value || "").length;
-      }
-      return n;
-    };
-    // Cap a fields array at FIELDS_PER_EMBED_MAX, folding the overflow into
-    // one trailing field so admin still sees something was dropped (the full
-    // data lives in the snippet embed / data-file paste).
     const capFields = (fields) => {
       if (fields.length <= FIELDS_PER_EMBED_MAX) return fields;
       const keep = fields.slice(0, FIELDS_PER_EMBED_MAX - 1);
@@ -4051,7 +3884,7 @@ ${members}
         .map(f => f.name).join(", ").slice(0, FIELD_VALUE_MAX - 80);
       keep.push({
         name: "More (truncated)",
-        value: "Additional fields didn't fit Discord's 25-field limit — see the data-file snippet below: " + droppedNames,
+        value: "Additional fields didn't fit Discord's 25-field limit: " + droppedNames,
         inline: false,
       });
       return keep;
@@ -4127,45 +3960,23 @@ ${members}
     if (form.notes)            fields.push(...splitField("Additional Notes", form.notes));
     fields.push({ name: "Rules Acknowledged", value: form.rulesAgree ? "✅ Confirmed read & agreed" : "✗ Not confirmed", inline: false });
 
-    const appEmbed = {
-      title: `New Application · ${typeName}`,
-      description: (type === "collective" && form.collectiveFlow === "createNew")
-        ? `Proposing **${form.newCollectiveName || '(unnamed collective)'}** — ${(form.newCollectiveFaction === "villain") ? "villain" : "hero"}-side · submitted by ${form.char || '(unknown)'}`
-        : `**${form.char}**${form.alias ? ` — *${form.alias}*` : ''}`,
-      color: (type === "collective" && (form.collectiveFlow === "joinVillain" || form.newCollectiveFaction === "villain"))
-        ? 0x4a1a1a
-        : 0xe31b23,
-      fields: capFields(fields),
-      footer: { text: "Calderyn College · Central Registry · 2026" },
-      timestamp: new Date().toISOString(),
-    };
-
-    // Size the snippet embed against whatever's left of Discord's 6000-char
-    // per-message cap. Reserve room for the snippet's title + ```js fence +
-    // a safety margin so we never push the message over the limit.
-    const SNIPPET_FIXED_OVERHEAD = "Data-file snippet".length + "```js\n\n```".length;
-    const SAFETY_MARGIN = 100;
-    const snippetBudget = Math.max(
-      0,
-      TOTAL_EMBED_CHARS_MAX - embedCharCount(appEmbed) - SNIPPET_FIXED_OVERHEAD - SAFETY_MARGIN
-    );
-    const embeds = [appEmbed];
-    // 200 chars is the smallest useful snippet (~one short data-file entry).
-    // Below that, drop the snippet embed entirely rather than push a stub.
-    if (snippet && snippetBudget >= 200) {
-      embeds.push({
-        title: "Data-file snippet",
-        description: "```js\n" + safeBlock(snippet, Math.min(3900, snippetBudget)) + "\n```",
-        color: 0xffcc00,
-      });
-    }
-
     const payload = {
       username: "Calderyn Registry — Applications",
       avatar_url: "https://dreamrpc.github.io/calderyn-registry/calderyn_college_logo_transparent.png",
       content: "<@&1498799678551101451>",
       allowed_mentions: { roles: ["1498799678551101451"] },
-      embeds,
+      embeds: [{
+        title: `New Application · ${typeName}`,
+        description: (type === "collective" && form.collectiveFlow === "createNew")
+          ? `Proposing **${form.newCollectiveName || '(unnamed collective)'}** — ${(form.newCollectiveFaction === "villain") ? "villain" : "hero"}-side · submitted by ${form.char || '(unknown)'}`
+          : `**${form.char}**${form.alias ? ` — *${form.alias}*` : ''}`,
+        color: (type === "collective" && (form.collectiveFlow === "joinVillain" || form.newCollectiveFaction === "villain"))
+          ? 0x4a1a1a
+          : 0xe31b23,
+        fields: capFields(fields),
+        footer: { text: "Calderyn College · Central Registry · 2026" },
+        timestamp: new Date().toISOString(),
+      }],
     };
 
     try {
