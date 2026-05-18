@@ -39,23 +39,45 @@ A roster-change audit log lands in `#registry-log` for every commit.
 
 ## Registry rules enforced by the bot
 
-### Per-tier per-writer caps
+### Per-pool per-tier per-writer caps
 
-Each writer is limited per tier, counted across all of their RPC
-accounts:
+Each writer has **two independent character pools** — students and
+adults — and each pool gets its own tier caps, counted across all of
+the writer's RPC accounts:
 
-| Tier   | Cap | Env var                     |
-|--------|-----|------------------------------|
-| A-List | 5   | `A_LIST_LIMIT_PER_WRITER`    |
-| B-List | 8   | `B_LIST_LIMIT_PER_WRITER`    |
-| C-List | 10  | `C_LIST_LIMIT_PER_WRITER`    |
-| D-List | uncapped | —                       |
+| Tier   | Cap (each pool) | Env var                  |
+|--------|-----------------|---------------------------|
+| A-List | 5               | `A_LIST_LIMIT_PER_WRITER` |
+| B-List | 8               | `B_LIST_LIMIT_PER_WRITER` |
+| C-List | 10              | `C_LIST_LIMIT_PER_WRITER` |
+| D-List | uncapped        | —                         |
+
+A writer at the student A-List cap can still submit an adult A-Lister
+(and vice versa) because the two pools are counted independently.
+
+**Pool determination:**
+- A character is **student** if their `powers[]` row carries
+  `status: "student"`.
+- Anything else (an Outside character, a STRATA hero with non-student
+  status, a `heroLists` slot for a character with no `powers[]` row)
+  is **adult**.
+- The same character is *never* counted in both pools — pool
+  classification is character-level, not entry-level. A student who
+  also has a STRATA `heroLists` slot still counts as one student, not
+  one student + one adult.
+
+**Submission routing** is by form type:
+- `Student` form → student pool
+- `STRATA`, `Outside`, `Collective Join` (any form with a tier other
+  than student) → adult pool
+- `Faculty`, `Club`, `Gov`, `Collective Create New` have no tier and
+  bypass the quota entirely.
 
 The check fires when an admin clicks ✅ on any submission with a tier.
-If approving would push the writer over the cap *for that tier*, the
-click is rejected with an amber *"Approval blocked — `<tier>` quota"*
-embed. The submission stays in the queue so the admin can revisit
-later or reject it outright.
+If approving would push the writer over the cap *for the submission's
+pool + tier combination*, the click is rejected with an amber
+*"Approval blocked — `<pool>` `<tier>` quota"* embed. The submission
+stays in the queue so the admin can revisit later or reject it outright.
 
 **Special cases:**
 
@@ -74,6 +96,19 @@ entirely server-side in [`worker/src/writers.js`](./worker/src/writers.js)
 and is consulted only by the quota check. The blocked embed shows
 just the count and the cap, nothing that links the submitting RPC
 account to the writer's other accounts.
+
+**Auto-mapping new writers.** When a new writer submits the form via
+the *"Other / new writer…"* path (typing their handle into the Writer
+Tag freeform input) and the submission is approved, the bot commits
+the `rpc-username → ooc-name` pair into
+[`worker/src/writers.js`](./worker/src/writers.js) automatically on
+the same approval, just above the `// AUTO-INSERT:writers` marker.
+The same happens if an existing writer submits from a new RPC account.
+Lands as a separate commit (`Map new writer: <user> → <handle>`)
+right before the registry-data commit, so cross-account quota counting
+works on their next submission. Failures are non-fatal — if the
+writers.js commit doesn't go through, the registry-data approval
+still does and the mapping picks up on the next try.
 
 ## Editing the registry manually
 

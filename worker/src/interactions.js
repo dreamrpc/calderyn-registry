@@ -2,7 +2,9 @@ import { verifySignature, editMessage, postMessage } from "./discord.js";
 import { buildEmbed } from "./embed.js";
 import { updateFile, getFile } from "./github.js";
 import { buildInsertions, applyInsertions, removeBySubmissionId, countEntriesFor } from "./markers.js";
-import { checkTierQuota, getTierLimits } from "./quota.js";
+import { checkTierQuota, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
+import { lookupOocByRpc } from "./writers.js";
+import { ensureWriterMapping } from "./writer-mapping.js";
 
 const INTERACTION_PONG       = 1;
 const INTERACTION_COMPONENT  = 3;
@@ -113,6 +115,19 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
     }
 
     if (!blocked) {
+      // Auto-register the writer mapping if this is the first time we
+      // see this RPC account. The form makes the OOC tag mandatory, so
+      // sub.form.ooc is always populated on new submissions; legacy
+      // submissions without it just skip this step. Failure to commit
+      // the mapping is non-fatal — log and continue with the data.js
+      // approval so a transient writers.js write doesn't strand the
+      // whole approval.
+      const username = extractRpcUsername(sub.form?.rpcLink);
+      const ooc = getOocForForm(sub.form);
+      if (username && ooc && !lookupOocByRpc(username)) {
+        await ensureWriterMapping(env, username, ooc);
+      }
+
       const insertions = buildInsertions(sub);
       if (insertions.length > 0) {
         const res = await updateFile(
@@ -152,16 +167,19 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
   // writer nor their existing A-List characters — listing those would
   // tie this RPC account to the writer's other accounts publicly.
   if (blocked) {
+    const poolLabel = blocked.pool === "student" ? "student" : "adult";
     const blockedEmbed = buildEmbed(sub.type, sub.form, {
       color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
-      footer: `Calderyn College · Central Registry · 2026 · ⚠ ${blocked.tier} quota`,
+      footer: `Calderyn College · Central Registry · 2026 · ⚠ ${poolLabel} ${blocked.tier} quota`,
     });
     blockedEmbed.description =
-      `**⚠ Approval blocked — ${blocked.tier} quota.**\n` +
-      `This writer already has **${blocked.count} ${blocked.tier} characters** ` +
-      `(limit: ${blocked.limit}). No new ${blocked.tier} approvals can be accepted ` +
-      `until existing characters are adjusted to a different tier. The writer ` +
-      `has been notified.\n\n` +
+      `**⚠ Approval blocked — ${poolLabel} ${blocked.tier} quota.**\n` +
+      `This writer already has **${blocked.count} ${poolLabel} ${blocked.tier} characters** ` +
+      `(limit: ${blocked.limit}). The ${poolLabel} pool is counted separately from the ` +
+      `${poolLabel === "student" ? "adult" : "student"} pool, so re-tiering one of those ` +
+      `won't free up a slot here. No new ${poolLabel} ${blocked.tier} approvals can be ` +
+      `accepted until existing ${poolLabel} characters are adjusted to a different tier. ` +
+      `The writer has been notified.\n\n` +
       (blockedEmbed.description || "");
     try {
       await editMessage(env, sub.channelId, sub.messageId, {
