@@ -1,122 +1,142 @@
 // A-List quota check.
 //
-// Rule: each writer (identified by their RPC username — the `user=foo`
-// segment in their roleplay.chat profile URL) may have at most N
-// A-List characters across the registry. Default N = 5.
+// Rule: each *OOC writer* may have at most A_LIST_LIMIT_PER_WRITER
+// A-List characters across the entire registry. Writers are grouped
+// across all of their RPC accounts via worker/src/writers.js — so a
+// writer with three RPC accounts contributes a single combined count,
+// not three independent ones.
 //
 // A character is A-List for a writer iff there exists at least one
 // committed entry in data.js where:
-//   - the entry's `link` field points to that writer's profile, AND
+//   - the entry's `link` field points to one of that writer's RPC
+//     usernames (resolved via the OOC mapping), AND
 //   - the entry sits in either:
 //        powers[]                       with tier "A" or "A-List", OR
 //        heroLists[<tier=A>].slots[]
 // Multiple entries for the same character (e.g. a Student row in
 // `students[]` and the matching `powers[]` row, or also a club
 // position) count as ONE character. Uniqueness is by `char` value.
+//
+// PRIVACY: the OOC name never leaves the Worker. Verdicts return
+// counts but not character lists — listing a writer's other A-Listers
+// next to a blocked submission would leak the RPC-account → OOC
+// mapping to anyone watching the channel.
 
 import { forEachArrayObject } from "./scanner.js";
+import { lookupOocByRpc } from "./writers.js";
 
-// Extract the username from a roleplay.chat (or similar) profile URL.
-// Decodes URL-encoded values so `user=blood+eagle` matches the same
-// writer as `user=blood eagle`.
-export function extractWriter(url) {
+// Extract the RPC username from a profile URL (rules.chat / similar).
+// Returns the username as it appears in the URL (with `+`/`%xx` intact)
+// — callers that need to compare should funnel through writers.js's
+// `normalize` for case/encoding-insensitive matches.
+export function extractRpcUsername(url) {
   if (!url) return null;
   const m = /[?&]user=([^&"]+)/.exec(String(url));
   if (!m) return null;
-  try {
-    return decodeURIComponent(m[1].replace(/\+/g, " "));
-  } catch {
-    return m[1];
-  }
-}
-
-export function linkBelongsToWriter(link, writer) {
-  const found = extractWriter(link);
-  if (!found || !writer) return false;
-  return found.toLowerCase() === writer.toLowerCase();
+  return m[1];
 }
 
 // Pull a top-level string field out of an object's source text.
 function pickStringField(objText, key) {
-  // Match `key:` then a double-quoted value. `\b` on the left so
-  // `othername:` doesn't match `name:`. Escapes inside the string are
-  // captured verbatim — we'll only use this for short, well-formed
-  // fields (char, alias, tier, status, link).
   const re = new RegExp(`\\b${key}\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"`);
   const m = re.exec(objText);
   if (!m) return null;
   return m[1].replace(/\\"/g, '"').replace(/\\\\/g, "\\");
 }
 
-// Set<char> of A-List characters belonging to `writer`, derived from
-// the current data.js text.
-export function getWriterALitersFromText(text, writer) {
-  const out = new Set();
-  if (!writer) return out;
+// Determine the OOC writer for an entry by reading its link field.
+// Returns null if the link's RPC username isn't in the mapping —
+// such an entry doesn't contribute to anyone's quota count.
+function entryOoc(objText) {
+  const link = pickStringField(objText, "link");
+  if (!link) return null;
+  const username = extractRpcUsername(link);
+  return lookupOocByRpc(username);
+}
+
+// Map<oocName, Set<charName>> of every A-List character in data.js,
+// grouped by their OOC writer.
+export function getALitersByOoc(text) {
+  const byOoc = new Map();
+  const add = (ooc, char) => {
+    if (!ooc || !char) return;
+    if (!byOoc.has(ooc)) byOoc.set(ooc, new Set());
+    byOoc.get(ooc).add(char);
+  };
 
   // 1) powers[] with tier "A" or "A-List".
   try {
     forEachArrayObject(text, ["powers"], (obj) => {
-      const link = pickStringField(obj, "link");
-      if (!linkBelongsToWriter(link, writer)) return;
       const tier = pickStringField(obj, "tier");
       if (tier !== "A" && tier !== "A-List") return;
-      const char = pickStringField(obj, "char");
-      if (char) out.add(char);
+      add(entryOoc(obj), pickStringField(obj, "char"));
     });
   } catch (err) {
-    // If the powers[] array isn't found we just skip — leave the heroLists
-    // scan a chance, and don't take the whole approval down with us.
     console.error("quota: powers scan failed:", err.message);
   }
 
-  // 2) heroLists[<tier=A>].slots[] — slot rows don't carry a tier field
-  //    of their own; the parent's tier is the source of truth.
+  // 2) heroLists[<tier=A>].slots[] — slot rows don't carry a tier of
+  //    their own; the parent's tier is the source of truth.
   try {
     forEachArrayObject(text, ["heroLists", { tier: "A" }, "slots"], (obj) => {
-      const link = pickStringField(obj, "link");
-      if (!linkBelongsToWriter(link, writer)) return;
-      const char = pickStringField(obj, "char");
-      if (char) out.add(char);
+      add(entryOoc(obj), pickStringField(obj, "char"));
     });
   } catch (err) {
     console.error("quota: heroLists scan failed:", err.message);
   }
 
-  return out;
+  return byOoc;
+}
+
+// Get the A-List character set for one OOC writer.
+export function getOocALiters(text, ooc) {
+  if (!ooc) return new Set();
+  return getALitersByOoc(text).get(ooc) || new Set();
+}
+
+// Pick the OOC writer for a fresh submission. The form's `ooc` field
+// (declared by the submitter via the Writer Tag dropdown) is the
+// primary source; fall back to the rpcLink → mapping lookup so that
+// legacy / API submissions without an `ooc` field still resolve when
+// the submitter is in the mapping.
+export function getOocForForm(form) {
+  if (!form) return null;
+  if (form.ooc && String(form.ooc).trim()) return String(form.ooc).trim();
+  return lookupOocByRpc(extractRpcUsername(form.rpcLink));
 }
 
 // Decide whether approving `sub` is allowed under the quota. Returns
-//   { allowed: true }                                      → proceed
-//   { allowed: false, reason: "...", count, limit, writer } → block
+//   { allowed: true,  ...meta }                  → proceed
+//   { allowed: false, count, newCount, limit }   → block (privacy:
+//      character list is NOT included on purpose)
 export function checkALitQuota(text, sub, limit) {
   const form = sub.form || {};
   if (form.tier !== "A-List") return { allowed: true };
 
-  const writer = extractWriter(form.rpcLink);
-  if (!writer) {
-    // No usable link — can't enforce the rule. Let it through but flag
-    // it; admin can sort by hand if needed.
-    return { allowed: true, warning: "no_writer_from_link" };
+  const ooc = getOocForForm(form);
+  if (!ooc) {
+    return { allowed: true, warning: "no_ooc_identifier" };
   }
 
-  const owned = getWriterALitersFromText(text, writer);
-  // Adding the new character only counts if they're not already in the
-  // writer's A-List set (e.g. a writer's A-Lister taking on a new role
-  // doesn't increase their A-List count).
-  const wouldOwn = new Set(owned);
-  if (form.char) wouldOwn.add(form.char);
-
-  if (wouldOwn.size > limit) {
+  const owned = getOocALiters(text, ooc);
+  // Adding a new role for a character already in the writer's A-List
+  // set doesn't grow the set, so it never bumps anyone over the limit
+  // — allow even if the writer is currently above the cap (which can
+  // happen for grandfathered early-supporter cases). Only block when
+  // approval would introduce a brand-new A-List character above the
+  // cap.
+  const isNewCharacter = form.char ? !owned.has(form.char) : true;
+  if (isNewCharacter && (owned.size + 1) > limit) {
     return {
       allowed: false,
-      writer,
+      // `ooc` is included so the interaction handler can log it for
+      // server-side debugging — it must NOT be put in any Discord
+      // message body.
+      ooc,
       count: owned.size,
-      newCount: wouldOwn.size,
+      newCount: owned.size + 1,
       limit,
-      existingChars: [...owned],
-      newChar: form.char,
     };
   }
-  return { allowed: true, writer, count: owned.size, limit };
+  return { allowed: true, ooc, count: owned.size, limit };
 }

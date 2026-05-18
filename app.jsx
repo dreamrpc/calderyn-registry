@@ -3788,7 +3788,7 @@ function JoinTab(){
   // Validation: list missing required fields per application type
   const requiredFields = useMemo(() => {
     if (!type) return [];
-    const base = ["rpcLink", "char", "rulesAgree"];
+    const base = ["rpcLink", "char", "ooc", "rulesAgree"];
     // Power fields are universal: any role can be powered unless explicitly "fully human"
     const power = form.fullyHuman ? [] : ["power", "powerExpression", "drawbacks"];
     switch (type) {
@@ -4374,7 +4374,32 @@ function CollectiveFieldset({form, set, Common}){
   );
 }
 
+// Known OOC writer tags shown in the application-form dropdown. The
+// real RPC-username ↔ OOC mapping lives in the Worker (worker/src/
+// writers.js) and is never sent to the client; the list here is just
+// the publicly-known set of writers so a familiar dropdown is shown.
+// Adding a writer here doesn't grant any quota access — server-side
+// is the source of truth.
+const KNOWN_OOC_TAGS = ["Dream", "Katniss", "Star", "Star King", "Storm", "Tyler", "Wilder"];
+
 function JoinFieldset({type, form, set}){
+  // Writer Tag dropdown state. `form.oocPreset` tracks which option is
+  // selected; "_other" reveals a freeform text input that writes into
+  // `form.ooc` directly. For preset selections, both fields hold the
+  // same value so server-side consumption is uniform.
+  const onOocSelect = (v) => {
+    if (v === "_other") {
+      set("oocPreset", "_other");
+      // Don't clear ooc if they're switching back from a preset and
+      // had nothing typed — let them edit. But if they came from a
+      // preset value, clear it so the text input starts empty.
+      if (form.oocPreset && form.oocPreset !== "_other") set("ooc", "");
+    } else {
+      set("oocPreset", v);
+      set("ooc", v);
+    }
+  };
+
   const Common = (
     <>
       <Field label="Character Name" required>
@@ -4382,6 +4407,27 @@ function JoinFieldset({type, form, set}){
       </Field>
       <Field label="RPC Profile Link" required hint="roleplay.chat profile URL">
         <input className="join-input" type="url" value={form.rpcLink || ""} onChange={e => set("rpcLink", e.target.value)} placeholder="https://www.roleplay.chat/..."/>
+      </Field>
+      <Field label="Writer Tag" required hint="Your OOC handle — used internally for quota tracking. Never shown publicly." full>
+        <select
+          className="join-select"
+          value={form.oocPreset || ""}
+          onChange={e => onOocSelect(e.target.value)}
+        >
+          <option value="">Select your handle…</option>
+          {KNOWN_OOC_TAGS.map(n => <option key={n} value={n}>{n}</option>)}
+          <option value="_other">Other / new writer…</option>
+        </select>
+        {form.oocPreset === "_other" && (
+          <input
+            className="join-input"
+            style={{marginTop: "8px"}}
+            type="text"
+            value={form.ooc || ""}
+            onChange={e => set("ooc", e.target.value)}
+            placeholder="Type your handle"
+          />
+        )}
       </Field>
     </>
   );

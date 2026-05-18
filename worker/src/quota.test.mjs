@@ -1,16 +1,16 @@
-// Tests for quota.js against the real data.js. We just committed seven
-// new students, three of which are A-List, so the writer-set lookups
-// have predictable answers.
+// Tests for quota.js: OOC-grouped A-List quota check.
 
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import {
-  extractWriter,
-  linkBelongsToWriter,
-  getWriterALitersFromText,
+  extractRpcUsername,
+  getALitersByOoc,
+  getOocALiters,
+  getOocForForm,
   checkALitQuota,
 } from "./quota.js";
+import { lookupOocByRpc, normalize, KNOWN_OOC_NAMES } from "./writers.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dataPath = resolve(here, "../../data.js");
@@ -21,109 +21,166 @@ function test(name, fn) {
   try { fn(); console.log("✓", name); }
   catch (e) { failed++; console.error("✗", name, "\n  ", e.message); }
 }
-function assertEq(a, b, msg) { if (a !== b) throw new Error(`${msg||"assertEq"}\n  expected: ${JSON.stringify(b)}\n  actual:   ${JSON.stringify(a)}`); }
+function assertEq(a, b, msg) {
+  if (a !== b) throw new Error(`${msg||"assertEq"}\n  expected: ${JSON.stringify(b)}\n  actual:   ${JSON.stringify(a)}`);
+}
 function assertTrue(v, msg) { if (!v) throw new Error(msg || "expected truthy"); }
 function assertFalse(v, msg) { if (v) throw new Error(msg || "expected falsy"); }
 
-test("extractWriter: standard URL", () => {
-  assertEq(extractWriter("https://roleplay.chat/profile.php?user=upchuck"), "upchuck");
+// ─── writers.js ────────────────────────────────────────────────────────
+test("writers: normalize handles + and case", () => {
+  assertEq(normalize("Black+Mass"), "black mass");
+  assertEq(normalize("BLACK+VEIN"), "black vein");
+  assertEq(normalize("Crown."), "crown.");
 });
-test("extractWriter: + decodes to space", () => {
-  assertEq(extractWriter("https://roleplay.chat/profile.php?user=blood+eagle"), "blood eagle");
+test("writers: lookupOocByRpc resolves Star's accounts", () => {
+  assertEq(lookupOocByRpc("Crown."),    "Star");
+  assertEq(lookupOocByRpc("Black+Mass"), "Star");
+  assertEq(lookupOocByRpc("crown."),    "Star"); // lowercase matches too
+  assertEq(lookupOocByRpc("nocturne."), "Star");
 });
-test("extractWriter: %20 decodes too", () => {
-  assertEq(extractWriter("https://example.com/x?user=foo%20bar"), "foo bar");
+test("writers: lookupOocByRpc distinguishes Tyler from Star (BLACK+VEIN)", () => {
+  assertEq(lookupOocByRpc("BLACK+VEIN"), "Tyler");
+  assertEq(lookupOocByRpc("black+vein"), "Tyler");
 });
-test("extractWriter: missing user param → null", () => {
-  assertEq(extractWriter("https://roleplay.chat/profile.php?id=42"), null);
+test("writers: unknown username → null", () => {
+  assertEq(lookupOocByRpc("not-a-real-writer"), null);
+  assertEq(lookupOocByRpc(""), null);
+  assertEq(lookupOocByRpc(null), null);
 });
-test("extractWriter: empty/null", () => {
-  assertEq(extractWriter(""), null);
-  assertEq(extractWriter(null), null);
-});
-
-test("linkBelongsToWriter: case-insensitive match", () => {
-  assertTrue(linkBelongsToWriter(
-    "https://roleplay.chat/profile.php?user=Crown.",
-    "crown."
-  ));
-});
-test("linkBelongsToWriter: different user → false", () => {
-  assertFalse(linkBelongsToWriter(
-    "https://roleplay.chat/profile.php?user=Crown.",
-    "upchuck"
-  ));
-});
-
-// ── Against real data.js ──────────────────────────────────────────────
-test("getWriterALitersFromText: known A-Lister Tatiana (Nocturne)", () => {
-  const owned = getWriterALitersFromText(data, "Nocturne.");
-  // We just added Tatiana as A-List for user=Nocturne. — link literal.
-  assertTrue(owned.has("Tatiana Morozova"), `expected Tatiana, got ${[...owned].join(", ")}`);
-  assertEq(owned.size, 1);
+test("writers: KNOWN_OOC_NAMES exposes unique values sorted", () => {
+  assertTrue(KNOWN_OOC_NAMES.includes("Star"));
+  assertTrue(KNOWN_OOC_NAMES.includes("Wilder"));
+  assertTrue(KNOWN_OOC_NAMES.includes("Tyler"));
+  // Sorted
+  const sorted = [...KNOWN_OOC_NAMES].sort();
+  assertEq(KNOWN_OOC_NAMES.join(","), sorted.join(","));
 });
 
-test("getWriterALitersFromText: B-Lister Hopper is not counted", () => {
-  const owned = getWriterALitersFromText(data, "Hopper");
-  assertEq(owned.size, 0);
+// ─── extractRpcUsername ────────────────────────────────────────────────
+test("extractRpcUsername: standard URL", () => {
+  assertEq(extractRpcUsername("https://roleplay.chat/profile.php?user=upchuck"), "upchuck");
+});
+test("extractRpcUsername: preserves +", () => {
+  assertEq(extractRpcUsername("https://roleplay.chat/profile.php?user=blood+eagle"), "blood+eagle");
+});
+test("extractRpcUsername: missing → null", () => {
+  assertEq(extractRpcUsername("https://example/?id=1"), null);
+  assertEq(extractRpcUsername(null), null);
 });
 
-test("getWriterALitersFromText: unknown writer returns empty set", () => {
-  const owned = getWriterALitersFromText(data, "someone-who-doesnt-exist");
-  assertEq(owned.size, 0);
+// ─── Grouping by OOC against real data.js ─────────────────────────────
+test("getALitersByOoc: Star's three new A-Listers + Sven group together", () => {
+  // Recent additions in main: Tatiana (Nocturne. → Star), Vittoria (Crown. → Star),
+  // Princeton (desirable → Wilder), plus Sven (blood+eagle → Dream).
+  // Star's three Hopper/etc accounts had no A-Listers prior to those.
+  const byOoc = getALitersByOoc(data);
+  const star = byOoc.get("Star") || new Set();
+  assertTrue(star.has("Tatiana Morozova"), `Star set: ${[...star].join(", ")}`);
+  assertTrue(star.has("Vittoria Delphine Malik"), `Star set: ${[...star].join(", ")}`);
+});
+test("getALitersByOoc: Dream owns Sven (blood+eagle)", () => {
+  const dream = getALitersByOoc(data).get("Dream") || new Set();
+  assertTrue(dream.has("Sven Skarsen"), `Dream set: ${[...dream].join(", ")}`);
+});
+test("getALitersByOoc: Wilder owns Princeton (desirable)", () => {
+  const wilder = getALitersByOoc(data).get("Wilder") || new Set();
+  assertTrue(wilder.has("Princeton Ambrose"), `Wilder set: ${[...wilder].join(", ")}`);
+});
+test("getOocALiters: unknown OOC → empty set", () => {
+  assertEq(getOocALiters(data, "Nobody").size, 0);
+  assertEq(getOocALiters(data, null).size, 0);
 });
 
-test("getWriterALitersFromText: blood+eagle is A-List (Sven)", () => {
-  // Sven's link uses + in the URL (blood+eagle). The query for the
-  // writer should match regardless.
-  const owned = getWriterALitersFromText(data, "blood eagle");
-  assertTrue(owned.has("Sven Skarsen"), `got ${[...owned].join(", ")}`);
+// ─── getOocForForm: form.ooc wins; rpcLink is fallback ────────────────
+test("getOocForForm: form.ooc takes precedence", () => {
+  assertEq(getOocForForm({
+    ooc: "Star",
+    rpcLink: "https://x?user=upchuck", // would map to Dream
+  }), "Star");
+});
+test("getOocForForm: rpcLink fallback when no ooc", () => {
+  assertEq(getOocForForm({
+    rpcLink: "https://x?user=upchuck",
+  }), "Dream");
+});
+test("getOocForForm: blank ooc falls back to rpcLink", () => {
+  assertEq(getOocForForm({
+    ooc: "   ",
+    rpcLink: "https://x?user=Crown.",
+  }), "Star");
+});
+test("getOocForForm: returns null when neither resolves", () => {
+  assertEq(getOocForForm({ ooc: "", rpcLink: "https://x?user=unknown" }), null);
+  assertEq(getOocForForm({}), null);
 });
 
-// ── checkALitQuota ────────────────────────────────────────────────────
+// ─── checkALitQuota verdicts ──────────────────────────────────────────
 test("checkALitQuota: non-A-List submission always allowed", () => {
-  const verdict = checkALitQuota(data, {
-    form: { tier: "B-List", char: "Anyone", rpcLink: "https://x?user=Nocturne." },
+  const v = checkALitQuota(data, {
+    form: { tier: "B-List", char: "X", ooc: "Star" },
   }, 5);
-  assertEq(verdict.allowed, true);
+  assertEq(v.allowed, true);
 });
 
-test("checkALitQuota: writer at limit, new A-List char → blocked", () => {
-  // Limit 1 — Nocturne writer already owns Tatiana (A). Trying to add a
-  // SECOND A-List character should block.
-  const verdict = checkALitQuota(data, {
-    form: { tier: "A-List", char: "Second Char", rpcLink: "https://x?user=Nocturne." },
+test("checkALitQuota: Star at limit 1 → blocked for a new char", () => {
+  // Star already owns ≥1 A-List; limit 1 means new char blocks.
+  const v = checkALitQuota(data, {
+    form: { tier: "A-List", char: "Brand New", ooc: "Star" },
   }, 1);
-  assertEq(verdict.allowed, false);
-  assertEq(verdict.count, 1);
-  assertEq(verdict.newCount, 2);
-  assertEq(verdict.limit, 1);
+  assertEq(v.allowed, false);
+  assertTrue(v.count >= 1, `count was ${v.count}`);
+  assertEq(v.newCount, v.count + 1);
+  assertEq(v.limit, 1);
 });
 
-test("checkALitQuota: writer at limit, *same* char → allowed", () => {
-  // Same writer, same character that's already on the registry —
-  // adding another role for an existing A-Lister shouldn't bump the
-  // count.
-  const verdict = checkALitQuota(data, {
-    form: { tier: "A-List", char: "Tatiana Morozova", rpcLink: "https://x?user=Nocturne." },
+test("checkALitQuota: Star adding a new role for existing A-Lister → allowed", () => {
+  // Tatiana is already Star's A-Lister. Adding e.g. a Club position for
+  // Tatiana shouldn't bump the count.
+  const v = checkALitQuota(data, {
+    form: { tier: "A-List", char: "Tatiana Morozova", ooc: "Star" },
   }, 1);
-  assertEq(verdict.allowed, true);
+  assertEq(v.allowed, true);
 });
 
-test("checkALitQuota: under limit, new A-List char → allowed", () => {
-  const verdict = checkALitQuota(data, {
-    form: { tier: "A-List", char: "Another", rpcLink: "https://x?user=Nocturne." },
-  }, 5);
-  assertEq(verdict.allowed, true);
-  assertEq(verdict.count, 1);
+test("checkALitQuota: cross-account counting — submit via Hopper, blocked by Star's other accounts", () => {
+  // Hopper (Star's account) submits a new A-Lister. Counting Star's
+  // existing A-Listers across ALL accounts should block at limit 1.
+  const v = checkALitQuota(data, {
+    form: {
+      tier: "A-List",
+      char: "From Hopper",
+      // No explicit ooc field — rely on the rpcLink → mapping fallback.
+      rpcLink: "https://roleplay.chat/profile.php?user=Hopper",
+    },
+  }, 1);
+  assertEq(v.allowed, false, "expected block; verdict was " + JSON.stringify(v));
 });
 
-test("checkALitQuota: no link → allowed with warning", () => {
-  const verdict = checkALitQuota(data, {
-    form: { tier: "A-List", char: "Mystery" },
+test("checkALitQuota: under limit → allowed", () => {
+  const v = checkALitQuota(data, {
+    form: { tier: "A-List", char: "New", ooc: "Star" },
+  }, 100);
+  assertEq(v.allowed, true);
+});
+
+test("checkALitQuota: unmapped writer, no ooc → allowed with warning", () => {
+  const v = checkALitQuota(data, {
+    form: {
+      tier: "A-List",
+      char: "Unmapped",
+      rpcLink: "https://x?user=someone-unmapped",
+    },
   }, 5);
-  assertEq(verdict.allowed, true);
-  assertEq(verdict.warning, "no_writer_from_link");
+  assertEq(v.allowed, true);
+  assertEq(v.warning, "no_ooc_identifier");
+});
+
+test("checkALitQuota: PRIVACY — verdict has no character list field", () => {
+  const v = checkALitQuota(data, {
+    form: { tier: "A-List", char: "New", ooc: "Star" },
+  }, 1);
+  assertFalse("existingChars" in v, "verdict must not include existingChars (would leak OOC mapping when surfaced in Discord)");
 });
 
 if (failed) {

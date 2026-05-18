@@ -148,28 +148,24 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
 
   // Blocked path — quota check refused the approval. Leave KV state
   // unchanged (still pending), restore both buttons, edit the message
-  // with a clear explanation.
+  // with a clear explanation. PRIVACY: the embed names neither the OOC
+  // writer nor their existing A-List characters — listing those would
+  // tie this RPC account to the writer's other accounts publicly.
   if (blocked) {
-    const existingList = blocked.existingChars
-      .map(c => `• ${c}`)
-      .join("\n")
-      .slice(0, 900);
     const blockedEmbed = buildEmbed(sub.type, sub.form, {
       color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
-      footer: `Calderyn College · Central Registry · 2026 · ⚠ quota blocked`,
+      footer: `Calderyn College · Central Registry · 2026 · ⚠ A-List quota`,
     });
     blockedEmbed.description =
       `**⚠ Approval blocked — A-List quota.**\n` +
-      `Writer **${blocked.writer}** already has **${blocked.count}/${blocked.limit}** A-List characters` +
-      ` and this would make **${blocked.newCount}**. ` +
-      `Adjust the application's tier, or remove one of the writer's existing A-Listers first.\n\n` +
-      `_Existing A-List characters:_\n${existingList || "(none — unexpected)"}\n\n` +
+      `This writer already has **${blocked.count} A-List characters** ` +
+      `(limit: ${blocked.limit}). No new A-List approvals can be accepted ` +
+      `until existing characters are adjusted to lower tiers. The writer ` +
+      `has been notified.\n\n` +
       (blockedEmbed.description || "");
     try {
       await editMessage(env, sub.channelId, sub.messageId, {
         embeds: [blockedEmbed],
-        // Both buttons restored: admin can try again later (after a
-        // removal), or click ❌ to reject this application outright.
         components: bothButtons(sub.id),
       });
     } catch (err) {
