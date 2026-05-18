@@ -419,7 +419,7 @@ function useInView(threshold = 0.25){
 function HomeTab({setTab}){
   return (
     <div className="home-page">
-      <HomeHero/>
+      <HomeHero setTab={setTab}/>
       <HomeVanguard/>
       <HomeProgramme/>
       <HomeDormNotice/>
@@ -428,7 +428,7 @@ function HomeTab({setTab}){
   );
 }
 
-function HomeHero(){
+function HomeHero({setTab}){
   // Title words split into individual spans so each gets its own
   // animation-delay — produces the cinematic word-by-word reveal.
   const lines = [
@@ -439,31 +439,77 @@ function HomeHero(){
   let i = 0;
   return (
     <section className="home-hero">
+      {/* Inline SVG filter defs — ink-bleed warps the focal type's
+          edges via a subtle displacement map. Inlined here so we don't
+          rely on an external SVG file. Hidden visually but present in
+          the DOM so the CSS filter: url(#...) reference resolves. */}
+      <svg className="home-hero-svg-defs" aria-hidden="true" focusable="false" width="0" height="0">
+        <defs>
+          <filter id="hero-ink-bleed" x="-2%" y="-2%" width="104%" height="104%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.78" numOctaves="2" seed="3"/>
+            <feDisplacementMap in="SourceGraphic" scale="1.6"/>
+          </filter>
+        </defs>
+      </svg>
+
       <div className="home-hero-bg" aria-hidden="true">
         <div className="home-hero-emberfield"/>
+        <div className="home-hero-halftone"/>
+        <div className="home-hero-grain"/>
+        <div className="home-hero-spotlight"/>
         <div className="home-hero-vignette"/>
       </div>
+
       <div className="home-hero-inner">
-        <div className="home-hero-stamp">CALDERYN COLLEGE · CENTRAL REGISTRY · 2026</div>
-        <h1 className="home-hero-title">
-          {lines.map((words, li) => (
-            <span key={li} className="home-hero-line">
-              {words.map((w, wi) => {
-                const delay = 0.35 + (i++) * 0.22;
-                return (
-                  <span key={wi} className="home-hero-word" style={{animationDelay: `${delay}s`}}>
-                    {w}{wi < words.length - 1 ? " " : ""}
-                  </span>
-                );
-              })}
-            </span>
-          ))}
-        </h1>
-        <p className="home-hero-sub" style={{animationDelay: "2.0s"}}>
-          The United Kingdom's only sanctioned training facility for powered operators.
-          Three Cradles. Four houses. One Vanguard. A roster that runs in the front of
-          the paper and the back of the morgue, sometimes in the same week.
-        </p>
+        {/* Comic-panel frame — four corner brackets that don't fully
+            close, gives the editorial / handcrafted feel without
+            visually fencing in the content. Pure pseudo-elements via
+            CSS — see polish.css. */}
+        <div className="home-hero-frame" aria-hidden="true"/>
+
+        <div className="home-hero-content">
+          <div className="home-hero-stamp">
+            <span className="home-hero-stamp-dot" aria-hidden="true"/>
+            INTAKE OPEN · 2026 · CALDERYN COLLEGE
+          </div>
+          <h1 className="home-hero-title">
+            {lines.map((words, li) => (
+              <span key={li} className={"home-hero-line home-hero-line-" + (li + 1)}>
+                {words.map((w, wi) => {
+                  const delay = 0.4 + (i++) * 0.18;
+                  return (
+                    <span key={wi} className="home-hero-word" style={{animationDelay: `${delay}s`}}>
+                      {w}{wi < words.length - 1 ? " " : ""}
+                    </span>
+                  );
+                })}
+              </span>
+            ))}
+          </h1>
+          <p className="home-hero-sub" style={{animationDelay: "1.9s"}}>
+            The United Kingdom's only sanctioned training facility for powered operators.
+            Three Cradles. Four houses. One Vanguard. A roster that runs in the front of
+            the paper and the back of the morgue, sometimes in the same week.
+          </p>
+          <div className="home-hero-cta-row" style={{animationDelay: "2.3s"}}>
+            <button
+              type="button"
+              className="home-hero-cta home-hero-cta-primary"
+              onClick={() => setTab && setTab("join")}
+            >
+              <span>Apply to Calderyn</span>
+              <Icon name="arrow-right" size={16}/>
+            </button>
+            <button
+              type="button"
+              className="home-hero-cta home-hero-cta-ghost"
+              onClick={() => setTab && setTab("lore")}
+            >
+              <span>Read the lore</span>
+            </button>
+          </div>
+        </div>
+
         <div className="home-hero-scrollhint" aria-hidden="true">SCROLL</div>
       </div>
     </section>

@@ -6121,3 +6121,357 @@ html, body { overflow-x: clip; }
   .join-wiz-btn { flex: 1 1 calc(50% - var(--space-3)); min-width: 0; }
   .join-wiz-btn-cancel { flex: 0 0 100%; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   PR D-1 — HOME HERO · AAA
+   Riot / Portkey / Arcane benchmark. Layered depth (texture +
+   spotlight + comic panel + ink-bleed letterforms), maximum
+   typographic scale, premium pressable CTA, restrained motion.
+   Overrides the v1 .home-hero block earlier in this file.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── SVG defs sit in the DOM but take no space ─────────────────── */
+.home-hero-svg-defs { position: absolute; width: 0; height: 0; pointer-events: none; }
+
+/* ── HERO SECTION — bigger, deeper, atmospheric ─────────────────── */
+.home-hero {
+  min-height: min(96vh, 920px) !important;
+  padding: var(--space-7) var(--space-5) var(--space-9) !important;
+  background:
+    radial-gradient(ellipse at 50% 28%, #1f0c0e 0%, #0a0608 55%, #03020a 100%) !important;
+}
+
+/* ── LAYERED BACKGROUND ───────────────────────────────────────── */
+/* Layer order (bottom to top):
+     emberfield  — drifting amber sparks
+     halftone    — comic-print dot grid, 1% opacity
+     grain       — paper noise, animated jitter
+     spotlight   — radial light behind the headline
+     vignette    — edge darkening                                  */
+
+.home-hero-halftone {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%, rgba(244, 200, 110, 0.06) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.home-hero-grain {
+  position: absolute; inset: -50%;
+  /* SVG-noise as a tileable data URL. Subtle, animated for jitter. */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  opacity: 0.06;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  animation: home-hero-grain-jitter 1.5s steps(4) infinite;
+}
+@keyframes home-hero-grain-jitter {
+  0%   { transform: translate3d(0, 0, 0); }
+  25%  { transform: translate3d(-1%, 1%, 0); }
+  50%  { transform: translate3d(1%, -1%, 0); }
+  75%  { transform: translate3d(-1%, -1%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+.home-hero-spotlight {
+  position: absolute;
+  top: 30%; left: 50%;
+  width: 80vw; height: 80vw;
+  max-width: 1400px; max-height: 1400px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at center,
+    rgba(227, 27, 35, 0.18) 0%,
+    rgba(227, 27, 35, 0.05) 25%,
+    transparent 60%);
+  pointer-events: none;
+  filter: blur(60px);
+  opacity: 0;
+  animation: home-hero-spotlight-on 2.4s ease-out 0.3s forwards;
+}
+@keyframes home-hero-spotlight-on {
+  to { opacity: 1; }
+}
+
+.home-hero-emberfield {
+  /* Slightly more presence than v1 — bigger sparks, slower drift */
+  opacity: 0.55 !important;
+}
+
+/* ── HERO INNER + COMIC PANEL FRAME ──────────────────────────── */
+.home-hero-inner {
+  position: relative;
+  max-width: 1100px !important;
+  width: 100%;
+  text-align: left !important;
+  padding: var(--space-7) var(--space-6) !important;
+}
+
+/* Four corner brackets — gold, asymmetric, editorial. Each is a
+   small L-shape sitting at one corner of the inner padding box. */
+.home-hero-frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.home-hero-frame::before,
+.home-hero-frame::after,
+.home-hero-content::before,
+.home-hero-content::after {
+  content: "";
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  border: 1.5px solid rgba(244, 200, 110, 0.45);
+  pointer-events: none;
+  opacity: 0;
+  animation: home-hero-frame-in 1.2s ease 0.2s forwards;
+}
+.home-hero-frame::before { top: 0; left: 0;     border-right: 0;  border-bottom: 0; }
+.home-hero-frame::after  { top: 0; right: 0;    border-left: 0;   border-bottom: 0; }
+.home-hero-content::before { bottom: 0; left: 0; border-right: 0; border-top: 0;   }
+.home-hero-content::after  { bottom: 0; right: 0; border-left: 0; border-top: 0;   }
+@keyframes home-hero-frame-in {
+  to { opacity: 1; }
+}
+
+.home-hero-content {
+  position: relative;
+  padding: var(--space-7) var(--space-6);
+}
+
+/* ── STAMP — refined with live-dot ───────────────────────────── */
+.home-hero-stamp {
+  display: inline-flex !important;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--mono, monospace);
+  font-size: 11px !important;
+  font-weight: 600;
+  letter-spacing: 0.32em !important;
+  color: var(--text-2) !important;
+  margin-bottom: var(--space-6) !important;
+  opacity: 0;
+  animation: home-fade-in 1s ease 0.15s forwards;
+  text-transform: uppercase;
+}
+.home-hero-stamp-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--red-bright, #ff2a32);
+  box-shadow: 0 0 12px var(--red-bright, #ff2a32);
+  animation: home-hero-dot-pulse 1.6s ease-in-out infinite;
+}
+@keyframes home-hero-dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(0.85); }
+}
+
+/* ── HEADLINE — MAXIMUM SCALE ─────────────────────────────── */
+.home-hero-title {
+  font-family: var(--display, "Bebas Neue", system-ui, serif) !important;
+  font-weight: 400 !important;
+  font-size: clamp(64px, 13vw, 188px) !important;
+  line-height: 0.9 !important;
+  letter-spacing: -0.01em !important;
+  margin: 0 0 var(--space-6) !important;
+  /* Drop a soft ink-shadow beneath the type for depth — lets it
+     feel like it's sitting on something, not floating. */
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    0 2px 32px rgba(227, 27, 35, 0.15);
+}
+.home-hero-line {
+  display: block;
+}
+.home-hero-line-1 { color: var(--text-1, #f5f1e8); }
+.home-hero-line-2 {
+  /* The middle line is the focal point — gold, with the ink-bleed
+     SVG filter applied for the printed-comic feel. */
+  color: var(--yellow, #d4a84a);
+  filter: url(#hero-ink-bleed);
+  text-shadow:
+    0 0 24px rgba(212, 168, 74, 0.35),
+    0 2px 0 rgba(0, 0, 0, 0.45);
+}
+.home-hero-line-3 {
+  color: var(--text-1, #f5f1e8);
+  opacity: 0.92;
+}
+
+.home-hero-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(28px) scale(0.96);
+  animation: home-hero-word-in 1s cubic-bezier(.18, .9, .25, 1) forwards;
+  /* Subtle character-level variation — handcrafted feel. */
+  will-change: transform, opacity;
+}
+@keyframes home-hero-word-in {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── SUB ─────────────────────────────────────────────────────── */
+.home-hero-sub {
+  font-family: var(--sans, system-ui) !important;
+  font-size: clamp(15px, 1.4vw, 18px) !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  max-width: 580px !important;
+  margin: 0 0 var(--space-6) !important;
+  color: var(--text-2) !important;
+  opacity: 0;
+  animation: home-fade-in 1.2s ease forwards;
+}
+
+/* ── CTA ROW ─────────────────────────────────────────────── */
+.home-hero-cta-row {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: home-hero-cta-in 1s cubic-bezier(.22, 1, .36, 1) forwards;
+}
+@keyframes home-hero-cta-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.home-hero-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 18px 32px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--sans, system-ui);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  transition:
+    transform 180ms cubic-bezier(.22, 1, .36, 1),
+    box-shadow 180ms cubic-bezier(.22, 1, .36, 1),
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease;
+}
+.home-hero-cta:focus-visible {
+  outline: 2px solid var(--yellow, #d4a84a);
+  outline-offset: 3px;
+}
+.home-hero-cta-primary {
+  background: var(--red, #c11a2c);
+  color: #ffffff;
+  border-color: var(--red, #c11a2c);
+  /* Layered shadow: tight rim + atmospheric spill + bottom ink-drop */
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.4) inset,
+    0 -1px 0 rgba(255, 255, 255, 0.15) inset,
+    0 8px 0 -4px rgba(0, 0, 0, 0.5),
+    0 24px 48px -20px rgba(227, 27, 35, 0.55);
+}
+/* Ink-spread overlay — fades in on hover from the centre. */
+.home-hero-cta-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(255, 255, 255, 0.22) 0%,
+      rgba(255, 255, 255, 0) 65%);
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+.home-hero-cta-primary:hover {
+  transform: translateY(-2px);
+  background: #d12030;
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.4) inset,
+    0 -1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 12px 0 -4px rgba(0, 0, 0, 0.5),
+    0 36px 72px -22px rgba(227, 27, 35, 0.75);
+}
+.home-hero-cta-primary:hover::after { opacity: 1; }
+.home-hero-cta-primary:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.5) inset,
+    0 4px 0 -2px rgba(0, 0, 0, 0.5),
+    0 14px 32px -16px rgba(227, 27, 35, 0.55);
+}
+
+.home-hero-cta-ghost {
+  color: var(--text-1);
+  border: 1.5px solid rgba(244, 200, 110, 0.45);
+  background: transparent;
+}
+.home-hero-cta-ghost:hover {
+  color: var(--yellow, #d4a84a);
+  border-color: var(--yellow, #d4a84a);
+  background: rgba(244, 200, 110, 0.06);
+  transform: translateY(-2px);
+}
+.home-hero-cta-ghost:active {
+  transform: translateY(1px);
+  background: rgba(244, 200, 110, 0.10);
+}
+
+/* ── SCROLL HINT — slight more deliberate placement ──────── */
+.home-hero-scrollhint {
+  position: absolute !important;
+  bottom: var(--space-5) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  font-family: var(--mono);
+  font-size: 10px !important;
+  font-weight: 600;
+  letter-spacing: 0.4em !important;
+  color: var(--text-3) !important;
+  opacity: 0 !important;
+  animation: home-fade-in 1s ease 2.6s forwards !important;
+}
+.home-hero-scrollhint::after {
+  content: "";
+  position: absolute;
+  left: 50%; bottom: -28px;
+  width: 1px; height: 22px;
+  background: linear-gradient(to bottom, var(--yellow, #d4a84a), transparent);
+  transform: translateX(-50%);
+  animation: home-hero-scroll-pulse 2s ease-in-out infinite;
+}
+@keyframes home-hero-scroll-pulse {
+  0%, 100% { opacity: 0.4; transform: translate(-50%, 0); }
+  50%      { opacity: 1;   transform: translate(-50%, 4px); }
+}
+
+/* ── Responsive: phone scales down gracefully ─────────────── */
+@media (max-width: 760px) {
+  .home-hero-content { padding: var(--space-5) var(--space-3); }
+  .home-hero-title { font-size: clamp(56px, 18vw, 96px) !important; }
+  .home-hero-cta-row { width: 100%; }
+  .home-hero-cta { flex: 1 1 100%; justify-content: center; }
+  /* Corner frames shrink so they don't dominate at narrow widths */
+  .home-hero-frame::before,
+  .home-hero-frame::after,
+  .home-hero-content::before,
+  .home-hero-content::after { width: 32px; height: 32px; }
+}
+
+/* Respect reduced motion — kill all animations cleanly. */
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-word, .home-hero-stamp, .home-hero-sub, .home-hero-cta-row,
+  .home-hero-scrollhint, .home-hero-grain, .home-hero-spotlight,
+  .home-hero-frame::before, .home-hero-frame::after,
+  .home-hero-content::before, .home-hero-content::after,
+  .home-hero-stamp-dot {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
