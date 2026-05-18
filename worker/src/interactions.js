@@ -1,7 +1,8 @@
 import { verifySignature, editMessage, postMessage } from "./discord.js";
 import { buildEmbed } from "./embed.js";
-import { updateFile } from "./github.js";
+import { updateFile, getFile } from "./github.js";
 import { buildInsertions, applyInsertions, removeBySubmissionId, countEntriesFor } from "./markers.js";
+import { checkALitQuota } from "./quota.js";
 
 const INTERACTION_PONG       = 1;
 const INTERACTION_COMPONENT  = 3;
@@ -92,21 +93,41 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
   // replacing them — see the audit-log note in logEmbed.
   let rosterChange = null; // "added" | "removed" | null
   let commitSha = null;
+  let blocked = null;     // populated if quota fails
   if (toState === "approved") {
-    const insertions = buildInsertions(sub);
-    if (insertions.length > 0) {
-      const res = await updateFile(
-        env,
-        env.GITHUB_DATA_FILE,
-        `Approve ${sub.type} application: ${safe(sub.form.char || sub.form.newCollectiveName)} (${sub.id})`,
-        (current) => {
-          if (countEntriesFor(current, sub.id) > 0) return current;
-          return applyInsertions(current, insertions);
+    // A-List quota check — needs the live data.js, so do it here rather
+    // than in the synchronous interaction handler. If the writer is
+    // about to exceed the per-writer A-List limit, abort the approval:
+    // leave KV state untouched and edit the message to show the block.
+    const limit = parseInt(env.A_LIST_LIMIT_PER_WRITER || "5", 10);
+    if (sub.form?.tier === "A-List") {
+      try {
+        const current = await getFile(env, env.GITHUB_DATA_FILE);
+        const verdict = checkALitQuota(current.text, sub, limit);
+        if (!verdict.allowed) blocked = verdict;
+      } catch (err) {
+        console.error("quota check failed:", err.message);
+        // Be conservative: if we can't verify, allow the approval to
+        // proceed rather than block on a transient GitHub hiccup.
+      }
+    }
+
+    if (!blocked) {
+      const insertions = buildInsertions(sub);
+      if (insertions.length > 0) {
+        const res = await updateFile(
+          env,
+          env.GITHUB_DATA_FILE,
+          `Approve ${sub.type} application: ${safe(sub.form.char || sub.form.newCollectiveName)} (${sub.id})`,
+          (current) => {
+            if (countEntriesFor(current, sub.id) > 0) return current;
+            return applyInsertions(current, insertions);
+          }
+        );
+        if (!res.unchanged) {
+          rosterChange = "added";
+          commitSha = res.commitSha;
         }
-      );
-      if (!res.unchanged) {
-        rosterChange = "added";
-        commitSha = res.commitSha;
       }
     }
   } else if (toState === "rejected" && fromState === "approved") {
@@ -123,6 +144,38 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
       rosterChange = "removed";
       commitSha = res.commitSha;
     }
+  }
+
+  // Blocked path — quota check refused the approval. Leave KV state
+  // unchanged (still pending), restore both buttons, edit the message
+  // with a clear explanation.
+  if (blocked) {
+    const existingList = blocked.existingChars
+      .map(c => `• ${c}`)
+      .join("\n")
+      .slice(0, 900);
+    const blockedEmbed = buildEmbed(sub.type, sub.form, {
+      color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
+      footer: `Calderyn College · Central Registry · 2026 · ⚠ quota blocked`,
+    });
+    blockedEmbed.description =
+      `**⚠ Approval blocked — A-List quota.**\n` +
+      `Writer **${blocked.writer}** already has **${blocked.count}/${blocked.limit}** A-List characters` +
+      ` and this would make **${blocked.newCount}**. ` +
+      `Adjust the application's tier, or remove one of the writer's existing A-Listers first.\n\n` +
+      `_Existing A-List characters:_\n${existingList || "(none — unexpected)"}\n\n` +
+      (blockedEmbed.description || "");
+    try {
+      await editMessage(env, sub.channelId, sub.messageId, {
+        embeds: [blockedEmbed],
+        // Both buttons restored: admin can try again later (after a
+        // removal), or click ❌ to reject this application outright.
+        components: bothButtons(sub.id),
+      });
+    } catch (err) {
+      console.error("blocked-message edit failed:", err);
+    }
+    return; // do not update KV, do not log to #registry-log
   }
 
   // Update KV state.
@@ -198,6 +251,19 @@ function inverseButton(id, currentState) {
       ? { type: 2, style: 4, label: "Reject",  emoji: { name: "❌" }, custom_id: `reject:${id}` }
       : { type: 2, style: 3, label: "Approve", emoji: { name: "✅" }, custom_id: `approve:${id}` };
   return [{ type: 1, components: [opposite] }];
+}
+
+// Both buttons — used when a quota-blocked approval leaves the
+// submission in its original state so the admin can either try again
+// later (after another A-Lister leaves) or reject outright.
+function bothButtons(id) {
+  return [{
+    type: 1,
+    components: [
+      { type: 2, style: 3, label: "Approve", emoji: { name: "✅" }, custom_id: `approve:${id}` },
+      { type: 2, style: 4, label: "Reject",  emoji: { name: "❌" }, custom_id: `reject:${id}` },
+    ],
+  }];
 }
 
 // Concise log post for the roster-change channel.

@@ -49,3 +49,9 @@ GITHUB_DATA_FILE = "data.js"
 # live Cloudflare Pages origin is on the allowlist; the GH Pages site
 # was unpublished after the migration.
 CORS_ALLOWED_ORIGINS = "https://calderyn-registry.pages.dev"
+
+# Maximum A-List characters per writer (identified by the user= segment
+# of their RPC link). Approvals that would push a writer over this
+# number are blocked with an explanatory message; the submission stays
+# in the queue so an admin can lower the tier or reject it.
+A_LIST_LIMIT_PER_WRITER = "5"
