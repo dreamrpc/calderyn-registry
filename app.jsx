@@ -700,8 +700,9 @@ function HomeHero({setTab}){
 
 function HomeVanguard(){
   const [ref, inView] = useInView(0.15);
-  // Sound-effect text dropped on each panel on hover — comic-book SFX
-  // language. Distinct per Vanguard member matching their power vibe.
+  const [hovered, setHovered] = useState(null);
+  // Sound-effect text dropped on each panel — comic-book SFX language.
+  // Distinct per Vanguard member matching their power vibe.
   const SFX = ["KRRSH", "SHRRK", "WHAM", "BZZZT"];
   return (
     <section ref={ref} className={"home-section home-vg-section " + (inView ? "is-in" : "")}>
@@ -714,33 +715,42 @@ function HomeVanguard(){
         </p>
       </div>
 
-      {/* Comic-panel grid — 12-col asymmetric layout. Paragon dominates
-          the left side (he's the headliner); the others share the right
-          column. Heavy black borders, halftone bg, sound-effect overlay
-          on hover. */}
-      <div className="home-vg-grid">
+      {/* CHAMPION SELECT — 4 equal columns, tall portraits, side-by-side
+          cinematic. Each panel is full-bleed portrait with comic
+          overlays (SFX, halftone, name plate). Hover dims the others
+          and brings the hovered to the foreground. */}
+      <div className={"home-vg-cs" + (hovered != null ? " has-focus" : "")}>
         {HOME_VANGUARD.map((v, i) => (
           <article
             key={v.alias}
-            className={"home-vg-panel home-vg-panel-" + (i + 1)}
+            className={"home-vg-cs-panel" + (hovered === i ? " is-focus" : "")}
             style={{"--vg-color": v.color, "--vg-i": i}}
+            onMouseEnter={() => setHovered(i)}
+            onMouseLeave={() => setHovered(null)}
           >
-            <div className="home-vg-img">
+            {/* PORTRAIT — full-bleed background, parallax-tilt on hover */}
+            <div className="home-vg-cs-img">
               <img src={v.portrait} alt={v.alias} loading="lazy"/>
-              <div className="home-vg-img-halftone" aria-hidden="true"/>
-              <div className="home-vg-sfx" aria-hidden="true">{SFX[i] || "POW"}!</div>
+              <div className="home-vg-cs-halftone" aria-hidden="true"/>
+              <div className="home-vg-cs-glow" aria-hidden="true"/>
+              <div className="home-vg-cs-scan" aria-hidden="true"/>
             </div>
-            <div className="home-vg-meta">
-              <div className="home-vg-tag">{v.tag.replace(/\.$/, "")}</div>
-              <h3 className="home-vg-alias">{v.alias}</h3>
-              <div className="home-vg-name">{v.name} · {v.age}</div>
+
+            {/* SFX — comic SFX text overlaid, always visible */}
+            <div className="home-vg-cs-sfx" aria-hidden="true">{SFX[i] || "POW"}!</div>
+
+            {/* ISSUE BADGE — top-left, like a comic-cover stamp */}
+            <div className="home-vg-cs-issue" aria-hidden="true">
+              ISSUE · {String(i + 1).padStart(2, "0")}
             </div>
-            <div className="home-vg-caption">
-              <span className="home-vg-caption-tail" aria-hidden="true"/>
-              <p className="home-vg-caption-body">
-                <strong>{v.power}</strong>
-              </p>
-              <p className="home-vg-caption-hook">&ldquo;{v.hook}&rdquo;</p>
+
+            {/* NAME PLATE — cinematic name reveal at bottom, like champion-select */}
+            <div className="home-vg-cs-plate">
+              <div className="home-vg-cs-tag">{v.tag.replace(/\.$/, "")}</div>
+              <h3 className="home-vg-cs-alias">{v.alias}</h3>
+              <div className="home-vg-cs-name">{v.name} · {v.age}</div>
+              <div className="home-vg-cs-power">{v.power}</div>
+              <div className="home-vg-cs-hook">&ldquo;{v.hook}&rdquo;</div>
             </div>
           </article>
         ))}

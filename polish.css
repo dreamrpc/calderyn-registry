@@ -9341,3 +9341,275 @@ html { scroll-behavior: smooth; }
 }
 
 /* ── A11Y: reduced motion already covered earlier in file ───── */
+
+/* ════════════════════════════════════════════════════════════════════
+   HOME · VANGUARD — CHAMPION SELECT
+   Side-by-side cinematic strip of 4 full-bleed portraits. Hover dims
+   the others + lifts the focused panel. Halftone overlay + SFX text
+   kept per feedback. Replaces the asymmetric panel grid.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Hide the v1 grid */
+.home-vg-grid { display: none !important; }
+
+.home-vg-cs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  max-width: 1280px;
+  margin: 0 auto;
+  background: #000;
+  padding: 4px;
+  border: 4px solid #000;
+  box-shadow: 14px 14px 0 0 var(--red, #c11a2c);
+  position: relative;
+}
+
+.home-vg-cs-panel {
+  position: relative;
+  aspect-ratio: 3 / 5;
+  overflow: hidden;
+  background: var(--bg-1, #0c0c10);
+  cursor: pointer;
+  transform: translateY(40px);
+  opacity: 0;
+  transition:
+    transform 0.8s cubic-bezier(.22, 1, .36, 1),
+    opacity 0.8s ease,
+    filter 0.4s ease;
+  transition-delay: calc(var(--vg-i, 0) * 0.12s);
+}
+.home-vg-section.is-in .home-vg-cs-panel {
+  transform: translateY(0);
+  opacity: 1;
+}
+/* When the group has a hovered panel, dim the others — classic
+   champion-select focus treatment. */
+.home-vg-cs.has-focus .home-vg-cs-panel:not(.is-focus) {
+  filter: brightness(0.42) saturate(0.5);
+}
+
+/* Portrait — full-bleed, parallax-tilt on hover */
+.home-vg-cs-img {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.home-vg-cs-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  filter: contrast(1.1) saturate(0.95);
+  transform: scale(1.05);
+  transition:
+    transform 1.2s cubic-bezier(.22, 1, .36, 1),
+    filter 0.5s ease;
+}
+.home-vg-cs-panel.is-focus .home-vg-cs-img img {
+  transform: scale(1.12);
+  filter: contrast(1.2) saturate(1.15);
+}
+
+/* Halftone-dot overlay — kept per feedback */
+.home-vg-cs-halftone {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%, rgba(0, 0, 0, 0.55) 1px, transparent 1.5px);
+  background-size: 4px 4px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+}
+
+/* House-colored radial glow on hover */
+.home-vg-cs-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 30%,
+      color-mix(in srgb, var(--vg-color) 35%, transparent) 0%,
+      transparent 60%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  mix-blend-mode: screen;
+}
+.home-vg-cs-panel.is-focus .home-vg-cs-glow { opacity: 1; }
+
+/* Animated scan line — continuous subtle motion so the portraits
+   feel alive, not static photos */
+.home-vg-cs-scan {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--vg-color) 70%, transparent), transparent);
+  pointer-events: none;
+  opacity: 0.6;
+  animation: vg-cs-scan 4s linear infinite;
+}
+@keyframes vg-cs-scan {
+  0%   { transform: translateY(0); opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.7; }
+  100% { transform: translateY(800%); opacity: 0; }
+}
+
+/* Bottom gradient → keeps the plate text readable over portrait */
+.home-vg-cs-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.0) 35%,
+    rgba(0, 0, 0, 0.85) 100%);
+  pointer-events: none;
+}
+
+/* SFX overlay — always visible, comic-style */
+.home-vg-cs-sfx {
+  position: absolute;
+  top: 20px; right: 16px;
+  z-index: 4;
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 900;
+  font-size: clamp(22px, 2.6vw, 32px);
+  letter-spacing: 0.02em;
+  color: var(--yellow, #d4a84a);
+  text-shadow:
+    3px 3px 0 #000,
+    -2px 0 0 rgba(227, 27, 35, 0.55);
+  transform: rotate(-8deg) scale(0.9);
+  opacity: 0.95;
+  pointer-events: none;
+  text-transform: uppercase;
+  transition: transform 0.4s cubic-bezier(.5, 1.6, .5, 1), opacity 0.3s ease;
+}
+.home-vg-cs-panel.is-focus .home-vg-cs-sfx {
+  transform: rotate(-6deg) scale(1.05);
+  opacity: 1;
+}
+
+/* Issue badge top-left */
+.home-vg-cs-issue {
+  position: absolute;
+  top: 14px; left: 14px;
+  z-index: 4;
+  padding: 3px 8px;
+  background: var(--yellow, #d4a84a);
+  color: #0a0a0a;
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* Name plate at the bottom — cinematic reveal */
+.home-vg-cs-plate {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 3;
+  padding: var(--space-4);
+  pointer-events: none;
+}
+.home-vg-cs-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--vg-color);
+  margin-bottom: 4px;
+  opacity: 0.95;
+}
+.home-vg-cs-alias {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 900;
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  /* CMYK ink-offset for the comic-print feel */
+  text-shadow:
+    -1.5px 0 0 rgba(227, 27, 35, 0.65),
+     1.5px 0 0 rgba(46, 188, 212, 0.45);
+}
+.home-vg-cs-name {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: var(--space-3);
+}
+.home-vg-cs-power {
+  font-family: var(--sans, 'Söhne', system-ui, sans-serif);
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 6px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(.22, 1, .36, 1), opacity 0.3s ease;
+}
+.home-vg-cs-hook {
+  font-family: var(--sans, 'Söhne', system-ui, sans-serif);
+  font-style: italic;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--vg-color);
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(.22, 1, .36, 1) 0.05s, opacity 0.3s ease 0.05s;
+}
+/* Reveal power + hook on focus */
+.home-vg-cs-panel.is-focus .home-vg-cs-power,
+.home-vg-cs-panel.is-focus .home-vg-cs-hook {
+  max-height: 200px;
+  opacity: 1;
+}
+
+/* Below 760px → 2x2 grid, then tighter aliases */
+@media (max-width: 760px) {
+  .home-vg-cs {
+    grid-template-columns: repeat(2, 1fr);
+    box-shadow: 8px 8px 0 0 var(--red, #c11a2c);
+  }
+  .home-vg-cs-panel { aspect-ratio: 3 / 4; }
+}
+@media (max-width: 440px) {
+  .home-vg-cs { grid-template-columns: 1fr; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   DORM MEMO · BELT-AND-BRACES TEXT COLORS
+   The user reported white-on-cream rendering somewhere in the
+   notice. Set an inherited color on the panel itself so any future
+   descendant element without an explicit color rule defaults dark
+   instead of inheriting cream from .home-page.
+   ════════════════════════════════════════════════════════════════════ */
+.home-page .home-dorm-panel,
+.home-page .home-dorm-panel *:not(.home-dorm-halftone):not(.home-dorm-eyes-stamp) {
+  color: #2d1f12 !important;
+}
+/* Re-assert the intentional accent colors AFTER the blanket dark
+   override so the title accent, em emphasis, caption labels still
+   pop the right way */
+.home-page .home-dorm-panel .home-dorm-title { color: #1a0e08 !important; }
+.home-page .home-dorm-panel .home-dorm-title span { color: var(--red, #c11a2c) !important; }
+.home-page .home-dorm-panel .home-dorm-body em { color: var(--red, #c11a2c) !important; }
+.home-page .home-dorm-panel .home-dorm-caption,
+.home-page .home-dorm-panel .home-dorm-signoff { color: #6b3e26 !important; }
+.home-page .home-dorm-panel .home-dorm-caption-doc { color: #1a0e08 !important; }
+.home-page .home-dorm-panel .home-dorm-caption-sep { color: #b87333 !important; }
+.home-page .home-dorm-panel .home-dorm-footer { color: #4a3322 !important; }
+/* The EYES ONLY stamp keeps white-on-red */
+.home-page .home-dorm-panel .home-dorm-eyes-stamp { color: #ffffff !important; }
