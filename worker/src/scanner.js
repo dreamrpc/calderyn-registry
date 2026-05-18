@@ -253,21 +253,29 @@ function findObject(text, from, to, selector) {
 }
 
 export function locateArrayInsertPos(text, path) {
+  return locateArrayBounds(text, path).closeIdx;
+}
+
+// Same path walk as locateArrayInsertPos, but returns both the array's
+// opening and closing bracket positions so callers can iterate the
+// array's children rather than just insert at the end.
+export function locateArrayBounds(text, path) {
   // data.js is shaped as `window.CALDERYN = { ... }`. Path traversal
   // happens *inside* that top-level object, so narrow scope to its
   // body before walking path segments — otherwise the very first
   // step would skip past the whole object as a "nested" `{...}`.
   const rootOpen = text.indexOf("window.CALDERYN");
   if (rootOpen < 0) {
-    throw new Error("locateArrayInsertPos: window.CALDERYN root object not found");
+    throw new Error("locateArrayBounds: window.CALDERYN root object not found");
   }
   const rootBrace = text.indexOf("{", rootOpen);
   if (rootBrace < 0) {
-    throw new Error("locateArrayInsertPos: opening brace for window.CALDERYN not found");
+    throw new Error("locateArrayBounds: opening brace for window.CALDERYN not found");
   }
   const rootClose = findMatchingBracket(text, rootBrace);
   let scopeStart = rootBrace + 1;
   let scopeEnd = rootClose;
+  let lastOpen = rootBrace; // overwritten on the first path segment
 
   for (let p = 0; p < path.length; p++) {
     const seg = path[p];
@@ -275,30 +283,62 @@ export function locateArrayInsertPos(text, path) {
     if (typeof seg === "string") {
       const vstart = findKeyValueStart(text, seg, scopeStart, scopeEnd);
       if (vstart < 0) {
-        throw new Error(`locateArrayInsertPos: key not found: ${seg} (scope ${scopeStart}-${scopeEnd})`);
+        throw new Error(`locateArrayBounds: key not found: ${seg} (scope ${scopeStart}-${scopeEnd})`);
       }
       const open = text[vstart];
       if (open !== "[" && open !== "{") {
-        throw new Error(`locateArrayInsertPos: key '${seg}' is not an array/object (value starts with '${open}')`);
+        throw new Error(`locateArrayBounds: key '${seg}' is not an array/object (value starts with '${open}')`);
       }
       const close = findMatchingBracket(text, vstart);
+      lastOpen = vstart;
       scopeStart = vstart + 1;
       scopeEnd = close;
     } else if (seg && typeof seg === "object") {
       const obj = findObject(text, scopeStart, scopeEnd, seg);
       if (!obj) {
-        throw new Error(`locateArrayInsertPos: no object matching ${JSON.stringify(seg)} in scope`);
+        throw new Error(`locateArrayBounds: no object matching ${JSON.stringify(seg)} in scope`);
       }
+      lastOpen = obj.start;
       scopeStart = obj.start + 1;
       scopeEnd = obj.end;
     } else {
-      throw new Error(`locateArrayInsertPos: bad path segment ${JSON.stringify(seg)}`);
+      throw new Error(`locateArrayBounds: bad path segment ${JSON.stringify(seg)}`);
     }
   }
 
-  // After all path segments, scopeEnd is the index of the closing `]`
-  // (or `}`) of the leaf. We insert *before* it.
-  return scopeEnd;
+  return { openIdx: lastOpen, closeIdx: scopeEnd };
+}
+
+// Walk every direct child object of the array at `path` and invoke
+// `cb(objectText)` with each child's `{...}` source slice. Skips
+// whitespace, commas, and comments between entries.
+export function forEachArrayObject(text, path, cb) {
+  const { openIdx, closeIdx } = locateArrayBounds(text, path);
+  let i = openIdx + 1;
+  while (i < closeIdx) {
+    const c = text[i];
+    if (c === " " || c === "\t" || c === "\n" || c === "\r" || c === ",") { i++; continue; }
+    if (c === "/" && text[i + 1] === "/") {
+      while (i < closeIdx && text[i] !== "\n") i++;
+      continue;
+    }
+    if (c === "/" && text[i + 1] === "*") {
+      i += 2;
+      while (i < closeIdx - 1 && !(text[i] === "*" && text[i + 1] === "/")) i++;
+      i += 2;
+      continue;
+    }
+    if (c === "{") {
+      const close = findMatchingBracket(text, i);
+      cb(text.slice(i, close + 1));
+      i = close + 1;
+      continue;
+    }
+    // Anything else inside an array of objects is unexpected; skip a
+    // char and keep going rather than throwing — defensive against
+    // future hand-edits to data.js.
+    i++;
+  }
 }
 
 export function detectIndent(text, posOnLine) {
