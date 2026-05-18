@@ -72,6 +72,43 @@ test("preserves marker indentation", () => {
   assertTrue(/^  "FreshAccount": "Fresh",$/m.test(next), "indent matches surrounding lines");
 });
 
+test("integration: every admin-action call site invokes ensureWriterMapping", async () => {
+  // Guard against the previous bug where ensureWriterMapping was
+  // only wired into the approved-not-blocked branch of finalizeAction
+  // — meaning rejected submissions never got their mapping written.
+  // We grep the worker source for the call to make sure submit.js
+  // (submission time) and interactions.js (every admin action) both
+  // hook it up.
+  const fs = await import("node:fs");
+  const path = await import("node:path");
+  const srcDir = path.dirname(new URL(import.meta.url).pathname);
+
+  const submitText = fs.readFileSync(path.join(srcDir, "submit.js"), "utf-8");
+  if (!submitText.includes("ensureWriterMapping")) {
+    throw new Error("submit.js no longer calls ensureWriterMapping — submission-time mapping is broken");
+  }
+
+  const interactionsText = fs.readFileSync(path.join(srcDir, "interactions.js"), "utf-8");
+  if (!interactionsText.includes("ensureWriterMapping")) {
+    throw new Error("interactions.js no longer calls ensureWriterMapping — admin-click mapping is broken");
+  }
+  // The call must sit OUTSIDE the `if (!blocked)` and `if (toState === "approved")` branches
+  // so it fires for rejections and quota-blocked approvals too. We
+  // check this by finding the call's position relative to those
+  // conditionals.
+  const callIdx = interactionsText.indexOf("ensureWriterMapping(env, writerUser, writerOoc)");
+  const approvedIfIdx = interactionsText.indexOf('if (toState === "approved")');
+  if (callIdx < 0 || approvedIfIdx < 0) {
+    throw new Error("expected call sites not found in interactions.js");
+  }
+  if (callIdx > approvedIfIdx) {
+    throw new Error(
+      "ensureWriterMapping is still inside the approved branch — rejections won't trigger it.\n  " +
+      "Move it to the top of finalizeAction so it fires on every admin action."
+    );
+  }
+});
+
 test("round-trip: original file still parses as JS after insert", async () => {
   const next = insertMapping(original, "RoundTrip", "RT");
   // Eval through dynamic import via data URI. Replace export keyword
