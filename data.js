@@ -1975,6 +1975,7 @@ curriculumTracks: [
 ],
 
 tabs: [
+  { id: "home",       label: "Home",          n: "00" },
   { id: "rules",      label: "Rules",         n: "01" },
   { id: "lore",       label: "Lore",          n: "02" },
   { id: "map",        label: "Campus Map",    n: "03" },

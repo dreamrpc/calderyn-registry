@@ -361,6 +361,253 @@ function SectionedTable({data, positionHeader = "Position", mode = "default"}){
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   HOME — landing page with the Vanguard hero, lore reveal, and a leaked
+   dorm-policy memo. First tab in the nav; this is what visitors hit at
+   calderyncollege.uk before deciding to dig deeper.
+═══════════════════════════════════════════════════════════════════════════ */
+
+// Vanguard quartet — alias / character / age / house-color / portrait /
+// power one-liner / lore tag. Portraits are the same ibb.co URLs used
+// on the Lore → The Vanguard page, so the home and lore views stay
+// visually consistent.
+const HOME_VANGUARD = [
+  {
+    alias: "PARAGON",
+    name:  "Adrian Valaris",
+    age:   45,
+    house: "valaris",
+    color: "#e31b23",
+    portrait: "https://i.ibb.co/Tx8LND9D/884dff81-b7c4-448a-be91-1d79b440f8e3.png",
+    power: "Solar metabolism. Uncapped strength. Flight. Heat vision.",
+    tag:   "The symbol.",
+    hook:  "Britain's most-watched man. Britain's most-wanted man.",
+  },
+  {
+    alias: "VIGIL",
+    name:  "Caius Saberis",
+    age:   42,
+    house: "saberis",
+    color: "#15803d",
+    portrait: "https://i.ibb.co/SDY1sLN8/2377bc73-8c3f-40c6-951d-7f0365013c2a.png",
+    power: "Ninety-second precognition. Folded-steel longsword.",
+    tag:   "The strategist.",
+    hook:  "Already saw you reading this. Picked the version where you applied.",
+  },
+  {
+    alias: "AEGIS",
+    name:  "Margery Orenne",
+    age:   39,
+    house: "orenne",
+    color: "#d4901a",
+    portrait: "https://i.ibb.co/fKV1tKH/ccf8e712-87c2-4da0-af44-d290385a7e8c.png",
+    power: "Damage resistance. Flight. Six-times healing. Indecent endurance.",
+    tag:   "The rescuer.",
+    hook:  "Three hundred miles an hour. Skips the queue.",
+  },
+  {
+    alias: "SWITCHBOARD",
+    name:  "Iris Grimere",
+    age:   35,
+    house: "grimere",
+    color: "#3b82f6",
+    portrait: "https://i.ibb.co/LzyQcRcL/a18a925b-91f4-45d8-b2e3-66821aaf9661.png",
+    power: "Technokinesis. Owns your phone. Probably owns your gear.",
+    tag:   "The architect.",
+    hook:  "Baseline body. Three cats. The deadliest of them.",
+  },
+];
+
+// useInView — IntersectionObserver hook. Returns [ref, inView]. Toggles
+// true the first time the element crosses ~25% into the viewport and
+// stays true (no re-trigger on scroll back). Used to drive the
+// scroll-reveal CSS class on sections below the hero.
+function useInView(threshold = 0.25){
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    const io = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); io.disconnect(); } },
+      { threshold }
+    );
+    io.observe(ref.current);
+    return () => io.disconnect();
+  }, [threshold]);
+  return [ref, inView];
+}
+
+function HomeTab({setTab}){
+  return (
+    <div className="home-page">
+      <HomeHero/>
+      <HomeVanguard/>
+      <HomeProgramme/>
+      <HomeDormNotice/>
+      <HomeCTA setTab={setTab}/>
+    </div>
+  );
+}
+
+function HomeHero(){
+  // Title words split into individual spans so each gets its own
+  // animation-delay — produces the cinematic word-by-word reveal.
+  const lines = [
+    ["Born", "powered."],
+    ["Built", "dangerous."],
+    ["Class", "is", "in", "session."],
+  ];
+  let i = 0;
+  return (
+    <section className="home-hero">
+      <div className="home-hero-bg" aria-hidden="true">
+        <div className="home-hero-emberfield"/>
+        <div className="home-hero-vignette"/>
+      </div>
+      <div className="home-hero-inner">
+        <div className="home-hero-stamp">CALDERYN COLLEGE · CENTRAL REGISTRY · 2026</div>
+        <h1 className="home-hero-title">
+          {lines.map((words, li) => (
+            <span key={li} className="home-hero-line">
+              {words.map((w, wi) => {
+                const delay = 0.35 + (i++) * 0.22;
+                return (
+                  <span key={wi} className="home-hero-word" style={{animationDelay: `${delay}s`}}>
+                    {w}{wi < words.length - 1 ? " " : ""}
+                  </span>
+                );
+              })}
+            </span>
+          ))}
+        </h1>
+        <p className="home-hero-sub" style={{animationDelay: "2.0s"}}>
+          The United Kingdom's only sanctioned training facility for powered operators.
+          Three Cradles. Four houses. One Vanguard. A roster that runs in the front of
+          the paper and the back of the morgue, sometimes in the same week.
+        </p>
+        <div className="home-hero-scrollhint" aria-hidden="true">SCROLL</div>
+      </div>
+    </section>
+  );
+}
+
+function HomeVanguard(){
+  const [ref, inView] = useInView(0.15);
+  return (
+    <section ref={ref} className={"home-section home-vanguard-section " + (inView ? "is-in" : "")}>
+      <div className="home-section-head">
+        <div className="home-section-stamp">DOSSIER · 01 · ACTIVE ROSTER</div>
+        <h2 className="home-section-title">THE VANGUARD</h2>
+        <p className="home-section-lede">
+          Four people stand between this country and the kinds of incidents the news
+          decides not to run. Their contracts are classified. Their faces are not.
+        </p>
+      </div>
+      <div className="home-vanguard-grid">
+        {HOME_VANGUARD.map((v, i) => (
+          <article key={v.alias} className="home-vg" style={{
+            "--vg-color": v.color,
+            animationDelay: `${0.15 * i}s`,
+          }}>
+            <div className="home-vg-portrait">
+              <img src={v.portrait} alt={v.alias} loading="lazy"/>
+              <div className="home-vg-portrait-frame"/>
+            </div>
+            <div className="home-vg-body">
+              <div className="home-vg-alias">{v.alias}</div>
+              <div className="home-vg-name">{v.name} · {v.age}</div>
+              <div className="home-vg-tag">{v.tag}</div>
+              <div className="home-vg-power">{v.power}</div>
+              <div className="home-vg-hook">&ldquo;{v.hook}&rdquo;</div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function HomeProgramme(){
+  const [ref, inView] = useInView(0.2);
+  const lines = [
+    "Calderyn does not produce heroes.",
+    "Heroes are what STRATA calls the ones it kept.",
+    "We produce candidates.",
+    "What the world does with them after graduation is, mostly, paperwork.",
+  ];
+  return (
+    <section ref={ref} className={"home-section home-programme " + (inView ? "is-in" : "")}>
+      <div className="home-programme-frame">
+        <div className="home-programme-stamp">EXCERPT · THE PROGRAMME · CLASSIFIED LEVEL 2</div>
+        <blockquote className="home-programme-quote">
+          {lines.map((l, i) => (
+            <p key={i} className="home-programme-line" style={{transitionDelay: `${0.15 + i * 0.18}s`}}>{l}</p>
+          ))}
+        </blockquote>
+        <div className="home-programme-sig">— Dr. Devika Ravindrakumar, Dean of Calderyn</div>
+      </div>
+    </section>
+  );
+}
+
+function HomeDormNotice(){
+  const [ref, inView] = useInView(0.25);
+  return (
+    <section ref={ref} className={"home-section home-dorm " + (inView ? "is-in" : "")}>
+      <div className="home-dorm-card">
+        <div className="home-dorm-stamp-row">
+          <div className="home-dorm-stamp red">RESTRICTED · INTERNAL</div>
+          <div className="home-dorm-doc">DOC · 14 · DORM POLICY</div>
+        </div>
+        <h3 className="home-dorm-title">Power Compatibility &amp; Cohabitation</h3>
+        <p className="home-dorm-body">
+          The Diagnostic Wing requests, again, that powered students disclose to
+          their partners before turning the lights off. Fire-based, explosive, and
+          telepathic abilities are not <em>moods.</em> The wards on Valaris and
+          Saberis dorms are calibrated for ambient power signatures only —
+          anything more energetic should be conducted off-campus.
+        </p>
+        <p className="home-dorm-body">
+          Heat-vision is not foreplay. Telekinesis is not consent. Pheromone
+          control is, expressly, never consent. Aegis-tier durability does not
+          translate to your partner. Switchboard does not appreciate the WiFi
+          requests on Saturday nights.
+        </p>
+        <p className="home-dorm-body home-dorm-footer">
+          The medical wing has stopped issuing burn-treatment kits to Valaris
+          dorm without prior request. Please respect their time.
+        </p>
+        <div className="home-dorm-signoff">— Faculty memorandum, second printing, 2026</div>
+      </div>
+    </section>
+  );
+}
+
+function HomeCTA({setTab}){
+  const [ref, inView] = useInView(0.4);
+  return (
+    <section ref={ref} className={"home-section home-cta " + (inView ? "is-in" : "")}>
+      <div className="home-cta-stamp">⚑ APPLICATIONS OPEN</div>
+      <h2 className="home-cta-title">Enter the Registry.</h2>
+      <p className="home-cta-sub">
+        Read the rules. Read the lore. Then apply. We review in the order we get
+        them and we ask harder questions than the brochure implies.
+      </p>
+      <div className="home-cta-buttons">
+        <button className="home-cta-btn primary" onClick={() => setTab && setTab("join")}>
+          APPLY TO CALDERYN
+        </button>
+        <button className="home-cta-btn ghost"   onClick={() => setTab && setTab("lore")}>
+          READ THE LORE
+        </button>
+        <button className="home-cta-btn ghost"   onClick={() => setTab && setTab("rules")}>
+          READ THE RULES
+        </button>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    RULES
 ═══════════════════════════════════════════════════════════════════════════ */
 function RulesTab(){
@@ -5466,7 +5713,7 @@ function App(){
       </nav>
 
       <div className="pg" id="panel" role="tabpanel">
-        {TAB_MAP[tab]}
+        {tab === "home" ? <HomeTab setTab={setTab}/> : TAB_MAP[tab]}
       </div>
 
       <Footer/>
