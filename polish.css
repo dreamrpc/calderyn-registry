@@ -5781,3 +5781,133 @@ html, body { overflow-x: clip; }
 /* Icon inside hero/CTA stamps gets the same color treatment */
 .home-cta-stamp .icon,
 .home-hero-stamp .icon { color: currentColor; }
+
+/* ════════════════════════════════════════════════════════════════════
+   PR B — NAV REDESIGN
+   Desktop: tighter rhythm, cleaner active state, no horizontal scroll.
+   Mobile (<760px): collapses to a hamburger drawer that slides down
+   from below the masthead. The closed state shows the active tab's
+   label so users always know where they are.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── Mobile toggle — hidden on desktop, becomes the only visible
+   nav element on mobile ───────────────────────────────────────── */
+.tabs-mobile-toggle {
+  display: none;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  height: var(--tabs-h);
+  padding: 0 var(--space-4);
+  background: transparent;
+  border: none;
+  color: var(--text-1, #f5f1e8);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: left;
+}
+.tabs-mobile-toggle:focus-visible {
+  outline: 2px solid var(--yellow, #d4a84a);
+  outline-offset: -2px;
+}
+.tabs-mobile-current {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--text-1);
+}
+
+/* ── Desktop polish — slightly more refined active state. The
+   PR #79 base is fine; just deepen the contrast on the gold accent. */
+.tab.on::before {
+  height: 2px !important;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--yellow, #d4a84a) 20%,
+    var(--yellow, #d4a84a) 80%,
+    transparent 100%
+  ) !important;
+}
+
+/* ── Mobile (<760px) — collapse to drawer ─────────────────────── */
+@media (max-width: 760px) {
+  /* Show the toggle */
+  .tabs-mobile-toggle { display: flex !important; }
+
+  /* The tabs container shrinks to just the toggle when closed */
+  .tabs {
+    overflow: visible !important;   /* drawer can extend below */
+    background: var(--bg-1, #0c0c10) !important;
+    border-bottom: 1px solid var(--rule, #2a2a32) !important;
+  }
+  .tabs-inner {
+    /* Hidden by default. Slides down when nav is .is-open. */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    padding: var(--space-2) 0 var(--space-3) !important;
+    background: var(--bg-1, #0c0c10);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.85);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.28s cubic-bezier(.22, 1, .36, 1);
+    z-index: 199;  /* under the toggle (.tabs is 200) but over content */
+  }
+  .tabs.is-open .tabs-inner {
+    max-height: calc(100vh - var(--hdr-h) - var(--tabs-h));
+    overflow-y: auto;
+  }
+
+  /* Mobile tab rows — bigger tap targets, left-aligned, label
+     comfortable */
+  .tabs.is-open .tab,
+  .tabs-inner .tab {
+    display: flex !important;
+    width: 100%;
+    height: auto !important;
+    min-height: 48px !important;
+    padding: var(--space-3) var(--space-5) !important;
+    justify-content: flex-start !important;
+    text-align: left;
+    font-size: 14px !important;
+    letter-spacing: 0.04em !important;
+    text-transform: none !important;
+    font-weight: 600 !important;
+    color: var(--text-2) !important;
+    border-bottom: 1px solid var(--rule-faint, #1c1c24);
+  }
+  .tabs-inner .tab:last-child { border-bottom: none; }
+  .tabs-inner .tab .tab-num {
+    display: inline-block !important;
+    margin-right: var(--space-3);
+    font-size: 11px !important;
+    letter-spacing: 0.16em;
+    color: var(--text-3) !important;
+    opacity: 1 !important;
+  }
+  .tabs-inner .tab.on {
+    color: var(--text-1) !important;
+    background: var(--bg-2, #15151a) !important;
+  }
+  .tabs-inner .tab.on .tab-num { color: var(--yellow) !important; }
+  /* The desktop pseudo-element accents look weird on the drawer
+     rows — hide them here. */
+  .tabs-inner .tab.on::before,
+  .tabs-inner .tab.on::after { display: none !important; }
+}
+
+/* ── Body lock when the drawer is open so the page behind doesn't
+   scroll under it. Done in CSS rather than JS to keep the toggle
+   purely declarative. */
+@media (max-width: 760px) {
+  .tabs.is-open ~ .pg { pointer-events: none; }
+}
