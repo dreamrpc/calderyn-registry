@@ -89,6 +89,26 @@ export async function handleInteraction(request, env, ctx) {
 async function finalizeAction({ env, sub, toState, fromState, actor }) {
   const auditLine = { at: new Date().toISOString(), action: toState, by: actor?.id || null };
 
+  // Auto-register the writer mapping on EVERY admin action — both
+  // approve and reject — and regardless of whether the data.js commit
+  // path runs. The submission represents a real writer the admin is
+  // acknowledging, so their RPC → OOC pair should land in writers.js
+  // even if the application itself is rejected, blocked by quota, or
+  // for a tierless form (faculty/club/gov) where no data.js mutation
+  // happens. Idempotent: ensureWriterMapping no-ops when the mapping
+  // is already present. Same call also fires at submission time from
+  // submit.js; the duplicate here covers transient failures and
+  // pre-mapping legacy submissions.
+  try {
+    const writerUser = extractRpcUsername(sub.form?.rpcLink);
+    const writerOoc  = getOocForForm(sub.form);
+    if (writerUser && writerOoc && !lookupOocByRpc(writerUser)) {
+      await ensureWriterMapping(env, writerUser, writerOoc);
+    }
+  } catch (err) {
+    console.error("admin-action writer-mapping failed:", err.message);
+  }
+
   // Data-file mutation runs for every form type in Phase 2. Each type's
   // entries are built by markers.js; slot-fill types (faculty, strata,
   // club, gov) append next to any existing placeholder rather than
@@ -115,19 +135,6 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
     }
 
     if (!blocked) {
-      // Auto-register the writer mapping if this is the first time we
-      // see this RPC account. The form makes the OOC tag mandatory, so
-      // sub.form.ooc is always populated on new submissions; legacy
-      // submissions without it just skip this step. Failure to commit
-      // the mapping is non-fatal — log and continue with the data.js
-      // approval so a transient writers.js write doesn't strand the
-      // whole approval.
-      const username = extractRpcUsername(sub.form?.rpcLink);
-      const ooc = getOocForForm(sub.form);
-      if (username && ooc && !lookupOocByRpc(username)) {
-        await ensureWriterMapping(env, username, ooc);
-      }
-
       const insertions = buildInsertions(sub);
       if (insertions.length > 0) {
         const res = await updateFile(
