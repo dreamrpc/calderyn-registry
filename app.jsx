@@ -8,7 +8,7 @@
    so that webhook URLs are never exposed in client code.
    ════════════════════════════════════════════════════════════════════════ */
 
-const WORKER_URL = "https://calderyn-registry-relay.dreamroleplaywriter.workers.dev";
+const WORKER_URL = "https://calderyn-registry-relay.dreamroleplaywriter.workers.dev/submit";
 
 const {useState, useMemo, useEffect, useCallback, useRef} = React;
 const D = window.CALDERYN;
@@ -3849,141 +3849,13 @@ function JoinTab(){
     if (!canSubmit) return;
     setStatus({ state: "loading", msg: "Sending…" });
 
-    const typeName = APPLICATION_TYPES.find(t => t.id === type)?.name || type;
-
-    /* --- Discord embed helpers ----------------------------------------
-       Discord enforces per-field (1024 chars) and per-embed (25 fields)
-       limits. splitField() word-aware splits long values into multiple
-       fields; capFields() folds any overflow past 25 into one trailing
-       field so we never lose data silently. */
-    const FIELD_VALUE_MAX = 1024;
-    const FIELDS_PER_EMBED_MAX = 25;
-    const splitField = (name, value, inline = false) => {
-      if (!value) return [];
-      const v = String(value);
-      if (v.length <= FIELD_VALUE_MAX) return [{ name, value: v, inline }];
-      const parts = [];
-      let rest = v;
-      while (rest.length > FIELD_VALUE_MAX) {
-        let cut = rest.lastIndexOf("\n", FIELD_VALUE_MAX);
-        if (cut < 600) cut = rest.lastIndexOf(" ", FIELD_VALUE_MAX);
-        if (cut < 600) cut = FIELD_VALUE_MAX;
-        parts.push(rest.slice(0, cut).trim());
-        rest = rest.slice(cut).trim();
-      }
-      if (rest) parts.push(rest);
-      return parts.map((value, i) => ({
-        name: parts.length > 1 ? `${name} (${i + 1}/${parts.length})` : name,
-        value, inline,
-      }));
-    };
-    const capFields = (fields) => {
-      if (fields.length <= FIELDS_PER_EMBED_MAX) return fields;
-      const keep = fields.slice(0, FIELDS_PER_EMBED_MAX - 1);
-      const droppedNames = fields.slice(FIELDS_PER_EMBED_MAX - 1)
-        .map(f => f.name).join(", ").slice(0, FIELD_VALUE_MAX - 80);
-      keep.push({
-        name: "More (truncated)",
-        value: "Additional fields didn't fit Discord's 25-field limit: " + droppedNames,
-        inline: false,
-      });
-      return keep;
-    };
-
-    // Build the Discord embed — only the info admin actually needs to update the site
-    const fields = [
-      { name: "Type",          value: typeName, inline: true },
-      { name: "Character",     value: form.char || "—", inline: true },
-      { name: "RPC Profile",   value: form.rpcLink || "—", inline: false },
-    ];
-    if (form.alias)            fields.push({ name: "Stage Name / Alias", value: form.alias, inline: true });
-    if (form.house)            fields.push({ name: "House",       value: form.house, inline: true });
-    if (form.year)             fields.push({ name: "Year",        value: form.year, inline: true });
-    if (form.track)            fields.push({ name: "Track",       value: form.track, inline: true });
-    if (form.tier)             fields.push({ name: "Tier",        value: form.tier, inline: true });
-    if (form.facultyRole)      fields.push({ name: "Faculty Role",     value: `${form.facultyRole} (${form.facultySection || '?'})`, inline: false });
-    if (form.clubPosition)     fields.push({ name: "Club Position",    value: `${form.clubName || '?'} — ${form.clubPosition}${form.clubTeam ? ' (' + form.clubTeam + ')' : ''}`, inline: false });
-    if (form.govSeat)          fields.push({ name: "Gov Seat",         value: `${form.govSeat} (${form.govSection || '?'})`, inline: false });
-    // Collective flow: emit a dedicated header + per-flow fields so admin
-    // can route the application at a glance.
-    if (type === "collective" && form.collectiveFlow){
-      const flow = form.collectiveFlow;
-      const flowLabel =
-        flow === "joinHero"    ? "Join (Hero-side)" :
-        flow === "joinVillain" ? "Join (Villain-side)" :
-        flow === "createNew"   ? "Create New Collective" : flow;
-      fields.push({ name: "Collective Flow", value: flowLabel, inline: true });
-
-      if (flow === "joinHero" || flow === "joinVillain"){
-        const fac = flow === "joinVillain" ? "Villain" : "Hero";
-        fields.push({ name: "Faction",  value: fac, inline: true });
-        fields.push({ name: "Collective", value: `${form.collectiveName || '?'} — ${form.collectiveRole || '?'}`, inline: false });
-      } else if (flow === "createNew"){
-        const fac = (form.newCollectiveFaction === "villain") ? "Villain" : "Hero";
-        fields.push({ name: "Faction",          value: fac, inline: true });
-        fields.push({ name: "New Collective",   value: form.newCollectiveName || '—', inline: true });
-        if (form.newCollectiveType)   fields.push({ name: "Kind",     value: form.newCollectiveType, inline: true });
-        if (form.newCollectiveColor)  fields.push({ name: "Colour",   value: form.newCollectiveColor, inline: true });
-        if (form.newCollectiveBanner) fields.push({ name: "Banner",   value: form.newCollectiveBanner, inline: false });
-        if (form.newCollectiveDesc)   fields.push(...splitField("Description", form.newCollectiveDesc));
-        const foundingList = (form.newCollectiveMembers || [])
-          .filter(m => m && (m.alias || "").trim() && (m.char || "").trim() && (m.role || "").trim())
-          .map((m, i) => `${i+1}. ${m.alias} — ${m.role} (${m.char})`)
-          .join("\n");
-        if (foundingList) fields.push(...splitField("Founding Members", foundingList));
-      }
-    } else if (form.collectiveRole){
-      // Legacy single-flow fallback for any callers that still set the
-      // old fields without a collectiveFlow (kept so backwards-compat
-      // submissions don't silently lose data).
-      fields.push({ name: "Collective", value: `${form.collectiveName || '?'} — ${form.collectiveRole}`, inline: false });
-    }
-    if (form.outsideRole)      fields.push({ name: "Outside Role",     value: `${form.outsideOrg || '?'} — ${form.outsideRole}`, inline: false });
-    if (form.outsideStatus){
-      const statusLabel = (JOIN_OUTSIDE_STATUSES.find(s => s.id === form.outsideStatus) || {}).label || form.outsideStatus;
-      fields.push({ name: "Registry Status", value: statusLabel, inline: true });
-    }
-
-    // Powers (only if not fully human)
-    if (form.fullyHuman){
-      fields.push({ name: "Powers",         value: "Fully human — no powers.", inline: false });
-    } else {
-      if (form.power)           fields.push({ name: "Power / Ability",  value: form.power, inline: true });
-      if (form.powerExpression) fields.push(...splitField("Power Expression", form.powerExpression));
-      if (form.drawbacks)       fields.push(...splitField("Drawbacks", form.drawbacks));
-    }
-
-    // Optional cross-references (student only)
-    if (form.optClubPosition)  fields.push({ name: "Optional Club",    value: `${form.optClubName || '?'} — ${form.optClubPosition}${form.optClubTeam ? ' (' + form.optClubTeam + ')' : ''}`, inline: false });
-    if (form.optGovSeat)       fields.push({ name: "Optional Gov Seat", value: `${form.optGovSeat} (${form.optGovSection || '?'})`, inline: false });
-
-    if (form.notes)            fields.push(...splitField("Additional Notes", form.notes));
-    fields.push({ name: "Rules Acknowledged", value: form.rulesAgree ? "✅ Confirmed read & agreed" : "✗ Not confirmed", inline: false });
-
-    const payload = {
-      username: "Calderyn Registry — Applications",
-      avatar_url: "https://dreamrpc.github.io/calderyn-registry/calderyn_college_logo_transparent.png",
-      content: "<@&1498799678551101451>",
-      allowed_mentions: { roles: ["1498799678551101451"] },
-      embeds: [{
-        title: `New Application · ${typeName}`,
-        description: (type === "collective" && form.collectiveFlow === "createNew")
-          ? `Proposing **${form.newCollectiveName || '(unnamed collective)'}** — ${(form.newCollectiveFaction === "villain") ? "villain" : "hero"}-side · submitted by ${form.char || '(unknown)'}`
-          : `**${form.char}**${form.alias ? ` — *${form.alias}*` : ''}`,
-        color: (type === "collective" && (form.collectiveFlow === "joinVillain" || form.newCollectiveFaction === "villain"))
-          ? 0x4a1a1a
-          : 0xe31b23,
-        fields: capFields(fields),
-        footer: { text: "Calderyn College · Central Registry · 2026" },
-        timestamp: new Date().toISOString(),
-      }],
-    };
-
+    // The Worker builds the Discord embed + attaches Approve/Reject
+    // buttons + stashes the submission in KV. We just send the raw form.
     try {
       const res = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, payload }),
+        body: JSON.stringify({ type, form }),
       });
       if (!res.ok){
         const txt = await res.text().catch(() => "");

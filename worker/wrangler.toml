@@ -1,0 +1,30 @@
+name = "calderyn-registry-relay"
+main = "src/index.js"
+compatibility_date = "2025-01-15"
+
+# KV namespace holding submission state.
+# Create with: wrangler kv namespace create SUBMISSIONS
+# then paste the returned id below.
+[[kv_namespaces]]
+binding = "SUBMISSIONS"
+id = "<PASTE_KV_NAMESPACE_ID_HERE>"
+
+# Public, non-secret config. Set via `wrangler secret put` for sensitive
+# values (see README.md): DISCORD_PUBLIC_KEY, DISCORD_BOT_TOKEN,
+# GITHUB_TOKEN.
+[vars]
+# Snowflake IDs (Discord). Visible to anyone with the Worker code; that's
+# fine — they're not secrets, just identifiers.
+DISCORD_APPLICATION_ID = "<PASTE_DISCORD_APPLICATION_ID>"
+DISCORD_ADMIN_CHANNEL_ID = "<PASTE_CHANNEL_ID_FOR_APPROVALS>"
+DISCORD_ADMIN_ROLE_ID = "<PASTE_ADMIN_ROLE_ID>"
+DISCORD_PING_ROLE_ID = "1498799678551101451"
+
+# GitHub repo coordinates.
+GITHUB_OWNER = "dreamrpc"
+GITHUB_REPO  = "calderyn-registry"
+GITHUB_BRANCH = "main"
+GITHUB_DATA_FILE = "data.js"
+
+# Allowed Origin for CORS on /submit. Pages site + any custom domain.
+CORS_ALLOWED_ORIGIN = "https://dreamrpc.github.io"

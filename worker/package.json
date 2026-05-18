@@ -1,0 +1,15 @@
+{
+  "name": "calderyn-registry-relay",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Worker: form relay + Discord interactions for the Calderyn College registry.",
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}
