@@ -1,4 +1,159 @@
 /* ════════════════════════════════════════════════════════════════════════
+   SÖHNE TYPEFACE — @font-face DECLARATIONS
+   ════════════════════════════════════════════════════════════════════════
+   Self-hosted from /fonts/. These are Klim Type Foundry's TEST/TRIAL
+   files (filenames prefixed "TestSohne…" in the source zip). For
+   production deployment to calderyncollege.uk a paid Klim Web License
+   is required — without it, these may not be served from a live domain
+   under Klim's EULA. Keep on test-only environments until licensed.
+
+   Three families:
+     Söhne          — primary sans (body, UI, captions)
+     Söhne Breit    — wider sibling, used for display headlines
+     Söhne Mono     — monospace (stamps, codes, captions)
+
+   Weights provided (German names from Klim, mapped to numeric):
+     Buch              400 (book)
+     Buch Kursiv       400 italic
+     Kräftig           500 (medium)
+     Halbfett          600 (semibold)
+     Dreiviertelfett   700 (bold)
+     Fett              800 (extra bold)
+     Extrafett         900 (black)
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Söhne (primary sans) ───────────────────────────────────────── */
+@font-face {
+  font-family: 'Söhne';
+  src: url('fonts/sohne-buch.otf') format('opentype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne';
+  src: url('fonts/sohne-buch-italic.otf') format('opentype');
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne';
+  src: url('fonts/sohne-kraftig.otf') format('opentype');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne';
+  src: url('fonts/sohne-halbfett.otf') format('opentype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne';
+  src: url('fonts/sohne-dreiviertelfett.otf') format('opentype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne';
+  src: url('fonts/sohne-fett.otf') format('opentype');
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne';
+  src: url('fonts/sohne-extrafett.otf') format('opentype');
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+
+/* ── Söhne Breit (display, wider sibling) ─────────────────────── */
+@font-face {
+  font-family: 'Söhne Breit';
+  src: url('fonts/sohne-breit-buch.otf') format('opentype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne Breit';
+  src: url('fonts/sohne-breit-halbfett.otf') format('opentype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne Breit';
+  src: url('fonts/sohne-breit-fett.otf') format('opentype');
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne Breit';
+  src: url('fonts/sohne-breit-extrafett.otf') format('opentype');
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+
+/* ── Söhne Mono (monospace) ──────────────────────────────────── */
+@font-face {
+  font-family: 'Söhne Mono';
+  src: url('fonts/sohne-mono-buch.otf') format('opentype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne Mono';
+  src: url('fonts/sohne-mono-kraftig.otf') format('opentype');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne Mono';
+  src: url('fonts/sohne-mono-halbfett.otf') format('opentype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   DRUK TYPEFACE — @font-face DECLARATIONS
+   ════════════════════════════════════════════════════════════════════════
+   Commercial Type's poster-display family. The classic pairing with
+   Söhne — used by NYT magazine, The Cut, premium game studios, and
+   editorial design teams. Maximum impact at large sizes.
+
+   Self-hosted from /fonts/. These are Commercial Type's TRIAL files
+   (filenames suffixed "-Trial"). For production deployment to
+   calderyncollege.uk a paid Commercial Type Web License is required.
+
+   Two families used here:
+     Druk         — primary display (heavy industrial poster sans)
+     Druk Wide    — wider variant for ultra-impact moments
+
+   Weights:
+     Bold     700
+     Heavy    800
+     Super    900
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Druk (primary display) ──────────────────────────────────── */
+@font-face {
+  font-family: 'Druk';
+  src: url('fonts/druk-bold.otf') format('opentype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Druk';
+  src: url('fonts/druk-heavy.otf') format('opentype');
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Druk';
+  src: url('fonts/druk-super.otf') format('opentype');
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+
+/* ── Druk Wide (extra-impact display) ─────────────────────── */
+@font-face {
+  font-family: 'Druk Wide';
+  src: url('fonts/druk-wide-bold.otf') format('opentype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Druk Wide';
+  src: url('fonts/druk-wide-heavy.otf') format('opentype');
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Druk Wide';
+  src: url('fonts/druk-wide-super.otf') format('opentype');
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
    CALDERYN — POLISH OVERRIDES
    ════════════════════════════════════════════════════════════════════════
 
@@ -7313,4 +7468,315 @@ select:focus-visible {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY · DRUK + SÖHNE TUNING
+   ════════════════════════════════════════════════════════════════════
+   With Druk now wired in for --display, the existing rules that set
+   font-weight: 400 (which was correct for Bebas Neue's single-weight
+   file) need to bump to a real Druk weight (700/800/900). This block
+   targets the major display headings explicitly so each gets the
+   right Druk variant at the right weight.
+
+   Pairing logic:
+     Hero / max-impact         Druk Wide Super (900)
+     Section heads             Druk Heavy (800)
+     Card titles               Druk Heavy (800)
+     Smaller display blocks    Druk Bold (700)
+     Body / UI                 Söhne Buch (400) — default
+     Strong body emphasis      Söhne Halbfett (600)
+     Headlines inside body     Söhne Dreiviertelfett (700)
+   ════════════════════════════════════════════════════════════════════ */
+
+/* HOME HERO — Druk Wide Super for maximum poster impact */
+.home-hero-title {
+  font-family: var(--display-wide, 'Druk Wide', 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.015em !important;
+  /* Druk's metrics are bolder than Bebas — pull line-height in
+     slightly so the three lines don't feel airy */
+  line-height: 0.88 !important;
+}
+
+/* HERO subtitle/CTA stay on Söhne via --sans inheritance */
+
+/* LORE intro & section headings — Druk Heavy */
+.lore-intro-title,
+.lore-h {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.015em !important;
+}
+
+/* JOIN wizard — page titles in Druk Heavy */
+.join-wiz-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* JOIN confirm title — Druk Heavy + name in Druk Super for the
+   "you specifically" punch */
+.join-confirm-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.015em !important;
+}
+.join-confirm-name {
+  font-weight: 900 !important;
+}
+
+/* RECEIVED stamp — Druk Super inside the wax-seal */
+.join-confirm-stamp-line-1 {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* HOME Vanguard card alias — Druk Heavy */
+.home-vg-alias {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.005em !important;
+}
+
+/* HOME section titles + CTA title — Druk Heavy */
+.home-section-title,
+.home-cta-title,
+.home-programme-line {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.015em !important;
+}
+
+/* PageHead h2 (all standard page heads) — Druk Heavy */
+.pg-hd h2 {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.015em !important;
+}
+
+/* BODY default — make sure Söhne's Buch (400) is the default,
+   and that bold/strong picks up Söhne Halbfett (600) not 700 */
+body {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-weight: 400;
+  font-feature-settings: "ss01", "ss03", "kern";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+strong, b {
+  font-weight: 600;  /* Söhne Halbfett looks better than 700 here */
+}
+
+/* Small caps mono labels — Söhne Mono Kraftig (500) reads cleaner
+   than 700 at small sizes */
+.lore-eyebrow,
+.home-hero-stamp,
+.home-section-stamp,
+.join-wiz-eyebrow,
+.join-confirm-eyebrow,
+.home-cta-stamp,
+.home-programme-stamp {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-weight: 500 !important;
+}
+
+/* Form labels + table headers — Söhne Halbfett for that
+   confident-not-shouty UI weight */
+.join-field-label,
+thead tr th {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-weight: 600 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   COMPLETION STATE · V2 — VANGUARD FLICKER + WAX SEAL
+   ════════════════════════════════════════════════════════════════════
+   Replaces the v1 red rectangle stamp with a cinematic moment:
+
+     0.0s   — Vanguard portraits start strobing in stagger
+     1.0s   — All four briefly hold (fully visible together)
+     1.4s   — Portraits fade to 14% as spectral backdrop
+     1.5s   — Wax-seal stamp drops in (rotation + scale + bounce)
+     2.0s   — Sub-id label fades in below the seal
+     2.2s   — Eyebrow → title → lede → receipt → next-steps cascade
+
+   The wax seal itself is an inline SVG — irregular roughened edge via
+   feTurbulence + feDisplacementMap on the outer circle, embossed
+   double-ring inside, Druk Super "STRATA" mark in the centre, and a
+   ring of mono caption text following the rim.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── STAGE — holds both the vanguard strip and the wax seal ──── */
+.join-confirm-stage {
+  position: relative;
+  height: 360px;
+  margin: 0 auto var(--space-7);
+  max-width: 760px;
+}
+
+/* ── VANGUARD STRIP ────────────────────────────────────────── */
+.join-confirm-vanguard {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  overflow: hidden;
+  /* Drops the saturation on the spectral state — the portraits
+     read as briefing slides rather than active photos */
+  filter: contrast(1.05);
+}
+.join-confirm-vg {
+  position: relative;
+  background-size: cover;
+  background-position: 50% 22%;
+  background-color: var(--bg-2);
+  border: 1px solid rgba(244, 200, 110, 0.18);
+  opacity: 0;
+  /* Each portrait flickers in then settles to a low spectral level.
+     The waveform is intentionally jittery — like a CRT briefing
+     monitor cutting between feeds. */
+  animation: vg-flicker 2.6s cubic-bezier(.3, 0, .7, 1) forwards;
+}
+.join-confirm-vg::after {
+  /* Vignette + scan-line overlay — sells the "briefing feed" feel */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0, 0, 0, 0.16) 2px, rgba(0, 0, 0, 0.16) 3px),
+    linear-gradient(180deg, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.7) 100%);
+  pointer-events: none;
+}
+/* Stagger each portrait's flicker by 0.12s */
+.join-confirm-vg-1 { animation-delay: 0s;    }
+.join-confirm-vg-2 { animation-delay: 0.18s; }
+.join-confirm-vg-3 { animation-delay: 0.36s; }
+.join-confirm-vg-4 { animation-delay: 0.54s; }
+
+/* The flicker waveform — opacity strobes, eventually settles low */
+@keyframes vg-flicker {
+  0%   { opacity: 0; }
+  6%   { opacity: 1; }       /* hard cut on */
+  10%  { opacity: 0.2; }
+  14%  { opacity: 0.9; }
+  20%  { opacity: 0.05; }
+  24%  { opacity: 0.85; }
+  32%  { opacity: 0.3; }
+  40%  { opacity: 1; }
+  46%  { opacity: 0.6; }
+  55%  { opacity: 1; }       /* settled hold */
+  72%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { opacity: 0.14; }    /* spectral background */
+}
+
+.join-confirm-vg-label {
+  position: absolute;
+  bottom: 10px; left: 10px;
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: rgba(244, 200, 110, 0.85);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  z-index: 2;
+}
+
+.join-confirm-vanguard-line {
+  position: absolute;
+  bottom: 8px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.36em;
+  color: var(--yellow, #d4a84a);
+  background: rgba(0, 0, 0, 0.7);
+  padding: 6px 12px;
+  border: 1px solid rgba(244, 200, 110, 0.4);
+  z-index: 3;
+  opacity: 0;
+  animation: vg-line-in 600ms ease 1.4s forwards;
+}
+@keyframes vg-line-in {
+  to { opacity: 1; }
+}
+
+/* ── WAX SEAL ────────────────────────────────────────────── */
+.join-confirm-wax {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 240px;
+  height: 240px;
+  margin-left: -120px;
+  margin-top: -120px;
+  /* Drops in AFTER the vanguard flicker settles */
+  opacity: 0;
+  transform: rotate(-22deg) scale(1.6);
+  animation: wax-seal-drop 900ms cubic-bezier(.34, 1.56, .64, 1) 1.5s forwards;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.55));
+  z-index: 4;
+}
+.join-confirm-wax-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+@keyframes wax-seal-drop {
+  0%   { opacity: 0; transform: rotate(-22deg) scale(1.6); }
+  50%  { opacity: 1; transform: rotate(-9deg) scale(0.92); }
+  70%  {              transform: rotate(-5deg) scale(1.04); }
+  100% { opacity: 1; transform: rotate(-7deg) scale(1); }
+}
+
+.join-confirm-wax-id {
+  position: absolute;
+  top: calc(50% + 110px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  color: var(--text-3, #948d80);
+  white-space: nowrap;
+  opacity: 0;
+  animation: vg-line-in 600ms ease 2.0s forwards;
+}
+
+/* ── Hide the v1 rectangular stamp area — it's been replaced ── */
+.join-confirm-stamp-area { display: none !important; }
+
+/* ── RETIME the content reveal to follow the wax seal ──────── */
+.join-confirm-eyebrow  { animation-delay: 2.2s !important; }
+.join-confirm-title    { animation-delay: 2.35s !important; }
+.join-confirm-lede     { animation-delay: 2.5s !important; }
+.join-confirm-receipt  { animation-delay: 2.7s !important; }
+.join-confirm-next     { animation-delay: 2.9s !important; }
+.join-confirm-actions  { animation-delay: 3.1s !important; }
+
+/* ── Responsive — phone keeps the moment but shrinks ─────── */
+@media (max-width: 600px) {
+  .join-confirm-stage { height: 280px; }
+  .join-confirm-vanguard { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); }
+  .join-confirm-wax { width: 180px; height: 180px; margin-left: -90px; margin-top: -90px; }
+  .join-confirm-wax-id { top: calc(50% + 86px); }
+}
+
+/* ── Reduced motion — show everything immediately, no flicker ─ */
+@media (prefers-reduced-motion: reduce) {
+  .join-confirm-vg,
+  .join-confirm-vanguard-line,
+  .join-confirm-wax,
+  .join-confirm-wax-id {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .join-confirm-vg { opacity: 0.25 !important; }
+  .join-confirm-wax { transform: rotate(-7deg) !important; }
 }
