@@ -110,21 +110,30 @@ houses: [
 ],
 
 // ────────────────────────────────────────────────────────────────────
-// REGISTRY RULE — A-LIST CAP PER WRITER
-//   Each writer (OOC identity) may have at most 5 A-List characters
-//   across the entire registry, counted across every RPC account.
+// REGISTRY RULES — PER-WRITER TIER CAPS
+//   Each writer (OOC identity) is limited per tier, counted across
+//   every RPC account they own:
+//       A-List → max 5
+//       B-List → max 8
+//       C-List → max 10
+//       D-List → uncapped
 //   Exceptions were granted to early supporters during the room's
 //   opening weeks; no further exceptions will be made going forward.
 //
 //   Enforced automatically by the Discord approval bot at click time
 //   (worker/src/quota.js + worker/src/writers.js). The bot blocks any
-//   A-List approval that would push a writer past the cap and shows
-//   an amber "quota blocked" embed in the application channel.
+//   approval that would push a writer past the cap for the
+//   submission's tier and shows an amber "quota blocked" embed in
+//   the application channel.
 //
-//   Adding a *new role* for an existing A-List character (e.g. an
-//   existing A-Lister taking a faculty seat or a Powerball position
-//   on another form) does NOT count as a new A-List slot — the set
-//   only grows on a new char name.
+//   Adding a *new role* for an existing character at the same tier
+//   (e.g. an A-Lister taking a faculty seat or a Powerball position
+//   on another form) does NOT count as a new slot — the set only
+//   grows on a new char name.
+//
+//   Cap values are env-configurable in worker/wrangler.toml:
+//   A_LIST_LIMIT_PER_WRITER, B_LIST_LIMIT_PER_WRITER,
+//   C_LIST_LIMIT_PER_WRITER.
 // ────────────────────────────────────────────────────────────────────
 students: [
   // Monty's secret ability (dormant power absorption through death) is
