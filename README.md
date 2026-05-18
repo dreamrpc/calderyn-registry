@@ -75,6 +75,19 @@ and is consulted only by the quota check. The blocked embed shows
 just the count and the cap, nothing that links the submitting RPC
 account to the writer's other accounts.
 
+**Auto-mapping new writers.** When a new writer submits the form via
+the *"Other / new writer…"* path (typing their handle into the Writer
+Tag freeform input) and the submission is approved, the bot commits
+the `rpc-username → ooc-name` pair into
+[`worker/src/writers.js`](./worker/src/writers.js) automatically on
+the same approval, just above the `// AUTO-INSERT:writers` marker.
+The same happens if an existing writer submits from a new RPC account.
+Lands as a separate commit (`Map new writer: <user> → <handle>`)
+right before the registry-data commit, so cross-account quota counting
+works on their next submission. Failures are non-fatal — if the
+writers.js commit doesn't go through, the registry-data approval
+still does and the mapping picks up on the next try.
+
 ## Editing the registry manually
 
 You don't usually need to — the bot handles approvals. But occasionally

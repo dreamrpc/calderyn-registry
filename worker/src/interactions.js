@@ -2,7 +2,9 @@ import { verifySignature, editMessage, postMessage } from "./discord.js";
 import { buildEmbed } from "./embed.js";
 import { updateFile, getFile } from "./github.js";
 import { buildInsertions, applyInsertions, removeBySubmissionId, countEntriesFor } from "./markers.js";
-import { checkTierQuota, getTierLimits } from "./quota.js";
+import { checkTierQuota, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
+import { lookupOocByRpc } from "./writers.js";
+import { ensureWriterMapping } from "./writer-mapping.js";
 
 const INTERACTION_PONG       = 1;
 const INTERACTION_COMPONENT  = 3;
@@ -113,6 +115,19 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
     }
 
     if (!blocked) {
+      // Auto-register the writer mapping if this is the first time we
+      // see this RPC account. The form makes the OOC tag mandatory, so
+      // sub.form.ooc is always populated on new submissions; legacy
+      // submissions without it just skip this step. Failure to commit
+      // the mapping is non-fatal — log and continue with the data.js
+      // approval so a transient writers.js write doesn't strand the
+      // whole approval.
+      const username = extractRpcUsername(sub.form?.rpcLink);
+      const ooc = getOocForForm(sub.form);
+      if (username && ooc && !lookupOocByRpc(username)) {
+        await ensureWriterMapping(env, username, ooc);
+      }
+
       const insertions = buildInsertions(sub);
       if (insertions.length > 0) {
         const res = await updateFile(
