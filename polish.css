@@ -4807,7 +4807,7 @@ body {
 .join-input,
 .join-select,
 .join-textarea {
-     background: rgba(255, 255, 255, 0.02) !important;
+     background-color: rgba(255, 255, 255, 0.02) !important;
      color: var(--text, #ece6d6) !important;
      border: 1px solid rgba(212, 168, 74, 0.16) !important;
      border-radius: 8px !important;
@@ -4815,7 +4815,7 @@ body {
      font-size: 14px !important;
      transition:
           border-color .18s ease,
-          background .18s ease,
+          background-color .18s ease,
           box-shadow .18s ease,
           transform .12s ease !important;
 }
@@ -4823,13 +4823,13 @@ body {
 .join-select:hover:not(:focus),
 .join-textarea:hover:not(:focus) {
      border-color: rgba(212, 168, 74, 0.35) !important;
-     background: rgba(255, 255, 255, 0.035) !important;
+     background-color: rgba(255, 255, 255, 0.035) !important;
 }
 .join-input:focus,
 .join-select:focus,
 .join-textarea:focus {
      border-color: var(--gold-bright, #f1cd72) !important;
-     background: rgba(212, 168, 74, 0.05) !important;
+     background-color: rgba(212, 168, 74, 0.05) !important;
      box-shadow: 0 0 0 3px rgba(212, 168, 74, 0.18) !important;
      outline: none !important;
 }
