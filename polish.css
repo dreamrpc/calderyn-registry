@@ -8301,3 +8301,71 @@ code, pre, kbd, samp, var, tt,
   .sfilter-search { flex: 1 1 100% !important; }
   .sfilter-count { margin-left: 0 !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   AUDIT FIX · CURRICULUM SUBJECTS LIST (audit #7)
+   The CurriculumView's year tabs used to update only the two track
+   summary cards. The computed subject list was never rendered. Now
+   the full module roster shows below the summaries, filterable by
+   track. ClassRow + .curr-row styles already existed and are reused.
+   ════════════════════════════════════════════════════════════════════ */
+
+.curr-classes {
+  padding: var(--space-7) 0 0 !important;
+}
+.curr-classes-hd {
+  background: transparent !important;
+  color: var(--text-1, #f5f1e8) !important;
+  padding: 0 0 var(--space-4) !important;
+  border-bottom: 2px solid rgba(201, 168, 76, 0.18) !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: var(--space-3) var(--space-4) !important;
+  margin-bottom: var(--space-4);
+}
+.curr-classes-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+.curr-classes-title {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 800;
+  font-size: clamp(20px, 2.4vw, 26px);
+  letter-spacing: -0.01em;
+  color: var(--text-1, #f5f1e8);
+  margin: 0;
+  text-transform: uppercase;
+  flex: 1;
+}
+.curr-classes-title-sub {
+  font-family: var(--sans, 'Söhne', system-ui);
+  font-weight: 500;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-3, #948d80);
+}
+.curr-classes-filter {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.curr-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.curr-rows-empty {
+  padding: var(--space-5);
+  text-align: center;
+  font-family: var(--sans, 'Söhne', system-ui);
+  font-size: 14px;
+  color: var(--text-3, #948d80);
+  border: 1px dashed var(--rule, #2a2a34);
+}

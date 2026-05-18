@@ -1002,6 +1002,70 @@ function CurriculumView(){
             )}
           </article>
         </div>
+
+        {/* SUBJECT LIST — the actual modules taught this year.
+            Audit #7: the year tabs were "underused" because clicking
+            them only updated the two track summary cards above; the
+            computed subject list was never rendered. Now the writer
+            sees the full module roster per year, filterable by track. */}
+        {allSubs.length > 0 && (
+          <section className="curr-classes">
+            <header className="curr-classes-hd">
+              <div className="curr-classes-tag">Year {yearIdx+1} · Modules</div>
+              <h4 className="curr-classes-title">
+                {filtered.length} {filtered.length === 1 ? "subject" : "subjects"}
+                {filter !== "all" && (
+                  <span className="curr-classes-title-sub">
+                    {" · "}{filter === "shared" ? "Shared only"
+                          : filter === "hero" ? "Hero only"
+                          : "Sidekick only"}
+                  </span>
+                )}
+                {filter === "all" && (
+                  <span className="curr-classes-title-sub">
+                    {" · "}{requiredCount} required, {electiveCount} elective
+                  </span>
+                )}
+              </h4>
+              <div className="curr-classes-filter">
+                <button
+                  type="button"
+                  className={"sf-pill" + (filter === "all" ? " on" : "")}
+                  onClick={() => setFilter("all")}
+                  aria-pressed={filter === "all"}
+                >All</button>
+                <button
+                  type="button"
+                  className={"sf-pill" + (filter === "hero" ? " on" : "")}
+                  onClick={() => setFilter("hero")}
+                  aria-pressed={filter === "hero"}
+                >Heroes</button>
+                <button
+                  type="button"
+                  className={"sf-pill" + (filter === "sidekick" ? " on" : "")}
+                  onClick={() => setFilter("sidekick")}
+                  aria-pressed={filter === "sidekick"}
+                >Sidekicks</button>
+                <button
+                  type="button"
+                  className={"sf-pill" + (filter === "shared" ? " on" : "")}
+                  onClick={() => setFilter("shared")}
+                  aria-pressed={filter === "shared"}
+                >Shared</button>
+              </div>
+            </header>
+            <ol className="curr-rows">
+              {filtered.length === 0 && (
+                <li className="curr-rows-empty">
+                  No subjects in this filter for {YEAR_TABS[yearIdx].label} year.
+                </li>
+              )}
+              {filtered.map((s, i) => (
+                <ClassRow key={`${yearIdx}-${i}-${s.subject}`} subject={s}/>
+              ))}
+            </ol>
+          </section>
+        )}
       </main>
     </div>
   );
