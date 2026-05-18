@@ -1,0 +1,59 @@
+name: Deploy Worker
+
+# Deploys the Cloudflare Worker that powers the application-approval
+# flow. Runs automatically when worker code or wrangler config changes
+# on main, and is also available as a manual one-click button under the
+# repo's "Actions" tab (workflow_dispatch).
+#
+# Required repo secrets (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN  — token with "Edit Cloudflare Workers" perms
+#   CLOUDFLARE_ACCOUNT_ID — found in Cloudflare dashboard sidebar
+#   DISCORD_PUBLIC_KEY    — Discord application Public Key
+#   DISCORD_BOT_TOKEN     — Discord bot token
+#   GH_DATA_PAT           — fine-grained PAT with Contents:Read+Write
+#                           on dreamrpc/calderyn-registry.
+#                           Named GH_DATA_PAT (not GITHUB_TOKEN) because
+#                           GITHUB_TOKEN is reserved by Actions itself;
+#                           the workflow uploads it to Cloudflare under
+#                           the name GITHUB_TOKEN that the Worker reads.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'worker/**'
+      - '.github/workflows/deploy-worker.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm install
+
+      - name: Deploy + push secrets
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: worker
+          # `secrets:` lists names to push to Cloudflare; values come from
+          # the env block below. Wrangler runs `secret put` for each, then
+          # runs the default `deploy` command.
+          secrets: |
+            DISCORD_PUBLIC_KEY
+            DISCORD_BOT_TOKEN
+            GITHUB_TOKEN
+        env:
+          DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
+          DISCORD_BOT_TOKEN:  ${{ secrets.DISCORD_BOT_TOKEN }}
+          GITHUB_TOKEN:       ${{ secrets.GH_DATA_PAT }}

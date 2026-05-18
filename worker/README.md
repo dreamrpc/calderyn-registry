@@ -19,6 +19,12 @@ Cloudflare Worker that powers the registry's application flow:
 
 ## One-time setup
 
+> **No terminal?** Skip this whole section and follow
+> [`DEPLOY-BROWSER.md`](./DEPLOY-BROWSER.md) instead — that path uses
+> only the Cloudflare dashboard + GitHub Actions and never needs a
+> shell. The walkthrough below assumes a local terminal with `node`
+> and `npx` available.
+
 ### 1. Discord — create the application
 
 1. Go to <https://discord.com/developers/applications> → **New
