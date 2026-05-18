@@ -126,12 +126,25 @@ function buildFaculty(form, id) {
   const powerFrag = form.fullyHuman ? ""
     : `, power: ${q(form.power)}, expression: ${q(form.powerExpression)}, drawbacks: ${q(form.drawbacks)}`;
   const stageFrag = form.alias ? q(form.alias) : '""';
-  const line = `{ role: ${q(form.facultyRole)}, char: ${q(form.char)}, stage: ${stageFrag}${powerFrag}${humanFrag}${linkFrag} }, // sub:${id}`;
-  return [{
+  const facultyLine = `{ role: ${q(form.facultyRole)}, char: ${q(form.char)}, stage: ${stageFrag}${powerFrag}${humanFrag}${linkFrag} }, // sub:${id}`;
+  const out = [{
     kind: "path",
     path: ["faculty", { section: form.facultySection }, "rows"],
-    lines: [line],
+    lines: [facultyLine],
   }];
+
+  // Also write a powers[] entry so the quota scanner can see this
+  // character — the powers[] array is the canonical place per-pool
+  // per-tier counting reads from. Skip for fully-human applicants
+  // (no power, expression, drawbacks to record).
+  if (!form.fullyHuman) {
+    out.push({
+      kind: "marker",
+      marker: "powers",
+      line: powersLine(form, id, "faculty"),
+    });
+  }
+  return out;
 }
 
 function buildStrata(form, id) {

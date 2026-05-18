@@ -80,9 +80,9 @@ roundTripCase({
   expectPlans: 1,
 });
 
-// ─── Faculty (Phase 2 — path insertion) ─────────────────────────────
+// ─── Faculty (Phase 2 — path insertion + powers[] for non-human) ────
 roundTripCase({
-  name: "faculty: path into faculty[<section>].rows",
+  name: "faculty: path into faculty[<section>].rows + powers entry",
   id: "fac00001",
   sub: {
     id: "fac00001", type: "faculty",
@@ -90,8 +90,27 @@ roundTripCase({
       facultySection: "OFFICE OF THE DEAN",
       facultyRole: "Director of Admissions",
       char: "Fac Test", alias: "DEAN-ELECT",
+      tier: "A-List",
       power: "P", powerExpression: "PE", drawbacks: "D",
       rpcLink: "https://example/f",
+    },
+  },
+  // Two plans now: a faculty[].rows insertion AND a powers[] entry so
+  // the quota scanner can count this character.
+  expectPlans: 2,
+});
+
+roundTripCase({
+  name: "faculty: fully human → only faculty[].rows, no powers entry",
+  id: "fachuman",
+  sub: {
+    id: "fachuman", type: "faculty",
+    form: {
+      facultySection: "OFFICE OF THE DEAN",
+      facultyRole: "Registrar",
+      char: "Human Faculty", alias: "REG",
+      tier: "D-List", fullyHuman: true,
+      rpcLink: "https://example/h",
     },
   },
   expectPlans: 1,
