@@ -8552,3 +8552,586 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   HOME · COMIC REDESIGN
+   Full Spider-Verse / Arcane / Magic Awakened energy. Replaces the
+   v1 "dossier" home with proper comic-panel layouts, halftones,
+   CMYK offset on display type, sound-effect language, diagonal red
+   slashes. Overrides earlier .home-* rules.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── HERO — push the existing layout harder, comic-cover style ─── */
+.home-hero {
+  background: #0a0a0a !important;
+}
+/* Big diagonal red slash behind the headline — Spider-Verse signature.
+   Sits over the existing emberfield + halftone but below the title. */
+.home-hero::before {
+  content: "";
+  position: absolute;
+  top: 0; right: -10%;
+  width: 60vw;
+  height: 100%;
+  background: linear-gradient(115deg,
+    transparent 0%, transparent 35%,
+    rgba(193, 26, 44, 0.18) 36%,
+    rgba(193, 26, 44, 0.18) 60%,
+    transparent 61%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.home-hero-bg, .home-hero-inner { z-index: 2; position: relative; }
+
+/* CMYK offset on the gold middle line — red + cyan ghost shadows
+   like ink-misregistration in a print run. */
+.home-hero-line-2 {
+  text-shadow:
+    -3px 0 0 rgba(227, 27, 35, 0.55),
+     3px 0 0 rgba(46, 188, 212, 0.45),
+    0 0 24px rgba(212, 168, 74, 0.35) !important;
+}
+
+/* Hero stamp now a comic-cover badge */
+.home-hero-stamp {
+  padding: 6px 12px !important;
+  background: var(--red, #c11a2c) !important;
+  color: #ffffff !important;
+  border: none !important;
+  letter-spacing: 0.3em !important;
+  opacity: 1 !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+}
+.home-hero-stamp-dot {
+  background: #ffffff !important;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* ── SECTION HEAD universal — make titles comic-poster scale ──── */
+.home-section-head {
+  text-align: left !important;
+  margin-bottom: var(--space-7) !important;
+  border-bottom: 4px solid #000 !important;
+  padding-bottom: var(--space-5) !important;
+  position: relative;
+}
+.home-section-head::after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 120px; height: 4px;
+  background: var(--red, #c11a2c);
+}
+.home-section-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(60px, 9vw, 140px) !important;
+  letter-spacing: -0.02em !important;
+  line-height: 0.88 !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.home-section-title-accent {
+  color: var(--yellow, #d4a84a);
+  text-shadow:
+    -2px 0 0 rgba(227, 27, 35, 0.5),
+     2px 0 0 rgba(46, 188, 212, 0.4);
+}
+.home-section-stamp {
+  display: inline-block !important;
+  padding: 4px 10px !important;
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  margin-bottom: var(--space-4) !important;
+  opacity: 1 !important;
+}
+.home-section-lede {
+  text-align: left !important;
+  max-width: 720px !important;
+  margin: var(--space-4) 0 0 !important;
+  font-size: 17px !important;
+  line-height: 1.55 !important;
+  color: var(--text-2, #c9c3b5) !important;
+}
+
+/* ── VANGUARD GRID — asymmetric comic-panel layout ─────────────── */
+.home-vg-section { background: #0a0a0a; padding-top: var(--space-9); padding-bottom: var(--space-9); }
+
+.home-vg-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-rows: repeat(2, minmax(260px, auto));
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+/* Paragon dominates — spans 2 rows on the left */
+.home-vg-panel-1 { grid-column: 1; grid-row: 1 / 3; }
+.home-vg-panel-2 { grid-column: 2; grid-row: 1; }
+.home-vg-panel-3 { grid-column: 3; grid-row: 1; }
+.home-vg-panel-4 { grid-column: 2 / 4; grid-row: 2; }
+
+.home-vg-panel {
+  position: relative;
+  background: var(--bg-1, #0c0c10);
+  border: 4px solid #000;
+  box-shadow:
+    8px 8px 0 0 #000,
+    inset 0 0 0 1px var(--vg-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(.22, 1, .36, 1), opacity 0.6s ease, box-shadow 0.3s ease;
+  transition-delay: calc(var(--vg-i, 0) * 0.12s);
+}
+.home-vg-section.is-in .home-vg-panel {
+  opacity: 1;
+  transform: translateY(0);
+}
+.home-vg-panel:hover {
+  box-shadow:
+    12px 12px 0 0 var(--vg-color),
+    inset 0 0 0 1px var(--vg-color);
+  z-index: 2;
+}
+.home-vg-panel:hover .home-vg-sfx {
+  opacity: 1;
+  transform: rotate(-6deg) scale(1);
+}
+
+/* Image area — halftone overlay + sound-effect SFX */
+.home-vg-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.05;
+  overflow: hidden;
+  background: #000;
+  flex: 1 1 auto;
+}
+.home-vg-panel-1 .home-vg-img { aspect-ratio: auto; }
+.home-vg-img img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 22%;
+  filter: contrast(1.1) saturate(0.9);
+  transition: filter 0.4s ease, transform 0.6s cubic-bezier(.22, 1, .36, 1);
+}
+.home-vg-panel:hover .home-vg-img img {
+  filter: contrast(1.2) saturate(1.1);
+  transform: scale(1.04);
+}
+/* Halftone overlay on the portrait — pure CSS dot field */
+.home-vg-img-halftone {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%, rgba(0, 0, 0, 0.45) 1px, transparent 1.5px);
+  background-size: 4px 4px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+}
+.home-vg-img::after {
+  /* Bottom gradient so text below reads cleanly */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.85) 100%);
+  pointer-events: none;
+}
+
+/* SFX — comic-book sound effect overlay on hover */
+.home-vg-sfx {
+  position: absolute;
+  top: 12px; right: 12px;
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 900;
+  font-size: clamp(28px, 4vw, 48px);
+  letter-spacing: 0.02em;
+  color: var(--yellow, #d4a84a);
+  text-shadow:
+    3px 3px 0 #000,
+    -2px 0 0 rgba(227, 27, 35, 0.6);
+  transform: rotate(-12deg) scale(0.7);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(.5, 1.6, .5, 1);
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+/* Meta block — name plate at the bottom of the image */
+.home-vg-meta {
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  background: linear-gradient(180deg, var(--bg-1) 0%, #000 100%);
+  border-top: 2px solid var(--vg-color);
+}
+.home-vg-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--vg-color);
+  margin-bottom: 4px;
+}
+.home-vg-alias {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 900;
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--text-1, #f5f1e8);
+  margin: 0 0 4px;
+  text-transform: uppercase;
+}
+.home-vg-panel-1 .home-vg-alias { font-size: clamp(40px, 4.5vw, 60px); }
+.home-vg-name {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--text-3, #948d80);
+  text-transform: uppercase;
+}
+
+/* Caption box — comic-book caption strip at the very bottom */
+.home-vg-caption {
+  position: relative;
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: #0a0a0a;
+  border-top: 1px solid var(--vg-color);
+}
+.home-vg-caption-body {
+  font-family: var(--sans, 'Söhne', system-ui);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-2, #c9c3b5);
+  margin: 0 0 6px;
+}
+.home-vg-caption-body strong {
+  color: var(--text-1, #f5f1e8);
+  font-weight: 600;
+}
+.home-vg-caption-hook {
+  font-family: var(--sans, 'Söhne', system-ui);
+  font-style: italic;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--vg-color);
+  margin: 0;
+  opacity: 0.95;
+}
+
+/* Below 900px collapse to a 1-col stack */
+@media (max-width: 900px) {
+  .home-vg-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+  .home-vg-panel-1, .home-vg-panel-2, .home-vg-panel-3, .home-vg-panel-4 {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .home-vg-img { aspect-ratio: 1 / 0.7; }
+}
+
+/* ── PROGRAMME — splash-page treatment ───────────────────────── */
+.home-programme {
+  background: #0a0a0a;
+  padding: var(--space-9) var(--space-5) !important;
+  position: relative;
+  overflow: hidden;
+}
+.home-programme-frame { display: none !important; } /* v1 block hidden */
+
+.home-programme-slash {
+  position: absolute;
+  top: -20%; left: -10%;
+  width: 80%; height: 140%;
+  background: linear-gradient(115deg,
+    transparent 0%, transparent 45%,
+    var(--red, #c11a2c) 46%,
+    var(--red, #c11a2c) 54%,
+    transparent 55%, transparent 100%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+.home-programme-halftone {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle 2px at 50% 50%, rgba(244, 200, 110, 0.12) 2px, transparent 2.5px);
+  background-size: 10px 10px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.home-programme-card {
+  position: relative;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-6);
+  background: var(--bg-1, #0c0c10);
+  border: 4px solid #000;
+  box-shadow: 14px 14px 0 0 #000;
+  z-index: 2;
+}
+.home-programme-stamp {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #000;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-5);
+}
+.home-programme-line {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: clamp(28px, 3.4vw, 42px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: uppercase;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 var(--space-3) !important;
+}
+.home-programme-line:nth-child(2) {
+  color: var(--yellow, #d4a84a) !important;
+  font-style: normal !important;
+  text-shadow:
+    -2px 0 0 rgba(227, 27, 35, 0.4),
+     2px 0 0 rgba(46, 188, 212, 0.3);
+}
+.home-programme-line:last-child {
+  color: var(--text-2, #c9c3b5) !important;
+  font-size: clamp(20px, 2.2vw, 26px) !important;
+}
+.home-programme-sig {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-3, #948d80);
+  margin-top: var(--space-5);
+  border-top: 2px solid var(--rule, #2a2a34);
+  padding-top: var(--space-4);
+}
+
+/* ── DORM MEMO — leaked transmission panel ────────────────────── */
+.home-dorm {
+  background: #0a0a0a;
+  padding: var(--space-9) var(--space-5) !important;
+}
+.home-dorm-card { display: none !important; } /* v1 cream block hidden */
+
+.home-dorm-panel {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-6);
+  background: #efe9d8;
+  color: #1a0e08;
+  border: 5px solid #000;
+  box-shadow: 14px 14px 0 0 var(--red, #c11a2c);
+  overflow: hidden;
+}
+.home-dorm-halftone {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle 1.5px at 50% 50%, rgba(26, 14, 8, 0.18) 1.5px, transparent 2px);
+  background-size: 5px 5px;
+  pointer-events: none;
+}
+.home-dorm-panel > *:not(.home-dorm-halftone) { position: relative; z-index: 2; }
+
+.home-dorm-eyes-stamp {
+  position: absolute;
+  top: 32px; right: -22px;
+  padding: 6px 30px;
+  background: var(--red, #c11a2c);
+  color: #fff !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  transform: rotate(8deg);
+  z-index: 3;
+  box-shadow: 0 4px 12px -4px rgba(0,0,0,0.4);
+}
+
+.home-dorm-caption {
+  display: flex;
+  gap: 12px;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase;
+  color: #6b3e26 !important;
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
+  border-bottom: 2px solid #1a0e08;
+}
+.home-dorm-caption-doc { color: #1a0e08 !important; }
+.home-dorm-caption-sep { color: #b87333 !important; }
+
+.home-dorm-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(32px, 4.4vw, 56px) !important;
+  letter-spacing: -0.015em !important;
+  line-height: 0.95 !important;
+  color: #1a0e08 !important;
+  margin: 0 0 var(--space-5) !important;
+  text-transform: uppercase;
+}
+.home-dorm-title span {
+  color: var(--red, #c11a2c);
+}
+.home-dorm-body-stack { margin-bottom: var(--space-5); }
+.home-dorm-body {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  color: #2d1f12 !important;
+  margin: 0 0 var(--space-4) !important;
+}
+.home-dorm-body em {
+  color: var(--red, #c11a2c) !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+}
+.home-dorm-footer {
+  padding-top: var(--space-3) !important;
+  border-top: 1px dashed rgba(26, 14, 8, 0.3) !important;
+  font-style: italic;
+  color: #4a3322 !important;
+}
+.home-dorm-signoff {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase;
+  color: #6b3e26 !important;
+  text-align: right;
+}
+
+/* ── CTA — comic-cover bottom strip ───────────────────────────── */
+.home-cta {
+  background: var(--red, #c11a2c);
+  text-align: left !important;
+  padding: var(--space-9) var(--space-5) !important;
+  position: relative;
+  overflow: hidden;
+  margin: 0 !important;
+  max-width: none !important;
+}
+/* Halftone field over the red */
+.home-cta::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle 1.5px at 50% 50%, rgba(255, 255, 255, 0.18) 1.5px, transparent 2px);
+  background-size: 8px 8px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+/* Yellow side strip */
+.home-cta::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 12px; height: 100%;
+  background: var(--yellow, #d4a84a);
+}
+.home-cta-stamp {
+  display: inline-flex !important;
+  padding: 6px 14px !important;
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  border: none !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  font-size: 11px !important;
+  margin-bottom: var(--space-5) !important;
+  opacity: 1 !important;
+}
+.home-cta-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(56px, 9vw, 140px) !important;
+  letter-spacing: -0.02em !important;
+  line-height: 0.88 !important;
+  color: #ffffff !important;
+  margin: 0 0 var(--space-4) !important;
+  text-transform: uppercase;
+  text-shadow: 6px 6px 0 #0a0a0a;
+}
+.home-cta-sub {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 17px !important;
+  line-height: 1.55 !important;
+  max-width: 640px !important;
+  margin: 0 0 var(--space-5) 0 !important;
+  color: #ffffff !important;
+  opacity: 0.9;
+}
+.home-cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: flex-start !important;
+}
+.home-cta-btn {
+  padding: 18px 28px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  border: 3px solid #0a0a0a !important;
+  cursor: pointer;
+  transition: transform var(--motion-base, 180ms) ease, box-shadow var(--motion-base) ease;
+}
+.home-cta-btn.primary {
+  background: #0a0a0a !important;
+  color: var(--yellow, #d4a84a) !important;
+  box-shadow: 6px 6px 0 0 var(--yellow, #d4a84a) !important;
+}
+.home-cta-btn.primary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 0 var(--yellow, #d4a84a) !important;
+}
+.home-cta-btn.primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--yellow, #d4a84a) !important;
+}
+.home-cta-btn.ghost {
+  background: transparent !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+.home-cta-btn.ghost:hover {
+  background: #ffffff !important;
+  color: var(--red, #c11a2c) !important;
+}
+
+@media (max-width: 760px) {
+  .home-dorm-eyes-stamp { top: 16px; right: -16px; padding: 4px 22px; font-size: 10px; }
+  .home-dorm-panel { padding: var(--space-5) var(--space-4); }
+  .home-programme-card { padding: var(--space-5) var(--space-4); }
+  .home-cta-buttons .home-cta-btn { flex: 1 1 100%; }
+}

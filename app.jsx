@@ -700,32 +700,47 @@ function HomeHero({setTab}){
 
 function HomeVanguard(){
   const [ref, inView] = useInView(0.15);
+  // Sound-effect text dropped on each panel on hover — comic-book SFX
+  // language. Distinct per Vanguard member matching their power vibe.
+  const SFX = ["KRRSH", "SHRRK", "WHAM", "BZZZT"];
   return (
-    <section ref={ref} className={"home-section home-vanguard-section " + (inView ? "is-in" : "")}>
+    <section ref={ref} className={"home-section home-vg-section " + (inView ? "is-in" : "")}>
       <div className="home-section-head">
-        <div className="home-section-stamp">DOSSIER · 01 · ACTIVE ROSTER</div>
-        <h2 className="home-section-title">THE VANGUARD</h2>
+        <div className="home-section-stamp">ISSUE · 01 · ACTIVE ROSTER</div>
+        <h2 className="home-section-title">THE <span className="home-section-title-accent">VANGUARD</span></h2>
         <p className="home-section-lede">
           Four people stand between this country and the kinds of incidents the news
           decides not to run. Their contracts are classified. Their faces are not.
         </p>
       </div>
-      <div className="home-vanguard-grid">
+
+      {/* Comic-panel grid — 12-col asymmetric layout. Paragon dominates
+          the left side (he's the headliner); the others share the right
+          column. Heavy black borders, halftone bg, sound-effect overlay
+          on hover. */}
+      <div className="home-vg-grid">
         {HOME_VANGUARD.map((v, i) => (
-          <article key={v.alias} className="home-vg" style={{
-            "--vg-color": v.color,
-            animationDelay: `${0.15 * i}s`,
-          }}>
-            <div className="home-vg-portrait">
+          <article
+            key={v.alias}
+            className={"home-vg-panel home-vg-panel-" + (i + 1)}
+            style={{"--vg-color": v.color, "--vg-i": i}}
+          >
+            <div className="home-vg-img">
               <img src={v.portrait} alt={v.alias} loading="lazy"/>
-              <div className="home-vg-portrait-frame"/>
+              <div className="home-vg-img-halftone" aria-hidden="true"/>
+              <div className="home-vg-sfx" aria-hidden="true">{SFX[i] || "POW"}!</div>
             </div>
-            <div className="home-vg-body">
-              <div className="home-vg-alias">{v.alias}</div>
+            <div className="home-vg-meta">
+              <div className="home-vg-tag">{v.tag.replace(/\.$/, "")}</div>
+              <h3 className="home-vg-alias">{v.alias}</h3>
               <div className="home-vg-name">{v.name} · {v.age}</div>
-              <div className="home-vg-tag">{v.tag}</div>
-              <div className="home-vg-power">{v.power}</div>
-              <div className="home-vg-hook">&ldquo;{v.hook}&rdquo;</div>
+            </div>
+            <div className="home-vg-caption">
+              <span className="home-vg-caption-tail" aria-hidden="true"/>
+              <p className="home-vg-caption-body">
+                <strong>{v.power}</strong>
+              </p>
+              <p className="home-vg-caption-hook">&ldquo;{v.hook}&rdquo;</p>
             </div>
           </article>
         ))}
@@ -744,7 +759,12 @@ function HomeProgramme(){
   ];
   return (
     <section ref={ref} className={"home-section home-programme " + (inView ? "is-in" : "")}>
-      <div className="home-programme-frame">
+      {/* Splash-page treatment — diagonal red slash through the
+          background, halftone field, the quote rendered as comic-book
+          interior monologue inside a black-bordered caption box. */}
+      <div className="home-programme-slash" aria-hidden="true"/>
+      <div className="home-programme-halftone" aria-hidden="true"/>
+      <div className="home-programme-card">
         <div className="home-programme-stamp">EXCERPT · THE PROGRAMME · CLASSIFIED LEVEL 2</div>
         <blockquote className="home-programme-quote">
           {lines.map((l, i) => (
@@ -761,29 +781,38 @@ function HomeDormNotice(){
   const [ref, inView] = useInView(0.25);
   return (
     <section ref={ref} className={"home-section home-dorm " + (inView ? "is-in" : "")}>
-      <div className="home-dorm-card">
-        <div className="home-dorm-stamp-row">
-          <div className="home-dorm-stamp red">RESTRICTED · INTERNAL</div>
-          <div className="home-dorm-doc">DOC · 14 · DORM POLICY</div>
+      {/* Comic-panel treatment — heavy black border, halftone bg field,
+          red EYES-ONLY stamp at the corner, mono caps caption strip
+          across the top. Replaces the v1 cream letterhead which read
+          "70s memo" instead of "leaked transmission". */}
+      <div className="home-dorm-panel">
+        <div className="home-dorm-halftone" aria-hidden="true"/>
+        <div className="home-dorm-eyes-stamp" aria-hidden="true">EYES ONLY</div>
+        <div className="home-dorm-caption">
+          <span className="home-dorm-caption-doc">DOC · 14 · DORM POLICY</span>
+          <span className="home-dorm-caption-sep">/</span>
+          <span className="home-dorm-caption-class">CLASSIFIED · INTERNAL · 2026</span>
         </div>
-        <h3 className="home-dorm-title">Power Compatibility &amp; Cohabitation</h3>
-        <p className="home-dorm-body">
-          The Diagnostic Wing requests, again, that powered students disclose to
-          their partners before turning the lights off. Fire-based, explosive, and
-          telepathic abilities are not <em>moods.</em> The wards on Valaris and
-          Saberis dorms are calibrated for ambient power signatures only —
-          anything more energetic should be conducted off-campus.
-        </p>
-        <p className="home-dorm-body">
-          Heat-vision is not foreplay. Telekinesis is not consent. Pheromone
-          control is, expressly, never consent. Aegis-tier durability does not
-          translate to your partner. Switchboard does not appreciate the WiFi
-          requests on Saturday nights.
-        </p>
-        <p className="home-dorm-body home-dorm-footer">
-          The medical wing has stopped issuing burn-treatment kits to Valaris
-          dorm without prior request. Please respect their time.
-        </p>
+        <h3 className="home-dorm-title">POWER COMPATIBILITY <span>&amp;</span> COHABITATION</h3>
+        <div className="home-dorm-body-stack">
+          <p className="home-dorm-body">
+            The Diagnostic Wing requests, again, that powered students disclose to
+            their partners before turning the lights off. Fire-based, explosive, and
+            telepathic abilities are not <em>moods.</em> The wards on Valaris and
+            Saberis dorms are calibrated for ambient power signatures only —
+            anything more energetic should be conducted off-campus.
+          </p>
+          <p className="home-dorm-body">
+            Heat-vision is not foreplay. Telekinesis is not consent. Pheromone
+            control is, expressly, never consent. Aegis-tier durability does not
+            translate to your partner. Switchboard does not appreciate the WiFi
+            requests on Saturday nights.
+          </p>
+          <p className="home-dorm-body home-dorm-footer">
+            The medical wing has stopped issuing burn-treatment kits to Valaris
+            dorm without prior request. Please respect their time.
+          </p>
+        </div>
         <div className="home-dorm-signoff">— Faculty memorandum, second printing, 2026</div>
       </div>
     </section>
