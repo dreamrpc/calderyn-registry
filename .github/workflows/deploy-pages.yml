@@ -1,0 +1,49 @@
+name: Deploy Pages
+
+# Deploys the static site (app.jsx, data.js, index.html, polish.css,
+# logo PNG, etc.) to Cloudflare Pages on every push to main that
+# touches a site file, and on demand via workflow_dispatch.
+#
+# GitHub Pages continues to deploy in parallel from the same branch
+# until you've verified the Cloudflare deployment, at which point you
+# can disable GH Pages in repo settings.
+#
+# Required repo secrets (same set as deploy-worker.yml):
+#   CLOUDFLARE_API_TOKEN  — must include "Cloudflare Pages — Edit" on
+#                           top of the Workers permission already in use.
+#   CLOUDFLARE_ACCOUNT_ID
+
+on:
+  push:
+    branches: [main]
+    # Site files live at the repo root. The two directories below are
+    # backend/CI and don't belong on the deployed site, so changes that
+    # *only* touch them shouldn't trigger a site deploy.
+    paths-ignore:
+      - 'worker/**'
+      - '.github/**'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage site files
+        # Copy only the public-facing files into a clean `dist/` so we
+        # don't ship `worker/`, `.github/`, README, etc. to the CDN.
+        run: |
+          mkdir -p dist
+          cp app.jsx data.js index.html polish.css dist/
+          cp calderyn_college_logo_transparent.png dist/
+          # .nojekyll is a GH Pages relic; harmless on CF Pages.
+          [ -f .nojekyll ] && cp .nojekyll dist/ || true
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=calderyn-registry --branch=main

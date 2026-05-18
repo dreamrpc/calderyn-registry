@@ -86,18 +86,20 @@ export async function handleInteraction(request, env, ctx) {
 async function finalizeAction({ env, sub, toState, fromState, actor }) {
   const auditLine = { at: new Date().toISOString(), action: toState, by: actor?.id || null };
 
-  // Data-file mutation: only for the Student form in Phase 1.
+  // Data-file mutation runs for every form type in Phase 2. Each type's
+  // entries are built by markers.js; slot-fill types (faculty, strata,
+  // club, gov) append next to any existing placeholder rather than
+  // replacing them — see the audit-log note in logEmbed.
   let rosterChange = null; // "added" | "removed" | null
   let commitSha = null;
-  if (sub.type === "student") {
-    if (toState === "approved") {
-      const insertions = buildInsertions(sub);
+  if (toState === "approved") {
+    const insertions = buildInsertions(sub);
+    if (insertions.length > 0) {
       const res = await updateFile(
         env,
         env.GITHUB_DATA_FILE,
-        `Approve student application: ${safe(sub.form.char)} (${sub.id})`,
+        `Approve ${sub.type} application: ${safe(sub.form.char || sub.form.newCollectiveName)} (${sub.id})`,
         (current) => {
-          // Skip re-insert if entries already present (idempotent retry).
           if (countEntriesFor(current, sub.id) > 0) return current;
           return applyInsertions(current, insertions);
         }
@@ -106,20 +108,20 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
         rosterChange = "added";
         commitSha = res.commitSha;
       }
-    } else if (toState === "rejected" && fromState === "approved") {
-      const res = await updateFile(
-        env,
-        env.GITHUB_DATA_FILE,
-        `Reject previously-approved student application: ${safe(sub.form.char)} (${sub.id})`,
-        (current) => {
-          if (countEntriesFor(current, sub.id) === 0) return current;
-          return removeBySubmissionId(current, sub.id);
-        }
-      );
-      if (!res.unchanged) {
-        rosterChange = "removed";
-        commitSha = res.commitSha;
+    }
+  } else if (toState === "rejected" && fromState === "approved") {
+    const res = await updateFile(
+      env,
+      env.GITHUB_DATA_FILE,
+      `Reject previously-approved ${sub.type} application: ${safe(sub.form.char || sub.form.newCollectiveName)} (${sub.id})`,
+      (current) => {
+        if (countEntriesFor(current, sub.id) === 0) return current;
+        return removeBySubmissionId(current, sub.id);
       }
+    );
+    if (!res.unchanged) {
+      rosterChange = "removed";
+      commitSha = res.commitSha;
     }
   }
 
@@ -144,9 +146,12 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
     toState === "approved" ? ` · ✅ approved by ${actor?.username || "admin"}` :
     toState === "rejected" ? ` · ❌ rejected by ${actor?.username || "admin"}` :
     "";
+  // Slot-fill forms keep their placeholder row when we append — admin
+  // may want to delete it manually so the slot isn't listed twice.
+  const SLOT_FILL_TYPES = new Set(["faculty", "strata", "club", "gov"]);
   const note =
-    sub.type !== "student" && toState === "approved"
-      ? "\n_(Phase 1: data.js auto-edit only supports Student form — please update manually.)_"
+    toState === "approved" && rosterChange === "added" && SLOT_FILL_TYPES.has(sub.type)
+      ? "\n_Tip: the original placeholder row for this slot is still in data.js — delete it manually if you want a clean roster._"
       : "";
 
   const newEmbed = buildEmbed(sub.type, sub.form, {

@@ -7,13 +7,15 @@ Cloudflare Worker that powers the registry's application flow:
   channel, and stashes the submission in KV.
 - `POST /interactions` — Discord posts here when an admin clicks a
   button. The Worker verifies the request signature, checks the clicker
-  has the admin role, and (for the **Student** form) auto-edits
-  `data.js` via the GitHub API to add or remove the entry.
+  has the admin role, and auto-edits `data.js` via the GitHub API to
+  add or remove the entry.
 
-> **Phase 1:** auto-routing into `data.js` is implemented for the
-> **Student** form only. Other form types still post + can be marked
-> approved/rejected, but the data file has to be updated by hand for
-> now. Phase 2 will add the rest.
+> **All seven form types auto-route to `data.js`.** Student / Powers
+> Registry / Collective Join / Outside also write a `powers[]` entry
+> when the character isn't fully human. Faculty / STRATA / Club / Gov
+> append next to any existing placeholder slot — those leave the
+> original empty row in place, so the audit-log embed reminds you to
+> delete it manually if you want a tidy roster.
 
 ---
 
