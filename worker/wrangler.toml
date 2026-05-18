@@ -33,6 +33,11 @@ DISCORD_CHANNEL_GOV         = "1498802689314783272"
 DISCORD_CHANNEL_COLLECTIVE  = "1498802704263286955"
 DISCORD_CHANNEL_OUTSIDE     = "1498802719425822791"
 DISCORD_CHANNEL_FALLBACK    = "1498802734206288043"
+# Optional. If set to a Discord channel snowflake, the Worker posts a
+# compact audit message here every time a roster change is committed to
+# data.js (student approve from pending, or reject of a previously-
+# approved entry). Leave empty to disable logging.
+DISCORD_CHANNEL_LOG         = ""
 
 # GitHub repo coordinates.
 GITHUB_OWNER = "dreamrpc"

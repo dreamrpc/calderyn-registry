@@ -1,4 +1,4 @@
-import { verifySignature, editMessage } from "./discord.js";
+import { verifySignature, editMessage, postMessage } from "./discord.js";
 import { buildEmbed } from "./embed.js";
 import { updateFile } from "./github.js";
 import { buildInsertions, applyInsertions, removeBySubmissionId, countEntriesFor } from "./markers.js";
@@ -84,15 +84,15 @@ export async function handleInteraction(request, env, ctx) {
 }
 
 async function finalizeAction({ env, sub, toState, fromState, actor }) {
-  const actorTag = actor ? `<@${actor.id}>` : "an admin";
   const auditLine = { at: new Date().toISOString(), action: toState, by: actor?.id || null };
 
   // Data-file mutation: only for the Student form in Phase 1.
-  let dataFileTouched = false;
+  let rosterChange = null; // "added" | "removed" | null
+  let commitSha = null;
   if (sub.type === "student") {
     if (toState === "approved") {
       const insertions = buildInsertions(sub);
-      await updateFile(
+      const res = await updateFile(
         env,
         env.GITHUB_DATA_FILE,
         `Approve student application: ${safe(sub.form.char)} (${sub.id})`,
@@ -102,9 +102,12 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
           return applyInsertions(current, insertions);
         }
       );
-      dataFileTouched = true;
+      if (!res.unchanged) {
+        rosterChange = "added";
+        commitSha = res.commitSha;
+      }
     } else if (toState === "rejected" && fromState === "approved") {
-      await updateFile(
+      const res = await updateFile(
         env,
         env.GITHUB_DATA_FILE,
         `Reject previously-approved student application: ${safe(sub.form.char)} (${sub.id})`,
@@ -113,7 +116,10 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
           return removeBySubmissionId(current, sub.id);
         }
       );
-      dataFileTouched = true;
+      if (!res.unchanged) {
+        rosterChange = "removed";
+        commitSha = res.commitSha;
+      }
     }
   }
 
@@ -128,7 +134,8 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
   });
 
   // Edit the original Discord message: change colour + footer to reflect
-  // the new state, keep the buttons so an admin can toggle it back.
+  // the new state, and switch the buttons to show only the *inverse*
+  // action so the admin can toggle back with a single click.
   const newColor =
     toState === "approved" ? 0x22c55e :     // green
     toState === "rejected" ? 0x6b7280 :     // grey
@@ -156,27 +163,71 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
   try {
     await editMessage(env, sub.channelId, sub.messageId, {
       embeds: [newEmbed],
-      components: approvalButtons(sub.id),
+      components: inverseButton(sub.id, toState),
     });
   } catch (err) {
     console.error("message edit failed:", err);
   }
 
-  if (!dataFileTouched && sub.type === "student" && toState === "rejected" && fromState === "pending") {
-    // Pending → rejected: nothing to remove from data.js, that's expected.
+  // Roster-change log post: only when a real data.js commit happened and
+  // a valid log channel snowflake is configured. /^\d{17,20}$/ guards
+  // against placeholder values like "<PASTE_..." that would otherwise
+  // hit Discord and produce noise in logs.
+  if (rosterChange && /^\d{17,20}$/.test(env.DISCORD_CHANNEL_LOG || "")) {
+    try {
+      await postMessage(env, env.DISCORD_CHANNEL_LOG, {
+        embeds: [logEmbed({ env, sub, rosterChange, actor, commitSha })],
+        allowed_mentions: { parse: [] },
+      });
+    } catch (err) {
+      console.error("log post failed:", err);
+    }
   }
 }
 
-function approvalButtons(id) {
-  return [
-    {
-      type: 1,
-      components: [
-        { type: 2, style: 3, label: "Approve", emoji: { name: "✅" }, custom_id: `approve:${id}` },
-        { type: 2, style: 4, label: "Reject",  emoji: { name: "❌" }, custom_id: `reject:${id}` },
-      ],
-    },
-  ];
+// After an action, show only the *opposite* button — clicking it toggles
+// state back. Pending state (initial) shows both buttons via submit.js.
+function inverseButton(id, currentState) {
+  const opposite =
+    currentState === "approved"
+      ? { type: 2, style: 4, label: "Reject",  emoji: { name: "❌" }, custom_id: `reject:${id}` }
+      : { type: 2, style: 3, label: "Approve", emoji: { name: "✅" }, custom_id: `approve:${id}` };
+  return [{ type: 1, components: [opposite] }];
+}
+
+// Concise log post for the roster-change channel.
+function logEmbed({ env, sub, rosterChange, actor, commitSha }) {
+  const form = sub.form || {};
+  const added = rosterChange === "added";
+  const title = added
+    ? `📥 Roster updated — added ${form.char || "(unknown)"}${form.alias ? ` (${form.alias})` : ""}`
+    : `📤 Roster updated — removed ${form.char || "(unknown)"}${form.alias ? ` (${form.alias})` : ""}`;
+
+  const meta = [
+    form.house  && `House: **${form.house}**`,
+    form.year   && `Year: ${form.year}`,
+    form.track  && `Track: ${form.track}`,
+    form.tier   && `Tier: ${form.tier}`,
+    form.power  && `Power: ${form.power}`,
+  ].filter(Boolean).join(" · ");
+
+  const commitUrl = commitSha
+    ? `https://github.com/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/commit/${commitSha}`
+    : null;
+
+  const lines = [
+    `${added ? "Approved" : "Removed"} by <@${actor?.id || "unknown"}>`,
+    meta,
+    commitUrl ? `[View commit](${commitUrl})` : null,
+    form.rpcLink ? `[RPC profile](${form.rpcLink})` : null,
+  ].filter(Boolean);
+
+  return {
+    title,
+    description: lines.join("\n"),
+    color: added ? 0x22c55e : 0x6b7280,
+    footer: { text: `sub:${sub.id} · ${new Date().toISOString()}` },
+  };
 }
 
 function ephemeral(content) {
