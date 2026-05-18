@@ -13379,17 +13379,17 @@ button.class-chip-btn{
 <body>
 <div class="page"><div id="root"></div></div>
 
-<!-- 1. Registry data — edit this file to add characters, faculty, clubs etc. -->
-<!-- 2. Structural configs + icons — split out of app.jsx so layout/data
-        changes don't require touching the giant component file. Loaded
-        in order so the globals (CDR.Icon, CDR.JOIN_WIZARD, etc.) are
-        available by the time app.jsx mounts. -->
+<!-- 1. Registry data — edit this file to add characters, faculty, clubs etc.
+     2. App code — icons, configs, and the React app all in one file. The
+        previous /src/ split was reverted because Cloudflare Pages on this
+        project serves index.html for /src/* paths (no SPA-fallback
+        opt-out without a build step). app.jsx now self-contains the
+        icon paths, wizard config, and Vanguard config at the top —
+        search by their banner comments. -->
 <script>
   (function () {
     var v = '?v=' + Date.now();
     document.write('<script src="data.js' + v + '"><\/script>');
-    document.write('<script type="text/babel" data-presets="react" src="src/icons.jsx' + v + '"><\/script>');
-    document.write('<script type="text/babel" data-presets="react" src="src/configs.jsx' + v + '"><\/script>');
     document.write('<script type="text/babel" data-presets="react" src="app.jsx' + v + '"><\/script>');
   })();
 </script>

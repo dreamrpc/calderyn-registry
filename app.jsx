@@ -46,10 +46,155 @@ const WRITER_TAGS_FALLBACK = ["Dream", "Katniss", "Skully", "Star", "Star King",
 
 const {useState, useMemo, useEffect, useCallback, useRef} = React;
 
-// Bridge to the split-out src/ modules (icons.jsx, configs.jsx).
-// Those files attach to window.CDR before app.jsx runs, so the
-// destructure here pulls the bound globals into local scope.
-const { Icon, ICON_PATHS, HOME_VANGUARD, JOIN_WIZARD } = window.CDR;
+/* ════════════════════════════════════════════════════════════════════════
+   ICONS · HOME · WIZARD CONFIGS
+   ════════════════════════════════════════════════════════════════════════
+   Previously split into src/icons.jsx + src/configs.jsx, but Cloudflare
+   Pages serves index.html for any /src/* path on this project, which
+   broke the in-browser Babel loader. Inlined here so the app boots
+   from one script (data.js + app.jsx). Editing surface remains
+   identical — search by these banners to find each block.
+
+   ADDING AN ICON
+     1. Find the icon on https://lucide.dev/icons
+     2. Add a row to ICON_PATHS below, keyed by name. Keep alphabetical.
+     3. <Icon name="your-icon" size={16}/> available everywhere.
+
+   ADDING A WIZARD PAGE
+     1. Append an entry to the relevant type's array in JOIN_WIZARD
+     2. Wrap the JSX in JoinFieldset with {onPage("your-id") && ...}
+
+   ADDING A VANGUARD CARD
+     1. Append a row to HOME_VANGUARD. Home page picks it up.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Lucide SVG path defs ──────────────────────────────────────────── */
+const ICON_PATHS = {
+  "alert-triangle": <><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></>,
+  "arrow-left":     <><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></>,
+  "arrow-right":    <><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>,
+  "arrow-up-right": <><path d="M7 7h10v10"/><path d="M7 17 17 7"/></>,
+  "book-open":      <><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></>,
+  "check":          <><path d="M20 6 9 17l-5-5"/></>,
+  "chevron-right":  <><path d="m9 18 6-6-6-6"/></>,
+  "external-link":  <><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/></>,
+  "file-text":      <><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></>,
+  "flag":           <><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></>,
+  "info":           <><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></>,
+  "map":            <><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></>,
+  "menu":           <><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></>,
+  "scroll-text":    <><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></>,
+  "search":         <><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></>,
+  "shield":         <><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></>,
+  "sparkles":       <><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></>,
+  "users":          <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
+  "x":              <><path d="M18 6 6 18"/><path d="m6 6 12 12"/></>,
+};
+
+/* ─── <Icon name="..."/> component ─────────────────────────────────── */
+function Icon({ name, size = 16, stroke = 1.5, className = "", style }){
+  const paths = ICON_PATHS[name];
+  if (!paths) return null;
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={stroke}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={"icon " + className}
+      style={style}
+      aria-hidden="true"
+      focusable="false"
+    >
+      {paths}
+    </svg>
+  );
+}
+
+/* ─── Home page Vanguard quartet ───────────────────────────────────── */
+const HOME_VANGUARD = [
+  {
+    alias: "PARAGON",
+    name:  "Adrian Valaris",
+    age:   45,
+    house: "valaris",
+    color: "#e31b23",
+    portrait: "https://i.ibb.co/Tx8LND9D/884dff81-b7c4-448a-be91-1d79b440f8e3.png",
+    power: "Solar metabolism. Uncapped strength. Flight. Heat vision.",
+    tag:   "The symbol.",
+    hook:  "Britain's most-watched man. Britain's most-wanted man.",
+  },
+  {
+    alias: "VIGIL",
+    name:  "Caius Saberis",
+    age:   42,
+    house: "saberis",
+    color: "#15803d",
+    portrait: "https://i.ibb.co/SDY1sLN8/2377bc73-8c3f-40c6-951d-7f0365013c2a.png",
+    power: "Ninety-second precognition. Folded-steel longsword.",
+    tag:   "The strategist.",
+    hook:  "Already saw you reading this. Picked the version where you applied.",
+  },
+  {
+    alias: "AEGIS",
+    name:  "Margery Orenne",
+    age:   39,
+    house: "orenne",
+    color: "#d4901a",
+    portrait: "https://i.ibb.co/fKV1tKH/ccf8e712-87c2-4da0-af44-d290385a7e8c.png",
+    power: "Damage resistance. Flight. Six-times healing. Indecent endurance.",
+    tag:   "The rescuer.",
+    hook:  "Three hundred miles an hour. Skips the queue.",
+  },
+  {
+    alias: "SWITCHBOARD",
+    name:  "Iris Grimere",
+    age:   35,
+    house: "grimere",
+    color: "#3b82f6",
+    portrait: "https://i.ibb.co/LzyQcRcL/a18a925b-91f4-45d8-b2e3-66821aaf9661.png",
+    power: "Technokinesis. Owns your phone. Probably owns your gear.",
+    tag:   "The architect.",
+    hook:  "Baseline body. Three cats. The deadliest of them.",
+  },
+];
+
+/* ─── Join-form multi-page wizard config ──────────────────────────── */
+const JOIN_WIZARD = {
+  student: [
+    { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
+    { id: "role",    title: "Enrollment",  subtitle: "Where in Calderyn they sit.",         required: ["house", "year", "track", "tier", "age"] },
+    { id: "power",   title: "Power",       subtitle: "What they can do, and what it costs.", required: (f) => f.fullyHuman ? [] : ["power", "powerExpression", "drawbacks"] },
+    { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
+  ],
+  faculty: [
+    { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
+    { id: "role",    title: "Position",    subtitle: "What they teach, run, or oversee.",   required: ["facultyRole", "tier"] },
+    { id: "power",   title: "Power",       subtitle: "What they can do, and what it costs.", required: (f) => f.fullyHuman ? [] : ["power", "powerExpression", "drawbacks"] },
+    { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
+  ],
+  strata: [
+    { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
+    { id: "role",    title: "Position",    subtitle: "Where they sit inside STRATA.",       required: (f) => f.strataRole === "corporate" ? ["strataRole", "strataDept", "strataTitle"] : ["strataRole", "alias", "tier"] },
+    { id: "power",   title: "Power",       subtitle: "What they can do, and what it costs.", required: (f) => f.fullyHuman ? [] : ["power", "powerExpression", "drawbacks"] },
+    { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
+  ],
+  club: [
+    { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
+    { id: "role",    title: "Position",    subtitle: "Pick from the open club roster.",     required: ["clubPosition"] },
+    { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
+  ],
+  gov: [
+    { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
+    { id: "role",    title: "Seat",        subtitle: "Which student-government office.",    required: ["govSeat"] },
+    { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
+  ],
+  // collective + outside not yet wizardized — fall through to legacy single-page render in JoinTab.
+};
 const D = window.CALDERYN;
 
 /* DATA BINDINGS ─────────────────────────────────────────────────────────── */
