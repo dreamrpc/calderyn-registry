@@ -167,16 +167,19 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
   // writer nor their existing A-List characters — listing those would
   // tie this RPC account to the writer's other accounts publicly.
   if (blocked) {
+    const poolLabel = blocked.pool === "student" ? "student" : "adult";
     const blockedEmbed = buildEmbed(sub.type, sub.form, {
       color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
-      footer: `Calderyn College · Central Registry · 2026 · ⚠ ${blocked.tier} quota`,
+      footer: `Calderyn College · Central Registry · 2026 · ⚠ ${poolLabel} ${blocked.tier} quota`,
     });
     blockedEmbed.description =
-      `**⚠ Approval blocked — ${blocked.tier} quota.**\n` +
-      `This writer already has **${blocked.count} ${blocked.tier} characters** ` +
-      `(limit: ${blocked.limit}). No new ${blocked.tier} approvals can be accepted ` +
-      `until existing characters are adjusted to a different tier. The writer ` +
-      `has been notified.\n\n` +
+      `**⚠ Approval blocked — ${poolLabel} ${blocked.tier} quota.**\n` +
+      `This writer already has **${blocked.count} ${poolLabel} ${blocked.tier} characters** ` +
+      `(limit: ${blocked.limit}). The ${poolLabel} pool is counted separately from the ` +
+      `${poolLabel === "student" ? "adult" : "student"} pool, so re-tiering one of those ` +
+      `won't free up a slot here. No new ${poolLabel} ${blocked.tier} approvals can be ` +
+      `accepted until existing ${poolLabel} characters are adjusted to a different tier. ` +
+      `The writer has been notified.\n\n` +
       (blockedEmbed.description || "");
     try {
       await editMessage(env, sub.channelId, sub.messageId, {

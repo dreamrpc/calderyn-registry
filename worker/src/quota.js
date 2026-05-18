@@ -1,41 +1,49 @@
-// Per-writer tier-cap quota check.
+// Per-writer per-pool tier-cap quota check.
 //
-// Rule: each OOC writer is limited per tier:
-//   A-List → A_LIST_LIMIT_PER_WRITER (default 5)
-//   B-List → B_LIST_LIMIT_PER_WRITER (default 8)
-//   C-List → C_LIST_LIMIT_PER_WRITER (default 10)
-//   D-List → uncapped
+// Rule: each OOC writer has TWO independent character pools — students
+// and adults — and each pool gets its own tier caps:
+//
+//       A-List → max 5    A_LIST_LIMIT_PER_WRITER
+//       B-List → max 8    B_LIST_LIMIT_PER_WRITER
+//       C-List → max 10   C_LIST_LIMIT_PER_WRITER
+//       D-List → uncapped
+//
+// Pool determination for an existing character:
+//   powers[].status === "student"  → student pool
+//   everything else                → adult pool
+// heroLists slot entries default to "adult" unless the same character
+// also has a powers[] row with status="student", in which case the
+// student-pool classification wins (a student who's also a sponsored
+// STRATA hero stays a student; their heroLists slot doesn't promote
+// them).
+//
+// Pool determination for a new submission:
+//   sub.type === "student"         → student pool
+//   everything else (strata,
+//     outside, collective-join,
+//     anything else with a tier)   → adult pool
+//
+// Faculty / Club / Gov / Collective-Create-New forms have no tier and
+// so don't trigger any quota check; they bypass this module entirely.
+//
 // Writers are grouped across all of their RPC accounts via
 // worker/src/writers.js so a writer with multiple accounts contributes
-// a single combined count per tier.
-//
-// A character is counted at a tier for a writer iff a committed entry
-// in data.js says so:
-//   - powers[]                       row with tier == "<X>" or "<X>-List"
-//   - heroLists[<tier=X>].slots[]    slot row (parent's tier is the truth)
-// Multiple entries for the same character at the same tier (e.g. a
-// Student row plus its matching powers[] row) count as ONE character.
+// a single combined count per (pool, tier).
 //
 // PRIVACY: the OOC name never leaves the Worker. Verdicts return only
-// the tier and counts — listing a writer's other characters next to a
+// pool / tier / counts — listing a writer's other characters next to a
 // blocked submission would leak the RPC-account → OOC mapping to anyone
 // watching the channel.
 
 import { forEachArrayObject } from "./scanner.js";
 import { lookupOocByRpc } from "./writers.js";
 
-// ── Built-in defaults ────────────────────────────────────────────────
-// Mirrors the defaults documented in worker/wrangler.toml. Anything not
-// present here is treated as uncapped (D-List + anything we don't ship
-// a rule for yet).
 const DEFAULT_LIMITS = {
   "A-List": 5,
   "B-List": 8,
   "C-List": 10,
 };
 
-// Resolve the per-tier limit map from env vars, falling back to the
-// defaults. Returns the same object shape regardless of env state.
 export function getTierLimits(env) {
   return {
     "A-List": readInt(env?.A_LIST_LIMIT_PER_WRITER, DEFAULT_LIMITS["A-List"]),
@@ -49,11 +57,6 @@ function readInt(raw, fallback) {
   return Number.isFinite(n) && n > 0 ? n : fallback;
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────
-
-// Extract the RPC username from a profile URL. Returns the username as
-// it appears in the URL (with `+`/`%xx` intact); callers compare via
-// writers.js's normalize().
 export function extractRpcUsername(url) {
   if (!url) return null;
   const m = /[?&]user=([^&"]+)/.exec(String(url));
@@ -61,7 +64,6 @@ export function extractRpcUsername(url) {
   return m[1];
 }
 
-// Pull a top-level string field out of an object's source text.
 function pickStringField(objText, key) {
   const re = new RegExp(`\\b${key}\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"`);
   const m = re.exec(objText);
@@ -69,24 +71,18 @@ function pickStringField(objText, key) {
   return m[1].replace(/\\"/g, '"').replace(/\\\\/g, "\\");
 }
 
-// Determine the OOC writer for an entry by reading its link field.
 function entryOoc(objText) {
   const link = pickStringField(objText, "link");
   if (!link) return null;
   return lookupOocByRpc(extractRpcUsername(link));
 }
 
-// Pick the OOC writer for a fresh submission. The form's `ooc` field
-// (declared via the Writer Tag dropdown) is the primary source; fall
-// back to the rpcLink → mapping lookup for legacy / API submissions.
 export function getOocForForm(form) {
   if (!form) return null;
   if (form.ooc && String(form.ooc).trim()) return String(form.ooc).trim();
   return lookupOocByRpc(extractRpcUsername(form.rpcLink));
 }
 
-// Convert any form-style tier ("A-List") or stored letter ("A") to the
-// canonical "A-List" form. Returns null for unrecognised inputs.
 function canonicalTier(raw) {
   if (!raw) return null;
   const s = String(raw).trim();
@@ -97,99 +93,120 @@ function canonicalTier(raw) {
   return null;
 }
 
-// ── Reading the registry ─────────────────────────────────────────────
+// Pool ID for a new submission. Student form → student pool; anything
+// else with a tier → adult pool.
+export function submissionPool(sub) {
+  return sub?.type === "student" ? "student" : "adult";
+}
 
-// Walk every relevant array in `text` and return
-// Map<canonical-tier, Map<ooc-name, Set<char>>>. Entries with an
-// unknown OOC writer or a tier outside A/B/C/D are skipped.
-export function getCharsByTierAndOoc(text) {
-  const tiers = new Map();
-  const add = (tier, ooc, char) => {
-    if (!tier || !ooc || !char) return;
-    if (!tiers.has(tier)) tiers.set(tier, new Map());
-    const inner = tiers.get(tier);
-    if (!inner.has(ooc)) inner.set(ooc, new Set());
-    inner.get(ooc).add(char);
+// Build char-name → pool ID by scanning powers[]. A character without
+// a powers[] entry is implicitly "adult" (no student status anywhere);
+// callers default-fill that case.
+function buildCharPools(text) {
+  const pools = new Map();
+  try {
+    forEachArrayObject(text, ["powers"], (obj) => {
+      const char = pickStringField(obj, "char");
+      if (!char) return;
+      const status = pickStringField(obj, "status");
+      // First write wins. If two rows disagree, we prefer "student"
+      // because the student form is the canonical record for students.
+      if (pools.get(char) === "student") return;
+      pools.set(char, status === "student" ? "student" : "adult");
+    });
+  } catch (err) {
+    console.error("quota: char-pool scan failed:", err.message);
+  }
+  return pools;
+}
+
+// Map<pool, Map<tier, Map<ooc, Set<char>>>>. A character is counted in
+// exactly one pool — their powers[].status decides, with a default of
+// "adult" for entries seen only in heroLists.
+export function getCharsByPoolTierAndOoc(text) {
+  const charPools = buildCharPools(text);
+  const out = new Map();
+  const add = (pool, tier, ooc, char) => {
+    if (!pool || !tier || !ooc || !char) return;
+    if (!out.has(pool)) out.set(pool, new Map());
+    const byTier = out.get(pool);
+    if (!byTier.has(tier)) byTier.set(tier, new Map());
+    const byOoc = byTier.get(tier);
+    if (!byOoc.has(ooc)) byOoc.set(ooc, new Set());
+    byOoc.get(ooc).add(char);
   };
 
-  // powers[] — the comprehensive source for tier ownership.
+  // powers[] — every tiered character should appear here.
   try {
     forEachArrayObject(text, ["powers"], (obj) => {
       const tier = canonicalTier(pickStringField(obj, "tier"));
       if (!tier) return;
-      add(tier, entryOoc(obj), pickStringField(obj, "char"));
+      const char = pickStringField(obj, "char");
+      const ooc = entryOoc(obj);
+      const pool = charPools.get(char) || "adult";
+      add(pool, tier, ooc, char);
     });
   } catch (err) {
     console.error("quota: powers scan failed:", err.message);
   }
 
-  // heroLists[<tier=X>].slots[] — slot rows don't carry their own
-  // tier; the parent's `tier: "X"` is the source of truth. We walk
-  // each known tier separately so the scoping query knows which
-  // bucket to look in.
+  // heroLists slot rows: parent's tier is the source of truth; pool
+  // inherits from the character's powers[] status when known
+  // (student-overrides-heroLists), else defaults to "adult".
   for (const letter of ["A", "B", "C", "D"]) {
     try {
       forEachArrayObject(text, ["heroLists", { tier: letter }, "slots"], (obj) => {
-        add(canonicalTier(letter), entryOoc(obj), pickStringField(obj, "char"));
+        const char = pickStringField(obj, "char");
+        const ooc = entryOoc(obj);
+        const pool = charPools.get(char) || "adult";
+        add(pool, canonicalTier(letter), ooc, char);
       });
     } catch (err) {
-      // Missing tier sections are normal (e.g. there's no D-List bucket
-      // in data.js right now). Don't log those as errors.
       if (!/no object matching/.test(err.message)) {
         console.error(`quota: heroLists[${letter}] scan failed:`, err.message);
       }
     }
   }
 
-  return tiers;
+  return out;
 }
 
-// Set<char> of all characters at `tier` owned by `ooc`.
-export function getOocCharsAtTier(text, ooc, tier) {
+// Set<char> for one (pool, ooc, tier) triple.
+export function getOocCharsAtPoolTier(text, ooc, pool, tier) {
   const t = canonicalTier(tier);
-  if (!ooc || !t) return new Set();
-  return getCharsByTierAndOoc(text).get(t)?.get(ooc) || new Set();
+  if (!ooc || !t || !pool) return new Set();
+  return getCharsByPoolTierAndOoc(text).get(pool)?.get(t)?.get(ooc) || new Set();
 }
 
-// ── Verdict ──────────────────────────────────────────────────────────
-
-// Decide whether approving `sub` is allowed under the configured tier
-// caps. Returns
-//   { allowed: true,  ...meta }                          → proceed
-//   { allowed: false, tier, count, newCount, limit }     → block
-//     (privacy: no OOC name, no character list)
+// Verdict shape:
+//   { allowed: true,  pool, tier, count, limit }
+//   { allowed: false, pool, tier, count, newCount, limit, ooc }
+//     (privacy: no character list, no OOC name in any
+//     Discord-bound field)
 export function checkTierQuota(text, sub, limits) {
   const form = sub.form || {};
   const tier = canonicalTier(form.tier);
   if (!tier) return { allowed: true };
 
   const limit = limits?.[tier];
-  if (limit == null) {
-    // Tier is recognised but uncapped (D-List).
-    return { allowed: true, tier };
-  }
+  if (limit == null) return { allowed: true, tier };
 
   const ooc = getOocForForm(form);
-  if (!ooc) {
-    return { allowed: true, tier, warning: "no_ooc_identifier" };
-  }
+  if (!ooc) return { allowed: true, tier, warning: "no_ooc_identifier" };
 
-  const owned = getOocCharsAtTier(text, ooc, tier);
-  // Adding a new role for a character already in the writer's set at
-  // this tier doesn't grow the set — allow even when the writer is
-  // currently above the cap (grandfathered early supporters).
+  const pool = submissionPool(sub);
+  const owned = getOocCharsAtPoolTier(text, ooc, pool, tier);
   const isNewCharacter = form.char ? !owned.has(form.char) : true;
   if (isNewCharacter && (owned.size + 1) > limit) {
     return {
       allowed: false,
-      // `ooc` included for server-side logging; must NOT appear in any
-      // Discord message body.
       ooc,
+      pool,
       tier,
       count: owned.size,
       newCount: owned.size + 1,
       limit,
     };
   }
-  return { allowed: true, ooc, tier, count: owned.size, limit };
+  return { allowed: true, ooc, pool, tier, count: owned.size, limit };
 }

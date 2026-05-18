@@ -110,21 +110,30 @@ houses: [
 ],
 
 // ────────────────────────────────────────────────────────────────────
-// REGISTRY RULES — PER-WRITER TIER CAPS
-//   Each writer (OOC identity) is limited per tier, counted across
-//   every RPC account they own:
-//       A-List → max 5
-//       B-List → max 8
-//       C-List → max 10
+// REGISTRY RULES — PER-WRITER PER-POOL TIER CAPS
+//   Each writer (OOC identity) has TWO independent character pools
+//   — students and adults — and each pool gets the same tier caps,
+//   counted across every RPC account they own:
+//       A-List → max 5    (per pool)
+//       B-List → max 8    (per pool)
+//       C-List → max 10   (per pool)
 //       D-List → uncapped
+//   Student characters and adult characters are counted SEPARATELY:
+//   a writer at the student A-List cap can still submit an adult
+//   A-Lister, and vice versa.
+//
+//   Pool determination — a character is "student" if their powers[]
+//   row has status: "student"; anything else (or a heroLists slot
+//   alone) is "adult".
+//
 //   Exceptions were granted to early supporters during the room's
 //   opening weeks; no further exceptions will be made going forward.
 //
 //   Enforced automatically by the Discord approval bot at click time
 //   (worker/src/quota.js + worker/src/writers.js). The bot blocks any
-//   approval that would push a writer past the cap for the
-//   submission's tier and shows an amber "quota blocked" embed in
-//   the application channel.
+//   approval that would push a writer past the cap for the submission's
+//   pool + tier combination and shows an amber "quota blocked" embed
+//   in the application channel.
 //
 //   Adding a *new role* for an existing character at the same tier
 //   (e.g. an A-Lister taking a faculty seat or a Powerball position

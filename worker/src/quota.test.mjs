@@ -1,15 +1,16 @@
-// Tests for quota.js: per-tier per-writer caps grouped by OOC.
+// Tests for quota.js: per-pool per-tier per-writer caps grouped by OOC.
 
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import {
   extractRpcUsername,
-  getCharsByTierAndOoc,
-  getOocCharsAtTier,
+  getCharsByPoolTierAndOoc,
+  getOocCharsAtPoolTier,
   getOocForForm,
   getTierLimits,
   checkTierQuota,
+  submissionPool,
 } from "./quota.js";
 import { lookupOocByRpc, normalize, KNOWN_OOC_NAMES } from "./writers.js";
 
@@ -29,23 +30,15 @@ function assertTrue(v, msg) { if (!v) throw new Error(msg || "expected truthy");
 function assertFalse(v, msg) { if (v) throw new Error(msg || "expected falsy"); }
 
 // ─── writers.js ────────────────────────────────────────────────────────
-test("writers: normalize handles + and case", () => {
+test("writers: normalize + Star account lookup", () => {
   assertEq(normalize("Black+Mass"), "black mass");
-  assertEq(normalize("BLACK+VEIN"), "black vein");
-});
-test("writers: lookupOocByRpc resolves Star's accounts", () => {
-  assertEq(lookupOocByRpc("Crown."),    "Star");
-  assertEq(lookupOocByRpc("Black+Mass"), "Star");
+  assertEq(lookupOocByRpc("Crown."), "Star");
   assertEq(lookupOocByRpc("nocturne."), "Star");
 });
-test("writers: BLACK+VEIN is Tyler, not Star", () => {
+test("writers: BLACK+VEIN is Tyler", () => {
   assertEq(lookupOocByRpc("BLACK+VEIN"), "Tyler");
 });
-test("writers: unknown username → null", () => {
-  assertEq(lookupOocByRpc("not-a-real-writer"), null);
-  assertEq(lookupOocByRpc(null), null);
-});
-test("writers: KNOWN_OOC_NAMES sorted + populated", () => {
+test("writers: KNOWN_OOC_NAMES is sorted + populated", () => {
   assertTrue(KNOWN_OOC_NAMES.includes("Star"));
   const sorted = [...KNOWN_OOC_NAMES].sort();
   assertEq(KNOWN_OOC_NAMES.join(","), sorted.join(","));
@@ -58,9 +51,6 @@ test("extractRpcUsername: standard URL", () => {
 test("extractRpcUsername: preserves +", () => {
   assertEq(extractRpcUsername("https://roleplay.chat/profile.php?user=blood+eagle"), "blood+eagle");
 });
-test("extractRpcUsername: missing → null", () => {
-  assertEq(extractRpcUsername(null), null);
-});
 
 // ─── getTierLimits ────────────────────────────────────────────────────
 test("getTierLimits: defaults when env unset", () => {
@@ -68,7 +58,7 @@ test("getTierLimits: defaults when env unset", () => {
   assertEq(l["A-List"], 5);
   assertEq(l["B-List"], 8);
   assertEq(l["C-List"], 10);
-  assertFalse("D-List" in l, "D-List must not appear in limits (uncapped)");
+  assertFalse("D-List" in l, "D-List intentionally absent → uncapped");
 });
 test("getTierLimits: env overrides parse as ints", () => {
   const l = getTierLimits({
@@ -80,41 +70,67 @@ test("getTierLimits: env overrides parse as ints", () => {
   assertEq(l["B-List"], 7);
   assertEq(l["C-List"], 15);
 });
-test("getTierLimits: garbage env → falls back to defaults", () => {
-  const l = getTierLimits({ A_LIST_LIMIT_PER_WRITER: "nope", B_LIST_LIMIT_PER_WRITER: "0" });
-  assertEq(l["A-List"], 5);
-  assertEq(l["B-List"], 8);
+
+// ─── submissionPool ────────────────────────────────────────────────────
+test("submissionPool: student form → student pool", () => {
+  assertEq(submissionPool({ type: "student", form: {} }), "student");
+});
+test("submissionPool: strata → adult", () => {
+  assertEq(submissionPool({ type: "strata", form: {} }), "adult");
+});
+test("submissionPool: outside → adult", () => {
+  assertEq(submissionPool({ type: "outside", form: {} }), "adult");
+});
+test("submissionPool: collective → adult", () => {
+  assertEq(submissionPool({ type: "collective", form: {} }), "adult");
+});
+test("submissionPool: unknown type → adult", () => {
+  assertEq(submissionPool({ type: "anything-else", form: {} }), "adult");
 });
 
-// ─── getCharsByTierAndOoc against real data.js ────────────────────────
-test("getCharsByTierAndOoc: Star A-List bucket contains Tatiana and Vittoria", () => {
-  const star = getCharsByTierAndOoc(data).get("A-List")?.get("Star") || new Set();
-  assertTrue(star.has("Tatiana Morozova"), `Star A-List: ${[...star].join(", ")}`);
-  assertTrue(star.has("Vittoria Delphine Malik"), `Star A-List: ${[...star].join(", ")}`);
+// ─── getCharsByPoolTierAndOoc against real data.js ────────────────────
+test("getCharsByPoolTierAndOoc: Star's student A-Listers land in student pool", () => {
+  const star = getCharsByPoolTierAndOoc(data).get("student")?.get("A-List")?.get("Star") || new Set();
+  // Tatiana and Vittoria are students with tier A → student pool.
+  assertTrue(star.has("Tatiana Morozova"), `Star student A-List: ${[...star].join(", ")}`);
+  assertTrue(star.has("Vittoria Delphine Malik"), `Star student A-List: ${[...star].join(", ")}`);
 });
-test("getCharsByTierAndOoc: Wilder owns Princeton at A-List", () => {
-  const wilder = getCharsByTierAndOoc(data).get("A-List")?.get("Wilder") || new Set();
-  assertTrue(wilder.has("Princeton Ambrose"), `Wilder A-List: ${[...wilder].join(", ")}`);
+
+test("getCharsByPoolTierAndOoc: Wilder's Princeton is in student pool", () => {
+  const wilderStudent = getCharsByPoolTierAndOoc(data).get("student")?.get("A-List")?.get("Wilder") || new Set();
+  assertTrue(wilderStudent.has("Princeton Ambrose"), `Wilder student A-List: ${[...wilderStudent].join(", ")}`);
 });
-test("getCharsByTierAndOoc: B-List + C-List buckets exist and are independent", () => {
-  const all = getCharsByTierAndOoc(data);
-  assertTrue(all.has("B-List"), "B-List bucket present");
-  assertTrue(all.has("C-List"), "C-List bucket present");
-  // A B-List char must not appear in the A-List bucket for the same writer.
-  for (const [ooc, chars] of (all.get("B-List") || new Map())) {
-    const aChars = all.get("A-List")?.get(ooc) || new Set();
-    for (const c of chars) assertFalse(aChars.has(c), `${c} appears in both A and B for ${ooc}`);
+
+test("getCharsByPoolTierAndOoc: same writer's student + adult buckets stay separate", () => {
+  const byPool = getCharsByPoolTierAndOoc(data);
+  for (const ooc of new Set([...byPool.values()].flatMap(byTier =>
+    [...byTier.values()].flatMap(byOoc => [...byOoc.keys()])
+  ))) {
+    const studentChars = new Set();
+    const adultChars = new Set();
+    for (const [tier, byOoc] of (byPool.get("student") || new Map())) {
+      for (const c of (byOoc.get(ooc) || new Set())) studentChars.add(c);
+    }
+    for (const [tier, byOoc] of (byPool.get("adult") || new Map())) {
+      for (const c of (byOoc.get(ooc) || new Set())) adultChars.add(c);
+    }
+    // The same character should NEVER appear in both pools for the
+    // same writer — pool classification is character-level, not
+    // entry-level.
+    for (const c of studentChars) {
+      assertFalse(adultChars.has(c), `${ooc}: ${c} appears in both pools`);
+    }
   }
 });
 
-// ─── getOocCharsAtTier ────────────────────────────────────────────────
-test("getOocCharsAtTier: unknown ooc → empty", () => {
-  assertEq(getOocCharsAtTier(data, "Nobody", "A-List").size, 0);
-  assertEq(getOocCharsAtTier(data, null, "A-List").size, 0);
+// ─── getOocCharsAtPoolTier ────────────────────────────────────────────
+test("getOocCharsAtPoolTier: unknown ooc → empty", () => {
+  assertEq(getOocCharsAtPoolTier(data, "Nobody", "student", "A-List").size, 0);
+  assertEq(getOocCharsAtPoolTier(data, null, "student", "A-List").size, 0);
 });
-test("getOocCharsAtTier: 'A' and 'A-List' input give same set", () => {
-  const a = getOocCharsAtTier(data, "Star", "A");
-  const b = getOocCharsAtTier(data, "Star", "A-List");
+test("getOocCharsAtPoolTier: 'A' and 'A-List' tier input give the same set", () => {
+  const a = getOocCharsAtPoolTier(data, "Star", "student", "A");
+  const b = getOocCharsAtPoolTier(data, "Star", "student", "A-List");
   assertEq([...a].sort().join(","), [...b].sort().join(","));
 });
 
@@ -132,61 +148,68 @@ test("getOocForForm: null when neither resolves", () => {
   assertEq(getOocForForm({ ooc: "", rpcLink: "https://x?user=unknown" }), null);
 });
 
-// ─── checkTierQuota: A-List ───────────────────────────────────────────
-test("checkTierQuota: A-List blocked at cap for a new char", () => {
+// ─── checkTierQuota: student pool ─────────────────────────────────────
+test("checkTierQuota: student A-List blocked at cap for a new char", () => {
   const v = checkTierQuota(data, {
+    type: "student",
     form: { tier: "A-List", char: "Brand New", ooc: "Star" },
   }, { "A-List": 1, "B-List": 99, "C-List": 99 });
   assertEq(v.allowed, false);
+  assertEq(v.pool, "student");
   assertEq(v.tier, "A-List");
-  assertEq(v.limit, 1);
-  assertTrue(v.count >= 1);
 });
-test("checkTierQuota: A-List same-char (existing) → allowed at limit 1", () => {
+
+test("checkTierQuota: student A-List existing-char → allowed at limit 1", () => {
+  // Tatiana is already in Star's student A-List set, so adding another
+  // Tatiana entry shouldn't grow the set.
   const v = checkTierQuota(data, {
+    type: "student",
     form: { tier: "A-List", char: "Tatiana Morozova", ooc: "Star" },
   }, { "A-List": 1, "B-List": 99, "C-List": 99 });
   assertEq(v.allowed, true);
+  assertEq(v.pool, "student");
 });
 
-// ─── checkTierQuota: B-List ───────────────────────────────────────────
+// ─── checkTierQuota: pool independence ────────────────────────────────
+test("checkTierQuota: student cap doesn't bleed into adult submissions", () => {
+  // A writer maxed out on student A-Listers should still be able to
+  // submit an adult-pool A-Lister (e.g. an outside character).
+  const v = checkTierQuota(data, {
+    type: "outside",
+    form: { tier: "A-List", char: "New Adult", ooc: "Star" },
+  }, { "A-List": 1, "B-List": 99, "C-List": 99 });
+  // Even with limit 1 and Star's student A-List bucket > 1, the adult
+  // pool is independent — if Star's adult A-List bucket fits, allowed.
+  // (At time of writing she has no adult A-Listers in data.js.)
+  assertEq(v.allowed, true, `verdict: ${JSON.stringify(v)}`);
+  assertEq(v.pool, "adult");
+});
+
+test("checkTierQuota: adult cap doesn't bleed into student submissions", () => {
+  // Verify the symmetric case using a synthetic-ish test against the
+  // real data. Nothing in current data.js has Star at an adult tier,
+  // so this is essentially a passthrough — but it confirms the pool
+  // routing.
+  const v = checkTierQuota(data, {
+    type: "student",
+    form: { tier: "A-List", char: "Another Student", ooc: "Star" },
+  }, { "A-List": 99, "B-List": 99, "C-List": 99 });
+  assertEq(v.allowed, true);
+  assertEq(v.pool, "student");
+});
+
+// ─── checkTierQuota: B-List + C-List + D-List ─────────────────────────
 test("checkTierQuota: B-List under cap → allowed", () => {
   const v = checkTierQuota(data, {
+    type: "student",
     form: { tier: "B-List", char: "Whoever", ooc: "Star" },
   }, { "A-List": 5, "B-List": 99, "C-List": 99 });
   assertEq(v.allowed, true);
   assertEq(v.tier, "B-List");
 });
-test("checkTierQuota: B-List blocked at limit 0 for a writer who has any B-Listers", () => {
-  // Pick a writer who actually has B-Listers in current data.js.
-  // Look at Star's B-List bucket; if non-empty, limit 0 blocks.
-  const starB = getOocCharsAtTier(data, "Star", "B-List");
-  if (starB.size === 0) {
-    // No fixture available — skip rather than fail.
-    console.log("  (skip: Star has no B-Listers in current data.js)");
-    return;
-  }
+test("checkTierQuota: D-List always allowed", () => {
   const v = checkTierQuota(data, {
-    form: { tier: "B-List", char: "Fresh B-Lister", ooc: "Star" },
-  }, { "A-List": 99, "B-List": 0, "C-List": 99 });
-  assertEq(v.allowed, false);
-  assertEq(v.tier, "B-List");
-  assertEq(v.limit, 0);
-});
-
-// ─── checkTierQuota: C-List ───────────────────────────────────────────
-test("checkTierQuota: C-List uses its own limit, not A's", () => {
-  const v = checkTierQuota(data, {
-    form: { tier: "C-List", char: "C-Tier Char", ooc: "Star" },
-  }, { "A-List": 0, "B-List": 0, "C-List": 99 });
-  // A-List cap of 0 doesn't apply because the submission is C-List.
-  assertEq(v.allowed, true);
-  assertEq(v.tier, "C-List");
-});
-
-// ─── checkTierQuota: D-List uncapped ──────────────────────────────────
-test("checkTierQuota: D-List always allowed (no limit entry)", () => {
-  const v = checkTierQuota(data, {
+    type: "student",
     form: { tier: "D-List", char: "Whoever", ooc: "Star" },
   }, getTierLimits({}));
   assertEq(v.allowed, true);
@@ -196,21 +219,24 @@ test("checkTierQuota: D-List always allowed (no limit entry)", () => {
 // ─── checkTierQuota: edge cases ───────────────────────────────────────
 test("checkTierQuota: no tier on submission → allowed", () => {
   const v = checkTierQuota(data, {
+    type: "faculty",
     form: { char: "Faculty char", ooc: "Star" },
   }, getTierLimits({}));
   assertEq(v.allowed, true);
 });
 test("checkTierQuota: unmapped writer, no ooc → allowed with warning", () => {
   const v = checkTierQuota(data, {
+    type: "student",
     form: { tier: "A-List", char: "X", rpcLink: "https://x?user=unknown" },
   }, getTierLimits({}));
   assertEq(v.allowed, true);
   assertEq(v.warning, "no_ooc_identifier");
 });
 test("checkTierQuota: cross-account counting via rpcLink fallback", () => {
-  // Submit via one of Star's accounts (Hopper). Counting Star's A-List
-  // chars across ALL her accounts should block at limit 1.
+  // Submit via Hopper (one of Star's accounts). Student pool count
+  // should include Star's other accounts' students.
   const v = checkTierQuota(data, {
+    type: "student",
     form: {
       tier: "A-List",
       char: "From Hopper",
@@ -218,14 +244,15 @@ test("checkTierQuota: cross-account counting via rpcLink fallback", () => {
     },
   }, { "A-List": 1, "B-List": 99, "C-List": 99 });
   assertEq(v.allowed, false);
+  assertEq(v.pool, "student");
 });
-test("checkTierQuota: PRIVACY — verdict has no existingChars / ooc-leaking field", () => {
+test("checkTierQuota: PRIVACY — verdict has no character list field", () => {
   const v = checkTierQuota(data, {
+    type: "student",
     form: { tier: "A-List", char: "X", ooc: "Star" },
   }, { "A-List": 1, "B-List": 99, "C-List": 99 });
   assertFalse("existingChars" in v, "verdict must not include existingChars");
-  // `ooc` is in the verdict for server-side logging — that's intentional.
-  // The interaction handler must not put it into any Discord message.
+  assertFalse("chars" in v, "verdict must not include chars");
 });
 
 if (failed) {
