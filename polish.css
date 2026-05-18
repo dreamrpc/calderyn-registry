@@ -370,11 +370,11 @@ body {
 }
 
 /* ═══ FONT FAMILY DISCIPLINE ═══════════════════════════════════════════
-   The original loads 6 families (Inter, Bebas Neue, JetBrains Mono,
-   Fraunces, Bungee, Bungee Shade, Archivo Black). The body text and
-   headings only need 3 — sans, display, mono. Fraunces / Bungee /
-   Archivo Black are still loaded for any one-off feature copy, but we
-   stop them creeping into UI chrome by re-asserting families here.
+   Site ships a pure two-family stack: Druk (display) + Söhne (sans),
+   with Söhne Mono for monospace. No third-party font loads — Inter /
+   Bebas Neue / Bungee / Fraunces / Archivo Black are all gone. This
+   block re-asserts the right family on the major display / UI selectors
+   so any leftover inline references can't creep through.
    ════════════════════════════════════════════════════════════════════ */
 .pg-hd h2, .lore-intro-title, .lore-h,
 .lore-vg-alias, .lore-house-name,
@@ -459,7 +459,7 @@ body {
 /* Wordmark: keep the comic family but kill the heavy red shadow.
    A single 1px offset reads as ink, not as a logo. */
 .mast-brand-name {
-  font-family: 'Bungee', 'Bebas Neue', sans-serif !important;
+  font-family: 'Druk', 'Druk', sans-serif !important;
   font-weight: 400 !important;
   font-size: 19px !important;
   letter-spacing: 0.025em !important;
@@ -5184,7 +5184,7 @@ body {
      letter-spacing: 0.22em !important;
 }
 .join-flow-title {
-     font-family: var(--serif, Georgia, serif) !important;
+     font-family: var(--serif, 'Söhne', serif) !important;
      letter-spacing: -0.01em !important;
 }
 
@@ -5568,7 +5568,7 @@ body {
   margin: 0 0 18px;
 }
 .home-dorm-body {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Söhne', 'Söhne', sans-serif;
   font-size: 14.5px;
   line-height: 1.7;
   color: #2a1a14;
@@ -5761,7 +5761,7 @@ body {
 /* Body — dark brown for high contrast on cream */
 .home-page .home-dorm-card .home-dorm-body {
   color: #2d1f12 !important;
-  font-family: Georgia, "Times New Roman", serif !important;
+  font-family: 'Söhne', 'Söhne', sans-serif !important;
   font-size: 15.5px !important;
   line-height: 1.75 !important;
   margin: 0 0 16px !important;
@@ -6136,7 +6136,7 @@ html, body { overflow-x: clip; }
   text-transform: uppercase;
 }
 .join-wiz-title {
-  font-family: var(--display, "Bebas Neue", system-ui, serif);
+  font-family: var(--display, 'Druk', system-ui, serif);
   font-weight: 400;
   font-size: clamp(36px, 5vw, 58px);
   letter-spacing: -0.01em;
@@ -6426,7 +6426,7 @@ html, body { overflow-x: clip; }
 
 /* ── HEADLINE — MAXIMUM SCALE ─────────────────────────────── */
 .home-hero-title {
-  font-family: var(--display, "Bebas Neue", system-ui, serif) !important;
+  font-family: var(--display, 'Druk', system-ui, serif) !important;
   font-weight: 400 !important;
   font-size: clamp(64px, 13vw, 188px) !important;
   line-height: 0.9 !important;
@@ -6818,7 +6818,7 @@ html, body { overflow-x: clip; }
   border: 4px double var(--red, #c11a2c);
   color: var(--red, #c11a2c);
   background: rgba(193, 26, 44, 0.04);
-  font-family: var(--display, "Bebas Neue", system-ui, serif);
+  font-family: var(--display, 'Druk', system-ui, serif);
   text-align: center;
   /* Initial state — for the drop animation */
   opacity: 0;
@@ -6879,7 +6879,7 @@ html, body { overflow-x: clip; }
 }
 
 .join-confirm-title {
-  font-family: var(--display, "Bebas Neue", system-ui, serif);
+  font-family: var(--display, 'Druk', system-ui, serif);
   font-weight: 400;
   font-size: clamp(36px, 5.5vw, 56px);
   letter-spacing: -0.01em;
@@ -7119,7 +7119,7 @@ html, body { overflow-x: clip; }
 
 /* ── LORE HEADINGS — maximum drama ──────────────────────── */
 .lore-intro-title {
-  font-family: var(--display, "Bebas Neue", system-ui, serif) !important;
+  font-family: var(--display, 'Druk', system-ui, serif) !important;
   font-size: clamp(48px, 7vw, 80px) !important;
   line-height: 1 !important;
   letter-spacing: -0.01em !important;
@@ -7135,7 +7135,7 @@ html, body { overflow-x: clip; }
     0 2px 0 rgba(0, 0, 0, 0.5);
 }
 .lore-h {
-  font-family: var(--display, "Bebas Neue", system-ui, serif) !important;
+  font-family: var(--display, 'Druk', system-ui, serif) !important;
   font-size: clamp(32px, 4.4vw, 52px) !important;
   line-height: 1.05 !important;
   letter-spacing: -0.01em !important;
@@ -7183,7 +7183,7 @@ html, body { overflow-x: clip; }
   padding: var(--space-5) var(--space-6);
   background: var(--bg-2, #15151a);
   border-left: 4px solid var(--red, #c11a2c);
-  font-family: var(--display, "Bebas Neue", system-ui, serif);
+  font-family: var(--display, 'Druk', system-ui, serif);
   font-size: clamp(22px, 2.4vw, 32px);
   line-height: 1.25;
   letter-spacing: -0.01em;
@@ -7212,7 +7212,7 @@ html, body { overflow-x: clip; }
 }
 .lore-stat-num {
   display: block;
-  font-family: var(--display, "Bebas Neue", system-ui, serif);
+  font-family: var(--display, 'Druk', system-ui, serif);
   font-size: 56px;
   line-height: 1;
   color: var(--yellow, #d4a84a);
@@ -7779,4 +7779,64 @@ thead tr th {
   }
   .join-confirm-vg { opacity: 0.25 !important; }
   .join-confirm-wax { transform: rotate(-7deg) !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   PURE-STACK ENFORCEMENT
+   ════════════════════════════════════════════════════════════════════
+   Final lockdown. Forces every leftover element to the Druk + Söhne
+   stack regardless of what an earlier rule declared. Lives at the
+   end of polish.css so it wins by cascade order.
+
+   Strategy:
+     1. Body + every native interactive element → Söhne via --sans.
+     2. All major display headings + tab labels + section banners →
+        Druk via --display.
+     3. Every mono/code/kbd surface → Söhne Mono via --mono.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. BODY DEFAULT — Söhne everywhere unless explicitly overridden */
+html, body,
+button, input, textarea, select, optgroup,
+p, li, dl, dt, dd,
+a, span, em, strong, b, i, u, small,
+blockquote, q, cite, mark, sub, sup, time {
+  font-family: var(--sans, 'Söhne', system-ui, sans-serif);
+}
+
+/* ── 2. DISPLAY HEADINGS — Druk for everything that needs impact */
+h1, h2, h3, h4, h5, h6,
+.t-display, .t-display-sub,
+.pg-hd h2, .pg-hd-stamp,
+.lore-intro-title, .lore-h, .lore-vg-alias, .lore-house-name,
+.home-hero-title, .home-section-title, .home-cta-title,
+.home-vg-alias, .home-programme-line,
+.join-wiz-title, .join-confirm-title,
+.club-name, .club-side-name,
+.fac-name, .strata-name,
+.subject-name, .student-name,
+.tier-card-name, .power-name,
+.role-card-name, .case-title,
+.outside-name, .preg-title,
+.banned-title, .org-name {
+  font-family: var(--display, 'Druk', sans-serif);
+}
+
+/* ── 3. MONO SURFACES — Söhne Mono everywhere code/labels need it */
+code, pre, kbd, samp, var, tt,
+.t-mono, .t-cap, .t-eyebrow, .t-micro,
+.tab-num, .mast-search-kbd,
+.lore-eyebrow, .lore-toc-stamp,
+.home-hero-stamp, .home-section-stamp,
+.home-cta-stamp, .home-programme-stamp,
+.join-wiz-eyebrow, .join-confirm-eyebrow,
+.join-confirm-receipt-label, .join-confirm-receipt-value,
+.club-tag, .fac-tag, .strata-tag,
+.subject-tag, .student-tag, .preg-tag,
+.banned-tag, .outside-tag, .org-tag,
+.pg-hd-note, .stamp, .pip,
+.freg-detail-label, .tier-card-tag,
+.kb-name, .case-col-tag,
+.committee-tag, .office-tag, .council-tag {
+  font-family: var(--mono, 'Söhne Mono', ui-monospace, monospace);
 }

@@ -6163,7 +6163,7 @@ try{
 }catch(err){
   document.getElementById("root").innerHTML =
     '<div style="padding:32px;font-family:Inter,sans-serif;color:#f1ede4;background:#0c0c10;border:1px solid #e4324a;border-left:4px solid #e4324a;margin:24px;border-radius:12px;">'
-    + '<div style="font-family:Fraunces,Georgia,serif;font-size:32px;margin-bottom:12px;letter-spacing:-.01em;color:#f1cd72;">Render error</div>'
+    + '<div style="font-family:Fraunces,'Söhne',sans-serif;font-size:32px;margin-bottom:12px;letter-spacing:-.01em;color:#f1cd72;">Render error</div>'
     + '<pre style="white-space:pre-wrap;font-size:12px;color:#b8b3a8;">' + (err && err.stack ? err.stack : String(err)) + '</pre>'
     + '</div>';
   console.error(err);
