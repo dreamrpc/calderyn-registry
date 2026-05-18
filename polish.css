@@ -368,71 +368,90 @@ body {
      · slight hover lift
    ════════════════════════════════════════════════════════════════════════ */
 
+/* ════════════════════════════════════════════════════════════════════
+   RULES — STYLED LIST
+   Single column. Number sits in a left gutter, gold-accented. Subtle
+   top-border separator between items. No card backgrounds, no hover
+   lift, no watermark. Lets the text breathe.
+   ════════════════════════════════════════════════════════════════════ */
+
 .rules-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important;
-  gap: 18px !important;
+  display: block !important;
+  grid-template-columns: none !important;
+  gap: 0 !important;
+  max-width: 760px;
+  margin: 0 auto;
 }
 
 .rule {
   position: relative !important;
-  display: block !important;
-  grid-template-columns: none !important;
-  padding: 28px 26px 26px !important;
-  background: linear-gradient(180deg, var(--paper-3), var(--paper-2)) !important;
-  border: 1px solid var(--rule-soft) !important;
-  border-top: 3px solid var(--red) !important;
+  display: grid !important;
+  grid-template-columns: 64px 1fr !important;
+  align-items: start;
+  column-gap: 22px !important;
+  padding: 22px 4px !important;
+  background: none !important;
+  border: none !important;
+  border-top: 1px solid var(--rule-soft) !important;
+  border-radius: 0 !important;
   box-shadow: none !important;
-  transition: transform var(--dur, .15s) ease, border-color var(--dur, .15s) ease, box-shadow var(--dur, .15s) ease;
-  overflow: hidden;
+  transition: none !important;
+  overflow: visible !important;
+}
+.rule:first-child {
+  border-top: none !important;
+  padding-top: 4px !important;
 }
 .rule:hover {
-  transform: translateY(-2px);
-  border-color: var(--gold-bright, var(--yellow));
-  box-shadow: 0 20px 40px -32px rgba(0, 0, 0, 0.9);
+  transform: none !important;
+  border-top-color: var(--rule-soft) !important;
+  box-shadow: none !important;
 }
 
-/* Number → outlined display watermark top-right */
+/* Number → left gutter, gold-accented display digit (small, not a
+   giant watermark). */
 .rule-num {
-  position: absolute !important;
-  top: 12px !important;
-  right: 18px !important;
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
   display: block !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
   background: transparent !important;
   border: none !important;
   border-right: none !important;
-  padding: 0 !important;
-  width: auto !important;
-  height: auto !important;
   font-family: var(--display) !important;
-  font-size: 64px !important;
+  font-size: 26px !important;
   font-weight: 400 !important;
   letter-spacing: 0 !important;
   line-height: 1 !important;
-  color: transparent !important;
-  -webkit-text-stroke: 1.5px var(--gold-bright, var(--yellow)) !important;
-  text-stroke: 1.5px var(--gold-bright, var(--yellow)) !important;
-  opacity: 0.55 !important;
-  pointer-events: none;
+  color: var(--gold-bright, var(--yellow)) !important;
+  -webkit-text-stroke: 0 !important;
+  text-stroke: 0 !important;
+  opacity: 1 !important;
+  text-align: right;
+  padding-top: 3px !important;
+  pointer-events: auto;
 }
 .rule:nth-child(even) .rule-num {
   background: transparent !important;
-  color: transparent !important;
+  color: var(--gold-bright, var(--yellow)) !important;
 }
 
 .rule-body {
   position: relative;
   padding: 0 !important;
-  padding-right: 60px !important;  /* leave room for the corner watermark */
+  padding-right: 0 !important;
 }
 .rule-title {
   font-family: var(--sans) !important;
-  font-size: 17px !important;
+  font-size: 16px !important;
   font-weight: 700 !important;
   letter-spacing: -0.005em !important;
   color: var(--text) !important;
-  line-height: 1.25 !important;
-  margin-bottom: 12px !important;
+  line-height: 1.35 !important;
+  margin-bottom: 6px !important;
   padding-right: 0;
 }
 .rule-text {
@@ -442,9 +461,7 @@ body {
   color: var(--text-mid, var(--muted)) !important;
 }
 
-/* Make the rules section wrap full-bleed on a darker slab so the cards
-   pop a bit. Currently they sit on the body. Wrap them with extra padding. */
-.rules-page-wrap, /* in case some future container */
+.rules-page-wrap,
 .tab-host .rules-grid,
 .subnav-host .rules-grid {
   padding: 16px 0 !important;
