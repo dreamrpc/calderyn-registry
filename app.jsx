@@ -3993,10 +3993,14 @@ ${members}
     const snippet = buildSnippet();
 
     /* --- Discord embed helpers ----------------------------------------
-       Embed field values are capped at 1024 chars by Discord. splitField()
-       word-aware splits long values across multiple fields ("Field (1/2)",
-       "Field (2/2)") instead of hard-truncating mid-word. */
+       Discord rejects messages (HTTP 400) whose embed total exceeds 6000
+       chars across all embed text, or any single embed with more than 25
+       fields, or any field value over 1024 chars. The helpers below
+       enforce each limit so a long-form Student application can't trip
+       the relay. */
     const FIELD_VALUE_MAX = 1024;
+    const FIELDS_PER_EMBED_MAX = 25;
+    const TOTAL_EMBED_CHARS_MAX = 6000;
     const splitField = (name, value, inline = false) => {
       if (!value) return [];
       const v = String(value);
@@ -4024,6 +4028,33 @@ ${members}
       if (cut < max - 400) cut = s.lastIndexOf(" ", max);
       if (cut < 0) cut = max;
       return s.slice(0, cut) + "\n// ...trimmed";
+    };
+    // Sum of embed text Discord counts toward the 6000-char message cap.
+    const embedCharCount = (e) => {
+      let n = 0;
+      if (e.title)        n += e.title.length;
+      if (e.description)  n += e.description.length;
+      if (e.footer?.text) n += e.footer.text.length;
+      if (e.author?.name) n += e.author.name.length;
+      for (const f of (e.fields || [])) {
+        n += (f.name || "").length + (f.value || "").length;
+      }
+      return n;
+    };
+    // Cap a fields array at FIELDS_PER_EMBED_MAX, folding the overflow into
+    // one trailing field so admin still sees something was dropped (the full
+    // data lives in the snippet embed / data-file paste).
+    const capFields = (fields) => {
+      if (fields.length <= FIELDS_PER_EMBED_MAX) return fields;
+      const keep = fields.slice(0, FIELDS_PER_EMBED_MAX - 1);
+      const droppedNames = fields.slice(FIELDS_PER_EMBED_MAX - 1)
+        .map(f => f.name).join(", ").slice(0, FIELD_VALUE_MAX - 80);
+      keep.push({
+        name: "More (truncated)",
+        value: "Additional fields didn't fit Discord's 25-field limit — see the data-file snippet below: " + droppedNames,
+        inline: false,
+      });
+      return keep;
     };
 
     // Build the Discord embed — only the info admin actually needs to update the site
@@ -4096,27 +4127,45 @@ ${members}
     if (form.notes)            fields.push(...splitField("Additional Notes", form.notes));
     fields.push({ name: "Rules Acknowledged", value: form.rulesAgree ? "✅ Confirmed read & agreed" : "✗ Not confirmed", inline: false });
 
+    const appEmbed = {
+      title: `New Application · ${typeName}`,
+      description: (type === "collective" && form.collectiveFlow === "createNew")
+        ? `Proposing **${form.newCollectiveName || '(unnamed collective)'}** — ${(form.newCollectiveFaction === "villain") ? "villain" : "hero"}-side · submitted by ${form.char || '(unknown)'}`
+        : `**${form.char}**${form.alias ? ` — *${form.alias}*` : ''}`,
+      color: (type === "collective" && (form.collectiveFlow === "joinVillain" || form.newCollectiveFaction === "villain"))
+        ? 0x4a1a1a
+        : 0xe31b23,
+      fields: capFields(fields),
+      footer: { text: "Calderyn College · Central Registry · 2026" },
+      timestamp: new Date().toISOString(),
+    };
+
+    // Size the snippet embed against whatever's left of Discord's 6000-char
+    // per-message cap. Reserve room for the snippet's title + ```js fence +
+    // a safety margin so we never push the message over the limit.
+    const SNIPPET_FIXED_OVERHEAD = "Data-file snippet".length + "```js\n\n```".length;
+    const SAFETY_MARGIN = 100;
+    const snippetBudget = Math.max(
+      0,
+      TOTAL_EMBED_CHARS_MAX - embedCharCount(appEmbed) - SNIPPET_FIXED_OVERHEAD - SAFETY_MARGIN
+    );
+    const embeds = [appEmbed];
+    // 200 chars is the smallest useful snippet (~one short data-file entry).
+    // Below that, drop the snippet embed entirely rather than push a stub.
+    if (snippet && snippetBudget >= 200) {
+      embeds.push({
+        title: "Data-file snippet",
+        description: "```js\n" + safeBlock(snippet, Math.min(3900, snippetBudget)) + "\n```",
+        color: 0xffcc00,
+      });
+    }
+
     const payload = {
       username: "Calderyn Registry — Applications",
       avatar_url: "https://dreamrpc.github.io/calderyn-registry/calderyn_college_logo_transparent.png",
       content: "<@&1498799678551101451>",
       allowed_mentions: { roles: ["1498799678551101451"] },
-      embeds: [{
-        title: `New Application · ${typeName}`,
-        description: (type === "collective" && form.collectiveFlow === "createNew")
-          ? `Proposing **${form.newCollectiveName || '(unnamed collective)'}** — ${(form.newCollectiveFaction === "villain") ? "villain" : "hero"}-side · submitted by ${form.char || '(unknown)'}`
-          : `**${form.char}**${form.alias ? ` — *${form.alias}*` : ''}`,
-        color: (type === "collective" && (form.collectiveFlow === "joinVillain" || form.newCollectiveFaction === "villain"))
-          ? 0x4a1a1a
-          : 0xe31b23,
-        fields,
-        footer: { text: "Calderyn College · Central Registry · 2026" },
-        timestamp: new Date().toISOString(),
-      }, {
-        title: "Data-file snippet",
-        description: "```js\n" + safeBlock(snippet) + "\n```",
-        color: 0xffcc00,
-      }],
+      embeds,
     };
 
     try {
