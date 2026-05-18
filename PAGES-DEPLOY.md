@@ -18,36 +18,26 @@ deploys need an additional permission on the same token.
 4. **Continue to summary** → **Update token**. The token value doesn't
    change; no GitHub secret update needed.
 
-### 2. Create the Pages project (one-click)
+> The workflow creates the Pages project itself on its first run via
+> the Cloudflare API. No dashboard click required.
 
-`wrangler pages deploy` only works after the project exists. Create
-the empty project from the dashboard:
-
-1. <https://dash.cloudflare.com/> → **Workers & Pages** → **Create
-   application** → **Pages** tab → **Create using direct upload**.
-2. **Project name:** `calderyn-registry` (must match the
-   `--project-name` flag in `deploy-pages.yml`).
-3. **Production branch:** `main`.
-4. Skip the upload step — just click **Create project** then **Deploy
-   site** with no files (or close the wizard at this point; the empty
-   project is enough). The site is live at
-   <https://calderyn-registry.pages.dev> but will 404 until the
-   first real deploy.
-
-### 3. Trigger the first deploy
+### 2. Trigger the first deploy
 
 Either push any site-file change to `main` or run the workflow
 manually:
 
 1. <https://github.com/dreamrpc/calderyn-registry/actions/workflows/deploy-pages.yml>
 2. **Run workflow** → choose branch `main` → **Run workflow**.
-3. Watch the run. The **Deploy to Cloudflare Pages** step prints the
-   deployed URL — typically
-   `https://calderyn-registry.pages.dev` for production and a unique
-   `https://<deployment-id>.calderyn-registry.pages.dev` URL for that
-   specific deployment.
+3. Watch the run. The **Ensure Pages project exists** step calls the
+   Cloudflare API to create `calderyn-registry` on the first run
+   (subsequent runs detect the project already exists and continue).
+   The **Deploy to Cloudflare Pages** step then prints the deployed
+   URL — typically `https://calderyn-registry.pages.dev` for
+   production and a unique
+   `https://<deployment-id>.calderyn-registry.pages.dev` URL for
+   that specific deployment.
 
-### 4. Verify in a private/incognito window
+### 3. Verify in a private/incognito window
 
 1. Open <https://calderyn-registry.pages.dev> in incognito.
 2. Compare against <https://dreamrpc.github.io/calderyn-registry/> —
