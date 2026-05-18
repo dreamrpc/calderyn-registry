@@ -5911,3 +5911,185 @@ html, body { overflow-x: clip; }
 @media (max-width: 760px) {
   .tabs.is-open ~ .pg { pointer-events: none; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   PR C — FORM WIZARD
+   Multi-page cinematic application flow. Each type renders its own
+   sequence of pages; the writer steps through them with Prev / Next.
+   Comic-leaning visual treatment via halftone overlay + bold display
+   type + clean panel borders.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── WIZARD HEAD — page counter, title, subtitle, progress ─────── */
+.join-wiz-head {
+  max-width: 900px;
+  margin: 0 auto var(--space-6);
+  padding: var(--space-6) 0 var(--space-5);
+  border-bottom: 1px solid var(--rule, #2a2a34);
+  text-align: left;
+}
+.join-wiz-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: var(--yellow, #d4a84a);
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+}
+.join-wiz-counter-now { font-size: 28px; font-weight: 700; letter-spacing: -0.01em; color: var(--text-1); }
+.join-wiz-counter-sep { font-size: 22px; color: var(--text-4); margin: 0 4px; }
+.join-wiz-counter-tot { font-size: 14px; color: var(--text-3); }
+
+.join-wiz-eyebrow {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: var(--yellow, #d4a84a);
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+}
+.join-wiz-title {
+  font-family: var(--display, "Bebas Neue", system-ui, serif);
+  font-weight: 400;
+  font-size: clamp(36px, 5vw, 58px);
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  color: var(--text-1);
+  margin: 0 0 var(--space-3);
+}
+.join-wiz-subtitle {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-2);
+  max-width: 540px;
+  margin: 0 0 var(--space-5);
+}
+
+.join-wiz-progress {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+.join-wiz-tick {
+  height: 3px;
+  background: var(--rule-soft, #1c1c24);
+  border-radius: 1.5px;
+  transition: background 0.3s ease;
+}
+.join-wiz-tick.is-done    { background: var(--yellow, #d4a84a); opacity: 0.6; }
+.join-wiz-tick.is-current { background: var(--red, #c11a2c); }
+
+/* ── FIELDSET CONTAINER — when in wizard mode, paint a halftone
+   dot field behind the fields. Subtle, ~3% opacity. */
+.join-fieldset[data-wiz-page] {
+  max-width: 900px;
+  margin: 0 auto var(--space-5);
+  padding: var(--space-6);
+  position: relative;
+  background: var(--bg-1, #0c0c10);
+  border: 1px solid var(--rule, #2a2a34);
+  /* Halftone-dot overlay — used as a comic texture. Built from
+     two layered radial gradients. */
+  background-image:
+    radial-gradient(circle 1px at 0% 0%, rgba(244, 200, 110, 0.05) 1px, transparent 1.5px),
+    radial-gradient(circle 1px at 100% 100%, rgba(244, 200, 110, 0.05) 1px, transparent 1.5px);
+  background-size: 8px 8px, 8px 8px;
+  background-position: 0 0, 4px 4px;
+}
+
+/* ── WIZARD NAVIGATION — Back / Next / Submit / Cancel row ──── */
+.join-wiz-nav {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-5) 0 var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.join-wiz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 0 var(--space-5);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1.5px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+.join-wiz-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.join-wiz-btn:not(:disabled):hover { transform: translateY(-1px); }
+
+.join-wiz-btn-back {
+  color: var(--text-2);
+  border-color: var(--rule, #2a2a34);
+}
+.join-wiz-btn-back:not(:disabled):hover {
+  color: var(--text-1);
+  border-color: var(--text-3);
+}
+
+.join-wiz-btn-next {
+  color: var(--text-1);
+  background: var(--red, #c11a2c);
+  border-color: var(--red, #c11a2c);
+  margin-left: auto;
+  box-shadow: 0 14px 32px -16px var(--red, #c11a2c);
+}
+.join-wiz-btn-next:not(:disabled):hover {
+  box-shadow: 0 22px 48px -18px var(--red, #c11a2c);
+}
+
+.join-wiz-btn-submit {
+  color: var(--text-1);
+  background: var(--yellow, #d4a84a);
+  color: #1a1108;
+  border-color: var(--yellow, #d4a84a);
+  margin-left: auto;
+  box-shadow: 0 14px 32px -16px var(--yellow, #d4a84a);
+}
+.join-wiz-btn-submit:not(:disabled):hover {
+  box-shadow: 0 22px 48px -18px var(--yellow, #d4a84a);
+}
+
+.join-wiz-btn-cancel {
+  color: var(--text-3);
+}
+.join-wiz-btn-cancel:hover { color: var(--text-2); }
+
+.join-wiz-status {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-3) 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.join-wiz-status.is-error   { color: var(--red-bright, #ff2a32); }
+.join-wiz-status.is-loading { color: var(--yellow); }
+.join-wiz-status.is-hint    { color: var(--text-3); }
+
+@media (max-width: 760px) {
+  .join-fieldset[data-wiz-page] { padding: var(--space-5) var(--space-4); }
+  .join-wiz-btn-next, .join-wiz-btn-submit { margin-left: 0; }
+  .join-wiz-btn { flex: 1 1 calc(50% - var(--space-3)); min-width: 0; }
+  .join-wiz-btn-cancel { flex: 0 0 100%; }
+}
