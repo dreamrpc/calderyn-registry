@@ -619,17 +619,41 @@ function RulesTab(){
         body="Read these before you apply. Short. Non-negotiable. If something isn't covered, use common sense — when in doubt, ask admin first."
         pageNum="P. 001 / VIII"
       />
-      <div className="rules-grid">
-        {D.rules.map((r,i) => (
-          <div key={i} className="rule">
-            <div className="rule-num">{r.n}</div>
-            <div className="rule-body">
-              <div className="rule-title">{r.title}</div>
-              <div className="rule-text">{r.body}</div>
+      {/* Group rules by category so we can render a section divider
+          between them. Rules without a category fall into 'general'
+          and are shown last under a 'GENERAL' heading. */}
+      {(() => {
+        const groups = [];
+        const order = ["conduct", "casting", "general"];
+        const labels = {
+          conduct: { label: "I · CONDUCT",      lede: "How we treat each other, in and out of character." },
+          casting: { label: "II · CASTING",     lede: "Submissions, queueing, and what gets through review." },
+          general: { label: "III · GENERAL",    lede: "Everything else." },
+        };
+        for (const cat of order) {
+          const rules = D.rules.filter(r => (r.category || "general") === cat);
+          if (rules.length) groups.push({ cat, rules });
+        }
+        return groups.map(({ cat, rules }) => (
+          <section key={cat} className={"rules-section rules-cat-" + cat}>
+            <header className="rules-section-head">
+              <div className="rules-section-label">{labels[cat].label}</div>
+              <div className="rules-section-lede">{labels[cat].lede}</div>
+            </header>
+            <div className="rules-grid">
+              {rules.map((r, i) => (
+                <div key={r.n} className="rule">
+                  <div className="rule-num">{r.n}</div>
+                  <div className="rule-body">
+                    <div className="rule-title">{r.title}</div>
+                    <div className="rule-text">{r.body}</div>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-        ))}
-      </div>
+          </section>
+        ));
+      })()}
 
       <section className="about-bay">
         <div className="about-bay-stamp">About This RP</div>
