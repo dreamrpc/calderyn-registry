@@ -2,7 +2,7 @@ import { verifySignature, editMessage, postMessage } from "./discord.js";
 import { buildEmbed } from "./embed.js";
 import { updateFile, getFile } from "./github.js";
 import { buildInsertions, applyInsertions, removeBySubmissionId, countEntriesFor } from "./markers.js";
-import { checkALitQuota } from "./quota.js";
+import { checkTierQuota, getTierLimits } from "./quota.js";
 
 const INTERACTION_PONG       = 1;
 const INTERACTION_COMPONENT  = 3;
@@ -95,15 +95,15 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
   let commitSha = null;
   let blocked = null;     // populated if quota fails
   if (toState === "approved") {
-    // A-List quota check — needs the live data.js, so do it here rather
-    // than in the synchronous interaction handler. If the writer is
-    // about to exceed the per-writer A-List limit, abort the approval:
-    // leave KV state untouched and edit the message to show the block.
-    const limit = parseInt(env.A_LIST_LIMIT_PER_WRITER || "5", 10);
-    if (sub.form?.tier === "A-List") {
+    // Per-tier quota check — needs the live data.js, so do it here
+    // rather than in the synchronous interaction handler. If the
+    // writer is about to exceed the cap for the submission's tier,
+    // abort the approval: leave KV state untouched and edit the
+    // message to show the block.
+    if (sub.form?.tier) {
       try {
         const current = await getFile(env, env.GITHUB_DATA_FILE);
-        const verdict = checkALitQuota(current.text, sub, limit);
+        const verdict = checkTierQuota(current.text, sub, getTierLimits(env));
         if (!verdict.allowed) blocked = verdict;
       } catch (err) {
         console.error("quota check failed:", err.message);
@@ -154,13 +154,13 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
   if (blocked) {
     const blockedEmbed = buildEmbed(sub.type, sub.form, {
       color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
-      footer: `Calderyn College · Central Registry · 2026 · ⚠ A-List quota`,
+      footer: `Calderyn College · Central Registry · 2026 · ⚠ ${blocked.tier} quota`,
     });
     blockedEmbed.description =
-      `**⚠ Approval blocked — A-List quota.**\n` +
-      `This writer already has **${blocked.count} A-List characters** ` +
-      `(limit: ${blocked.limit}). No new A-List approvals can be accepted ` +
-      `until existing characters are adjusted to lower tiers. The writer ` +
+      `**⚠ Approval blocked — ${blocked.tier} quota.**\n` +
+      `This writer already has **${blocked.count} ${blocked.tier} characters** ` +
+      `(limit: ${blocked.limit}). No new ${blocked.tier} approvals can be accepted ` +
+      `until existing characters are adjusted to a different tier. The writer ` +
       `has been notified.\n\n` +
       (blockedEmbed.description || "");
     try {

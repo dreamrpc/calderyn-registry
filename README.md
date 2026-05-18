@@ -39,31 +39,34 @@ A roster-change audit log lands in `#registry-log` for every commit.
 
 ## Registry rules enforced by the bot
 
-### A-List cap — 5 characters per writer
+### Per-tier per-writer caps
 
-Each writer is limited to **a maximum of 5 A-List characters across the
-entire registry**. The limit applies *per OOC writer*, not per RPC
-account — a writer with multiple RPC accounts has a single combined
-count.
+Each writer is limited per tier, counted across all of their RPC
+accounts:
 
-The check fires when an admin clicks ✅ on a submission whose tier is
-`A-List`. If approving would push the writer over the cap, the click
-is rejected with an amber *"Approval blocked — A-List quota"* embed.
-The submission stays in the queue so the admin can revisit later or
-reject it outright.
+| Tier   | Cap | Env var                     |
+|--------|-----|------------------------------|
+| A-List | 5   | `A_LIST_LIMIT_PER_WRITER`    |
+| B-List | 8   | `B_LIST_LIMIT_PER_WRITER`    |
+| C-List | 10  | `C_LIST_LIMIT_PER_WRITER`    |
+| D-List | uncapped | —                       |
+
+The check fires when an admin clicks ✅ on any submission with a tier.
+If approving would push the writer over the cap *for that tier*, the
+click is rejected with an amber *"Approval blocked — `<tier>` quota"*
+embed. The submission stays in the queue so the admin can revisit
+later or reject it outright.
 
 **Special cases:**
 
-- Adding a *new role* for a character the writer already owns at
-  A-List (e.g. that A-Lister gaining a faculty seat or a Powerball
+- Adding a *new role* for a character the writer already owns at the
+  same tier (e.g. an A-Lister gaining a faculty seat or a Powerball
   position via another form) is **allowed** — the set doesn't grow.
-- Writers who are over the cap from grandfathered early-supporter
-  approvals can still add new roles for their existing A-Listers; new
-  characters at A-List remain blocked until they bring the count down
-  by re-tiering existing characters.
-- The cap value lives in `worker/wrangler.toml` as
-  `A_LIST_LIMIT_PER_WRITER`; changing it is one edit + a Worker
-  re-deploy.
+- Writers who are over a cap from grandfathered early-supporter
+  approvals can still add new roles for their existing characters at
+  that tier; only *new char names* are blocked.
+- The cap values live in `worker/wrangler.toml`; changing one is a
+  single edit + a Worker re-deploy.
 
 **Privacy:** the bot never exposes the OOC writer name or the writer's
 other characters in any public Discord message. The OOC mapping lives
