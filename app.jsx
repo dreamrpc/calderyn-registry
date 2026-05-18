@@ -76,7 +76,9 @@ const ICON_PATHS = {
   "arrow-up-right": <><path d="M7 7h10v10"/><path d="M7 17 17 7"/></>,
   "book-open":      <><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></>,
   "check":          <><path d="M20 6 9 17l-5-5"/></>,
+  "chevron-down":   <><path d="m6 9 6 6 6-6"/></>,
   "chevron-right":  <><path d="m9 18 6-6-6-6"/></>,
+  "chevron-up":     <><path d="m18 15-6-6-6 6"/></>,
   "external-link":  <><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/></>,
   "file-text":      <><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></>,
   "flag":           <><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></>,
@@ -1096,7 +1098,9 @@ function ClassRow({subject}){
           <span className={"curr-row-track t-" + trackKind}>{trackLabel}</span>
         )}
         {hasDesc && (
-          <span className="curr-row-toggle" aria-hidden="true">{open ? "−" : "+"}</span>
+          <span className="curr-row-toggle" aria-hidden="true">
+            <Icon name={open ? "chevron-up" : "chevron-down"} size={14}/>
+          </span>
         )}
       </button>
       {open && hasDesc && (
@@ -1316,7 +1320,9 @@ function PowersRegistry(){
                           {hasExpr && (
                             <span className="preg-view-btn" aria-hidden="true">
                               {isOpen ? "Hide" : "View"}
-                              <span className="preg-view-arrow">{isOpen ? "▲" : "▼"}</span>
+                              <span className="preg-view-arrow">
+                                <Icon name={isOpen ? "chevron-up" : "chevron-down"} size={12}/>
+                              </span>
                             </span>
                           )}
                         </td>

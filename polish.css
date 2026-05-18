@@ -8369,3 +8369,135 @@ code, pre, kbd, samp, var, tt,
   color: var(--text-3, #948d80);
   border: 1px dashed var(--rule, #2a2a34);
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   AUDIT FIX · POWERS REGISTRY TOOLBAR (audit #8)
+   Match the Students filter-bar HUD treatment so the two roster
+   pages read as siblings. The underlying logic is fine; this is a
+   visual unification.
+   ════════════════════════════════════════════════════════════════════ */
+
+.preg-toolbar {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px)) !important;
+  z-index: 40 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: var(--space-3) var(--space-5) !important;
+  padding: var(--space-3) var(--space-5) !important;
+  margin: 0 !important;
+  background: #0a0a0a !important;
+  border-top: 2px solid #c9a84c !important;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.18) !important;
+  box-shadow: 0 12px 32px -20px rgba(0, 0, 0, 0.85);
+}
+
+.preg-filters {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  align-items: center !important;
+}
+
+.preg-pill {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  padding: 5px 9px !important;
+  background: #14140e !important;
+  border: 1px solid rgba(201, 168, 76, 0.18) !important;
+  color: var(--text-3, #948d80) !important;
+  cursor: pointer;
+  transition:
+    background var(--motion-base, 180ms) ease,
+    color var(--motion-base) ease,
+    border-color var(--motion-base) ease !important;
+}
+.preg-pill:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  background: #14140e !important;
+  border-color: rgba(201, 168, 76, 0.45) !important;
+}
+.preg-pill.on {
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+
+.preg-search-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--space-3) !important;
+  flex: 0 1 380px !important;
+  margin-left: auto !important;
+}
+.preg-search {
+  flex: 1;
+  padding: 8px 12px !important;
+  background: #14140e !important;
+  border: 1px solid rgba(201, 168, 76, 0.25) !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  color: var(--text-1, #f5f1e8) !important;
+  outline: none;
+  transition:
+    border-color var(--motion-base, 180ms) ease,
+    background-color var(--motion-base) ease,
+    box-shadow var(--motion-base) ease !important;
+}
+.preg-search::placeholder { color: var(--text-3, #948d80) !important; }
+.preg-search:focus {
+  border-color: var(--yellow, #d4a84a) !important;
+  background: #18180f !important;
+  box-shadow: 0 0 0 3px rgba(212, 168, 74, 0.16) !important;
+  outline: none !important;
+}
+.preg-clear {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  background: transparent !important;
+  color: var(--text-3) !important;
+  border: 1px solid var(--rule, #2a2a34) !important;
+  cursor: pointer;
+}
+.preg-clear:hover {
+  color: var(--text-1) !important;
+  border-color: var(--text-3) !important;
+}
+.preg-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  padding: 4px 10px !important;
+  border: 1px solid rgba(201, 168, 76, 0.45) !important;
+  background: rgba(201, 168, 76, 0.06) !important;
+  white-space: nowrap;
+}
+
+/* Group header above each status group — refine to dossier feel */
+.preg-group-hd {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  padding: 12px 18px !important;
+}
+
+@media (max-width: 760px) {
+  .preg-toolbar {
+    position: static !important;
+    padding: var(--space-3) var(--space-4) !important;
+  }
+  .preg-search-wrap { flex: 1 1 100% !important; margin-left: 0 !important; }
+}
