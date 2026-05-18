@@ -13372,10 +13372,16 @@ button.class-chip-btn{
 <div class="page"><div id="root"></div></div>
 
 <!-- 1. Registry data — edit this file to add characters, faculty, clubs etc. -->
+<!-- 2. Structural configs + icons — split out of app.jsx so layout/data
+        changes don't require touching the giant component file. Loaded
+        in order so the globals (CDR.Icon, CDR.JOIN_WIZARD, etc.) are
+        available by the time app.jsx mounts. -->
 <script>
   (function () {
     var v = '?v=' + Date.now();
     document.write('<script src="data.js' + v + '"><\/script>');
+    document.write('<script type="text/babel" data-presets="react" src="src/icons.jsx' + v + '"><\/script>');
+    document.write('<script type="text/babel" data-presets="react" src="src/configs.jsx' + v + '"><\/script>');
     document.write('<script type="text/babel" data-presets="react" src="app.jsx' + v + '"><\/script>');
   })();
 </script>

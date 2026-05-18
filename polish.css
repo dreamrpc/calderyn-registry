@@ -1,10 +1,38 @@
 /* ════════════════════════════════════════════════════════════════════════
    CALDERYN — POLISH OVERRIDES
-   ────────────────────────────────────────────────────────────────────────
-   Loaded AFTER the inline <style> block. Same-specificity rules WIN
-   on later-in-source. Touches font-size, family, weight, letter-spacing
-   and a handful of padding/spacing values. Never touches layout
-   primitives (display / grid / flex / position) so behaviour is preserved.
+   ════════════════════════════════════════════════════════════════════════
+
+   Loaded AFTER the inline <style> block in index.html. Same-specificity
+   rules win on later-in-source; that's why this file appends rather
+   than tries to be self-contained.
+
+   TABLE OF CONTENTS — search by section banner ──────────────────────────
+
+     TYPE SCALE & DESIGN TOKENS .....................  line 1
+     MASTHEAD .......................................  search 'MASTHEAD'
+     TABS ...........................................  search 'TABS'
+     PAGE HEAD ......................................  search 'PAGE HEAD'
+     LORE / HOUSES + CURRICULUM .....................  search 'LORE'
+     CAMPUS MAP .....................................  search 'CAMPUS MAP'
+     FACULTY ........................................  search 'FACULTY'
+     STUDENTS .......................................  search 'STUDENTS'
+     CLUBS ..........................................  search 'CLUBS'
+     STRATA .........................................  search 'STRATA'
+     OUTSIDE ........................................  search 'OUTSIDE'
+     POWERS .........................................  search 'POWERS'
+     JOIN FORM ......................................  search 'JOIN FORM'
+     GLOBAL SEARCH ..................................  search 'GLOBAL SEARCH'
+     RULES SECTIONS .................................  search 'RULES'
+     HOME LANDING PAGE ..............................  search 'HOME'
+     HOME — REFINEMENT PASS .........................  search 'refinement pass'
+     PR A · FOUNDATION ..............................  search 'PR A'
+     PR B · NAV REDESIGN ............................  search 'PR B'
+     PR C · FORM WIZARD .............................  search 'PR C'
+
+   Section banners look like:
+     /* ════ HEADING ════ */          (major bucket)
+     /* ── subheading ── */           (sub-section inside a bucket)
+   Banner names are the durable anchors — line numbers will drift.
    ════════════════════════════════════════════════════════════════════════ */
 
 :root {
