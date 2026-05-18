@@ -4226,6 +4226,80 @@ function humanizeFieldKey(k){
   return k.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
 }
 
+/* ──────────────────────────────────────────────────────────────────────
+   JOIN STATS BAR — always-visible slot availability strip
+   ──────────────────────────────────────────────────────────────────────
+   Renders above the wizard chrome whenever the join tab is active.
+   Cells switch based on the chosen type so writers always know what's
+   open while they fill in the form.
+
+   Pre-type-pick:  global registry overview (students / faculty / clubs
+                   / open seats across the school).
+   Per-type:       slot availability specific to the application — open
+                   roles, open seats, current rosters etc.
+   ──────────────────────────────────────────────────────────────────── */
+function JoinStatsBar({ type }){
+  const cells = useMemo(() => {
+    const out = [];
+    if (!type){
+      const openSeats = getOpenGovSeats().length
+                      + getOpenClubPositions().length
+                      + getOpenFacultyRoles().length;
+      out.push({ label: "Active students", num: (D.students || []).length });
+      out.push({ label: "Faculty",         num: (D.faculty  || []).length });
+      out.push({ label: "Clubs",           num: (D.clubs    || []).length });
+      out.push({ label: "Open seats",      num: openSeats });
+      return out;
+    }
+    if (type === "student"){
+      out.push({ label: "Active students", num: (D.students || []).length });
+      out.push({ label: "Houses",          num: (D.houses   || []).length });
+      out.push({ label: "Open club roles", num: getOpenClubPositions().length });
+      out.push({ label: "Open gov seats",  num: getOpenGovSeats().length });
+    } else if (type === "faculty"){
+      const open  = getOpenFacultyRoles().length;
+      const total = (D.faculty || []).length + open;
+      out.push({ label: "Open positions",  num: open, of: total });
+      out.push({ label: "Faculty roster",  num: (D.faculty || []).length });
+    } else if (type === "strata"){
+      const talent = ((D.strata && D.strata.talent)    || []).length;
+      const corp   = ((D.strata && D.strata.corporate) || []).length;
+      out.push({ label: "STRATA talent",    num: talent });
+      out.push({ label: "STRATA corporate", num: corp });
+      out.push({ label: "Total roster",     num: talent + corp });
+    } else if (type === "club"){
+      const open = getOpenClubPositions().length;
+      out.push({ label: "Open positions", num: open });
+      out.push({ label: "Active clubs",   num: (D.clubs || []).length });
+    } else if (type === "gov"){
+      const open = getOpenGovSeats().length;
+      out.push({ label: "Open seats",  num: open });
+      out.push({ label: "Active members", num: ((D.studentGov && D.studentGov.members) || []).length });
+    } else if (type === "collective"){
+      const groups = (D.groups || []).length;
+      out.push({ label: "Collectives", num: groups });
+    } else if (type === "outside"){
+      out.push({ label: "External orgs", num: (D.outside || []).length });
+    }
+    return out;
+  }, [type]);
+
+  if (cells.length === 0) return null;
+  return (
+    <div className="join-stats-bar" role="region" aria-label="Application statistics">
+      {cells.map((c, i) => (
+        <div key={i} className="join-stats-cell">
+          <div className="join-stats-num">
+            {c.num}
+            {c.of != null && <span className="join-stats-of"> / {c.of}</span>}
+          </div>
+          <div className="join-stats-label">{c.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function JoinTab(){
   const [type, setType]   = useState(null);
   const [form, setForm]   = useState({});
@@ -4417,6 +4491,7 @@ function JoinTab(){
     return (
       <div className="join">
         <div className="join-form-wrap">
+          <JoinStatsBar type={type}/>
           <div className="join-confirm-aaa">
             {/* CINEMATIC MOMENT — the Vanguard has just been briefed.
                 The four portraits flicker in sequence for ~2s as if
@@ -4577,6 +4652,11 @@ function JoinTab(){
       </div>
 
       <div className="join-form-wrap">
+        {/* STATS BAR — persistent slot availability strip. Shows
+            global overview before a type is picked, then switches
+            to type-specific stats. */}
+        <JoinStatsBar type={type}/>
+
         {/* WIZARD HEAD — Riot-quality numbered step indicator above
             the page title. Shown only once a type has been selected
             (step >= 1) AND the type is wizardized. */}

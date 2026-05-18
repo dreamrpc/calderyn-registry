@@ -7849,3 +7849,80 @@ code, pre, kbd, samp, var, tt,
 .committee-tag, .office-tag, .council-tag {
   font-family: var(--mono, 'Söhne Mono', ui-monospace, monospace);
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   JOIN · STATS BAR
+   Always-visible slot-availability strip above the form. Sticks at
+   the top of the form-wrap from type-picker through confirmation.
+   Editorial grid — big Druk numbers, mono caps labels.
+   ════════════════════════════════════════════════════════════════════ */
+.join-stats-bar {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 1px;
+  max-width: 1100px;
+  margin: 0 auto var(--space-6);
+  background: var(--rule, #2a2a34);
+  border: 1px solid var(--rule, #2a2a34);
+  /* Sticky so it stays in view as the writer scrolls through long
+     pages of the wizard. Top offset clears the masthead + tabs. */
+  position: sticky;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--space-4));
+  z-index: 50;
+  box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.6);
+}
+.join-stats-cell {
+  padding: var(--space-4) var(--space-5);
+  background: var(--bg-1, #0c0c10);
+  text-align: left;
+  transition: background-color var(--motion-base, 180ms) ease;
+}
+.join-stats-cell:hover {
+  background: var(--bg-2, #15151a);
+}
+.join-stats-num {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 40px);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: var(--text-1, #f5f1e8);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.join-stats-of {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 700;
+  font-size: 0.45em;
+  color: var(--text-3, #948d80);
+  letter-spacing: 0.02em;
+}
+.join-stats-label {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-3, #948d80);
+  margin-top: var(--space-2);
+}
+
+/* Below 760px, stack vertically — too many cells to fit horizontally
+   on phones, the vertical stack keeps each readable. */
+@media (max-width: 760px) {
+  .join-stats-bar {
+    grid-auto-flow: row;
+    position: static; /* unstick at phone size, the masthead already
+                         takes most of the vertical space */
+  }
+  .join-stats-cell {
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .join-stats-num { font-size: 24px; }
+  .join-stats-label { margin-top: 0; }
+}
