@@ -51,6 +51,58 @@ const RegContext = React.createContext({
 });
 
 /* REUSABLE COMPONENTS ───────────────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ICON SYSTEM
+   ─────────────────────────────────────────────────────────────────────────
+   Inline Lucide SVGs (MIT). One <Icon name="..."/> component instead of
+   text-glyph decorations. Stroke 1.5px, viewBox 24x24, currentColor.
+   Add new icons to ICON_PATHS as needed — keep them sorted alphabetically.
+   ───────────────────────────────────────────────────────────────────────── */
+const ICON_PATHS = {
+  "alert-triangle": <><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></>,
+  "arrow-left":     <><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></>,
+  "arrow-right":    <><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>,
+  "arrow-up-right": <><path d="M7 7h10v10"/><path d="M7 17 17 7"/></>,
+  "book-open":      <><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></>,
+  "check":          <><path d="M20 6 9 17l-5-5"/></>,
+  "chevron-right":  <><path d="m9 18 6-6-6-6"/></>,
+  "external-link":  <><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/></>,
+  "file-text":      <><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></>,
+  "flag":           <><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></>,
+  "info":           <><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></>,
+  "map":            <><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></>,
+  "menu":           <><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></>,
+  "scroll-text":    <><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></>,
+  "search":         <><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></>,
+  "shield":         <><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></>,
+  "sparkles":       <><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></>,
+  "users":          <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
+  "x":              <><path d="M18 6 6 18"/><path d="m6 6 12 12"/></>,
+};
+function Icon({ name, size = 16, stroke = 1.5, className = "", style }){
+  const paths = ICON_PATHS[name];
+  if (!paths) return null;
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={stroke}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={"icon " + className}
+      style={style}
+      aria-hidden="true"
+      focusable="false"
+    >
+      {paths}
+    </svg>
+  );
+}
+
 function CLink({name, link, cls}){
   if(!name) return null;
   const cn = "clink" + (cls ? " " + cls : "");
@@ -586,7 +638,7 @@ function HomeCTA({setTab}){
   const [ref, inView] = useInView(0.4);
   return (
     <section ref={ref} className={"home-section home-cta " + (inView ? "is-in" : "")}>
-      <div className="home-cta-stamp">⚑ APPLICATIONS OPEN</div>
+      <div className="home-cta-stamp"><Icon name="flag" size={12}/> APPLICATIONS OPEN</div>
       <h2 className="home-cta-title">Enter the Registry.</h2>
       <p className="home-cta-sub">
         Read the rules. Read the lore. Then apply. We review in the order we get
@@ -2777,24 +2829,24 @@ function StrataOverview({onJump}){
         <button className="strata-stat" onClick={() => onJump("corporate")}>
           <div className="strata-stat-num">{corpFilled}<span className="strata-stat-of">/{corpRoles}</span></div>
           <div className="strata-stat-label">Corporate roles filled</div>
-          <div className="strata-stat-sub">Internal structure ↗</div>
+          <div className="strata-stat-sub">Internal structure <Icon name="arrow-up-right" size={11} className="inline-icon"/></div>
         </button>
         <button className="strata-stat" onClick={() => onJump("talent")}>
           <div className="strata-stat-num">{heroFilled}<span className="strata-stat-of">/{heroSlots}</span></div>
           <div className="strata-stat-label">Heroes on the roster</div>
-          <div className="strata-stat-sub">A → D-list talent ↗</div>
+          <div className="strata-stat-sub">A–D-list talent <Icon name="arrow-up-right" size={11} className="inline-icon"/></div>
         </button>
         <button className="strata-stat" onClick={() => onJump("groups")}>
           <div className="strata-stat-num">{groupCount}</div>
           <div className="strata-stat-label">{sanctioned} sanctioned · {groupCount - sanctioned} independent · {groupMembers} {groupMembers === 1 ? "member" : "members"} on file</div>
-          <div className="strata-stat-sub">Vanguard & collectives ↗</div>
+          <div className="strata-stat-sub">Vanguard & collectives <Icon name="arrow-up-right" size={11} className="inline-icon"/></div>
         </button>
       </section>
 
       <section className="strata-directory">
         <div className="strata-directory-hd">
           <div>
-            <div className="strata-directory-eyebrow">◆ Unified Directory</div>
+            <div className="strata-directory-eyebrow"><Icon name="sparkles" size={11} className="inline-icon"/> Unified Directory</div>
             <h3 className="strata-directory-title">Every name on the STRATA books.</h3>
             <p className="strata-directory-blurb">Corporate, talent, and group affiliations in one place. Names with cross-affiliation are flagged.</p>
           </div>
@@ -2814,7 +2866,7 @@ function StrataOverview({onJump}){
                   <td>
                     <CLink name={d.char} link={d.link}/>
                     {d.npc && <NpcBadge/>}
-                    {d.crossRef && <span className="strata-crossref" title="Appears in multiple STRATA sections">⇄</span>}
+                    {d.crossRef && <span className="strata-crossref" title="Appears in multiple STRATA sections"><Icon name="arrow-up-right" size={10}/></span>}
                   </td>
                   <td><Chip variant={d.kind === "Corporate" ? "ink" : d.kind === "Sanctioned Group" ? "gold" : d.kind === "Collective" ? "ghost" : "red"}>{d.kind}</Chip></td>
                   <td><span style={{color:"var(--text-mid)"}}>{d.section}</span> <span style={{color:"var(--text-low)", margin:"0 6px"}}>·</span> <span style={{color:"var(--text)", fontWeight:600}}>{d.role}</span></td>
@@ -3337,7 +3389,7 @@ function ClubDetailFull({club, onBack}){
       <div className="clubdf-hero" style={{"--accent": accent}}>
         <div className="clubdf-hero-inner">
           <button className="clubdf-back" onClick={onBack} type="button">
-            <span aria-hidden="true">←</span> All clubs
+            <Icon name="arrow-left" size={12} className="inline-icon"/> All clubs
           </button>
           {club.tag && <div className="clubdf-tag">{club.tag}</div>}
           <h1 className="clubdf-name">{club.name}</h1>
@@ -4181,7 +4233,7 @@ function JoinTab(){
       <div className="join">
         <div className="join-form-wrap">
           <div className="join-confirm">
-            <div className="join-confirm-stamp">⚑ APPLICATION RECEIVED</div>
+            <div className="join-confirm-stamp"><Icon name="flag" size={12} className="inline-icon"/> APPLICATION RECEIVED</div>
             <h3>Application <span className="accent">sent.</span></h3>
             <p>
               Your application has been forwarded to the admin channel.
@@ -4201,7 +4253,7 @@ function JoinTab(){
     <div className="join">
       <div className="join-hero">
         <div className="join-hero-inner">
-          <div className="join-hero-stamp">⚑ INTAKE · 2026 INTAKE OPEN</div>
+          <div className="join-hero-stamp"><Icon name="flag" size={12} className="inline-icon"/> INTAKE · 2026 INTAKE OPEN</div>
           <h2>Join the <span className="accent">registry.</span></h2>
           <p>
             Calderyn is open. Pick what you're applying for, fill in the details, we'll review on Discord. <strong>One form per character</strong> — submit multiples separately.
@@ -5399,7 +5451,7 @@ function MapTab(){
             activeDistrict && (
               <section className="map-district">
                 <header className="map-district-head">
-                  <div className="lore-eyebrow">◆ District {String(activeIdx + 1).padStart(2, "0")}</div>
+                  <div className="lore-eyebrow"><Icon name="sparkles" size={11} className="inline-icon"/> District {String(activeIdx + 1).padStart(2, "0")}</div>
                   <h2 className="lore-h map-district-h">{activeDistrict.name}.</h2>
                   <p className="map-district-blurb">{activeDistrict.blurb}</p>
                   <div className="map-district-meta">

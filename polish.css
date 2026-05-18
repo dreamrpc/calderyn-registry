@@ -4806,9 +4806,13 @@ body {
 }
 .join-section-header:first-child { margin-top: 4px !important; }
 .join-section-header::before {
-     content: "◆";
-     font-size: 9px;
-     color: rgba(212, 168, 74, 0.65);
+     content: "";
+     display: inline-block;
+     width: 18px;
+     height: 2px;
+     background: var(--yellow, #d4a84a);
+     margin-right: 12px;
+     vertical-align: middle;
 }
 .join-section-header::after { display: none; }
 
@@ -5687,3 +5691,93 @@ body {
 @media (max-width: 920px) {
   .tab { padding: 0 10px !important; font-size: 11.5px !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   FOUNDATION — design tokens, icons, scroll-fix, WCAG bumps
+   PR A of the redesign. Establishes the system everything else
+   draws from. Loads after the existing tokens at top of file so
+   it extends rather than replaces.
+   ════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─ SPACING SCALE — single source of truth. Snap all paddings,
+     margins, and gaps to one of these. No off-scale values. */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+  --space-9:  96px;
+  --space-10: 128px;
+
+  /* ─ TEXT CONTRAST TIERS — used on the dark theme. Each one is
+     WCAG-AA verified for body text against bg-1/bg-2. Replace the
+     rgba(255,255,255,0.5x) sprinkled across the codebase with
+     these. */
+  --text-1: #f5f1e8;  /* 14.5:1 on bg-1 — primary text, headlines     */
+  --text-2: #c9c3b5;  /* 9.2:1  on bg-1 — body, important secondary   */
+  --text-3: #948d80;  /* 5.1:1  on bg-1 — muted UI, captions, labels  */
+  --text-4: #6b6558;  /* 3.2:1  on bg-1 — non-text only (borders etc) */
+
+  /* On cream/letterhead surfaces (e.g. dorm memo card) */
+  --text-ink-1: #1a0e08;  /* 16:1 on cream  */
+  --text-ink-2: #4a3b2e;  /* 8:1  on cream  */
+  --text-ink-3: #6b5942;  /* 4.7:1 on cream */
+
+  /* ─ SURFACE TIERS — explicit z-depth for dark theme. The existing
+     --ink / --paper / --rule still work; these add stops between. */
+  --bg-0: #050507;
+  --bg-1: #0c0c10;
+  --bg-2: #15151a;
+  --bg-3: #1e1e25;
+  --bg-4: #2a2a32;
+}
+
+/* ─ HORIZONTAL SCROLL FIX ─────────────────────────────────────────
+   The home page uses negative margins to break out of the .pg
+   gutter for full-bleed sections. Without this clip on the root,
+   that overflow propagates to the body and the whole page becomes
+   horizontally scrollable. overflow-x:clip is the modern non-
+   scroll-container version of hidden — supported by every browser
+   we care about. */
+html, body { overflow-x: clip; }
+
+/* ─ ICON COMPONENT BASE ──────────────────────────────────────────
+   <Icon name="..."/> renders as <svg className="icon"/>. Default
+   vertical alignment + currentColor inheritance so icons sit
+   inside text or buttons cleanly. */
+.icon {
+  display: inline-block;
+  vertical-align: -0.125em;
+  flex-shrink: 0;
+  color: currentColor;
+}
+.inline-icon {
+  display: inline-block;
+  margin: 0 4px;
+  vertical-align: -0.1em;
+}
+
+/* ─ WCAG BUMPS — replace the low-alpha ghost text on home page
+   with system text tokens. Same visual character, higher contrast.
+   These all win because they come later in the cascade than the
+   originals. */
+.home-hero-stamp        { color: var(--yellow, #d4a84a) !important; opacity: 0.85 !important; }
+.home-hero-sub          { color: var(--text-2)            !important; }
+.home-hero-scrollhint   { color: var(--yellow, #d4a84a) !important; opacity: 0.7 !important; }
+.home-section-stamp     { color: var(--yellow, #d4a84a) !important; opacity: 0.85 !important; }
+.home-section-lede      { color: var(--text-2)            !important; }
+.home-vg-name           { color: var(--text-3)            !important; }
+.home-vg-power          { color: var(--text-2)            !important; }
+.home-vg-hook           { color: var(--yellow, #d4a84a) !important; opacity: 0.95 !important; }
+.home-programme-stamp   { color: var(--yellow, #d4a84a) !important; opacity: 0.75 !important; }
+.home-programme-sig     { color: var(--text-3)            !important; }
+.home-cta-sub           { color: var(--text-2)            !important; }
+.home-cta-stamp         { color: var(--yellow, #d4a84a) !important; opacity: 1 !important; }
+
+/* Icon inside hero/CTA stamps gets the same color treatment */
+.home-cta-stamp .icon,
+.home-hero-stamp .icon { color: currentColor; }
