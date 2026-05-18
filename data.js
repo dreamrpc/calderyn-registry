@@ -920,15 +920,6 @@ outside: [
           { role: "Underboss" },
           { role: "Capo" },
           { role: "Soldier" },
-          {
-            role: "Nightclub Singer",
-            char: "Briar Musgraves",
-            power: "Resonant Aura Reading, Emotional Atmosphere Manipulation, Vocal Entrancement, Emotional Echoes",
-            expression: "Resonant Aura Reading\nBriar perceives emotional resonance through sound, rhythm, vocal inflection, and atmosphere. Music sharpens this perception dramatically, especially live singing. Emotional states manifest to her as layered sensory impressions: tones, textures, temperatures, pressure shifts, phantom tastes, or distortions in sound. Crowds become emotional symphonies, while individuals feel like isolated instruments she can tune into with frightening precision.\n\nShe can sense: attraction, grief, fear, guilt, obsession, deception, emotional instability, desperation, suppressed anger, and emotional attachment. The stronger the emotion, the \"louder\" the resonance. Direct singing creates the clearest readings, particularly if eye contact or emotional focus is maintained.",
-            expressionDoc: "https://docs.google.com/document/d/1PSqNwFZpLZTVDERTNYN-VJxPZxDOt1UgCZRB03r_ni4/edit?usp=sharing",
-            drawbacks: "Emotional Overload, Difficulty Separating Her Emotions From Others, Silence Weakens Her, Emotional Blind Spots, Attachment Vulnerability, Hypervigilance & Control Issues, Physical Vulnerability",
-            link: "https://roleplay.chat/profile.php?user=Reverie",
-          },
         ],
       },
       {
@@ -1068,6 +1059,25 @@ outside: [
         roles: [
           { role: "Owner" },
           { role: "Bartender" }, { role: "Bartender" },
+        ],
+      },
+      {
+        name: "The 2/4 Circle",
+        type: "Nightclub",
+        note: "Intimate live-music venue tucked off Greenwich Market. Smaller and more atmospheric than Pulse — focused on vocal acts, jazz nights, and after-hours sets.",
+        roles: [
+          {
+            role: "Nightclub Singer",
+            char: "Briar Musgraves",
+            power: "Resonant Aura Reading, Emotional Atmosphere Manipulation, Vocal Entrancement, Emotional Echoes",
+            expression: "Resonant Aura Reading\nBriar perceives emotional resonance through sound, rhythm, vocal inflection, and atmosphere. Music sharpens this perception dramatically, especially live singing. Emotional states manifest to her as layered sensory impressions: tones, textures, temperatures, pressure shifts, phantom tastes, or distortions in sound. Crowds become emotional symphonies, while individuals feel like isolated instruments she can tune into with frightening precision.\n\nShe can sense: attraction, grief, fear, guilt, obsession, deception, emotional instability, desperation, suppressed anger, and emotional attachment. The stronger the emotion, the \"louder\" the resonance. Direct singing creates the clearest readings, particularly if eye contact or emotional focus is maintained.",
+            expressionDoc: "https://docs.google.com/document/d/1PSqNwFZpLZTVDERTNYN-VJxPZxDOt1UgCZRB03r_ni4/edit?usp=sharing",
+            drawbacks: "Emotional Overload, Difficulty Separating Her Emotions From Others, Silence Weakens Her, Emotional Blind Spots, Attachment Vulnerability, Hypervigilance & Control Issues, Physical Vulnerability",
+            link: "https://roleplay.chat/profile.php?user=Reverie",
+          },
+          { role: "Manager" },
+          { role: "Bartender" },
+          { role: "Bouncer" },
         ],
       },
     ],
