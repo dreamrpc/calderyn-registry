@@ -34,8 +34,9 @@ export async function getFile(env, file) {
   };
 }
 
-// Commit a new version of a file. Returns the new SHA. Caller is
-// responsible for retrying on 409 (concurrent write) using getFile again.
+// Commit a new version of a file. Returns { contentSha, commitSha }.
+// Caller is responsible for retrying on 409 (concurrent write) using
+// getFile again.
 export async function putFile(env, file, newText, currentSha, commitMessage) {
   const encoded = encodeBase64Utf8(newText);
   const res = await fetch(
@@ -58,20 +59,22 @@ export async function putFile(env, file, newText, currentSha, commitMessage) {
     throw err;
   }
   const data = await res.json();
-  return data.content?.sha;
+  return { contentSha: data.content?.sha, commitSha: data.commit?.sha };
 }
 
 // Update a file with retry on SHA conflict. `mutate(currentText)` returns
 // the new text; called fresh on each attempt so it sees the latest file.
+// Returns { commitSha, unchanged } — commitSha is undefined when nothing
+// changed.
 export async function updateFile(env, file, commitMessage, mutate, maxAttempts = 4) {
   let lastErr;
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const current = await getFile(env, file);
     const next = mutate(current.text);
-    if (next === current.text) return { sha: current.sha, unchanged: true };
+    if (next === current.text) return { unchanged: true };
     try {
-      const sha = await putFile(env, file, next, current.sha, commitMessage);
-      return { sha };
+      const { commitSha } = await putFile(env, file, next, current.sha, commitMessage);
+      return { commitSha };
     } catch (err) {
       lastErr = err;
       // 409 = SHA mismatch (someone else wrote between get and put).
