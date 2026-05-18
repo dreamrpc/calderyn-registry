@@ -8,9 +8,16 @@
    so that webhook URLs are never exposed in client code.
    ════════════════════════════════════════════════════════════════════════ */
 
-const WORKER_BASE = "https://calderyn-registry-relay.dreamroleplaywriter.workers.dev";
-const WORKER_URL  = WORKER_BASE + "/submit";
-const QUOTA_URL   = WORKER_BASE + "/quota-stats";
+const WORKER_BASE       = "https://calderyn-registry-relay.dreamroleplaywriter.workers.dev";
+const WORKER_URL        = WORKER_BASE + "/submit";
+const QUOTA_URL         = WORKER_BASE + "/quota-stats";
+const WRITER_TAGS_URL   = WORKER_BASE + "/writer-tags";
+
+// Fallback Writer Tag list used until the live fetch from /writer-tags
+// returns (or if it fails). Keep it roughly in sync with the values
+// currently in worker/src/writers.js — the live fetch supersedes it
+// the moment it arrives.
+const WRITER_TAGS_FALLBACK = ["Dream", "Katniss", "Skully", "Star", "Star King", "Storm", "Tyler", "Wilder"];
 
 const {useState, useMemo, useEffect, useCallback, useRef} = React;
 const D = window.CALDERYN;
@@ -3781,6 +3788,28 @@ function JoinTab(){
   // Worker so the writers.js mapping never leaves the server — only
   // counts and limits come down to the client.
   const [quotaStats, setQuotaStats] = useState(null);
+  // Writer Tag dropdown options. Starts as the fallback list and gets
+  // replaced by /writer-tags from the Worker so auto-mapped writers
+  // (e.g. Skully via Gremlin → Skully) appear without code edits.
+  const [oocTags, setOocTags] = useState(WRITER_TAGS_FALLBACK);
+
+  // Fetch the live Writer Tag list once on mount. Failures fall back
+  // to WRITER_TAGS_FALLBACK so the form remains usable offline.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(WRITER_TAGS_URL);
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (cancelled || !Array.isArray(data.tags) || data.tags.length === 0) return;
+        setOocTags(data.tags);
+      } catch {
+        // Leave the fallback in place.
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   const set = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
 
@@ -3974,7 +4003,7 @@ function JoinTab(){
             </aside>
           )}                                                                          
 
-            <JoinFieldset type={type} form={form} set={set} quotaStats={quotaStats}/>
+            <JoinFieldset type={type} form={form} set={set} quotaStats={quotaStats} oocTags={oocTags}/>
 
             <div className="join-actions">
               <button
@@ -4406,14 +4435,6 @@ function CollectiveFieldset({form, set, Common}){
   );
 }
 
-// Known OOC writer tags shown in the application-form dropdown. The
-// real RPC-username ↔ OOC mapping lives in the Worker (worker/src/
-// writers.js) and is never sent to the client; the list here is just
-// the publicly-known set of writers so a familiar dropdown is shown.
-// Adding a writer here doesn't grant any quota access — server-side
-// is the source of truth.
-const KNOWN_OOC_TAGS = ["Dream", "Katniss", "Star", "Star King", "Storm", "Tyler", "Wilder"];
-
 // Small read-only panel that surfaces a writer's current per-pool,
 // per-tier character counts the moment they pick their Writer Tag.
 // Counts come from the Worker's /quota-stats endpoint; the OOC mapping
@@ -4478,7 +4499,7 @@ function QuotaStatsPanel({stats, activePool}){
   );
 }
 
-function JoinFieldset({type, form, set, quotaStats}){
+function JoinFieldset({type, form, set, quotaStats, oocTags}){
   // Pool this form would route to — student form → student pool,
   // everything else → adult. Used to highlight the relevant row in
   // the quota panel below the Writer Tag dropdown.
@@ -4516,7 +4537,7 @@ function JoinFieldset({type, form, set, quotaStats}){
           onChange={e => onOocSelect(e.target.value)}
         >
           <option value="">Select your handle…</option>
-          {KNOWN_OOC_TAGS.map(n => <option key={n} value={n}>{n}</option>)}
+          {(oocTags || []).map(n => <option key={n} value={n}>{n}</option>)}
           <option value="_other">Other / new writer…</option>
         </select>
         {form.oocPreset === "_other" && (
