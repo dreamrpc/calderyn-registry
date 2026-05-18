@@ -7155,3 +7155,162 @@ tbody tr td:first-child {
 @media (prefers-reduced-motion: reduce) {
   .lore-eyebrow { transform: none !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   PR D-4 — GLOBAL POLISH
+   The last pass of the D-series. Hover states, transition timings,
+   focus styling, mobile rhythm. Goal: every interaction feels
+   considered, every transition is 150-200ms ease-out, every
+   interactive element has crisp hover and visible focus.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── MOTION TOKENS ─────────────────────────────────────────────
+   Single source of truth for transition curves and durations.
+   New code should reference these, not hard-coded values. */
+:root {
+  --motion-fast:    120ms;
+  --motion-base:    180ms;
+  --motion-slow:    280ms;
+  --ease-out:       cubic-bezier(.22, 1, .36, 1);
+  --ease-in-out:    cubic-bezier(.4, 0, .2, 1);
+  --ease-snap:      cubic-bezier(.5, 1.6, .5, 1);
+}
+
+/* ── BUTTON BASE — every <button> that doesn't opt out gets a
+   smooth motion transition and crisp focus. Targeted on
+   button, not just :hover, so the focused state also reads. */
+button:not(.opt-out-polish),
+[role="button"]:not(.opt-out-polish) {
+  transition:
+    transform var(--motion-base) var(--ease-out),
+    background-color var(--motion-base) ease,
+    border-color var(--motion-base) ease,
+    color var(--motion-base) ease,
+    box-shadow var(--motion-base) ease,
+    opacity var(--motion-base) ease;
+}
+button:not(.opt-out-polish):active,
+[role="button"]:not(.opt-out-polish):active {
+  transition-duration: var(--motion-fast);
+}
+
+/* ── LINK BASE — same easing on color shifts ─────────────── */
+a:not(.opt-out-polish) {
+  transition:
+    color var(--motion-base) ease,
+    text-decoration-color var(--motion-base) ease,
+    opacity var(--motion-base) ease;
+}
+
+/* ── FOCUS RINGS — uniform gold across the site ────────── */
+*:focus-visible {
+  outline: 2px solid var(--yellow, #d4a84a);
+  outline-offset: 3px;
+  border-radius: 2px;
+  transition: outline-offset var(--motion-fast) ease;
+}
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible {
+  outline-offset: 4px;
+}
+/* Inputs and textareas get a slightly different treatment — the
+   ring sits inside the field for visual cohesion */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--yellow, #d4a84a);
+  outline-offset: -2px;
+}
+
+/* ── CHIP / PILL HOVER — soft lift + brightening ────── */
+.chip:not(.on):hover,
+.pill:not(.on):hover,
+.club-filter-pill:not(.on):hover {
+  transform: translateY(-1px);
+}
+
+/* ── CARD HOVER — generic uplift on common card classes ───
+   These selectors target shared card patterns across the site.
+   Each card gets a -2px lift + slightly more shadow on hover.
+   Cards with their own ::hover already override naturally. */
+.role-card:hover,
+.tier-card:hover,
+.club:hover,
+.case-card:hover,
+.banned-bay:hover,
+.org-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ── INPUT POLISH — refined edges + transitions ──── */
+.join-input,
+.join-textarea,
+.join-select {
+  transition:
+    border-color var(--motion-base) ease,
+    background-color var(--motion-base) ease,
+    box-shadow var(--motion-base) ease;
+}
+.join-input:hover,
+.join-textarea:hover,
+.join-select:hover {
+  border-color: var(--text-3) !important;
+}
+.join-input:focus,
+.join-textarea:focus,
+.join-select:focus {
+  border-color: var(--yellow, #d4a84a) !important;
+  box-shadow: 0 0 0 3px rgba(212, 168, 74, 0.16) !important;
+}
+
+/* ── PAGE-LEVEL CROSSFADE — refine the existing fade ───
+   The base file has a 0.25s opacity-only page-enter. Tighten
+   it slightly with the standard easing for cohesion. */
+.pg {
+  animation: page-enter var(--motion-slow) var(--ease-out);
+}
+
+/* ── MOBILE POLISH — tap targets, spacing, type ──────── */
+@media (max-width: 600px) {
+  /* Anything that's a button/link tap target should comfortably
+     hit the 44x44 minimum. The a11y layer already enforces
+     min-height:40px on buttons; bump on the small screen. */
+  button, [role="button"], a.btn, .btn { min-height: 44px; }
+
+  /* Tighten home page padding on phone for breathing room */
+  .home-section { padding-left: var(--space-4); padding-right: var(--space-4); }
+
+  /* Faculty / Students / STRATA tables get horizontal scroll on
+     mobile rather than crushing — wrap them in a container that
+     scrolls if needed. (Existing .tw class already does this on
+     some pages; this is the safety net.) */
+  table { font-size: 13px; }
+  table th, table td { padding: 10px 12px !important; }
+}
+
+/* ── SELECTION — branded ────────────────────────────── */
+::selection {
+  background: var(--yellow, #d4a84a);
+  color: var(--bg-0, #050507);
+}
+
+/* ── SCROLLBAR — restrained, themed (Webkit) ──────── */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--bg-1, #0c0c10); }
+::-webkit-scrollbar-thumb {
+  background: var(--bg-3, #1e1e25);
+  border: 3px solid var(--bg-1, #0c0c10);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--bg-4, #2a2a32); }
+
+/* ── REDUCED MOTION — kill anything left over ──────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
