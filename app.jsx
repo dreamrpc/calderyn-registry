@@ -1898,40 +1898,64 @@ const LORE_TABS = [
 
 function HousesTab(){
   const ctx = React.useContext(RegContext);
-  const [view, setView] = useState("world");
+  // active = which section the sidebar should highlight. Defaults
+  // to the first; updated by the IntersectionObserver as the writer
+  // scrolls and by sidebar-click optimistic updates.
+  const [active, setActive] = useState(LORE_TABS[0]?.id || "world");
+
+  // Honour deep-link hashes like #lore/vanguard on mount by scrolling
+  // to that anchor.
   useEffect(() => {
     if (ctx.targetSubview && LORE_TABS.find(t => t.id === ctx.targetSubview)){
-      setView(ctx.targetSubview);
+      const el = document.getElementById("lore-" + ctx.targetSubview);
+      if (el) {
+        // Defer to next frame so the section has mounted
+        requestAnimationFrame(() => {
+          el.scrollIntoView({ behavior: "instant", block: "start" });
+        });
+      }
+      setActive(ctx.targetSubview);
       ctx.consumeSubview();
     }
   }, [ctx]);
 
-  const activeLore = LORE_TABS.find(t => t.id === view) || LORE_TABS[0];
+  // SCROLL-SPY — observe each section, set `active` to whichever
+  // is currently nearest the top of the viewport. rootMargin pulls
+  // the trigger zone down 20% from the top of the viewport so the
+  // sidebar updates as a section enters the upper third, not the
+  // moment its bottom edge crosses in.
+  useEffect(() => {
+    const sections = LORE_TABS
+      .map(t => document.getElementById("lore-" + t.id))
+      .filter(Boolean);
+    if (!sections.length) return;
 
-  // Render the title with the trailing word in italic prestige serif
-  const titleWithItalic = (() => {
-    const parts = activeLore.label.split(" ");
-    if (parts.length < 2) return activeLore.label;
-    const last = parts.pop();
-    return <>{parts.join(" ")} {last.toLowerCase()}</>;
-  })();
+    const io = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting);
+      if (visible.length === 0) return;
+      const top = visible.sort(
+        (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
+      )[0];
+      const id = top.target.id.replace(/^lore-/, "");
+      if (LORE_TABS.find(t => t.id === id)) setActive(id);
+    }, { rootMargin: "-20% 0px -60% 0px", threshold: 0 });
 
-  // Per-sub-tab body copy so the page-head intro reflects the active section
-  const bodyMap = {
-    world:     "Eleven years on, the world has not been the same since the first hero team walked out onto a stage in west London. STRATA owns most of them. Calderyn trains the rest.",
-    history:   "Sixty years of preparation for a war that never came. Project Cradle, Strathogen, the pipeline that shaped almost every working superhuman in Britain.",
-    vanguard:  "Four members. The most powerful superhumans alive. Paragon, Vigil, Aegis, Switchboard — and the politics keeping them on the same team.",
-    houses:    "Four houses, four virtues, four namesakes. Pick the one that matches the character you want to play.",
-    dean:      "Dr. Devika Ravindrakumar. Fifty-three. Field nullification at fifteen metres. Students are afraid of her before they meet her, and more afraid afterwards.",
-    incidents: "The MV Cassandra. February 2024. A press cycle no one survived intact — and the contingency plans Felix Strathe quietly began developing the day after.",
+    sections.forEach(s => io.observe(s));
+    return () => io.disconnect();
+  }, []);
+
+  const goTo = (id) => {
+    const el = document.getElementById("lore-" + id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setActive(id);
   };
 
   return (
     <div className="subnav-host">
       <PageHead
         stamp="DOC · 02 · LORE"
-        title={titleWithItalic}
-        body={bodyMap[view] || bodyMap.world}
+        title={<>The <em>lore</em></>}
+        body="Six sections. Read in order or jump to whichever section you need. The sidebar tracks where you are."
         note={<>Public record · IC-visible<br/>Plot-locked content lives elsewhere</>}
         pageNum="P. 002 / VIII"
       />
@@ -1941,12 +1965,12 @@ function HousesTab(){
             <div className="lore-toc-stamp">CONTENTS</div>
             <ol className="lore-toc-list">
               {LORE_TABS.map((t, i) => (
-                <li key={t.id} className={"lore-toc-item" + (view === t.id ? " on" : "")}>
+                <li key={t.id} className={"lore-toc-item" + (active === t.id ? " on" : "")}>
                   <button
                     type="button"
                     className="lore-toc-btn"
-                    onClick={() => { setView(t.id); window.scrollTo({top: 0, behavior: 'instant'}); }}
-                    aria-current={view === t.id ? "page" : undefined}
+                    onClick={() => goTo(t.id)}
+                    aria-current={active === t.id ? "true" : undefined}
                   >
                     <span className="lore-toc-n">{String(i + 1).padStart(2, "0")}</span>
                     <span className="lore-toc-label">{t.label}</span>
@@ -1957,12 +1981,12 @@ function HousesTab(){
           </div>
         </aside>
         <main className="lore-main">
-          {view === "world" && <LoreWorld/>}
-          {view === "history" && <LoreHistory/>}
-          {view === "vanguard" && <LoreVanguard/>}
-          {view === "houses" && <LoreHouses/>}
-          {view === "dean" && <LoreDean/>}
-          {view === "incidents" && <LoreIncidents/>}
+          <section id="lore-world"     className="lore-section"><LoreWorld/></section>
+          <section id="lore-history"   className="lore-section"><LoreHistory/></section>
+          <section id="lore-vanguard"  className="lore-section"><LoreVanguard/></section>
+          <section id="lore-houses"    className="lore-section"><LoreHouses/></section>
+          <section id="lore-dean"      className="lore-section"><LoreDean/></section>
+          <section id="lore-incidents" className="lore-section"><LoreIncidents/></section>
         </main>
       </div>
     </div>

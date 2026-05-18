@@ -8501,3 +8501,54 @@ code, pre, kbd, samp, var, tt,
   }
   .preg-search-wrap { flex: 1 1 100% !important; margin-left: 0 !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   AUDIT FIX · LORE SCROLL-SPY (audit #9)
+   All six lore sub-views now stack as one scrollable page. Sidebar
+   tracks active via IntersectionObserver. Each section gets an
+   anchor id ("lore-world", etc) plus scroll-margin-top so clicking
+   the sidebar lands the section below the sticky masthead + tabs.
+   ════════════════════════════════════════════════════════════════════ */
+
+.lore-section {
+  /* Anchor target: ensure the section header lands below the sticky
+     site nav after scrollIntoView. The 24px adds breathing room. */
+  scroll-margin-top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--space-5));
+  padding-bottom: var(--space-9);
+  position: relative;
+}
+.lore-section + .lore-section {
+  margin-top: var(--space-7);
+  /* Subtle gold-tinted hairline between sections so the writer
+     senses progress as they scroll. */
+  border-top: 1px solid rgba(201, 168, 76, 0.18);
+  padding-top: var(--space-7);
+}
+
+/* Lift the sidebar's active-state visibility — the user noted the
+   highlight wasn't obvious enough. Now: brighter red left bar, red
+   background tint stronger, gold accent on the number for the
+   currently-in-view section. */
+.lore-toc-item.on .lore-toc-btn {
+  border-left-color: var(--red, #c11a2c) !important;
+  background: linear-gradient(90deg,
+    rgba(193, 26, 44, 0.18),
+    rgba(193, 26, 44, 0.04) 60%,
+    transparent 100%) !important;
+  border-left-width: 3px !important;
+}
+.lore-toc-item.on .lore-toc-n {
+  color: var(--yellow, #d4a84a) !important;
+}
+.lore-toc-item.on .lore-toc-label {
+  color: var(--text-1, #f5f1e8) !important;
+  font-weight: 700 !important;
+}
+
+/* Smooth-scroll on the whole document so the JS scrollIntoView
+   call animates rather than snaps when the writer clicks a sidebar
+   link. Reduced-motion respects user preference. */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
