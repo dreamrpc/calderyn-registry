@@ -15,9 +15,12 @@ id = "<PASTE_KV_NAMESPACE_ID_HERE>"
 [vars]
 # Snowflake IDs (Discord). Visible to anyone with the Worker code; that's
 # fine — they're not secrets, just identifiers.
-DISCORD_APPLICATION_ID = "<PASTE_DISCORD_APPLICATION_ID>"
+DISCORD_APPLICATION_ID = "1505897337019437148"
 DISCORD_ADMIN_CHANNEL_ID = "<PASTE_CHANNEL_ID_FOR_APPROVALS>"
-DISCORD_ADMIN_ROLE_ID = "<PASTE_ADMIN_ROLE_ID>"
+DISCORD_ADMIN_ROLE_ID = "1498799678551101451"
+DISCORD_GUILD_ID = "1498798317541396730"
+# Role pinged in the "new application" message. Set to the admin role
+# so the same group that approves is the group that gets notified.
 DISCORD_PING_ROLE_ID = "1498799678551101451"
 
 # GitHub repo coordinates.
