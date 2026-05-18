@@ -4,7 +4,7 @@ import { ensureWriterMapping } from "./writer-mapping.js";
 import { lookupOocByRpc } from "./writers.js";
 import { extractRpcUsername, getOocForForm } from "./quota.js";
 
-export async function handleSubmit(request, env) {
+export async function handleSubmit(request, env, ctx) {
   let body;
   try {
     body = await request.json();

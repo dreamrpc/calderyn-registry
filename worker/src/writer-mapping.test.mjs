@@ -72,6 +72,28 @@ test("preserves marker indentation", () => {
   assertTrue(/^  "FreshAccount": "Fresh",$/m.test(next), "indent matches surrounding lines");
 });
 
+test("integration: handleSubmit accepts ctx so ctx.waitUntil doesn't crash", async () => {
+  // Regression guard for the bug where submit.js called `ctx.waitUntil(...)`
+  // but the function signature was `handleSubmit(request, env)` — ctx was
+  // undefined at runtime, and the line would have thrown a ReferenceError
+  // on every submission that triggered the auto-map branch.
+  const fs = await import("node:fs");
+  const path = await import("node:path");
+  const srcDir = path.dirname(new URL(import.meta.url).pathname);
+  const submitText = fs.readFileSync(path.join(srcDir, "submit.js"), "utf-8");
+  // Find the export declaration and make sure ctx is in the parameter list.
+  const m = /export\s+async\s+function\s+handleSubmit\s*\(([^)]*)\)/.exec(submitText);
+  if (!m) throw new Error("handleSubmit declaration not found in submit.js");
+  const params = m[1].split(",").map(s => s.trim());
+  if (!params.includes("ctx")) {
+    throw new Error(
+      `handleSubmit must accept ctx as a parameter (currently: ${m[1]}). ` +
+      `submit.js calls ctx.waitUntil(...) — without ctx in the signature, ` +
+      `that line crashes the moment a new writer submits.`
+    );
+  }
+});
+
 test("integration: every admin-action call site invokes ensureWriterMapping", async () => {
   // Guard against the previous bug where ensureWriterMapping was
   // only wired into the approved-not-blocked branch of finalizeAction

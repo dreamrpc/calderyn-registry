@@ -51,6 +51,33 @@ test("extractRpcUsername: standard URL", () => {
 test("extractRpcUsername: preserves +", () => {
   assertEq(extractRpcUsername("https://roleplay.chat/profile.php?user=blood+eagle"), "blood+eagle");
 });
+test("extractRpcUsername: /u/ path form", () => {
+  assertEq(extractRpcUsername("https://www.roleplay.chat/u/Zephyr"), "Zephyr");
+});
+test("extractRpcUsername: /p/ path form", () => {
+  assertEq(extractRpcUsername("https://www.roleplay.chat/p/Princeton"), "Princeton");
+});
+test("extractRpcUsername: /users/ path form", () => {
+  assertEq(extractRpcUsername("https://roleplay.chat/users/Foo"), "Foo");
+});
+test("extractRpcUsername: /u/ stops at trailing slash", () => {
+  assertEq(extractRpcUsername("https://roleplay.chat/u/Bar/"), "Bar");
+});
+test("extractRpcUsername: /u/ stops at ? and #", () => {
+  assertEq(extractRpcUsername("https://roleplay.chat/u/Baz?ref=x"), "Baz");
+  assertEq(extractRpcUsername("https://roleplay.chat/u/Qux#frag"), "Qux");
+});
+test("extractRpcUsername: ?user= wins when both forms present", () => {
+  // Hypothetical mixed URL — query-string is the canonical form so
+  // it takes precedence over the path segment.
+  assertEq(extractRpcUsername("https://roleplay.chat/u/PathName?user=QueryName"), "QueryName");
+});
+test("extractRpcUsername: path form preserves + (URL-safe space)", () => {
+  assertEq(extractRpcUsername("https://www.roleplay.chat/u/Some+Name"), "Some+Name");
+});
+test("extractRpcUsername: no recognised pattern → null", () => {
+  assertEq(extractRpcUsername("https://example.com/profile/123"), null);
+});
 
 // ─── getTierLimits ────────────────────────────────────────────────────
 test("getTierLimits: defaults when env unset", () => {
