@@ -8059,3 +8059,91 @@ code, pre, kbd, samp, var, tt,
 @media (prefers-reduced-motion: reduce) {
   .join-hud-status-dot { animation: none !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   JOIN · HUD — single-row tightening (overrides earlier HUD block)
+   Single relevant pool per spec; tightens internal rhythm; the bar
+   now feels game-UI authoritative, never a content panel.
+   ════════════════════════════════════════════════════════════════════ */
+.join-hud-inner {
+  flex-wrap: nowrap !important;
+  min-height: 52px !important;
+  padding: 6px var(--space-5) !important;
+}
+.join-hud-left {
+  flex-wrap: nowrap !important;
+  gap: var(--space-4) !important;
+}
+.join-hud-pool { gap: var(--space-3) !important; }
+.join-hud-pool-label {
+  font-size: 10px !important;
+  letter-spacing: 0.32em !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.join-hud-chip {
+  padding: 5px 9px !important;
+  font-size: 10px !important;
+}
+
+@media (max-width: 760px) {
+  /* On phone keep it ONE row by horizontally scrolling. Cleaner than
+     stacking which read as broken in v1. */
+  .join-hud-inner {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 6px var(--space-3) !important;
+  }
+  .join-hud-inner::-webkit-scrollbar { display: none; }
+  .join-hud-left { gap: var(--space-3) !important; }
+  .join-hud-right { flex-shrink: 0; }
+  .join-hud-badge { font-size: 9.5px !important; padding: 3px 7px !important; }
+  .join-hud-pool-label { font-size: 9px !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   JOIN · FORM MASTER HEADER
+   Top-level identity strip above the wizard chrome. Tells the writer
+   exactly which application they're filling out, in the same Druk
+   weight as the page section heads elsewhere on the site.
+   ════════════════════════════════════════════════════════════════════ */
+.join-form-header {
+  max-width: 1100px;
+  margin: 0 auto var(--space-6);
+  padding: var(--space-6) 0 var(--space-5);
+  border-bottom: 1px solid var(--rule, #2a2a34);
+  text-align: left;
+}
+.join-form-header-eyebrow {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--yellow, #d4a84a);
+  margin-bottom: var(--space-3);
+}
+.join-form-header-title {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 800;
+  font-size: clamp(40px, 6vw, 72px);
+  letter-spacing: -0.015em;
+  line-height: 1;
+  color: var(--text-1, #f5f1e8);
+  margin: 0 0 var(--space-3);
+  text-transform: uppercase;
+}
+.join-form-header-sub {
+  font-family: var(--sans, 'Söhne', system-ui, sans-serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-2, #c9c3b5);
+  max-width: 640px;
+  margin: 0;
+}
+@media (max-width: 760px) {
+  .join-form-header { padding: var(--space-5) 0 var(--space-4); }
+  .join-form-header-title { font-size: clamp(32px, 8vw, 48px); }
+  .join-form-header-sub { font-size: 15px; }
+}

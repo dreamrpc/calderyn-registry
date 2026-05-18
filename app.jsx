@@ -4276,34 +4276,17 @@ function QuotaChip({ tier, count, limit }){
 }
 
 function JoinHUD({ type, quotaStats }){
-  // Which pool does this form contribute to?
-  const activePool = type === "student" ? "student" : "adult";
-  const stats = quotaStats || {};
-  const limits = stats.limits || {};
-  const studentCounts = stats.student || {};
-  const adultCounts   = stats.adult   || {};
+  // Hide entirely on the archetype picker — the HUD only appears once
+  // a writer is inside the wizard for a specific form.
+  if (!type) return null;
 
-  const renderPool = (poolKey, label, counts) => {
-    const isActive = activePool === poolKey;
-    return (
-      <div className={"join-hud-pool" + (isActive ? " is-active" : "")}>
-        <div className="join-hud-pool-label">
-          {label}
-          {isActive && <span className="join-hud-pool-active"> · THIS FORM</span>}
-        </div>
-        <div className="join-hud-chips">
-          {QUOTA_TIERS.map(t => (
-            <QuotaChip
-              key={t.id}
-              tier={t}
-              count={quotaStats ? (counts[t.id] || 0) : null}
-              limit={limits[t.id]}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  };
+  // Single relevant pool only: students for student forms, adults for
+  // everything else.
+  const activePool = type === "student" ? "student" : "adult";
+  const poolLabel  = activePool === "student" ? "STUDENTS" : "ADULTS";
+  const stats   = quotaStats || {};
+  const limits  = stats.limits || {};
+  const counts  = (activePool === "student" ? stats.student : stats.adult) || {};
 
   return (
     <div className="join-hud" role="region" aria-label="Intake quota status">
@@ -4311,9 +4294,19 @@ function JoinHUD({ type, quotaStats }){
       <div className="join-hud-inner">
         <div className="join-hud-left">
           <span className="join-hud-badge">INTAKE QUOTA · 2026</span>
-          {renderPool("student", "STUDENTS", studentCounts)}
-          <div className="join-hud-divider" aria-hidden="true"/>
-          {renderPool("adult",   "ADULTS",   adultCounts)}
+          <div className="join-hud-pool">
+            <span className="join-hud-pool-label">{poolLabel}</span>
+            <div className="join-hud-chips">
+              {QUOTA_TIERS.map(t => (
+                <QuotaChip
+                  key={t.id}
+                  tier={t}
+                  count={quotaStats ? (counts[t.id] || 0) : null}
+                  limit={limits[t.id]}
+                />
+              ))}
+            </div>
+          </div>
         </div>
         <div className="join-hud-right">
           <span className="join-hud-status-dot" aria-hidden="true"/>
@@ -4680,6 +4673,24 @@ function JoinTab(){
             global overview before a type is picked, then switches
             to type-specific stats. */}
         <JoinHUD type={type} quotaStats={quotaStats}/>
+
+        {/* FORM MASTER HEADER — display name of the application as a
+            top-level identity ("STUDENT APPLICATION" / "CLUB POSITION
+            APPLICATION") above the step indicator. Shown whenever the
+            writer has picked a type, both for wizardized types and
+            legacy single-page forms (collective / outside). */}
+        {type && (
+          <header className="join-form-header">
+            <div className="join-form-header-eyebrow">CALDERYN · INTAKE FORM</div>
+            <h1 className="join-form-header-title">
+              {(APPLICATION_TYPES.find(t => t.id === type) || {}).name?.toUpperCase() || "APPLICATION"}
+              {" "}APPLICATION
+            </h1>
+            <p className="join-form-header-sub">
+              {(APPLICATION_TYPES.find(t => t.id === type) || {}).desc || ""}
+            </p>
+          </header>
+        )}
 
         {/* WIZARD HEAD — Riot-quality numbered step indicator above
             the page title. Shown only once a type has been selected
