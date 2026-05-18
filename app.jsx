@@ -4078,11 +4078,58 @@ function FieldGroup({title, children}){
 }
 
 
+/* ──────────────────────────────────────────────────────────────────────
+   JOIN-FORM PAGE CONFIG
+   ──────────────────────────────────────────────────────────────────────
+   Each application type defines an ordered list of "pages" the wizard
+   walks the writer through. Each page has:
+     - id        : stable identifier
+     - title     : big display heading
+     - subtitle  : one-line context
+     - required  : array of form keys OR a function(form) returning array
+   Types not listed here render the legacy single-page form (currently
+   collective + outside, which have sub-flows we'll wizardize later).
+   ──────────────────────────────────────────────────────────────────────*/
+const JOIN_WIZARD = {
+  student: [
+    { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
+    { id: "role",    title: "Enrollment",  subtitle: "Where in Calderyn they sit.",         required: ["house", "year", "track", "tier", "age"] },
+    { id: "power",   title: "Power",       subtitle: "What they can do, and what it costs.", required: (f) => f.fullyHuman ? [] : ["power", "powerExpression", "drawbacks"] },
+    { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
+  ],
+  faculty: [
+    { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
+    { id: "role",    title: "Position",    subtitle: "What they teach, run, or oversee.",   required: ["facultyRole", "tier"] },
+    { id: "power",   title: "Power",       subtitle: "What they can do, and what it costs.", required: (f) => f.fullyHuman ? [] : ["power", "powerExpression", "drawbacks"] },
+    { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
+  ],
+  strata: [
+    { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
+    { id: "role",    title: "Position",    subtitle: "Where they sit inside STRATA.",       required: (f) => f.strataRole === "corporate" ? ["strataRole", "strataDept", "strataTitle"] : ["strataRole", "alias", "tier"] },
+    { id: "power",   title: "Power",       subtitle: "What they can do, and what it costs.", required: (f) => f.fullyHuman ? [] : ["power", "powerExpression", "drawbacks"] },
+    { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
+  ],
+  club: [
+    { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
+    { id: "role",    title: "Position",    subtitle: "Pick from the open club roster.",     required: ["clubPosition"] },
+    { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
+  ],
+  gov: [
+    { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
+    { id: "role",    title: "Seat",        subtitle: "Which student-government office.",    required: ["govSeat"] },
+    { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
+  ],
+  // collective + outside: not yet wizardized, will fall back to single-page render
+};
+
 function JoinTab(){
   const [type, setType]   = useState(null);
   const [form, setForm]   = useState({});
   const [status, setStatus] = useState({ state: "idle", msg: "" });
   const [confirmed, setConfirmed] = useState(false);
+  // Wizard step. 0 = type picker; 1..N = wizard pages for the chosen
+  // type. Resets to 0 when type changes or form is reset.
+  const [step, setStep] = useState(0);
   // Quota stats for the writer's current OOC tag. Fetched from the
   // Worker so the writers.js mapping never leaves the server — only
   // counts and limits come down to the client.
@@ -4118,7 +4165,27 @@ function JoinTab(){
     setStatus({ state: "idle", msg: "" });
     setConfirmed(false);
     setQuotaStats(null);
+    setStep(0);
   };
+
+  // Wizard pages for the current type (null = type uses legacy
+  // single-page render).
+  const wizardPages = type && JOIN_WIZARD[type] ? JOIN_WIZARD[type] : null;
+  const wizardCount = wizardPages ? wizardPages.length : 0;
+  const currentPage = wizardPages && step >= 1 ? wizardPages[step - 1] : null;
+
+  // Fields the current wizard page requires. Empty array on the type
+  // picker step (step 0) — Next is gated by type selection instead.
+  const currentPageRequired = useMemo(() => {
+    if (!currentPage) return [];
+    const r = currentPage.required;
+    return typeof r === "function" ? r(form) : (r || []);
+  }, [currentPage, form.fullyHuman, form.strataRole]);
+
+  const currentPageMissing = currentPageRequired.filter(k => !form[k] || !String(form[k]).trim());
+  const canAdvance = step === 0
+    ? !!type
+    : currentPageMissing.length === 0;
 
   // Re-fetch quota stats when the writer's OOC tag changes. Debounce
   // by waiting until the value is stable for 300ms so a user typing
@@ -4262,45 +4329,161 @@ function JoinTab(){
       </div>
 
       <div className="join-form-wrap">
-        {/* Step 1 — type picker */}
-        <div className="join-step">
-          <span className="join-step-tag">Step 01 · Application Type</span>
-          <div className="join-step-title">What are you applying for?</div>
-          <div className="join-step-blurb">
-            Pick a role. The form adjusts to ask only what's needed. Switching types resets your inputs.
-          </div>
-          <div className="join-typegrid">
-            {APPLICATION_TYPES.map((t, i) => (
-              <button
-                key={t.id}
-                type="button"
-                className={"join-type" + (type === t.id ? " on" : "")}
-                onClick={() => { setType(t.id); setForm({}); setStatus({state:"idle",msg:""}); }}
-              >
-                <div className="join-type-num">{String(i+1).padStart(2,"0")}</div>
-                <div className="join-type-name">{t.name}</div>
-                <div className="join-type-desc">{t.desc}</div>
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* WIZARD HEAD — page counter + title + progress.
+            Shown only once a type has been selected (step >= 1) AND
+            the type is wizardized (collective/outside fall through to
+            the legacy layout below). */}
+        {type && wizardPages && step >= 1 && (
+          <header className="join-wiz-head">
+            <div className="join-wiz-counter">
+              <span className="join-wiz-counter-now">{String(step).padStart(2, "0")}</span>
+              <span className="join-wiz-counter-sep">/</span>
+              <span className="join-wiz-counter-tot">{String(wizardCount).padStart(2, "0")}</span>
+            </div>
+            <h2 className="join-wiz-title">{currentPage.title}</h2>
+            <p className="join-wiz-subtitle">{currentPage.subtitle}</p>
+            <div className="join-wiz-progress" aria-hidden="true">
+              {wizardPages.map((p, i) => (
+                <div
+                  key={p.id}
+                  className={"join-wiz-tick" + (i + 1 === step ? " is-current" : (i + 1 < step ? " is-done" : ""))}
+                />
+              ))}
+            </div>
+          </header>
+        )}
 
-        {/* Step 2 — fields specific to chosen type */}
-        {type && (
+        {/* STEP 0 — Type picker.
+            For wizardized types, picking advances to step 1. For
+            legacy types (collective/outside) it stays put and renders
+            the old single-page form below. */}
+        {(step === 0 || !wizardPages) && (
+          <div className="join-step">
+            {!wizardPages && (
+              <>
+                <span className="join-step-tag">Step 01 · Application Type</span>
+                <div className="join-step-title">What are you applying for?</div>
+                <div className="join-step-blurb">
+                  Pick a role. The form adjusts to ask only what's needed. Switching types resets your inputs.
+                </div>
+              </>
+            )}
+            {wizardPages && step === 0 && (
+              <>
+                <span className="join-wiz-eyebrow">01 · ARCHETYPE</span>
+                <h2 className="join-wiz-title">Pick your archetype.</h2>
+                <p className="join-wiz-subtitle">The form adjusts to ask only what's needed for the role. You can change later — switching resets your inputs.</p>
+              </>
+            )}
+            <div className="join-typegrid">
+              {APPLICATION_TYPES.map((t, i) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={"join-type" + (type === t.id ? " on" : "")}
+                  onClick={() => {
+                    setType(t.id);
+                    setForm({});
+                    setStatus({state:"idle",msg:""});
+                    // For wizardized types, advance immediately to step 1
+                    // so the writer drops into the first real page.
+                    if (JOIN_WIZARD[t.id]) setStep(1);
+                  }}
+                >
+                  <div className="join-type-num">{String(i+1).padStart(2,"0")}</div>
+                  <div className="join-type-name">{t.name}</div>
+                  <div className="join-type-desc">{t.desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* WIZARD PAGES — render only the current page's fields. */}
+        {type && wizardPages && step >= 1 && (
+          <>
+            {/* Cradle warning still shows on the role page where age
+                actually matters, not on every page. */}
+            {currentPage.id === "role" && ["student","faculty","strata"].includes(type) && (
+              <aside className="join-warn" role="note">
+                <div className="join-warn-tag">Age &amp; Cradle requirement — strict.</div>
+                <p>
+                  Your character's age must fall inside the age range of their Cradle phase (Cradle III: 0–26 · Cradle II: 31–46 · Cradle I: 51–58). Powers track the Cradle a character was born into. <strong>The Dean</strong> and <strong>Vale</strong> are the only Cradle I characters above 46. <strong>Paragon</strong> is a Cradle II character (age 31–46) who received the Cradle I injection — Cradle II body, Cradle I powers. Please <a href="#lore" className="join-warn-link">read the lore</a> (start with <em>The Programme</em>) before submitting.
+                </p>
+              </aside>
+            )}
+
+            <JoinFieldset
+              type={type}
+              form={form}
+              set={set}
+              quotaStats={quotaStats}
+              oocTags={oocTags}
+              wizardPageId={currentPage.id}
+            />
+
+            <div className="join-wiz-nav">
+              <button
+                type="button"
+                className="join-wiz-btn join-wiz-btn-back"
+                onClick={() => step > 1 ? setStep(step - 1) : setStep(0)}
+              >
+                <Icon name="arrow-left" size={14}/> Back
+              </button>
+              {step < wizardCount && (
+                <button
+                  type="button"
+                  className="join-wiz-btn join-wiz-btn-next"
+                  onClick={() => setStep(step + 1)}
+                  disabled={!canAdvance}
+                >
+                  Next <Icon name="arrow-right" size={14}/>
+                </button>
+              )}
+              {step === wizardCount && (
+                <button
+                  type="button"
+                  className="join-wiz-btn join-wiz-btn-submit"
+                  onClick={submit}
+                  disabled={!canSubmit}
+                >
+                  {status.state === "loading" ? "Sending…" : "Submit Application"}
+                </button>
+              )}
+              <button type="button" className="join-wiz-btn join-wiz-btn-cancel" onClick={reset}>
+                Cancel
+              </button>
+            </div>
+            {status.state !== "idle" && (
+              <div className={"join-wiz-status " + (status.state === "error" ? "is-error" : "is-loading")}>
+                {status.msg}
+              </div>
+            )}
+            {currentPageMissing.length > 0 && step < wizardCount && (
+              <div className="join-wiz-status is-hint">
+                {currentPageMissing.length} required field{currentPageMissing.length === 1 ? "" : "s"} to go.
+              </div>
+            )}
+          </>
+        )}
+
+        {/* LEGACY single-page render — for collective + outside which
+            aren't wizardized yet. Keep the original layout intact. */}
+        {type && !wizardPages && (
           <>
             <div className="join-divider">
               <span className="join-divider-rule"/>
               <span className="join-divider-tag">Step 02 · Details</span>
               <span className="join-divider-rule"/>
             </div>
-          {["student","faculty","strata","collective"].includes(type) && (
-            <aside className="join-warn" role="note">
-              <div className="join-warn-tag">Age &amp; Cradle requirement — strict.</div>
-              <p>
-                Your character's age must fall inside the age range of their Cradle phase (Cradle III: 0–26 · Cradle II: 31–46 · Cradle I: 51–58). Powers track the Cradle a character was born into. <strong>The Dean</strong> and <strong>Vale</strong> are the only Cradle I characters above 46. <strong>Paragon</strong> is a Cradle II character (age 31–46) who received the Cradle I injection — Cradle II body, Cradle I powers. Please <a href="#lore" className="join-warn-link">read the lore</a> (start with <em>The Programme</em>) before submitting.
-              </p>
-            </aside>
-          )}                                                                          
+            {["collective"].includes(type) && (
+              <aside className="join-warn" role="note">
+                <div className="join-warn-tag">Age &amp; Cradle requirement — strict.</div>
+                <p>
+                  Your character's age must fall inside the age range of their Cradle phase (Cradle III: 0–26 · Cradle II: 31–46 · Cradle I: 51–58). Powers track the Cradle a character was born into. <strong>The Dean</strong> and <strong>Vale</strong> are the only Cradle I characters above 46. <strong>Paragon</strong> is a Cradle II character (age 31–46) who received the Cradle I injection — Cradle II body, Cradle I powers. Please <a href="#lore" className="join-warn-link">read the lore</a> (start with <em>The Programme</em>) before submitting.
+                </p>
+              </aside>
+            )}
 
             <JoinFieldset type={type} form={form} set={set} quotaStats={quotaStats} oocTags={oocTags}/>
 
@@ -4798,7 +4981,11 @@ function QuotaStatsPanel({stats, activePool}){
   );
 }
 
-function JoinFieldset({type, form, set, quotaStats, oocTags}){
+function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
+  // wizardPageId: when present, render only the fields belonging to
+  // that wizard page. When absent (collective/outside legacy types),
+  // render the full single-page form.
+  const onPage = (id) => !wizardPageId || wizardPageId === id;
   // Pool this form would route to — student form → student pool,
   // everything else → adult. Used to highlight the relevant row in
   // the quota panel below the Writer Tag dropdown.
@@ -4856,45 +5043,53 @@ function JoinFieldset({type, form, set, quotaStats, oocTags}){
 
   if (type === "student"){
     return (
-      <div className="join-fieldset">
-        <FieldGroup title="Character Profile"/>
-        {Common}
-        <Field label="Stage Name / Alias" hint="If they have a hero name yet" full>
-          <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="VOLT, KESTREL, etc."/>
-        </Field>
-
-        <FieldGroup title="Enrollment"/>
-        <Field label="House" required full>
-          <select className="join-select" value={form.house || ""} onChange={e => set("house", e.target.value)}>
-            <option value="">Select house…</option>
-            {JOIN_HOUSES.map(h => <option key={h} value={h}>{h}</option>)}
-          </select>
-        </Field>
-        <Field label="Year" required hint="Fr 18–19 · So 19–20 · Jr 20–21 · Sr 21–22" full>
-          <select className="join-select" value={form.year || ""} onChange={e => set("year", e.target.value)}>
-            <option value="">Select year…</option>
-            {JOIN_YEARS.map(y => <option key={y} value={y}>{y}</option>)}
-          </select>
-        </Field>
-        <Field label="Track" required>
-          <select className="join-select" value={form.track || ""} onChange={e => set("track", e.target.value)}>
-            <option value="">Select track…</option>
-            {JOIN_TRACKS.map(t => <option key={t} value={t}>{t}</option>)}
-          </select>
-        </Field>
-        <Field label="Tier" required hint="A through D">
-          <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
-            <option value="">Select tier…</option>
-            {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
-          </select>
-        </Field>
-
-        <PowerFields form={form} set={set} allowHuman={false}/>
-
-        <FieldGroup title="Optional Extras"/>
-        <StudentExtras form={form} set={set}/>
-
-        <TailFields form={form} set={set}/>
+      <div className="join-fieldset" data-wiz-page={wizardPageId || ""}>
+        {onPage("profile") && (
+          <>
+            <FieldGroup title="Character Profile"/>
+            {Common}
+            <Field label="Stage Name / Alias" hint="If they have a hero name yet" full>
+              <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="VOLT, KESTREL, etc."/>
+            </Field>
+          </>
+        )}
+        {onPage("role") && (
+          <>
+            <FieldGroup title="Enrollment"/>
+            <Field label="House" required full>
+              <select className="join-select" value={form.house || ""} onChange={e => set("house", e.target.value)}>
+                <option value="">Select house…</option>
+                {JOIN_HOUSES.map(h => <option key={h} value={h}>{h}</option>)}
+              </select>
+            </Field>
+            <Field label="Year" required hint="Fr 18–19 · So 19–20 · Jr 20–21 · Sr 21–22" full>
+              <select className="join-select" value={form.year || ""} onChange={e => set("year", e.target.value)}>
+                <option value="">Select year…</option>
+                {JOIN_YEARS.map(y => <option key={y} value={y}>{y}</option>)}
+              </select>
+            </Field>
+            <Field label="Track" required>
+              <select className="join-select" value={form.track || ""} onChange={e => set("track", e.target.value)}>
+                <option value="">Select track…</option>
+                {JOIN_TRACKS.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </Field>
+            <Field label="Tier" required hint="A through D">
+              <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
+                <option value="">Select tier…</option>
+                {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </Field>
+            <FieldGroup title="Optional Extras"/>
+            <StudentExtras form={form} set={set}/>
+          </>
+        )}
+        {onPage("power") && (
+          <PowerFields form={form} set={set} allowHuman={false}/>
+        )}
+        {onPage("submit") && (
+          <TailFields form={form} set={set}/>
+        )}
       </div>
     );
   }
@@ -4902,40 +5097,46 @@ function JoinFieldset({type, form, set, quotaStats, oocTags}){
   if (type === "faculty"){
     const openRoles = getOpenFacultyRoles();
     return (
-      <div className="join-fieldset">
-        <FieldGroup title="Character Profile"/>
-        {Common}
-        <Field label="Stage Name / Alias" hint="Public-facing alias. Optional." full>
-          <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="Optional"/>
-        </Field>
-
-        <FieldGroup title="Faculty Position"/>
-        <Field label="Open Faculty Role" required hint="Only open roles are listed" full>
-          <select
-            className="join-select"
-            value={form.facultyRole || ""}
-            onChange={e => {
-              const role = e.target.value;
-              const found = openRoles.find(r => r.role === role);
-              set("facultyRole", role);
-              set("facultySection", found ? found.section : "");
-            }}
-          >
-            <option value="">Select role…</option>
-            {openRoles.map((r, i) => (
-              <option key={i} value={r.role}>{r.section} — {r.role}</option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Ranking" required hint="A-List · B-List · C-List · D-List — counts toward your adult-pool quota" full>
-          <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
-            <option value="">Select ranking…</option>
-            {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
-          </select>
-        </Field>
-
-        <PowerFields form={form} set={set}/>
-        <TailFields form={form} set={set}/>
+      <div className="join-fieldset" data-wiz-page={wizardPageId || ""}>
+        {onPage("profile") && (
+          <>
+            <FieldGroup title="Character Profile"/>
+            {Common}
+            <Field label="Stage Name / Alias" hint="Public-facing alias. Optional." full>
+              <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="Optional"/>
+            </Field>
+          </>
+        )}
+        {onPage("role") && (
+          <>
+            <FieldGroup title="Faculty Position"/>
+            <Field label="Open Faculty Role" required hint="Only open roles are listed" full>
+              <select
+                className="join-select"
+                value={form.facultyRole || ""}
+                onChange={e => {
+                  const role = e.target.value;
+                  const found = openRoles.find(r => r.role === role);
+                  set("facultyRole", role);
+                  set("facultySection", found ? found.section : "");
+                }}
+              >
+                <option value="">Select role…</option>
+                {openRoles.map((r, i) => (
+                  <option key={i} value={r.role}>{r.section} — {r.role}</option>
+                ))}
+              </select>
+            </Field>
+            <Field label="Ranking" required hint="A-List · B-List · C-List · D-List — counts toward your adult-pool quota" full>
+              <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
+                <option value="">Select ranking…</option>
+                {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </Field>
+          </>
+        )}
+        {onPage("power") && <PowerFields form={form} set={set}/>}
+        {onPage("submit") && <TailFields form={form} set={set}/>}
       </div>
     );
   }
@@ -4943,42 +5144,51 @@ function JoinFieldset({type, form, set, quotaStats, oocTags}){
   if (type === "strata"){
     const isCorporate = form.strataRole === "corporate";
     return (
-      <div className="join-fieldset">
-        <FieldGroup title="Character Profile"/>
-        {Common}
-
-        <FieldGroup title="STRATA Position"/>
-        <Field label="STRATA Role" required hint="Talent = hero roster. Corporate = executive, field, or PR." full>
-          <select className="join-select" value={form.strataRole || ""} onChange={e => set("strataRole", e.target.value)}>
-            <option value="">Select role…</option>
-            <option value="talent">Talent (Hero)</option>
-            <option value="corporate">Corporate</option>
-          </select>
-        </Field>
-        {form.strataRole === "talent" && (<>
-        <Field label="Stage Name / Alias" required hint="Their hero name" full>
-          <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="ARCLIGHT, etc."/>
-        </Field>
-        <Field label="Tier" required hint="A-list = top of roster" full>
-          <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
-            <option value="">Select tier…</option>
-            {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
-          </select>
-        </Field>
-        </>)}
-        {isCorporate && (<>
-        <Field label="Department" required hint="Which division they work in" full>
-          <select className="join-select" value={form.strataDept || ""} onChange={e => set("strataDept", e.target.value)}>
-            <option value="">Select department…</option>
-            {JOIN_STRATA_DEPTS.map(d => <option key={d} value={d}>{d}</option>)}
-          </select>
-        </Field>
-        <Field label="Role / Title" required hint="e.g. Board Member, Senior Handler, PR Director" full>
-          <input className="join-input" type="text" value={form.strataTitle || ""} onChange={e => set("strataTitle", e.target.value)} placeholder="e.g. Senior Handler"/>
-        </Field>
-        </>)}
-        {form.strataRole && (<PowerFields form={form} set={set} allowHuman={isCorporate}/>)}
-        <TailFields form={form} set={set}/>
+      <div className="join-fieldset" data-wiz-page={wizardPageId || ""}>
+        {onPage("profile") && (
+          <>
+            <FieldGroup title="Character Profile"/>
+            {Common}
+          </>
+        )}
+        {onPage("role") && (
+          <>
+            <FieldGroup title="STRATA Position"/>
+            <Field label="STRATA Role" required hint="Talent = hero roster. Corporate = executive, field, or PR." full>
+              <select className="join-select" value={form.strataRole || ""} onChange={e => set("strataRole", e.target.value)}>
+                <option value="">Select role…</option>
+                <option value="talent">Talent (Hero)</option>
+                <option value="corporate">Corporate</option>
+              </select>
+            </Field>
+            {form.strataRole === "talent" && (<>
+            <Field label="Stage Name / Alias" required hint="Their hero name" full>
+              <input className="join-input" type="text" value={form.alias || ""} onChange={e => set("alias", e.target.value)} placeholder="ARCLIGHT, etc."/>
+            </Field>
+            <Field label="Tier" required hint="A-list = top of roster" full>
+              <select className="join-select" value={form.tier || ""} onChange={e => set("tier", e.target.value)}>
+                <option value="">Select tier…</option>
+                {JOIN_TIERS.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </Field>
+            </>)}
+            {isCorporate && (<>
+            <Field label="Department" required hint="Which division they work in" full>
+              <select className="join-select" value={form.strataDept || ""} onChange={e => set("strataDept", e.target.value)}>
+                <option value="">Select department…</option>
+                {JOIN_STRATA_DEPTS.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
+            </Field>
+            <Field label="Role / Title" required hint="e.g. Board Member, Senior Handler, PR Director" full>
+              <input className="join-input" type="text" value={form.strataTitle || ""} onChange={e => set("strataTitle", e.target.value)} placeholder="e.g. Senior Handler"/>
+            </Field>
+            </>)}
+          </>
+        )}
+        {onPage("power") && form.strataRole && (
+          <PowerFields form={form} set={set} allowHuman={isCorporate}/>
+        )}
+        {onPage("submit") && <TailFields form={form} set={set}/>}
       </div>
     );
   }
@@ -4986,37 +5196,47 @@ function JoinFieldset({type, form, set, quotaStats, oocTags}){
   if (type === "club"){
     const openPos = getOpenClubPositions();
     return (
-      <div className="join-fieldset">
-        {Common}
-        <Field label="Open Club Position" required hint="Only open positions are listed" full>
-          <select
-            className="join-select"
-            value={form.clubPositionKey ?? ""}
-            onChange={e => {
-              const raw = e.target.value;
-              const idx = raw === "" ? -1 : parseInt(raw, 10);
-              const found = idx >= 0 ? openPos[idx] : null;
-              set("clubPositionKey", raw);
-              if (found){
-                set("clubPosition", found.position);
-                set("clubName",     found.club);
-                set("clubTeam",     found.team || "");
-              } else {
-                set("clubPosition", "");
-                set("clubName",     "");
-                set("clubTeam",     "");
-              }
-            }}
-          >
-            <option value="">Select position…</option>
-            {openPos.map((p, i) => (
-              <option key={i} value={i}>
-                {p.club}{p.team ? ` · ${p.team}` : ""} — {p.position}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <TailFields form={form} set={set}/>
+      <div className="join-fieldset" data-wiz-page={wizardPageId || ""}>
+        {onPage("profile") && (
+          <>
+            <FieldGroup title="Character Profile"/>
+            {Common}
+          </>
+        )}
+        {onPage("role") && (
+          <>
+            <FieldGroup title="Club Position"/>
+            <Field label="Open Club Position" required hint="Only open positions are listed" full>
+              <select
+                className="join-select"
+                value={form.clubPositionKey ?? ""}
+                onChange={e => {
+                  const raw = e.target.value;
+                  const idx = raw === "" ? -1 : parseInt(raw, 10);
+                  const found = idx >= 0 ? openPos[idx] : null;
+                  set("clubPositionKey", raw);
+                  if (found){
+                    set("clubPosition", found.position);
+                    set("clubName",     found.club);
+                    set("clubTeam",     found.team || "");
+                  } else {
+                    set("clubPosition", "");
+                    set("clubName",     "");
+                    set("clubTeam",     "");
+                  }
+                }}
+              >
+                <option value="">Select position…</option>
+                {openPos.map((p, i) => (
+                  <option key={i} value={i}>
+                    {p.club}{p.team ? ` · ${p.team}` : ""} — {p.position}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          </>
+        )}
+        {onPage("submit") && <TailFields form={form} set={set}/>}
       </div>
     );
   }
@@ -5024,35 +5244,45 @@ function JoinFieldset({type, form, set, quotaStats, oocTags}){
   if (type === "gov"){
     const openSeats = getOpenGovSeats();
     return (
-      <div className="join-fieldset">
-        {Common}
-        <Field label="Open Government Seat" required hint="Only open seats are listed" full>
-          <select
-            className="join-select"
-            value={form.govSeatKey ?? ""}
-            onChange={e => {
-              const raw = e.target.value;
-              const idx = raw === "" ? -1 : parseInt(raw, 10);
-              const found = idx >= 0 ? openSeats[idx] : null;
-              set("govSeatKey", raw);
-              if (found){
-                set("govSeat",    found.position);
-                set("govSection", found.section);
-                set("govTerm",    found.term);
-              } else {
-                set("govSeat",    "");
-                set("govSection", "");
-                set("govTerm",    "");
-              }
-            }}
-          >
-            <option value="">Select seat…</option>
-            {openSeats.map((s, i) => (
-              <option key={i} value={i}>{s.section} — {s.position}{s.term ? ` (${s.term})` : ""}</option>
-            ))}
-          </select>
-        </Field>
-        <TailFields form={form} set={set}/>
+      <div className="join-fieldset" data-wiz-page={wizardPageId || ""}>
+        {onPage("profile") && (
+          <>
+            <FieldGroup title="Character Profile"/>
+            {Common}
+          </>
+        )}
+        {onPage("role") && (
+          <>
+            <FieldGroup title="Government Seat"/>
+            <Field label="Open Government Seat" required hint="Only open seats are listed" full>
+              <select
+                className="join-select"
+                value={form.govSeatKey ?? ""}
+                onChange={e => {
+                  const raw = e.target.value;
+                  const idx = raw === "" ? -1 : parseInt(raw, 10);
+                  const found = idx >= 0 ? openSeats[idx] : null;
+                  set("govSeatKey", raw);
+                  if (found){
+                    set("govSeat",    found.position);
+                    set("govSection", found.section);
+                    set("govTerm",    found.term);
+                  } else {
+                    set("govSeat",    "");
+                    set("govSection", "");
+                    set("govTerm",    "");
+                  }
+                }}
+              >
+                <option value="">Select seat…</option>
+                {openSeats.map((s, i) => (
+                  <option key={i} value={i}>{s.section} — {s.position}{s.term ? ` (${s.term})` : ""}</option>
+                ))}
+              </select>
+            </Field>
+          </>
+        )}
+        {onPage("submit") && <TailFields form={form} set={set}/>}
       </div>
     );
   }
