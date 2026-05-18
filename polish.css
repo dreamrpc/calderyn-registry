@@ -5501,3 +5501,189 @@ body {
     transform: none !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   HOME — refinement pass
+   Fixes:
+   - Dorm memo: title was rendering invisible (cream-on-cream) because
+     .home-page sets color:var(--text) and the card was inheriting it.
+     Force high-contrast dark text with explicit overrides.
+   - Memo: drop the rotation + lined-paper kitsch; do a real letterhead.
+   - Nav: 11 tabs were overflowing on standard laptops. Tighten.
+   - Hero stamps/subtitles: were too faint, bump alpha.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── DORM MEMO — REDESIGNED as a refined corporate letterhead ───── */
+
+.home-dorm-card {
+  /* Reset everything from the v1 design */
+  background: #f5efde !important;
+  background-image: none !important;
+  transform: none !important;
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.05) inset,
+    0 40px 80px -40px rgba(0,0,0,0.6) !important;
+  padding: 48px 56px 40px !important;
+  border-top: 4px solid #1a0e08 !important;
+  position: relative;
+}
+.home-dorm.is-in .home-dorm-card {
+  transform: none !important;
+}
+
+/* Letterhead band — replaces the old stamp row */
+.home-dorm-stamp-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding-bottom: 18px !important;
+  margin-bottom: 32px !important;
+  border-bottom: 1px solid rgba(26, 14, 8, 0.18) !important;
+  font-family: var(--mono, ui-monospace, monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.32em !important;
+  color: #6b4e35 !important;
+}
+.home-dorm-stamp.red {
+  color: #8b1a0f !important;
+  border: 1.5px solid #8b1a0f !important;
+  background: transparent !important;
+  padding: 4px 10px !important;
+  letter-spacing: 0.28em !important;
+  transform: none !important;
+  font-size: 9.5px !important;
+}
+.home-dorm-doc {
+  color: #1a0e08 !important;
+  font-weight: 700 !important;
+}
+
+/* Title — explicit override to beat .home-page color inheritance.
+   Without !important, .home-page { color: var(--text) } cascades and
+   wins because of where it sits in the source order. */
+.home-page .home-dorm-card .home-dorm-title {
+  color: #1a0e08 !important;
+  font-family: var(--display, "Antonio", system-ui, serif) !important;
+  font-size: 34px !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.1 !important;
+  margin: 0 0 24px !important;
+}
+
+/* Body — dark brown for high contrast on cream */
+.home-page .home-dorm-card .home-dorm-body {
+  color: #2d1f12 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 15.5px !important;
+  line-height: 1.75 !important;
+  margin: 0 0 16px !important;
+}
+.home-page .home-dorm-card .home-dorm-body em {
+  color: #8b1a0f !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+}
+
+.home-page .home-dorm-card .home-dorm-footer {
+  margin-top: 24px !important;
+  padding-top: 18px !important;
+  border-top: 1px solid rgba(26, 14, 8, 0.18) !important;
+  border-bottom: none !important;
+  font-style: italic !important;
+  color: #4a3322 !important;
+}
+
+.home-page .home-dorm-card .home-dorm-signoff {
+  margin-top: 28px !important;
+  font-family: var(--mono, monospace) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.18em !important;
+  color: #6b4e35 !important;
+  text-align: right !important;
+}
+
+@media (max-width: 600px) {
+  .home-dorm-card { padding: 32px 24px 28px !important; }
+  .home-page .home-dorm-card .home-dorm-title { font-size: 26px !important; }
+  .home-dorm-stamp-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+}
+
+/* ── HERO — confidence pass on muted text ──────────────────────── */
+
+.home-hero-stamp {
+  color: rgba(244, 200, 110, 0.78) !important;
+}
+.home-hero-sub {
+  color: rgba(236, 230, 214, 0.88) !important;
+}
+.home-hero-scrollhint {
+  color: rgba(244, 200, 110, 0.7) !important;
+}
+
+/* ── TOP NAV — fit 11 tabs cleanly, lift to high-end ──────────── */
+
+/* Tighter horizontal rhythm; more letter-spacing for that
+   editorial-display feel. */
+.tab {
+  padding: 0 14px !important;
+  font-size: 12px !important;
+  letter-spacing: 0.16em !important;
+  gap: 8px !important;
+  font-weight: 600 !important;
+  color: rgba(255, 255, 255, 0.62) !important;
+}
+.tab-num {
+  font-size: 9.5px !important;
+  letter-spacing: 0.12em !important;
+  opacity: 0.55 !important;
+}
+.tab:hover {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+.tab:hover .tab-num { opacity: 0.95 !important; }
+
+/* Active state: drop the dark fill background, use a clean gold
+   accent above + a tighter red rule below. Feels more confident
+   than the old filled state. */
+.tab.on {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+.tab.on::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 14px; right: 14px;
+  height: 2px;
+  background: var(--yellow, #d4a84a);
+}
+.tab.on::after {
+  bottom: -1px !important;
+  height: 2px !important;
+  left: 0 !important; right: 0 !important;
+  background: var(--red, #c11a2c) !important;
+}
+.tab.on .tab-num {
+  color: var(--yellow, #d4a84a) !important;
+  opacity: 1 !important;
+}
+
+.tabs-inner {
+  padding: 0 18px !important;
+}
+
+/* Below 1200px (typical laptop overshoot territory) drop the tab
+   numbers and tighten further. Below 760px the existing overflow-x
+   scroll behaviour takes over — fine for phones. */
+@media (max-width: 1200px) {
+  .tab-num { display: none !important; }
+  .tab { padding: 0 12px !important; gap: 0 !important; }
+}
+@media (max-width: 920px) {
+  .tab { padding: 0 10px !important; font-size: 11.5px !important; }
+}
