@@ -9,9 +9,10 @@
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
 <title>CALDERYN COLLEGE — Central Registry</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Bungee&family=Bungee+Shade&family=Archivo+Black&display=swap" rel="stylesheet"/>
+<!-- Pure font stack: Druk + Söhne (incl. Söhne Mono).
+     Both self-hosted from /fonts/ via @font-face declarations at the
+     top of polish.css. No third-party / Google Fonts loads. -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js" crossorigin="anonymous"></script>
@@ -60,10 +61,15 @@
   --h-grimere:  #1e40af;          /* royal blue */
 
   /* ─── typography ─── */
-  --sans:       'Söhne', 'Inter', system-ui, -apple-system, sans-serif;
-  --display:    'Druk', 'Söhne Breit', 'Bebas Neue', 'Inter', sans-serif;       /* poster-display */
-  --display-wide: 'Druk Wide', 'Druk', 'Söhne Breit', sans-serif;               /* ultra-impact */
-  --mono:       'Söhne Mono', 'JetBrains Mono', ui-monospace, monospace;
+  /* PURE FONT STACK — Druk + Söhne family only. No web fallbacks
+     to Inter / Bebas / Bungee / Fraunces / 'Söhne' / Times. */
+  --sans:         'Söhne', system-ui, -apple-system, sans-serif;
+  --display:      'Druk', 'Söhne Breit', 'Söhne', sans-serif;
+  --display-wide: 'Druk Wide', 'Druk', 'Söhne Breit', sans-serif;
+  --mono:         'Söhne Mono', ui-monospace, monospace;
+  --serif:        'Söhne', system-ui, sans-serif;    /* legacy alias — points to Söhne */
+  --comic:        'Druk', 'Söhne Breit', sans-serif; /* legacy alias — points to Druk */
+  --comic-shade:  'Druk Wide', 'Druk', sans-serif;   /* legacy alias — points to Druk Wide */
 
   /* ─── header heights ───
      Must match the rendered heights of .mast-inner and the .tab strip
@@ -5725,8 +5731,8 @@ span.cname{ font-weight:600; color:var(--ink); }
   --dur:         220ms;
   --dur-slow:    360ms;
 
-  /* ─── editorial display family ─── */
-  --serif:       'Fraunces', 'Iowan Old Style', 'Georgia', serif;
+  /* ─── editorial display family — redirected to Söhne for the pure stack ─── */
+  --serif:       'Söhne', system-ui, sans-serif;
 }
 
 /* ─── canvas reset ─── */
@@ -10675,8 +10681,9 @@ button.class-chip-btn{
      reference var(--gold); alias it to --yellow so they resolve. */
   --gold:         #d4a84a;
 
-  --comic:        'Bungee', 'Bebas Neue', 'Archivo Black', 'Inter', sans-serif;
-  --comic-shade:  'Bungee Shade', 'Bungee', 'Bebas Neue', sans-serif;
+  /* Comic / display aliases redirected to the pure stack */
+  --comic:        'Druk', 'Söhne Breit', sans-serif;
+  --comic-shade:  'Druk Wide', 'Druk', sans-serif;
 
   /* hard panel ink — slightly off-true-black for warmth */
   --panel-ink:    #07070b;
