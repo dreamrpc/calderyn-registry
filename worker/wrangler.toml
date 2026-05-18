@@ -7,7 +7,7 @@ compatibility_date = "2025-01-15"
 # then paste the returned id below.
 [[kv_namespaces]]
 binding = "SUBMISSIONS"
-id = "<PASTE_KV_NAMESPACE_ID_HERE>"
+id = "f4b40cc6287b4654835bd47d21857b97"
 
 # Public, non-secret config. Set via `wrangler secret put` for sensitive
 # values (see README.md): DISCORD_PUBLIC_KEY, DISCORD_BOT_TOKEN,
