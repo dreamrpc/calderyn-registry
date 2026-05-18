@@ -4227,75 +4227,99 @@ function humanizeFieldKey(k){
 }
 
 /* ──────────────────────────────────────────────────────────────────────
-   JOIN STATS BAR — always-visible slot availability strip
+   JOIN HUD — STRATA "live ops" dossier-bar
    ──────────────────────────────────────────────────────────────────────
-   Renders above the wizard chrome whenever the join tab is active.
-   Cells switch based on the chosen type so writers always know what's
-   open while they fill in the form.
+   Sticky bar pinned just below the site nav for the entire application
+   flow (type picker → wizard → confirmation). Replaces the v1
+   JoinStatsBar with the spec'd HUD treatment:
 
-   Pre-type-pick:  global registry overview (students / faculty / clubs
-                   / open seats across the school).
-   Per-type:       slot availability specific to the application — open
-                   roles, open seats, current rosters etc.
+     [INTAKE QUOTA · 2026]   STUDENTS · [A 1/5][B 0/8][C 0/10][D OPEN]
+                             ADULTS    · [A 0/3][B 1/6][C 0/8][D OPEN]
+                                                       ● INTAKE OPEN
+
+   - Tier chips show writer's current usage / limit per pool, sourced
+     from the same /quota-stats Worker endpoint that powers the inline
+     QuotaStatsPanel.
+   - Active pool (the one THIS form contributes to) is labeled
+     "(THIS FORM)" so the writer always knows where they're spending.
+   - Before a writer tag is entered (quotaStats null), chips render
+     with "—" counts and a muted prompt.
    ──────────────────────────────────────────────────────────────────── */
-function JoinStatsBar({ type }){
-  const cells = useMemo(() => {
-    const out = [];
-    if (!type){
-      const openSeats = getOpenGovSeats().length
-                      + getOpenClubPositions().length
-                      + getOpenFacultyRoles().length;
-      out.push({ label: "Active students", num: (D.students || []).length });
-      out.push({ label: "Faculty",         num: (D.faculty  || []).length });
-      out.push({ label: "Clubs",           num: (D.clubs    || []).length });
-      out.push({ label: "Open seats",      num: openSeats });
-      return out;
-    }
-    if (type === "student"){
-      out.push({ label: "Active students", num: (D.students || []).length });
-      out.push({ label: "Houses",          num: (D.houses   || []).length });
-      out.push({ label: "Open club roles", num: getOpenClubPositions().length });
-      out.push({ label: "Open gov seats",  num: getOpenGovSeats().length });
-    } else if (type === "faculty"){
-      const open  = getOpenFacultyRoles().length;
-      const total = (D.faculty || []).length + open;
-      out.push({ label: "Open positions",  num: open, of: total });
-      out.push({ label: "Faculty roster",  num: (D.faculty || []).length });
-    } else if (type === "strata"){
-      const talent = ((D.strata && D.strata.talent)    || []).length;
-      const corp   = ((D.strata && D.strata.corporate) || []).length;
-      out.push({ label: "STRATA talent",    num: talent });
-      out.push({ label: "STRATA corporate", num: corp });
-      out.push({ label: "Total roster",     num: talent + corp });
-    } else if (type === "club"){
-      const open = getOpenClubPositions().length;
-      out.push({ label: "Open positions", num: open });
-      out.push({ label: "Active clubs",   num: (D.clubs || []).length });
-    } else if (type === "gov"){
-      const open = getOpenGovSeats().length;
-      out.push({ label: "Open seats",  num: open });
-      out.push({ label: "Active members", num: ((D.studentGov && D.studentGov.members) || []).length });
-    } else if (type === "collective"){
-      const groups = (D.groups || []).length;
-      out.push({ label: "Collectives", num: groups });
-    } else if (type === "outside"){
-      out.push({ label: "External orgs", num: (D.outside || []).length });
-    }
-    return out;
-  }, [type]);
+const QUOTA_TIERS = [
+  { id: "A-List", label: "A", className: "tier-a" },
+  { id: "B-List", label: "B", className: "tier-b" },
+  { id: "C-List", label: "C", className: "tier-c" },
+  { id: "D-List", label: "D", className: "tier-d" },
+];
 
-  if (cells.length === 0) return null;
+function QuotaChip({ tier, count, limit }){
+  const isUncapped = limit == null;
+  const isFull = !isUncapped && count >= limit;
+  const isOver = !isUncapped && count > limit;
   return (
-    <div className="join-stats-bar" role="region" aria-label="Application statistics">
-      {cells.map((c, i) => (
-        <div key={i} className="join-stats-cell">
-          <div className="join-stats-num">
-            {c.num}
-            {c.of != null && <span className="join-stats-of"> / {c.of}</span>}
-          </div>
-          <div className="join-stats-label">{c.label}</div>
+    <div className={
+      "join-hud-chip join-hud-chip-" + tier.className
+      + (isFull ? " is-full" : "")
+      + (isOver ? " is-over" : "")
+    }>
+      <span className="join-hud-chip-tier">{tier.label}-LIST</span>
+      <span className="join-hud-chip-count">
+        {count == null
+          ? "—"
+          : isUncapped
+            ? "OPEN"
+            : <>{count}<span className="join-hud-chip-slash">/</span>{limit}</>
+        }
+      </span>
+    </div>
+  );
+}
+
+function JoinHUD({ type, quotaStats }){
+  // Which pool does this form contribute to?
+  const activePool = type === "student" ? "student" : "adult";
+  const stats = quotaStats || {};
+  const limits = stats.limits || {};
+  const studentCounts = stats.student || {};
+  const adultCounts   = stats.adult   || {};
+
+  const renderPool = (poolKey, label, counts) => {
+    const isActive = activePool === poolKey;
+    return (
+      <div className={"join-hud-pool" + (isActive ? " is-active" : "")}>
+        <div className="join-hud-pool-label">
+          {label}
+          {isActive && <span className="join-hud-pool-active"> · THIS FORM</span>}
         </div>
-      ))}
+        <div className="join-hud-chips">
+          {QUOTA_TIERS.map(t => (
+            <QuotaChip
+              key={t.id}
+              tier={t}
+              count={quotaStats ? (counts[t.id] || 0) : null}
+              limit={limits[t.id]}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="join-hud" role="region" aria-label="Intake quota status">
+      <div className="join-hud-grain" aria-hidden="true"/>
+      <div className="join-hud-inner">
+        <div className="join-hud-left">
+          <span className="join-hud-badge">INTAKE QUOTA · 2026</span>
+          {renderPool("student", "STUDENTS", studentCounts)}
+          <div className="join-hud-divider" aria-hidden="true"/>
+          {renderPool("adult",   "ADULTS",   adultCounts)}
+        </div>
+        <div className="join-hud-right">
+          <span className="join-hud-status-dot" aria-hidden="true"/>
+          <span className="join-hud-status-text">INTAKE OPEN</span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -4491,7 +4515,7 @@ function JoinTab(){
     return (
       <div className="join">
         <div className="join-form-wrap">
-          <JoinStatsBar type={type}/>
+          <JoinHUD type={type} quotaStats={quotaStats}/>
           <div className="join-confirm-aaa">
             {/* CINEMATIC MOMENT — the Vanguard has just been briefed.
                 The four portraits flicker in sequence for ~2s as if
@@ -4655,7 +4679,7 @@ function JoinTab(){
         {/* STATS BAR — persistent slot availability strip. Shows
             global overview before a type is picked, then switches
             to type-specific stats. */}
-        <JoinStatsBar type={type}/>
+        <JoinHUD type={type} quotaStats={quotaStats}/>
 
         {/* WIZARD HEAD — Riot-quality numbered step indicator above
             the page title. Shown only once a type has been selected

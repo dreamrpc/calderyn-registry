@@ -5855,9 +5855,16 @@ body {
   left: 0 !important; right: 0 !important;
   background: var(--red, #c11a2c) !important;
 }
+/* Active tab number becomes a dark-text-on-gold pill — clearer
+   "badge" treatment than gold-on-transparent which can read as
+   low contrast against the tab's own gold top-accent line. */
 .tab.on .tab-num {
-  color: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  background: var(--yellow, #d4a84a) !important;
+  padding: 2px 6px !important;
+  border-radius: 2px !important;
   opacity: 1 !important;
+  font-weight: 800 !important;
 }
 
 .tabs-inner {
@@ -6081,7 +6088,14 @@ html, body { overflow-x: clip; }
     color: var(--text-1) !important;
     background: var(--bg-2, #15151a) !important;
   }
-  .tabs-inner .tab.on .tab-num { color: var(--yellow) !important; }
+  /* Mobile drawer: same pill treatment as desktop active tab-num */
+  .tabs-inner .tab.on .tab-num {
+    color: #0a0a0a !important;
+    background: var(--yellow, #d4a84a) !important;
+    padding: 2px 6px !important;
+    border-radius: 2px !important;
+    font-weight: 800 !important;
+  }
   /* The desktop pseudo-element accents look weird on the drawer
      rows — hide them here. */
   .tabs-inner .tab.on::before,
@@ -7850,79 +7864,198 @@ code, pre, kbd, samp, var, tt,
   font-family: var(--mono, 'Söhne Mono', ui-monospace, monospace);
 }
 
+
 /* ════════════════════════════════════════════════════════════════════
-   JOIN · STATS BAR
-   Always-visible slot-availability strip above the form. Sticks at
-   the top of the form-wrap from type-picker through confirmation.
-   Editorial grid — big Druk numbers, mono caps labels.
+   JOIN · HUD (live-ops dossier bar)
+   ════════════════════════════════════════════════════════════════════
+   Sticky beneath the masthead + tabs for the entire join flow.
+   Authoritative, compact (~56px), never in the way.
+   Spec: dark bg + 2px gold top border + grain overlay + tier chips
+   per pool + pulsing red intake-open dot on the right.
    ════════════════════════════════════════════════════════════════════ */
-.join-stats-bar {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  gap: 1px;
-  max-width: 1100px;
-  margin: 0 auto var(--space-6);
-  background: var(--rule, #2a2a34);
-  border: 1px solid var(--rule, #2a2a34);
-  /* Sticky so it stays in view as the writer scrolls through long
-     pages of the wizard. Top offset clears the masthead + tabs. */
+
+.join-hud {
   position: sticky;
-  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--space-4));
-  z-index: 50;
-  box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.6);
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px));
+  z-index: 60;
+  background: #0a0a0a;
+  border-top: 2px solid #c9a84c;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.18);
+  /* Negative side margin so it bleeds to the page edges within
+     .join-form-wrap (which has gutter padding) */
+  margin: 0 calc(var(--space-5) * -1) var(--space-6);
+  min-height: 56px;
+  box-shadow: 0 12px 32px -20px rgba(0, 0, 0, 0.85);
 }
-.join-stats-cell {
-  padding: var(--space-4) var(--space-5);
-  background: var(--bg-1, #0c0c10);
-  text-align: left;
-  transition: background-color var(--motion-base, 180ms) ease;
+.join-hud-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>"),
+    radial-gradient(circle 1px at 50% 50%, rgba(201, 168, 76, 0.04) 1px, transparent 1.5px);
+  background-size: 100px 100px, 4px 4px;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
 }
-.join-stats-cell:hover {
-  background: var(--bg-2, #15151a);
-}
-.join-stats-num {
-  font-family: var(--display, 'Druk', sans-serif);
-  font-weight: 800;
-  font-size: clamp(28px, 3.4vw, 40px);
-  letter-spacing: -0.01em;
-  line-height: 1;
-  color: var(--text-1, #f5f1e8);
+.join-hud-inner {
+  position: relative;
   display: flex;
-  align-items: baseline;
-  gap: 4px;
-}
-.join-stats-of {
-  font-family: var(--display, 'Druk', sans-serif);
-  font-weight: 700;
-  font-size: 0.45em;
-  color: var(--text-3, #948d80);
-  letter-spacing: 0.02em;
-}
-.join-stats-label {
-  font-family: var(--mono, 'Söhne Mono', monospace);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--text-3, #948d80);
-  margin-top: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: 8px var(--space-5);
+  min-height: 56px;
+  flex-wrap: wrap;
 }
 
-/* Below 760px, stack vertically — too many cells to fit horizontally
-   on phones, the vertical stack keeps each readable. */
-@media (max-width: 760px) {
-  .join-stats-bar {
-    grid-auto-flow: row;
-    position: static; /* unstick at phone size, the masthead already
-                         takes most of the vertical space */
+.join-hud-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.join-hud-badge {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  padding: 4px 10px;
+  border: 1.5px solid rgba(201, 168, 76, 0.45);
+  background: rgba(201, 168, 76, 0.06);
+  white-space: nowrap;
+}
+
+.join-hud-pool {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.join-hud-pool-label {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--text-3, #948d80);
+  white-space: nowrap;
+}
+.join-hud-pool.is-active .join-hud-pool-label {
+  color: var(--text-1, #f5f1e8);
+}
+.join-hud-pool-active {
+  color: #c9a84c;
+  font-size: 8px;
+  letter-spacing: 0.32em;
+  margin-left: 4px;
+}
+
+.join-hud-chips {
+  display: flex;
+  gap: 4px;
+}
+
+.join-hud-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: #14140e;
+  border-left: 2px solid var(--rule, #2a2a34);
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background var(--motion-base, 180ms) ease, border-color var(--motion-base, 180ms) ease;
+}
+.join-hud-chip-tier-a { border-left-color: #d4a84a; }    /* gold */
+.join-hud-chip-tier-b { border-left-color: #b8b8b8; }    /* silver */
+.join-hud-chip-tier-c { border-left-color: #b87333; }    /* bronze */
+.join-hud-chip-tier-d { border-left-color: #555555; }    /* dim */
+
+.join-hud-chip.is-full {
+  background: rgba(212, 168, 74, 0.10);
+}
+.join-hud-chip.is-over {
+  background: rgba(193, 26, 44, 0.15);
+  border-left-color: var(--red-bright, #ff2a32) !important;
+}
+
+.join-hud-chip-tier {
+  color: var(--text-3, #948d80);
+}
+.join-hud-chip-count {
+  color: var(--text-1, #f5f1e8);
+  font-weight: 700;
+}
+.join-hud-chip-slash {
+  color: var(--text-4, #6b6558);
+  margin: 0 1px;
+}
+.join-hud-chip.is-over .join-hud-chip-count {
+  color: var(--red-bright, #ff2a32);
+}
+
+.join-hud-divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--rule, #2a2a34);
+  margin: 4px 0;
+}
+
+.join-hud-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.join-hud-status-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--red-bright, #ff2a32);
+  box-shadow: 0 0 10px var(--red-bright, #ff2a32);
+  animation: join-hud-pulse 1.6s ease-in-out infinite;
+}
+@keyframes join-hud-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.75); }
+}
+.join-hud-status-text {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--red-bright, #ff2a32);
+}
+
+/* On phone: stack pools and right-side dot vertically. Keep the bar
+   sticky so writers always see their quota state. */
+@media (max-width: 900px) {
+  .join-hud-inner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px var(--space-4);
+    gap: 8px;
   }
-  .join-stats-cell {
-    padding: var(--space-3) var(--space-4);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .join-hud-left {
+    gap: var(--space-3);
   }
-  .join-stats-num { font-size: 24px; }
-  .join-stats-label { margin-top: 0; }
+  .join-hud-divider {
+    display: none;
+  }
+  .join-hud-right {
+    justify-content: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .join-hud-status-dot { animation: none !important; }
 }
