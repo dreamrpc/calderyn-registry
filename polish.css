@@ -6475,3 +6475,422 @@ html, body { overflow-x: clip; }
     transform: none !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   PR D-2 — WIZARD UX · AAA
+   Numbered step indicator with connector lines (Riot account
+   creation quality), per-page slide-in transition, refined
+   validation hint, and an animated stamp-drop completion state.
+   Overrides the v1 .join-wiz-progress block in the PR-C section.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── STEP INDICATOR — numbered pills + labels + connectors ───── */
+.join-wiz-steps {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0;
+  margin: 0 0 var(--space-6);
+  padding: var(--space-3) 0 var(--space-2);
+}
+.join-wiz-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+  padding: 0 var(--space-2);
+}
+.join-wiz-step-circle {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border: 1.5px solid var(--rule, #2a2a34);
+  background: var(--bg-1, #0c0c10);
+  color: var(--text-3, #948d80);
+  transition:
+    border-color 220ms cubic-bezier(.22, 1, .36, 1),
+    background-color 220ms ease,
+    color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms cubic-bezier(.22, 1, .36, 1);
+}
+.join-wiz-step-label {
+  font-family: var(--mono, monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-3, #948d80);
+  transition: color 220ms ease;
+}
+/* Connector — sits between two step circles, behind them */
+.join-wiz-step-connector {
+  position: absolute;
+  z-index: 1;
+  top: 22px;  /* half of circle height */
+  left: calc(50% + 24px);
+  right: calc(-50% + 24px);
+  height: 1.5px;
+  background: var(--rule, #2a2a34);
+  transition: background 220ms ease;
+}
+
+/* States */
+.join-wiz-step.is-done .join-wiz-step-circle {
+  border-color: var(--yellow, #d4a84a);
+  background: var(--yellow, #d4a84a);
+  color: #1a0e08;
+}
+.join-wiz-step.is-done .join-wiz-step-label {
+  color: var(--text-2);
+}
+.join-wiz-step.is-done .join-wiz-step-connector {
+  background: var(--yellow, #d4a84a);
+}
+
+.join-wiz-step.is-current .join-wiz-step-circle {
+  border-color: var(--red, #c11a2c);
+  background: var(--red, #c11a2c);
+  color: #ffffff;
+  transform: scale(1.08);
+  box-shadow:
+    0 0 0 4px rgba(193, 26, 44, 0.18),
+    0 8px 24px -8px rgba(193, 26, 44, 0.6);
+}
+.join-wiz-step.is-current .join-wiz-step-label {
+  color: var(--text-1, #f5f1e8);
+}
+
+.join-wiz-step.is-pending .join-wiz-step-circle { /* default state */ }
+
+/* ── PAGE-SPECIFIC HEAD (eyebrow + title + subtitle), animated
+   in on each step change via key={"head-" + step} */
+.join-wiz-head-body {
+  animation: wiz-head-in 380ms cubic-bezier(.22, 1, .36, 1) both;
+}
+@keyframes wiz-head-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.join-wiz-eyebrow {
+  display: inline-block;
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  color: var(--yellow, #d4a84a);
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+}
+
+/* Hide the old .join-wiz-counter block in favor of the eyebrow above */
+.join-wiz-counter { display: none !important; }
+
+/* ── PAGE TRANSITIONS — slide-in-from-right when step advances */
+.join-wiz-page {
+  animation: wiz-page-in 360ms cubic-bezier(.22, 1, .36, 1) both;
+}
+@keyframes wiz-page-in {
+  from { opacity: 0; transform: translateX(14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── VALIDATION HINT — list field names instead of count ────── */
+.join-wiz-status.is-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-left: 2px solid var(--yellow, #d4a84a);
+  background: rgba(212, 168, 74, 0.06);
+  color: var(--text-2, #c9c3b5) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: var(--sans) !important;
+  font-size: 13px !important;
+}
+.join-wiz-status.is-hint strong {
+  color: var(--text-1, #f5f1e8);
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .join-wiz-step-label { display: none; }
+  .join-wiz-step-circle { width: 36px; height: 36px; font-size: 11px; }
+  .join-wiz-step-connector { top: 18px; left: calc(50% + 20px); right: calc(-50% + 20px); }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   PR D-2 — WIZARD COMPLETION STATE · AAA
+   "Feels like a reward, not a blank confirmation." Animated stamp
+   drop, personalized greeting, submission receipt, what-happens-next.
+   ════════════════════════════════════════════════════════════════════ */
+
+.join-confirm-aaa {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-5);
+  text-align: left;
+  position: relative;
+}
+
+/* ── STAMP — drops in with rotation + scale, ends askew ────── */
+.join-confirm-stamp-area {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 0 var(--space-6) auto;
+}
+.join-confirm-stamp-mark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  border: 4px double var(--red, #c11a2c);
+  color: var(--red, #c11a2c);
+  background: rgba(193, 26, 44, 0.04);
+  font-family: var(--display, "Bebas Neue", system-ui, serif);
+  text-align: center;
+  /* Initial state — for the drop animation */
+  opacity: 0;
+  transform: rotate(-2deg) scale(1.6);
+  animation: confirm-stamp-drop 900ms cubic-bezier(.22, 1, .28, 1.05) 0.25s forwards;
+  box-shadow: 0 8px 32px -16px rgba(193, 26, 44, 0.45);
+}
+.join-confirm-stamp-line-1 {
+  font-size: 36px;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.join-confirm-stamp-line-2 {
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  font-family: var(--mono);
+  font-weight: 700;
+  border-top: 1.5px solid var(--red, #c11a2c);
+  border-bottom: 1.5px solid var(--red, #c11a2c);
+  padding: 6px 0;
+  margin: 4px 0;
+  align-self: stretch;
+}
+.join-confirm-stamp-line-3 {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  font-family: var(--mono);
+  opacity: 0.85;
+}
+@keyframes confirm-stamp-drop {
+  0%   { opacity: 0; transform: rotate(-12deg) scale(1.8); }
+  60%  { opacity: 1; transform: rotate(-6deg)  scale(0.95); }
+  75%  {              transform: rotate(-3deg) scale(1.04); }
+  100% { opacity: 1; transform: rotate(-4deg) scale(1); }
+}
+
+/* ── EYEBROW + TITLE ─────────────────────────────────────── */
+.join-confirm-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  color: var(--yellow, #d4a84a);
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: confirm-content-in 700ms ease 0.6s forwards;
+}
+.join-confirm-dot {
+  display: inline-block;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--yellow, #d4a84a);
+  box-shadow: 0 0 8px var(--yellow, #d4a84a);
+}
+
+.join-confirm-title {
+  font-family: var(--display, "Bebas Neue", system-ui, serif);
+  font-weight: 400;
+  font-size: clamp(36px, 5.5vw, 56px);
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  color: var(--text-1, #f5f1e8);
+  margin: 0 0 var(--space-4);
+  opacity: 0;
+  animation: confirm-content-in 700ms ease 0.7s forwards;
+}
+.join-confirm-name {
+  color: var(--yellow, #d4a84a);
+}
+
+.join-confirm-lede {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-2, #c9c3b5);
+  margin: 0 0 var(--space-6);
+  max-width: 560px;
+  opacity: 0;
+  animation: confirm-content-in 700ms ease 0.85s forwards;
+}
+
+@keyframes confirm-content-in {
+  to { opacity: 1; }
+}
+
+/* ── RECEIPT — three-column metadata strip ───────────────── */
+.join-confirm-receipt {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-bottom: var(--space-6);
+  border: 1px solid var(--rule, #2a2a34);
+  background: var(--bg-2, #15151a);
+  opacity: 0;
+  animation: confirm-content-in 700ms ease 1.0s forwards;
+}
+.join-confirm-receipt-col {
+  padding: var(--space-4) var(--space-5);
+  border-right: 1px solid var(--rule, #2a2a34);
+}
+.join-confirm-receipt-col:last-child { border-right: 0; }
+.join-confirm-receipt-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-3, #948d80);
+  margin-bottom: 6px;
+}
+.join-confirm-receipt-value {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-1, #f5f1e8);
+}
+.join-confirm-receipt-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--yellow, #d4a84a) !important;
+}
+.join-confirm-status-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--yellow, #d4a84a);
+  animation: confirm-status-pulse 1.8s ease-in-out infinite;
+}
+@keyframes confirm-status-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* ── WHAT HAPPENS NEXT — three-step ordered list ────────── */
+.join-confirm-next {
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--rule, #2a2a34);
+  margin-bottom: var(--space-6);
+  opacity: 0;
+  animation: confirm-content-in 700ms ease 1.15s forwards;
+}
+.join-confirm-next-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--yellow, #d4a84a);
+  margin-bottom: var(--space-4);
+}
+.join-confirm-next-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+.join-confirm-next-list li {
+  position: relative;
+  padding: var(--space-3) 0 var(--space-3) 44px;
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-2);
+  counter-increment: step;
+  border-bottom: 1px solid var(--rule-faint, #1c1c24);
+}
+.join-confirm-next-list li:last-child { border-bottom: none; }
+.join-confirm-next-list li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: var(--space-3);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--yellow, #d4a84a);
+}
+
+/* ── ACTIONS ─────────────────────────────────────────────── */
+.join-confirm-actions {
+  opacity: 0;
+  animation: confirm-content-in 700ms ease 1.3s forwards;
+}
+.join-confirm-again {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 14px 24px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-2);
+  background: transparent;
+  border: 1.5px solid var(--rule);
+  cursor: pointer;
+  transition: color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+.join-confirm-again:hover {
+  color: var(--text-1);
+  border-color: var(--text-3);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .join-confirm-stamp-area { width: 160px; height: 160px; margin: 0 auto var(--space-5); }
+  .join-confirm-stamp-line-1 { font-size: 28px; }
+  .join-confirm-receipt { grid-template-columns: 1fr; }
+  .join-confirm-receipt-col {
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .join-confirm-receipt-col:last-child { border-bottom: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .join-confirm-stamp-mark, .join-confirm-eyebrow, .join-confirm-title,
+  .join-confirm-lede, .join-confirm-receipt, .join-confirm-next,
+  .join-confirm-actions, .join-wiz-head-body, .join-wiz-page {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

@@ -4052,6 +4052,35 @@ function FieldGroup({title, children}){
 }
 
 
+// Friendly field-key → label mapping for the "still needs: …" hint
+// shown on each wizard page. Keys not listed here fall through to a
+// generic title-cased label.
+const JOIN_FIELD_LABELS = {
+  char: "Character name",
+  rpcLink: "RPC profile link",
+  ooc: "Writer tag",
+  alias: "Stage name / alias",
+  house: "House",
+  year: "Year",
+  track: "Track",
+  tier: "Tier",
+  age: "Age",
+  power: "Power",
+  powerExpression: "Power expression",
+  drawbacks: "Drawbacks",
+  rulesAgree: "Rules acknowledgment",
+  facultyRole: "Faculty role",
+  strataRole: "STRATA role",
+  strataDept: "Department",
+  strataTitle: "Role title",
+  clubPosition: "Club position",
+  govSeat: "Government seat",
+};
+function humanizeFieldKey(k){
+  if (JOIN_FIELD_LABELS[k]) return JOIN_FIELD_LABELS[k];
+  return k.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
+}
+
 function JoinTab(){
   const [type, setType]   = useState(null);
   const [form, setForm]   = useState({});
@@ -4226,20 +4255,83 @@ function JoinTab(){
   };
 
   if (confirmed){
+    // Submission receipt: derived from char name + timestamp so it's
+    // stable for the writer to reference, not a real DB id.
+    const submittedChar = (form.char || form.alias || "Applicant").trim();
+    const submissionId = (() => {
+      const t = Date.now().toString(36).toUpperCase().slice(-6);
+      const seed = (form.char || form.alias || form.rpcLink || "X")
+        .split("")
+        .reduce((a, c) => a + c.charCodeAt(0), 0)
+        .toString(36).toUpperCase().slice(-2);
+      return "CDR-" + seed + "-" + t;
+    })();
+    const submittedDate = new Date().toLocaleDateString("en-GB", {
+      year: "numeric", month: "short", day: "numeric"
+    });
     return (
       <div className="join">
         <div className="join-form-wrap">
-          <div className="join-confirm">
-            <div className="join-confirm-stamp"><Icon name="flag" size={12} className="inline-icon"/> APPLICATION RECEIVED</div>
-            <h3>Application <span className="accent">sent.</span></h3>
-            <p>
-              Your application has been forwarded to the admin channel.
-              We'll reach out via the RPC profile you linked with a decision and any
-              follow-up questions. Sit tight — usually within a few days.
+          <div className="join-confirm-aaa">
+            {/* The stamp drops in with a CSS animation — scale + rotate
+                + slight bounce on landing. The hatched red border and
+                offset shadow read as a rubber-stamp print. */}
+            <div className="join-confirm-stamp-area" aria-hidden="true">
+              <div className="join-confirm-stamp-mark">
+                <div className="join-confirm-stamp-line-1">RECEIVED</div>
+                <div className="join-confirm-stamp-line-2">UNDER REVIEW</div>
+                <div className="join-confirm-stamp-line-3">{submittedDate}</div>
+              </div>
+            </div>
+
+            <div className="join-confirm-eyebrow">
+              <span className="join-confirm-dot" aria-hidden="true"/>
+              SUBMISSION LOGGED · ADMIN CHANNEL NOTIFIED
+            </div>
+
+            <h2 className="join-confirm-title">
+              Thank you, <span className="join-confirm-name">{submittedChar}</span>.
+            </h2>
+            <p className="join-confirm-lede">
+              Your application has been routed to the admin channel. We'll reach out
+              via the RPC profile you linked — usually within a few days, sometimes
+              sooner. Don't refresh this page if you're waiting on a confirmation,
+              just keep an eye on your roleplay.chat messages.
             </p>
-            <button className="join-confirm-again" onClick={reset}>
-              Submit Another Application
-            </button>
+
+            <div className="join-confirm-receipt" role="note">
+              <div className="join-confirm-receipt-col">
+                <div className="join-confirm-receipt-label">Submission ID</div>
+                <code className="join-confirm-receipt-value">{submissionId}</code>
+              </div>
+              <div className="join-confirm-receipt-col">
+                <div className="join-confirm-receipt-label">Lodged</div>
+                <div className="join-confirm-receipt-value">{submittedDate}</div>
+              </div>
+              <div className="join-confirm-receipt-col">
+                <div className="join-confirm-receipt-label">Status</div>
+                <div className="join-confirm-receipt-value join-confirm-receipt-status">
+                  <span className="join-confirm-status-dot" aria-hidden="true"/>
+                  PENDING REVIEW
+                </div>
+              </div>
+            </div>
+
+            <div className="join-confirm-next">
+              <div className="join-confirm-next-title">What happens next</div>
+              <ol className="join-confirm-next-list">
+                <li>Admin reads your submission against the masterlist and quota.</li>
+                <li>You'll receive a message on your linked RPC profile with the decision and any follow-up questions.</li>
+                <li>If approved, you'll be added to the roster and the channel.</li>
+              </ol>
+            </div>
+
+            <div className="join-confirm-actions">
+              <button className="join-confirm-again" onClick={reset}>
+                <Icon name="arrow-left" size={14} className="inline-icon"/>
+                Submit another application
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -4259,26 +4351,44 @@ function JoinTab(){
       </div>
 
       <div className="join-form-wrap">
-        {/* WIZARD HEAD — page counter + title + progress.
-            Shown only once a type has been selected (step >= 1) AND
-            the type is wizardized (collective/outside fall through to
-            the legacy layout below). */}
+        {/* WIZARD HEAD — Riot-quality numbered step indicator above
+            the page title. Shown only once a type has been selected
+            (step >= 1) AND the type is wizardized. */}
         {type && wizardPages && step >= 1 && (
           <header className="join-wiz-head">
-            <div className="join-wiz-counter">
-              <span className="join-wiz-counter-now">{String(step).padStart(2, "0")}</span>
-              <span className="join-wiz-counter-sep">/</span>
-              <span className="join-wiz-counter-tot">{String(wizardCount).padStart(2, "0")}</span>
+            <div className="join-wiz-steps" role="list" aria-label="Application progress">
+              {wizardPages.map((p, i) => {
+                const n = i + 1;
+                const state = n < step ? "done" : n === step ? "current" : "pending";
+                return (
+                  <div
+                    key={p.id}
+                    className={"join-wiz-step is-" + state}
+                    role="listitem"
+                    aria-current={state === "current" ? "step" : undefined}
+                  >
+                    <div className="join-wiz-step-circle" aria-hidden="true">
+                      {state === "done"
+                        ? <Icon name="check" size={14}/>
+                        : <span className="join-wiz-step-n">{String(n).padStart(2, "0")}</span>
+                      }
+                    </div>
+                    <div className="join-wiz-step-label">{p.title}</div>
+                    {i < wizardPages.length - 1 && (
+                      <div className="join-wiz-step-connector" aria-hidden="true"/>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-            <h2 className="join-wiz-title">{currentPage.title}</h2>
-            <p className="join-wiz-subtitle">{currentPage.subtitle}</p>
-            <div className="join-wiz-progress" aria-hidden="true">
-              {wizardPages.map((p, i) => (
-                <div
-                  key={p.id}
-                  className={"join-wiz-tick" + (i + 1 === step ? " is-current" : (i + 1 < step ? " is-done" : ""))}
-                />
-              ))}
+            {/* Page-specific head — re-keyed on step so each page's
+                title animates in from the right on advance. */}
+            <div key={"head-" + step} className="join-wiz-head-body">
+              <div className="join-wiz-eyebrow">
+                STEP {String(step).padStart(2, "0")} / {String(wizardCount).padStart(2, "0")}
+              </div>
+              <h2 className="join-wiz-title">{currentPage.title}</h2>
+              <p className="join-wiz-subtitle">{currentPage.subtitle}</p>
             </div>
           </header>
         )}
@@ -4343,14 +4453,17 @@ function JoinTab(){
               </aside>
             )}
 
-            <JoinFieldset
-              type={type}
-              form={form}
-              set={set}
-              quotaStats={quotaStats}
-              oocTags={oocTags}
-              wizardPageId={currentPage.id}
-            />
+            <div key={"page-" + step} className="join-wiz-page">
+              <JoinFieldset
+                type={type}
+                form={form}
+                set={set}
+                quotaStats={quotaStats}
+                oocTags={oocTags}
+                wizardPageId={currentPage.id}
+                missingFields={currentPageMissing}
+              />
+            </div>
 
             <div className="join-wiz-nav">
               <button
@@ -4391,7 +4504,11 @@ function JoinTab(){
             )}
             {currentPageMissing.length > 0 && step < wizardCount && (
               <div className="join-wiz-status is-hint">
-                {currentPageMissing.length} required field{currentPageMissing.length === 1 ? "" : "s"} to go.
+                <Icon name="alert-triangle" size={14} className="inline-icon"/>
+                {currentPageMissing.length === 1
+                  ? <>Still needs: <strong>{humanizeFieldKey(currentPageMissing[0])}</strong></>
+                  : <>Still needs: <strong>{currentPageMissing.map(humanizeFieldKey).join(" · ")}</strong></>
+                }
               </div>
             )}
           </>
