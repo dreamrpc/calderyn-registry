@@ -8,7 +8,9 @@
    so that webhook URLs are never exposed in client code.
    ════════════════════════════════════════════════════════════════════════ */
 
-const WORKER_URL = "https://calderyn-registry-relay.dreamroleplaywriter.workers.dev/submit";
+const WORKER_BASE = "https://calderyn-registry-relay.dreamroleplaywriter.workers.dev";
+const WORKER_URL  = WORKER_BASE + "/submit";
+const QUOTA_URL   = WORKER_BASE + "/quota-stats";
 
 const {useState, useMemo, useEffect, useCallback, useRef} = React;
 const D = window.CALDERYN;
@@ -3775,6 +3777,10 @@ function JoinTab(){
   const [form, setForm]   = useState({});
   const [status, setStatus] = useState({ state: "idle", msg: "" });
   const [confirmed, setConfirmed] = useState(false);
+  // Quota stats for the writer's current OOC tag. Fetched from the
+  // Worker so the writers.js mapping never leaves the server — only
+  // counts and limits come down to the client.
+  const [quotaStats, setQuotaStats] = useState(null);
 
   const set = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
 
@@ -3783,7 +3789,33 @@ function JoinTab(){
     setForm({});
     setStatus({ state: "idle", msg: "" });
     setConfirmed(false);
+    setQuotaStats(null);
   };
+
+  // Re-fetch quota stats when the writer's OOC tag changes. Debounce
+  // by waiting until the value is stable for 300ms so a user typing
+  // their freeform tag doesn't fire a request on every keystroke.
+  useEffect(() => {
+    const ooc = (form.ooc || "").trim();
+    if (!ooc) { setQuotaStats(null); return; }
+    let cancelled = false;
+    const handle = setTimeout(async () => {
+      try {
+        const res = await fetch(QUOTA_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ooc, rpcLink: form.rpcLink || "" }),
+        });
+        if (!res.ok || cancelled) return;
+        const stats = await res.json();
+        if (!cancelled) setQuotaStats(stats);
+      } catch {
+        // Network error — leave whatever was last loaded; not worth
+        // erroring the form for a hint panel.
+      }
+    }, 300);
+    return () => { cancelled = true; clearTimeout(handle); };
+  }, [form.ooc, form.rpcLink]);
 
   // Validation: list missing required fields per application type
   const requiredFields = useMemo(() => {
@@ -3942,7 +3974,7 @@ function JoinTab(){
             </aside>
           )}                                                                          
 
-            <JoinFieldset type={type} form={form} set={set}/>
+            <JoinFieldset type={type} form={form} set={set} quotaStats={quotaStats}/>
 
             <div className="join-actions">
               <button
@@ -4382,7 +4414,76 @@ function CollectiveFieldset({form, set, Common}){
 // is the source of truth.
 const KNOWN_OOC_TAGS = ["Dream", "Katniss", "Star", "Star King", "Storm", "Tyler", "Wilder"];
 
-function JoinFieldset({type, form, set}){
+// Small read-only panel that surfaces a writer's current per-pool,
+// per-tier character counts the moment they pick their Writer Tag.
+// Counts come from the Worker's /quota-stats endpoint; the OOC mapping
+// and character lists never leave the server.
+function QuotaStatsPanel({stats, activePool}){
+  if (!stats) return null;
+  const TIERS = ["A-List", "B-List", "C-List", "D-List"];
+  const limits = stats.limits || {};
+  const renderPool = (pool, label) => {
+    const counts = stats[pool] || {};
+    const isActive = pool === activePool;
+    return (
+      <div className="quota-pool" style={{
+        opacity: isActive ? 1 : 0.65,
+        fontWeight: isActive ? 600 : 400,
+        margin: "4px 0",
+      }}>
+        <span style={{minWidth: "9em", display: "inline-block"}}>
+          {label}{isActive ? " (this form)" : ""}:
+        </span>
+        {TIERS.map((t, i) => {
+          const count = counts[t] || 0;
+          const limit = limits[t]; // undefined for D-List → uncapped
+          const atCap = limit != null && count >= limit;
+          const overCap = limit != null && count > limit;
+          const sep = i === 0 ? "" : " · ";
+          return (
+            <span key={t} style={{
+              color: overCap ? "#e31b23" : atCap ? "#d4a84a" : "inherit",
+              fontWeight: (overCap || atCap) ? 700 : "inherit",
+            }}>
+              {sep}{t} {count}{limit != null ? `/${limit}` : " (uncapped)"}
+            </span>
+          );
+        })}
+      </div>
+    );
+  };
+  return (
+    <div className="quota-stats" style={{
+      margin: "8px 0 4px",
+      padding: "10px 12px",
+      background: "rgba(212, 168, 74, 0.05)",
+      border: "1px solid rgba(212, 168, 74, 0.2)",
+      borderRadius: "8px",
+      fontSize: "13px",
+      fontFamily: "var(--mono, monospace)",
+      color: "var(--text, #ece6d6)",
+    }}>
+      <div style={{
+        fontSize: "11px",
+        letterSpacing: "0.08em",
+        textTransform: "uppercase",
+        color: "var(--text-low, #8a8478)",
+        marginBottom: "6px",
+      }}>
+        Your current quota
+      </div>
+      {renderPool("student", "Students")}
+      {renderPool("adult",   "Adults")}
+    </div>
+  );
+}
+
+function JoinFieldset({type, form, set, quotaStats}){
+  // Pool this form would route to — student form → student pool,
+  // everything else → adult. Used to highlight the relevant row in
+  // the quota panel below the Writer Tag dropdown.
+  const activePool = type === "student" ? "student" : "adult";
+
   // Writer Tag dropdown state. `form.oocPreset` tracks which option is
   // selected; "_other" reveals a freeform text input that writes into
   // `form.ooc` directly. For preset selections, both fields hold the
@@ -4428,6 +4529,7 @@ function JoinFieldset({type, form, set}){
             placeholder="Type your handle"
           />
         )}
+        <QuotaStatsPanel stats={quotaStats} activePool={activePool}/>
       </Field>
     </>
   );

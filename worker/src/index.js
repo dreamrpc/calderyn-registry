@@ -1,5 +1,6 @@
 import { handleSubmit } from "./submit.js";
 import { handleInteraction } from "./interactions.js";
+import { handleQuotaStats } from "./quota-stats.js";
 
 export default {
   async fetch(request, env, ctx) {
@@ -11,6 +12,10 @@ export default {
 
     if (url.pathname === "/submit" && request.method === "POST") {
       return withCors(await handleSubmit(request, env, ctx), env, request);
+    }
+
+    if (url.pathname === "/quota-stats" && request.method === "POST") {
+      return withCors(await handleQuotaStats(request, env, ctx), env, request);
     }
 
     if (url.pathname === "/interactions" && request.method === "POST") {
