@@ -1066,6 +1066,9 @@ outside: [
         type: "Nightclub",
         note: "Intimate live-music venue tucked off Greenwich Market. Smaller and more atmospheric than Pulse — focused on vocal acts, jazz nights, and after-hours sets.",
         roles: [
+          { role: "Manager" },
+          { role: "Bartender" },
+          { role: "Bouncer" },
           {
             role: "Nightclub Singer",
             char: "Briar Musgraves",
@@ -1075,9 +1078,6 @@ outside: [
             drawbacks: "Emotional Overload, Difficulty Separating Her Emotions From Others, Silence Weakens Her, Emotional Blind Spots, Attachment Vulnerability, Hypervigilance & Control Issues, Physical Vulnerability",
             link: "https://roleplay.chat/profile.php?user=Reverie",
           },
-          { role: "Manager" },
-          { role: "Bartender" },
-          { role: "Bouncer" },
         ],
       },
     ],
