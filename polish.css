@@ -5501,3 +5501,94 @@ body {
     transform: none !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   RULES — polished section dividers and refined typography
+   Sits on top of the earlier "single-column → two-column grid"
+   block earlier in this file. Adds category section headers and
+   lifts the type a notch toward the dossier feel of the home page.
+   ════════════════════════════════════════════════════════════════════ */
+
+.rules-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4px;
+}
+.rules-section + .rules-section {
+  margin-top: 56px;
+}
+.rules-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 0 18px;
+  border-top: 1px solid rgba(212, 168, 74, 0.32);
+  border-bottom: 1px solid rgba(212, 168, 74, 0.14);
+  margin-bottom: 12px;
+}
+.rules-section:first-of-type .rules-section-head {
+  border-top: none;
+  padding-top: 4px;
+}
+.rules-section-label {
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: rgba(244, 200, 110, 0.85);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.rules-section-lede {
+  font-family: var(--sans, system-ui);
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(236, 230, 214, 0.65);
+  text-align: right;
+  max-width: 460px;
+}
+
+/* Override the previous "rules-grid max-width 1200px / margin auto"
+   so the per-section grid sits flush with its section container. */
+.rules-section .rules-grid {
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+/* Lift the rule number — bigger, still gold, with a hairline rule
+   under it for added structure. */
+.rules-section .rule-num {
+  font-size: 36px !important;
+  padding-top: 0 !important;
+  position: relative;
+}
+.rules-section .rule-num::after {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: rgba(244, 200, 110, 0.45);
+  margin-left: auto;
+  margin-top: 6px;
+}
+
+/* Title gets a touch more presence */
+.rules-section .rule-title {
+  font-size: 17px !important;
+  line-height: 1.3 !important;
+  margin-bottom: 8px !important;
+  color: var(--text) !important;
+}
+.rules-section .rule-text {
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+}
+
+@media (max-width: 760px) {
+  .rules-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .rules-section-lede { text-align: left; }
+}
