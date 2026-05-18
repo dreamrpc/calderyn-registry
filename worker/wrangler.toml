@@ -45,10 +45,13 @@ GITHUB_REPO  = "calderyn-registry"
 GITHUB_BRANCH = "main"
 GITHUB_DATA_FILE = "data.js"
 
-# Comma-separated list of origins allowed to call /submit. Only the
-# live Cloudflare Pages origin is on the allowlist; the GH Pages site
-# was unpublished after the migration.
-CORS_ALLOWED_ORIGINS = "https://calderyn-registry.pages.dev"
+# Comma-separated list of origins allowed to call /submit and
+# /quota-stats. The site lives at calderyncollege.uk now (with the
+# pages.dev origin redirected to it). Both apex and www variants are
+# allowed so the form works regardless of which one the user lands on.
+# The pages.dev origin stays on the list so admins can still hit the
+# raw Cloudflare URL if they need to bypass DNS for debugging.
+CORS_ALLOWED_ORIGINS = "https://calderyncollege.uk,https://www.calderyncollege.uk,https://calderyn-registry.pages.dev"
 
 # Per-tier per-writer caps. Approvals that would push a writer past
 # the cap for the submission's tier are blocked with an explanatory
