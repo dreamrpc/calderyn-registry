@@ -8147,3 +8147,34 @@ code, pre, kbd, samp, var, tt,
   .join-form-header-title { font-size: clamp(32px, 8vw, 48px); }
   .join-form-header-sub { font-size: 15px; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   JOIN · INFO CARD
+   Soft inline notice block used for non-blocking informational copy
+   inside a wizard page (e.g. "Power is optional on create-new flow").
+   ════════════════════════════════════════════════════════════════════ */
+.join-info-card {
+  margin: 0 0 var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  background: rgba(212, 168, 74, 0.06);
+  border-left: 3px solid var(--yellow, #d4a84a);
+  font-family: var(--sans, 'Söhne', system-ui, sans-serif);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-2, #c9c3b5);
+}
+.join-info-card strong {
+  color: var(--text-1, #f5f1e8);
+  font-weight: 600;
+  display: inline;
+}
+
+/* Flow blurb sitting right under the "Pick a flow" FieldGroup */
+.join-flow-blurb {
+  font-family: var(--sans, 'Söhne', system-ui, sans-serif);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-3, #948d80);
+  margin: calc(-1 * var(--space-2)) 0 var(--space-4);
+  max-width: 640px;
+}
