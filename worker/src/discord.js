@@ -1,11 +1,12 @@
 const API = "https://discord.com/api/v10";
 
-// POST a fresh message into the admin channel using the bot token.
+// POST a fresh message into the given channel using the bot token.
 // Returns the parsed message object (so we can stash id/channel_id).
-export async function postMessage(env, payload) {
-  requireEnv(env, ["DISCORD_BOT_TOKEN", "DISCORD_ADMIN_CHANNEL_ID"]);
+export async function postMessage(env, channelId, payload) {
+  requireEnv(env, ["DISCORD_BOT_TOKEN"]);
+  if (!channelId) throw new Error("postMessage: missing channelId");
   const res = await fetch(
-    `${API}/channels/${env.DISCORD_ADMIN_CHANNEL_ID}/messages`,
+    `${API}/channels/${channelId}/messages`,
     {
       method: "POST",
       headers: {

@@ -32,9 +32,15 @@ Cloudflare Worker that powers the registry's application flow:
 4. **OAuth2 → URL Generator**: tick `bot` and `applications.commands`.
    Bot permissions: `Send Messages`, `Read Message History`, `View
    Channels`. Open the generated URL and invite the bot to your server.
-5. In Discord, right-click the channel you want approval messages to
-   land in → **Copy Channel ID** (Developer Mode must be on:
-   Settings → App Settings → Advanced → Developer Mode).
+5. For each form type, you need an admin-only channel for its approval
+   messages — `student-apps`, `faculty-apps`, `strata-apps`,
+   `club-apps`, `gov-apps`, `collective-apps`, `outside-apps`, plus an
+   `apps-fallback` for anything unrecognised. Right-click each →
+   **Copy Channel ID** (Developer Mode on: Settings → App Settings →
+   Advanced → Developer Mode). Paste each into the matching
+   `DISCORD_CHANNEL_*` entry in `wrangler.toml`. The bot needs
+   *View Channel* + *Send Messages* + *Read Message History* in every
+   channel it'll post to.
 6. In Discord, right-click the **admin role** in the server's role list
    → **Copy Role ID**.
 
@@ -67,8 +73,9 @@ Copy that `id` into `wrangler.toml` (replace `<PASTE_KV_NAMESPACE_ID_HERE>`).
 
 In `wrangler.toml`, also fill in the non-secret IDs you copied above:
 - `DISCORD_APPLICATION_ID`
-- `DISCORD_ADMIN_CHANNEL_ID`
 - `DISCORD_ADMIN_ROLE_ID`
+- `DISCORD_CHANNEL_STUDENT` / `_FACULTY` / `_STRATA` / `_CLUB` /
+  `_GOV` / `_COLLECTIVE` / `_OUTSIDE` / `_FALLBACK`
 
 Then store the **secrets**:
 ```bash

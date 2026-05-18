@@ -22,10 +22,11 @@ export async function handleSubmit(request, env) {
   const id = newSubmissionId();
   const embed = buildEmbed(type, form);
   const components = approvalButtons(id);
+  const channelId = channelForType(env, type);
 
   let posted;
   try {
-    posted = await postMessage(env, {
+    posted = await postMessage(env, channelId, {
       content: env.DISCORD_PING_ROLE_ID ? `<@&${env.DISCORD_PING_ROLE_ID}>` : "",
       allowed_mentions: env.DISCORD_PING_ROLE_ID
         ? { roles: [env.DISCORD_PING_ROLE_ID] }
@@ -77,6 +78,21 @@ function approvalButtons(id) {
       ],
     },
   ];
+}
+
+// Map a submission type to the configured admin-only channel. Unknown
+// types fall through to the fallback channel so nothing silently drops.
+function channelForType(env, type) {
+  const map = {
+    student:    env.DISCORD_CHANNEL_STUDENT,
+    faculty:    env.DISCORD_CHANNEL_FACULTY,
+    strata:     env.DISCORD_CHANNEL_STRATA,
+    club:       env.DISCORD_CHANNEL_CLUB,
+    gov:        env.DISCORD_CHANNEL_GOV,
+    collective: env.DISCORD_CHANNEL_COLLECTIVE,
+    outside:    env.DISCORD_CHANNEL_OUTSIDE,
+  };
+  return map[type] || env.DISCORD_CHANNEL_FALLBACK;
 }
 
 function newSubmissionId() {
