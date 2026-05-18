@@ -25,76 +25,76 @@
 /* ── Söhne (primary sans) ───────────────────────────────────────── */
 @font-face {
   font-family: 'Söhne';
-  src: url('fonts/sohne-buch.otf') format('opentype');
+  src: url('/fonts/sohne-buch.otf') format('opentype');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne';
-  src: url('fonts/sohne-buch-italic.otf') format('opentype');
+  src: url('/fonts/sohne-buch-italic.otf') format('opentype');
   font-weight: 400; font-style: italic; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne';
-  src: url('fonts/sohne-kraftig.otf') format('opentype');
+  src: url('/fonts/sohne-kraftig.otf') format('opentype');
   font-weight: 500; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne';
-  src: url('fonts/sohne-halbfett.otf') format('opentype');
+  src: url('/fonts/sohne-halbfett.otf') format('opentype');
   font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne';
-  src: url('fonts/sohne-dreiviertelfett.otf') format('opentype');
+  src: url('/fonts/sohne-dreiviertelfett.otf') format('opentype');
   font-weight: 700; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne';
-  src: url('fonts/sohne-fett.otf') format('opentype');
+  src: url('/fonts/sohne-fett.otf') format('opentype');
   font-weight: 800; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne';
-  src: url('fonts/sohne-extrafett.otf') format('opentype');
+  src: url('/fonts/sohne-extrafett.otf') format('opentype');
   font-weight: 900; font-style: normal; font-display: swap;
 }
 
 /* ── Söhne Breit (display, wider sibling) ─────────────────────── */
 @font-face {
   font-family: 'Söhne Breit';
-  src: url('fonts/sohne-breit-buch.otf') format('opentype');
+  src: url('/fonts/sohne-breit-buch.otf') format('opentype');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne Breit';
-  src: url('fonts/sohne-breit-halbfett.otf') format('opentype');
+  src: url('/fonts/sohne-breit-halbfett.otf') format('opentype');
   font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne Breit';
-  src: url('fonts/sohne-breit-fett.otf') format('opentype');
+  src: url('/fonts/sohne-breit-fett.otf') format('opentype');
   font-weight: 800; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne Breit';
-  src: url('fonts/sohne-breit-extrafett.otf') format('opentype');
+  src: url('/fonts/sohne-breit-extrafett.otf') format('opentype');
   font-weight: 900; font-style: normal; font-display: swap;
 }
 
 /* ── Söhne Mono (monospace) ──────────────────────────────────── */
 @font-face {
   font-family: 'Söhne Mono';
-  src: url('fonts/sohne-mono-buch.otf') format('opentype');
+  src: url('/fonts/sohne-mono-buch.otf') format('opentype');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne Mono';
-  src: url('fonts/sohne-mono-kraftig.otf') format('opentype');
+  src: url('/fonts/sohne-mono-kraftig.otf') format('opentype');
   font-weight: 500; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Söhne Mono';
-  src: url('fonts/sohne-mono-halbfett.otf') format('opentype');
+  src: url('/fonts/sohne-mono-halbfett.otf') format('opentype');
   font-weight: 600; font-style: normal; font-display: swap;
 }
 
@@ -122,34 +122,34 @@
 /* ── Druk (primary display) ──────────────────────────────────── */
 @font-face {
   font-family: 'Druk';
-  src: url('fonts/druk-bold.otf') format('opentype');
+  src: url('/fonts/druk-bold.otf') format('opentype');
   font-weight: 700; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Druk';
-  src: url('fonts/druk-heavy.otf') format('opentype');
+  src: url('/fonts/druk-heavy.otf') format('opentype');
   font-weight: 800; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Druk';
-  src: url('fonts/druk-super.otf') format('opentype');
+  src: url('/fonts/druk-super.otf') format('opentype');
   font-weight: 900; font-style: normal; font-display: swap;
 }
 
 /* ── Druk Wide (extra-impact display) ─────────────────────── */
 @font-face {
   font-family: 'Druk Wide';
-  src: url('fonts/druk-wide-bold.otf') format('opentype');
+  src: url('/fonts/druk-wide-bold.otf') format('opentype');
   font-weight: 700; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Druk Wide';
-  src: url('fonts/druk-wide-heavy.otf') format('opentype');
+  src: url('/fonts/druk-wide-heavy.otf') format('opentype');
   font-weight: 800; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Druk Wide';
-  src: url('fonts/druk-wide-super.otf') format('opentype');
+  src: url('/fonts/druk-wide-super.otf') format('opentype');
   font-weight: 900; font-style: normal; font-display: swap;
 }
 
@@ -6463,7 +6463,16 @@ html, body { overflow-x: clip; }
   animation: home-hero-word-in 1s cubic-bezier(.18, .9, .25, 1) forwards;
   /* Subtle character-level variation — handcrafted feel. */
   will-change: transform, opacity;
+  /* Explicit inter-word gap. The JSX wraps each word in its own
+     inline-block span so the per-word animation can stagger, but
+     trailing whitespace inside an inline-block collapses against
+     the next one — at Druk Wide Super 188px, that reads as the
+     words touching ("Class is in session" looks like "Classisin
+     session"). 0.22em adds the missing word gap back. Last word in
+     each line zeros it so trailing margin doesn't shift centering. */
+  margin-right: 0.22em;
 }
+.home-hero-word:last-child { margin-right: 0; }
 @keyframes home-hero-word-in {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }

@@ -4625,22 +4625,14 @@ function JoinTab(){
             the old single-page form below. */}
         {(step === 0 || !wizardPages) && (
           <div className="join-step">
-            {!wizardPages && (
-              <>
-                <span className="join-step-tag">Step 01 · Application Type</span>
-                <div className="join-step-title">What are you applying for?</div>
-                <div className="join-step-blurb">
-                  Pick a role. The form adjusts to ask only what's needed. Switching types resets your inputs.
-                </div>
-              </>
-            )}
-            {wizardPages && step === 0 && (
-              <>
-                <span className="join-wiz-eyebrow">01 · ARCHETYPE</span>
-                <h2 className="join-wiz-title">Pick your archetype.</h2>
-                <p className="join-wiz-subtitle">The form adjusts to ask only what's needed for the role. You can change later — switching resets your inputs.</p>
-              </>
-            )}
+            {/* Type picker eyebrow + title — uses the wizard-eyebrow
+                treatment universally now. Earlier this branched on
+                whether the type was wizardized, but at step 0 nothing
+                is selected yet so wizardPages was always null and the
+                v1 ".join-step-tag" text always ran. */}
+            <span className="join-wiz-eyebrow">01 · ARCHETYPE</span>
+            <h2 className="join-wiz-title">Pick your archetype.</h2>
+            <p className="join-wiz-subtitle">The form adjusts to ask only what's needed for the role. Switching resets your inputs.</p>
             <div className="join-typegrid">
               {APPLICATION_TYPES.map((t, i) => (
                 <button
