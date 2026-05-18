@@ -1,5 +1,8 @@
 import { buildEmbed } from "./embed.js";
 import { postMessage } from "./discord.js";
+import { ensureWriterMapping } from "./writer-mapping.js";
+import { lookupOocByRpc } from "./writers.js";
+import { extractRpcUsername, getOocForForm } from "./quota.js";
 
 export async function handleSubmit(request, env) {
   let body;
@@ -52,6 +55,23 @@ export async function handleSubmit(request, env) {
     // Keep submissions for 180 days; admin can still toggle within that window.
     { expirationTtl: 60 * 60 * 24 * 180 }
   );
+
+  // Auto-register the writer mapping if this RPC account isn't in
+  // writers.js yet. Runs in the background via ctx.waitUntil so the
+  // submission response doesn't wait on a GitHub commit. Idempotent:
+  // ensureWriterMapping re-reads the live writers.js inside its
+  // SHA-retry loop and returns { unchanged: true } when the entry is
+  // already there, so this safely co-exists with the same call from
+  // interactions.js.
+  const rpcUsername = extractRpcUsername(form.rpcLink);
+  const ooc = getOocForForm(form);
+  if (rpcUsername && ooc && !lookupOocByRpc(rpcUsername)) {
+    ctx.waitUntil(
+      ensureWriterMapping(env, rpcUsername, ooc).catch(err =>
+        console.error("submit-time writer-mapping failed:", err.message)
+      )
+    );
+  }
 
   return json({ ok: true, id });
 }
