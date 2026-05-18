@@ -412,6 +412,12 @@ body {
   border-top: none !important;
   padding-top: 6px !important;
 }
+/* If the rules list has an odd count, the last rule otherwise sits
+   alone in column 1 — span it across both columns instead so the row
+   doesn't leave half its width empty. */
+.rule:last-child:nth-child(odd) {
+  grid-column: 1 / -1 !important;
+}
 @media (max-width: 760px) {
   .rule:nth-child(-n+2) { border-top: 1px solid var(--rule-soft) !important; padding-top: 22px !important; }
   .rule:first-child     { border-top: none !important; padding-top: 6px !important; }
