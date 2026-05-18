@@ -6894,3 +6894,264 @@ html, body { overflow-x: clip; }
     transform: none !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   PR D-3 — LORE PAGE · COMIC TREATMENT
+   Halftone overlays, comic-panel dividers, pull-quote captions,
+   and elevated tables. Reference: Arcane marketing, HP Magic
+   Awakened art direction. Premium graphic-novel feel.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── LORE SHELL — base atmosphere ─────────────────────────────── */
+.lore {
+  position: relative;
+}
+/* Halftone-dot overlay across the lore page — same pattern as the
+   wizard fieldset, slightly lighter so long-form reading isn't
+   overwhelmed. Sits behind content. */
+.lore::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%, rgba(244, 200, 110, 0.04) 1px, transparent 1.5px);
+  background-size: 7px 7px;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+.lore > * { position: relative; z-index: 1; }
+
+/* ── LORE BLOCK — comic-panel dividers between sections ───── */
+.lore-block {
+  position: relative;
+  padding: var(--space-7) 0;
+  /* Bold ink rule between blocks. The pseudo-element draws a
+     thick comic gutter — a 2px red rule capped at left and right
+     by gold tick-marks. */
+}
+.lore-block + .lore-block::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    var(--yellow, #d4a84a) 0%,
+    var(--yellow, #d4a84a) 24px,
+    var(--red, #c11a2c) 24px,
+    var(--red, #c11a2c) calc(100% - 24px),
+    var(--yellow, #d4a84a) calc(100% - 24px),
+    var(--yellow, #d4a84a) 100%);
+}
+
+/* ── LORE EYEBROW — comic-burst stamp treatment ───────────── */
+.lore-eyebrow {
+  display: inline-block !important;
+  font-family: var(--mono, ui-monospace, monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: var(--red-bright, #ff2a32) !important;
+  padding: 6px 12px !important;
+  border: 1.5px solid var(--red-bright, #ff2a32) !important;
+  background: rgba(227, 27, 35, 0.06) !important;
+  margin-bottom: var(--space-4) !important;
+  /* Slight rotation for the handcrafted feel */
+  transform: rotate(-0.6deg);
+}
+
+/* ── LORE HEADINGS — maximum drama ──────────────────────── */
+.lore-intro-title {
+  font-family: var(--display, "Bebas Neue", system-ui, serif) !important;
+  font-size: clamp(48px, 7vw, 80px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 var(--space-5) !important;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+.lore-intro-title .accent {
+  color: var(--yellow, #d4a84a);
+  /* Faint ink-bleed glow */
+  text-shadow:
+    0 0 20px rgba(212, 168, 74, 0.32),
+    0 2px 0 rgba(0, 0, 0, 0.5);
+}
+.lore-h {
+  font-family: var(--display, "Bebas Neue", system-ui, serif) !important;
+  font-size: clamp(32px, 4.4vw, 52px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 var(--space-5) !important;
+}
+.lore-h .accent {
+  color: var(--yellow, #d4a84a);
+}
+
+/* ── LORE LEAD + PARAGRAPHS — premium serif rhythm ───── */
+.lore-lead {
+  font-family: var(--sans, system-ui) !important;
+  font-size: clamp(17px, 1.4vw, 19px) !important;
+  line-height: 1.7 !important;
+  font-weight: 400 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  max-width: 720px !important;
+  margin: 0 0 var(--space-4) !important;
+}
+.lore-p {
+  font-family: var(--sans, system-ui) !important;
+  font-size: 16px !important;
+  line-height: 1.75 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  max-width: 720px !important;
+  margin: 0 0 var(--space-4) !important;
+}
+.lore-p strong {
+  color: var(--text-1, #f5f1e8);
+  font-weight: 700;
+}
+/* Emphasized phrases inside lore — italics get the gold caption treatment */
+.lore-p em, .lore-lead em {
+  color: var(--yellow, #d4a84a);
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* ── PULL-QUOTE — comic caption box (use .lore-quote class
+   on any <blockquote> or .lore-p that should pop) ─── */
+.lore-quote, blockquote.lore-quote {
+  position: relative;
+  margin: var(--space-6) 0;
+  padding: var(--space-5) var(--space-6);
+  background: var(--bg-2, #15151a);
+  border-left: 4px solid var(--red, #c11a2c);
+  font-family: var(--display, "Bebas Neue", system-ui, serif);
+  font-size: clamp(22px, 2.4vw, 32px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text-1, #f5f1e8);
+  max-width: 720px;
+  box-shadow: 8px 8px 0 0 var(--red, #c11a2c);
+}
+.lore-quote::before {
+  content: "";
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 24px; height: 24px;
+  background-image: radial-gradient(circle 1px at 50% 50%, var(--yellow, #d4a84a) 1px, transparent 1.5px);
+  background-size: 4px 4px;
+  opacity: 0.5;
+}
+
+/* ── STAT PANEL — bold panel box for key facts ───────── */
+.lore-stat {
+  display: inline-block;
+  margin: var(--space-4) var(--space-3) var(--space-4) 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--bg-1, #0c0c10);
+  border: 1.5px solid var(--yellow, #d4a84a);
+  box-shadow: 6px 6px 0 0 var(--bg-3, #1e1e25);
+}
+.lore-stat-num {
+  display: block;
+  font-family: var(--display, "Bebas Neue", system-ui, serif);
+  font-size: 56px;
+  line-height: 1;
+  color: var(--yellow, #d4a84a);
+  letter-spacing: -0.01em;
+}
+.lore-stat-label {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   PR D-3 — DATA TABLES · ELEVATED (not replaced)
+   The brief explicitly said: keep tables as tables, just make them
+   premium. Clean grid lines, subtle halftone bg, bold headers,
+   typographic hierarchy in cells.
+   ════════════════════════════════════════════════════════════════════ */
+
+table {
+  background: var(--bg-1, #0c0c10);
+  border: 1px solid var(--rule, #2a2a34);
+}
+
+/* Header row — already inked + sticky in the base; lift the
+   typography and add a halftone overlay for the comic-print feel */
+thead tr th {
+  font-family: var(--mono, ui-monospace, monospace) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.24em !important;
+  font-weight: 700 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  background-color: var(--bg-2, #15151a) !important;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%, rgba(244, 200, 110, 0.12) 1px, transparent 1.5px) !important;
+  background-size: 6px 6px !important;
+  padding: 14px 18px !important;
+  border-bottom: 2px solid var(--red, #c11a2c) !important;
+}
+
+/* Body cells — comfortable rhythm, real typographic hierarchy */
+tbody tr td {
+  padding: 14px 18px !important;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--text-2, #c9c3b5);
+  border-bottom: 1px solid var(--rule-faint, #1c1c24);
+  vertical-align: middle;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+tbody tr:last-child td { border-bottom: 0; }
+
+/* Subtle row separator — a 1px stripe between every two rows so
+   the grid reads without being heavy */
+tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.012);
+}
+
+/* Row hover — gold tint with a left-edge accent stripe */
+tbody tr:hover td {
+  background: rgba(212, 168, 74, 0.06);
+  color: var(--text-1, #f5f1e8);
+}
+tbody tr {
+  position: relative;
+}
+tbody tr:hover {
+  box-shadow: inset 3px 0 0 0 var(--yellow, #d4a84a);
+}
+
+/* First column in each row often holds the primary identifier
+   (name, alias, role) — bump weight slightly for hierarchy */
+tbody tr td:first-child {
+  font-weight: 600;
+  color: var(--text-1, #f5f1e8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  tbody tr td { transition: none !important; }
+}
+
+/* The clubs/STRATA inner tables — keep them denser since they
+   sit inside cards already */
+.kb-team-tbl tbody tr td,
+.cp-staff-tbl tbody tr td,
+.cp-rgroup-tbl tbody tr td {
+  padding: 10px 14px !important;
+  font-size: 13px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lore-eyebrow { transform: none !important; }
+}
