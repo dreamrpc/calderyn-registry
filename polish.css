@@ -12765,3 +12765,46 @@ html { scroll-behavior: smooth; }
     padding-right: max(var(--space-6), calc(184px + 48px)) !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   HOME · UNDO right-padding land-grab, fix scrollnav truncation
+   The 232px right padding I added was the cause of the empty
+   right-third on home sections. Removing it. The side nav has
+   its own dark backdrop pill now, so overlapping content reads
+   fine and doesn't need a reserved corridor.
+   ════════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 900px) {
+  .home-page > .home-hero,
+  .home-page > .home-section,
+  .home-hero .home-hero-inner,
+  .home-cta {
+    /* Reset to a small visual breathing right-padding (matches the
+       left). Nav overlaps content where they meet — the backdrop
+       handles legibility. */
+    padding-right: var(--space-5) !important;
+  }
+}
+
+/* SCROLLNAV WIDTH LOCK — earlier 156px rule was winning at the
+   cascade. Force explicit width + min-width at the toplevel
+   selector to lock it. */
+nav.home-scrollnav,
+.home-scrollnav {
+  width: 200px !important;
+  min-width: 200px !important;
+}
+.home-scrollnav-btn {
+  /* Give labels enough cell to render the longest current item
+     ("PROGRAMME") without ellipsis at the active letter-spacing */
+  grid-template-columns: 10px 22px 1fr !important;
+  padding-right: 8px !important;
+}
+.home-scrollnav-label {
+  /* Hard nope on overflow truncation */
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  font-size: 10px !important;
+  letter-spacing: 0.1em !important;
+}
