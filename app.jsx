@@ -1928,15 +1928,19 @@ function PowersRegistry(){
                         fontStyle: "normal",
                         whiteSpace: "nowrap",
                       }}>
-                        <span className="stage-name" style={{
-                          color: "#d4a843",
-                          fontFamily: "Söhne Mono, ui-monospace, monospace",
-                          fontSize: "13px",
-                          fontWeight: 700,
-                          letterSpacing: "0.08em",
-                          textTransform: "uppercase",
-                          fontStyle: "normal",
-                        }}>{p.alias || "—"}</span>
+                        <span
+                          ref={el => {
+                            if (el) el.style.setProperty("color", "#d4a843", "important");
+                          }}
+                          style={{
+                            color: "#d4a843",
+                            fontFamily: "Söhne Mono, ui-monospace, monospace",
+                            fontSize: "13px",
+                            fontWeight: 700,
+                            letterSpacing: "0.08em",
+                            textTransform: "uppercase",
+                            fontStyle: "normal",
+                          }}>{p.alias || "—"}</span>
                       </td>
                       <td><TierChip tier={p.tier}/></td>
                       <td>
