@@ -25530,3 +25530,25 @@ button.orgs-pill {
   color: #f5e8c2 !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   POWERS REGISTRY · STAGE NAME COLOR FIX
+   The `td:nth-child(3) .stage-name { color: inherit }` rule wasn't
+   inheriting gold from its td parent on live (likely an earlier
+   `.stage-name` font-family rule using Druk display was forcing a
+   different paint cycle). Direct selector with explicit gold + mono
+   font wins decisively.
+   ════════════════════════════════════════════════════════════════════ */
+.preg-tw .stage-name,
+.preg-tw tbody td .stage-name,
+.preg-tw tbody td:nth-child(3) .stage-name,
+.preg-tw tbody td:nth-child(3) {
+  color: #d4a843 !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  font-style: normal !important;
+}
+
