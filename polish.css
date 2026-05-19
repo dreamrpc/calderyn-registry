@@ -18045,11 +18045,18 @@ div.strata-paper-title {
   display: grid !important;
   grid-template-columns: 1fr !important;
   gap: 14px !important;
-  margin: 0 auto 36px !important;
-  padding: 0 !important;
-  max-width: 1280px !important;
+  margin: clamp(28px, 4vw, 56px) auto 36px !important;
+  padding: 0 clamp(20px, 4vw, 32px) !important;
+  max-width: 1340px !important;
   background: transparent !important;
   border: 0 !important;
+}
+.about-bay {
+  margin: 24px clamp(20px, 4vw, 32px) 48px !important;
+  max-width: 1280px !important;
+}
+@media (min-width: 1340px) {
+  .about-bay { margin-left: auto !important; margin-right: auto !important; }
 }
 @media (min-width: 900px) {
   .rules-grid,
