@@ -25027,3 +25027,72 @@ button.orgs-pill {
   .curr-nav { position: static !important; }
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   POWERS GUIDE · KILL THE UGLY GOLD/WHITE BORDERS
+   Every panel and chip in the guide had a `1px solid rgba(...gold)`
+   border at low opacity that rendered as a dirty white-ish hairline
+   on the dark page. Strip them. Keep ONLY the colored left-rail
+   accent on cards; chips become background-tinted with no borders.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* The "00 / READ FIRST" badge — bg-tinted pill, no border */
+.pg-guide .bay-hd-tag {
+  border: 0 !important;
+  background: rgba(212,168,74,0.10) !important;
+  padding: 5px 12px !important;
+  margin: 0 0 18px !important;
+}
+
+/* Eyebrow chips inside the two intro columns — no border */
+.pg-guide .intro-bay-eyebrow {
+  border: 0 !important;
+  background: rgba(212,168,74,0.10) !important;
+  padding: 4px 11px !important;
+}
+
+/* "The Core Rule" / "World Ground Rules" panels — drop the 1px outer
+   border. Cards now read entirely by left-rail + background contrast. */
+.pg-guide .intro-bay-col {
+  background: #0d0d11 !important;
+  border: 0 !important;
+  border-left: 3px solid var(--yellow, #d4a843) !important;
+  padding: 28px 30px !important;
+  box-shadow: none !important;
+}
+.pg-guide .intro-bay-col-canon {
+  border: 0 !important;
+  border-left: 3px solid var(--red, #e31b23) !important;
+}
+
+/* Tier ladder cards (A-LIST through D-LIST) — same border-strip. */
+.pg-guide .tier-card {
+  background: #0d0d11 !important;
+  border: 0 !important;
+  border-left: 3px solid var(--tier-c, var(--yellow, #d4a843)) !important;
+  border-top: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Status cards (the six payroll buckets) — same treatment, neutral
+   left rail since each has its own colored status tag inside. */
+.pg-guide .status-card {
+  background: #0d0d11 !important;
+  border: 0 !important;
+  border-left: 3px solid #2a2a2a !important;
+  box-shadow: none !important;
+}
+
+/* Rules list inside the "World Ground Rules" column — drop the gold
+   row dividers, use a neutral hairline. */
+.pg-guide .intro-bay-rules li {
+  border-bottom: 1px solid #1a1a1a !important;
+}
+
+/* The bay-hd's bottom hairline + 60px gold accent — keep the accent
+   but switch the hairline to neutral so the header doesn't sit on a
+   dirty-gold rule. */
+.pg-guide .bay-hd {
+  border-bottom: 1px solid #1a1a1a !important;
+}
+
