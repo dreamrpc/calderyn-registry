@@ -6519,6 +6519,19 @@ function MapStageLocation({loc}){
   );
 }
 
+/* Short labels for the sticky district nav so 8 chips fit one row without
+   overflow. Falls back to the full name when no short is mapped. */
+const DISTRICT_SHORT = {
+  academic:  "Academic",
+  training:  "Training",
+  residence: "Houses",
+  strata:    "STRATA",
+  athletics: "Athletics",
+  commons:   "Commons",
+  perimeter: "Perimeter",
+  outside:   "Outside",
+};
+
 function MapTab(){
   const districts = D.mapDistricts;
   const locations = D.mapLocations;
@@ -6627,7 +6640,7 @@ function MapTab(){
                   </span>
                   <span className="map-nav-body">
                     <span className="map-nav-num">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="map-nav-name">{d.name}</span>
+                    <span className="map-nav-name">{DISTRICT_SHORT[d.id] || d.name}</span>
                     <span className="map-nav-count">{dCount} {dCount === 1 ? "loc" : "locs"}</span>
                   </span>
                 </button>

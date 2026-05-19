@@ -15512,53 +15512,76 @@ nav.home-scrollnav,
   display: grid !important;
   grid-template-columns: 1fr !important;
   gap: 0 !important;
-  margin: 0 0 24px !important;
+  margin: 0 auto 32px !important;
   padding: 0 !important;
+  max-width: 1440px !important;
   background: #0a0a0e !important;
-  border: 1px solid rgba(212,168,74,0.28) !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
   box-shadow:
-    0 28px 60px -28px rgba(0,0,0,0.9),
+    0 32px 70px -28px rgba(0,0,0,0.92),
     inset 0 1px 0 rgba(255,255,255,0.04) !important;
   position: relative !important;
   overflow: hidden !important;
   min-height: 0 !important;
+  align-items: stretch !important;
 }
 @media (min-width: 1000px) {
   .map-stage {
-    grid-template-columns: 460px 1fr !important;
-    min-height: 640px !important;
+    grid-template-columns: 420px 1fr !important;
+    min-height: 680px !important;
   }
 }
 @media (min-width: 1300px) {
-  .map-stage { grid-template-columns: 520px 1fr !important; }
+  .map-stage { grid-template-columns: 460px 1fr !important; }
 }
 
-/* ── LEFT · the poster ───────────────────────────────────────────── */
+/* ── LEFT · the poster (fills full cell) ──────────────────────────── */
 .map-stage-poster {
   position: relative !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: space-between !important;
   align-items: flex-start !important;
-  padding: 28px !important;
-  min-height: 380px !important;
+  padding: 32px !important;
+  min-height: 420px !important;
+  align-self: stretch !important;
   background:
-    radial-gradient(700px 400px at 30% 25%, color-mix(in srgb, var(--district-c1, #3b4a6e) 70%, transparent) 0%, transparent 60%),
-    radial-gradient(900px 500px at 100% 100%, color-mix(in srgb, var(--district-c, #d4a84a) 30%, transparent) 0%, transparent 65%),
-    linear-gradient(180deg, var(--district-c1, #3b4a6e) 0%, var(--district-c2, #10172b) 100%) !important;
+    radial-gradient(700px 400px at 30% 25%, color-mix(in srgb, var(--district-c1, #3b4a6e) 75%, transparent) 0%, transparent 60%),
+    radial-gradient(900px 500px at 100% 100%, color-mix(in srgb, var(--district-c, #d4a84a) 35%, transparent) 0%, transparent 65%),
+    linear-gradient(165deg, var(--district-c1, #3b4a6e) 0%, var(--district-c2, #10172b) 100%) !important;
   overflow: hidden !important;
-  border-right: 1px solid rgba(212,168,74,0.22) !important;
+  border-right: 1px solid rgba(212,168,74,0.32) !important;
   isolation: isolate !important;
 }
 @media (min-width: 1000px) {
   .map-stage-poster {
-    padding: 36px !important;
-    min-height: 0 !important;
-    position: sticky !important;
-    top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + 60px) !important;
-    align-self: start !important;
-    height: auto !important;
+    padding: 40px !important;
+    min-height: 100% !important;
+    height: 100% !important;
+    align-self: stretch !important;
   }
+}
+
+/* Gold corner brackets — comic dossier frame */
+.map-stage-poster::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 14px; left: 14px;
+  width: 22px; height: 22px;
+  border-top: 1.5px solid rgba(212,168,74,0.7);
+  border-left: 1.5px solid rgba(212,168,74,0.7);
+  pointer-events: none !important;
+  z-index: 4 !important;
+}
+.map-stage-poster::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: 14px; right: 14px;
+  width: 22px; height: 22px;
+  border-bottom: 1.5px solid rgba(212,168,74,0.7);
+  border-right: 1.5px solid rgba(212,168,74,0.7);
+  pointer-events: none !important;
+  z-index: 4 !important;
 }
 
 /* Halftone scatter */
@@ -15930,6 +15953,27 @@ nav.home-scrollnav,
 .map-stage .map-list { display: none !important; }
 .map-stage .map-banner { display: none !important; }
 .map-stage .map-district-head { display: none !important; }
+
+/* Map search bar — sticky above the district nav (both stick together) */
+.subnav-host:has(.map-page) .map-search-bar,
+.map-search-bar {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px)) !important;
+  z-index: 36 !important;
+  margin: 0 !important;
+  padding: 12px 32px !important;
+  background: rgba(8,8,10,0.94) !important;
+  border-bottom: 1px solid rgba(212,168,74,0.14) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+.map-nav {
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + 60px) !important;
+}
+@media (max-width: 760px) {
+  .map-search-bar { padding: 10px 16px !important; }
+  .map-nav { top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + 56px) !important; }
+}
 
 /* ════════════════════════════════════════════════════════════════════════
    POWERS REGISTRY · TOOLBAR · STICKY + ALIGNED REDESIGN
@@ -17640,11 +17684,19 @@ nav.home-scrollnav,
   .home-scrollnav-label { font-size: 10px !important; }
 }
 
-/* THE FINANCIAL CORRESPONDENT masthead — force pure black */
+/* THE FINANCIAL CORRESPONDENT masthead — force pure black with max
+   specificity, beating the `.strata-paper *` blanket rule. */
+.strata-paper .strata-paper-masthead .strata-paper-title,
+.strata-paper-masthead .strata-paper-title,
+.pg .strata-paper .strata-paper-title,
+.pg .strata-paper-masthead .strata-paper-title,
 .strata-paper .strata-paper-title,
 .strata-paper-title,
-.pg .strata-paper-title {
+.pg .strata-paper-title,
+div.strata-paper-title {
   color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  text-shadow: none !important;
 }
 
 /* LEAGUE STAFF block — sharp corners, no rounding */
