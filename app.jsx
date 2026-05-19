@@ -1394,6 +1394,12 @@ function ClassRow({subject}){
         aria-expanded={open}
       >
         <span className="curr-row-name">{subject.subject}</span>
+        {subject.prof && (
+          <span className="curr-row-prof">
+            <span className="curr-row-prof-lbl">Faculty</span>
+            <span className="curr-row-prof-val">{subject.prof}</span>
+          </span>
+        )}
         <span className={"curr-row-kind " + (required ? "is-required" : "is-elective")}>
           {required ? "Required" : "Elective"}
         </span>
