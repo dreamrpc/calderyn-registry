@@ -11924,3 +11924,251 @@ html { scroll-behavior: smooth; }
   }
   .lore-vg-portrait { aspect-ratio: 4 / 5 !important; max-width: 280px; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   POWERS REGISTRY · TABLE ELEVATION
+   Brings the table treatment in line with the Students roster: sharp
+   edges, tier-color left stripe per row, cleaner status group banner,
+   refined detail-expansion panel.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Status group banner — instead of a fully-saturated colour fill,
+   use a thin coloured left-stripe + dark background. Reads as a
+   classified-folder section banner, matches the HUD vocabulary. */
+.preg-group {
+  margin-bottom: var(--space-6) !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+.preg-group-hd {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 12px 18px !important;
+  background: var(--bg-1, #0c0c10) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  border-left: 4px solid currentColor !important;
+  border-bottom: 2px solid var(--rule, #2a2a34) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+}
+.preg-group-name {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+}
+.preg-group-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 3px 8px;
+  border: 1px solid rgba(212, 168, 74, 0.45);
+  background: rgba(212, 168, 74, 0.06);
+}
+
+/* Table wrap + table — sharp edges, dark fill */
+.preg-tbl-wrap {
+  background: var(--bg-1, #0c0c10) !important;
+  border: 1px solid var(--rule, #2a2a34) !important;
+  border-top: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+.preg-tbl {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+/* Header row — mono caps, dark, hairline gold rule */
+.preg-tbl thead th {
+  background: var(--bg-2, #15151a) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  padding: 12px 16px !important;
+  border-bottom: 1.5px solid var(--yellow, #d4a84a) !important;
+  text-align: left !important;
+}
+
+/* Body cells — Söhne text, tier-color left stripe per row */
+.preg-tbl tbody td {
+  background: transparent !important;
+  border-bottom: 1px solid var(--rule-faint, #1c1c24) !important;
+  padding: 12px 16px !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  color: var(--text-2, #c9c3b5) !important;
+  vertical-align: middle !important;
+  transition: background var(--motion-base, 180ms) ease, color var(--motion-base) ease;
+}
+.preg-tbl tbody tr.preg-row {
+  position: relative;
+}
+.preg-tbl tbody tr.preg-row td:first-child {
+  /* Subtle tier-band on the first column */
+  border-left: 3px solid transparent;
+}
+
+/* Hover state — gold tint + gold left-stripe inset */
+.preg-tbl tbody tr.preg-row.is-clickable:hover td {
+  background: rgba(212, 168, 74, 0.04) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  cursor: pointer;
+}
+.preg-tbl tbody tr.preg-row.is-clickable:hover td:first-child {
+  border-left-color: var(--yellow, #d4a84a) !important;
+}
+
+/* Open / active row */
+.preg-tbl tbody tr.preg-row.is-open td {
+  background: rgba(212, 168, 74, 0.08) !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.preg-tbl tbody tr.preg-row.is-open td:first-child {
+  border-left-color: var(--yellow, #d4a84a) !important;
+}
+
+.preg-tbl tbody tr:last-child td { border-bottom: 0 !important; }
+
+/* Stage name + power column treatment */
+.preg-col-char {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-weight: 600 !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.preg-col-alias .preg-alias {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+.preg-col-alias .preg-na {
+  color: var(--text-4, #6b6558) !important;
+}
+.preg-col-power {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
+}
+
+/* View / Hide toggle chip */
+.preg-view-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 4px 9px !important;
+  border: 1px solid var(--rule, #2a2a34) !important;
+  background: transparent !important;
+  transition: color var(--motion-base) ease, border-color var(--motion-base) ease, background var(--motion-base) ease;
+}
+.preg-tbl tbody tr.preg-row:hover .preg-view-btn,
+.preg-tbl tbody tr.preg-row.is-open .preg-view-btn {
+  color: var(--yellow, #d4a84a) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+  background: rgba(212, 168, 74, 0.06) !important;
+}
+
+/* Detail-row expansion panel */
+.preg-detail-row td {
+  padding: 0 !important;
+  background: var(--bg-2, #15151a) !important;
+}
+.preg-detail {
+  padding: var(--space-5) var(--space-6) !important;
+  border-left: 3px solid var(--yellow, #d4a84a) !important;
+  background: var(--bg-1, #0c0c10) !important;
+}
+.preg-detail-label {
+  display: block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  margin: 0 0 6px !important;
+}
+.preg-detail-label--note {
+  color: var(--red-bright, #ff2a32) !important;
+}
+.preg-detail-text {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 var(--space-4) !important;
+}
+.preg-detail-text:last-of-type { margin-bottom: 0 !important; }
+.preg-detail-note {
+  color: var(--text-3, #948d80) !important;
+  font-style: italic;
+}
+
+/* Power doc link */
+.preg-detail-doc {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px !important;
+  margin: 0 0 var(--space-4) !important;
+  background: var(--bg-2, #15151a) !important;
+  border: 1px solid var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  text-decoration: none !important;
+  transition: background var(--motion-base) ease, color var(--motion-base) ease;
+}
+.preg-detail-doc:hover {
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+}
+.preg-detail-doc:hover .icon { color: #0a0a0a; }
+.preg-detail-doc .preg-detail-doc-icon,
+.preg-detail-doc .preg-detail-doc-arrow {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Empty state */
+.preg-empty {
+  padding: var(--space-7) var(--space-5) !important;
+  text-align: center;
+  font-family: var(--sans, 'Söhne', system-ui);
+  font-size: 14px;
+  color: var(--text-3, #948d80);
+  border: 1px dashed var(--rule, #2a2a34);
+  border-radius: 0;
+}
+
+/* Hint above toolbar */
+.preg-hint {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin: var(--space-3) var(--space-5) !important;
+  text-align: right;
+}

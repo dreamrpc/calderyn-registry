@@ -1649,9 +1649,13 @@ function PowersRegistry(){
                                   rel="noopener noreferrer"
                                   className="preg-detail-doc"
                                 >
-                                  <span className="preg-detail-doc-icon" aria-hidden="true">📄</span>
+                                  <span className="preg-detail-doc-icon" aria-hidden="true">
+                                    <Icon name="file-text" size={14}/>
+                                  </span>
                                   <span className="preg-detail-doc-label">Read the full power doc</span>
-                                  <span className="preg-detail-doc-arrow" aria-hidden="true">→</span>
+                                  <span className="preg-detail-doc-arrow" aria-hidden="true">
+                                    <Icon name="arrow-up-right" size={12}/>
+                                  </span>
                                 </a>
                               )}
                               {p.drawbacks && <span className="preg-detail-label">Drawbacks / Limits</span>}
