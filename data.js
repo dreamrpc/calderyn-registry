@@ -781,6 +781,7 @@ departments: [
     blurb: "The public-presentation faculty. Press on one wing, identity craft on the other, performance training as the spine that joins them. The department whose graduates the public actually recognises.",
     head: {
       role: "Head of Media & Arts",
+      reserved: "Room owner",
       bio: "Retired public-facing figure who's worked both sides: real press incidents and a known persona of her own. Carries scar tissue and glamour. Theron treats her with a particular respect, which is institutionally noticeable.",
     },
     staff: [

@@ -22771,12 +22771,13 @@ button.orgs-pill {
 }
 .freg-classes-item {
   display: grid !important;
-  grid-template-columns: 80px 44px 1fr auto !important;
-  gap: 14px !important;
+  grid-template-columns: 80px 110px 1fr auto !important;
+  gap: 18px !important;
   align-items: baseline !important;
   padding: 9px 10px !important;
   border-bottom: 1px solid rgba(212,168,74,0.1) !important;
 }
+.freg-classes-year { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
 .freg-classes-item:last-child { border-bottom: 0 !important; }
 .freg-classes-item:hover { background: rgba(212,168,74,0.04) !important; }
 .freg-classes-code {
@@ -25728,4 +25729,145 @@ button.orgs-pill {
 .pg-guide .status-card-tag {
   border: 1px solid currentColor !important;
 }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   FIX 1 · CURRICULUM single sticky bar
+   Year tabs + designation filter merged into one .curr-nav row.
+   ════════════════════════════════════════════════════════════════════ */
+.lore-nav.curr-nav,
+.curr > nav.lore-nav {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0 14px !important;
+  padding: 10px clamp(20px, 4vw, 32px) !important;
+  min-height: 56px !important;
+}
+.lore-nav.curr-nav .lore-nav-list {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.lore-nav.curr-nav .lore-nav-item { margin: 0 !important; }
+
+.curr-nav-sep {
+  display: inline-block !important;
+  width: 1px !important;
+  height: 26px !important;
+  margin: 0 6px !important;
+  background: #2a2a2a !important;
+  flex: 0 0 auto !important;
+}
+
+.curr-nav-filter {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  flex: 1 1 auto !important;
+}
+.curr-nav-filter .curr-filter-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin-right: 2px !important;
+}
+
+/* The old standalone .curr-filter-bar block is no longer rendered;
+   hide it defensively in case any cached JSX still emits it. */
+.curr-main > .curr-filter-bar { display: none !important; }
+
+/* ════════════════════════════════════════════════════════════════════
+   FIX 3 · STAFF SLOT · RESERVED state
+   Mirrors the OPEN pill chrome but in amber-on-amber-tint with a
+   "Room owner"-style secondary line beneath.
+   ════════════════════════════════════════════════════════════════════ */
+.freg-slot-reserved {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #f4c95c !important;
+  padding: 3px 10px !important;
+  border: 1px solid rgba(244, 201, 92, 0.55) !important;
+  background: rgba(244, 201, 92, 0.10) !important;
+  font-style: normal !important;
+}
+.freg-slot-reserved-note {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: #f4c95c !important;
+  margin-top: 4px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   FIX 4 · POWERS REGISTRY · expand on click for Power column
+   Restores click-to-reveal full power / expression / drawbacks text.
+   ════════════════════════════════════════════════════════════════════ */
+.preg-tw tbody tr.preg-row.is-clickable td { cursor: pointer; }
+.preg-tw tbody tr.preg-row.is-open td { background: #131313 !important; }
+
+.preg-col-power {
+  position: relative !important;
+}
+.preg-col-power .preg-power-text {
+  display: inline-block !important;
+  max-width: calc(100% - 24px) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  vertical-align: middle !important;
+}
+.preg-col-power .preg-power-chev {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-left: 8px !important;
+  color: #d4a843 !important;
+  vertical-align: middle !important;
+}
+
+/* Expanded detail row */
+.preg-tw .preg-detail-row td {
+  padding: 0 !important;
+  background: #08080b !important;
+  border-bottom: 1px solid #1a1a1a !important;
+}
+.preg-tw .preg-detail-row .preg-detail {
+  padding: 18px 20px 22px !important;
+  border-left: 3px solid #d4a843 !important;
+}
+.preg-tw .preg-detail-row .preg-detail-label {
+  display: block !important;
+  margin-top: 14px !important;
+  margin-bottom: 6px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+}
+.preg-tw .preg-detail-row .preg-detail-label:first-child { margin-top: 0 !important; }
+.preg-tw .preg-detail-row .preg-detail-text {
+  margin: 0 !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: #cfcabe !important;
+  white-space: pre-wrap !important;
+}
+.preg-tw .preg-detail-row .preg-detail-note { color: rgba(255, 180, 100, 0.85) !important; }
 

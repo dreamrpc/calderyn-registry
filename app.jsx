@@ -1412,8 +1412,8 @@ function CurriculumView(){
 
   return (
     <div className="curr">
-      {/* Year nav — Freshman / Sophomore / Junior / Senior anchor jumps */}
-      <nav className="lore-nav curr-nav" aria-label="Jump to year">
+      {/* Single sticky bar — Year tabs + Designation filter pills */}
+      <nav className="lore-nav curr-nav" aria-label="Curriculum filters">
         <ol className="lore-nav-list">
           {YEAR_TABS.map(yt => (
             <li key={yt.idx} className={"lore-nav-item" + (yt.key === activeYear ? " is-active" : "")}>
@@ -1431,6 +1431,27 @@ function CurriculumView(){
             </li>
           ))}
         </ol>
+
+        <span className="curr-nav-sep" aria-hidden="true"/>
+
+        <div className="curr-nav-filter" role="group" aria-label="Filter by designation">
+          <span className="curr-filter-lbl">Designation</span>
+          <button type="button"
+            className={"curr-filter-pill" + (filterDesig === "all" ? " is-active" : "")}
+            onClick={() => setFilterDesig("all")}
+            aria-pressed={filterDesig === "all"}
+          >All Tracks</button>
+          <button type="button"
+            className={"curr-filter-pill t-hero" + (filterDesig === "hero" ? " is-active" : "")}
+            onClick={() => setFilterDesig("hero")}
+            aria-pressed={filterDesig === "hero"}
+          >Heroes</button>
+          <button type="button"
+            className={"curr-filter-pill t-sidekick" + (filterDesig === "sidekick" ? " is-active" : "")}
+            onClick={() => setFilterDesig("sidekick")}
+            aria-pressed={filterDesig === "sidekick"}
+          >Sidekicks</button>
+        </div>
       </nav>
 
       <main className="curr-main">
@@ -1457,26 +1478,8 @@ function CurriculumView(){
           </div>
         </section>
 
-        {/* Designation filter — hero / sidekick / all. Applies across
-            every year section. */}
-        <div className="curr-filter-bar" role="group" aria-label="Filter by designation">
-          <span className="curr-filter-lbl">Designation</span>
-          <button type="button"
-            className={"curr-filter-pill" + (filterDesig === "all" ? " is-active" : "")}
-            onClick={() => setFilterDesig("all")}
-            aria-pressed={filterDesig === "all"}
-          >All Tracks</button>
-          <button type="button"
-            className={"curr-filter-pill t-hero" + (filterDesig === "hero" ? " is-active" : "")}
-            onClick={() => setFilterDesig("hero")}
-            aria-pressed={filterDesig === "hero"}
-          >Heroes</button>
-          <button type="button"
-            className={"curr-filter-pill t-sidekick" + (filterDesig === "sidekick" ? " is-active" : "")}
-            onClick={() => setFilterDesig("sidekick")}
-            aria-pressed={filterDesig === "sidekick"}
-          >Sidekicks</button>
-        </div>
+        {/* Year sections render below — designation filter is in the
+            sticky nav above */}
 
         {/* Freshman · Shared Core */}
         {activeYear === "FRESHMAN" && (
@@ -1816,6 +1819,8 @@ function PowersRegistry(){
   const [status, setStatus] = useState("all");
   const [tier,   setTier]   = useState("all");
   const [q, setQ] = useState("");
+  const [openIdx, setOpenIdx] = useState({});
+  const toggleRow = (key) => setOpenIdx(prev => ({...prev, [key]: !prev[key]}));
 
   // Master filtered list
   const rows = useMemo(() => POWERS.filter(p => {
@@ -1865,39 +1870,92 @@ function PowersRegistry(){
   }, [groupingMode, rows]);
 
   // Row renderer (reused inside every section so we don't duplicate JSX).
-  const renderRow = (p, i) => {
+  const renderRow = (p, i, sectionKey) => {
     const s = statusOf(p.status);
+    const rowKey = `${sectionKey}-${i}`;
+    const isOpen = !!openIdx[rowKey];
+    const hasMore = !!p.power || !!p.expression || !!p.drawbacks;
+    const linkAttr = (e) => {
+      // Don't toggle when the user clicks the character link itself
+      if (e.target.closest("a")) return;
+      if (hasMore) toggleRow(rowKey);
+    };
     return (
-      <tr key={i} className="preg-row student-row" style={{boxShadow: "inset 4px 0 0 #c41a1a"}}>
-        <td className="rn">{String(i + 1).padStart(2, "0")}</td>
-        <td>
-          <CLink name={p.char} link={p.link || null}/>
-          {p.npc && <NpcBadge/>}
-        </td>
-        <td>
-          <span
-            ref={el => { if (el) el.style.setProperty("color", "#d4a843", "important"); }}
-            style={{
-              color: "#d4a843",
-              fontFamily: "Söhne Mono, ui-monospace, monospace",
-              fontSize: "13px",
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              fontStyle: "normal",
-            }}
-          >{p.alias || "—"}</span>
-        </td>
-        <td><TierChip tier={p.tier}/></td>
-        <td>
-          {s && (
-            <span className="preg-status-chip" style={{background: s.bg, color: s.text}}>
-              {s.label}
-            </span>
-          )}
-        </td>
-        <td className="preg-col-power" style={{color: "#888"}}>{p.power || "—"}</td>
-      </tr>
+      <React.Fragment key={i}>
+        <tr
+          className={"preg-row student-row" + (isOpen ? " is-open" : "") + (hasMore ? " is-clickable" : "")}
+          style={{boxShadow: "inset 4px 0 0 #c41a1a", cursor: hasMore ? "pointer" : "default"}}
+          onClick={linkAttr}
+        >
+          <td className="rn">{String(i + 1).padStart(2, "0")}</td>
+          <td>
+            <CLink name={p.char} link={p.link || null}/>
+            {p.npc && <NpcBadge/>}
+          </td>
+          <td>
+            <span
+              ref={el => { if (el) el.style.setProperty("color", "#d4a843", "important"); }}
+              style={{
+                color: "#d4a843",
+                fontFamily: "Söhne Mono, ui-monospace, monospace",
+                fontSize: "13px",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                fontStyle: "normal",
+              }}
+            >{p.alias || "—"}</span>
+          </td>
+          <td><TierChip tier={p.tier}/></td>
+          <td>
+            {s && (
+              <span className="preg-status-chip" style={{background: s.bg, color: s.text}}>
+                {s.label}
+              </span>
+            )}
+          </td>
+          <td className="preg-col-power" style={{color: "#888"}}>
+            <span className="preg-power-text">{p.power || "—"}</span>
+            {hasMore && (
+              <span className="preg-power-chev" aria-hidden="true">
+                <Icon name={isOpen ? "chevron-up" : "chevron-down"} size={12}/>
+              </span>
+            )}
+          </td>
+        </tr>
+        {isOpen && hasMore && (
+          <tr className="preg-detail-row">
+            <td colSpan={6}>
+              <div className="preg-detail">
+                {p.power && (
+                  <>
+                    <span className="preg-detail-label">Power / Ability</span>
+                    <p className="preg-detail-text">{p.power}</p>
+                  </>
+                )}
+                {p.expression && (
+                  <>
+                    <span className="preg-detail-label">Expression</span>
+                    <p className="preg-detail-text">{p.expression}</p>
+                  </>
+                )}
+                {p.drawbacks && (
+                  <>
+                    <span className="preg-detail-label">Drawbacks / Limits</span>
+                    <p className="preg-detail-text">{p.drawbacks}</p>
+                  </>
+                )}
+                {p.note && (
+                  <>
+                    <span className="preg-detail-label preg-detail-label--note">Admin Note</span>
+                    <p className="preg-detail-text preg-detail-note">{p.note}</p>
+                  </>
+                )}
+              </div>
+            </td>
+          </tr>
+        )}
+      </React.Fragment>
     );
   };
 
@@ -1985,7 +2043,7 @@ function PowersRegistry(){
                 </tr>
               </thead>
               <tbody>
-                {sec.list.map(renderRow)}
+                {sec.list.map((p, i) => renderRow(p, i, sec.key))}
               </tbody>
             </table>
           </div>
@@ -2384,9 +2442,10 @@ function slotLabelFor(deptSlot){
 /* Single staff card — used inside dept sections for HoD + 3 profs */
 function StaffSlotCard({person, slot, isHead, deptColor}){
   const filled = !!person?.char;
+  const reserved = !filled && !!person?.reserved;
   return (
     <div
-      className={"freg-slot" + (isHead ? " is-head" : "") + (filled ? " is-filled" : " is-open")}
+      className={"freg-slot" + (isHead ? " is-head" : "") + (filled ? " is-filled" : (reserved ? " is-reserved" : " is-open"))}
       style={{ "--dept-c": deptColor || "#d4a84a" }}
     >
       <div className="freg-slot-tag">{slot}</div>
@@ -2405,6 +2464,14 @@ function StaffSlotCard({person, slot, isHead, deptColor}){
                 : null)}
           <div className="freg-slot-role">{person.role}</div>
           {person.power && <div className="freg-slot-power"><span>Power</span> {person.power}</div>}
+        </>
+      ) : reserved ? (
+        <>
+          <div className="freg-slot-name">
+            <span className="freg-slot-reserved">RESERVED</span>
+          </div>
+          <div className="freg-slot-reserved-note">{person.reserved}</div>
+          <div className="freg-slot-role">{person.role || "Reserved position"}</div>
         </>
       ) : (
         <>
