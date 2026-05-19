@@ -2154,6 +2154,19 @@ function FacultyTab(){
   );
 }
 
+// Short department label for the faculty registry's Department column.
+function deptShortFromSection(sectionName){
+  const s = (sectionName || "").toLowerCase();
+  if (s.includes("heroes"))    return "Heroes Track";
+  if (s.includes("sidekicks")) return "Sidekicks Track";
+  if (s.includes("shared"))    return "Shared";
+  if (s.includes("elective"))  return "Electives";
+  if (s.includes("dean"))      return "Dean's Office";
+  if (s.includes("support"))   return "Support Staff";
+  if (s.includes("admin"))     return "Admin";
+  return sectionName || "—";
+}
+
 function FacultyRegistryView(){
   const [openIdx, setOpenIdx] = useState({});
   const toggleRow = (key) => setOpenIdx(prev => ({...prev, [key]: !prev[key]}));
@@ -2246,12 +2259,15 @@ function FacultyRegistryView(){
 
         return (
           <section key={si} className="freg-group">
-            <div className="freg-group-hd">
-              <span className="freg-group-name">{sec.section}</span>
+            <header className="freg-group-hd">
+              <div className="freg-group-hd-lhs">
+                <span className="freg-group-eyebrow">Section · {String(si + 1).padStart(2, "0")}</span>
+                <h3 className="freg-group-name">{sec.section}</h3>
+              </div>
               <span className="freg-group-count">
                 {rowsToShow.length} {rowsToShow.length === 1 ? "role" : "roles"}
               </span>
-            </div>
+            </header>
             {sec.note && !(deanRow && sec === deanSection) && (
               <p className="freg-group-note">{sec.note}</p>
             )}
@@ -2259,12 +2275,13 @@ function FacultyRegistryView(){
               <table className="freg-tbl">
                 <thead>
                   <tr>
-                    <th style={{width:300}}>Subject</th>
-                    <th style={{width:130}}>Tracks</th>
-                    <th style={{width:220}}>Professor</th>
-                    <th style={{width:160}}>Stage Name</th>
+                    <th style={{width:260}}>Subject</th>
+                    <th style={{width:140}}>Department</th>
+                    <th style={{width:110}}>Tracks</th>
+                    <th style={{width:200}}>Professor</th>
+                    <th style={{width:150}}>Stage Name</th>
                     <th>Power</th>
-                    <th style={{width:80}} aria-label="Details"></th>
+                    <th style={{width:130}} aria-label="Details"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -2278,8 +2295,8 @@ function FacultyRegistryView(){
                       }
                       return s;
                     }).filter(Boolean);
-                    const YEAR_KEY = { FR: 0, SO: 1, JR: 2, SR: 3 };
-                    subs.sort((a, b) => YEAR_KEY[a.year] - YEAR_KEY[b.year]);
+                    const YEAR_KEY_REG = { FR: 0, SO: 1, JR: 2, SR: 3 };
+                    subs.sort((a, b) => (YEAR_KEY_REG[a.year] ?? 99) - (YEAR_KEY_REG[b.year] ?? 99));
                     const hasArc = subs.length > 0;
                     const isOpenRole = !r.char && !r.clf;
                     const trackLabel = (() => {
@@ -2289,6 +2306,7 @@ function FacultyRegistryView(){
                       if (r.tracks[0] === "sidekick") return "Sidekicks";
                       return null;
                     })();
+                    const deptShort = deptShortFromSection(sec.section);
 
                     return (
                       <React.Fragment key={ri}>
@@ -2297,6 +2315,9 @@ function FacultyRegistryView(){
                           onClick={() => hasArc && toggleRow(key)}
                         >
                           <td className="freg-col-subj">{r.role}</td>
+                          <td className="freg-col-dept">
+                            <span className={"freg-dept-chip freg-dept-chip--" + (deptShort.toLowerCase().split(/\s+/)[0])}>{deptShort}</span>
+                          </td>
                           <td className="freg-col-tracks">
                             {trackLabel || <span className="freg-na">N/A</span>}
                           </td>
@@ -2324,22 +2345,24 @@ function FacultyRegistryView(){
                           </td>
                           <td className="freg-col-toggle">
                             {hasArc && (
-                              <span className="freg-view-btn" aria-hidden="true">
-                                {isOpen ? "Hide" : "View"}
-                                <span className="freg-view-arrow">{isOpen ? "▲" : "▼"}</span>
+                              <span className={"freg-view-btn" + (isOpen ? " is-open" : "")} aria-hidden="true">
+                                <span className="freg-view-btn-lbl">{isOpen ? "HIDE ARC" : "VIEW ARC"}</span>
+                                <span className="freg-view-arrow">
+                                  <Icon name={isOpen ? "chevron-up" : "arrow-right"} size={12} stroke={2}/>
+                                </span>
                               </span>
                             )}
                           </td>
                         </tr>
                         {isOpen && hasArc && (
                           <tr className="freg-detail-row">
-                            <td colSpan={6}>
+                            <td colSpan={7}>
                               <div className="freg-detail">
-                                <span className="freg-detail-label">Course Arc</span>
+                                <span className="freg-detail-label">Course Arc · {subs.length} {subs.length === 1 ? "class" : "classes"}</span>
                                 <ol className="freg-arc">
                                   {subs.map((s, sj) => (
                                     <li key={sj} className="freg-arc-item">
-                                      <span className="freg-arc-year">{s.year}</span>
+                                      <span className="freg-arc-year">{s.year || "—"}</span>
                                       <span className="freg-arc-title">{s.title}</span>
                                     </li>
                                   ))}
