@@ -15513,6 +15513,7 @@ nav.home-scrollnav,
   padding: 0 !important;
   margin: 0 !important;
   max-width: none !important;
+  overflow: visible !important;
 }
 .curr.lore-shell { /* override the old shell rule completely */
   display: block !important;
@@ -15522,10 +15523,28 @@ nav.home-scrollnav,
   border-radius: 0 !important;
   padding: 0 !important;
   margin: 0 !important;
+  overflow: visible !important;
 }
 .curr > .lore-toc,
 .curr .lore-toc {
   display: none !important;
+}
+
+/* Curriculum year nav — explicit sticky top so it pins under the global
+   header on scroll. Parents must not clip overflow. */
+.curr-nav,
+.lore-nav.curr-nav,
+.curr > .lore-nav,
+.curr > nav.lore-nav {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px)) !important;
+  z-index: 34 !important;
+  margin: 0 0 8px !important;
+}
+/* Ensure ancestor containers don't break sticky */
+.subnav-host:has(> .curr),
+.subnav-host {
+  overflow: visible !important;
 }
 
 .curr-main {
