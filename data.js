@@ -835,7 +835,7 @@ departments: [
     ],
     facilities: "The Teaching Clinic (operational facility treating powered patients), the Labs (biology, chemistry, physics — separate wings), the Research Wing (closed to undergraduates outside the Year 3 capstone).",
     classes: [
-      { code: "SCI-101", year: "FRESHMAN", kind: "shared-core", title: "Foundations of Parahuman Biology",
+      { code: "SCI-101", year: "SOPHOMORE", kind: "required", title: "Foundations of Parahuman Biology",
         taughtBy: "Prof. 2",
         desc: "Year-one shared core. How human anatomy and physiology stretch, distort, and occasionally break to accommodate powered metabolism. Even the Combat kids take this. Especially the Combat kids." },
       { code: "SCI-102", year: "SOPHOMORE", kind: "required",    title: "Chemistry for the Powered Sciences",
@@ -939,10 +939,10 @@ departments: [
     ],
     facilities: "The Reading Room (open to students), the Closed Archive (not — though everyone knows it's there).",
     classes: [
-      { code: "CAL-101", year: "FRESHMAN", kind: "shared-core", title: "Introduction to Calderyn",
+      { code: "CAL-101", year: "SOPHOMORE", kind: "required", title: "Introduction to Calderyn",
         taughtBy: "Prof. 1",
         desc: "Year-one shared core. The institution, its remit, its public history. The first reading list is mandatory. The second reading list is implied." },
-      { code: "HIS-101", year: "FRESHMAN", kind: "shared-core", title: "The Calderyn Doctrine, 1948–Present",
+      { code: "HIS-101", year: "SOPHOMORE", kind: "required", title: "The Calderyn Doctrine, 1948–Present",
         taughtBy: "Prof. 1",
         desc: "Year-one shared core. The public version of the institution's history. The professor teaches with the omissions visible at the edges; a careful student notices what is missing." },
       { code: "HIS-102", year: "SOPHOMORE", kind: "required",    title: "Foundations of Powered Law",
@@ -996,7 +996,7 @@ departments: [
     ],
     facilities: "The Conditioning Hall (the legendary inter-house records live on the wall here — the Valaris–Saberis bench-press record that's stood for nine years), the Powerball Arena, four house training rooms.",
     classes: [
-      { code: "ATH-102", year: "FRESHMAN", kind: "shared-core", title: "Movement & Powered Form",
+      { code: "ATH-102", year: "SOPHOMORE", kind: "required", title: "Movement & Powered Form",
         taughtBy: "Prof. 1",
         desc: "Year-one shared core. Baseline conditioning, movement, the body before specialisation. Every student takes this regardless of designation or intended department." },
       { code: "ATH-101", year: "SOPHOMORE", kind: "required",    title: "Foundations of Conditioning",
@@ -1044,7 +1044,7 @@ departments: [
     ],
     facilities: "The Library (the only one open to all students; Engineering bots reshelve overnight), the Seminar Rooms.",
     classes: [
-      { code: "HUM-101", year: "FRESHMAN", kind: "shared-core", title: "Foundations of Literary Analysis",
+      { code: "HUM-101", year: "SOPHOMORE", kind: "required", title: "Foundations of Literary Analysis",
         taughtBy: "Prof. 1",
         desc: "Year-one shared core. Close reading, argument, the apparatus of academic writing. Even the Combat kids take English; especially the Combat kids." },
       { code: "HUM-102", year: "SOPHOMORE", kind: "required",    title: "Foundations of Philosophy",
