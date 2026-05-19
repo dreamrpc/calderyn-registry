@@ -16231,7 +16231,72 @@ nav.home-scrollnav,
   border-bottom: 1px solid rgba(212,168,74,0.14) !important;
   backdrop-filter: blur(8px) !important;
   -webkit-backdrop-filter: blur(8px) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
 }
+
+/* Search input wrap — flex row, icon + input + clear with gap */
+.map-search-input-wrap {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex: 1 1 auto !important;
+  padding: 8px 14px !important;
+  background: rgba(20,20,24,0.7) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  max-width: 480px !important;
+  min-width: 0 !important;
+  position: relative !important;
+}
+.map-search-input-wrap:focus-within {
+  border-color: var(--yellow, #d4a84a) !important;
+  background: rgba(20,20,24,0.95) !important;
+  box-shadow: 0 0 0 3px rgba(212,168,74,0.12) !important;
+}
+.map-search-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+  color: var(--text-3, #948d80) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  position: static !important;
+}
+.map-search-input,
+input.map-search-input {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  color: var(--text-1, #f5f1e8) !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+.map-search-input::placeholder { color: var(--text-3, #948d80) !important; }
+.map-search-clear {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 22px !important;
+  height: 22px !important;
+  background: transparent !important;
+  border: 0 !important;
+  color: var(--text-3, #948d80) !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+  font-size: 13px !important;
+}
+.map-search-clear:hover { color: var(--text-1, #f5f1e8) !important; }
 .map-nav {
   top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + 60px) !important;
 }
@@ -17962,6 +18027,172 @@ div.strata-paper-title {
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
   text-shadow: none !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   RULES PAGE · REDESIGN TO MATCH HOME + LORE + MAP
+   The rules-grid was rendering small cream cards from the old paper
+   theme. Replace with dark editorial dossier panels: gold-bordered
+   cards with a giant Druk number rail on the left, comic halftone
+   scatter, and the rule title in Druk display + body in Söhne. Two
+   columns on wide screens, one on mobile. About-bay also restyled.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.rules-grid,
+.tab-host .rules-grid,
+.subnav-host .rules-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 14px !important;
+  margin: 0 auto 36px !important;
+  padding: 0 !important;
+  max-width: 1280px !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+@media (min-width: 900px) {
+  .rules-grid,
+  .tab-host .rules-grid,
+  .subnav-host .rules-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 14px 18px !important; }
+}
+
+.rule {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 72px 1fr !important;
+  gap: 0 !important;
+  background: linear-gradient(180deg, #0c0c12 0%, #08080b 100%) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-left: 4px solid var(--yellow, #d4a84a) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  box-shadow:
+    0 20px 36px -22px rgba(0,0,0,0.85),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+  transition:
+    border-color 220ms cubic-bezier(.2,.7,.2,1),
+    transform 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.rule::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.04) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  opacity: 0.55 !important;
+  mix-blend-mode: screen !important;
+  z-index: 0;
+}
+.rule:hover {
+  border-color: rgba(212,168,74,0.55) !important;
+  transform: translateY(-2px) !important;
+}
+
+.rule-num {
+  position: relative !important;
+  z-index: 1 !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  padding: 22px 0 0 !important;
+  background: rgba(212,168,74,0.06) !important;
+  border-right: 1px solid rgba(212,168,74,0.18) !important;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 38px !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1 !important;
+  color: var(--yellow, #d4a84a) !important;
+  text-shadow:
+    -1.5px 0 0 rgba(227,27,35,0.4),
+     1.5px 0 0 rgba(46,188,212,0.32) !important;
+}
+
+.rule-body {
+  position: relative !important;
+  z-index: 1 !important;
+  padding: 18px 22px 20px !important;
+  min-width: 0 !important;
+}
+.rule-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 17px !important;
+  letter-spacing: -0.008em !important;
+  line-height: 1.15 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 8px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+  text-transform: none !important;
+}
+.rule-text {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+}
+
+/* About-bay — dark editorial panel to match */
+.about-bay {
+  position: relative !important;
+  background: #0a0a0e !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-radius: 0 !important;
+  padding: 26px 32px !important;
+  margin: 16px auto 0 !important;
+  max-width: 1280px !important;
+  overflow: hidden !important;
+}
+.about-bay::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.04) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  opacity: 0.5 !important;
+  mix-blend-mode: screen !important;
+}
+.about-bay-stamp {
+  position: relative !important;
+  z-index: 1 !important;
+  display: inline-block !important;
+  padding: 4px 11px !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  background: rgba(212,168,74,0.08) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  margin: 0 0 14px !important;
+  border-radius: 0 !important;
+}
+.about-bay-text {
+  position: relative !important;
+  z-index: 1 !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 10px !important;
+  max-width: 880px !important;
+}
+.about-bay-text:last-child { margin-bottom: 0 !important; }
+.about-bay-text-quiet { color: var(--text-3, #948d80) !important; font-size: 12.5px !important; font-style: italic !important; }
+
+@media (max-width: 720px) {
+  .rule { grid-template-columns: 56px 1fr !important; }
+  .rule-num { font-size: 30px !important; padding-top: 18px !important; }
+  .rule-body { padding: 16px 18px 18px !important; }
+  .about-bay { padding: 22px 18px !important; }
 }
 
 /* Cassandra Adrian quote — cleaner block treatment, no floating glyph */
