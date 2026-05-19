@@ -11471,3 +11471,287 @@ html { scroll-behavior: smooth; }
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   LORE · COMPLETE OVERHAUL — clean editorial long-form
+   Resets every prior layered treatment (animated rails, dot drift,
+   per-block dividers, signature colours, drop caps, etc) and
+   replaces with a calm one-column reading experience. Sidebar stays
+   for scroll-spy nav but goes minimal. Body widens, breathes,
+   reads like a magazine feature.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── SHELL — wider body, less aggressive sidebar ───────────────── */
+.lore-shell {
+  max-width: 1180px !important;
+  padding: var(--space-8) var(--space-5) var(--space-9) !important;
+  display: grid !important;
+  grid-template-columns: 200px minmax(0, 1fr) !important;
+  gap: var(--space-9) !important;
+  align-items: flex-start !important;
+}
+@media (max-width: 960px) {
+  .lore-shell {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-5) !important;
+    padding: var(--space-6) var(--space-4) var(--space-7) !important;
+  }
+}
+
+/* ── SIDEBAR — minimal vertical TOC ─────────────────────────── */
+.lore-toc {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--space-5)) !important;
+  align-self: start !important;
+}
+.lore-toc-inner {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-3) !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.lore-toc-stamp {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  padding-bottom: var(--space-3) !important;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.18) !important;
+  margin-bottom: var(--space-2) !important;
+}
+.lore-toc-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+.lore-toc-item { display: block !important; }
+.lore-toc-btn {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: var(--space-3) !important;
+  padding: 8px 0 8px var(--space-3) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 2px solid transparent !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.005em !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  color: var(--text-3, #948d80) !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  transition: color var(--motion-base, 180ms) ease, border-left-color var(--motion-base) ease !important;
+}
+.lore-toc-btn:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  background: transparent !important;
+  border-left-color: rgba(212, 168, 74, 0.45) !important;
+}
+.lore-toc-n {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  color: var(--text-4, #6b6558) !important;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+.lore-toc-label {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.4 !important;
+  color: inherit !important;
+}
+/* ACTIVE — single gold accent, no heavy background */
+.lore-toc-item.on .lore-toc-btn {
+  color: var(--text-1, #f5f1e8) !important;
+  border-left-color: var(--yellow, #d4a84a) !important;
+  background: transparent !important;
+}
+.lore-toc-item.on .lore-toc-n {
+  color: var(--yellow, #d4a84a) !important;
+}
+.lore-toc-item.on .lore-toc-label {
+  font-weight: 700 !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+
+/* ── MAIN BODY — editorial column ───────────────────────────── */
+.lore-main {
+  max-width: none !important;
+}
+.lore-section {
+  scroll-margin-top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--space-5)) !important;
+  padding-bottom: var(--space-9) !important;
+  position: relative !important;
+}
+.lore-section + .lore-section {
+  margin-top: var(--space-8) !important;
+  padding-top: var(--space-8) !important;
+  border-top: 1px solid rgba(212, 168, 74, 0.18) !important;
+}
+
+/* Inner .lore wrapper inside each section */
+.lore-section .lore {
+  max-width: 720px !important;
+  margin: 0 !important;
+}
+
+/* ── BLOCKS — generous spacing, no decorative dividers ──── */
+.lore-block,
+.lore-section .lore-block {
+  padding: 0 !important;
+  margin: 0 0 var(--space-7) !important;
+  border: 0 !important;
+  background: transparent !important;
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+.lore-block + .lore-block,
+.lore-section .lore-block + .lore-block {
+  margin-top: var(--space-7) !important;
+}
+.lore-block + .lore-block::before,
+.lore-section .lore-block + .lore-block::before {
+  display: none !important;
+}
+
+/* Reset all the layered animations & rails & drift on .lore-intro */
+.lore-intro,
+.lore-section .lore-intro {
+  padding: 0 !important;
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+.lore-intro::before,
+.lore-intro::after,
+.lore-section .lore-intro::before,
+.lore-section .lore-intro::after {
+  display: none !important;
+  animation: none !important;
+}
+
+.lore-intro-stamp,
+.lore-intro-title,
+.lore-lead,
+.lore-block:not(.lore-intro),
+.lore-block:not(.lore-intro) .lore-eyebrow {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ── TYPOGRAPHY — editorial hierarchy ─────────────────────── */
+.lore-intro-stamp,
+.lore-eyebrow {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  transform: none !important;
+  margin-bottom: var(--space-4) !important;
+  /* small gold underscore */
+  border-bottom: 1.5px solid var(--yellow, #d4a84a) !important;
+  padding-bottom: 4px !important;
+}
+
+.lore-intro-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: clamp(36px, 4.8vw, 60px) !important;
+  letter-spacing: -0.015em !important;
+  line-height: 1.02 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 var(--space-5) !important;
+  text-shadow: none !important;
+  text-transform: none !important;
+}
+.lore-intro-title .accent {
+  color: var(--yellow, #d4a84a) !important;
+  text-shadow: none !important;
+}
+
+.lore-h {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: clamp(26px, 3.2vw, 36px) !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.1 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 var(--space-4) !important;
+  text-shadow: none !important;
+  text-transform: none !important;
+}
+.lore-h .accent {
+  color: var(--yellow, #d4a84a) !important;
+  text-shadow: none !important;
+}
+
+.lore-lead {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 17px !important;
+  line-height: 1.7 !important;
+  font-weight: 400 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 var(--space-4) !important;
+  max-width: none !important;
+}
+.lore-lead em {
+  color: var(--yellow, #d4a84a) !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+}
+
+.lore-p {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 16px !important;
+  line-height: 1.7 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 var(--space-4) !important;
+  max-width: none !important;
+}
+.lore-p strong {
+  color: var(--text-1, #f5f1e8) !important;
+  font-weight: 600 !important;
+}
+.lore-p em {
+  color: var(--yellow, #d4a84a) !important;
+  font-style: italic !important;
+}
+
+/* ── KILL ALL HALFTONE / DOT OVERLAYS ON LORE ──────────── */
+.lore::before,
+.lore-section::before {
+  display: none !important;
+}
+
+/* ── DROP CAP — kept but more restrained, only on intro lead ─ */
+.lore .lore-intro .lore-lead::first-letter,
+.lore .lore-block.lore-intro + .lore-block .lore-p:first-child::first-letter {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 900;
+  font-size: 64px;
+  line-height: 0.85;
+  float: left;
+  margin: 6px 12px 0 0;
+  color: var(--yellow, #d4a84a);
+}
