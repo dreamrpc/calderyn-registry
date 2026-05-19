@@ -15932,6 +15932,193 @@ nav.home-scrollnav,
 .map-stage .map-district-head { display: none !important; }
 
 /* ════════════════════════════════════════════════════════════════════════
+   POWERS REGISTRY · TOOLBAR · STICKY + ALIGNED REDESIGN
+   The previous toolbar was rendering rounded 999px-radius pills (old
+   style block winning). Force sharp gold-bordered chips, dark
+   background, full sticky positioning under the global header so the
+   filter/search stay reachable while browsing 50+ records.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.preg {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.preg-hint {
+  padding: 14px 32px 12px !important;
+  margin: 0 !important;
+  background: #08080b !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(212,168,74,0.14) !important;
+  color: var(--text-3, #948d80) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  line-height: 1.4 !important;
+}
+
+.preg-toolbar,
+div.preg-toolbar {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px)) !important;
+  z-index: 34 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px 18px !important;
+  padding: 14px 32px !important;
+  margin: 0 0 16px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  background: rgba(8,8,10,0.94) !important;
+  border-top: 0 !important;
+  border-bottom: 1px solid rgba(212,168,74,0.22) !important;
+  backdrop-filter: blur(10px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(130%) !important;
+  box-shadow: 0 14px 24px -18px rgba(0,0,0,0.85) !important;
+  grid-template-columns: none !important;
+  grid-template-rows: none !important;
+}
+
+.preg-filters,
+div.preg-filters {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Sharp gold-bordered chips, no rounded pills */
+.preg-pill,
+button.preg-pill {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  padding: 7px 12px !important;
+  background: rgba(20,20,24,0.7) !important;
+  color: var(--text-3, #948d80) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+  transition:
+    background 180ms cubic-bezier(.2,.7,.2,1),
+    color 180ms cubic-bezier(.2,.7,.2,1),
+    border-color 180ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.preg-pill:hover,
+button.preg-pill:hover {
+  background: rgba(212,168,74,0.06) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  border-color: rgba(212,168,74,0.5) !important;
+}
+.preg-pill.on,
+button.preg-pill.on,
+.preg-pill[aria-pressed="true"] {
+  background: rgba(212,168,74,0.14) !important;
+  color: var(--yellow, #d4a84a) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+  box-shadow: inset 0 0 0 1px rgba(212,168,74,0.3) !important;
+}
+
+/* Search wrap — sits at the right edge of the toolbar row */
+.preg-search-wrap,
+div.preg-search-wrap {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  margin: 0 0 0 auto !important;
+  padding: 0 !important;
+}
+
+.preg-search,
+input.preg-search {
+  flex: 0 1 320px !important;
+  min-width: 220px !important;
+  padding: 8px 12px !important;
+  background: rgba(20,20,24,0.7) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-radius: 0 !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  outline: none !important;
+  transition: border-color 180ms cubic-bezier(.2,.7,.2,1), background 180ms cubic-bezier(.2,.7,.2,1), box-shadow 180ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.preg-search::placeholder { color: var(--text-3, #948d80) !important; }
+.preg-search:focus {
+  border-color: var(--yellow, #d4a84a) !important;
+  background: rgba(20,20,24,0.95) !important;
+  box-shadow: 0 0 0 3px rgba(212,168,74,0.14) !important;
+}
+
+.preg-clear,
+button.preg-clear {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 7px 11px !important;
+  background: transparent !important;
+  color: var(--text-3, #948d80) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  transition: color 180ms ease, border-color 180ms ease !important;
+}
+.preg-clear:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  border-color: rgba(212,168,74,0.5) !important;
+}
+
+.preg-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  padding: 6px 11px !important;
+  border: 1px solid rgba(212,168,74,0.5) !important;
+  background: rgba(212,168,74,0.08) !important;
+  border-radius: 0 !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 900px) {
+  .preg-hint { padding: 12px 16px !important; }
+  .preg-toolbar,
+  div.preg-toolbar {
+    padding: 12px 16px !important;
+    gap: 8px 12px !important;
+  }
+  .preg-search-wrap,
+  div.preg-search-wrap {
+    flex: 1 1 100% !important;
+    margin-left: 0 !important;
+  }
+  .preg-search,
+  input.preg-search { flex: 1 1 auto !important; min-width: 0 !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
    CURRICULUM PAGE · REDESIGN TO MATCH HOME + LORE
    Drops the left-sidebar lore-shell pattern. Top quiet underline nav for
    year selection (reuses .lore-nav classes), single-column main content
