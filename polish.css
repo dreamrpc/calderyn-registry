@@ -19341,6 +19341,54 @@ button.orgs-pill {
 }
 
 /* ════════════════════════════════════════════════════════════════════════
+   HOME NAV · kill the width expansion on hover (issue 4)
+   Older rules added max-width:120px + padding:4px 8px on the label
+   inside .home-scrollnav-btn:hover, and a border-left to the button
+   itself. Both caused the tab to grow on hover and shifted the layout.
+   Re-assert geometry on every hover/active state so only colour +
+   underline animate.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.home-scrollnav-btn,
+.home-scrollnav-btn:hover,
+.home-scrollnav-btn:focus,
+.home-scrollnav-btn:focus-visible,
+.home-scrollnav-item.is-active .home-scrollnav-btn {
+  padding: 0 18px !important;
+  border: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  flex-basis: auto !important;
+  transform: none !important;
+}
+
+.home-scrollnav-btn .home-scrollnav-label,
+.home-scrollnav-btn:hover .home-scrollnav-label,
+.home-scrollnav-btn:focus .home-scrollnav-label,
+.home-scrollnav-item.is-active .home-scrollnav-label {
+  max-width: none !important;
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  opacity: 1 !important;
+  letter-spacing: 0.22em !important;
+}
+
+.home-scrollnav-btn .home-scrollnav-icon,
+.home-scrollnav-btn:hover .home-scrollnav-icon,
+.home-scrollnav-item.is-active .home-scrollnav-icon {
+  transform: none !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
    CURRICULUM TIMETABLE · all years stacked, 3-column timetable per year
    Loaded LAST so cascade wins. Owns: .curr-year, .curr-timetable,
    .curr-col, .curr-class, .curr-electives.
