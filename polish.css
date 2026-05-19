@@ -13983,3 +13983,577 @@ nav.home-scrollnav,
   .lore-section .lore-lead { font-size: 17px !important; }
   .lore-section .lore-p { font-size: 16px !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   LORE READER · CHAPTER-SWITCHED MAGAZINE SPREAD
+   Replaces the long-scroll lore page with a single visible chapter at
+   a time. Right rail is a chapter picker (icons, slide-in label). Each
+   chapter renders as a cinematic editorial spread inside a comic-panel
+   frame, with a masthead (roman · kicker · big title · deck · folio),
+   tight body typography, and prev/next chapter buttons at the bottom.
+
+   This block is the canonical lore styling — it suppresses the prior
+   per-section ghost numbers, halftone fields, and stacked-section chrome
+   so they don't double up.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Suppress prior lore-page treatments ────────────────────────────── */
+.lore-reader .lore-page { display: contents !important; }
+.lore-reader .lore-section,
+.lore-reader .lore-stage .lore-section { all: unset !important; display: block !important; }
+
+/* ── Reader shell ──────────────────────────────────────────────────── */
+.lore-reader {
+  position: relative !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #050507 !important;
+  min-height: 100vh;
+}
+.lore-reader::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.045) 1px, transparent 1.5px),
+    radial-gradient(circle 1px at 30% 70%, rgba(255,255,255,0.022) 1px, transparent 1.6px);
+  background-size: 9px 9px, 13px 13px;
+  opacity: 0.7 !important;
+  z-index: 0 !important;
+  mix-blend-mode: screen;
+}
+
+/* ── Right rail · chapter picker (icons only) ──────────────────────── */
+.lore-reader .lore-rail {
+  position: fixed !important;
+  top: 50% !important;
+  right: 22px !important;
+  transform: translateY(-50%) !important;
+  z-index: 90 !important;
+}
+.lore-reader .lore-rail-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 14px 11px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  background: linear-gradient(180deg, rgba(14,14,18,0.92), rgba(8,8,10,0.88)) !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  backdrop-filter: blur(14px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(125%) !important;
+  box-shadow: 0 18px 40px -22px rgba(0,0,0,0.92),
+              inset 0 1px 0 rgba(255,255,255,0.05) !important;
+}
+.lore-reader .lore-rail-item { margin: 0 !important; position: relative !important; }
+.lore-reader .lore-rail-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: rgba(245,241,232,0.42) !important;
+  cursor: pointer !important;
+  position: relative !important;
+  border-radius: 0 !important;
+  transition:
+    color 220ms cubic-bezier(.2,.7,.2,1),
+    background 220ms cubic-bezier(.2,.7,.2,1),
+    border-color 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.lore-reader .lore-rail-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 22px !important;
+  height: 22px !important;
+  color: inherit !important;
+  transition: transform 260ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.lore-reader .lore-rail-icon svg { stroke: currentColor !important; }
+.lore-reader .lore-rail-btn::after {
+  content: "" !important;
+  position: absolute !important;
+  left: -11px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 3px !important;
+  height: 0 !important;
+  background: var(--yellow, #d4a84a) !important;
+  box-shadow: 0 0 10px rgba(212,168,74,0.7) !important;
+  transition: height 280ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.lore-reader .lore-rail-btn::before {
+  content: attr(data-label) !important;
+  position: absolute !important;
+  right: calc(100% + 18px) !important;
+  top: 50% !important;
+  transform: translateY(-50%) translateX(8px) !important;
+  padding: 6px 12px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  background: rgba(8,8,10,0.96) !important;
+  border: 1px solid rgba(212,168,74,0.5) !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 220ms cubic-bezier(.2,.7,.2,1),
+              transform 240ms cubic-bezier(.2,.7,.2,1) !important;
+  z-index: 5 !important;
+}
+.lore-reader .lore-rail-btn:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  background: rgba(212,168,74,0.06) !important;
+  border-color: rgba(212,168,74,0.35) !important;
+}
+.lore-reader .lore-rail-btn:hover .lore-rail-icon { transform: scale(1.12) !important; }
+.lore-reader .lore-rail-btn:hover::before {
+  opacity: 1 !important;
+  transform: translateY(-50%) translateX(0) !important;
+}
+.lore-reader .lore-rail-item.is-active .lore-rail-btn {
+  color: var(--yellow, #d4a84a) !important;
+  background: rgba(212,168,74,0.12) !important;
+  border-color: rgba(212,168,74,0.7) !important;
+}
+.lore-reader .lore-rail-item.is-active .lore-rail-btn::after { height: 22px !important; }
+.lore-reader .lore-rail-item.is-active .lore-rail-icon { transform: scale(1.15) !important; }
+.lore-reader .lore-rail-item.is-active .lore-rail-btn::before {
+  opacity: 1 !important;
+  transform: translateY(-50%) translateX(0) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+@media (max-width: 900px) {
+  .lore-reader .lore-rail { display: none !important; }
+}
+
+/* ── Stage (holds the active spread) ───────────────────────────────── */
+.lore-reader .lore-stage {
+  position: relative !important;
+  z-index: 1 !important;
+  padding: clamp(20px, 3vw, 48px) clamp(20px, 4vw, 64px) clamp(60px, 6vw, 96px) !important;
+  max-width: 1380px !important;
+  margin: 0 auto !important;
+}
+@media (min-width: 900px) {
+  .lore-reader .lore-stage { padding-right: clamp(96px, 9vw, 160px) !important; }
+}
+
+/* ── The Spread · cinematic comic panel ────────────────────────────── */
+.lore-reader .lore-spread {
+  position: relative !important;
+  background:
+    radial-gradient(900px 500px at 100% 0%, rgba(212,168,74,0.06) 0%, transparent 60%),
+    radial-gradient(800px 500px at 0% 100%, rgba(227,27,35,0.045) 0%, transparent 60%),
+    linear-gradient(180deg, #0b0b10 0%, #0a0a0e 50%, #0b0b10 100%) !important;
+  border: 1px solid rgba(212,168,74,0.28) !important;
+  box-shadow:
+    0 32px 80px -32px rgba(0,0,0,0.95),
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    inset 0 -1px 0 rgba(0,0,0,0.5) !important;
+  padding: clamp(36px, 5vw, 72px) !important;
+  animation: lore-spread-in 320ms cubic-bezier(.2,.7,.2,1) both !important;
+  overflow: hidden !important;
+}
+.lore-reader .lore-spread::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.04) 1px, transparent 1.5px);
+  background-size: 7px 7px;
+  opacity: 0.6 !important;
+  mix-blend-mode: screen !important;
+}
+/* Corner crosshair marks for the panel — comic-book chrome */
+.lore-reader .lore-spread::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 14px; right: 14px;
+  width: 18px; height: 18px;
+  border-top: 1.5px solid rgba(212,168,74,0.6);
+  border-right: 1.5px solid rgba(212,168,74,0.6);
+  pointer-events: none;
+}
+
+@keyframes lore-spread-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Spread head · masthead row ────────────────────────────────────── */
+.lore-reader .lore-spread-head {
+  position: relative !important;
+  z-index: 2 !important;
+  display: grid !important;
+  grid-template-columns: auto 1fr auto !important;
+  align-items: end !important;
+  gap: clamp(20px, 3vw, 44px) !important;
+  padding-bottom: clamp(28px, 3vw, 40px) !important;
+  margin-bottom: clamp(32px, 4vw, 56px) !important;
+  border-bottom: 2px solid rgba(212,168,74,0.32) !important;
+}
+.lore-reader .lore-spread-head::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: -2px !important;
+  width: 140px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+
+.lore-reader .lore-spread-rail {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+.lore-reader .lore-spread-roman {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(64px, 7vw, 112px) !important;
+  line-height: 0.82 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--yellow, #d4a84a) !important;
+  text-shadow:
+    -2px 0 0 rgba(227,27,35,0.5),
+     2px 0 0 rgba(46,188,212,0.4) !important;
+}
+.lore-reader .lore-spread-rule {
+  width: 2px !important;
+  height: 28px !important;
+  background: rgba(212,168,74,0.5) !important;
+  display: block !important;
+}
+.lore-reader .lore-spread-glyph {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 38px !important;
+  height: 38px !important;
+  border: 1.5px solid rgba(212,168,74,0.55) !important;
+  color: var(--yellow, #d4a84a) !important;
+  background: rgba(212,168,74,0.06) !important;
+}
+
+.lore-reader .lore-spread-masthead { min-width: 0 !important; }
+.lore-reader .lore-spread-kicker {
+  display: inline-block !important;
+  padding: 5px 12px !important;
+  background: rgba(212,168,74,0.08) !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 16px !important;
+  border-radius: 0 !important;
+}
+.lore-reader .lore-spread-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(48px, 6vw, 92px) !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.025em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 12px !important;
+  text-transform: none !important;
+}
+.lore-reader .lore-spread-deck {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  font-size: clamp(16px, 1.4vw, 19px) !important;
+  line-height: 1.45 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  max-width: 680px !important;
+  margin: 0 !important;
+}
+
+.lore-reader .lore-spread-folio {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 2px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.24em !important;
+  color: var(--text-3, #948d80) !important;
+  text-transform: uppercase !important;
+  padding-bottom: 6px !important;
+}
+.lore-reader .lore-spread-folio strong {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 32px !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  line-height: 1 !important;
+  margin: 4px 0 !important;
+}
+
+@media (max-width: 760px) {
+  .lore-reader .lore-spread-head {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    align-items: start !important;
+  }
+  .lore-reader .lore-spread-rail {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+  .lore-reader .lore-spread-rule { width: 28px !important; height: 2px !important; }
+  .lore-reader .lore-spread-folio { align-items: flex-start !important; }
+}
+
+/* ── Spread body · the actual chapter prose ────────────────────────── */
+.lore-reader .lore-spread-body {
+  position: relative !important;
+  z-index: 2 !important;
+  max-width: 1080px !important;
+}
+.lore-reader .lore-spread-body .lore {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+/* Suppress the body's own intro stamp — masthead kicker covers that */
+.lore-reader .lore-spread-body .lore-intro-stamp { display: none !important; }
+/* Suppress duplicate intro title — masthead already shows chapter name */
+.lore-reader .lore-spread-body .lore-block.lore-intro .lore-intro-title { display: none !important; }
+
+.lore-reader .lore-spread-body .lore-block {
+  position: relative !important;
+  margin: 0 0 44px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+.lore-reader .lore-spread-body .lore-block:last-child { margin-bottom: 0 !important; }
+
+.lore-reader .lore-spread-body .lore-block.lore-intro {
+  margin: 0 0 44px !important;
+  padding: 0 0 36px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.2) !important;
+  position: relative !important;
+}
+.lore-reader .lore-spread-body .lore-block.lore-intro::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: -1px !important;
+  width: 48px !important;
+  height: 1px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+
+.lore-reader .lore-spread-body .lore-lead {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: clamp(17px, 1.3vw, 19px) !important;
+  line-height: 1.65 !important;
+  font-weight: 400 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 16px !important;
+  max-width: 780px !important;
+}
+.lore-reader .lore-spread-body .lore-lead:last-child { margin-bottom: 0 !important; }
+.lore-reader .lore-spread-body .lore-lead em {
+  color: var(--yellow, #d4a84a) !important;
+  font-style: italic !important;
+}
+.lore-reader .lore-spread-body .lore-lead strong {
+  color: var(--text-1, #f5f1e8) !important;
+  font-weight: 600 !important;
+}
+
+/* Drop cap — first lead of the chapter only */
+.lore-reader .lore-spread-body .lore-block.lore-intro .lore-lead:first-of-type::first-letter {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(64px, 6vw, 84px) !important;
+  line-height: 0.78 !important;
+  float: left !important;
+  margin: 8px 14px 0 0 !important;
+  padding: 0 !important;
+  color: var(--yellow, #d4a84a) !important;
+  text-shadow:
+    -2px 0 0 rgba(227,27,35,0.4),
+     2px 0 0 rgba(46,188,212,0.3) !important;
+}
+
+.lore-reader .lore-spread-body .lore-eyebrow {
+  display: inline-block !important;
+  padding: 4px 10px !important;
+  background: transparent !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 14px !important;
+  border-radius: 0 !important;
+  width: max-content !important;
+}
+.lore-reader .lore-spread-body .lore-eyebrow::before { display: none !important; }
+
+.lore-reader .lore-spread-body .lore-h {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: clamp(28px, 2.8vw, 38px) !important;
+  line-height: 1.06 !important;
+  letter-spacing: -0.015em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 18px !important;
+  text-shadow: none !important;
+  text-transform: none !important;
+  max-width: 820px !important;
+}
+.lore-reader .lore-spread-body .lore-h .accent {
+  color: var(--yellow, #d4a84a) !important;
+  font-style: italic !important;
+}
+
+.lore-reader .lore-spread-body .lore-p {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 16px !important;
+  line-height: 1.66 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 14px !important;
+  max-width: 740px !important;
+  font-weight: 400 !important;
+}
+.lore-reader .lore-spread-body .lore-p:last-child { margin-bottom: 0 !important; }
+.lore-reader .lore-spread-body .lore-p strong {
+  color: var(--text-1, #f5f1e8) !important;
+  font-weight: 600 !important;
+}
+.lore-reader .lore-spread-body .lore-p em {
+  color: var(--yellow, #d4a84a) !important;
+  font-style: italic !important;
+}
+
+/* Vanguard — 2-column on wide screens so 4 character cards fit ~1 viewport */
+.lore-reader .lore-spread-body .lore-vanguard {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 28px !important;
+  margin-top: 4px !important;
+  max-width: none !important;
+}
+@media (min-width: 1100px) {
+  .lore-reader .lore-spread-body .lore-vanguard {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 32px 36px !important;
+  }
+}
+
+/* ── Spread foot · prev/next buttons ───────────────────────────────── */
+.lore-reader .lore-spread-foot {
+  position: relative !important;
+  z-index: 2 !important;
+  margin-top: clamp(40px, 5vw, 72px) !important;
+  padding-top: clamp(28px, 3vw, 40px) !important;
+  border-top: 1px solid rgba(212,168,74,0.22) !important;
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
+.lore-reader .lore-spread-foot-mark {
+  font-size: 10px !important;
+  color: rgba(212,168,74,0.6) !important;
+  letter-spacing: 0.6em !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+}
+
+.lore-reader .lore-spread-step {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  padding: 14px 20px !important;
+  background: rgba(212,168,74,0.05) !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  cursor: pointer !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  text-align: left !important;
+  text-decoration: none !important;
+  transition:
+    background 220ms cubic-bezier(.2,.7,.2,1),
+    border-color 220ms cubic-bezier(.2,.7,.2,1),
+    transform 220ms cubic-bezier(.2,.7,.2,1) !important;
+  min-width: 0 !important;
+}
+.lore-reader .lore-spread-step:not(:disabled):hover {
+  background: rgba(212,168,74,0.14) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+.lore-reader .lore-spread-step-prev:not(:disabled):hover { transform: translateX(-4px) !important; }
+.lore-reader .lore-spread-step-next:not(:disabled):hover { transform: translateX(4px) !important; }
+.lore-reader .lore-spread-step:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+}
+.lore-reader .lore-spread-step-prev { justify-self: start !important; }
+.lore-reader .lore-spread-step-next { justify-self: end !important; text-align: right !important; }
+
+.lore-reader .lore-spread-step-meta {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+}
+.lore-reader .lore-spread-step-next .lore-spread-step-meta { align-items: flex-end !important; }
+.lore-reader .lore-spread-step-kicker {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  letter-spacing: 0.28em !important;
+  color: var(--yellow, #d4a84a) !important;
+  text-transform: uppercase !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+.lore-reader .lore-spread-step-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 18px !important;
+  letter-spacing: -0.005em !important;
+  line-height: 1.05 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.lore-reader .lore-spread-step svg { color: var(--yellow, #d4a84a) !important; flex-shrink: 0 !important; }
+
+@media (max-width: 760px) {
+  .lore-reader .lore-spread { padding: 28px 20px !important; }
+  .lore-reader .lore-spread-foot {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .lore-reader .lore-spread-foot-mark { display: none !important; }
+  .lore-reader .lore-spread-step-prev,
+  .lore-reader .lore-spread-step-next { justify-self: stretch !important; }
+  .lore-reader .lore-spread-title { font-size: 44px !important; }
+  .lore-reader .lore-spread-roman { font-size: 60px !important; }
+}
