@@ -558,94 +558,139 @@ students: [
 faculty: [
   {
     section: "OFFICE OF THE DEAN",
-    note: "The Dean is the operational head of Calderyn College. Final authority on admission, discipline, expulsion, and reassignment. Reports to the STRATA executive board and to no one else.",
+    note: "The Dean is the operational head of Calderyn College. Final authority on admission, discipline, expulsion, and reassignment. Reports to the STRATA executive board and to no one else. The Fellowship Coordinator sits under the Dean's office, not under any one department.",
     rows: [
       { role: "Dean", char: "Dr. Devika Ravindrakumar", power: "Power Nullification (15m field)", npc: true },
       { role: "Director of Admissions" },
       { role: "Registrar" },
+      { role: "Fellowship Coordinator" },
     ],
   },
+
+  /* ─── 1 · COMBAT ───────────────────────────────────────────────── */
   {
-    section: "HEROES TRACK FACULTY",
-    note: "Professors who teach exclusively on the Heroes track (Track One). Combat, deployment, public-facing capability. Each prof tracks their students through all four years — the freshman instructor is the senior instructor.",
+    section: "COMBAT",
+    dept: "combat",
+    note: "The largest faculty by headcount. The department the public thinks Calderyn is. HoD locked: Theron, ex-Vanguard background. Operational record partially classified.",
     rows: [
-      { role: "Deployment & Field Ops", tracks: ["hero"], subjects: [
-        { year: "SO", type: "hero", kind: "required", title: "Deployment & Field Ops II",  desc: "Simulated live deployments begin. Civilian-adjacent shadowing, threat assessment in friendly environments, learning to read a crowd before you have to read a crisis." },
-        { year: "JR", type: "hero", kind: "required", title: "Deployment & Field Ops III", desc: "Live sanctioned ops with faculty present. Property damage scenes, crowd control, low-end hostage incidents. Body counts get logged. Strike planning and approach vectors integrated week by week." },
-        { year: "SR", type: "hero", kind: "required", title: "Deployment & Field Ops IV",  desc: "Solo and paired ops scaled to your tier. Senior year involves press. Faculty no longer present — you radio in for permission, you don't ask it. The collateral math gets formalised." },
-      ]},
-      { role: "Powered Conditioning", tracks: ["hero"], subjects: [
-        { year: "FR", type: "hero", kind: "required", title: "Powered Conditioning I",   desc: "Foundation. Power-output baseline measurement, recovery curves on your specific ability, sleep cycles, nutrition under powered metabolism. Diagnostic Wing writes a personalised programme in the first month. Most students are surprised by what their own body actually wants." },
-        { year: "SO", type: "hero", kind: "required", title: "Powered Conditioning II",  desc: "Application and limits. Sustained-use endurance, working through fatigue, recognising the difference between a safe limit and an ego limit. The class where most students discover, properly, what their ceiling looks like." },
-        { year: "JR", type: "hero", kind: "required", title: "Powered Conditioning III", desc: "Live conditioning. Working through real injury during deployment year, pain management protocols, when to call yourself out and when to push through. Highest visit rate to the Diagnostic Wing of any class on the timetable." },
-        { year: "SR", type: "hero", kind: "required", title: "Powered Conditioning IV",  desc: "Career pacing. The twenty-year operative arc — recovery between deployments, off-season protocols, recognising the early signs of burnout that end careers. Retired Vanguard members guest-lecture. They tell you the truth." },
-      ]},
+      { role: "Head of Combat", deptSlot: "head",
+        char: "Theron", stage: "THERON",
+        power: "Biokinetic Augmentation · Kinetic Absorption & Release",
+        expression: "Theron's body absorbs and redistributes incoming force, dampening damage and channelling that energy into momentum. Strength scales with motion, favouring charges, grapples, and sustained pressure. In Break State his biological inhibitors fail, deepening output at the cost of self-damage.",
+        drawbacks: "Not invulnerable — repeated impacts, piercing attacks, and concentrated force still fracture and bleed him. Heavy absorption strains his system, slowing reactions and pushing him toward overheating, fatigue, and eventual shutdown. Break State worsens injury suppression and risks collapse.",
+        link: "https://roleplay.chat/profile.php?user=bulk",
+        npc: false,
+      },
+      { role: "Prof. 1 · Power-Augmented Engagement & Hand-to-Hand", deptSlot: "prof1" },
+      { role: "Prof. 2 · Crisis Intervention & Multi-Agency Response", deptSlot: "prof2" },
+      { role: "Prof. 3 · Containment & Powered-on-Powered Engagement", deptSlot: "prof3" },
+      { role: "TA · Combat (Heroes lane)" },
+      { role: "TA · Combat (Sidekicks lane)" },
     ],
   },
+
+  /* ─── 2 · MEDIA & ARTS ─────────────────────────────────────────── */
   {
-    section: "SIDEKICKS TRACK FACULTY",
-    note: "Professors who teach exclusively on the Sidekicks track (Track Two). Triage, handling, partnership, deniability. Same prof carries forward across all four years — continuity is the point.",
+    section: "MEDIA & ARTS",
+    dept: "media-arts",
+    note: "The public-presentation faculty. Press, identity craft, performance training as the spine. The department whose graduates the public actually recognises. HoD: open.",
     rows: [
-      { role: "Field Medicine & Triage", tracks: ["sidekick"], subjects: [
-        { year: "FR", type: "sidekick", kind: "required", title: "Field Medicine I",  desc: "Triage, stabilisation, emergency response in a powered incident. Wound packing, airway management, the photogenic-victim triage doctrine. Keeping your Hero conscious long enough to matter." },
-        { year: "JR", type: "sidekick", kind: "required", title: "Field Medicine II", desc: "Advanced trauma management, powered-specific injuries, and how to operate a medical kit when the building is on fire. Burns at unusual temperature, regen-cancer interactions, structural damage from kinetic supes. Diagnostic Wing supplies the case material." },
-      ]},
-      { role: "Tactical Communications", tracks: ["sidekick"], subjects: [] },
-      { role: "Pairing & Protocol", tracks: ["sidekick"], subjects: [
-        { year: "FR", type: "sidekick", kind: "required", title: "Tactical Comms & Handler Basics", desc: "Comms protocol, mission logging, asset tracking, how to manage a Hero who is not listening to you. Encrypted channels, handler-to-operative call-and-response, reading a crisis through audio alone before you've ever stood in one." },
-      ]},
+      { role: "Head of Media & Arts", deptSlot: "head" },
+      { role: "Prof. 1 · Press, Statement Craft & Statutory Liaison", deptSlot: "prof1" },
+      { role: "Prof. 2 · Performance, Presence & Public Address", deptSlot: "prof2" },
+      { role: "Prof. 3 · Visual Identity, Costume & the Codename Seminar", deptSlot: "prof3" },
     ],
   },
+
+  /* ─── 3 · SCIENCES ─────────────────────────────────────────────── */
   {
-    section: "SHARED FACULTY",
-    note: "Professors whose subjects are required on both tracks. The classes where Heroes and Sidekicks sit in the same room, and notice the difference in how they're spoken to. One prof teaches the whole four-year arc on both tracks simultaneously.",
+    section: "SCIENCES",
+    dept: "sciences",
+    note: "The academic spine of the institution. A real faculty of sciences that happens to teach supes. Largest discipline cluster after Combat. HoD: open.",
     rows: [
-      { role: "Powered Research & Theory", tracks: ["hero", "sidekick"], subjects: [
-        { year: "FR", type: "shared", kind: "required", title: "Powered History I",  desc: "The first documented powered individual. The cover-up that followed. How the public mythology of heroes was constructed by governments and eventually handed to STRATA. You read the rules before you read the people who made them." },
-        { year: "SO", type: "shared", kind: "required", title: "Powered History II", desc: "The modern era. STRATA's founding, the first corporate contract, the first powered fatality under managed deployment. Case studies in incidents that reshaped the legal framework — Geneva, Cassandra, the ones the broadcaster won't name." },
-      ]},
-      { role: "Powered Medicine & Healing", tracks: ["hero", "sidekick"], subjects: [
-        { year: "FR", type: "shared", kind: "required", mandatory: true, title: "Powered Biology & Sexual Health", desc: "Mandatory. How powers interact with human physiology — accelerated healing, toxic output, energy fields, altered neurochemistry — and what that means for intimacy, reproduction, contraception, and consent between powered individuals. The class no one talks about and everyone attends. Clinical framing, frank language, the Diagnostic Wing supplies the case material." },
-      ]},
-      { role: "Contract Law & Ethics", tracks: ["hero", "sidekick"], subjects: [
-        { year: "FR", type: "shared", kind: "required", title: "Contract Law I",  desc: "Your STRATA contract is not a job offer. It is a multi-decade liability waiver disguised as a career. This class teaches you to read the fine print. The Geneva 2009 framework, STRATA's regulatory authority, the legal status of registered abilities." },
-        { year: "JR", type: "shared", kind: "required", title: "Contract Law II", desc: "Advanced contract mechanics. Exclusivity clauses, image rights, incident indemnification, the exit-clause labyrinth. Guest lecturer slot for a STRATA legal NPC most terms. Most of the cynicism in your junior year comes out of this room." },
-      ]},
-      { role: "Strategic Studies & Doctrine", tracks: ["hero", "sidekick"], subjects: [
-        { year: "SO", type: "shared", kind: "required", title: "Ethics & Conduct",     desc: "Collateral damage doctrine, civilian casualty thresholds, the Vanguard precedent, what proportionate force means when you can level a building with one hand. The class that teaches you what STRATA will and will not pay to clean up." },
-        { year: "SO", type: "shared", kind: "required", title: "Strategic Studies I",  desc: "Mission architecture, threat tiering, extraction protocol. How a deployment actually runs from briefing to debrief. The class students take when they want to run the room rather than fight in it." },
-        { year: "SR", type: "shared", kind: "required", title: "Strategic Studies II", desc: "Capstone strategic module. Cross-track joint planning exercises — Heroes and Sidekicks plan the same mission from their respective roles and debrief together. Senior thesis incidents come out of this room." },
-      ]},
+      { role: "Head of Sciences", deptSlot: "head" },
+      { role: "Prof. 1 · Mathematics & Physical Sciences", deptSlot: "prof1" },
+      { role: "Prof. 2 · Parahuman Biology & Pharmacology", deptSlot: "prof2" },
+      { role: "Prof. 3 · Powered Medicine · Teaching Clinic", deptSlot: "prof3" },
     ],
   },
+
+  /* ─── 4 · ENGINEERING ──────────────────────────────────────────── */
   {
-    section: "ELECTIVE FACULTY",
-    note: "Open to both tracks across all four years. Students self-select based on aptitude, ambition, and what they want their post-Calderyn life to look like. Some electives align naturally with house culture — Grimere fills the engineering benches, Orenne fills the medical wing — but no elective is gated to a house.",
+    section: "ENGINEERING",
+    dept: "engineering",
+    note: "Builds, maintains, and runs everything on campus that isn't a person. HoD: open. (Iris Grimere stays in Support Staff as Diagnostic Wing Director — not teaching faculty.)",
     rows: [
-      { role: "Engineering & Fabrication", tracks: ["hero", "sidekick"], subjects: [
-        { type: "shared", kind: "elective", title: "Engineering & Fabrication", desc: "Suit tech, support gear, equipment modification. Building gear that interacts with the user's ability rather than getting destroyed by it. Switchboard sometimes guest-lectures on technokinetic integration." },
-      ]},
-      { role: "Powered Medicine & Healing", tracks: ["hero", "sidekick"], subjects: [
-        { type: "shared", kind: "elective", title: "Powered Medicine (Advanced)", desc: "Elective extension of the shared Powered Biology requirement for students pursuing medical or research paths. Long-form recovery, rehabilitation protocols, Diagnostic Wing rotation. Graduates are first in line for Wing positions." },
-      ]},
-      { role: "Performance & Stunt Arts", tracks: ["hero", "sidekick"], subjects: [
-        { type: "shared", kind: "elective", title: "Performance & Stunt Arts", desc: "Physical stagecraft for Heroes. How to make a necessary fight look like what the cameras want. Choreographed power use for sponsored shows and demonstrations; the class with the highest insurance premium on campus." },
-      ]},
-      { role: "Powered Research & Theory", tracks: ["hero", "sidekick"], subjects: [
-        { type: "shared", kind: "elective", title: "Power Theory", desc: "The academic study of how powers work. Origin hypotheses, classification systems, interaction models — the things STRATA funds research into, and the things it doesn't. The track Grimere's strangest students disappear into." },
-      ]},
-      { role: "Strategic Studies & Doctrine", tracks: ["hero", "sidekick"], subjects: [] },
-      { role: "Covert Operations", tracks: ["hero", "sidekick"], subjects: [
-        { type: "shared", kind: "elective", title: "Covert Operations", desc: "Black-site theory, deep cover, off-book deployment. What happens when the contract doesn't cover what you just did. The instructor's CV is officially redacted; the back of the syllabus is not." },
-      ]},
-      { role: "Forensic Analysis", tracks: ["hero", "sidekick"], subjects: [
-        { type: "shared", kind: "elective", title: "Forensic Analysis", desc: "Powered crime scenes, incident reconstruction, evidence that doesn't show up on normal instruments. Top students rotate through real Met Specialist Unit consults as observers." },
-      ]},
+      { role: "Head of Engineering", deptSlot: "head" },
+      { role: "Prof. 1 · Robotics & Autonomous Systems", deptSlot: "prof1" },
+      { role: "Prof. 2 · Personal Kit & Gadget Design", deptSlot: "prof2" },
+      { role: "Prof. 3 · Facility Systems & Infrastructure", deptSlot: "prof3" },
+      { role: "Workshop Technician" },
+      { role: "Workshop Technician" },
+      { role: "Bot Bay Technician" },
     ],
   },
+
+  /* ─── 5 · HISTORY & DOCTRINE ───────────────────────────────────── */
+  {
+    section: "HISTORY & DOCTRINE",
+    dept: "history-doctrine",
+    note: "The department that holds the institutional argument with itself. The Doctrine, ethics, law, comparative powered politics. HoD: open, longest-serving head on paper; sits to Devika's right at Heads' Table.",
+    rows: [
+      { role: "Head of History & Doctrine", deptSlot: "head" },
+      { role: "Prof. 1 · The Calderyn Doctrine, 1948–Present", deptSlot: "prof1" },
+      { role: "Prof. 2 · Ethics, Restraint & Non-Deployment", deptSlot: "prof2" },
+      { role: "Prof. 3 · Powered Persons, the State, STRATA & the Pipeline", deptSlot: "prof3" },
+    ],
+  },
+
+  /* ─── 6 · ATHLETICS ────────────────────────────────────────────── */
+  {
+    section: "ATHLETICS",
+    dept: "athletics",
+    note: "The body as long-term instrument. Distinct from Combat. Runs the house system, Powerball, and the inter-house calendar. HoD: open.",
+    rows: [
+      { role: "Head of Athletics", deptSlot: "head" },
+      { role: "Prof. 1 · Foundations of Conditioning & Endurance", deptSlot: "prof1" },
+      { role: "Prof. 2 · Power-Augmented Athletics & Limit Testing", deptSlot: "prof2" },
+      { role: "Prof. 3 · Sports Medicine & Recovery", deptSlot: "prof3" },
+      { role: "House Trainer · Valaris" },
+      { role: "House Trainer · Saberis" },
+      { role: "House Trainer · Orenne" },
+      { role: "House Trainer · Grimere" },
+    ],
+  },
+
+  /* ─── 7 · HUMANITIES ───────────────────────────────────────────── */
+  {
+    section: "HUMANITIES",
+    dept: "humanities",
+    note: "Literature, philosophy, languages. The academic spine that isn't STEM. HoD: open. The only head with no security clearance — institutionally significant.",
+    rows: [
+      { role: "Head of Humanities", deptSlot: "head" },
+      { role: "Prof. 1 · English Literature & Writing", deptSlot: "prof1" },
+      { role: "Prof. 2 · Philosophy", deptSlot: "prof2" },
+      { role: "Prof. 3 · Modern Languages", deptSlot: "prof3" },
+    ],
+  },
+
+  /* ─── 8 · POLITICS & PUBLIC AFFAIRS ────────────────────────────── */
+  {
+    section: "POLITICS & PUBLIC AFFAIRS",
+    dept: "politics",
+    note: "The social-sciences department. Politics, business, policy, economics — the disciplines that govern how powered persons actually operate inside the state and the market. HoD: open.",
+    rows: [
+      { role: "Head of Politics & Public Affairs", deptSlot: "head" },
+      { role: "Prof. 1 · Political Theory & Government", deptSlot: "prof1" },
+      { role: "Prof. 2 · Business & Management", deptSlot: "prof2" },
+      { role: "Prof. 3 · Public Policy & Economics", deptSlot: "prof3" },
+    ],
+  },
+
+  /* ─── SUPPORT STAFF (Switchboards LOCKED here per canon) ──────── */
   {
     section: "SUPPORT STAFF",
-    note: "The Diagnostic Wing is overseen, in name and in practice, by Iris Grimere (Switchboard). Day-to-day medical staff report through her.",
+    note: "The Diagnostic Wing is overseen, in name and in practice, by Iris Grimere (Switchboard). Day-to-day medical staff report through her. Switchboards is not on teaching faculty; her institutional presence runs through the Wing and through the bots that run the campus.",
     rows: [
       { role: "Diagnostic Wing — Director", char: "Iris Grimere", stage: "Switchboard", power: "Technokinesis", npc: true },
       { role: "Chief Medical Officer" },
@@ -671,13 +716,17 @@ faculty: [
      - headSubs: true       → head (overrides the TA for that class)
 ═══════════════════════════════════════════════════════════════════════════ */
 departments: [
+  /* ─────────────────────────────────────────────────────────────────
+     1 · COMBAT (HoD locked: Theron)
+     ───────────────────────────────────────────────────────────────── */
   {
     id: "combat",
-    name: "Combat Training",
-    blurb: "Theron's domain. Foundations and capstone in his hands; the Hero and Sidekick mid-years split between two TAs trained to his doctrine.",
+    name: "Combat",
+    code: "COM",
     color: "#c41a1a",
+    blurb: "The largest faculty by headcount and the department the public thinks Calderyn is. Carries the heaviest legacy of the doctrinal era — the 'prepared for war that never came' energy lives strongest here.",
     head: {
-      role: "Head of Combat Training",
+      role: "Head of Combat",
       char: "Theron",
       stage: "THERON",
       power: "Biokinetic Augmentation · Kinetic Absorption & Release",
@@ -685,47 +734,423 @@ departments: [
       drawbacks: "Not invulnerable — repeated impacts, piercing attacks, and concentrated force still fracture and bleed him. Heavy absorption strains his system, slowing reactions and pushing him toward overheating, fatigue, and eventual shutdown. Break State worsens injury suppression and risks collapse.",
       link: "https://roleplay.chat/profile.php?user=bulk",
       npc: false,
+      bio: "Ex-Vanguard background. Carries an institutional authority no other head matches. Operational record is partially classified; what students know is that he was on active deployment during the Cassandra incident, though never on the boat itself.",
     },
-    taHero:     { role: "TA · Combat Training (Heroes)" },
-    taSidekick: { role: "TA · Combat Training (Sidekicks)" },
+    staff: [
+      { slot: "Prof. 1", role: "Power-Augmented Engagement & Hand-to-Hand Combat", bio: "Practitioner background. The professor everyone takes first because she's the most accessible." },
+      { slot: "Prof. 2", role: "Crisis Intervention & Multi-Agency Response",       bio: "Joint background: Met liaison, fire service coordination, ambulance triage. Teaches the realistic chaos of mixed-asset response." },
+      { slot: "Prof. 3", role: "Containment & Powered-on-Powered Engagement",       bio: "The most feared seat in the building regardless of who holds the post. Teaches students to fight their own peers — current classmates, future colleagues, sometimes both — and teaches the moral weight of it explicitly." },
+    ],
+    instructional: [
+      { role: "TA · Combat (Heroes lane)" },
+      { role: "TA · Combat (Sidekicks lane)" },
+    ],
+    facilities: "The Engagement Hall (multi-arena, designed to take damage and recover overnight via Engineering bots), the Containment Range, the Briefing Theatre.",
     classes: [
-      { year: "FR", type: "hero",     title: "Combat Foundations",
-        desc: "Hero-track freshmen learn the basics of powered combat. Controlled drills, power stress-testing, calibration against your own classified ceiling — taught by Theron because the foundation is what survives every later course correction. Most physical washouts come out of this class." },
-      { year: "SO", type: "hero",     title: "Strike Doctrine",
-        desc: "Track-specific offensive theory. The physics of how powers interact mid-fight, how to neutralise without killing, and when the second option is off the table." },
-      { year: "SO", type: "sidekick", title: "Field Support Combat",
-        desc: "Combat fundamentals from the support position: protecting assets, disabling threats without being the primary, surviving a situation you weren't supposed to be in." },
-      { year: "JR", type: "hero",     title: "Advanced Heroic Combat",
-        desc: "Complex multi-threat scenarios, power-combination tactics, fighting alongside Vanguard-tier assets. Live sparring against juniors from rival houses." },
-      { year: "JR", type: "sidekick", title: "Sidekick Tactical Defence",
-        desc: "Advanced defensive and evasion theory. How to make yourself very hard to kill when the fight wasn't meant to include you." },
-      { year: "SR", type: "shared",   title: "Joint Field Operations",
-        desc: "Combat Foundations capstone. Heroes and Sidekicks in the same exercise — the first time both tracks have to actually work together under pressure. Theron takes the room back; the doctrine only works if both sides do it the same way. Final assessment is paired." },
+      { code: "COM-101", year: "Y1", kind: "shared-core", title: "Foundations of Engagement",
+        taughtBy: "Prof. 1",
+        desc: "Year-one combat literacy for every student, every designation. Stance, conditioning, controlled-arena drills, calibrated power stress-testing. Most physical washouts surface here — STRATA wants the unwillable broken early." },
+      { code: "COM-201", year: "Y2", kind: "literacy",    title: "Crisis Intervention Protocols",
+        taughtBy: "Prof. 2",
+        desc: "Multi-agency response. The realistic chaos of mixed-asset coordination — Met liaison, fire service, ambulance triage, you. The professor's joint background means you do not get the version where everything works first time." },
+      { code: "COM-202", year: "Y2", kind: "literacy",    title: "Containment & Holding",
+        taughtBy: "Prof. 3",
+        desc: "How to stop a powered threat without taking it apart. Restraint doctrine, holding patterns, the calculus of when not to escalate. Sidekick-designation students gravitate here; the institution does not object." },
+      { code: "COM-203", year: "Y2", kind: "literacy",    title: "Tactical Doctrine",
+        taughtBy: "Prof. 2",
+        desc: "Field tactics at the team level. Approach vectors, fire-and-movement under powered conditions, the architecture of a sanctioned op from briefing to debrief." },
+      { code: "COM-301", year: "Y3", kind: "literacy",    title: "The Civilian Calculation",
+        taughtBy: "HoD",
+        desc: "The institution's most morally serious module. When the maths is bystanders against asset, who lives, who pays the bill. Failing this class is generally career-ending." },
+      { code: "COM-302", year: "Y3", kind: "specialism",  title: "Powered-on-Powered Engagement",
+        taughtBy: "Prof. 3",
+        desc: "Specialist seat. Combat against your own peers — current classmates, future colleagues, sometimes both. The professor teaches the moral weight of it explicitly." },
+      { code: "COM-303", year: "Y3", kind: "specialism",  title: "Field Command",
+        taughtBy: "HoD", designation: "hero",
+        desc: "Hero-designation specialism. Lead authority, command structure under live conditions, the responsibility that comes with being the one whose name reaches the press." },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────────────────
+     2 · MEDIA & ARTS  (HoD: open)
+     ───────────────────────────────────────────────────────────────── */
   {
-    id: "media",
-    name: "Media Training",
-    blurb: "The press room before the press room. The HoD takes the senior crisis capstone where both tracks share the same air; the track-specific persona work between them is split between two TAs.",
+    id: "media-arts",
+    name: "Media & Arts",
+    code: "MDA",
     color: "#d4901a",
+    blurb: "The public-presentation faculty. Press on one wing, identity craft on the other, performance training as the spine that joins them. The department whose graduates the public actually recognises.",
     head: {
-      role: "Head of Media Training · TBA",
+      role: "Head of Media & Arts",
+      bio: "Retired public-facing figure who's worked both sides: real press incidents and a known persona of her own. Carries scar tissue and glamour. Theron treats her with a particular respect, which is institutionally noticeable.",
     },
-    taHero:     { role: "TA · Media Training (Heroes)" },
-    taSidekick: { role: "TA · Media Training (Sidekicks)" },
+    staff: [
+      { slot: "Prof. 1", role: "Press, Statement Craft & Statutory Liaison",        bio: "Former STRATA press officer. Teaches how the powered sector communicates with the state and the public, and where the two diverge." },
+      { slot: "Prof. 2", role: "Performance, Presence & Public Address",            bio: "The bridge between the two wings. Every student takes at least one of her modules." },
+      { slot: "Prof. 3", role: "Visual Identity, Costume & the Codename Seminar",   bio: "Notorious. Single-term seminar — students leave with a working persona, or not at all." },
+    ],
+    facilities: "The Press Suite (working broadcast space, real cameras, real lighting), the Studio (visual identity / costume / persona work), the Address Theatre (live-audience performance training).",
     classes: [
-      { year: "SO", type: "hero",     title: "Heroic Persona & Brand",
-        desc: "Stage name finalisation, public-appearance doctrine, the legal architecture of a hero identity. Case study: Paragon, the world's most famous no-separation supe. How to exist in front of a camera without embarrassing your handler." },
-      { year: "SO", type: "sidekick", title: "Sidekick PR & Cover Identity",
-        desc: "You do not exist publicly. This class teaches you how to maintain that. Cover-identity discipline, press deflection, the etiquette of staying out of the frame." },
-      { year: "JR", type: "hero",     title: "Press & Interview Craft",
-        desc: "Advanced media work: hostile interviews, crisis press, the art of saying nothing while appearing to answer everything. Most footage from this class gets used as case study by future cohorts." },
-      { year: "JR", type: "sidekick", title: "Discreet Press & Handler Liaison",
-        desc: "Managing your Hero's media presence from behind the curtain. Drafting the statement they will take credit for. Protecting both of you when a story breaks wrong." },
-      { year: "SR", type: "shared",   title: "Crisis Comms Capstone",
-        desc: "A live-fire media drill: manufactured scandal, hostile press, coordinated response. Both tracks graded on whether they survive it as a unit. The HoD teaches it because at this level both sides are speaking the same voice." },
+      { code: "MDA-101", year: "Y1", kind: "shared-core", title: "The Public Face",
+        taughtBy: "Prof. 2",
+        desc: "Year-one media literacy for every student. Camera presence, interview basics, the transcript of someone else's incident dissected line by line. You learn what gets said and what gets cleared before you learn how to say either." },
+      { code: "MDA-201", year: "Y2", kind: "literacy",    title: "Press Protocols & Statement Craft",
+        taughtBy: "Prof. 1",
+        desc: "Press and statutory liaison. How the powered sector communicates with the state and the public, and where those two diverge. The Sidekick-designation lane gravitates here." },
+      { code: "MDA-202", year: "Y2", kind: "literacy",    title: "Performance & Presence",
+        taughtBy: "Prof. 2",
+        desc: "Public address under hostile conditions. Holding a room without your power, refusing a question visibly, the bridge between press work and stagecraft." },
+      { code: "MDA-203", year: "Y2", kind: "specialism",  title: "Visual Identity & Costume Design",
+        taughtBy: "Prof. 3",
+        desc: "Single-term seminar. You walk in a student; you walk out with a working persona, or you don't. Costume, visual identity, the legal architecture of a working alias." },
+      { code: "MDA-301", year: "Y3", kind: "literacy",    title: "Hearings & Accountability",
+        taughtBy: "Prof. 1", designation: "sidekick",
+        desc: "Sidekick-designation specialism. Statutory hearings, internal investigations, the architecture of accountability when something went wrong. The press work that falls to support roles when the lead is unavailable." },
+      { code: "MDA-302", year: "Y3", kind: "specialism",  title: "The Codename Seminar",
+        taughtBy: "Prof. 3", designation: "hero",
+        desc: "Hero-designation specialism. Notorious. The naming itself is the assessment. Most students change their codename at least twice during the term." },
+      { code: "MDA-303", year: "Y3", kind: "specialism",  title: "Powerball Coverage",
+        taughtBy: "Prof. 2",
+        desc: "Cross-listed with Athletics. The annual exhibition meet is the country's biggest powered media event. How to cover it, brand it, survive it on either side of the camera." },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────────────────
+     3 · SCIENCES  (HoD: open)
+     ───────────────────────────────────────────────────────────────── */
+  {
+    id: "sciences",
+    name: "Sciences",
+    code: "SCI",
+    color: "#2eb574",
+    blurb: "The academic spine of the institution. A real faculty of sciences that happens to teach supes. Largest discipline cluster after Combat.",
+    head: {
+      role: "Head of Sciences",
+      bio: "Senior parahuman researcher, clinical or biological background, the most-cited member of faculty. Holds unlisted STRATA clearance.",
+    },
+    staff: [
+      { slot: "Prof. 1", role: "Mathematics & Physical Sciences",       bio: "Maths, physics, foundational chemistry. The quantitative spine. Teaches the modules every other department's students complain about taking." },
+      { slot: "Prof. 2", role: "Parahuman Biology & Pharmacology",      bio: "Physiology, biochem, drug action, dosing for altered metabolisms. Works closely with Prof. 3's clinical team." },
+      { slot: "Prof. 3", role: "Powered Medicine — Teaching Clinic",    bio: "Clinical and surgical practice. Runs the Teaching Clinic. Holds NHS consultant-equivalent status; the Clinic is the country's only specialist powered-medicine training site." },
+    ],
+    facilities: "The Teaching Clinic (operational facility treating powered patients), the Labs (biology, chemistry, physics — separate wings), the Research Wing (closed to undergraduates outside the Year 3 capstone).",
+    classes: [
+      { code: "SCI-101", year: "Y1", kind: "shared-core", title: "Foundations of Parahuman Biology",
+        taughtBy: "Prof. 2",
+        desc: "Year-one shared core. How human anatomy and physiology stretch, distort, and occasionally break to accommodate powered metabolism. Even the Combat kids take this. Especially the Combat kids." },
+      { code: "SCI-102", year: "Y2", kind: "required",    title: "Chemistry for the Powered Sciences",
+        taughtBy: "Prof. 1",
+        desc: "Powered biochem foundations. The quantitative spine the other departments complain about taking but no responsible science programme would survive without." },
+      { code: "SCI-103", year: "Y2", kind: "required",    title: "Mathematics for the Powered Sciences",
+        taughtBy: "Prof. 1",
+        desc: "Calculus and statistics applied to powered systems. Dose curves, ballistic models, kinetic scaling. The professor expects working knowledge by week three." },
+      { code: "SCI-201", year: "Y2", kind: "required",    title: "Powered Physiology & Operational Limits",
+        taughtBy: "Prof. 2",
+        desc: "Where powers actually live in the body. Cellular adaptations, energy budgets, the failure modes that come for everyone eventually. Diagnostic Wing supplies the case material." },
+      { code: "SCI-202", year: "Y2", kind: "specialism",  title: "Pharmacology & Dosing",
+        taughtBy: "Prof. 2",
+        desc: "Drug action on altered metabolisms. Standard pharmacology then everything that changes when the patient is not strictly standard. Required for anyone working in the Wing." },
+      { code: "SCI-203", year: "Y2", kind: "specialism",  title: "Applied Physics for Powered Practitioners",
+        taughtBy: "Prof. 1",
+        desc: "Forces, fields, thermodynamics under power-induced stress. The class for people who want to build, study, or contain powered phenomena — and the class engineers steal from." },
+      { code: "SCI-301", year: "Y3", kind: "specialism",  title: "Trauma Medicine & Powered Anatomy",
+        taughtBy: "Prof. 3",
+        desc: "Clinical specialism. Trauma response at the powered scale. Live case rotations in the Teaching Clinic; you see your first real powered casualty before week four." },
+      { code: "SCI-302", year: "Y3", kind: "specialism",  title: "Surgical Practice on Powered Patients",
+        taughtBy: "Prof. 3",
+        desc: "Surgical specialism. The country's only training site. Direct supervision by the consultant who holds the chair. Senior students assist on live cases by term end." },
+      { code: "SCI-303", year: "Y3", kind: "specialism",  title: "Powered Research Methods",
+        taughtBy: "HoD",
+        desc: "Capstone for research-track students. Original investigative work; some senior projects get classified before they get graded." },
+    ],
+  },
+
+  /* ─────────────────────────────────────────────────────────────────
+     4 · ENGINEERING  (HoD: OPEN per canon — Switchboards stays in
+     Support Staff as Diagnostic Wing Director, not teaching faculty)
+     ───────────────────────────────────────────────────────────────── */
+  {
+    id: "engineering",
+    name: "Engineering",
+    code: "ENG",
+    color: "#1e40af",
+    blurb: "Builds, maintains, and runs everything on campus that isn't a person. The kitchens, the grounds, the cleaning crew, the boiler rooms, the training-hall maintenance, the security shutters — all of it runs on bots designed, built, and serviced by Engineering. There are no human kitchen staff and no human caretakers at Calderyn.",
+    head: {
+      role: "Head of Engineering",
+      bio: "Senior systems engineer with infrastructure-scale background. The seat the institution treats as quietly load-bearing.",
+    },
+    staff: [
+      { slot: "Prof. 1", role: "Robotics & Autonomous Systems",   bio: "Runs the design pipeline for kitchen and maintenance units. The kitchens you eat from this term were her work." },
+      { slot: "Prof. 2", role: "Personal Kit & Gadget Design",    bio: "Smaller-scale: what an individual operative carries, wears, or deploys. Most Engineering students who aren't going into infrastructure end up under him." },
+      { slot: "Prof. 3", role: "Facility Systems & Infrastructure", bio: "Buildings, power, security, integration. Works directly on the campus's underlying systems." },
+    ],
+    instructional: [
+      { role: "Workshop Technician" },
+      { role: "Workshop Technician" },
+      { role: "Bot Bay Technician" },
+    ],
+    facilities: "The Workshops (multiple), the Bot Bays (kitchen, maintenance, security units serviced and trained here), the Infrastructure Spine (a physical corridor running the length of the campus housing the systems the department runs).",
+    classes: [
+      { code: "ENG-101", year: "Y2", kind: "required",    title: "Foundations of Powered Engineering",
+        taughtBy: "Prof. 1",
+        desc: "Year-two entry module. Materials, tolerances, the physics of gear built to take power-induced stress without coming apart in the user's hand." },
+      { code: "ENG-102", year: "Y2", kind: "required",    title: "Workshop Practice & Safety",
+        taughtBy: "Prof. 2",
+        desc: "Hands-on workshop training. Tools, fabrication basics, the unwritten rules of a shop where the equipment is sometimes powered. First-aid is on the syllabus." },
+      { code: "ENG-201", year: "Y2", kind: "specialism",  title: "Autonomous Systems",
+        taughtBy: "Prof. 1",
+        desc: "Robotics and autonomous design. The kitchen units, the maintenance bots, the security shutters — all designed under this seat. Students service the live fleet by term end." },
+      { code: "ENG-202", year: "Y2", kind: "specialism",  title: "Personal Kit Design",
+        taughtBy: "Prof. 2",
+        desc: "What an individual operative carries, wears, or deploys. Most Engineering graduates who aren't going into infrastructure end up here." },
+      { code: "ENG-203", year: "Y2", kind: "specialism",  title: "Infrastructure Systems",
+        taughtBy: "Prof. 3",
+        desc: "Buildings, power, security, integration. The systems that run the campus. Senior placements rotate through the Infrastructure Spine alongside the professor." },
+      { code: "ENG-301", year: "Y3", kind: "specialism",  title: "Containment Tech & Hardened Systems",
+        taughtBy: "Prof. 3",
+        desc: "How to build environments that hold powered persons reliably and safely. Cross-listed informally with Combat — the Containment Range was largely designed by this seat's predecessors." },
+      { code: "ENG-302", year: "Y3", kind: "specialism",  title: "Field Repair & Improvisation",
+        taughtBy: "Prof. 2",
+        desc: "Operational repair under live conditions. Building what you need with what you have. The professor's anecdotes are not in the syllabus; the techniques are." },
+      { code: "ENG-303", year: "Y3", kind: "specialism",  title: "Project Capstone",
+        taughtBy: "HoD",
+        desc: "Senior project. Design and build something a working operative would actually use. Best projects get adopted into the campus's actual infrastructure." },
+    ],
+  },
+
+  /* ─────────────────────────────────────────────────────────────────
+     5 · HISTORY & DOCTRINE  (HoD: open, longest-serving head on
+     paper, sits to Devika's right at Heads' Table)
+     ───────────────────────────────────────────────────────────────── */
+  {
+    id: "history-doctrine",
+    name: "History & Doctrine",
+    code: "HIS",
+    color: "#8a3a8a",
+    blurb: "The department that holds the institutional argument with itself. The Doctrine, ethics, law, comparative powered politics. The void at the centre is exactly the point: the curriculum teaches around the question of where the powered population originally came from, and a careful student notices the gap.",
+    head: {
+      role: "Head of History & Doctrine",
+      bio: "Institutional historian, longest-serving head on faculty. Sits to Devika's right at Heads' Table. Has held the post longer than any of his colleagues have held theirs combined.",
+    },
+    staff: [
+      { slot: "Prof. 1", role: "The Calderyn Doctrine, 1948–Present",                    bio: "Teaches the public version of the institution's history. Knows exactly what the public version omits, and teaches with that omission visible at the edges." },
+      { slot: "Prof. 2", role: "Ethics, Restraint & the Philosophy of Non-Deployment",   bio: "The institution-specific ethics seat. Famously brutal modular assessments." },
+      { slot: "Prof. 3", role: "Powered Persons, the State, STRATA & the Pipeline",      bio: "The law/regulation seat. Handles statutory frameworks, the pipeline, Met liaison, and the architecture of the regulatory monopoly." },
+    ],
+    facilities: "The Reading Room (open to students), the Closed Archive (not — though everyone knows it's there).",
+    classes: [
+      { code: "CAL-101", year: "Y1", kind: "shared-core", title: "Introduction to Calderyn",
+        taughtBy: "Prof. 1",
+        desc: "Year-one shared core. The institution, its remit, its public history. The first reading list is mandatory. The second reading list is implied." },
+      { code: "HIS-101", year: "Y1", kind: "shared-core", title: "The Calderyn Doctrine, 1948–Present",
+        taughtBy: "Prof. 1",
+        desc: "Year-one shared core. The public version of the institution's history. The professor teaches with the omissions visible at the edges; a careful student notices what is missing." },
+      { code: "HIS-102", year: "Y2", kind: "required",    title: "Foundations of Powered Law",
+        taughtBy: "Prof. 3",
+        desc: "Statutory framework. Geneva, the Powered Persons Acts, the architecture of the regulatory monopoly that produced STRATA." },
+      { code: "HIS-201", year: "Y2", kind: "required",    title: "Ethics of Restraint",
+        taughtBy: "Prof. 2",
+        desc: "Calderyn-specific applied ethics. The institutional case for non-deployment, the philosophy that holds the Doctrine together, the assessments famous for being brutal. Absorbs the foundation ethics work no Calderyn graduate is allowed to skip." },
+      { code: "HIS-202", year: "Y2", kind: "specialism",  title: "Powered Persons & the State",
+        taughtBy: "Prof. 3",
+        desc: "The political dimension of regulation. How parliamentary scrutiny, the Met, and STRATA actually interact. Statutory hearings, oversight committees, the votes that have shaped the powered sector since 1948." },
+      { code: "HIS-203", year: "Y2", kind: "specialism",  title: "STRATA: Structure and Mandate",
+        taughtBy: "Prof. 3",
+        desc: "The institution that owns the pipeline. Corporate structure, executive lines, the contracts your future depends on. The professor brought receipts from his last consultancy." },
+      { code: "HIS-301", year: "Y3", kind: "specialism",  title: "STRATA & the Pipeline",
+        taughtBy: "Prof. 3",
+        desc: "Specialism. The mechanics by which Calderyn fills STRATA's roster, the conditions of the relationship, the politics of being its training arm. Reading list is small and dense." },
+      { code: "HIS-302", year: "Y3", kind: "specialism",  title: "Comparative Powered Histories",
+        taughtBy: "Prof. 1",
+        desc: "Powered governance abroad. Comparative case studies — what other states do, what they don't, where Britain stands relative to them." },
+      { code: "HIS-303", year: "Y3", kind: "specialism",  title: "Doctrine in Practice",
+        taughtBy: "HoD",
+        desc: "Senior seminar. Selected guests from STRATA and the Vanguard attend; some sessions are recorded, some are not. Attendance is by invitation from the professor." },
+    ],
+  },
+
+  /* ─────────────────────────────────────────────────────────────────
+     6 · ATHLETICS  (HoD: open. Distinct from Combat — body as
+     long-term instrument, not weapon. Runs houses + Powerball.)
+     ───────────────────────────────────────────────────────────────── */
+  {
+    id: "athletics",
+    name: "Athletics",
+    code: "ATH",
+    color: "#15803d",
+    blurb: "The body as long-term instrument. Distinct from Combat: Combat is engagement, Athletics is conditioning, movement, endurance, recovery. Less institutional, more coaching culture. Runs the house system, Powerball, and the inter-house calendar.",
+    head: {
+      role: "Head of Athletics",
+      bio: "Competitive background, former record-holder in powered athletics. Treats the office like a locker room and the corridor outside it accordingly.",
+    },
+    staff: [
+      { slot: "Prof. 1", role: "Foundations of Conditioning & Endurance",          bio: "Where every student starts. The professor is unromantic about the body and very fond of statistics." },
+      { slot: "Prof. 2", role: "Power-Augmented Athletics & Limit Testing",         bio: "Designs Powerball each year. Has strong opinions about which house should win and is meant to keep them to herself." },
+      { slot: "Prof. 3", role: "Sports Medicine, Injury Management & Recovery",     bio: "Works closely with the Sciences Teaching Clinic; the two faculties share cases weekly." },
+    ],
+    instructional: [
+      { role: "House Trainer · Valaris" },
+      { role: "House Trainer · Saberis" },
+      { role: "House Trainer · Orenne" },
+      { role: "House Trainer · Grimere" },
+    ],
+    facilities: "The Conditioning Hall (the legendary inter-house records live on the wall here — the Valaris–Saberis bench-press record that's stood for nine years), the Powerball Arena, four house training rooms.",
+    classes: [
+      { code: "ATH-102", year: "Y1", kind: "shared-core", title: "Movement & Powered Form",
+        taughtBy: "Prof. 1",
+        desc: "Year-one shared core. Baseline conditioning, movement, the body before specialisation. Every student takes this regardless of designation or intended department." },
+      { code: "ATH-101", year: "Y2", kind: "required",    title: "Foundations of Conditioning",
+        taughtBy: "Prof. 1",
+        desc: "Year-two entry module for the department. Conditioning, endurance, recovery science. Treats the powered body as a long-term instrument rather than a short-term weapon." },
+      { code: "ATH-201", year: "Y2", kind: "specialism",  title: "Power-Augmented Athletics",
+        taughtBy: "Prof. 2",
+        desc: "Limit testing, output scaling, the boundary between training hard and breaking yourself. The professor designs Powerball each year and has opinions about which house should win." },
+      { code: "ATH-202", year: "Y2", kind: "specialism",  title: "Sports Medicine & Recovery",
+        taughtBy: "Prof. 3",
+        desc: "Injury management, rehabilitation, the medicine of long careers. Shares case material with the Sciences Teaching Clinic; the two faculties meet weekly." },
+      { code: "ATH-203", year: "Y2", kind: "specialism",  title: "Tactical Athletics",
+        taughtBy: "Prof. 2",
+        desc: "Cross-listed with Combat. Movement under operational conditions — speed, agility, escape, pursuit. Where the body meets the engagement." },
+      { code: "ATH-301", year: "Y3", kind: "specialism",  title: "Competitive Practice",
+        taughtBy: "HoD",
+        desc: "Inter-house competition framework. The professor runs the calendar; students run on the days he sets. Track records on the Conditioning Hall wall date back to 1968." },
+      { code: "ATH-302", year: "Y3", kind: "specialism",  title: "Long Career Practice",
+        taughtBy: "Prof. 3",
+        desc: "How to operate, fight, and present for two decades without destroying yourself. The class retired operatives wish they had taken when they had it." },
+      { code: "ATH-303", year: "Y3", kind: "specialism",  title: "Powerball Officiating",
+        taughtBy: "Prof. 2",
+        desc: "Rules, calls, controversies. Graduates of this seminar referee at exhibition meets. The professor's standards are explicit and unforgiving." },
+    ],
+  },
+
+  /* ─────────────────────────────────────────────────────────────────
+     7 · HUMANITIES  (HoD: open. The only head with no security
+     clearance — institutionally significant.)
+     ───────────────────────────────────────────────────────────────── */
+  {
+    id: "humanities",
+    name: "Humanities",
+    code: "HUM",
+    color: "#a85020",
+    blurb: "Literature, philosophy, languages. The academic spine that isn't STEM. Smaller than Combat or Sciences. Taught by faculty with serious academic reputations rather than operational ones.",
+    head: {
+      role: "Head of Humanities",
+      bio: "Senior humanities academic, no operational background. The only head who's never held a Vanguard or STRATA position — at Heads' Table she is the only voice with no security clearance, which means a small but real category of conversations doesn't happen in her presence.",
+    },
+    staff: [
+      { slot: "Prof. 1", role: "English Literature & Writing",     bio: "Specialism in 20th-century British literature, with a particular interest in the post-1948 corpus and its powered subtexts." },
+      { slot: "Prof. 2", role: "Philosophy",                       bio: "General moral philosophy. Teaches the canon (Aristotle, Kant, Mill) and modern applied ethics. Distinct from History & Doctrine's Calderyn-specific ethics." },
+      { slot: "Prof. 3", role: "Modern Languages",                 bio: "Foundation course plus a rotating specialism. French and Russian most years; Mandarin when staffing allows." },
+    ],
+    facilities: "The Library (the only one open to all students; Engineering bots reshelve overnight), the Seminar Rooms.",
+    classes: [
+      { code: "HUM-101", year: "Y1", kind: "shared-core", title: "Foundations of Literary Analysis",
+        taughtBy: "Prof. 1",
+        desc: "Year-one shared core. Close reading, argument, the apparatus of academic writing. Even the Combat kids take English; especially the Combat kids." },
+      { code: "HUM-102", year: "Y2", kind: "required",    title: "Foundations of Philosophy",
+        taughtBy: "Prof. 2",
+        desc: "The canon. Aristotle through Mill, then a brief and bracing application to powered contemporary problems. The professor's reading list runs to two pages." },
+      { code: "HUM-103", year: "Y2", kind: "required",    title: "Foundations of Modern Languages",
+        taughtBy: "Prof. 3",
+        desc: "Entry-level language work. The rotating specialism varies by staffing — French and Russian most years, Mandarin when the budget allows." },
+      { code: "HUM-201", year: "Y2", kind: "specialism",  title: "Writing for Powered Practitioners",
+        taughtBy: "Prof. 1",
+        desc: "Report craft. Statement-writing. Every other department leans on this module by spring. The Press Suite owes its survival to graduates of this seat." },
+      { code: "HUM-202", year: "Y2", kind: "specialism",  title: "Moral Philosophy",
+        taughtBy: "Prof. 2",
+        desc: "General applied ethics. Distinct from History & Doctrine's Calderyn-specific module — this is the broader canon and the wider tradition. Students take both. The contradictions are the point." },
+      { code: "HUM-203", year: "Y2", kind: "specialism",  title: "Languages · Specialism",
+        taughtBy: "Prof. 3",
+        desc: "Advanced language work in the rotating specialism. Field translation is the eventual goal; the professor's standards for fluency are unsentimental." },
+      { code: "HUM-301", year: "Y3", kind: "specialism",  title: "Powered Literature & the Public Imagination",
+        taughtBy: "Prof. 1",
+        desc: "Famously divisive seminar. The 20th-century corpus and what it did and didn't do with the powered population. The reading list is the assessment." },
+      { code: "HUM-302", year: "Y3", kind: "specialism",  title: "Applied Ethics",
+        taughtBy: "Prof. 2",
+        desc: "Senior applied ethics. Case-based, often drawing on real incidents. Joint sessions with History & Doctrine when the timetable allows; the two faculties disagree publicly and amicably." },
+      { code: "HUM-303", year: "Y3", kind: "specialism",  title: "Translation & Field Communication",
+        taughtBy: "Prof. 3",
+        desc: "For students likely to operate internationally. The mechanics of working in a second language under operational pressure." },
+    ],
+  },
+
+  /* ─────────────────────────────────────────────────────────────────
+     8 · POLITICS & PUBLIC AFFAIRS  (HoD: open)
+     ───────────────────────────────────────────────────────────────── */
+  {
+    id: "politics",
+    name: "Politics & Public Affairs",
+    code: "POL",
+    color: "#54545c",
+    blurb: "The social-sciences department. Politics, business, policy, economics — the disciplines that govern how powered persons actually operate inside the state and the market.",
+    head: {
+      role: "Head of Politics & Public Affairs",
+      bio: "Senior policy academic or former parliamentary advisor, with prior STRATA committee work on record.",
+    },
+    staff: [
+      { slot: "Prof. 1", role: "Political Theory & Government",          bio: "Powered affairs in parliament, comparative powered politics abroad, the political philosophy of having a powered minority population." },
+      { slot: "Prof. 2", role: "Business & Management",                  bio: "The commercial dimension of a public-facing career: sponsorship, brand, contracting, liability. Disproportionately important for hero-designation students." },
+      { slot: "Prof. 3", role: "Public Policy & Economics",              bio: "Including the political economy of the pipeline. Disproportionately important for sidekick-designation students moving into post-field admin and committee work." },
+    ],
+    facilities: "The Committee Room (a working facsimile of an actual parliamentary committee room, used for moot hearings), the Strategy Suite (war-game space for political and commercial scenarios).",
+    classes: [
+      { code: "POL-101", year: "Y2", kind: "required",    title: "Foundations of Powered Politics",
+        taughtBy: "Prof. 1",
+        desc: "Year-two entry module. Political theory applied to the powered sector. Parliamentary process, the architecture of regulation, the long argument over how to govern a powered minority." },
+      { code: "POL-102", year: "Y2", kind: "required",    title: "Foundations of Business & Management",
+        taughtBy: "Prof. 2",
+        desc: "Year-two entry module. Commercial fundamentals for a public-facing career. The professor has the longest CV of operational consultancy on faculty." },
+      { code: "POL-201", year: "Y2", kind: "specialism",  title: "Comparative Powered Government",
+        taughtBy: "Prof. 1",
+        desc: "Other states, other regimes. How parliamentary democracies, party autocracies, and unaffiliated jurisdictions handle the powered population. The professor's annotated map covers the back wall of the Strategy Suite." },
+      { code: "POL-202", year: "Y2", kind: "specialism",  title: "Sponsorship, Profile & Commercial Practice",
+        taughtBy: "Prof. 2",
+        desc: "Disproportionately important for hero-designation students. Sponsorship structure, brand management, the commercial liability of a career under contract." },
+      { code: "POL-203", year: "Y2", kind: "specialism",  title: "Public Policy & the Powered Sector",
+        taughtBy: "Prof. 3",
+        desc: "The political economy of the pipeline. Disproportionately important for sidekick-designation students moving into post-field admin or committee work." },
+      { code: "POL-301", year: "Y3", kind: "specialism",  title: "Parliamentary Practice & Committee Work",
+        taughtBy: "Prof. 1",
+        desc: "Senior specialism. The Committee Room is a working facsimile of an actual parliamentary committee room; the moot hearings are not abstract." },
+      { code: "POL-302", year: "Y3", kind: "specialism",  title: "International Powered Affairs",
+        taughtBy: "Prof. 1",
+        desc: "Treaty work, diplomacy, the operational architecture of powered persons abroad. Geneva is on the syllabus; so are the conversations Geneva pretends to settle." },
+      { code: "POL-303", year: "Y3", kind: "specialism",  title: "Capstone Policy Project",
+        taughtBy: "HoD",
+        desc: "Senior policy capstone. Original work, briefed to a panel that includes a STRATA observer and, in some years, a serving committee member." },
+    ],
+  },
+],
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DESIGNATION MODULES (HRO- / SDK-)
+   Year-by-year specialist track for Heroes / Sidekicks designations.
+   Not attached to a department. Designation is assigned by faculty at
+   the end of Freshman Orientation based on power profile + STRATA
+   preliminary assessment.
+═══════════════════════════════════════════════════════════════════════ */
+designationModules: [
+  { code: "HRO-101", year: "Y1", designation: "hero",     title: "Foundations of Lead Practice",
+    desc: "Year-one designation module. What the lead designation actually means, before you've earned the right to it. The class is small; the assessment is harder than the syllabus suggests." },
+  { code: "HRO-201", year: "Y2", designation: "hero",     title: "Profile, Burden, and the Public Eye",
+    desc: "Year-two designation module. The cost of being seen. Notoriously honest about the asymmetry — the institution officially treats Hero and Sidekick as equal-but-different. The institution officially knows this is not true." },
+  { code: "HRO-301", year: "Y3", designation: "hero",     title: "The Lead Calculation",
+    desc: "Year-three designation module. The decisions that cannot be delegated. Some sessions are closed to faculty outside the seat. The transcripts follow you into your contract negotiation." },
+  { code: "SDK-101", year: "Y1", designation: "sidekick", title: "Foundations of Support Practice",
+    desc: "Year-one designation module. Support doctrine. Why a lead without a support fails earlier and more publicly than they expect." },
+  { code: "SDK-201", year: "Y2", designation: "sidekick", title: "Coordination Under Lead Authority",
+    desc: "Year-two designation module. The cost of not being seen. Notoriously honest about the asymmetry — the institution officially treats Hero and Sidekick as equal-but-different. The institution officially knows this is not true." },
+  { code: "SDK-301", year: "Y3", designation: "sidekick", title: "The Sidekick's Calculation",
+    desc: "Year-three designation module. The decisions that have to be made silently. Some of the most senior STRATA handlers came out of this seat." },
+],
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SHARED CORE — Y1 modules that don't sit under a department
+═══════════════════════════════════════════════════════════════════════ */
+sharedCoreExtra: [
+  { code: "TUT-101", year: "Y1", kind: "shared-core", title: "Tutorial",
+    taughtBy: "Assigned Tutor",
+    desc: "Small-group tutorial system. Each student is assigned a tutor at the start of Year 1; the tutor stays with the student through all three years. Pastoral, academic-progress, and the first place a problem surfaces before it becomes one." },
 ],
 
 strata: [
