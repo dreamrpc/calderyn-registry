@@ -6483,38 +6483,28 @@ function DistrictBanner({ district, idx, count }){
   );
 }
 
-/* Compact accordion location row used inside the stage view. Clean
-   number + name + sub line, click to expand description + tags. */
-function MapStageLocation({loc}){
-  const [open, setOpen] = useState(false);
+/* Field-guide location card · everything visible at a glance, no
+   dropdowns. Map-style pin marker + name + sub + description + tags. */
+function MapStageLocation({loc, idx}){
   return (
-    <li className={"map-stage-loc" + (open ? " is-open" : "") + (loc.classified ? " is-classified" : "")}>
-      <button
-        type="button"
-        className="map-stage-loc-btn"
-        onClick={() => setOpen(o => !o)}
-        aria-expanded={open}
-      >
-        <span className="map-stage-loc-n">{loc.n}</span>
-        <span className="map-stage-loc-body">
-          <span className="map-stage-loc-name">{loc.name}</span>
-          {loc.sub && <span className="map-stage-loc-sub">{loc.sub}</span>}
-        </span>
-        {loc.classified && <span className="map-stage-loc-cls">CLASSIFIED</span>}
-        <span className="map-stage-loc-toggle" aria-hidden="true">
-          <Icon name={open ? "chevron-up" : "chevron-down"} size={14}/>
-        </span>
-      </button>
-      {open && (
-        <div className="map-stage-loc-detail">
-          <p className="map-stage-loc-desc" dangerouslySetInnerHTML={{__html: loc.desc}}/>
-          {loc.tags && loc.tags.length > 0 && (
-            <ul className="map-stage-loc-tags">
-              {loc.tags.map((t, i) => (<li key={i} className="map-stage-loc-tag">{t}</li>))}
-            </ul>
-          )}
-        </div>
-      )}
+    <li className={"map-stage-pin" + (loc.classified ? " is-classified" : "")}>
+      <div className="map-stage-pin-rail" aria-hidden="true">
+        <span className="map-stage-pin-marker">{loc.n}</span>
+        <span className="map-stage-pin-line"/>
+      </div>
+      <div className="map-stage-pin-body">
+        <header className="map-stage-pin-hd">
+          <h4 className="map-stage-pin-name">{loc.name}</h4>
+          {loc.classified && <span className="map-stage-pin-cls">CLASSIFIED</span>}
+        </header>
+        {loc.sub && <div className="map-stage-pin-sub">{loc.sub}</div>}
+        <p className="map-stage-pin-desc" dangerouslySetInnerHTML={{__html: loc.desc}}/>
+        {loc.tags && loc.tags.length > 0 && (
+          <ul className="map-stage-pin-tags">
+            {loc.tags.map((t, i) => (<li key={i} className="map-stage-pin-tag">{t}</li>))}
+          </ul>
+        )}
+      </div>
     </li>
   );
 }
@@ -6736,12 +6726,12 @@ function MapTab(){
                   ) : (
                     <section className="map-stage-locations">
                       <header className="map-stage-locations-hd">
-                        <span className="map-stage-locations-lbl">Locations</span>
+                        <span className="map-stage-locations-lbl">Field Guide · Locations</span>
                         <span className="map-stage-locations-count">{activeItems.length}</span>
                       </header>
-                      <ol className="map-stage-list">
-                        {activeItems.map(loc => (
-                          <MapStageLocation key={loc.id} loc={loc}/>
+                      <ol className="map-stage-pins">
+                        {activeItems.map((loc, i) => (
+                          <MapStageLocation key={loc.id} loc={loc} idx={i}/>
                         ))}
                       </ol>
                     </section>

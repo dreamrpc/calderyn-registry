@@ -15137,13 +15137,15 @@ nav.home-scrollnav,
 .map-page {
   display: block !important;
   grid-template-columns: none !important;
-  padding: 0 32px 32px !important;
-  margin: 0 !important;
+  padding: 0 clamp(20px, 4vw, 56px) 48px !important;
+  margin: 0 auto !important;
+  max-width: 1600px !important;
+  width: 100% !important;
 }
 .map-page > .lore-toc { display: none !important; }
 .map-main {
   width: 100% !important;
-  max-width: 1280px !important;
+  max-width: 1500px !important;
   margin: 0 auto !important;
   padding: 0 !important;
 }
@@ -15514,7 +15516,8 @@ nav.home-scrollnav,
   gap: 0 !important;
   margin: 0 auto 32px !important;
   padding: 0 !important;
-  max-width: 1440px !important;
+  max-width: 100% !important;
+  width: 100% !important;
   background: #0a0a0e !important;
   border: 1px solid rgba(212,168,74,0.32) !important;
   box-shadow:
@@ -15949,10 +15952,234 @@ nav.home-scrollnav,
 }
 
 /* Hide the OLD card-style location grid inside the new stage shell —
-   the stage uses .map-stage-list, not .map-list */
+   the stage uses .map-stage-pins now */
 .map-stage .map-list { display: none !important; }
 .map-stage .map-banner { display: none !important; }
 .map-stage .map-district-head { display: none !important; }
+.map-stage .map-stage-list { display: none !important; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   MAP STAGE · FIELD GUIDE PINS (no dropdowns) + COORDINATE POSTER
+   Every location's full info is visible at a glance — name, sub, desc,
+   tags — laid out as a numbered field-guide pin with a vertical
+   connector line down the left rail. The poster gains a faint
+   topographic coordinate grid overlay so it reads as a real map.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Topographic coordinate grid on the poster — faint gold lines like
+   surveyor's grid paper */
+.map-stage-poster {
+  background-image:
+    radial-gradient(700px 400px at 30% 25%, color-mix(in srgb, var(--district-c1, #3b4a6e) 75%, transparent) 0%, transparent 60%),
+    radial-gradient(900px 500px at 100% 100%, color-mix(in srgb, var(--district-c, #d4a84a) 35%, transparent) 0%, transparent 65%),
+    linear-gradient(0deg,  rgba(212,168,74,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,168,74,0.06) 1px, transparent 1px),
+    linear-gradient(165deg, var(--district-c1, #3b4a6e) 0%, var(--district-c2, #10172b) 100%) !important;
+  background-size:
+    auto, auto,
+    44px 44px, 44px 44px,
+    auto !important;
+}
+
+/* Compass-rose-style decoration in the top-right of the poster */
+.map-stage-poster-grain::before {
+  content: "N" !important;
+  position: absolute !important;
+  top: 22px !important;
+  right: 50px !important;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.2em !important;
+  color: rgba(212,168,74,0.5) !important;
+  z-index: 4 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6) !important;
+}
+.map-stage-poster-grain::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 38px !important;
+  right: 56px !important;
+  width: 2px !important;
+  height: 22px !important;
+  background: linear-gradient(180deg, var(--yellow, #d4a84a) 0%, transparent 100%) !important;
+  z-index: 4 !important;
+}
+
+/* Field Guide · Locations header — a bit punchier */
+.map-stage-locations-hd {
+  position: relative !important;
+  padding-bottom: 10px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+  margin-bottom: 16px !important;
+}
+.map-stage-locations-hd::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: -1px !important;
+  width: 40px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+
+/* Pin list — no dropdowns, everything visible */
+.map-stage-pins {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 4px !important;
+}
+
+/* Single pin row · rail (number marker + connector line) + body */
+.map-stage-pin {
+  display: grid !important;
+  grid-template-columns: 56px 1fr !important;
+  gap: 0 !important;
+  padding: 16px 18px 16px 0 !important;
+  position: relative !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(212,168,74,0.12) !important;
+  transition:
+    background 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.map-stage-pin:last-child { border-bottom: 0 !important; }
+.map-stage-pin:hover {
+  background: rgba(212,168,74,0.04) !important;
+}
+.map-stage-pin.is-classified { background: rgba(227,27,35,0.05) !important; }
+.map-stage-pin.is-classified:hover { background: rgba(227,27,35,0.08) !important; }
+
+/* RAIL · vertical line + numbered marker */
+.map-stage-pin-rail {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding-top: 4px !important;
+  padding-right: 14px !important;
+  flex-shrink: 0 !important;
+}
+.map-stage-pin-marker {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 28px !important;
+  padding: 0 10px !important;
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  position: relative !important;
+  z-index: 2 !important;
+  box-shadow:
+    -2px 2px 0 0 rgba(0,0,0,0.4),
+    -3px 3px 0 0 rgba(212,168,74,0.25) !important;
+}
+.map-stage-pin.is-classified .map-stage-pin-marker {
+  background: var(--red, #e31b23) !important;
+  color: #fff !important;
+  box-shadow:
+    -2px 2px 0 0 rgba(0,0,0,0.4),
+    -3px 3px 0 0 rgba(227,27,35,0.3) !important;
+}
+.map-stage-pin-line {
+  display: block !important;
+  width: 2px !important;
+  flex: 1 1 auto !important;
+  background: repeating-linear-gradient(180deg,
+    rgba(212,168,74,0.3) 0 4px,
+    transparent 4px 8px) !important;
+  margin-top: 8px !important;
+  min-height: 16px !important;
+}
+.map-stage-pin:last-child .map-stage-pin-line { display: none !important; }
+
+/* BODY · name + sub + desc + tags, all visible */
+.map-stage-pin-body {
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+.map-stage-pin-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+}
+.map-stage-pin-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 19px !important;
+  letter-spacing: -0.008em !important;
+  line-height: 1.1 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 !important;
+  text-transform: none !important;
+}
+.map-stage-pin-cls {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  padding: 3px 7px !important;
+  background: rgba(227,27,35,0.14) !important;
+  border: 1px solid rgba(227,27,35,0.55) !important;
+  color: rgba(255,120,128,0.95) !important;
+}
+.map-stage-pin-sub {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+}
+.map-stage-pin-desc {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 4px 0 0 !important;
+}
+.map-stage-pin-desc strong { color: var(--text-1, #f5f1e8) !important; font-weight: 600 !important; }
+.map-stage-pin-desc em { color: var(--yellow, #d4a84a) !important; font-style: italic !important; }
+.map-stage-pin-tags {
+  list-style: none !important;
+  margin: 4px 0 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+.map-stage-pin-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  padding: 2px 8px !important;
+  border: 1px solid rgba(212,168,74,0.28) !important;
+  background: rgba(212,168,74,0.04) !important;
+  color: var(--text-3, #948d80) !important;
+}
+
+@media (max-width: 720px) {
+  .map-stage-pin { grid-template-columns: 48px 1fr !important; padding: 14px 14px 14px 0 !important; }
+  .map-stage-pin-rail { padding-right: 10px !important; }
+  .map-stage-pin-marker { font-size: 10px !important; padding: 0 8px !important; }
+  .map-stage-pin-name { font-size: 17px !important; }
+}
 
 /* Map search bar — sticky above the district nav (both stick together) */
 .subnav-host:has(.map-page) .map-search-bar,
