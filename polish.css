@@ -25361,3 +25361,26 @@ button.orgs-pill {
 .preg-count,
 .preg-hint { display: none !important; }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   STUDENTS / POWERS · ENTRY COUNT · drop the floating chip
+   The gold-bordered "42 ENTRIES" chip was wrapping to its own line
+   on tight viewports because the flex container ran out of room.
+   Strip the border + background — leave a quiet mono label that
+   sits inline with the filters, pushed right but never floating.
+   ════════════════════════════════════════════════════════════════════ */
+.sfilter-count {
+  margin-left: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  white-space: nowrap !important;
+  align-self: center !important;
+}
+
