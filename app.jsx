@@ -809,7 +809,7 @@ const HOME_SECTIONS = [
   { id: "home-vanguard", label: "Vanguard" },
   { id: "home-today",    label: "Today" },
   { id: "home-programme",label: "Programme" },
-  { id: "home-dorm",     label: "Dorm Policy" },
+  { id: "home-dorm",     label: "Dorms" },
   { id: "home-cta",      label: "Apply" },
 ];
 
