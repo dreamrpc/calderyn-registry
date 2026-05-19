@@ -6483,6 +6483,42 @@ function DistrictBanner({ district, idx, count }){
   );
 }
 
+/* Compact accordion location row used inside the stage view. Clean
+   number + name + sub line, click to expand description + tags. */
+function MapStageLocation({loc}){
+  const [open, setOpen] = useState(false);
+  return (
+    <li className={"map-stage-loc" + (open ? " is-open" : "") + (loc.classified ? " is-classified" : "")}>
+      <button
+        type="button"
+        className="map-stage-loc-btn"
+        onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+      >
+        <span className="map-stage-loc-n">{loc.n}</span>
+        <span className="map-stage-loc-body">
+          <span className="map-stage-loc-name">{loc.name}</span>
+          {loc.sub && <span className="map-stage-loc-sub">{loc.sub}</span>}
+        </span>
+        {loc.classified && <span className="map-stage-loc-cls">CLASSIFIED</span>}
+        <span className="map-stage-loc-toggle" aria-hidden="true">
+          <Icon name={open ? "chevron-up" : "chevron-down"} size={14}/>
+        </span>
+      </button>
+      {open && (
+        <div className="map-stage-loc-detail">
+          <p className="map-stage-loc-desc" dangerouslySetInnerHTML={{__html: loc.desc}}/>
+          {loc.tags && loc.tags.length > 0 && (
+            <ul className="map-stage-loc-tags">
+              {loc.tags.map((t, i) => (<li key={i} className="map-stage-loc-tag">{t}</li>))}
+            </ul>
+          )}
+        </div>
+      )}
+    </li>
+  );
+}
+
 function MapTab(){
   const districts = D.mapDistricts;
   const locations = D.mapLocations;
@@ -6639,7 +6675,7 @@ function MapTab(){
           ) : (
             activeDistrict && (
               <section
-                className="map-district"
+                className={"map-stage" + (isResidence ? " is-residence" : "")}
                 style={{
                   "--district-c": activeDistrict.color,
                   "--district-c1": (DISTRICT_VISUALS[activeDistrict.id] || DISTRICT_VISUALS.academic).c1,
@@ -6647,24 +6683,57 @@ function MapTab(){
                 }}
                 data-district={activeDistrict.id}
               >
-                {/* DISTRICT BANNER — placeholder image-card per district.
-                    Uses a gradient + iconography keyed to the district id
-                    until real photography lands. Halftone overlay keeps
-                    it on-brand with the rest of the comic visual lang. */}
-                <DistrictBanner district={activeDistrict} idx={activeIdx} count={activeItems.length}/>
-                <header className="map-district-head">
-                  <div className="lore-eyebrow"><Icon name="sparkles" size={11} className="inline-icon"/> District {String(activeIdx + 1).padStart(2, "0")}</div>
-                  <h2 className="lore-h map-district-h">{activeDistrict.name}.</h2>
-                  <p className="map-district-blurb">{activeDistrict.blurb}</p>
-                  <div className="map-district-meta">
-                    <span className="map-district-count">{activeItems.length} {activeItems.length === 1 ? "location" : "locations"}</span>
+                {/* LEFT · the cinematic poster — gradient + halftone +
+                    massive icon glyph + overlay name. Stays in view on
+                    desktop while the right column scrolls. */}
+                <aside className="map-stage-poster" aria-hidden="true">
+                  <div className="map-stage-poster-halftone"/>
+                  <div className="map-stage-poster-grain"/>
+                  <div className="map-stage-poster-glyph">
+                    <Icon name={(DISTRICT_VISUALS[activeDistrict.id] || DISTRICT_VISUALS.academic).icon} size={220} stroke={0.9}/>
                   </div>
-                </header>
+                  <div className="map-stage-poster-stamp">
+                    <span className="map-stage-poster-stamp-tag">{(DISTRICT_VISUALS[activeDistrict.id] || DISTRICT_VISUALS.academic).tag}</span>
+                    <span className="map-stage-poster-stamp-sep">·</span>
+                    <span className="map-stage-poster-stamp-n">№ {String(activeIdx + 1).padStart(2, "0")}</span>
+                  </div>
+                  <div className="map-stage-poster-title">
+                    <span className="map-stage-poster-title-kicker">District {String(activeIdx + 1).padStart(2, "0")}</span>
+                    <span className="map-stage-poster-title-name">{activeDistrict.name}</span>
+                  </div>
+                  <div className="map-stage-poster-count">
+                    {activeItems.length} {activeItems.length === 1 ? "LOCATION" : "LOCATIONS"} ON RECORD
+                  </div>
+                </aside>
 
-                {isResidence
-                  ? <ResidenceBlocks items={activeItems}/>
-                  : <MapLocList items={activeItems}/>
-                }
+                {/* RIGHT · info column — header, deck, then sub-locations
+                    as a compact clickable accordion list. */}
+                <div className="map-stage-info">
+                  <header className="map-stage-head">
+                    <div className="map-stage-eyebrow">
+                      <Icon name="map" size={11} className="inline-icon"/>
+                      District {String(activeIdx + 1).padStart(2, "0")} · Field Report
+                    </div>
+                    <h2 className="map-stage-title">{activeDistrict.name}</h2>
+                    <p className="map-stage-deck">{activeDistrict.blurb}</p>
+                  </header>
+
+                  {isResidence ? (
+                    <ResidenceBlocks items={activeItems}/>
+                  ) : (
+                    <section className="map-stage-locations">
+                      <header className="map-stage-locations-hd">
+                        <span className="map-stage-locations-lbl">Locations</span>
+                        <span className="map-stage-locations-count">{activeItems.length}</span>
+                      </header>
+                      <ol className="map-stage-list">
+                        {activeItems.map(loc => (
+                          <MapStageLocation key={loc.id} loc={loc}/>
+                        ))}
+                      </ol>
+                    </section>
+                  )}
+                </div>
               </section>
             )
           )}

@@ -15499,6 +15499,439 @@ nav.home-scrollnav,
 }
 
 /* ════════════════════════════════════════════════════════════════════════
+   MAP STAGE · POSTER + INFO TWO-PANE LAYOUT
+   Fits one district in one viewport: cinematic poster on the left
+   (gradient, halftone, massive icon, district name overlay), info
+   column on the right with a header and a compact accordion list of
+   sub-locations. Click a location to expand its description inline.
+   No infinite scroll; one cinematic page per district.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.map-stage {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+  margin: 0 0 24px !important;
+  padding: 0 !important;
+  background: #0a0a0e !important;
+  border: 1px solid rgba(212,168,74,0.28) !important;
+  box-shadow:
+    0 28px 60px -28px rgba(0,0,0,0.9),
+    inset 0 1px 0 rgba(255,255,255,0.04) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+}
+@media (min-width: 1000px) {
+  .map-stage {
+    grid-template-columns: 460px 1fr !important;
+    min-height: 640px !important;
+  }
+}
+@media (min-width: 1300px) {
+  .map-stage { grid-template-columns: 520px 1fr !important; }
+}
+
+/* ── LEFT · the poster ───────────────────────────────────────────── */
+.map-stage-poster {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  padding: 28px !important;
+  min-height: 380px !important;
+  background:
+    radial-gradient(700px 400px at 30% 25%, color-mix(in srgb, var(--district-c1, #3b4a6e) 70%, transparent) 0%, transparent 60%),
+    radial-gradient(900px 500px at 100% 100%, color-mix(in srgb, var(--district-c, #d4a84a) 30%, transparent) 0%, transparent 65%),
+    linear-gradient(180deg, var(--district-c1, #3b4a6e) 0%, var(--district-c2, #10172b) 100%) !important;
+  overflow: hidden !important;
+  border-right: 1px solid rgba(212,168,74,0.22) !important;
+  isolation: isolate !important;
+}
+@media (min-width: 1000px) {
+  .map-stage-poster {
+    padding: 36px !important;
+    min-height: 0 !important;
+    position: sticky !important;
+    top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + 60px) !important;
+    align-self: start !important;
+    height: auto !important;
+  }
+}
+
+/* Halftone scatter */
+.map-stage-poster-halftone {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1.2px at 50% 50%, rgba(0,0,0,0.5) 1.2px, transparent 1.5px);
+  background-size: 5px 5px !important;
+  mix-blend-mode: multiply !important;
+  opacity: 0.55 !important;
+  z-index: 1 !important;
+}
+/* Subtle film grain */
+.map-stage-poster-grain {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 3px),
+    radial-gradient(circle 0.5px at 50% 50%, rgba(255,255,255,0.04) 0.5px, transparent 1px);
+  background-size: auto, 3px 3px !important;
+  mix-blend-mode: overlay !important;
+  z-index: 2 !important;
+}
+
+/* Massive icon glyph, very faint, decorative */
+.map-stage-poster-glyph {
+  position: absolute !important;
+  right: -40px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: rgba(255,255,255,0.08) !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.45)) !important;
+}
+.map-stage-poster-glyph svg { stroke: currentColor !important; width: 220px !important; height: 220px !important; }
+
+/* Top stamp · TAG · № 01 */
+.map-stage-poster-stamp {
+  position: relative !important;
+  z-index: 3 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 12px !important;
+  background: rgba(0,0,0,0.55) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6) !important;
+}
+.map-stage-poster-stamp-tag { color: var(--yellow, #d4a84a) !important; }
+.map-stage-poster-stamp-sep { opacity: 0.6 !important; }
+
+/* Bottom title block — district name BIG */
+.map-stage-poster-title {
+  position: relative !important;
+  z-index: 3 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  max-width: 100% !important;
+  margin-top: auto !important;
+}
+.map-stage-poster-title-kicker {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.7) !important;
+}
+.map-stage-poster-title-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(40px, 5vw, 64px) !important;
+  letter-spacing: -0.025em !important;
+  line-height: 0.92 !important;
+  color: #fff !important;
+  text-transform: uppercase !important;
+  text-shadow:
+    -2px 0 0 rgba(227,27,35,0.6),
+     2px 0 0 rgba(46,188,212,0.5),
+     0 4px 18px rgba(0,0,0,0.65) !important;
+}
+
+.map-stage-poster-count {
+  position: relative !important;
+  z-index: 3 !important;
+  margin-top: 18px !important;
+  padding: 5px 10px !important;
+  background: rgba(0,0,0,0.45) !important;
+  border: 1px solid rgba(212,168,74,0.55) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+
+/* ── RIGHT · info column ───────────────────────────────────────────── */
+.map-stage-info {
+  padding: 28px 32px 32px !important;
+  background: #0a0a0e !important;
+  position: relative !important;
+  min-width: 0 !important;
+  z-index: 1 !important;
+}
+
+.map-stage-head {
+  position: relative !important;
+  padding-bottom: 22px !important;
+  margin-bottom: 22px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.22) !important;
+}
+.map-stage-head::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: -1px !important;
+  width: 64px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+.map-stage-eyebrow {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 4px 11px !important;
+  background: rgba(212,168,74,0.08) !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  margin: 0 0 14px !important;
+}
+.map-stage-eyebrow .icon { color: currentColor !important; }
+.map-stage-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(28px, 3.4vw, 44px) !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 12px !important;
+  text-transform: none !important;
+}
+.map-stage-deck {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+  max-width: 720px !important;
+}
+
+/* Locations section header */
+.map-stage-locations { margin: 0 !important; }
+.map-stage-locations-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  margin: 0 0 12px !important;
+  padding-bottom: 8px !important;
+}
+.map-stage-locations-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.map-stage-locations-count {
+  display: inline-block !important;
+  padding: 3px 9px !important;
+  background: rgba(212,168,74,0.08) !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+}
+
+/* Compact accordion list */
+.map-stage-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+.map-stage-loc {
+  background: linear-gradient(180deg, rgba(20,20,24,0.6) 0%, rgba(14,14,18,0.6) 100%) !important;
+  border: 1px solid rgba(212,168,74,0.16) !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  transition:
+    background 220ms cubic-bezier(.2,.7,.2,1),
+    border-color 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.map-stage-loc:hover { background: rgba(212,168,74,0.05) !important; border-color: rgba(212,168,74,0.45) !important; }
+.map-stage-loc.is-open {
+  background: rgba(212,168,74,0.08) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+.map-stage-loc.is-classified { border-left: 3px solid var(--red, #e31b23) !important; }
+
+.map-stage-loc-btn {
+  display: grid !important;
+  grid-template-columns: 44px 1fr auto auto !important;
+  align-items: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  padding: 12px 14px !important;
+  background: transparent !important;
+  border: 0 !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  border-radius: 0 !important;
+}
+.map-stage-loc-n {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 26px !important;
+  padding: 0 8px !important;
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  flex-shrink: 0 !important;
+}
+.map-stage-loc-body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+}
+.map-stage-loc-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  letter-spacing: -0.005em !important;
+  line-height: 1.1 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.map-stage-loc-sub {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.map-stage-loc-cls {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  padding: 3px 7px !important;
+  background: rgba(227,27,35,0.12) !important;
+  border: 1px solid rgba(227,27,35,0.5) !important;
+  color: rgba(255,120,128,0.95) !important;
+  white-space: nowrap !important;
+}
+.map-stage-loc-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 24px !important;
+  height: 24px !important;
+  color: var(--text-3, #948d80) !important;
+  transition: color 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.map-stage-loc.is-open .map-stage-loc-toggle { color: var(--yellow, #d4a84a) !important; }
+
+.map-stage-loc-detail {
+  padding: 0 18px 16px !important;
+  margin-top: -4px !important;
+  border-top: 1px solid rgba(212,168,74,0.18) !important;
+  padding-top: 14px !important;
+}
+.map-stage-loc-desc {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 10px !important;
+}
+.map-stage-loc-desc:last-child { margin-bottom: 0 !important; }
+.map-stage-loc-desc strong { color: var(--text-1, #f5f1e8) !important; font-weight: 600 !important; }
+.map-stage-loc-desc em { color: var(--yellow, #d4a84a) !important; font-style: italic !important; }
+.map-stage-loc-tags {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+.map-stage-loc-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  padding: 2px 8px !important;
+  border: 1px solid rgba(212,168,74,0.3) !important;
+  background: rgba(212,168,74,0.04) !important;
+  color: var(--text-3, #948d80) !important;
+}
+
+/* Residence stage variant — drop the locations chrome since
+   ResidenceBlocks brings its own. */
+.map-stage.is-residence .map-stage-info {
+  padding: 28px 32px 32px !important;
+}
+.map-stage.is-residence .map-residence { margin-top: 8px !important; }
+
+@media (max-width: 999px) {
+  .map-stage-poster { min-height: 320px !important; }
+  .map-stage-poster-glyph svg { width: 180px !important; height: 180px !important; }
+  .map-stage-info { padding: 24px 22px 28px !important; }
+}
+@media (max-width: 720px) {
+  .map-stage-poster { padding: 22px !important; min-height: 260px !important; }
+  .map-stage-poster-title-name { font-size: 36px !important; }
+  .map-stage-info { padding: 22px 18px 28px !important; }
+  .map-stage-loc-btn {
+    grid-template-columns: 38px 1fr auto !important;
+    grid-template-rows: auto auto !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+  .map-stage-loc-cls { grid-column: 1 / -1; justify-self: start; }
+}
+
+/* Hide the OLD card-style location grid inside the new stage shell —
+   the stage uses .map-stage-list, not .map-list */
+.map-stage .map-list { display: none !important; }
+.map-stage .map-banner { display: none !important; }
+.map-stage .map-district-head { display: none !important; }
+
+/* ════════════════════════════════════════════════════════════════════════
    CURRICULUM PAGE · REDESIGN TO MATCH HOME + LORE
    Drops the left-sidebar lore-shell pattern. Top quiet underline nav for
    year selection (reuses .lore-nav classes), single-column main content
