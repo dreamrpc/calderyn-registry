@@ -2320,7 +2320,7 @@ function LoreStart({onJump}){
     { id: "vanguard",  n: "03", title: "The Vanguard",         blurb: "Paragon, Vigil, Aegis, Switchboard. The four." },
     { id: "houses",    n: "04", title: "The Houses",           blurb: "Valaris, Orenne, Saberis, Grimere. Pick yours." },
     { id: "dean",      n: "05", title: "The Dean",             blurb: "Dr. Devika Ravindrakumar. Fifteen metres. The line." },
-    { id: "incidents", n: "06", title: "Cassandra",            blurb: "Feb 2024. The press cycle no one survived." },
+    { id: "incidents", n: "06", title: "Cassandra",            blurb: "August 2023. The press cycle no one survived." },
   ];
 
   return (
@@ -3024,9 +3024,9 @@ function LoreIncidents(){
         <div className="lore-intro-stamp">RESTRICTED · BOARD-LEVEL CIRCULATION</div>
         <h2 className="lore-intro-title">The MV <span className="accent">Cassandra.</span></h2>
         <p className="lore-lead">
-          October 2023. A North Sea ferry running its overnight Newcastle to Amsterdam
+          August 2023. A North Sea ferry running its overnight Newcastle to Amsterdam
           route. <strong>Two thousand four hundred and eleven</strong> passengers and crew.
-          A Saturday night, peak autumn sailing season, the ship at near full capacity.
+          A Saturday night, peak summer sailing season, the ship at near full capacity.
         </p>
         <p className="lore-lead">
           What happened to the Cassandra is officially <em>the worst peacetime maritime
@@ -3038,7 +3038,7 @@ function LoreIncidents(){
       </section>
 
       <section className="lore-block">
-        <div className="lore-eyebrow">Casefile · 23-OCT-CASS</div>
+        <div className="lore-eyebrow">Casefile · 23-AUG-CASS</div>
         <h3 className="lore-h">By the <span className="accent">numbers.</span></h3>
         <div className="case-stats" role="list">
           <div className="case-stat" role="listitem">
@@ -3149,7 +3149,7 @@ function LoreIncidents(){
           documentaries, two memoirs by survivors, a Royal Commission inquiry that returned
           its findings in 2024 (it accepted the official narrative) and an annual memorial
           service at Newcastle harbour that Adrian attends. He lays a wreath. He weeps.
-          The footage circulates every October.
+          The footage circulates every August.
         </p>
         <p className="lore-p">
           The praise has, in the years since, begun to <em>curdle</em>. There are forums
