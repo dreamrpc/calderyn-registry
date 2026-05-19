@@ -1278,11 +1278,9 @@ function ClassCard({cls}){
 
   const kindLabel =
       cls.kind === "shared-core" ? "Shared Core"
-    : cls.kind === "designation" ? (cls.designation === "hero" ? "Heroes Track" : "Sidekicks Track")
-    : cls.kind === "elective"    ? "Elective"
-    : cls.kind === "specialism"  ? "Specialism"
-    : cls.kind === "literacy"    ? "Literacy Pool"
-    : "Required";
+    : cls.kind === "designation" ? "Designation"
+    : cls.kind === "capstone"    ? "Capstone"
+    : "Elective"; // literacy / specialism / required all collapse to Elective
 
   const path = classPath(cls);
   const pathLabel = path === "hero" ? "Hero Path"
@@ -1534,6 +1532,7 @@ function CurriculumView(){
             <div className="curr-block">
               <header className="curr-block-hd">
                 <span className="curr-block-tag">Designation Modules</span>
+                <span className="curr-block-sublbl">Designation Module</span>
                 <span className="curr-block-count">{y1Desig.length}</span>
               </header>
               <div className="curr-class-grid">
@@ -1567,6 +1566,7 @@ function CurriculumView(){
               <header className="curr-block-hd is-dept">
                 <span className="curr-block-marker"/>
                 <span className="curr-block-tag">{g.dept.code} · {g.dept.name}</span>
+                <span className="curr-block-sublbl">Elective Pool</span>
                 <span className="curr-block-count">{g.classes.length}</span>
               </header>
               <div className="curr-class-grid">
@@ -1579,6 +1579,7 @@ function CurriculumView(){
             <div className="curr-block">
               <header className="curr-block-hd">
                 <span className="curr-block-tag">Designation Modules</span>
+                <span className="curr-block-sublbl">Designation Module</span>
                 <span className="curr-block-count">{y2.designation.length}</span>
               </header>
               <div className="curr-class-grid">
@@ -1612,6 +1613,7 @@ function CurriculumView(){
               <header className="curr-block-hd is-dept">
                 <span className="curr-block-marker"/>
                 <span className="curr-block-tag">{g.dept.code} · {g.dept.name}</span>
+                <span className="curr-block-sublbl">Elective Pool</span>
                 <span className="curr-block-count">{g.classes.length}</span>
               </header>
               <div className="curr-class-grid">
@@ -1624,6 +1626,7 @@ function CurriculumView(){
             <div className="curr-block">
               <header className="curr-block-hd">
                 <span className="curr-block-tag">Designation Modules</span>
+                <span className="curr-block-sublbl">Designation Module</span>
                 <span className="curr-block-count">{y3.designation.length}</span>
               </header>
               <div className="curr-class-grid">
@@ -1657,6 +1660,7 @@ function CurriculumView(){
               <header className="curr-block-hd is-dept">
                 <span className="curr-block-marker"/>
                 <span className="curr-block-tag">{g.dept.code} · {g.dept.name}</span>
+                <span className="curr-block-sublbl">Elective Pool</span>
                 <span className="curr-block-count">{g.classes.length}</span>
               </header>
               <div className="curr-class-grid">
@@ -1669,6 +1673,7 @@ function CurriculumView(){
             <div className="curr-block">
               <header className="curr-block-hd">
                 <span className="curr-block-tag">Designation Modules</span>
+                <span className="curr-block-sublbl">Designation Module</span>
                 <span className="curr-block-count">{ySR.designation.length}</span>
               </header>
               <div className="curr-class-grid">

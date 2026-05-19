@@ -26038,3 +26038,46 @@ button.orgs-pill {
   .lore-nav.curr-nav .curr-nav-search { flex: 1 1 100% !important; max-width: none !important; }
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   CURRICULUM · SECTION DIVIDER LABELS
+   - `.curr-block-sublbl` renders a dim sub-label between the section
+     tag and the count badge: "Elective Pool" on dept blocks,
+     "Designation Module" on the HRO/SDK blocks.
+   - Freshman SHARED CORE + DESIGNATION MODULES section headers bump
+     to font-weight 700 so they read as the primary section dividers
+     of Year 1.
+   ════════════════════════════════════════════════════════════════════ */
+
+.curr-block-sublbl {
+  color: rgba(255, 255, 255, 0.35) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  margin-left: 10px !important;
+}
+
+/* Non-dept block headers — Shared Core + Designation Modules.
+   `.is-dept` is only set on Sophomore-Senior dept rows, so this
+   selector hits Freshman Shared Core + every "Designation Modules"
+   block (which is exactly the spec). */
+.curr-block-hd:not(.is-dept) .curr-block-tag {
+  font-weight: 700 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   FACULTY REGISTRY · CLASS CATALOGUE year column lock
+   The year cell (FRESHMAN / SOPHOMORE / JUNIOR / SENIOR) is given an
+   explicit min-width + flex-shrink:0 to guarantee it never bleeds
+   into the course title column.
+   ════════════════════════════════════════════════════════════════════ */
+.freg-classes-year {
+  min-width: 110px !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
