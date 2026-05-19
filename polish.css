@@ -24924,3 +24924,106 @@ button.orgs-pill {
   margin-top: 28px !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   STICKY STRIPS · FINAL FIX
+   Three observable bugs from the previous push:
+   1) The "DESIGNATION / ALL TRACKS / HEROES / SIDEKICKS" pill row
+      was getting bottom-letter clipping — padding too tight, the
+      strip's box was shorter than the pill's actual rendered height
+      because of font descenders.
+   2) Backgrounds at 0.94 opacity were letting class-card edges show
+      through behind the bars when scrolled — looked like ghosting.
+   3) The 40px gap between the year-tab strip and the designation
+      strip was an estimate; in practice the year strip is 48-52px
+      after font-line-height + padding, so the two were touching
+      with no separation.
+   Fix: pin both bars with solid backgrounds, generous vertical
+   padding, and a strong calculated offset using fixed strip heights.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Year-tab strip — fixed height, fully opaque, line-height locked */
+.curr-nav,
+.lore-nav.curr-nav,
+.curr > .lore-nav,
+.curr > nav.lore-nav {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px)) !important;
+  z-index: 36 !important;
+  margin: 0 !important;
+  padding: 12px clamp(20px, 4vw, 32px) !important;
+  min-height: 52px !important;
+  background: #0a0a0a !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-top: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  box-shadow: none !important;
+  line-height: 1 !important;
+}
+.curr-nav .lore-nav-btn,
+.curr > .lore-nav .lore-nav-btn {
+  padding: 6px 16px !important;
+  line-height: 1.4 !important;
+}
+
+/* Designation filter — pinned directly below the year tabs strip.
+   Use a precise +52px (= year-strip min-height) offset so the two
+   bars stack flush without overlap. Solid background, bigger pad. */
+.curr-filter-bar {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px) + 52px) !important;
+  z-index: 35 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px clamp(20px, 4vw, 32px) !important;
+  min-height: 52px !important;
+  margin: 0 0 24px !important;
+  background: #0a0a0a !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  box-shadow: 0 12px 24px -22px rgba(0, 0, 0, 0.9) !important;
+}
+.curr-filter-bar .curr-filter-lbl {
+  line-height: 1.4 !important;
+}
+.curr-filter-bar .curr-filter-pill {
+  line-height: 1.4 !important;
+  padding: 7px 14px !important;
+}
+
+/* Faculty filter — same chrome, just pinned directly under the subnav
+   (no year-tab strip on this view). */
+.sfilter.freg-sfilter {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px)) !important;
+  z-index: 36 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px clamp(20px, 4vw, 32px) !important;
+  min-height: 52px !important;
+  margin: 0 0 24px !important;
+  background: #0a0a0a !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  box-shadow: 0 12px 24px -22px rgba(0, 0, 0, 0.9) !important;
+}
+.sfilter.freg-sfilter .sf-pill {
+  line-height: 1.4 !important;
+  padding: 7px 14px !important;
+}
+
+@media (max-width: 760px) {
+  .curr-filter-bar,
+  .sfilter.freg-sfilter,
+  .curr-nav { position: static !important; }
+}
+
