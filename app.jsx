@@ -1364,31 +1364,17 @@ function CurriculumView(){
   const y2 = groupYearByDept("Y2");
   const y3 = groupYearByDept("Y3");
 
-  // Year scroll-spy
-  useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      const trigger = window.innerHeight * 0.28;
-      let current = "Y1";
-      for (const yt of YEAR_TABS) {
-        const el = document.getElementById("curr-year-" + yt.key);
-        if (!el) continue;
-        if (el.getBoundingClientRect().top - trigger <= 0) current = yt.key;
-      }
-      setActiveYear(current);
-    };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    update();
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-  const jumpToYear = (key) => {
-    const el = document.getElementById("curr-year-" + key);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Year tabs are state-driven now — only the active year renders, so
+  // a new member sees one focused page at a time instead of scrolling
+  // through four stacked years of content.
+  const switchYear = (key) => {
+    setActiveYear(key);
+    // Scroll back to the top of the curriculum main so the new year
+    // appears at a clean baseline.
+    requestAnimationFrame(() => {
+      const main = document.querySelector(".curr-main");
+      if (main) main.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   };
 
   return (
@@ -1401,7 +1387,7 @@ function CurriculumView(){
               <button
                 type="button"
                 className="lore-nav-btn"
-                onClick={() => jumpToYear(yt.key)}
+                onClick={() => switchYear(yt.key)}
                 aria-current={yt.key === activeYear ? "page" : undefined}
               >
                 <span className="lore-nav-icon" aria-hidden="true">
@@ -1439,6 +1425,7 @@ function CurriculumView(){
         </section>
 
         {/* Y1 · Shared Core */}
+        {activeYear === "Y1" && (
         <section id="curr-year-Y1" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
@@ -1475,8 +1462,10 @@ function CurriculumView(){
             </div>
           )}
         </section>
+        )}
 
         {/* Y2 · Specialisation begins */}
+        {activeYear === "Y2" && (
         <section id="curr-year-Y2" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
@@ -1518,8 +1507,10 @@ function CurriculumView(){
             </div>
           )}
         </section>
+        )}
 
         {/* Y3 · Deep specialisation */}
+        {activeYear === "Y3" && (
         <section id="curr-year-Y3" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
@@ -1561,8 +1552,10 @@ function CurriculumView(){
             </div>
           )}
         </section>
+        )}
 
         {/* Fellowship */}
+        {activeYear === "FEL" && (
         <section id="curr-year-FEL" className="curr-year curr-year-fellowship">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
@@ -1586,6 +1579,7 @@ function CurriculumView(){
             </p>
           </div>
         </section>
+        )}
       </main>
     </div>
   );
