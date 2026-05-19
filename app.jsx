@@ -1837,48 +1837,50 @@ function PowersRegistry(){
 
   const toggleRow = (key) => setOpenIdx(prev => ({...prev, [key]: !prev[key]}));
 
+  // Flatten all visible rows into a single list, grouped by status
+  // for the section dividers but sharing one table chrome.
+  const flatRows = groups.flatMap(({s, list}) => list.map(p => ({...p, _status: s})));
+
   return (
     <div className="preg">
-      <div className="preg-hint">
-        Click any record to read that character's power expression.
-      </div>
-      <div className="preg-toolbar">
-        <div className="preg-filters">
-          <button
-            className={"preg-pill" + (status === "all" ? " on" : "")}
+      {/* Students-style filter bar — search input + status pills + count */}
+      <div className="sfilter preg-sfilter" role="search">
+        <div className="sfilter-search">
+          <span className="sfilter-search-icon" aria-hidden="true">⌕</span>
+          <input
+            type="text"
+            className="sfilter-input"
+            placeholder="Search name, alias, or power…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            aria-label="Search powers"
+          />
+          {q && (
+            <button type="button" className="sfilter-clear" onClick={() => setQ("")} aria-label="Clear search">×</button>
+          )}
+        </div>
+
+        <div className="sfilter-group">
+          <span className="sfilter-lbl">Status</span>
+          <button type="button"
+            className={"sf-pill" + (status === "all" ? " on" : "")}
             onClick={() => setStatus("all")}
+            aria-pressed={status === "all"}
           >All</button>
           {POWER_STATUSES.map(s => (
-            <button
-              key={s.id}
-              className={"preg-pill" + (status === s.id ? " on" : "")}
+            <button key={s.id} type="button"
+              className={"sf-pill" + (status === s.id ? " on" : "")}
               onClick={() => setStatus(status === s.id ? "all" : s.id)}
-              style={status === s.id
-                ? {background:s.bg, color:s.text, borderColor:s.bg}
-                : {}}
+              aria-pressed={status === s.id}
+              style={status === s.id ? {background:s.bg, color:s.text, borderColor:s.bg} : {}}
             >{s.label}</button>
           ))}
         </div>
-        <div className="preg-search-wrap">
-          <input
-            type="text"
-            placeholder="Search name, alias, power, expression…"
-            value={q}
-            onChange={e => setQ(e.target.value)}
-            className="preg-search"
-            aria-label="Search powers"
-          />
-          {(q || status !== "all") && (
-            <button
-              className="preg-clear"
-              onClick={() => { setQ(""); setStatus("all"); }}
-            >Clear</button>
-          )}
-          <span className="preg-count">{rows.length} {rows.length === 1 ? "record" : "records"}</span>
-        </div>
+
+        <div className="sfilter-count">{rows.length} entr{rows.length === 1 ? "y" : "ies"}</div>
       </div>
 
-      {groups.length === 0 && (
+      {flatRows.length === 0 && (
         <div className="preg-empty">
           {POWERS.length === 0
             ? "No powers registered yet"
@@ -1886,91 +1888,83 @@ function PowersRegistry(){
         </div>
       )}
 
-      {groups.map(({s, list}) => (
-        <section key={s.id} className="preg-group">
-          <div
-            className="preg-group-hd"
-            style={{background:s.bg, color:s.text}}
-          >
-            <span className="preg-group-name">{s.label}</span>
-            <span className="preg-group-count">
-              {list.length} {list.length === 1 ? "record" : "records"}
-            </span>
-          </div>
-
-          <ul className="preg-rows" role="list">
-            {list.map((p, pi) => {
-              const key = `${s.id}-${pi}`;
-              const isOpen = !!openIdx[key];
-              const hasExpr = !!p.expression;
-              return (
-                <li key={pi} className={"preg-rowcard" + (isOpen ? " is-open" : "")}>
-                  <button
-                    type="button"
-                    className={"preg-rowcard-main" + (hasExpr ? " is-clickable" : "")}
-                    onClick={() => hasExpr && toggleRow(key)}
-                    aria-expanded={isOpen}
-                    disabled={!hasExpr}
-                  >
-                    <div className="preg-rowcard-tier">
-                      <TierChip tier={p.tier}/>
-                    </div>
-                    <div className="preg-rowcard-id">
-                      <div className="preg-rowcard-name">
+      {flatRows.length > 0 && (
+        <div className="tw preg-tw">
+          <table>
+            <thead>
+              <tr>
+                <th className="rn">#</th>
+                <th>Character</th>
+                <th>Stage Name</th>
+                <th>Tier</th>
+                <th>Status</th>
+                <th>Power / Ability</th>
+                <th aria-label="Details"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {flatRows.map((p, i) => {
+                const key = `${p._status.id}-${i}`;
+                const isOpen = !!openIdx[key];
+                const hasExpr = !!p.expression;
+                return (
+                  <React.Fragment key={i}>
+                    <tr
+                      className={"preg-row" + (isOpen ? " is-open" : "") + (hasExpr ? " is-clickable" : "")}
+                      onClick={() => hasExpr && toggleRow(key)}
+                    >
+                      <td className="rn">{String(i+1).padStart(2, "0")}</td>
+                      <td>
                         <CLink name={p.char} link={p.link || null}/>
                         {p.npc && <NpcBadge/>}
-                      </div>
-                      {p.alias && (
-                        <div className="preg-rowcard-alias">{p.alias}</div>
-                      )}
-                    </div>
-                    <div className="preg-rowcard-power">
-                      {p.power || <span className="preg-na">—</span>}
-                    </div>
-                    <div className="preg-rowcard-action">
-                      {hasExpr && (
-                        <span className="preg-view-btn" aria-hidden="true">
-                          {isOpen ? "Hide" : "View"}
-                          <span className="preg-view-arrow">
-                            <Icon name={isOpen ? "chevron-up" : "chevron-down"} size={12}/>
-                          </span>
+                      </td>
+                      <td><span className="stage-name">{p.alias || "—"}</span></td>
+                      <td><TierChip tier={p.tier}/></td>
+                      <td>
+                        <span className="preg-status-chip" style={{background:p._status.bg, color:p._status.text}}>
+                          {p._status.label}
                         </span>
-                      )}
-                    </div>
-                  </button>
-
-                  {isOpen && hasExpr && (
-                    <div className="preg-rowcard-detail">
-                      <span className="preg-detail-label">Expression</span>
-                      <p className="preg-detail-text">{p.expression}</p>
-                      {p.expressionDoc && (
-                        <a
-                          href={p.expressionDoc}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="preg-detail-doc"
-                        >
-                          <span className="preg-detail-doc-icon" aria-hidden="true">
-                            <Icon name="file-text" size={14}/>
+                      </td>
+                      <td className="preg-col-power">{p.power || "—"}</td>
+                      <td className="preg-col-toggle">
+                        {hasExpr && (
+                          <span className="preg-view-btn" aria-hidden="true">
+                            {isOpen ? "Hide" : "View"}
+                            <span className="preg-view-arrow">
+                              <Icon name={isOpen ? "chevron-up" : "chevron-down"} size={12}/>
+                            </span>
                           </span>
-                          <span className="preg-detail-doc-label">Read the full power doc</span>
-                          <span className="preg-detail-doc-arrow" aria-hidden="true">
-                            <Icon name="arrow-up-right" size={12}/>
-                          </span>
-                        </a>
-                      )}
-                      {p.drawbacks && <span className="preg-detail-label">Drawbacks / Limits</span>}
-                      {p.drawbacks && <p className="preg-detail-text">{p.drawbacks}</p>}
-                      {p.note && <span className="preg-detail-label preg-detail-label--note">Admin Note</span>}
-                      {p.note && <p className="preg-detail-text preg-detail-note">{p.note}</p>}
-                    </div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ))}
+                        )}
+                      </td>
+                    </tr>
+                    {isOpen && hasExpr && (
+                      <tr className="preg-detail-row">
+                        <td colSpan={7}>
+                          <div className="preg-detail">
+                            <span className="preg-detail-label">Expression</span>
+                            <p className="preg-detail-text">{p.expression}</p>
+                            {p.expressionDoc && (
+                              <a href={p.expressionDoc} target="_blank" rel="noopener noreferrer" className="preg-detail-doc">
+                                <span className="preg-detail-doc-icon" aria-hidden="true"><Icon name="file-text" size={14}/></span>
+                                <span className="preg-detail-doc-label">Read the full power doc</span>
+                                <span className="preg-detail-doc-arrow" aria-hidden="true"><Icon name="arrow-up-right" size={12}/></span>
+                              </a>
+                            )}
+                            {p.drawbacks && <span className="preg-detail-label">Drawbacks / Limits</span>}
+                            {p.drawbacks && <p className="preg-detail-text">{p.drawbacks}</p>}
+                            {p.note && <span className="preg-detail-label preg-detail-label--note">Admin Note</span>}
+                            {p.note && <p className="preg-detail-text preg-detail-note">{p.note}</p>}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

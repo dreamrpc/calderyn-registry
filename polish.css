@@ -25096,3 +25096,268 @@ button.orgs-pill {
   border-bottom: 1px solid #1a1a1a !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   STATUS CARDS · FINAL OVERHAUL
+   The "UNSANCTIONED" / "CIVILIAN" status tags were rendering with a
+   wide gold-bordered box around tiny 10px mono text — looked like
+   a placeholder rectangle around a label. The status-card itself
+   still had a faint outer border too. This block:
+   - Kills every remaining outer border on .status-card.
+   - Rebuilds .status-card-tag as a tight pill with proper padding
+     and a larger 13px label (was 10px).
+   - Cleans up the number column so it doesn't dominate.
+   - Bumps the description font.
+   ════════════════════════════════════════════════════════════════════ */
+
+.pg-guide .status-cards {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 16px !important;
+}
+@media (min-width: 900px) {
+  .pg-guide .status-cards { grid-template-columns: repeat(2, 1fr) !important; gap: 16px 20px !important; }
+}
+
+.pg-guide .status-card {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 70px 1fr !important;
+  grid-template-rows: auto auto !important;
+  gap: 0 !important;
+  background: #0d0d11 !important;
+  border: 0 !important;
+  border-left: 3px solid #2a2a2a !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}
+.pg-guide .status-card::before { content: none !important; }
+.pg-guide .status-card > * { position: relative !important; z-index: 1 !important; }
+
+.pg-guide .status-card-num {
+  grid-row: 1 / span 2 !important;
+  grid-column: 1 !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  padding: 22px 0 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-right: 1px solid #1a1a1a !important;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 30px !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1 !important;
+  color: var(--text-3, #948d80) !important;
+  margin: 0 !important;
+}
+
+.pg-guide .status-card-tag {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  width: max-content !important;
+  max-width: max-content !important;
+  margin: 22px 24px 10px !important;
+  padding: 5px 12px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  line-height: 1.2 !important;
+  /* color + background come from the inline style on the JSX */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15),
+              inset 0 -1px 0 rgba(0,0,0,0.3) !important;
+}
+.pg-guide .status-card-tag > span {
+  display: inline-block !important;
+  line-height: 1.2 !important;
+}
+.pg-guide .status-card-desc {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  padding: 0 24px 22px !important;
+  margin: 0 !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   DESIGNATION FILTER · FULL VIEWPORT WIDTH
+   The filter strip was constrained to `.curr-main`'s 1280px max-width
+   container, so when it pinned it looked like a floating pill rather
+   than a real top-bar — visible page bg on either side. Break it out
+   to viewport width with negative margins, keep inner content aligned
+   to the 1280px content rail via internal padding.
+   ════════════════════════════════════════════════════════════════════ */
+.curr-filter-bar {
+  width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  padding-left: max(clamp(20px, 4vw, 32px), calc((100vw - 1280px) / 2 + clamp(20px, 4vw, 32px))) !important;
+  padding-right: max(clamp(20px, 4vw, 32px), calc((100vw - 1280px) / 2 + clamp(20px, 4vw, 32px))) !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   POWERS REGISTRY · STUDENTS-STYLE TABLE (FINAL)
+   Replaced the row-card layout with a `.tw`-style table identical to
+   the Students roster chrome:
+   - Mono eyebrow column headers, no borders.
+   - Flat #0d0d0d header row, #0a0a0a body rows, hover #121212.
+   - Hairline #1a1a1a row dividers.
+   - Sticky `.sfilter` toolbar at top w/ search + status pills + count.
+   ════════════════════════════════════════════════════════════════════ */
+
+.preg { padding: 0 !important; margin: 0 !important; }
+
+.sfilter.preg-sfilter {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px)) !important;
+  z-index: 36 !important;
+  margin: 0 !important;
+  padding: 12px clamp(20px, 4vw, 32px) !important;
+  min-height: 52px !important;
+  background: #0a0a0a !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  box-shadow: 0 12px 24px -22px rgba(0, 0, 0, 0.9) !important;
+}
+@media (max-width: 760px) {
+  .sfilter.preg-sfilter { position: static !important; }
+}
+
+.preg-tw {
+  margin: 24px clamp(20px, 4vw, 32px) 48px !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.preg-tw table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+}
+.preg-tw thead th {
+  text-align: left !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 12px 16px !important;
+  background: #0d0d0d !important;
+  border: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+}
+.preg-tw thead th.rn { width: 56px !important; }
+.preg-tw tbody tr {
+  border: 0 !important;
+  transition: background 160ms ease !important;
+}
+.preg-tw tbody td {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  color: #e7e3d6 !important;
+  padding: 14px 16px !important;
+  background: #0a0a0a !important;
+  border: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  vertical-align: middle !important;
+}
+.preg-tw tbody tr.preg-row.is-clickable { cursor: pointer !important; }
+.preg-tw tbody tr.preg-row:hover td,
+.preg-tw tbody tr.preg-row.is-open td { background: #121212 !important; }
+
+.preg-tw tbody td.rn {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  color: var(--text-3, #948d80) !important;
+  letter-spacing: 0.08em !important;
+}
+.preg-tw tbody td.preg-col-power {
+  font-size: 13px !important;
+  color: #b8b1a3 !important;
+  line-height: 1.45 !important;
+  max-width: 480px !important;
+}
+.preg-tw tbody td.preg-col-toggle { text-align: right !important; width: 96px !important; }
+
+/* Inline status chip in the Status column (matches each status's color
+   palette from POWER_STATUSES). */
+.preg-status-chip {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 3px 9px !important;
+  white-space: nowrap !important;
+  border-radius: 0 !important;
+}
+
+/* Detail row (expanded expression panel below a clicked row) */
+.preg-detail-row td {
+  padding: 0 !important;
+  background: #08080b !important;
+  border-bottom: 1px solid #1a1a1a !important;
+}
+.preg-detail {
+  padding: 18px 20px 22px !important;
+  border-left: 3px solid #d4a843 !important;
+}
+.preg-detail-label {
+  display: block !important;
+  margin-top: 14px !important;
+  margin-bottom: 6px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+}
+.preg-detail-label:first-child { margin-top: 0 !important; }
+.preg-detail-text {
+  margin: 0 !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: #cfcabe !important;
+  white-space: pre-wrap !important;
+}
+.preg-detail-note { color: rgba(255, 180, 100, 0.85) !important; }
+
+/* Hide the old group ribbons / row card chrome — superseded by the
+   `.tw` table layout above. */
+.preg-group,
+.preg-group-hd,
+.preg-rows,
+.preg-rowcard,
+.preg-rowcard-main,
+.preg-rowcard-detail,
+.preg-tbl,
+.preg-tbl-wrap,
+.preg-toolbar,
+.preg-filters,
+.preg-pill,
+.preg-search-wrap,
+.preg-search,
+.preg-clear,
+.preg-count,
+.preg-hint { display: none !important; }
+
