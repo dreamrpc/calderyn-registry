@@ -21206,11 +21206,15 @@ button.map-nav-btn:hover {
 }
 .map-stage { transition: grid-template-columns 320ms cubic-bezier(.2,.7,.2,1) !important; }
 
-/* Expand toggle on the poster — sits bottom-right corner */
+/* Expand toggle on the poster — top-right corner, clear of the title.
+   Sat at bottom-right previously and overlapped the district name; the
+   title block has margin-top:auto so it always parks at the bottom. */
 .map-stage-poster-expand {
   position: absolute !important;
-  bottom: 14px !important;
+  top: 14px !important;
   right: 14px !important;
+  bottom: auto !important;
+  left: auto !important;
   z-index: 5 !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -21226,6 +21230,8 @@ button.map-nav-btn:hover {
   text-transform: uppercase !important;
   cursor: pointer !important;
   border-radius: 0 !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
   transition: background 180ms ease, color 180ms ease, border-color 180ms ease !important;
 }
 .map-stage-poster-expand:hover {
@@ -21234,6 +21240,11 @@ button.map-nav-btn:hover {
   border-color: var(--yellow, #d4a84a) !important;
 }
 .map-stage-poster-expand svg { stroke: currentColor !important; }
+/* The poster already has a top corner-bracket at top:14px / left:14px,
+   so the expand chip on the right doesn't fight with anything — but
+   the existing top-right corner-bracket would clash with it; suppress
+   that bracket when the expand chip is on the poster. */
+.map-stage-poster::after { display: none !important; }
 
 /* When the poster is narrower (default), shrink the big title so it
    still reads but doesn't crowd the icon. */
