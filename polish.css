@@ -9613,3 +9613,367 @@ html { scroll-behavior: smooth; }
 .home-page .home-dorm-panel .home-dorm-footer { color: #4a3322 !important; }
 /* The EYES ONLY stamp keeps white-on-red */
 .home-page .home-dorm-panel .home-dorm-eyes-stamp { color: #ffffff !important; }
+
+/* ════════════════════════════════════════════════════════════════════
+   HOME · TODAY — date / weather / stats / events
+   ════════════════════════════════════════════════════════════════════ */
+
+.home-today { background: #0a0a0a; padding: var(--space-7) var(--space-5) !important; position: relative; }
+
+/* Status strip — 3-column HUD-style row at the top of the section */
+.home-today-status {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0;
+  background: #14140e;
+  border: 1.5px solid rgba(201, 168, 76, 0.25);
+  border-left: 4px solid var(--yellow, #d4a84a);
+  margin-bottom: var(--space-6);
+  max-width: 1200px;
+}
+.home-today-status-cell {
+  padding: var(--space-3) var(--space-5);
+  border-right: 1px solid rgba(201, 168, 76, 0.15);
+}
+.home-today-status-cell:last-child { border-right: 0; }
+.home-today-status-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--text-3, #948d80);
+  margin-bottom: 4px;
+}
+.home-today-status-val {
+  font-family: var(--sans, 'Söhne', system-ui);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-1, #f5f1e8);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.home-today-pulse {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--red-bright, #ff2a32);
+  box-shadow: 0 0 8px var(--red-bright, #ff2a32);
+  animation: home-today-pulse 1.6s ease-in-out infinite;
+}
+@keyframes home-today-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* Numbers grid — 4 stat cells */
+.home-today-numbers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  background: #000;
+  padding: 4px;
+  border: 4px solid #000;
+  box-shadow: 10px 10px 0 0 var(--yellow, #d4a84a);
+  margin-bottom: var(--space-7);
+  max-width: 1200px;
+}
+.home-today-num-cell {
+  padding: var(--space-5) var(--space-5);
+  background: var(--bg-1, #0c0c10);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.home-today-num-cell::before {
+  /* Halftone field per cell for the comic texture */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%, rgba(244, 200, 110, 0.08) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  pointer-events: none;
+}
+.home-today-num-cell > * { position: relative; z-index: 1; }
+.home-today-num {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 900;
+  font-size: clamp(40px, 5.5vw, 64px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--text-1, #f5f1e8);
+  margin-bottom: var(--space-2);
+}
+.home-today-num-label {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--yellow, #d4a84a);
+  margin-bottom: 4px;
+}
+.home-today-num-sub {
+  font-family: var(--sans, 'Söhne', system-ui);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-3, #948d80);
+}
+
+/* Events list */
+.home-today-events {
+  max-width: 1200px;
+  background: var(--bg-1, #0c0c10);
+  border: 4px solid #000;
+  box-shadow: 10px 10px 0 0 var(--red, #c11a2c);
+}
+.home-today-events-head {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 2px solid var(--rule, #2a2a34);
+  background: linear-gradient(180deg, #0c0c10, #0a0a0a);
+}
+.home-today-events-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--yellow, #d4a84a);
+  margin-bottom: 4px;
+}
+.home-today-events-title {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 800;
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  color: var(--text-1, #f5f1e8);
+  margin: 0;
+  text-transform: uppercase;
+}
+.home-today-events-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: ev;
+}
+.home-today-events-row {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--rule-faint, #1c1c24);
+  transition: background var(--motion-base, 180ms) ease;
+}
+.home-today-events-row:last-child { border-bottom: 0; }
+.home-today-events-row:hover {
+  background: rgba(212, 168, 74, 0.05);
+  box-shadow: inset 3px 0 0 0 var(--yellow, #d4a84a);
+}
+.home-today-events-date {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--yellow, #d4a84a);
+}
+.home-today-events-event {
+  font-family: var(--sans, 'Söhne', system-ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-1, #f5f1e8);
+}
+.home-today-events-loc {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-3, #948d80);
+}
+
+@media (max-width: 760px) {
+  .home-today-status { grid-template-columns: 1fr; }
+  .home-today-status-cell { border-right: 0; border-bottom: 1px solid rgba(201, 168, 76, 0.15); }
+  .home-today-status-cell:last-child { border-bottom: 0; }
+  .home-today-numbers { grid-template-columns: repeat(2, 1fr); }
+  .home-today-events-row { grid-template-columns: 80px 1fr; }
+  .home-today-events-loc { grid-column: 1 / -1; padding-left: calc(80px + var(--space-4)); }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   STRATA · NEWSPAPER OVERVIEW
+   Replaces the v1 stat-card overview. Renders as a fake business-
+   section page: masthead, headline, byline, two-column body with
+   drop cap, compact figure strip at the foot.
+   ════════════════════════════════════════════════════════════════════ */
+.strata-stats { display: none !important; } /* v1 cards hidden */
+
+.strata-paper {
+  max-width: 1100px;
+  margin: 0 auto var(--space-7);
+  padding: var(--space-6) var(--space-7);
+  background: #f5efde;
+  color: #1a0e08;
+  border: 4px solid #1a0e08;
+  position: relative;
+  box-shadow: 10px 10px 0 0 #1a0e08;
+}
+/* Force every text descendant dark so nothing inherits the dark-theme
+   cream from .pg */
+.strata-paper, .strata-paper * {
+  color: #1a0e08 !important;
+}
+
+.strata-paper-masthead {
+  border-top: 3px solid #1a0e08;
+  border-bottom: 3px solid #1a0e08;
+  padding: 8px 0 6px;
+  margin-bottom: var(--space-5);
+  text-align: center;
+}
+.strata-paper-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(20px, 2.4vw, 28px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.strata-paper-meta {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.strata-paper-eyebrow {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #8b1a0f !important;
+  margin-bottom: var(--space-3);
+}
+
+.strata-paper-headline {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(32px, 4.4vw, 56px) !important;
+  letter-spacing: -0.015em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  margin: 0 0 var(--space-3) !important;
+}
+
+.strata-paper-subhead {
+  font-family: var(--sans, 'Söhne', system-ui, sans-serif) !important;
+  font-size: clamp(15px, 1.4vw, 18px);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #2d1f12 !important;
+  margin: 0 0 var(--space-4);
+  max-width: 720px;
+}
+
+.strata-paper-byline {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  padding: 8px 0;
+  border-top: 1px solid #1a0e08;
+  border-bottom: 1px solid #1a0e08;
+  margin-bottom: var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.strata-paper-byline-sep { color: #6b3e26 !important; }
+
+.strata-paper-body {
+  columns: 2;
+  column-gap: var(--space-6);
+  margin-bottom: var(--space-5);
+}
+.strata-paper-body p {
+  font-family: var(--sans, 'Söhne', system-ui, sans-serif) !important;
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 0 0 var(--space-3);
+  text-align: justify;
+  break-inside: avoid;
+}
+.strata-paper-body p em {
+  color: #6d1a0f !important;
+  font-style: italic;
+}
+
+.strata-paper-dropcap {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 64px;
+  line-height: 0.85;
+  float: left;
+  margin: 4px 8px 0 0;
+  color: #8b1a0f !important;
+}
+
+.strata-paper-figures {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: #1a0e08;
+  border: 2px solid #1a0e08;
+  margin-top: var(--space-5);
+}
+.strata-paper-figure {
+  background: #efe7d3;
+  border: 0;
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: background var(--motion-base, 180ms) ease;
+}
+.strata-paper-figure:hover { background: #e8dfc4; }
+.strata-paper-figure-num {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.strata-paper-figure-of {
+  font-size: 14px;
+  color: #6b3e26 !important;
+  font-weight: 700;
+}
+.strata-paper-figure-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #6b3e26 !important;
+}
+
+@media (max-width: 760px) {
+  .strata-paper { padding: var(--space-5) var(--space-4); }
+  .strata-paper-body { columns: 1; }
+  .strata-paper-figures { grid-template-columns: repeat(2, 1fr); }
+}

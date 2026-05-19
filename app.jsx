@@ -603,10 +603,101 @@ function HomeTab({setTab}){
     <div className="home-page">
       <HomeHero setTab={setTab}/>
       <HomeVanguard/>
+      <HomeToday/>
       <HomeProgramme/>
       <HomeDormNotice/>
       <HomeCTA setTab={setTab}/>
     </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   HOME · CALDERYN TODAY
+   Status bar (date / location / weather) + by-the-numbers stats grid
+   + upcoming events list. Roots the school in the UK setting; reads
+   like the masthead of a college admissions page.
+   ──────────────────────────────────────────────────────────────────── */
+function HomeToday(){
+  const [ref, inView] = useInView(0.15);
+  // Fixed in-fiction "now" — 18 May 2026, the lore date. Could be
+  // wired to live date later; for now this is the canonical present.
+  const today = new Date(2026, 4, 18);
+  const fmtDate = today.toLocaleDateString("en-GB", {
+    weekday: "long", day: "numeric", month: "long", year: "numeric"
+  });
+
+  const stats = [
+    { num: "3%",      label: "Acceptance",     sub: "of 14,200 applicants this cycle" },
+    { num: "£45K",    label: "Annual tuition", sub: "STRATA-subsidised after Y1" },
+    { num: "412",     label: "Active students", sub: "across four houses" },
+    { num: "1965",    label: "Founded",         sub: "Greenwich, defence-funded" },
+  ];
+
+  const events = [
+    { date: "22 MAY", event: "Spring practicals begin",          loc: "Combat Hangar · Saberis" },
+    { date: "04 JUN", event: "Vanguard public Q&A",              loc: "Greenwich Hall" },
+    { date: "18 JUN", event: "Inter-house championship · final", loc: "Vale grounds" },
+    { date: "09 JUL", event: "Open day · prospective applicants", loc: "Main quad" },
+  ];
+
+  return (
+    <section ref={ref} className={"home-section home-today " + (inView ? "is-in" : "")}>
+      <div className="home-section-head">
+        <div className="home-section-stamp">DOSSIER · 02 · BY THE NUMBERS</div>
+        <h2 className="home-section-title">CALDERYN <span className="home-section-title-accent">TODAY</span></h2>
+        <p className="home-section-lede">
+          A snapshot of the school as it stood at last roll-call. Selective by
+          design, quietly subsidised, and rarely far from the news cycle.
+        </p>
+      </div>
+
+      {/* Status strip — UK setting indicators, comic-print HUD style */}
+      <div className="home-today-status">
+        <div className="home-today-status-cell">
+          <div className="home-today-status-lbl">Date</div>
+          <div className="home-today-status-val">{fmtDate}</div>
+        </div>
+        <div className="home-today-status-cell">
+          <div className="home-today-status-lbl">Greenwich · SE10</div>
+          <div className="home-today-status-val">Calderyn Quad · 16°C · Overcast · Light rain ~16:00</div>
+        </div>
+        <div className="home-today-status-cell">
+          <div className="home-today-status-lbl">Cycle status</div>
+          <div className="home-today-status-val">
+            <span className="home-today-pulse" aria-hidden="true"/>
+            INTAKE OPEN · TERM 2 · 2026
+          </div>
+        </div>
+      </div>
+
+      {/* By the numbers — 4 stat cells */}
+      <div className="home-today-numbers">
+        {stats.map((s, i) => (
+          <div key={i} className="home-today-num-cell">
+            <div className="home-today-num">{s.num}</div>
+            <div className="home-today-num-label">{s.label}</div>
+            <div className="home-today-num-sub">{s.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Upcoming events */}
+      <div className="home-today-events">
+        <header className="home-today-events-head">
+          <div className="home-today-events-tag">EVENTS · TERM 2 · 2026</div>
+          <h3 className="home-today-events-title">Upcoming</h3>
+        </header>
+        <ol className="home-today-events-list">
+          {events.map((e, i) => (
+            <li key={i} className="home-today-events-row">
+              <span className="home-today-events-date">{e.date}</span>
+              <span className="home-today-events-event">{e.event}</span>
+              <span className="home-today-events-loc">{e.loc}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
   );
 }
 
@@ -3112,22 +3203,77 @@ function StrataOverview({onJump}){
 
   return (
     <div className="strata-overview">
-      <section className="strata-stats">
-        <button className="strata-stat" onClick={() => onJump("corporate")}>
-          <div className="strata-stat-num">{corpFilled}<span className="strata-stat-of">/{corpRoles}</span></div>
-          <div className="strata-stat-label">Corporate roles filled</div>
-          <div className="strata-stat-sub">Internal structure <Icon name="arrow-up-right" size={11} className="inline-icon"/></div>
-        </button>
-        <button className="strata-stat" onClick={() => onJump("talent")}>
-          <div className="strata-stat-num">{heroFilled}<span className="strata-stat-of">/{heroSlots}</span></div>
-          <div className="strata-stat-label">Heroes on the roster</div>
-          <div className="strata-stat-sub">A–D-list talent <Icon name="arrow-up-right" size={11} className="inline-icon"/></div>
-        </button>
-        <button className="strata-stat" onClick={() => onJump("groups")}>
-          <div className="strata-stat-num">{groupCount}</div>
-          <div className="strata-stat-label">{sanctioned} sanctioned · {groupCount - sanctioned} independent · {groupMembers} {groupMembers === 1 ? "member" : "members"} on file</div>
-          <div className="strata-stat-sub">Vanguard & collectives <Icon name="arrow-up-right" size={11} className="inline-icon"/></div>
-        </button>
+      {/* NEWSPAPER OVERVIEW — replaces the v1 stat cards. A short
+          in-fiction business-section piece about STRATA's position,
+          set in the Calderyn world's "now" (May 2026). Two columns
+          of body, drop cap, byline, masthead. Tight on purpose. */}
+      <section className="strata-paper">
+        <div className="strata-paper-masthead">
+          <div className="strata-paper-title">THE FINANCIAL CORRESPONDENT</div>
+          <div className="strata-paper-meta">
+            <span>CITY DESK</span>
+            <span>·</span>
+            <span>SE10</span>
+            <span>·</span>
+            <span>12 MAY 2026</span>
+            <span>·</span>
+            <span>EDITION 4,118</span>
+          </div>
+        </div>
+        <div className="strata-paper-eyebrow">BUSINESS · POWERED INDUSTRIES</div>
+        <h2 className="strata-paper-headline">
+          STRATA reports record intake.
+          Critics quiet, again.
+        </h2>
+        <p className="strata-paper-subhead">
+          Four hundred and twelve students across four houses. A three percent
+          acceptance rate. Three private security firms quietly absorbed last quarter.
+        </p>
+        <div className="strata-paper-byline">
+          <span>BY <strong>TESSA HOLLINGS-BRAE</strong></span>
+          <span className="strata-paper-byline-sep">·</span>
+          <span>BUSINESS DESK</span>
+          <span className="strata-paper-byline-sep">·</span>
+          <span>4 MIN READ</span>
+        </div>
+
+        <div className="strata-paper-body">
+          <p>
+            <span className="strata-paper-dropcap">S</span>trata International &mdash;
+            the company that owns or contracts nine in ten of Britain&rsquo;s working
+            superhumans &mdash; reported a record intake at Calderyn College last week.
+            Its share price closed flat. Its critics were, as is now traditional, quiet.
+          </p>
+          <p>
+            What did not draw editorials was the company&rsquo;s acquisition, in March,
+            of three private security firms operating in the Hebrides and Northern
+            Ireland. A spokesperson said the firm <em>&ldquo;does not comment on
+            portfolio adjustments.&rdquo;</em> Felix Strathe was unavailable.
+            Silas Strathe was, as ever, said to be reviewing options from home.
+          </p>
+        </div>
+
+        {/* Compact stats strip at the bottom — preserves the v1 numbers
+            without dominating the article. Click-throughs to the
+            corresponding sub-views. */}
+        <div className="strata-paper-figures">
+          <button className="strata-paper-figure" onClick={() => onJump("corporate")}>
+            <span className="strata-paper-figure-num">{corpFilled}<span className="strata-paper-figure-of">/{corpRoles}</span></span>
+            <span className="strata-paper-figure-lbl">Corporate</span>
+          </button>
+          <button className="strata-paper-figure" onClick={() => onJump("talent")}>
+            <span className="strata-paper-figure-num">{heroFilled}<span className="strata-paper-figure-of">/{heroSlots}</span></span>
+            <span className="strata-paper-figure-lbl">Talent</span>
+          </button>
+          <button className="strata-paper-figure" onClick={() => onJump("groups")}>
+            <span className="strata-paper-figure-num">{groupCount}</span>
+            <span className="strata-paper-figure-lbl">Groups</span>
+          </button>
+          <button className="strata-paper-figure" onClick={() => onJump("groups")}>
+            <span className="strata-paper-figure-num">{groupMembers}</span>
+            <span className="strata-paper-figure-lbl">On file</span>
+          </button>
+        </div>
       </section>
 
       <section className="strata-directory">
@@ -4443,10 +4589,14 @@ function QuotaChip({ tier, count, limit }){
   );
 }
 
-function JoinHUD({ type, quotaStats }){
+function JoinHUD({ type, quotaStats, step }){
   // Hide entirely on the archetype picker — the HUD only appears once
-  // a writer is inside the wizard for a specific form.
+  // a writer is inside the wizard for a specific form. Belt + braces:
+  // gate on both `type` (no type selected = picker) AND `step` (back
+  // navigation can land on step 0 with `type` still set; HUD should
+  // hide in that case too).
   if (!type) return null;
+  if (step === 0) return null;
 
   // Single relevant pool only: students for student forms, adults for
   // everything else.
@@ -4676,7 +4826,7 @@ function JoinTab(){
     return (
       <div className="join">
         <div className="join-form-wrap">
-          <JoinHUD type={type} quotaStats={quotaStats}/>
+          <JoinHUD type={type} quotaStats={quotaStats} step={step}/>
           <div className="join-confirm-aaa">
             {/* CINEMATIC MOMENT — the Vanguard has just been briefed.
                 The four portraits flicker in sequence for ~2s as if
@@ -4840,7 +4990,7 @@ function JoinTab(){
         {/* STATS BAR — persistent slot availability strip. Shows
             global overview before a type is picked, then switches
             to type-specific stats. */}
-        <JoinHUD type={type} quotaStats={quotaStats}/>
+        <JoinHUD type={type} quotaStats={quotaStats} step={step}/>
 
         {/* FORM MASTER HEADER — display name of the application as a
             top-level identity ("STUDENT APPLICATION" / "CLUB POSITION
@@ -4969,7 +5119,7 @@ function JoinTab(){
               <button
                 type="button"
                 className="join-wiz-btn join-wiz-btn-back"
-                onClick={() => step > 1 ? setStep(step - 1) : setStep(0)}
+                onClick={() => step > 1 ? setStep(step - 1) : reset()}
               >
                 <Icon name="arrow-left" size={14}/> Back
               </button>
