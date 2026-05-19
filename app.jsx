@@ -2275,39 +2275,39 @@ function HousesTab(){
       <PageHead
         stamp="DOC · 02 · LORE"
         title={<>The <em>lore</em></>}
-        body="Six sections. Read in order or jump to whichever section you need. The sidebar tracks where you are."
+        body="Six sections. Read in order or jump to whichever you need. The dot rail on the right tracks where you are."
         note={<>Public record · IC-visible<br/>Plot-locked content lives elsewhere</>}
         pageNum="P. 002 / VIII"
       />
-      <div className="lore-shell">
-        <aside className="lore-toc">
-          <div className="lore-toc-inner">
-            <div className="lore-toc-stamp">CONTENTS</div>
-            <ol className="lore-toc-list">
-              {LORE_TABS.map((t, i) => (
-                <li key={t.id} className={"lore-toc-item" + (active === t.id ? " on" : "")}>
-                  <button
-                    type="button"
-                    className="lore-toc-btn"
-                    onClick={() => goTo(t.id)}
-                    aria-current={active === t.id ? "true" : undefined}
-                  >
-                    <span className="lore-toc-n">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="lore-toc-label">{t.label}</span>
-                  </button>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </aside>
-        <main className="lore-main">
-          <section id="lore-world"     className="lore-section"><LoreWorld/></section>
-          <section id="lore-history"   className="lore-section"><LoreHistory/></section>
-          <section id="lore-vanguard"  className="lore-section"><LoreVanguard/></section>
-          <section id="lore-houses"    className="lore-section"><LoreHouses/></section>
-          <section id="lore-dean"      className="lore-section"><LoreDean/></section>
-          <section id="lore-incidents" className="lore-section"><LoreIncidents/></section>
-        </main>
+
+      {/* Floating dots-only nav — same pattern as the home page side
+          scroll-nav. Replaces the previous left sidebar TOC. */}
+      <nav className="home-scrollnav lore-scrollnav" aria-label="Lore sections">
+        <ol className="home-scrollnav-list">
+          {LORE_TABS.map((t, i) => (
+            <li key={t.id} className={"home-scrollnav-item" + (active === t.id ? " is-active" : "")}>
+              <button
+                type="button"
+                className="home-scrollnav-btn"
+                onClick={() => goTo(t.id)}
+                aria-current={active === t.id ? "true" : undefined}
+                aria-label={`Jump to ${t.label}`}
+                data-label={t.label}
+              >
+                <span className="home-scrollnav-dot" aria-hidden="true"/>
+              </button>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      <div className="lore-page">
+        <section id="lore-world"     className="lore-section"><LoreWorld/></section>
+        <section id="lore-history"   className="lore-section"><LoreHistory/></section>
+        <section id="lore-vanguard"  className="lore-section"><LoreVanguard/></section>
+        <section id="lore-houses"    className="lore-section"><LoreHouses/></section>
+        <section id="lore-dean"      className="lore-section"><LoreDean/></section>
+        <section id="lore-incidents" className="lore-section"><LoreIncidents/></section>
       </div>
     </div>
   );
