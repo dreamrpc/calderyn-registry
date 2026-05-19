@@ -6635,7 +6635,15 @@ function MapTab(){
             </section>
           ) : (
             activeDistrict && (
-              <section className="map-district">
+              <section
+                className="map-district"
+                style={{
+                  "--district-c": activeDistrict.color,
+                  "--district-c1": (DISTRICT_VISUALS[activeDistrict.id] || DISTRICT_VISUALS.academic).c1,
+                  "--district-c2": (DISTRICT_VISUALS[activeDistrict.id] || DISTRICT_VISUALS.academic).c2,
+                }}
+                data-district={activeDistrict.id}
+              >
                 {/* DISTRICT BANNER — placeholder image-card per district.
                     Uses a gradient + iconography keyed to the district id
                     until real photography lands. Halftone overlay keeps
