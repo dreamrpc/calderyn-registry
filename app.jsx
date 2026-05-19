@@ -1253,6 +1253,20 @@ function gatherCurriculumClasses(){
 /* Single class card · streamlined. Code chip + Druk title up top, short
    desc, single kind tag at the bottom-left, faculty + dept chip on the
    bottom-right. Designation cards get a red/blue accent corner. */
+/* Derive a single path tag for a class.
+   Returns one of: "hero" | "sidekick" | "both" | "elective".
+   • Shared-core modules → both (every student, every designation).
+   • Explicitly designated modules → hero / sidekick.
+   • Anything else (literacy pools, specialism options) → elective. */
+function classPath(cls){
+  if (!cls) return "elective";
+  if (cls.path) return cls.path; // explicit override on the data object
+  if (cls.designation === "hero") return "hero";
+  if (cls.designation === "sidekick") return "sidekick";
+  if (cls.kind === "shared-core") return "both";
+  return "elective";
+}
+
 function ClassCard({cls}){
   const fac = cls.faculty;
   const facName = fac?.char || null;
@@ -1270,14 +1284,21 @@ function ClassCard({cls}){
     : cls.kind === "literacy"    ? "Literacy Pool"
     : "Required";
 
+  const path = classPath(cls);
+  const pathLabel = path === "hero" ? "Hero Path"
+                  : path === "sidekick" ? "Sidekick Path"
+                  : path === "both" ? "Both Paths"
+                  : "Elective";
+
   return (
     <article
-      className={"curr-class" + (cls.designation ? " is-designation t-" + cls.designation : "")}
+      className={"curr-class" + (cls.designation ? " is-designation t-" + cls.designation : "") + " path-" + path}
       style={{ "--class-c": accentColor }}
     >
       <header className="curr-class-hd">
         <span className="curr-class-code">{cls.code}</span>
         <span className="curr-class-kind">{kindLabel}</span>
+        <span className={"curr-class-path p-" + path}>{pathLabel}</span>
       </header>
       <h5 className="curr-class-title">{cls.title}</h5>
       {cls.desc && <p className="curr-class-desc">{cls.desc}</p>}
@@ -1343,14 +1364,14 @@ function CurriculumView(){
 
   const allClasses = gatherCurriculumClasses();
 
-  // Apply the hero/sidekick/all filter before year bucketing. A class
-  // matches the filter when its designation matches OR it has no
-  // designation lock (i.e. shared / required / specialism modules are
-  // visible to everyone regardless of designation choice).
+  // Apply the path filter before year bucketing. Hero filter shows
+  // hero + both + elective (everything except sidekick-only). Mirror
+  // for sidekick. "All" shows everything.
   const filterMatch = (c) => {
     if (filterDesig === "all") return true;
-    if (!c.designation) return true; // unscoped classes visible to all
-    return c.designation === filterDesig;
+    const p = classPath(c);
+    if (p === "both" || p === "elective") return true;
+    return p === filterDesig;
   };
   const byYear = (y) => allClasses.filter(c => c.year === y && filterMatch(c));
 
@@ -2476,9 +2497,10 @@ function FacultyRegistryView(){
   // that mention the opposite lane in their role get hidden.
   const filteredDept = (dept) => {
     if (filterDesig === "all") return dept;
-    const classes = (dept.classes || []).filter(
-      c => !c.designation || c.designation === filterDesig
-    );
+    const classes = (dept.classes || []).filter(c => {
+      const p = classPath(c);
+      return p === "both" || p === "elective" || p === filterDesig;
+    });
     const otherLane = filterDesig === "hero" ? "sidekicks lane" : "heroes lane";
     const instructional = (dept.instructional || []).filter(p => {
       const role = (p.role || "").toLowerCase();

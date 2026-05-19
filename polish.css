@@ -24450,3 +24450,150 @@ button.orgs-pill {
   font-size: 9.5px !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   CLASS PATH CHIPS · HERO / SIDEKICK / BOTH / ELECTIVE
+   Every class card carries a small path chip in the header row,
+   sitting next to the kind label. Reds for Hero, blues for Sidekick,
+   gold for Both, neutral grey for Elective. The chip mirrors the
+   tier-pill vocabulary so the registry feels like one system.
+   ════════════════════════════════════════════════════════════════════ */
+.curr-class-path {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-left: 6px !important;
+  padding: 2px 7px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  border: 1px solid currentColor !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+.curr-class-path.p-hero {
+  color: #ff8c94 !important;
+  border-color: rgba(196, 26, 26, 0.6) !important;
+  background: rgba(196, 26, 26, 0.12) !important;
+}
+.curr-class-path.p-sidekick {
+  color: #8cb2ff !important;
+  border-color: rgba(30, 64, 175, 0.7) !important;
+  background: rgba(30, 64, 175, 0.14) !important;
+}
+.curr-class-path.p-both {
+  color: #f5e8c2 !important;
+  border-color: rgba(212, 168, 74, 0.6) !important;
+  background: rgba(212, 168, 74, 0.12) !important;
+}
+.curr-class-path.p-elective {
+  color: #b8b1a3 !important;
+  border-color: #2a2a2a !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* Make the class card header layout flex so the chip slots in cleanly
+   to the right of the kind label */
+.curr-class-hd {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   DESIGNATION FILTER · STICKY UNDER YEAR TABS
+   Both the Curriculum filter (curr-filter-bar) and Faculty Registry
+   filter (freg-filter-bar) pin to the top under the year-tab strip
+   (Curriculum) or the section hint (Faculty). Same chrome as the
+   year-tab strip so they read as one stacked toolbar.
+   ════════════════════════════════════════════════════════════════════ */
+.curr-filter-bar {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px) + 44px) !important;
+  z-index: 34 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px clamp(20px, 4vw, 32px) !important;
+  margin: 0 0 20px !important;
+  background: rgba(10, 10, 10, 0.92) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  backdrop-filter: blur(10px) saturate(140%) !important;
+  border-bottom: 1px solid rgba(212, 168, 74, 0.16) !important;
+}
+.curr-filter-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin-right: 4px !important;
+}
+
+.freg-filter-bar {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px)) !important;
+  z-index: 34 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px clamp(20px, 4vw, 32px) !important;
+  margin: 0 0 24px !important;
+  background: rgba(10, 10, 10, 0.92) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  backdrop-filter: blur(10px) saturate(140%) !important;
+  border-top: 2px solid #c9a84c !important;
+  border-bottom: 1px solid rgba(212, 168, 74, 0.22) !important;
+}
+.freg-filter-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin-right: 4px !important;
+}
+
+/* Filter pill chrome — shared between curr + freg variants */
+.curr-filter-pill,
+.freg-filter-pill {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  padding: 6px 12px !important;
+  background: #14140e !important;
+  border: 1px solid rgba(201, 168, 76, 0.22) !important;
+  color: var(--text-3, #948d80) !important;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease !important;
+}
+.curr-filter-pill:hover,
+.freg-filter-pill:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  border-color: rgba(201, 168, 76, 0.55) !important;
+}
+.curr-filter-pill.is-active,
+.freg-filter-pill.is-active {
+  background: rgba(212, 168, 74, 0.14) !important;
+  color: #d4a843 !important;
+  border-color: #d4a843 !important;
+}
+
+/* Mobile — filters drop to static so they don't eat the screen */
+@media (max-width: 760px) {
+  .curr-filter-bar,
+  .freg-filter-bar { position: static !important; }
+}
+
