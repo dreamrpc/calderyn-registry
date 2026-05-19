@@ -79,6 +79,14 @@ const ICON_PATHS = {
   "chevron-down":   <><path d="m6 9 6 6 6-6"/></>,
   "chevron-right":  <><path d="m9 18 6-6-6-6"/></>,
   "chevron-up":     <><path d="m18 15-6-6-6 6"/></>,
+  "cloud":          <><path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.78A7 7 0 0 0 3 11.5a4.5 4.5 0 0 0 4.5 4.5h10"/></>,
+  "cloud-drizzle":  <><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M8 19v1"/><path d="M8 14v1"/><path d="M16 19v1"/><path d="M16 14v1"/><path d="M12 21v1"/><path d="M12 16v1"/></>,
+  "cloud-fog":      <><path d="M17.5 17a4.5 4.5 0 1 0-1.4-8.78A7 7 0 0 0 3 9.5h2.5"/><path d="M5 16h17"/><path d="M2 19h20"/></>,
+  "cloud-lightning":<><path d="M6 16.326A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 .5 8.973"/><path d="m13 12-3 5h4l-3 5"/></>,
+  "cloud-rain":     <><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></>,
+  "cloud-snow":     <><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M8 15h.01"/><path d="M8 19h.01"/><path d="M12 17h.01"/><path d="M12 21h.01"/><path d="M16 15h.01"/><path d="M16 19h.01"/></>,
+  "cloud-sun":      <><path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/></>,
+  "sun":            <><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></>,
   "external-link":  <><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/></>,
   "file-text":      <><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></>,
   "flag":           <><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></>,
@@ -598,9 +606,81 @@ function useInView(threshold = 0.25){
   return [ref, inView];
 }
 
+/* ──────────────────────────────────────────────────────────────────────
+   Weather — open-meteo (free, no key, CORS-enabled) for Greenwich,
+   London. Refreshes every 15 minutes. Returns null on failure so the
+   UI falls back to a graceful "—".
+   ──────────────────────────────────────────────────────────────────── */
+const WEATHER_URL = "https://api.open-meteo.com/v1/forecast"
+  + "?latitude=51.4825&longitude=0.0076"
+  + "&current=temperature_2m,weather_code,wind_speed_10m"
+  + "&timezone=GMT";
+
+// WMO weather-code → { icon, label } mapping. Matches the Lucide
+// weather icons added to ICON_PATHS above. Default falls through
+// to "cloud" / "Conditions unknown".
+const WEATHER_BY_CODE = {
+  0:  { icon: "sun",             label: "Clear" },
+  1:  { icon: "cloud-sun",       label: "Mostly clear" },
+  2:  { icon: "cloud-sun",       label: "Partly cloudy" },
+  3:  { icon: "cloud",           label: "Overcast" },
+  45: { icon: "cloud-fog",       label: "Fog" },
+  48: { icon: "cloud-fog",       label: "Freezing fog" },
+  51: { icon: "cloud-drizzle",   label: "Light drizzle" },
+  53: { icon: "cloud-drizzle",   label: "Drizzle" },
+  55: { icon: "cloud-drizzle",   label: "Heavy drizzle" },
+  56: { icon: "cloud-drizzle",   label: "Freezing drizzle" },
+  57: { icon: "cloud-drizzle",   label: "Freezing drizzle" },
+  61: { icon: "cloud-rain",      label: "Light rain" },
+  63: { icon: "cloud-rain",      label: "Rain" },
+  65: { icon: "cloud-rain",      label: "Heavy rain" },
+  66: { icon: "cloud-rain",      label: "Freezing rain" },
+  67: { icon: "cloud-rain",      label: "Freezing rain" },
+  71: { icon: "cloud-snow",      label: "Light snow" },
+  73: { icon: "cloud-snow",      label: "Snow" },
+  75: { icon: "cloud-snow",      label: "Heavy snow" },
+  77: { icon: "cloud-snow",      label: "Snow grains" },
+  80: { icon: "cloud-rain",      label: "Rain showers" },
+  81: { icon: "cloud-rain",      label: "Rain showers" },
+  82: { icon: "cloud-rain",      label: "Violent rain" },
+  85: { icon: "cloud-snow",      label: "Snow showers" },
+  86: { icon: "cloud-snow",      label: "Snow showers" },
+  95: { icon: "cloud-lightning", label: "Thunderstorm" },
+  96: { icon: "cloud-lightning", label: "Thunderstorm" },
+  99: { icon: "cloud-lightning", label: "Storm w/ hail" },
+};
+
+function useWeather(){
+  const [w, setW] = useState(null);
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchNow(){
+      try {
+        const res = await fetch(WEATHER_URL);
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        if (cancelled || !data || !data.current) return;
+        const c = data.current;
+        setW({
+          temp:  Math.round(c.temperature_2m),
+          wind:  Math.round(c.wind_speed_10m),
+          code:  c.weather_code,
+          meta:  WEATHER_BY_CODE[c.weather_code] || { icon: "cloud", label: "Conditions unknown" },
+          when:  Date.now(),
+        });
+      } catch { /* network/CORS error — leave null, UI shows fallback */ }
+    }
+    fetchNow();
+    const id = setInterval(fetchNow, 15 * 60 * 1000); // refresh every 15 min
+    return () => { cancelled = true; clearInterval(id); };
+  }, []);
+  return w;
+}
+
 function HomeTab({setTab}){
   return (
     <div className="home-page">
+      <HomeScrollNav/>
       <HomeHero setTab={setTab}/>
       <HomeVanguard/>
       <HomeToday/>
@@ -619,29 +699,22 @@ function HomeTab({setTab}){
    ──────────────────────────────────────────────────────────────────── */
 function HomeToday(){
   const [ref, inView] = useInView(0.15);
-  // Fixed in-fiction "now" — 18 May 2026, the lore date. Could be
-  // wired to live date later; for now this is the canonical present.
-  const today = new Date(2026, 4, 18);
+  const weather = useWeather();
+  // Live "now" — re-evaluates per render so the date stays current.
+  const today = new Date();
   const fmtDate = today.toLocaleDateString("en-GB", {
     weekday: "long", day: "numeric", month: "long", year: "numeric"
   });
 
   const stats = [
-    { num: "3%",      label: "Acceptance",     sub: "of 14,200 applicants this cycle" },
-    { num: "£45K",    label: "Annual tuition", sub: "STRATA-subsidised after Y1" },
+    { num: "3%",      label: "Acceptance",      sub: "of 14,200 applicants this cycle" },
+    { num: "£45K",    label: "Annual tuition",  sub: "STRATA-subsidised after Y1" },
     { num: "412",     label: "Active students", sub: "across four houses" },
     { num: "1965",    label: "Founded",         sub: "Greenwich, defence-funded" },
   ];
 
-  const events = [
-    { date: "22 MAY", event: "Spring practicals begin",          loc: "Combat Hangar · Saberis" },
-    { date: "04 JUN", event: "Vanguard public Q&A",              loc: "Greenwich Hall" },
-    { date: "18 JUN", event: "Inter-house championship · final", loc: "Vale grounds" },
-    { date: "09 JUL", event: "Open day · prospective applicants", loc: "Main quad" },
-  ];
-
   return (
-    <section ref={ref} className={"home-section home-today " + (inView ? "is-in" : "")}>
+    <section id="home-today" ref={ref} className={"home-section home-today " + (inView ? "is-in" : "")}>
       <div className="home-section-head">
         <div className="home-section-stamp">DOSSIER · 02 · BY THE NUMBERS</div>
         <h2 className="home-section-title">CALDERYN <span className="home-section-title-accent">TODAY</span></h2>
@@ -651,15 +724,32 @@ function HomeToday(){
         </p>
       </div>
 
-      {/* Status strip — UK setting indicators, comic-print HUD style */}
+      {/* Status strip — UK setting indicators. Date refreshes per
+          render. Weather pulled live from open-meteo (Greenwich) and
+          refreshed every 15 min via useWeather. */}
       <div className="home-today-status">
         <div className="home-today-status-cell">
-          <div className="home-today-status-lbl">Date</div>
+          <div className="home-today-status-lbl">Date · London</div>
           <div className="home-today-status-val">{fmtDate}</div>
         </div>
-        <div className="home-today-status-cell">
-          <div className="home-today-status-lbl">Greenwich · SE10</div>
-          <div className="home-today-status-val">Calderyn Quad · 16°C · Overcast · Light rain ~16:00</div>
+        <div className="home-today-status-cell home-today-status-weather">
+          <div className="home-today-status-lbl">Greenwich · SE10 · Live</div>
+          <div className="home-today-status-val">
+            {weather ? (
+              <>
+                <span className="home-today-weather-icon" aria-hidden="true">
+                  <Icon name={weather.meta.icon} size={20}/>
+                </span>
+                <span className="home-today-weather-temp">{weather.temp}°C</span>
+                <span className="home-today-weather-sep">·</span>
+                <span className="home-today-weather-label">{weather.meta.label}</span>
+                <span className="home-today-weather-sep">·</span>
+                <span className="home-today-weather-wind">{weather.wind} km/h</span>
+              </>
+            ) : (
+              <span className="home-today-weather-loading">Fetching live conditions…</span>
+            )}
+          </div>
         </div>
         <div className="home-today-status-cell">
           <div className="home-today-status-lbl">Cycle status</div>
@@ -681,23 +771,91 @@ function HomeToday(){
         ))}
       </div>
 
-      {/* Upcoming events */}
+      {/* Events — currently nothing scheduled. Empty-state panel so
+          the section reads as "calendar exists, nothing on it" rather
+          than absent. */}
       <div className="home-today-events">
         <header className="home-today-events-head">
-          <div className="home-today-events-tag">EVENTS · TERM 2 · 2026</div>
-          <h3 className="home-today-events-title">Upcoming</h3>
+          <div className="home-today-events-tag">CAMPUS CALENDAR · TERM 2 · 2026</div>
+          <h3 className="home-today-events-title">Scheduled events</h3>
         </header>
-        <ol className="home-today-events-list">
-          {events.map((e, i) => (
-            <li key={i} className="home-today-events-row">
-              <span className="home-today-events-date">{e.date}</span>
-              <span className="home-today-events-event">{e.event}</span>
-              <span className="home-today-events-loc">{e.loc}</span>
-            </li>
-          ))}
-        </ol>
+        <div className="home-today-events-empty">
+          <div className="home-today-events-empty-icon" aria-hidden="true">
+            <Icon name="file-text" size={26}/>
+          </div>
+          <div className="home-today-events-empty-body">
+            <div className="home-today-events-empty-title">No events on the public calendar.</div>
+            <div className="home-today-events-empty-sub">
+              When admin or the Student Body President posts something — practicals,
+              Vanguard appearances, inter-house matches — it appears here. Until then
+              the schedule is quiet.
+            </div>
+          </div>
+        </div>
       </div>
     </section>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   HOME · SIDE SCROLL NAV
+   Vertical sticky dot-rail anchored to the right side of the viewport.
+   Each dot maps to a home section; click smooth-scrolls to that
+   section; IntersectionObserver updates the active dot as the writer
+   scrolls.
+   ──────────────────────────────────────────────────────────────────── */
+const HOME_SECTIONS = [
+  { id: "home-hero",     label: "Hero" },
+  { id: "home-vanguard", label: "Vanguard" },
+  { id: "home-today",    label: "Today" },
+  { id: "home-programme",label: "Programme" },
+  { id: "home-dorm",     label: "Dorm Policy" },
+  { id: "home-cta",      label: "Apply" },
+];
+
+function HomeScrollNav(){
+  const [active, setActive] = useState(HOME_SECTIONS[0].id);
+  useEffect(() => {
+    const els = HOME_SECTIONS
+      .map(s => document.getElementById(s.id))
+      .filter(Boolean);
+    if (!els.length) return;
+    const io = new IntersectionObserver((entries) => {
+      const vis = entries.filter(e => e.isIntersecting);
+      if (!vis.length) return;
+      const top = vis.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      setActive(top.target.id);
+    }, { rootMargin: "-25% 0px -60% 0px", threshold: 0 });
+    els.forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  const goTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setActive(id);
+  };
+
+  return (
+    <nav className="home-scrollnav" aria-label="Home page sections">
+      <ol className="home-scrollnav-list">
+        {HOME_SECTIONS.map((s, i) => (
+          <li key={s.id} className={"home-scrollnav-item" + (active === s.id ? " is-active" : "")}>
+            <button
+              type="button"
+              className="home-scrollnav-btn"
+              onClick={() => goTo(s.id)}
+              aria-current={active === s.id ? "true" : undefined}
+              aria-label={`Jump to ${s.label}`}
+            >
+              <span className="home-scrollnav-dot" aria-hidden="true"/>
+              <span className="home-scrollnav-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              <span className="home-scrollnav-label">{s.label}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 }
 
@@ -711,7 +869,7 @@ function HomeHero({setTab}){
   ];
   let i = 0;
   return (
-    <section className="home-hero">
+    <section id="home-hero" className="home-hero">
       {/* Inline SVG filter defs — ink-bleed warps the focal type's
           edges via a subtle displacement map. Inlined here so we don't
           rely on an external SVG file. Hidden visually but present in
@@ -796,7 +954,7 @@ function HomeVanguard(){
   // Distinct per Vanguard member matching their power vibe.
   const SFX = ["KRRSH", "SHRRK", "WHAM", "BZZZT"];
   return (
-    <section ref={ref} className={"home-section home-vg-section " + (inView ? "is-in" : "")}>
+    <section id="home-vanguard" ref={ref} className={"home-section home-vg-section " + (inView ? "is-in" : "")}>
       <div className="home-section-head">
         <div className="home-section-stamp">ISSUE · 01 · ACTIVE ROSTER</div>
         <h2 className="home-section-title">THE <span className="home-section-title-accent">VANGUARD</span></h2>
@@ -859,7 +1017,7 @@ function HomeProgramme(){
     "What the world does with them after graduation is, mostly, paperwork.",
   ];
   return (
-    <section ref={ref} className={"home-section home-programme " + (inView ? "is-in" : "")}>
+    <section id="home-programme" ref={ref} className={"home-section home-programme " + (inView ? "is-in" : "")}>
       {/* Splash-page treatment — diagonal red slash through the
           background, halftone field, the quote rendered as comic-book
           interior monologue inside a black-bordered caption box. */}
@@ -881,7 +1039,7 @@ function HomeProgramme(){
 function HomeDormNotice(){
   const [ref, inView] = useInView(0.25);
   return (
-    <section ref={ref} className={"home-section home-dorm " + (inView ? "is-in" : "")}>
+    <section id="home-dorm" ref={ref} className={"home-section home-dorm " + (inView ? "is-in" : "")}>
       {/* Comic-panel treatment — heavy black border, halftone bg field,
           red EYES-ONLY stamp at the corner, mono caps caption strip
           across the top. Replaces the v1 cream letterhead which read
@@ -923,7 +1081,7 @@ function HomeDormNotice(){
 function HomeCTA({setTab}){
   const [ref, inView] = useInView(0.4);
   return (
-    <section ref={ref} className={"home-section home-cta " + (inView ? "is-in" : "")}>
+    <section id="home-cta" ref={ref} className={"home-section home-cta " + (inView ? "is-in" : "")}>
       <div className="home-cta-stamp"><Icon name="flag" size={12}/> APPLICATIONS OPEN</div>
       <h2 className="home-cta-title">Enter the Registry.</h2>
       <p className="home-cta-sub">
