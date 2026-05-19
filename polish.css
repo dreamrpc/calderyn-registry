@@ -24185,24 +24185,28 @@ button.orgs-pill {
   margin-right: 4px !important;
 }
 
-/* Slot OPEN state — small gold-bordered pill inline with the name slot.
-   Consistent visual weight whether slot is filled or open. */
-.freg-slot.is-open .freg-slot-name { color: transparent !important; height: 0; }
-.freg-slot.is-open .freg-slot-name::after {
-  content: "OPEN";
-  display: inline-block;
-  font-family: var(--mono, 'Söhne Mono', monospace);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #d4a843;
-  padding: 3px 9px;
-  border: 1px solid rgba(212, 168, 74, 0.45);
-  background: rgba(212, 168, 74, 0.05);
+/* Slot OPEN state — the inner `.freg-slot-open` span renders as a
+   small gold-bordered pill in the name area. No height collapsing,
+   no ::after pseudo (the previous version overlapped role text). */
+.freg-slot.is-open .freg-slot-name {
+  display: inline-flex !important;
+  align-items: center !important;
+  color: inherit !important;
+  height: auto !important;
 }
-/* Strip the inline OPEN span — superseded by the ::after badge. */
-.freg-slot.is-open .freg-slot-open { display: none !important; }
+.freg-slot-open {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+  padding: 3px 9px !important;
+  border: 1px solid rgba(212, 168, 74, 0.45) !important;
+  background: rgba(212, 168, 74, 0.05) !important;
+  font-style: normal !important;
+}
 
 /* 2 · Instructional Staff — strip the outer panel + inner pills, leave
        a clean inline list under an eyebrow label. */
@@ -24376,4 +24380,58 @@ button.orgs-pill {
   background: rgba(212, 168, 74, 0.05) !important;
   font-style: normal !important;
 }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   CURRICULUM · YEAR TABS PIN TO TOP
+   The Freshman/Sophomore/Junior/Senior strip needs to stick directly
+   beneath the subnav (the CURRICULUM / FACULTY REGISTRY tabs) so
+   scrolling 8 departments of class cards keeps year-switching one
+   click away. Override the earlier `top: hdr + tabs` offset to also
+   include the subnav height.
+   ════════════════════════════════════════════════════════════════════ */
+.curr-nav,
+.lore-nav.curr-nav,
+.curr > .lore-nav,
+.curr > nav.lore-nav {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px)) !important;
+  z-index: 36 !important;
+  margin: 0 !important;
+  padding: 10px clamp(20px, 4vw, 32px) !important;
+  background: rgba(10, 10, 10, 0.94) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  backdrop-filter: blur(10px) saturate(140%) !important;
+  border-top: 1px solid rgba(212, 168, 74, 0.18) !important;
+  border-bottom: 1px solid rgba(212, 168, 74, 0.22) !important;
+  box-shadow: 0 12px 28px -22px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Tighter year-tab nav-list since the strip is now sticky + dense */
+.curr-nav .lore-nav-list,
+.curr > .lore-nav .lore-nav-list {
+  gap: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: 1280px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+.curr-nav .lore-nav-item,
+.curr > .lore-nav .lore-nav-item {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.curr-nav .lore-nav-btn,
+.curr > .lore-nav .lore-nav-btn {
+  padding: 8px 18px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Add a little breathing room above the first year section so the
+   sticky strip doesn't kiss the primer panel below */
+.curr-main { padding-top: 28px !important; }
 
