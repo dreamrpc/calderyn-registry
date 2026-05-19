@@ -11056,3 +11056,141 @@ html { scroll-behavior: smooth; }
     0 12px 32px -16px rgba(0, 0, 0, 0.8),
     0 0 0 1px rgba(0, 0, 0, 0.5);
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   DORM · EYES ONLY STAMP — hard size/position lock
+   Screenshot showed the stamp expanding into a long diagonal bar
+   that took up the top half of the panel. Locking explicit
+   dimensions so it can't blow out.
+   ════════════════════════════════════════════════════════════════════ */
+
+.home-page .home-dorm-panel .home-dorm-eyes-stamp {
+  position: absolute !important;
+  top: 16px !important;
+  right: 16px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: auto !important;
+  max-width: 140px !important;
+  height: auto !important;
+  padding: 4px 12px !important;
+  background: var(--red, #c11a2c) !important;
+  color: #ffffff !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  line-height: 1.4 !important;
+  transform: rotate(4deg) !important;
+  transform-origin: top right;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  box-shadow: 0 4px 12px -4px rgba(0,0,0,0.5) !important;
+  border: 1.5px solid #fff !important;
+  outline: 2px solid var(--red, #c11a2c) !important;
+  z-index: 3 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   HOME · SIDE SCROLL-NAV — clean, minimal redesign
+   Previous version was a heavy dark panel that read as cluttered.
+   New: floating dots with no panel background. Labels reveal on
+   hover only. Smaller footprint.
+   ════════════════════════════════════════════════════════════════════ */
+
+.home-scrollnav {
+  position: fixed;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  z-index: 90;
+  pointer-events: auto;
+  /* No background panel — just floating dots */
+}
+.home-scrollnav-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 4px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  background: transparent !important;
+  border: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+.home-scrollnav-item { margin: 0 !important; }
+.home-scrollnav-btn {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  padding: 6px 6px 6px 10px !important;
+  background: transparent !important;
+  border: 0 !important;
+  cursor: pointer;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: transparent !important;
+  min-height: 0 !important;
+}
+.home-scrollnav-dot {
+  display: inline-block !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  flex-shrink: 0 !important;
+  transition: background var(--motion-base, 180ms) ease, transform var(--motion-base) ease, box-shadow var(--motion-base) ease !important;
+  box-shadow: none !important;
+}
+/* Hide num + label by default — clean minimal */
+.home-scrollnav-num { display: none !important; }
+.home-scrollnav-label {
+  display: inline-block !important;
+  max-width: 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
+  padding: 0 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  border: 1px solid rgba(201, 168, 76, 0.4) !important;
+  transition: max-width var(--motion-base) ease, opacity var(--motion-base) ease, padding var(--motion-base) ease !important;
+}
+/* Hover state: each dot brightens, scales up; label appears for
+   that single dot only (not the whole rail like before) */
+.home-scrollnav-btn:hover .home-scrollnav-dot {
+  background: var(--text-1, #f5f1e8) !important;
+  transform: scale(1.4) !important;
+}
+.home-scrollnav-btn:hover .home-scrollnav-label {
+  max-width: 120px !important;
+  opacity: 1 !important;
+  padding: 4px 8px !important;
+}
+
+/* Active dot — gold, slightly larger, with a soft glow. Label
+   appears alongside automatically. */
+.home-scrollnav-item.is-active .home-scrollnav-dot {
+  background: var(--yellow, #d4a84a) !important;
+  transform: scale(1.5) !important;
+  box-shadow: 0 0 10px rgba(212, 168, 74, 0.7) !important;
+}
+.home-scrollnav-item.is-active .home-scrollnav-label {
+  max-width: 120px !important;
+  opacity: 1 !important;
+  padding: 4px 8px !important;
+  color: var(--yellow, #d4a84a) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+
+@media (max-width: 900px) {
+  .home-scrollnav { display: none !important; }
+}
