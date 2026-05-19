@@ -10941,3 +10941,71 @@ html { scroll-behavior: smooth; }
      2px 0 0 rgba(46, 188, 212, 0.32),
     0 2px 0 rgba(0, 0, 0, 0.45) !important;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   OUTSIDE · FILTER PILL HARDENING (fix the deformed look)
+   The base index.html rules set the pill's count-badge to gold-on-
+   gold when active — invisible on the yellow pill. Plus rounded
+   corners and bigger padding undid my comic-square treatment.
+   Locking the whole pill family down with high-specificity rules.
+   ════════════════════════════════════════════════════════════════════ */
+
+.orgs-toolbar .orgs-pill {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px !important;
+  padding: 6px 12px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  border: 1px solid rgba(201, 168, 76, 0.2) !important;
+  background: #14140e !important;
+  color: var(--text-2, #c9c3b5) !important;
+  border-radius: 0 !important;          /* sharp comic corners */
+  min-height: 0 !important;             /* override the a11y 40px floor */
+  cursor: pointer;
+  transition:
+    background var(--motion-base, 180ms) ease,
+    color var(--motion-base) ease,
+    border-color var(--motion-base) ease !important;
+}
+.orgs-toolbar .orgs-pill:hover {
+  background: #1c1c14 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  border-color: rgba(201, 168, 76, 0.55) !important;
+}
+.orgs-toolbar .orgs-pill.on {
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+
+/* Count badge inside each pill */
+.orgs-toolbar .orgs-pill .orgs-pill-n {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  padding: 2px 6px !important;
+  min-width: 18px !important;
+  text-align: center !important;
+  border-radius: 0 !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  color: var(--text-3, #948d80) !important;
+  margin-left: 2px;
+}
+.orgs-toolbar .orgs-pill:hover .orgs-pill-n {
+  background: rgba(201, 168, 76, 0.18) !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+/* ACTIVE PILL — count badge becomes near-black on near-black so it
+   reads against the yellow body. Was previously gold-on-gold. */
+.orgs-toolbar .orgs-pill.on .orgs-pill-n {
+  background: rgba(10, 10, 10, 0.85) !important;
+  color: var(--yellow, #d4a84a) !important;
+}
