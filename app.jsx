@@ -5822,60 +5822,58 @@ function CollectiveFieldset({form, set, Common, wizardPageId}){
 // and character lists never leave the server.
 function QuotaStatsPanel({stats, activePool}){
   if (!stats) return null;
-  const TIERS = ["A-List", "B-List", "C-List", "D-List"];
+  const TIERS = [
+    { id: "A-List", label: "A", className: "tier-a" },
+    { id: "B-List", label: "B", className: "tier-b" },
+    { id: "C-List", label: "C", className: "tier-c" },
+    { id: "D-List", label: "D", className: "tier-d" },
+  ];
   const limits = stats.limits || {};
   const renderPool = (pool, label) => {
     const counts = stats[pool] || {};
     const isActive = pool === activePool;
     return (
-      <div className="quota-pool" style={{
-        opacity: isActive ? 1 : 0.65,
-        fontWeight: isActive ? 600 : 400,
-        margin: "4px 0",
-      }}>
-        <span style={{minWidth: "9em", display: "inline-block"}}>
-          {label}{isActive ? " (this form)" : ""}:
-        </span>
-        {TIERS.map((t, i) => {
-          const count = counts[t] || 0;
-          const limit = limits[t]; // undefined for D-List → uncapped
-          const atCap = limit != null && count >= limit;
-          const overCap = limit != null && count > limit;
-          const sep = i === 0 ? "" : " · ";
-          return (
-            <span key={t} style={{
-              color: overCap ? "#e31b23" : atCap ? "#d4a84a" : "inherit",
-              fontWeight: (overCap || atCap) ? 700 : "inherit",
-            }}>
-              {sep}{t} {count}{limit != null ? `/${limit}` : " (uncapped)"}
-            </span>
-          );
-        })}
+      <div className={"quota-pool" + (isActive ? " is-active" : "")}>
+        <div className="quota-pool-label">
+          {label}
+          {isActive && <span className="quota-pool-flag">· THIS FORM</span>}
+        </div>
+        <div className="quota-pool-chips">
+          {TIERS.map(t => {
+            const count = counts[t.id] || 0;
+            const limit = limits[t.id];
+            const isUncapped = limit == null;
+            const isFull = !isUncapped && count >= limit;
+            const isOver = !isUncapped && count > limit;
+            return (
+              <span
+                key={t.id}
+                className={
+                  "quota-chip quota-chip-" + t.className
+                  + (isFull ? " is-full" : "")
+                  + (isOver ? " is-over" : "")
+                }
+              >
+                <span className="quota-chip-tier">{t.label}</span>
+                <span className="quota-chip-count">
+                  {count}{isUncapped ? "" : <>/<span className="quota-chip-limit">{limit}</span></>}
+                </span>
+              </span>
+            );
+          })}
+        </div>
       </div>
     );
   };
   return (
-    <div className="quota-stats" style={{
-      margin: "8px 0 4px",
-      padding: "10px 12px",
-      background: "rgba(212, 168, 74, 0.05)",
-      border: "1px solid rgba(212, 168, 74, 0.2)",
-      borderRadius: "8px",
-      fontSize: "13px",
-      fontFamily: "var(--mono, monospace)",
-      color: "var(--text, #ece6d6)",
-    }}>
-      <div style={{
-        fontSize: "11px",
-        letterSpacing: "0.08em",
-        textTransform: "uppercase",
-        color: "var(--text-low, #8a8478)",
-        marginBottom: "6px",
-      }}>
-        Your current quota
+    <div className="quota-stats">
+      <div className="quota-stats-head">
+        <span className="quota-stats-tag">YOUR CURRENT QUOTA</span>
+        <span className="quota-stats-sep"/>
+        <span className="quota-stats-sub">Live from STRATA admin</span>
       </div>
-      {renderPool("student", "Students")}
-      {renderPool("adult",   "Adults")}
+      {renderPool("student", "STUDENTS")}
+      {renderPool("adult",   "ADULTS")}
     </div>
   );
 }
