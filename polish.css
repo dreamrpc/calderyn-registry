@@ -14372,3 +14372,387 @@ nav.home-scrollnav,
 @media (max-width: 900px) {
   .home-scrollnav, nav.home-scrollnav { display: none !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   CASSANDRA INCIDENT · DARK CINEMATIC CARDS
+   The original .case-stats / .case-diptych / .case-dossier CSS in
+   index.html paints cream-paper rectangles meant for the old light
+   theme. Against the current dark lore page they read as flat,
+   misplaced sticky-notes. Replace with a dark editorial treatment that
+   matches the rest of the lore page: comic panel borders, black/red
+   contrast, oversized numerals, halftone scatter, gold accent rules.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1) THE STATS GRID — four big numerals on a single black panel ──── */
+.lore-section .case-stats,
+.case-stats {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 0 !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  background: #0a0a0e !important;
+  margin: 18px 0 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow:
+    0 28px 60px -28px rgba(0,0,0,0.85),
+    inset 0 1px 0 rgba(255,255,255,0.04) !important;
+}
+.lore-section .case-stats::before,
+.case-stats::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.05) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  opacity: 0.7 !important;
+  mix-blend-mode: screen !important;
+  z-index: 0;
+}
+.lore-section .case-stat,
+.case-stat {
+  position: relative !important;
+  padding: 36px 28px 30px !important;
+  background: transparent !important;
+  border-right: 1px solid rgba(212,168,74,0.22) !important;
+  border-bottom: 0 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  z-index: 1;
+}
+.lore-section .case-stat:last-child,
+.case-stat:last-child { border-right: 0 !important; }
+.lore-section .case-stat:nth-child(2),
+.case-stat:nth-child(2) {
+  background: linear-gradient(180deg, rgba(227,27,35,0.16) 0%, rgba(227,27,35,0.05) 100%) !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.lore-section .case-stat:nth-child(2)::after,
+.case-stat:nth-child(2)::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border: 1px solid rgba(227,27,35,0.45) !important;
+  pointer-events: none !important;
+}
+.lore-section .case-stat-n,
+.case-stat-n {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(40px, 5vw, 64px) !important;
+  letter-spacing: -0.025em !important;
+  line-height: 0.92 !important;
+  color: var(--yellow, #d4a84a) !important;
+  margin: 0 0 10px !important;
+  text-shadow:
+    -1.5px 0 0 rgba(227,27,35,0.5),
+     1.5px 0 0 rgba(46,188,212,0.32) !important;
+}
+.lore-section .case-stat:nth-child(2) .case-stat-n,
+.case-stat:nth-child(2) .case-stat-n {
+  color: var(--red, #e31b23) !important;
+  text-shadow:
+    -1.5px 0 0 rgba(46,188,212,0.4),
+     1.5px 0 0 rgba(255,255,255,0.18) !important;
+}
+.lore-section .case-stat-l,
+.case-stat-l {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  line-height: 1.45 !important;
+  margin: 0 !important;
+}
+.lore-section .case-stat:nth-child(2) .case-stat-l,
+.case-stat:nth-child(2) .case-stat-l {
+  color: var(--yellow, #d4a84a) !important;
+}
+
+@media (max-width: 760px) {
+  .lore-section .case-stats,
+  .case-stats { grid-template-columns: repeat(2, 1fr) !important; }
+  .lore-section .case-stat,
+  .case-stat {
+    border-right: 1px solid rgba(212,168,74,0.22) !important;
+    border-bottom: 1px solid rgba(212,168,74,0.22) !important;
+  }
+  .lore-section .case-stat:nth-child(2n),
+  .case-stat:nth-child(2n) { border-right: 0 !important; }
+  .lore-section .case-stat:nth-child(n+3),
+  .case-stat:nth-child(n+3) { border-bottom: 0 !important; }
+}
+
+/* ── 2) THE DIPTYCH — public record vs internal file ─────────────────── */
+.lore-section .case-diptych,
+.case-diptych {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0 !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  margin: 18px 0 0 !important;
+  background: #0a0a0e !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 28px 60px -28px rgba(0,0,0,0.85) !important;
+}
+.lore-section .case-col,
+.case-col {
+  position: relative !important;
+  padding: 36px 32px 32px !important;
+  background: transparent !important;
+  color: var(--text-2, #c9c3b5) !important;
+}
+.lore-section .case-col:first-child,
+.case-col:first-child {
+  background:
+    radial-gradient(800px 400px at 0% 0%, rgba(46,188,212,0.05) 0%, transparent 60%),
+    #0a0a0e !important;
+  border-right: 1px solid rgba(212,168,74,0.22) !important;
+}
+.lore-section .case-col:last-child,
+.case-col:last-child {
+  background:
+    radial-gradient(800px 400px at 100% 100%, rgba(227,27,35,0.06) 0%, transparent 60%),
+    #08080b !important;
+  color: var(--text-2, #c9c3b5) !important;
+}
+
+.lore-section .case-col-tag,
+.case-col-tag {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  padding: 4px 11px !important;
+  margin: 0 0 16px !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+.lore-section .case-col:first-child .case-col-tag,
+.case-col:first-child .case-col-tag {
+  background: rgba(46,188,212,0.1) !important;
+  border: 1px solid rgba(46,188,212,0.45) !important;
+  color: rgba(120,210,230,0.95) !important;
+}
+.lore-section .case-col:last-child .case-col-tag,
+.case-col:last-child .case-col-tag {
+  background: rgba(227,27,35,0.1) !important;
+  border: 1px solid rgba(227,27,35,0.55) !important;
+  color: rgba(255,120,128,0.95) !important;
+}
+
+.lore-section .case-col-h,
+.case-col-h {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(26px, 2.6vw, 36px) !important;
+  letter-spacing: -0.015em !important;
+  text-transform: none !important;
+  line-height: 1.04 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 18px !important;
+}
+.lore-section .case-col:first-child .case-col-h,
+.case-col:first-child .case-col-h { color: var(--text-1, #f5f1e8) !important; }
+.lore-section .case-col:last-child .case-col-h,
+.case-col:last-child .case-col-h { color: var(--text-1, #f5f1e8) !important; }
+.lore-section .case-col-h em,
+.case-col-h em {
+  font-style: italic !important;
+  font-weight: 900 !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+
+.lore-section .case-col-p,
+.case-col-p {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  margin: 0 0 14px !important;
+  color: var(--text-2, #c9c3b5) !important;
+}
+.lore-section .case-col-p:last-child,
+.case-col-p:last-child { margin-bottom: 0 !important; }
+.lore-section .case-col-p strong,
+.case-col-p strong {
+  font-weight: 700 !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.lore-section .case-col-p em,
+.case-col-p em {
+  font-style: italic !important;
+  font-weight: 500 !important;
+  color: var(--yellow, #d4a84a) !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+.lore-section .case-col:first-child .case-col-p strong,
+.case-col:first-child .case-col-p strong { color: var(--text-1, #f5f1e8) !important; }
+.lore-section .case-col:last-child .case-col-p strong,
+.case-col:last-child .case-col-p strong { color: var(--yellow, #d4a84a) !important; }
+
+@media (max-width: 760px) {
+  .lore-section .case-diptych,
+  .case-diptych { grid-template-columns: 1fr !important; }
+  .lore-section .case-col:first-child,
+  .case-col:first-child {
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(212,168,74,0.22) !important;
+  }
+}
+
+/* ── 3) THE DOSSIER — eyes-only stamp panel ─────────────────────────── */
+.lore-section .case-dossier,
+.case-dossier {
+  position: relative !important;
+  background:
+    radial-gradient(800px 400px at 100% 0%, rgba(227,27,35,0.05) 0%, transparent 60%),
+    #0a0a0e !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  margin-top: 36px !important;
+  box-shadow: 0 28px 60px -28px rgba(0,0,0,0.85) !important;
+  overflow: hidden !important;
+}
+.lore-section .case-stamp,
+.case-stamp {
+  position: absolute !important;
+  top: -1px !important;
+  right: 24px !important;
+  background: var(--red, #e31b23) !important;
+  color: #fff !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  padding: 8px 14px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow:
+    -2px 2px 0 0 #0a0a0e,
+    -4px 4px 0 0 var(--yellow, #d4a84a) !important;
+  z-index: 3;
+}
+
+.lore-section .case-dossier-hd,
+.case-dossier-hd {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-end !important;
+  gap: 18px !important;
+  flex-wrap: wrap !important;
+  padding: 34px 32px 22px !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(212,168,74,0.32) !important;
+  position: relative;
+}
+.lore-section .case-dossier-hd::after,
+.case-dossier-hd::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 32px !important;
+  bottom: -1px !important;
+  width: 60px !important;
+  height: 1px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+.lore-section .case-dossier-hd-l,
+.case-dossier-hd-l {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(28px, 2.8vw, 40px) !important;
+  letter-spacing: -0.015em !important;
+  text-transform: none !important;
+  line-height: 1 !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.lore-section .case-dossier-hd-r,
+.case-dossier-hd-r {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+
+.lore-section .case-dossier-body,
+.case-dossier-body { padding: 28px 32px 32px !important; }
+.lore-section .case-dossier-body p,
+.case-dossier-body p {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 14px !important;
+}
+.lore-section .case-dossier-body p:last-of-type,
+.case-dossier-body p:last-of-type { margin-bottom: 24px !important; }
+.lore-section .case-dossier-body p strong,
+.case-dossier-body p strong {
+  font-weight: 700 !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.lore-section .case-dossier-body p em,
+.case-dossier-body p em {
+  font-style: italic !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+
+/* The Adrian pull-quote — comic caption box, gold strip on left */
+.lore-section .case-quote,
+.case-quote {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: clamp(20px, 2.2vw, 28px) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.005em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  background: linear-gradient(180deg, rgba(212,168,74,0.08) 0%, rgba(212,168,74,0.02) 100%) !important;
+  padding: 22px 26px !important;
+  margin: 0 !important;
+  border-left: 4px solid var(--yellow, #d4a84a) !important;
+  border-radius: 0 !important;
+  position: relative !important;
+}
+.lore-section .case-quote::before,
+.case-quote::before {
+  content: "“" !important;
+  position: absolute !important;
+  top: -8px !important;
+  left: 18px !important;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-size: 64px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  color: var(--yellow, #d4a84a) !important;
+  opacity: 0.4 !important;
+}
+.lore-section .case-quote-attr,
+.case-quote-attr {
+  display: block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin-top: 14px !important;
+  opacity: 0.85 !important;
+}
+
+@media (max-width: 720px) {
+  .lore-section .case-dossier-hd,
+  .case-dossier-hd { padding: 28px 22px 16px !important; }
+  .lore-section .case-dossier-body,
+  .case-dossier-body { padding: 22px 22px 24px !important; }
+  .lore-section .case-stamp,
+  .case-stamp { right: 14px !important; }
+}
+
