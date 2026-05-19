@@ -11340,3 +11340,102 @@ html { scroll-behavior: smooth; }
 .quota-pool:not(.is-active) .quota-chip {
   opacity: 0.55;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   OUTSIDE · SECTION HEADER FIX
+   - Eyebrow was clipping behind the sticky .orgs-toolbar.
+   - Right-side stats (orgs / filled) rendered cramped.
+   - Title scale was leaking past its clamp on wide viewports.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* scroll-margin-top clears the sticky toolbar when a section enters
+   the viewport (also when clicked-to via anchor). The orgs container
+   itself gets more top padding so the very-top section has breathing
+   room from the toolbar. */
+.orgs-group {
+  scroll-margin-top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px) + var(--space-4));
+}
+.orgs {
+  padding-top: var(--space-7) !important;
+}
+
+/* Section header — reflow the stats block to be readable on the right
+   instead of cramped. Each stat becomes a vertical pair (number +
+   label) inside its own cell with a gold left-stripe accent. */
+.orgs-group-hd {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  align-items: end !important;
+  gap: var(--space-5) var(--space-6) !important;
+  padding: var(--space-3) 0 var(--space-4) !important;
+}
+.orgs-group-hd-lhs {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-2) !important;
+}
+.orgs-group-eyebrow {
+  /* slight bump so it has clear visual weight, line-height adjusted */
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+  padding: 2px 0 !important;
+}
+.orgs-group-name {
+  font-size: clamp(24px, 3vw, 36px) !important;
+  line-height: 1 !important;
+}
+
+/* Right-side stats — a row of 2 properly-spaced cells */
+.orgs-group-meta {
+  display: flex !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  background: var(--rule, #2a2a34) !important;
+  border: 1px solid var(--rule, #2a2a34) !important;
+}
+.orgs-group-count,
+.orgs-group-fill {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  padding: var(--space-2) var(--space-4) !important;
+  background: var(--bg-1, #0c0c10) !important;
+  min-width: 64px !important;
+}
+.orgs-group-count {
+  border-left: 3px solid var(--yellow, #d4a84a) !important;
+}
+.orgs-group-fill {
+  border-left: 3px solid var(--red, #c11a2c) !important;
+  margin-left: 1px;
+}
+.orgs-group-count-num,
+.orgs-group-fill-num {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 24px !important;
+  line-height: 1 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.orgs-group-count-lbl,
+.orgs-group-fill-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 8.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  line-height: 1 !important;
+}
+
+/* Mobile — stack title above stats */
+@media (max-width: 700px) {
+  .orgs-group-hd {
+    grid-template-columns: 1fr !important;
+    align-items: flex-start !important;
+  }
+  .orgs-group-meta { align-self: stretch; }
+}
