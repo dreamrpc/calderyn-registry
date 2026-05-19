@@ -23728,3 +23728,360 @@ button.orgs-pill {
   border-color: rgba(30,64,175,0.7) !important;
   background: rgba(30,64,175,0.12) !important;
 }
+/* ════════════════════════════════════════════════════════════════════
+   POWERS REGISTRY · ROW-CARD OVERHAUL + STICKY FILTER
+   The old table layout looked like a bootstrap data grid. Replace
+   with editorial dossier rows on dark panels and pin the filter
+   toolbar so it never scrolls away. Spec from user: sticky top 145px,
+   backdrop blur, rgba(10,10,10,0.92).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* The PowersTab subnav is a sticky strip above. Pin the filter
+   directly under it so scrolling 51+ records keeps controls in view. */
+.preg-toolbar {
+  position: sticky !important;
+  top: 145px !important;
+  z-index: 38 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: var(--space-3) var(--space-5) !important;
+  padding: 14px var(--space-5) !important;
+  margin: 0 !important;
+  background: rgba(10, 10, 10, 0.92) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  backdrop-filter: blur(10px) saturate(140%) !important;
+  border-top: 2px solid #c9a84c !important;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.22) !important;
+  box-shadow: 0 14px 36px -22px rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Status group header — same chrome as before, just verify the
+   sticky offset isn't being clobbered by a higher z-index hairline. */
+.preg-group {
+  margin-top: 0 !important;
+  background: transparent !important;
+}
+.preg-group + .preg-group { margin-top: 28px !important; }
+.preg-group-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  padding: 12px 18px !important;
+  border: 0 !important;
+  border-left: 3px solid currentColor !important;
+}
+
+/* Row list resets — kill <ol>/<ul> defaults from the page-scope css. */
+.preg-rows {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Each record is its own dossier card. */
+.preg-rowcard {
+  background: #0d0d0d !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  position: relative !important;
+  transition: background var(--motion-base, 180ms) ease !important;
+}
+.preg-rowcard::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 0;
+  background: #d4a843;
+  transition: width var(--motion-base, 180ms) ease;
+  pointer-events: none;
+}
+.preg-rowcard:hover {
+  background: #141414 !important;
+}
+.preg-rowcard:hover::before,
+.preg-rowcard.is-open::before {
+  width: 2px;
+}
+.preg-rowcard.is-open {
+  background: #121212 !important;
+}
+
+/* The clickable header row — 4-column grid. */
+.preg-rowcard-main {
+  all: unset;
+  display: grid !important;
+  grid-template-columns: 92px 1fr 2fr 96px !important;
+  align-items: center !important;
+  gap: 22px !important;
+  width: 100% !important;
+  padding: 16px 22px !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+}
+.preg-rowcard-main:disabled,
+.preg-rowcard-main:not(.is-clickable) { cursor: default !important; }
+.preg-rowcard-main:focus-visible {
+  outline: 1px solid rgba(212, 168, 74, 0.6) !important;
+  outline-offset: -1px !important;
+}
+
+.preg-rowcard-tier { display: flex !important; align-items: center !important; }
+
+.preg-rowcard-id {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+}
+.preg-rowcard-name {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #f5f1e8 !important;
+  line-height: 1.25 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.preg-rowcard-name .clink { color: #f5f1e8 !important; }
+.preg-rowcard-alias {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.preg-rowcard-power {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  color: #999 !important;
+  line-height: 1.45 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.preg-rowcard-action {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+}
+.preg-rowcard-action .preg-view-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 12px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+  background: transparent !important;
+  border: 1px solid rgba(212, 168, 74, 0.35) !important;
+  transition:
+    background var(--motion-base, 180ms) ease,
+    border-color var(--motion-base, 180ms) ease,
+    color var(--motion-base, 180ms) ease !important;
+}
+.preg-rowcard:hover .preg-rowcard-action .preg-view-btn,
+.preg-rowcard.is-open .preg-rowcard-action .preg-view-btn {
+  background: rgba(212, 168, 74, 0.1) !important;
+  border-color: #d4a843 !important;
+  color: #f5e8c2 !important;
+}
+
+/* Expanded detail panel inside the row */
+.preg-rowcard-detail {
+  padding: 4px 22px 22px 22px !important;
+  border-top: 1px solid rgba(212, 168, 74, 0.14) !important;
+  background: #0a0a0a !important;
+}
+.preg-rowcard-detail .preg-detail-label {
+  display: block !important;
+  margin-top: 16px !important;
+  margin-bottom: 6px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+}
+.preg-rowcard-detail .preg-detail-text {
+  margin: 0 !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: #cfcabe !important;
+  white-space: pre-wrap !important;
+}
+.preg-rowcard-detail .preg-detail-note {
+  color: rgba(255, 180, 100, 0.85) !important;
+}
+
+/* Tier pill — premium look: heavier, smaller, mono-spaced, subtle inner shadow */
+.tier-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 66px !important;
+  padding: 5px 10px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  border: 0 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -1px 0 rgba(0,0,0,0.32),
+    0 2px 6px -2px rgba(0,0,0,0.6) !important;
+}
+
+/* Mobile — sticky becomes static, grid collapses to stacked */
+@media (max-width: 760px) {
+  .preg-toolbar { position: static !important; }
+  .preg-rowcard-main {
+    grid-template-columns: 92px 1fr !important;
+    gap: 12px 16px !important;
+    padding: 14px 16px !important;
+  }
+  .preg-rowcard-power {
+    grid-column: 1 / -1 !important;
+    -webkit-line-clamp: 3 !important;
+  }
+  .preg-rowcard-action {
+    grid-column: 1 / -1 !important;
+    justify-content: flex-start !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   FACULTY REGISTRY · INLINE-EXPANSION OVERHAUL
+   The collapse-to-expand mechanic is gone. Every department renders
+   fully open: header → staff grid → instructional → class catalogue
+   → facilities. No toggle button, no chevron.
+   ════════════════════════════════════════════════════════════════════ */
+
+.freg-dept-section {
+  display: block !important;
+  margin: 32px 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 3px solid var(--dept-c, #d4a843) !important;
+  padding-left: 20px !important;
+}
+.freg-dept-section + .freg-dept-section {
+  margin-top: 40px !important;
+  padding-top: 32px !important;
+  border-top: 1px solid #1a1a1a !important;
+}
+
+.freg-dept-section-hd {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 24px !important;
+  padding: 0 !important;
+  margin: 0 0 20px 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  cursor: default !important;
+}
+.freg-dept-section-hd-l {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+}
+.freg-dept-section-eyebrow {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--dept-c, #d4a843) !important;
+}
+.freg-dept-section-name {
+  font-family: var(--display, 'Druk', 'Druk Wide', sans-serif) !important;
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: uppercase !important;
+  color: #f5f1e8 !important;
+  margin: 0 !important;
+  line-height: 1.05 !important;
+}
+.freg-dept-section-head-line {
+  display: inline-flex !important;
+  gap: 8px !important;
+  align-items: baseline !important;
+  margin-top: 2px !important;
+}
+.freg-dept-section-head-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #948d80 !important;
+}
+.freg-dept-section-head-name {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #e7e3d6 !important;
+}
+.freg-dept-section-head-open {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+  padding: 2px 8px !important;
+  border: 1px solid rgba(212, 168, 74, 0.45) !important;
+  background: rgba(212, 168, 74, 0.06) !important;
+}
+
+.freg-dept-section-hd-r {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 4px !important;
+  flex-shrink: 0 !important;
+}
+.freg-dept-section-staff-count,
+.freg-dept-section-class-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: #948d80 !important;
+}
+
+/* Hide the old chevron if any straggler instances render it. */
+.freg-dept-section-chev,
+.freg-dept-section-toggle { display: none !important; }
+
+.freg-dept-section-body {
+  display: block !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+

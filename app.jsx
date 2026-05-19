@@ -262,7 +262,7 @@ const STUDENT_GOV    = D.studentGov;
 const HERO_LISTS     = D.heroLists;
 const GROUPS         = D.groups;
 const TABS           = D.tabs;
-const TIER_COLOR     = {A:"#e31b23", B:"#1e40af", C:"#15803d", D:"#54545c"};
+const TIER_COLOR     = {A:"#e31b23", B:"#1e40af", C:"#d4a843", D:"#54545c"};
 
 /* RegistryContext — used by global search to deep-link into subviewed tabs */
 const RegContext = React.createContext({
@@ -1818,7 +1818,7 @@ function PowersRegistry(){
   return (
     <div className="preg">
       <div className="preg-hint">
-        Click any row to read that character's power expression.
+        Click any record to read that character's power expression.
       </div>
       <div className="preg-toolbar">
         <div className="preg-filters">
@@ -1875,86 +1875,78 @@ function PowersRegistry(){
               {list.length} {list.length === 1 ? "record" : "records"}
             </span>
           </div>
-          <div className="preg-tbl-wrap">
-            <table className="preg-tbl">
-              <thead>
-                <tr>
-                  <th style={{width:80}}>Tier</th>
-                  <th style={{width:200}}>Character</th>
-                  <th style={{width:170}}>Stage Name</th>
-                  <th>Power</th>
-                  <th style={{width:90}} aria-label="Details"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {list.map((p, pi) => {
-                  const key = `${s.id}-${pi}`;
-                  const isOpen = !!openIdx[key];
-                  const hasExpr = !!p.expression;
-                  return (
-                    <React.Fragment key={pi}>
-                      <tr
-                        className={"preg-row" + (isOpen ? " is-open" : "") + (hasExpr ? " is-clickable" : "")}
-                        onClick={() => hasExpr && toggleRow(key)}
-                      >
-                        <td><TierChip tier={p.tier}/></td>
-                        <td className="preg-col-char">
-                          <CLink name={p.char} link={p.link || null}/>
-                          {p.npc && <NpcBadge/>}
-                        </td>
-                        <td className="preg-col-alias">
-                          {p.alias
-                            ? <span className="preg-alias">{p.alias}</span>
-                            : <span className="preg-na">—</span>}
-                        </td>
-                        <td className="preg-col-power">{p.power || "N/A"}</td>
-                        <td className="preg-col-toggle">
-                          {hasExpr && (
-                            <span className="preg-view-btn" aria-hidden="true">
-                              {isOpen ? "Hide" : "View"}
-                              <span className="preg-view-arrow">
-                                <Icon name={isOpen ? "chevron-up" : "chevron-down"} size={12}/>
-                              </span>
-                            </span>
-                          )}
-                        </td>
-                      </tr>
-                      {isOpen && hasExpr && (
-                        <tr className="preg-detail-row">
-                          <td colSpan={5}>
-                            <div className="preg-detail">
-                              <span className="preg-detail-label">Expression</span>
-                              <p className="preg-detail-text">{p.expression}</p>
-                              {p.expressionDoc && (
-                                <a
-                                  href={p.expressionDoc}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="preg-detail-doc"
-                                >
-                                  <span className="preg-detail-doc-icon" aria-hidden="true">
-                                    <Icon name="file-text" size={14}/>
-                                  </span>
-                                  <span className="preg-detail-doc-label">Read the full power doc</span>
-                                  <span className="preg-detail-doc-arrow" aria-hidden="true">
-                                    <Icon name="arrow-up-right" size={12}/>
-                                  </span>
-                                </a>
-                              )}
-                              {p.drawbacks && <span className="preg-detail-label">Drawbacks / Limits</span>}
-                              {p.drawbacks && <p className="preg-detail-text">{p.drawbacks}</p>}
-                               {p.note && <span className="preg-detail-label preg-detail-label--note">Admin Note</span>}
-                               {p.note && <p className="preg-detail-text preg-detail-note">{p.note}</p>}
-                            </div>
-                          </td>
-                        </tr>
+
+          <ul className="preg-rows" role="list">
+            {list.map((p, pi) => {
+              const key = `${s.id}-${pi}`;
+              const isOpen = !!openIdx[key];
+              const hasExpr = !!p.expression;
+              return (
+                <li key={pi} className={"preg-rowcard" + (isOpen ? " is-open" : "")}>
+                  <button
+                    type="button"
+                    className={"preg-rowcard-main" + (hasExpr ? " is-clickable" : "")}
+                    onClick={() => hasExpr && toggleRow(key)}
+                    aria-expanded={isOpen}
+                    disabled={!hasExpr}
+                  >
+                    <div className="preg-rowcard-tier">
+                      <TierChip tier={p.tier}/>
+                    </div>
+                    <div className="preg-rowcard-id">
+                      <div className="preg-rowcard-name">
+                        <CLink name={p.char} link={p.link || null}/>
+                        {p.npc && <NpcBadge/>}
+                      </div>
+                      {p.alias && (
+                        <div className="preg-rowcard-alias">{p.alias}</div>
                       )}
-                    </React.Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                    <div className="preg-rowcard-power">
+                      {p.power || <span className="preg-na">—</span>}
+                    </div>
+                    <div className="preg-rowcard-action">
+                      {hasExpr && (
+                        <span className="preg-view-btn" aria-hidden="true">
+                          {isOpen ? "Hide" : "View"}
+                          <span className="preg-view-arrow">
+                            <Icon name={isOpen ? "chevron-up" : "chevron-down"} size={12}/>
+                          </span>
+                        </span>
+                      )}
+                    </div>
+                  </button>
+
+                  {isOpen && hasExpr && (
+                    <div className="preg-rowcard-detail">
+                      <span className="preg-detail-label">Expression</span>
+                      <p className="preg-detail-text">{p.expression}</p>
+                      {p.expressionDoc && (
+                        <a
+                          href={p.expressionDoc}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="preg-detail-doc"
+                        >
+                          <span className="preg-detail-doc-icon" aria-hidden="true">
+                            <Icon name="file-text" size={14}/>
+                          </span>
+                          <span className="preg-detail-doc-label">Read the full power doc</span>
+                          <span className="preg-detail-doc-arrow" aria-hidden="true">
+                            <Icon name="arrow-up-right" size={12}/>
+                          </span>
+                        </a>
+                      )}
+                      {p.drawbacks && <span className="preg-detail-label">Drawbacks / Limits</span>}
+                      {p.drawbacks && <p className="preg-detail-text">{p.drawbacks}</p>}
+                      {p.note && <span className="preg-detail-label preg-detail-label--note">Admin Note</span>}
+                      {p.note && <p className="preg-detail-text preg-detail-note">{p.note}</p>}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
         </section>
       ))}
     </div>
@@ -2381,115 +2373,98 @@ function StaffSlotCard({person, slot, isHead, deptColor}){
 }
 
 /* One department section — staff grid + expandable class catalogue */
-function DepartmentSection({dept, expanded, onToggle}){
+function DepartmentSection({dept}){
   const headChar = dept.head?.char;
-  const headRole = dept.head?.role || "Head of Department";
   const staffCount = 1 + (dept.staff?.length || 0) + (dept.instructional?.length || 0);
   const classCount = (dept.classes || []).length;
 
   return (
-    <section className={"freg-dept-section" + (expanded ? " is-expanded" : " is-collapsed")} style={{"--dept-c": dept.color || "#d4a84a"}}>
-      {/* Whole header is the expand/collapse control */}
-      <button
-        type="button"
-        className="freg-dept-section-toggle"
-        onClick={onToggle}
-        aria-expanded={expanded}
-      >
-        <div className="freg-dept-section-hd">
-          <div className="freg-dept-section-hd-l">
-            <span className="freg-dept-section-eyebrow">{dept.code} · Department</span>
-            <h3 className="freg-dept-section-name">{dept.name}</h3>
-            <span className="freg-dept-section-head-line">
-              <span className="freg-dept-section-head-lbl">HoD</span>
-              {headChar
-                ? <span className="freg-dept-section-head-name">{headChar}</span>
-                : <span className="freg-dept-section-head-open">Open</span>}
-            </span>
-          </div>
-          <div className="freg-dept-section-hd-r">
-            <span className="freg-dept-section-staff-count">{staffCount} roles</span>
-            <span className="freg-dept-section-class-count">{classCount} classes</span>
-            <span className="freg-dept-section-chev" aria-hidden="true">
-              <Icon name={expanded ? "chevron-up" : "chevron-down"} size={14} stroke={2}/>
-            </span>
-          </div>
+    <section className="freg-dept-section is-expanded" style={{"--dept-c": dept.color || "#d4a84a"}}>
+      <div className="freg-dept-section-hd">
+        <div className="freg-dept-section-hd-l">
+          <span className="freg-dept-section-eyebrow">{dept.code} · Department</span>
+          <h3 className="freg-dept-section-name">{dept.name}</h3>
+          <span className="freg-dept-section-head-line">
+            <span className="freg-dept-section-head-lbl">HoD</span>
+            {headChar
+              ? <span className="freg-dept-section-head-name">{headChar}</span>
+              : <span className="freg-dept-section-head-open">Open</span>}
+          </span>
         </div>
-      </button>
-
-      {/* Expanded body */}
-      {expanded && (
-        <div className="freg-dept-section-body">
-          {dept.blurb && <p className="freg-dept-section-blurb">{dept.blurb}</p>}
-
-          {/* Staff grid · HoD + 3 profs */}
-          <div className="freg-dept-staff">
-            <StaffSlotCard person={dept.head} slot="Head of Department" isHead deptColor={dept.color}/>
-            {(dept.staff || []).map((p, i) => (
-              <StaffSlotCard key={i} person={p} slot={p.slot || ("Prof. " + (i+1))} deptColor={dept.color}/>
-            ))}
-          </div>
-
-          {/* Instructional Staff (TAs, technicians, house trainers) */}
-          {(dept.instructional && dept.instructional.length > 0) && (
-            <div className="freg-dept-aux">
-              <span className="freg-dept-aux-lbl">Instructional Staff</span>
-              <ul className="freg-dept-aux-list">
-                {dept.instructional.map((p, i) => (
-                  <li key={i} className={"freg-dept-aux-item" + (p.char ? " is-filled" : " is-open")}>
-                    {p.char ? (
-                      <>
-                        {p.link
-                          ? <CLink name={p.char} link={p.link}/>
-                          : <span>{p.char}</span>}
-                        <span className="freg-dept-aux-role">· {p.role}</span>
-                        {p.npc && <NpcBadge/>}
-                      </>
-                    ) : (
-                      <span className="freg-dept-aux-open">OPEN · {p.role}</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Class catalogue · always visible inside expanded body */}
-          {classCount > 0 && (
-            <div className="freg-classes">
-              <header className="freg-classes-hd">
-                <span className="freg-classes-hd-lbl">Class Catalogue</span>
-                <span className="freg-classes-hd-count">{classCount}</span>
-              </header>
-              <ol className="freg-classes-list">
-                {dept.classes.map((cls, i) => (
-                  <li key={i} className="freg-classes-item">
-                    <span className="freg-classes-code">{cls.code}</span>
-                    <span className="freg-classes-year">{cls.year}</span>
-                    <span className="freg-classes-title">{cls.title}</span>
-                    <span className="freg-classes-by">{cls.taughtBy || "—"}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
-
-          {dept.facilities && (
-            <div className="freg-dept-facilities">
-              <span className="freg-dept-facilities-lbl">Facilities</span>
-              <p>{dept.facilities}</p>
-            </div>
-          )}
+        <div className="freg-dept-section-hd-r">
+          <span className="freg-dept-section-staff-count">{staffCount} roles</span>
+          <span className="freg-dept-section-class-count">{classCount} classes</span>
         </div>
-      )}
+      </div>
+
+      <div className="freg-dept-section-body">
+        {dept.blurb && <p className="freg-dept-section-blurb">{dept.blurb}</p>}
+
+        {/* Staff grid · HoD + 3 profs */}
+        <div className="freg-dept-staff">
+          <StaffSlotCard person={dept.head} slot="Head of Department" isHead deptColor={dept.color}/>
+          {(dept.staff || []).map((p, i) => (
+            <StaffSlotCard key={i} person={p} slot={p.slot || ("Prof. " + (i+1))} deptColor={dept.color}/>
+          ))}
+        </div>
+
+        {/* Instructional Staff (TAs, technicians, house trainers) */}
+        {(dept.instructional && dept.instructional.length > 0) && (
+          <div className="freg-dept-aux">
+            <span className="freg-dept-aux-lbl">Instructional Staff</span>
+            <ul className="freg-dept-aux-list">
+              {dept.instructional.map((p, i) => (
+                <li key={i} className={"freg-dept-aux-item" + (p.char ? " is-filled" : " is-open")}>
+                  {p.char ? (
+                    <>
+                      {p.link
+                        ? <CLink name={p.char} link={p.link}/>
+                        : <span>{p.char}</span>}
+                      <span className="freg-dept-aux-role">· {p.role}</span>
+                      {p.npc && <NpcBadge/>}
+                    </>
+                  ) : (
+                    <span className="freg-dept-aux-open">OPEN · {p.role}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Class catalogue */}
+        {classCount > 0 && (
+          <div className="freg-classes">
+            <header className="freg-classes-hd">
+              <span className="freg-classes-hd-lbl">Class Catalogue</span>
+              <span className="freg-classes-hd-count">{classCount}</span>
+            </header>
+            <ol className="freg-classes-list">
+              {dept.classes.map((cls, i) => (
+                <li key={i} className="freg-classes-item">
+                  <span className="freg-classes-code">{cls.code}</span>
+                  <span className="freg-classes-year">{cls.year}</span>
+                  <span className="freg-classes-title">{cls.title}</span>
+                  <span className="freg-classes-by">{cls.taughtBy || "—"}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        {dept.facilities && (
+          <div className="freg-dept-facilities">
+            <span className="freg-dept-facilities-lbl">Facilities</span>
+            <p>{dept.facilities}</p>
+          </div>
+        )}
+      </div>
     </section>
   );
 }
 
 function FacultyRegistryView(){
-  const [openDept, setOpenDept] = useState({});
   const [filterDesig, setFilterDesig] = useState("all"); // all | hero | sidekick
-  const toggleDept = (id) => setOpenDept(prev => ({...prev, [id]: !prev[id]}));
 
   // Filter a dept's classes by selected designation. Classes without a
   // designation tag are visible regardless (shared / required modules).
@@ -2512,7 +2487,7 @@ function FacultyRegistryView(){
   return (
     <div className="freg">
       <div className="freg-hint">
-        Eight departments. Click any department to view its class catalogue.
+        Eight departments. All staff, class catalogues, and facilities visible inline — scroll to read.
       </div>
 
       {/* Designation filter — filters which classes show up inside
@@ -2592,14 +2567,9 @@ function FacultyRegistryView(){
         </section>
       )}
 
-      {/* 8 DEPARTMENT SECTIONS — class catalogues filtered by designation */}
+      {/* 8 DEPARTMENT SECTIONS — always expanded, class catalogues filtered by designation */}
       {(D.departments || []).map(dept => (
-        <DepartmentSection
-          key={dept.id}
-          dept={filteredDept(dept)}
-          expanded={!!openDept[dept.id]}
-          onToggle={() => toggleDept(dept.id)}
-        />
+        <DepartmentSection key={dept.id} dept={filteredDept(dept)}/>
       ))}
 
       {/* SUPPORT STAFF · Switchboards stays here per canon */}
