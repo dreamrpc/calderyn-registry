@@ -6878,20 +6878,13 @@ function MapTab(){
                     <span className="map-stage-poster-title-kicker">District {String(activeIdx + 1).padStart(2, "0")}</span>
                     <span className="map-stage-poster-title-name">{activeDistrict.name}</span>
                   </div>
-                  <div className="map-stage-poster-count">
-                    {activeItems.length} {activeItems.length === 1 ? "LOCATION" : "LOCATIONS"} ON RECORD
-                  </div>
                 </aside>
 
-                {/* RIGHT · info column — header, deck, then sub-locations
-                    as a compact clickable accordion list. */}
+                {/* RIGHT · info column — deck (blurb) then sub-locations.
+                    Header chrome lives entirely in the poster on the left;
+                    don't duplicate the district name or stamp here. */}
                 <div className="map-stage-info">
                   <header className="map-stage-head">
-                    <div className="map-stage-eyebrow">
-                      <Icon name="map" size={11} className="inline-icon"/>
-                      District {String(activeIdx + 1).padStart(2, "0")} · Field Report
-                    </div>
-                    <h2 className="map-stage-title">{activeDistrict.name}</h2>
                     <p className="map-stage-deck">{activeDistrict.blurb}</p>
                   </header>
 
