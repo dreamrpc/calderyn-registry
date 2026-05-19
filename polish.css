@@ -13339,3 +13339,156 @@ nav.home-scrollnav,
   border-top: 0 !important;
   box-shadow: none !important;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   DORM MEMO · READABILITY FIX
+   Screenshot showed:
+   - Panel spans full viewport (1400px+) → unreadable line length
+   - Body text rendering as faded grey on cream, not the intended
+     dark brown — earlier rules getting beaten by the recent
+     home-normalising overrides
+   - Halftone overlay washing out the body text contrast
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Panel — proper letterhead width, not viewport-spanning */
+.home-page .home-dorm-panel {
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  padding: 48px 56px !important;
+  background: #f5efde !important;
+  background-image: none !important;
+  border: 4px solid #1a0e08 !important;
+  border-radius: 0 !important;
+  box-shadow: 14px 14px 0 0 var(--red, #c11a2c) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Subtle halftone — much fainter so text contrast holds */
+.home-page .home-dorm-panel .home-dorm-halftone {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%, rgba(26,14,8,0.06) 1px, transparent 1.5px) !important;
+  background-size: 7px 7px !important;
+  opacity: 0.45 !important;
+  z-index: 1 !important;
+}
+.home-page .home-dorm-panel > *:not(.home-dorm-halftone) {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* EYES ONLY stamp — stays compact in the corner */
+.home-page .home-dorm-panel .home-dorm-eyes-stamp {
+  position: absolute !important;
+  top: 18px !important;
+  right: 18px !important;
+  width: auto !important;
+  max-width: 120px !important;
+  padding: 4px 12px !important;
+  background: var(--red, #c11a2c) !important;
+  color: #ffffff !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  line-height: 1.4 !important;
+  transform: rotate(3deg) !important;
+  transform-origin: top right !important;
+  white-space: nowrap !important;
+  z-index: 5 !important;
+  box-shadow: 0 4px 10px -4px rgba(0,0,0,0.5) !important;
+  border: 1.5px solid #fff !important;
+  outline: 1.5px solid var(--red, #c11a2c) !important;
+}
+
+/* Caption strip — dark brown, clear */
+.home-page .home-dorm-panel .home-dorm-caption {
+  display: flex !important;
+  gap: 10px !important;
+  align-items: center !important;
+  padding-bottom: 14px !important;
+  margin-bottom: 18px !important;
+  border-bottom: 1.5px solid #1a0e08 !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: #1a0e08 !important;
+}
+.home-page .home-dorm-panel .home-dorm-caption-doc,
+.home-page .home-dorm-panel .home-dorm-caption-class { color: #1a0e08 !important; }
+.home-page .home-dorm-panel .home-dorm-caption-sep   { color: #8b1a0f !important; }
+
+/* Title — Druk Heavy, scaled to fit the narrower column */
+.home-page .home-dorm-panel .home-dorm-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 34px !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.015em !important;
+  text-transform: uppercase !important;
+  color: #1a0e08 !important;
+  margin: 0 0 22px !important;
+  max-width: 100% !important;
+}
+.home-page .home-dorm-panel .home-dorm-title span {
+  color: var(--red, #c11a2c) !important;
+}
+
+/* Body paragraphs — readable Söhne, dark brown, comfortable line height */
+.home-page .home-dorm-panel .home-dorm-body {
+  font-family: var(--sans, 'Söhne', system-ui, sans-serif) !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  color: #1a0e08 !important;
+  font-weight: 450 !important;
+  margin: 0 0 14px !important;
+  max-width: 100% !important;
+}
+.home-page .home-dorm-panel .home-dorm-body em {
+  color: var(--red, #c11a2c) !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+}
+
+/* Footer note — italic, slightly muted */
+.home-page .home-dorm-panel .home-dorm-footer {
+  padding-top: 14px !important;
+  margin-top: 6px !important;
+  border-top: 1px dashed rgba(26,14,8,0.35) !important;
+  font-style: italic !important;
+  color: #4a3322 !important;
+}
+
+/* Signoff — mono caps, right-aligned, dimmer */
+.home-page .home-dorm-panel .home-dorm-signoff {
+  margin-top: 22px !important;
+  padding-top: 12px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #6b3e26 !important;
+  text-align: right !important;
+}
+
+@media (max-width: 760px) {
+  .home-page .home-dorm-panel {
+    padding: 32px 24px !important;
+  }
+  .home-page .home-dorm-panel .home-dorm-title {
+    font-size: 26px !important;
+  }
+  .home-page .home-dorm-panel .home-dorm-eyes-stamp {
+    top: 12px !important;
+    right: 12px !important;
+    font-size: 8.5px !important;
+    padding: 3px 9px !important;
+  }
+}
