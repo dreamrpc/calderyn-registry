@@ -10657,6 +10657,13 @@ html { scroll-behavior: smooth; }
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: var(--space-4) !important;
 }
+/* Solo card on its own row spans full width — no dead space beside it.
+   Catches both: a section with one org total, and the last card on a
+   row of three when the third sits alone. */
+.orgs-list > .orgs-item:only-child,
+.orgs-list > .orgs-item:last-child:nth-child(odd) {
+  grid-column: 1 / -1 !important;
+}
 @media (max-width: 760px) {
   .orgs-list { grid-template-columns: 1fr !important; }
 }

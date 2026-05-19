@@ -810,8 +810,8 @@ outside: [
         type: "Local Council",
         note: "The Royal Borough's elected leadership and senior staff. Negotiates the STRATA municipal contract and answers to the Mayor of London on incidents that cross borough lines.",
         roles: [
-          { role: "Council Leader" },
-          { role: "Mayor (Ceremonial)" },
+          { role: "Council Leader",     char: "Anton Oakridge", npc: true },
+          { role: "Mayor (Ceremonial)", char: "Lynda Byrd",     npc: true },
           { role: "Chief Executive" },
           { role: "Press Officer" },
         ],
