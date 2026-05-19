@@ -6766,10 +6766,8 @@ function MapTab(){
         )}
       </div>
 
-      {/* Map shell — 2-column grid that fits inside one viewport height.
-          Left = sticky vertical zone selector + a thin tall district
-          poster. Right = scrollable location list for the active zone. */}
-      <div className="map-shell">
+      {/* Horizontal chip row · zone selector. Compact tabs along the top.
+          Below it, a 40/60 stage panel that fits the viewport. */}
       <nav className="map-nav" aria-label="Campus districts">
         <ol className="map-nav-list">
           {districtsWithItems.map((d, i) => {
@@ -6917,7 +6915,6 @@ function MapTab(){
           )}
         </main>
       </div>
-      </div>{/* /.map-shell */}
     </div>
   );
 }

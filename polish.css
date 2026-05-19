@@ -18849,6 +18849,334 @@ div.cp-staff-block,
 }
 
 /* ════════════════════════════════════════════════════════════════════════
+   MAP · LAYOUT REBUILD (issue 2)
+   Full-width section, search bar above, compact horizontal chip row of
+   districts, then a stage panel: ~40% image (poster) left + ~60%
+   location list right. The right column scrolls internally; the section
+   itself never grows the page past one viewport.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Kill the old .map-shell vertical grid wrapper entirely */
+.map-shell {
+  all: unset !important;
+  display: contents !important;
+}
+
+/* Horizontal chip row — compact pills along the top */
+nav.map-nav,
+.map-nav {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + 60px) !important;
+  z-index: 34 !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 0 14px !important;
+  padding: 12px clamp(20px, 4vw, 32px) !important;
+  background: rgba(8,8,10,0.94) !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow: none !important;
+  flex-direction: row !important;
+  overflow: visible !important;
+}
+.map-nav::before { content: none !important; }
+.map-nav-list {
+  list-style: none !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+  max-width: 1500px !important;
+  overflow-x: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(212,168,74,0.4) transparent !important;
+  background: transparent !important;
+  border: 0 !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+.map-nav-list::-webkit-scrollbar { height: 5px !important; }
+.map-nav-list::-webkit-scrollbar-thumb { background: rgba(212,168,74,0.4) !important; border-radius: 0 !important; }
+.map-nav-list::-webkit-scrollbar-track { background: transparent !important; }
+
+.map-nav-item {
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+}
+.map-nav-btn {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: auto !important;
+  height: 36px !important;
+  min-height: 0 !important;
+  padding: 0 14px !important;
+  background: rgba(20,20,24,0.7) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-left: 2px solid transparent !important;
+  color: var(--text-3, #948d80) !important;
+  cursor: pointer !important;
+  border-radius: 0 !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease !important;
+}
+.map-nav-btn::before,
+.map-nav-btn::after { content: none !important; }
+.map-nav-btn:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  background: rgba(212,168,74,0.05) !important;
+  border-color: rgba(212,168,74,0.45) !important;
+  border-left-color: rgba(212,168,74,0.45) !important;
+}
+.map-nav-item.is-active .map-nav-btn {
+  color: var(--yellow, #d4a84a) !important;
+  background: rgba(212,168,74,0.12) !important;
+  border-color: rgba(212,168,74,0.55) !important;
+  border-left-color: var(--map-nav-c, var(--yellow, #d4a84a)) !important;
+}
+.map-nav-item.is-dim .map-nav-btn { opacity: 0.4 !important; }
+
+.map-nav-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 14px !important;
+  height: 14px !important;
+  color: var(--map-nav-c, inherit) !important;
+  flex-shrink: 0 !important;
+  opacity: 0.85 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.map-nav-icon svg { stroke: currentColor !important; width: 14px !important; height: 14px !important; }
+.map-nav-body {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+  grid-template-columns: none !important;
+  grid-template-rows: none !important;
+  min-width: 0 !important;
+}
+.map-nav-num { display: none !important; }
+.map-nav-count {
+  display: inline-block !important;
+  grid-row: auto; grid-column: auto;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  color: var(--text-3, #948d80) !important;
+  opacity: 0.65 !important;
+}
+.map-nav-name {
+  grid-row: auto; grid-column: auto;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-weight: 700 !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: inherit !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  margin: 0 !important;
+}
+
+/* The stage — 40/60 grid below the nav */
+.map-page {
+  display: block !important;
+  padding: 0 clamp(20px, 4vw, 32px) clamp(24px, 3vw, 40px) !important;
+  margin: 0 auto !important;
+  max-width: 1600px !important;
+  width: 100% !important;
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+}
+.map-main { max-width: 1500px !important; margin: 0 auto !important; padding: 0 !important; }
+
+.map-stage {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+  margin: 0 auto !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  height: calc(100vh - var(--hdr-h, 100px) - var(--tabs-h, 53px) - 180px) !important;
+  min-height: 520px !important;
+  max-height: 820px !important;
+  background: #0a0a0e !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  box-shadow: 0 32px 70px -28px rgba(0,0,0,0.92) !important;
+  align-items: stretch !important;
+  overflow: hidden !important;
+}
+@media (min-width: 900px) {
+  .map-stage {
+    grid-template-columns: 40% 60% !important;
+  }
+}
+
+/* LEFT 40% · the poster (image-style panel with big district name) */
+.map-stage-poster {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  padding: 36px !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  align-self: stretch !important;
+  border-right: 1px solid rgba(212,168,74,0.28) !important;
+  border-bottom: 0 !important;
+  grid-template-columns: none !important;
+  background:
+    radial-gradient(700px 400px at 30% 25%, color-mix(in srgb, var(--district-c1, #3b4a6e) 75%, transparent) 0%, transparent 60%),
+    radial-gradient(900px 500px at 100% 100%, color-mix(in srgb, var(--district-c, #d4a84a) 30%, transparent) 0%, transparent 65%),
+    linear-gradient(0deg,  rgba(212,168,74,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,168,74,0.06) 1px, transparent 1px),
+    linear-gradient(165deg, var(--district-c1, #3b4a6e) 0%, var(--district-c2, #10172b) 100%) !important;
+  background-size:
+    auto, auto,
+    44px 44px, 44px 44px,
+    auto !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+.map-stage-poster-glyph {
+  position: absolute !important;
+  right: -10px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: rgba(255,255,255,0.07) !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+.map-stage-poster-glyph svg { width: 200px !important; height: 200px !important; }
+.map-stage-poster-stamp {
+  grid-column: auto !important;
+  grid-row: auto !important;
+}
+.map-stage-poster-title {
+  grid-column: auto !important;
+  grid-row: auto !important;
+  margin-top: auto !important;
+  position: relative !important;
+  z-index: 3 !important;
+}
+.map-stage-poster-title-name {
+  font-size: clamp(40px, 4.6vw, 64px) !important;
+  line-height: 0.92 !important;
+}
+.map-stage-poster-count { display: none !important; } /* moved to locations header */
+
+/* RIGHT 60% · the locations column, scrolls internally */
+.map-stage-info {
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 26px 28px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  background: #0a0a0e !important;
+}
+.map-stage-head {
+  flex: 0 0 auto !important;
+  padding: 0 0 16px !important;
+  margin: 0 0 14px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.22) !important;
+  position: relative !important;
+}
+.map-stage-head::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: -1px !important;
+  width: 60px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+.map-stage-deck {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+  max-width: none !important;
+}
+
+.map-stage-locations {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+.map-stage-locations-hd {
+  flex: 0 0 auto !important;
+  padding: 4px 0 10px !important;
+  margin: 0 0 10px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.16) !important;
+}
+.map-stage-pins,
+.map-stage-pins.map-stage-pins-house {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(212,168,74,0.45) transparent !important;
+  padding: 0 4px 0 0 !important;
+}
+.map-stage-pins::-webkit-scrollbar { width: 6px !important; }
+.map-stage-pins::-webkit-scrollbar-thumb { background: rgba(212,168,74,0.45) !important; border-radius: 0 !important; }
+.map-stage-pins::-webkit-scrollbar-track { background: transparent !important; }
+
+/* Mobile — collapse to a single column, allow the stage to grow naturally */
+@media (max-width: 899px) {
+  .map-nav { position: static !important; }
+  .map-stage {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+  .map-stage-poster {
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(212,168,74,0.28) !important;
+    min-height: 220px !important;
+    height: auto !important;
+  }
+  .map-stage-info { height: auto !important; overflow: visible !important; }
+  .map-stage-pins,
+  .map-stage-pins.map-stage-pins-house { overflow: visible !important; max-height: none !important; }
+}
+
+/* Map search bar — re-pin sticky just above the nav */
+.map-search-bar {
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px)) !important;
+  margin: 0 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
    CURRICULUM TIMETABLE · all years stacked, 3-column timetable per year
    Loaded LAST so cascade wins. Owns: .curr-year, .curr-timetable,
    .curr-col, .curr-class, .curr-electives.
