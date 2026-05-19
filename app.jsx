@@ -1361,17 +1361,25 @@ function DeptStaffCard({person, slot, isHead, deptColor}){
 function CurriculumView(){
   const [activeYear, setActiveYear] = useState("FRESHMAN");
   const [filterDesig, setFilterDesig] = useState("all"); // all | hero | sidekick
+  const [q, setQ] = useState("");
+  const ql = q.trim().toLowerCase();
 
   const allClasses = gatherCurriculumClasses();
 
   // Apply the path filter before year bucketing. Hero filter shows
   // hero + both + elective (everything except sidekick-only). Mirror
-  // for sidekick. "All" shows everything.
+  // for sidekick. "All" shows everything. Search query (q) filters
+  // by class code or title — case-insensitive substring match.
   const filterMatch = (c) => {
-    if (filterDesig === "all") return true;
-    const p = classPath(c);
-    if (p === "both" || p === "elective") return true;
-    return p === filterDesig;
+    if (filterDesig !== "all") {
+      const p = classPath(c);
+      if (p !== "both" && p !== "elective" && p !== filterDesig) return false;
+    }
+    if (ql) {
+      const hay = [c.code, c.title, c.desc, c.deptName].filter(Boolean).join(" ").toLowerCase();
+      if (!hay.includes(ql)) return false;
+    }
+    return true;
   };
   const byYear = (y) => allClasses.filter(c => c.year === y && filterMatch(c));
 
@@ -1412,8 +1420,23 @@ function CurriculumView(){
 
   return (
     <div className="curr">
-      {/* Single sticky bar — Year tabs + Designation filter pills */}
+      {/* Single sticky bar — Search + Year tabs + Designation filter pills */}
       <nav className="lore-nav curr-nav" aria-label="Curriculum filters">
+        <div className="sfilter-search curr-nav-search">
+          <span className="sfilter-search-icon" aria-hidden="true">⌕</span>
+          <input
+            type="text"
+            className="sfilter-input"
+            placeholder="Search class code or title…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            aria-label="Search classes"
+          />
+          {q && (
+            <button type="button" className="sfilter-clear" onClick={() => setQ("")} aria-label="Clear search">×</button>
+          )}
+        </div>
+        <span className="curr-nav-sep" aria-hidden="true"/>
         <ol className="lore-nav-list">
           {YEAR_TABS.map(yt => (
             <li key={yt.idx} className={"lore-nav-item" + (yt.key === activeYear ? " is-active" : "")}>
@@ -2578,6 +2601,22 @@ function DepartmentSection({dept}){
 
 function FacultyRegistryView(){
   const [filterDesig, setFilterDesig] = useState("all"); // all | hero | sidekick
+  const [q, setQ] = useState("");
+  const ql = q.trim().toLowerCase();
+
+  // Match a dept against the search query. Looks at dept name, code,
+  // head/staff/instructional names + roles, and class codes/titles.
+  const deptMatchesSearch = (dept) => {
+    if (!ql) return true;
+    const haystack = [
+      dept.name, dept.code,
+      dept.head?.char, dept.head?.role,
+      ...(dept.staff || []).flatMap(s => [s.char, s.role]),
+      ...(dept.instructional || []).flatMap(p => [p.char, p.role]),
+      ...(dept.classes || []).flatMap(c => [c.code, c.title]),
+    ].filter(Boolean).join(" ").toLowerCase();
+    return haystack.includes(ql);
+  };
 
   // Filter a dept's classes + instructional staff by selected
   // designation. Classes without a designation tag are visible
@@ -2615,6 +2654,20 @@ function FacultyRegistryView(){
           so the two pages read as siblings. Filters classes + off-lane
           instructional staff inside each department's catalogue. */}
       <div className="sfilter freg-sfilter" role="search" aria-label="Filter faculty by designation">
+        <div className="sfilter-search">
+          <span className="sfilter-search-icon" aria-hidden="true">⌕</span>
+          <input
+            type="text"
+            className="sfilter-input"
+            placeholder="Search by name, role, or department…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            aria-label="Search faculty"
+          />
+          {q && (
+            <button type="button" className="sfilter-clear" onClick={() => setQ("")} aria-label="Clear search">×</button>
+          )}
+        </div>
         <div className="sfilter-group">
           <span className="sfilter-lbl">Designation</span>
           <button type="button"
@@ -2633,7 +2686,12 @@ function FacultyRegistryView(){
             aria-pressed={filterDesig === "sidekick"}
           >Sidekick</button>
         </div>
-        <div className="sfilter-count">{(D.departments || []).length} departments</div>
+        <div className="sfilter-count">
+          {(() => {
+            const n = (D.departments || []).filter(deptMatchesSearch).length;
+            return `${n} ${n === 1 ? "department" : "departments"}`;
+          })()}
+        </div>
       </div>
 
       {/* DEAN · the existing portrait-card treatment stays */}
@@ -2693,7 +2751,7 @@ function FacultyRegistryView(){
       )}
 
       {/* 8 DEPARTMENT SECTIONS — always expanded, class catalogues filtered by designation */}
-      {(D.departments || []).map(dept => (
+      {(D.departments || []).filter(deptMatchesSearch).map(dept => (
         <DepartmentSection key={dept.id} dept={filteredDept(dept)}/>
       ))}
 

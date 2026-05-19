@@ -25871,3 +25871,157 @@ button.orgs-pill {
 }
 .preg-tw .preg-detail-row .preg-detail-note { color: rgba(255, 180, 100, 0.85) !important; }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   ISSUE 2 · INTAKE BAR (.join-hud) · full-width premium redesign
+   - Edge-to-edge dark plate with thin gold top accent + red bottom
+     hairline.
+   - Söhne Mono uppercase labels with vertical dividers between
+     sections.
+   - INTAKE OPEN status pill on far right with a glowing dot.
+   ════════════════════════════════════════════════════════════════════ */
+.join-hud {
+  position: relative !important;
+  width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  padding: 14px clamp(24px, 4vw, 56px) !important;
+  background: linear-gradient(180deg, #0a0a0c 0%, #07070a 100%) !important;
+  border: 0 !important;
+  border-top: 2px solid #c9a84c !important;
+  border-bottom: 1px solid rgba(196, 26, 26, 0.55) !important;
+  box-shadow:
+    0 14px 36px -22px rgba(0, 0, 0, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02) !important;
+}
+.join-hud-grain {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.04) 1px, transparent 1.5px) !important;
+  background-size: 6px 6px !important;
+  opacity: 0.4 !important;
+  mix-blend-mode: screen !important;
+}
+.join-hud-inner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 24px !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  flex-wrap: wrap !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+.join-hud-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  flex-wrap: wrap !important;
+}
+.join-hud-badge {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+  padding: 6px 16px 6px 0 !important;
+  border-right: 1px solid #1f1f24 !important;
+  margin-right: 16px !important;
+}
+.join-hud-pool {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding-right: 16px !important;
+  border-right: 1px solid #1f1f24 !important;
+  margin-right: 16px !important;
+}
+.join-hud-pool:last-child { border-right: 0 !important; }
+.join-hud-pool-label {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: #f5e8c2 !important;
+}
+.join-hud-chips {
+  display: flex !important;
+  gap: 0 !important;
+  align-items: center !important;
+}
+.join-hud-chip {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #c9c3b5 !important;
+  padding: 4px 14px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-right: 1px solid #1f1f24 !important;
+}
+.join-hud-chip:last-child { border-right: 0 !important; }
+.join-hud-chip-tier { color: #d4a843 !important; margin-right: 6px !important; }
+.join-hud-chip-count { color: #f5f1e8 !important; }
+.join-hud-chip-slash { color: #4a4a52 !important; margin: 0 2px !important; }
+.join-hud-chip.is-full {
+  color: #ff8c94 !important;
+  background: rgba(196, 26, 26, 0.10) !important;
+}
+.join-hud-chip.is-over {
+  color: #ff2a32 !important;
+  background: rgba(196, 26, 26, 0.18) !important;
+}
+.join-hud-divider { display: none !important; }
+.join-hud-right {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 14px !important;
+  background: rgba(20, 220, 90, 0.08) !important;
+  border: 1px solid rgba(20, 220, 90, 0.4) !important;
+}
+.join-hud-status-dot {
+  display: inline-block !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: #1adc5a !important;
+  box-shadow: 0 0 8px rgba(26, 220, 90, 0.7) !important;
+  animation: hudPulse 2.4s ease-in-out infinite !important;
+}
+.join-hud-status-text {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: #5cf07f !important;
+}
+@keyframes hudPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(26, 220, 90, 0.7); }
+  50%      { opacity: 0.65; box-shadow: 0 0 14px rgba(26, 220, 90, 0.95); }
+}
+@media (max-width: 760px) {
+  .join-hud-inner { gap: 12px !important; }
+  .join-hud-right { margin-left: 0 !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   ISSUE 4 · CURRICULUM nav · search input slot
+   The search field is the leftmost element on the sticky nav row.
+   ════════════════════════════════════════════════════════════════════ */
+.lore-nav.curr-nav .curr-nav-search {
+  flex: 0 1 280px !important;
+  max-width: 280px !important;
+  margin: 0 !important;
+}
+@media (max-width: 760px) {
+  .lore-nav.curr-nav .curr-nav-search { flex: 1 1 100% !important; max-width: none !important; }
+}
+
