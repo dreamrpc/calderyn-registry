@@ -2235,35 +2235,40 @@ function HousesTab(){
     }
   }, [ctx]);
 
-  // SCROLL-SPY — observe each section, set `active` to whichever
-  // is currently nearest the top of the viewport. rootMargin pulls
-  // the trigger zone down 20% from the top of the viewport so the
-  // sidebar updates as a section enters the upper third, not the
-  // moment its bottom edge crosses in.
+  // SCROLL-SPY — compute the active section on scroll directly off
+  // each section's bounding rect. This is more reliable than
+  // IntersectionObserver for long sections where the previous one's
+  // tail can still overlap the active band when the new one's head
+  // is visible. We pick the section whose TOP is just above the
+  // 25% line of the viewport — the one the reader is "reading".
   useEffect(() => {
-    const sections = LORE_TABS
-      .map(t => document.getElementById("lore-" + t.id))
-      .filter(Boolean);
-    if (!sections.length) return;
-
-    const io = new IntersectionObserver((entries) => {
-      const visible = entries.filter(e => e.isIntersecting);
-      if (visible.length === 0) return;
-      // Pick the section whose top is CLOSEST to (just past) the
-      // top-trigger line — i.e. the "most recently entered from
-      // above". Largest .top value wins. Earlier we picked
-      // smallest .top, which incorrectly stuck on the previous
-      // section when its body still overlapped the lower active
-      // band even after the next section's heading had appeared.
-      const newest = visible.sort(
-        (a, b) => b.boundingClientRect.top - a.boundingClientRect.top
-      )[0];
-      const id = newest.target.id.replace(/^lore-/, "");
-      if (LORE_TABS.find(t => t.id === id)) setActive(id);
-    }, { rootMargin: "-12% 0px -78% 0px", threshold: 0 });
-
-    sections.forEach(s => io.observe(s));
-    return () => io.disconnect();
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const trigger = window.innerHeight * 0.25;
+      const sections = LORE_TABS
+        .map(t => ({ id: t.id, el: document.getElementById("lore-" + t.id) }))
+        .filter(s => s.el);
+      if (!sections.length) return;
+      let current = sections[0].id;
+      for (const s of sections) {
+        const top = s.el.getBoundingClientRect().top;
+        if (top - trigger <= 0) current = s.id;
+      }
+      setActive(current);
+    };
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
 
   const goTo = (id) => {
@@ -2282,24 +2287,25 @@ function HousesTab(){
         pageNum="P. 002 / VIII"
       />
 
-      {/* Floating dots-only nav — same pattern as the home page side
-          scroll-nav. Replaces the previous left sidebar TOC. */}
-      <nav className="home-scrollnav lore-scrollnav" aria-label="Lore sections">
-        <ol className="home-scrollnav-list">
+      {/* Top sticky chapter nav — horizontal strip, icons + always-
+          visible labels. Replaces the previous floating right-rail
+          which cascaded off-screen on tall content. */}
+      <nav className="lore-nav" aria-label="Lore chapters">
+        <ol className="lore-nav-list">
           {LORE_TABS.map((t, i) => (
-            <li key={t.id} className={"home-scrollnav-item" + (active === t.id ? " is-active" : "")}>
+            <li key={t.id} className={"lore-nav-item" + (active === t.id ? " is-active" : "")}>
               <button
                 type="button"
-                className="home-scrollnav-btn"
+                className="lore-nav-btn"
                 onClick={() => goTo(t.id)}
                 aria-current={active === t.id ? "true" : undefined}
                 aria-label={`Jump to ${t.label}`}
-                data-label={t.label}
               >
-                <span className="home-scrollnav-icon" aria-hidden="true">
-                  <Icon name={t.icon} size={18} stroke={1.8}/>
+                <span className="lore-nav-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                <span className="lore-nav-icon" aria-hidden="true">
+                  <Icon name={t.icon} size={16} stroke={1.7}/>
                 </span>
-                <span className="home-scrollnav-label">{t.label}</span>
+                <span className="lore-nav-label">{t.label}</span>
               </button>
             </li>
           ))}

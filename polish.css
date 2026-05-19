@@ -15711,3 +15711,134 @@ nav.home-scrollnav,
     max-width: 1140px !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   LORE · TOP STICKY CHAPTER NAV
+   Replaces the floating right rail (which cascaded off-screen on tall
+   sections and clipped its labels at the viewport edge). Always-visible
+   horizontal strip pinned to the top of the lore page, with all six
+   chapters showing their number, icon, and full label.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Kill the old floating rail on the lore page */
+.lore-reader .lore-rail,
+.lore-scrollnav,
+nav.lore-scrollnav,
+.home-scrollnav.lore-scrollnav { display: none !important; }
+
+.lore-nav {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px)) !important;
+  z-index: 35 !important;
+  margin: 0 0 20px !important;
+  padding: 14px 32px 16px !important;
+  background: linear-gradient(180deg, #0a0a0a 0%, #0a0a0a 88%, rgba(10,10,10,0) 100%) !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+}
+.lore-nav-list {
+  list-style: none !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+  max-width: 1280px !important;
+  overflow-x: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(212,168,74,0.4) transparent !important;
+}
+.lore-nav-list::-webkit-scrollbar { height: 6px !important; }
+.lore-nav-list::-webkit-scrollbar-thumb { background: rgba(212,168,74,0.4) !important; border-radius: 0 !important; }
+.lore-nav-list::-webkit-scrollbar-track { background: transparent !important; }
+
+.lore-nav-item {
+  margin: 0 !important;
+  flex: 1 1 0 !important;
+  min-width: 150px !important;
+}
+
+.lore-nav-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  padding: 10px 14px !important;
+  background: rgba(20,20,24,0.6) !important;
+  border: 1px solid rgba(212,168,74,0.2) !important;
+  border-bottom: 2px solid transparent !important;
+  color: var(--text-3, #948d80) !important;
+  cursor: pointer !important;
+  border-radius: 0 !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  text-align: left !important;
+  position: relative !important;
+  transition:
+    background 220ms cubic-bezier(.2,.7,.2,1),
+    border-color 220ms cubic-bezier(.2,.7,.2,1),
+    color 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.lore-nav-btn:hover {
+  background: rgba(212,168,74,0.06) !important;
+  border-color: rgba(212,168,74,0.5) !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+
+.lore-nav-num {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  color: var(--yellow, #d4a84a) !important;
+  flex-shrink: 0 !important;
+}
+.lore-nav-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: inherit !important;
+  flex-shrink: 0 !important;
+}
+.lore-nav-icon svg { stroke: currentColor !important; }
+.lore-nav-label {
+  display: inline-block !important;
+  color: inherit !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  line-height: 1.1 !important;
+}
+
+.lore-nav-item.is-active .lore-nav-btn {
+  background: rgba(212,168,74,0.14) !important;
+  border-color: rgba(212,168,74,0.7) !important;
+  border-bottom-color: var(--yellow, #d4a84a) !important;
+  color: var(--yellow, #d4a84a) !important;
+  box-shadow:
+    0 12px 24px -18px rgba(0,0,0,0.9),
+    inset 0 1px 0 rgba(255,255,255,0.04) !important;
+}
+
+@media (max-width: 900px) {
+  .lore-nav { padding: 12px 16px 14px !important; }
+  .lore-nav-item { min-width: 140px !important; flex: 0 0 auto !important; }
+}
+
+/* Lore page itself — drop the right-rail padding now that the nav lives
+   at the top */
+.lore-section {
+  padding-right: clamp(24px, 5vw, 96px) !important;
+}
+@media (min-width: 900px) {
+  .lore-section {
+    padding-right: clamp(24px, 5vw, 96px) !important;
+  }
+}
