@@ -25552,3 +25552,165 @@ button.orgs-pill {
   font-style: normal !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   POWERS REGISTRY · MATCH STUDENTS TABLE EXACTLY
+   - Max-width container so the table doesn't stretch full viewport.
+   - Header row uses the same halftone-dot bg as the Students roster.
+   - Red 4px inset-shadow left border on each row (.student-row).
+   - Section headers (TIER / STATUS group labels) styled as eyebrow.
+   - VIEW button column removed — clicking name is enough.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Container width — same content rail as the rest of the dossier */
+.preg .preg-section,
+.preg .preg-tw {
+  max-width: 1280px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(20px, 4vw, 32px) !important;
+  padding-right: clamp(20px, 4vw, 32px) !important;
+}
+.preg .preg-section {
+  margin-top: 28px !important;
+  margin-bottom: 12px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.preg .preg-section + .preg-section { margin-top: 36px !important; }
+.preg .preg-tw {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Section header (visible only when grouping is active) — eyebrow
+   style above each tier/status sub-table */
+.preg-section-hd {
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  padding: 0 clamp(20px, 4vw, 32px) !important;
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 12px !important;
+}
+.preg-section-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+  line-height: 1 !important;
+}
+.preg-section-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #948d80 !important;
+}
+
+/* Table header — halftone dot pattern bg matching Students roster */
+.preg-tw thead th {
+  background:
+    radial-gradient(circle 1px at 50% 50%, rgba(212, 168, 67, 0.18) 1px, transparent 1.5px) 0 0 / 6px 6px,
+    #0d0d0d !important;
+  color: #f5e8c2 !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  padding: 14px 16px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+}
+
+/* Rows — red 4px inset left rail (same as student-row pattern) */
+.preg-tw tbody tr.preg-row {
+  position: relative !important;
+}
+.preg-tw tbody tr.preg-row td:first-child {
+  position: relative !important;
+}
+.preg-tw tbody td {
+  background: #0a0a0a !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  padding: 14px 16px !important;
+  vertical-align: middle !important;
+}
+.preg-tw tbody tr.preg-row:hover td { background: #131313 !important; }
+
+/* Character cell · bold white name */
+.preg-tw tbody td:nth-child(2) {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  color: #f5f1e8 !important;
+}
+
+/* Power cell · grey, ellipsis-truncated */
+.preg-tw tbody td.preg-col-power {
+  color: #888 !important;
+  font-size: 13px !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  max-width: 420px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Status chip — colored pill identical to the row's status palette */
+.preg-status-chip {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 3px 9px !important;
+  white-space: nowrap !important;
+  border-radius: 0 !important;
+}
+
+/* Defensive hide for the old VIEW column markup (no longer rendered) */
+.preg-tw .preg-col-toggle,
+.preg-tw .preg-view-btn { display: none !important; }
+
+/* Filter bar — already sticky; just slim the padding so two pill
+   groups + search + count fit one row on common widths. */
+.sfilter.preg-sfilter {
+  gap: 12px 18px !important;
+  flex-wrap: wrap !important;
+}
+.sfilter.preg-sfilter .sfilter-search { flex: 1 1 260px !important; max-width: 360px !important; }
+
+/* ════════════════════════════════════════════════════════════════════
+   POWERS GUIDE · SECTION CONTAINER PADDING
+   The section number badge (00 / READ FIRST, 01 / TIERS, etc.),
+   H2, subtitle, and separator were flush against the section
+   container edges. Add generous interior padding per spec.
+   ════════════════════════════════════════════════════════════════════ */
+.pg-guide .intro-bay,
+.pg-guide .tier-bay,
+.pg-guide .status-bay,
+.pg-guide .banned-bay {
+  padding: 40px clamp(28px, 4vw, 56px) 44px !important;
+  margin: 0 auto 32px !important;
+  max-width: 1340px !important;
+  background: #0d0d11 !important;
+  border: 0 !important;
+}
+.pg-guide section + section {
+  margin-top: 0 !important;
+}
+.pg-guide .bay-hd {
+  padding: 0 !important;
+  margin: 0 0 24px !important;
+}
+

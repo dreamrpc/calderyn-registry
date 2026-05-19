@@ -1814,36 +1814,96 @@ function PowersBanned(){
 
 function PowersRegistry(){
   const [status, setStatus] = useState("all");
+  const [tier,   setTier]   = useState("all");
   const [q, setQ] = useState("");
-  const [openIdx, setOpenIdx] = useState({});
+
+  // Master filtered list
   const rows = useMemo(() => POWERS.filter(p => {
-    if(status !== "all" && p.status !== status) return false;
-    if(q){
+    if (status !== "all" && p.status !== status) return false;
+    if (tier   !== "all" && (p.tier || "").toUpperCase() !== tier) return false;
+    if (q){
       const hay = [p.power, p.char, p.alias, p.expression].join(" ").toLowerCase();
-      if(!hay.includes(q.toLowerCase())) return false;
+      if (!hay.includes(q.toLowerCase())) return false;
     }
     return true;
-  }), [status, q]);
-  const groups = useMemo(() => POWER_STATUSES
-    .map(s => ({
-      s,
-      list: rows
-        .filter(p => p.status === s.id)
-        .slice()
-        .sort((a, b) => (a.char || a.alias || "").localeCompare(b.char || b.alias || "", undefined, { sensitivity: "base" })),
-    }))
-    .filter(g => g.list.length > 0)
-  , [rows]);
+  }), [status, tier, q]);
 
-  const toggleRow = (key) => setOpenIdx(prev => ({...prev, [key]: !prev[key]}));
+  const statusOf = (id) => POWER_STATUSES.find(s => s.id === id) || null;
+  const sortByName = (a, b) =>
+    (a.char || a.alias || "").localeCompare(b.char || b.alias || "", undefined, { sensitivity: "base" });
 
-  // Flatten all visible rows into a single list, grouped by status
-  // for the section dividers but sharing one table chrome.
-  const flatRows = groups.flatMap(({s, list}) => list.map(p => ({...p, _status: s})));
+  // Grouping mode:
+  //   "all"      — flat table when no Status/Tier filter active
+  //   "by-tier"  — Status filter active: sub-sections by tier (A-LIST, B-LIST...)
+  //   "by-status"— Tier filter active: sub-sections by status
+  const groupingMode =
+    status !== "all" ? "by-tier" :
+    tier   !== "all" ? "by-status" :
+    "all";
+
+  const sections = useMemo(() => {
+    if (groupingMode === "all") {
+      return [{ key: "all", label: null, list: rows.slice().sort(sortByName) }];
+    }
+    if (groupingMode === "by-tier") {
+      return ["A", "B", "C", "D"]
+        .map(t => ({
+          key: t,
+          label: `${t}-LIST`,
+          list: rows.filter(p => (p.tier || "").toUpperCase() === t).sort(sortByName),
+        }))
+        .filter(g => g.list.length > 0);
+    }
+    // by-status
+    return POWER_STATUSES
+      .map(s => ({
+        key: s.id,
+        label: s.label.toUpperCase(),
+        list: rows.filter(p => p.status === s.id).sort(sortByName),
+      }))
+      .filter(g => g.list.length > 0);
+  }, [groupingMode, rows]);
+
+  // Row renderer (reused inside every section so we don't duplicate JSX).
+  const renderRow = (p, i) => {
+    const s = statusOf(p.status);
+    return (
+      <tr key={i} className="preg-row student-row" style={{boxShadow: "inset 4px 0 0 #c41a1a"}}>
+        <td className="rn">{String(i + 1).padStart(2, "0")}</td>
+        <td>
+          <CLink name={p.char} link={p.link || null}/>
+          {p.npc && <NpcBadge/>}
+        </td>
+        <td>
+          <span
+            ref={el => { if (el) el.style.setProperty("color", "#d4a843", "important"); }}
+            style={{
+              color: "#d4a843",
+              fontFamily: "Söhne Mono, ui-monospace, monospace",
+              fontSize: "13px",
+              fontWeight: 700,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              fontStyle: "normal",
+            }}
+          >{p.alias || "—"}</span>
+        </td>
+        <td><TierChip tier={p.tier}/></td>
+        <td>
+          {s && (
+            <span className="preg-status-chip" style={{background: s.bg, color: s.text}}>
+              {s.label}
+            </span>
+          )}
+        </td>
+        <td className="preg-col-power" style={{color: "#888"}}>{p.power || "—"}</td>
+      </tr>
+    );
+  };
 
   return (
     <div className="preg">
-      {/* Students-style filter bar — search input + status pills + count */}
+      {/* Students-style single sticky filter bar */}
       <div className="sfilter preg-sfilter" role="search">
         <div className="sfilter-search">
           <span className="sfilter-search-icon" aria-hidden="true">⌕</span>
@@ -1872,15 +1932,31 @@ function PowersRegistry(){
               className={"sf-pill" + (status === s.id ? " on" : "")}
               onClick={() => setStatus(status === s.id ? "all" : s.id)}
               aria-pressed={status === s.id}
-              style={status === s.id ? {background:s.bg, color:s.text, borderColor:s.bg} : {}}
+              style={status === s.id ? {background: s.bg, color: s.text, borderColor: s.bg} : {}}
             >{s.label}</button>
+          ))}
+        </div>
+
+        <div className="sfilter-group">
+          <span className="sfilter-lbl">Tier</span>
+          <button type="button"
+            className={"sf-pill" + (tier === "all" ? " on" : "")}
+            onClick={() => setTier("all")}
+            aria-pressed={tier === "all"}
+          >All</button>
+          {["A", "B", "C", "D"].map(t => (
+            <button key={t} type="button"
+              className={"sf-pill" + (tier === t ? " on" : "")}
+              onClick={() => setTier(tier === t ? "all" : t)}
+              aria-pressed={tier === t}
+            >{t}</button>
           ))}
         </div>
 
         <div className="sfilter-count">{rows.length} entr{rows.length === 1 ? "y" : "ies"}</div>
       </div>
 
-      {flatRows.length === 0 && (
+      {rows.length === 0 && (
         <div className="preg-empty">
           {POWERS.length === 0
             ? "No powers registered yet"
@@ -1888,106 +1964,33 @@ function PowersRegistry(){
         </div>
       )}
 
-      {flatRows.length > 0 && (
-        <div className="tw preg-tw">
-          <table>
-            <thead>
-              <tr>
-                <th className="rn">#</th>
-                <th>Character</th>
-                <th>Stage Name</th>
-                <th>Tier</th>
-                <th>Status</th>
-                <th>Power / Ability</th>
-                <th aria-label="Details"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {flatRows.map((p, i) => {
-                const key = `${p._status.id}-${i}`;
-                const isOpen = !!openIdx[key];
-                const hasExpr = !!p.expression;
-                return (
-                  <React.Fragment key={i}>
-                    <tr
-                      className={"preg-row" + (isOpen ? " is-open" : "") + (hasExpr ? " is-clickable" : "")}
-                      onClick={() => hasExpr && toggleRow(key)}
-                    >
-                      <td className="rn">{String(i+1).padStart(2, "0")}</td>
-                      <td>
-                        <CLink name={p.char} link={p.link || null}/>
-                        {p.npc && <NpcBadge/>}
-                      </td>
-                      <td style={{
-                        color: "#d4a843",
-                        fontFamily: "Söhne Mono, ui-monospace, monospace",
-                        fontSize: "13px",
-                        fontWeight: 700,
-                        letterSpacing: "0.08em",
-                        textTransform: "uppercase",
-                        fontStyle: "normal",
-                        whiteSpace: "nowrap",
-                      }}>
-                        <span
-                          ref={el => {
-                            if (el) el.style.setProperty("color", "#d4a843", "important");
-                          }}
-                          style={{
-                            color: "#d4a843",
-                            fontFamily: "Söhne Mono, ui-monospace, monospace",
-                            fontSize: "13px",
-                            fontWeight: 700,
-                            letterSpacing: "0.08em",
-                            textTransform: "uppercase",
-                            fontStyle: "normal",
-                          }}>{p.alias || "—"}</span>
-                      </td>
-                      <td><TierChip tier={p.tier}/></td>
-                      <td>
-                        <span className="preg-status-chip" style={{background:p._status.bg, color:p._status.text}}>
-                          {p._status.label}
-                        </span>
-                      </td>
-                      <td className="preg-col-power">{p.power || "—"}</td>
-                      <td className="preg-col-toggle">
-                        {hasExpr && (
-                          <span className="preg-view-btn" aria-hidden="true">
-                            {isOpen ? "Hide" : "View"}
-                            <span className="preg-view-arrow">
-                              <Icon name={isOpen ? "chevron-up" : "chevron-down"} size={12}/>
-                            </span>
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                    {isOpen && hasExpr && (
-                      <tr className="preg-detail-row">
-                        <td colSpan={7}>
-                          <div className="preg-detail">
-                            <span className="preg-detail-label">Expression</span>
-                            <p className="preg-detail-text">{p.expression}</p>
-                            {p.expressionDoc && (
-                              <a href={p.expressionDoc} target="_blank" rel="noopener noreferrer" className="preg-detail-doc">
-                                <span className="preg-detail-doc-icon" aria-hidden="true"><Icon name="file-text" size={14}/></span>
-                                <span className="preg-detail-doc-label">Read the full power doc</span>
-                                <span className="preg-detail-doc-arrow" aria-hidden="true"><Icon name="arrow-up-right" size={12}/></span>
-                              </a>
-                            )}
-                            {p.drawbacks && <span className="preg-detail-label">Drawbacks / Limits</span>}
-                            {p.drawbacks && <p className="preg-detail-text">{p.drawbacks}</p>}
-                            {p.note && <span className="preg-detail-label preg-detail-label--note">Admin Note</span>}
-                            {p.note && <p className="preg-detail-text preg-detail-note">{p.note}</p>}
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
+      {sections.map(sec => (
+        <div key={sec.key} className="preg-section">
+          {sec.label && (
+            <div className="preg-section-hd">
+              <span className="preg-section-name">{sec.label}</span>
+              <span className="preg-section-count">{sec.list.length} {sec.list.length === 1 ? "record" : "records"}</span>
+            </div>
+          )}
+          <div className="tw preg-tw">
+            <table>
+              <thead>
+                <tr>
+                  <th className="rn">#</th>
+                  <th>Character</th>
+                  <th>Stage Name</th>
+                  <th>Tier</th>
+                  <th>Status</th>
+                  <th>Power / Ability</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sec.list.map(renderRow)}
+              </tbody>
+            </table>
+          </div>
         </div>
-      )}
+      ))}
     </div>
   );
 }
