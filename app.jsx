@@ -1161,12 +1161,12 @@ function RulesTab(){
 /* ═══════════════════════════════════════════════════════════════════════════
    CURRICULUM · Y1/Y2/Y3/Fellowship · eight-department model
 ═══════════════════════════════════════════════════════════════════════════ */
-const YEAR_KEY  = { Y1: 0, Y2: 1, Y3: 2, FEL: 3 };
+const YEAR_KEY  = { FR: 0, SO: 1, JR: 2, SR: 3 };
 const YEAR_TABS = [
-  { idx: 0, key: "Y1",  label: "Freshman",   short: "Freshman",   long: "Year One · Freshman"   },
-  { idx: 1, key: "Y2",  label: "Sophomore",  short: "Sophomore",  long: "Year Two · Sophomore"  },
-  { idx: 2, key: "Y3",  label: "Junior",     short: "Junior",     long: "Year Three · Junior"   },
-  { idx: 3, key: "FEL", label: "Fellowship", short: "Fellowship", long: "Vanguard Fellowship · Postgraduate" },
+  { idx: 0, key: "FR", label: "Freshman",  long: "Year One · Freshman"  },
+  { idx: 1, key: "SO", label: "Sophomore", long: "Year Two · Sophomore" },
+  { idx: 2, key: "JR", label: "Junior",    long: "Year Three · Junior"  },
+  { idx: 3, key: "SR", label: "Senior",    long: "Year Four · Senior"   },
 ];
 
 const DESIG_COLORS = { hero: "#c41a1a", sidekick: "#1e40af" };
@@ -1338,15 +1338,15 @@ function DeptStaffCard({person, slot, isHead, deptColor}){
 }
 
 function CurriculumView(){
-  const [activeYear, setActiveYear] = useState("Y1");
+  const [activeYear, setActiveYear] = useState("FR");
 
   const allClasses = gatherCurriculumClasses();
   const byYear = (y) => allClasses.filter(c => c.year === y);
 
   // Y1 splits: shared core (all departments + TUT-101) + Y1 designation modules
-  const y1Shared = byYear("Y1").filter(c => c.kind === "shared-core")
+  const y1Shared = byYear("FR").filter(c => c.kind === "shared-core")
     .sort((a, b) => (a.code || "").localeCompare(b.code || ""));
-  const y1Desig = byYear("Y1").filter(c => c.kind === "designation")
+  const y1Desig = byYear("FR").filter(c => c.kind === "designation")
     .sort((a, b) => (a.code || "").localeCompare(b.code || ""));
 
   // Y2/Y3 grouped by department + designation modules at the bottom
@@ -1361,8 +1361,9 @@ function CurriculumView(){
       .sort((a, b) => (a.code || "").localeCompare(b.code || ""));
     return { groups, designation };
   };
-  const y2 = groupYearByDept("Y2");
-  const y3 = groupYearByDept("Y3");
+  const y2 = groupYearByDept("SO");
+  const y3 = groupYearByDept("JR");
+  const ySR = groupYearByDept("SR");
 
   // Year tabs are state-driven now — only the active year renders, so
   // a new member sees one focused page at a time instead of scrolling
@@ -1406,9 +1407,9 @@ function CurriculumView(){
         <section className="curr-primer">
           <div className="curr-primer-l">
             <span className="curr-primer-tag">How the curriculum works</span>
-            <h3 className="curr-primer-title">Three years, eight departments, one Fellowship.</h3>
+            <h3 className="curr-primer-title">Four years, eight departments.</h3>
             <p className="curr-primer-body">
-              Year 1 is unified — every student takes the same shared core. Year 2 declares a Home Department and specialisation begins. Year 3 is capstone and field placement. A small postgraduate Fellowship cohort is invited from across the eight departments at the end of Year 2.
+              Freshman year is unified — every student takes the same shared core. Sophomore year declares a Home Department and specialisation begins. Junior and Senior years are deep specialisation, capstone modules, and field placement. STRATA contract conversations start in the spring of Senior year.
             </p>
             <p className="curr-primer-body curr-primer-body-quiet">
               Heroes and Sidekicks designations run alongside the academic track. Designation modules (HRO- / SDK-) are flagged on each card. To see the full faculty roster, head to the <strong>Faculty Registry</strong> tab.
@@ -1418,15 +1419,15 @@ function CurriculumView(){
             <ul className="curr-primer-list">
               <li><span className="curr-primer-list-k">Freshman</span><span className="curr-primer-list-v">Shared core, no specialisation yet.</span></li>
               <li><span className="curr-primer-list-k">Sophomore</span><span className="curr-primer-list-v">Home Department declared.</span></li>
-              <li><span className="curr-primer-list-k">Junior</span><span className="curr-primer-list-v">Deep specialisation and capstones.</span></li>
-              <li><span className="curr-primer-list-k">Fellowship</span><span className="curr-primer-list-v">Postgraduate, invitation only.</span></li>
+              <li><span className="curr-primer-list-k">Junior</span><span className="curr-primer-list-v">Deep specialisation, field placement begins.</span></li>
+              <li><span className="curr-primer-list-k">Senior</span><span className="curr-primer-list-v">Capstones, final placements, contract talks.</span></li>
             </ul>
           </div>
         </section>
 
         {/* Y1 · Shared Core */}
-        {activeYear === "Y1" && (
-        <section id="curr-year-Y1" className="curr-year">
+        {activeYear === "FR" && (
+        <section id="curr-year-FR" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
               <div className="curr-year-tag">Freshman · Foundation</div>
@@ -1465,8 +1466,8 @@ function CurriculumView(){
         )}
 
         {/* Y2 · Specialisation begins */}
-        {activeYear === "Y2" && (
-        <section id="curr-year-Y2" className="curr-year">
+        {activeYear === "SO" && (
+        <section id="curr-year-SO" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
               <div className="curr-year-tag">Sophomore · Specialisation</div>
@@ -1510,14 +1511,14 @@ function CurriculumView(){
         )}
 
         {/* Y3 · Deep specialisation */}
-        {activeYear === "Y3" && (
-        <section id="curr-year-Y3" className="curr-year">
+        {activeYear === "JR" && (
+        <section id="curr-year-JR" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
-              <div className="curr-year-tag">Junior · Capstone</div>
-              <h3 className="curr-year-title">Deep specialisation, capstone modules, field placement.</h3>
+              <div className="curr-year-tag">Junior · Specialisation</div>
+              <h3 className="curr-year-title">Deep specialisation, the first field placements.</h3>
               <p className="curr-year-blurb">
-                Year 3 is the last year of the standard programme. Department capstones, the HRO-/SDK- specialism, and the institution's most morally serious modules — COM-301, HIS-303, the senior policy capstone. Students who finish here graduate as standard practitioners; nominations for the Fellowship are issued from this cohort.
+                Year 3. Students go deep inside their declared department, take their designation specialism, and run their first supervised field placements. The classes here set up the Senior capstones — what you choose this year decides what you defend next.
               </p>
             </div>
             <div className="curr-year-hd-r">
@@ -1554,30 +1555,48 @@ function CurriculumView(){
         </section>
         )}
 
-        {/* Fellowship */}
-        {activeYear === "FEL" && (
-        <section id="curr-year-FEL" className="curr-year curr-year-fellowship">
+        {/* Senior · capstone year */}
+        {activeYear === "SR" && (
+        <section id="curr-year-SR" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
-              <div className="curr-year-tag">Vanguard Fellowship · Postgraduate</div>
-              <h3 className="curr-year-title">By invitation only.</h3>
+              <div className="curr-year-tag">Senior · Capstone</div>
+              <h3 className="curr-year-title">Final year. Department capstones and field placement.</h3>
               <p className="curr-year-blurb">
-                The Fellowship is not a department. Nominations are drawn from across all eight departments by the Dean, issued at the end of Y2 to students who show dual-track capability or exceptional cross-domain performance. Fellows have access to all Y3 modules plus Fellowship-exclusive seminars, scheduled by the Fellowship Coordinator under the Dean's office.
+                Senior year is the final year of the standard programme. Department capstones, field placement, the institution's most morally serious modules — COM-301, HIS-303, the senior policy capstone. Students finish here as standard practitioners and start STRATA contract conversations in the spring.
               </p>
             </div>
             <div className="curr-year-hd-r">
-              <span className="curr-year-count">Closed seminar</span>
+              <span className="curr-year-count">
+                {ySR.groups.reduce((n, g) => n + g.classes.length, 0) + ySR.designation.length} classes
+              </span>
             </div>
           </header>
-          <div className="curr-fellowship-card">
-            <div className="curr-fellowship-card-hd">
-              <span className="curr-fellowship-stamp">FELLOWSHIP · NOMINATION</span>
-              <span className="curr-fellowship-meta">Annual cohort · cap classified</span>
+
+          {ySR.groups.map(g => (
+            <div key={g.dept.id} className="curr-block" style={{"--dept-c": g.dept.color || "#d4a84a"}}>
+              <header className="curr-block-hd is-dept">
+                <span className="curr-block-marker"/>
+                <span className="curr-block-tag">{g.dept.code} · {g.dept.name}</span>
+                <span className="curr-block-count">{g.classes.length}</span>
+              </header>
+              <div className="curr-class-grid">
+                {g.classes.map((c, i) => <ClassCard key={i} cls={c}/>)}
+              </div>
             </div>
-            <p className="curr-fellowship-body">
-              Specific seminar codes and reading lists are not published. Fellows attend by invitation each term. Combat and Media &amp; Arts nominations carry the most weight in practice; History &amp; Doctrine's nomination carries the most weight in theory. The Fellowship coordinates with STRATA on placement; some Fellows leave the year on contract.
-            </p>
-          </div>
+          ))}
+
+          {ySR.designation.length > 0 && (
+            <div className="curr-block">
+              <header className="curr-block-hd">
+                <span className="curr-block-tag">Designation Modules</span>
+                <span className="curr-block-count">{ySR.designation.length}</span>
+              </header>
+              <div className="curr-class-grid">
+                {ySR.designation.map((c, i) => <ClassCard key={i} cls={c}/>)}
+              </div>
+            </div>
+          )}
         </section>
         )}
       </main>
@@ -1990,9 +2009,8 @@ function StudentRosterFull(){
     return collapsed.split(" · ").map(titleSegment).join(" · ");
   };
 
-  // Designation is the canonical field. For legacy data it comes from
-  // s.track (hero/sidekick). Fellows override via s.fellow === true.
-  const desigOf = (s) => s.fellow ? "fellow" : ((s.track || "").toLowerCase() || null);
+  // Designation is the canonical field. Sourced from s.track (hero/sidekick).
+  const desigOf = (s) => (s.track || "").toLowerCase() || null;
 
   const [q, setQ] = useState("");
   const [house, setHouse] = useState("all");
@@ -2067,7 +2085,6 @@ function StudentRosterFull(){
           <Pill active={designation === "all"}      onClick={() => setDesignation("all")}>All</Pill>
           <Pill active={designation === "hero"}     onClick={() => setDesignation("hero")}>Hero</Pill>
           <Pill active={designation === "sidekick"} onClick={() => setDesignation("sidekick")}>Sidekick</Pill>
-          <Pill active={designation === "fellow"}   onClick={() => setDesignation("fellow")}>Fellow</Pill>
         </div>
 
         <div className="sfilter-count">{filtered.length} entr{filtered.length === 1 ? "y" : "ies"}</div>
@@ -2109,7 +2126,7 @@ function StudentRosterFull(){
             {filtered.map((s, i) => {
               const houseCol = s.house ? HC_PRIMARY[s.house.toLowerCase()] : null;
               const d = desigOf(s);
-              const desigLbl = d === "hero" ? "Hero" : d === "sidekick" ? "Sidekick" : d === "fellow" ? "Fellow" : "—";
+              const desigLbl = d === "hero" ? "Hero" : d === "sidekick" ? "Sidekick" : "—";
               return (
                 <tr key={i} className="student-row" style={houseCol ? {boxShadow:`inset 4px 0 0 ${houseCol}`} : null}>
                   <td className="rn">{i+1}</td>
@@ -2445,7 +2462,6 @@ function FacultyRegistryView(){
   const deanSection = FACULTY.find(s => /office of the dean/i.test(s.section));
   const deanRow = deanSection ? deanSection.rows.find(r => /^dean$/i.test(r.role) && r.char) : null;
   const deanOtherRows = deanSection ? deanSection.rows.filter(r => !(deanRow && r === deanRow)) : [];
-  const fellowshipCoord = deanOtherRows.find(r => /fellowship coordinator/i.test(r.role));
 
   // Find Support Staff section
   const supportSection = FACULTY.find(s => /support staff/i.test(s.section));
@@ -2521,39 +2537,6 @@ function FacultyRegistryView(){
           onToggle={() => toggleDept(dept.id)}
         />
       ))}
-
-      {/* VANGUARD FELLOWSHIP · ninth section. Always open (no toggle). */}
-      <section className="freg-dept-section freg-fellowship is-expanded is-static" style={{"--dept-c": "#d4a84a"}}>
-        <div className="freg-dept-section-hd">
-          <div className="freg-dept-section-hd-l">
-            <span className="freg-dept-section-eyebrow">Postgraduate · By Invitation</span>
-            <h3 className="freg-dept-section-name">Vanguard Fellowship</h3>
-          </div>
-          <div className="freg-dept-section-hd-r">
-            <span className="freg-dept-section-class-count">Closed seminar</span>
-          </div>
-        </div>
-        <div className="freg-dept-section-body">
-          <p className="freg-dept-section-blurb">
-            Not a department. Nominations are drawn from across all eight departments by the Dean, issued at the end of Y2 to students who show dual-track capability or exceptional cross-domain performance. Fellows attend Y3 modules plus Fellowship-exclusive seminars; the schedule is run by the Fellowship Coordinator under the Dean's office.
-          </p>
-          <div className="freg-dept-staff">
-            {fellowshipCoord && (
-              <StaffSlotCard
-                person={fellowshipCoord}
-                slot="Fellowship Coordinator"
-                isHead
-                deptColor="#d4a84a"
-              />
-            )}
-            <div className="freg-slot freg-slot-fellow">
-              <div className="freg-slot-tag">Active Fellows</div>
-              <div className="freg-slot-name"><span className="freg-slot-open">CLASSIFIED</span></div>
-              <div className="freg-slot-role">Cohort identities are not on the public registry; ask admin for the current Fellows list.</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* SUPPORT STAFF · Switchboards stays here per canon */}
       {supportSection && (
