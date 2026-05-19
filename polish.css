@@ -15759,78 +15759,175 @@ nav.lore-scrollnav,
 }
 
 .lore-nav-btn {
-  display: flex !important;
+  display: grid !important;
+  grid-template-columns: auto auto 1fr !important;
+  grid-template-rows: auto !important;
   align-items: center !important;
-  gap: 10px !important;
+  gap: 0 12px !important;
   width: 100% !important;
-  padding: 10px 14px !important;
-  background: rgba(20,20,24,0.6) !important;
-  border: 1px solid rgba(212,168,74,0.2) !important;
-  border-bottom: 2px solid transparent !important;
+  padding: 13px 16px 11px !important;
+  background: transparent !important;
+  border: 1px solid rgba(212,168,74,0.18) !important;
+  border-bottom: 0 !important;
   color: var(--text-3, #948d80) !important;
   cursor: pointer !important;
   border-radius: 0 !important;
-  font-family: var(--mono, 'Söhne Mono', monospace) !important;
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.2em !important;
-  text-transform: uppercase !important;
+  font-family: var(--display, 'Druk', sans-serif) !important;
   text-align: left !important;
   position: relative !important;
+  overflow: hidden !important;
+  transform: translateY(0) !important;
   transition:
     background 220ms cubic-bezier(.2,.7,.2,1),
     border-color 220ms cubic-bezier(.2,.7,.2,1),
-    color 220ms cubic-bezier(.2,.7,.2,1) !important;
-}
-.lore-nav-btn:hover {
-  background: rgba(212,168,74,0.06) !important;
-  border-color: rgba(212,168,74,0.5) !important;
-  color: var(--text-1, #f5f1e8) !important;
+    color 220ms cubic-bezier(.2,.7,.2,1),
+    transform 240ms cubic-bezier(.2,.7,.2,1) !important;
 }
 
-.lore-nav-num {
-  font-family: var(--mono, 'Söhne Mono', monospace) !important;
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.18em !important;
-  color: var(--yellow, #d4a84a) !important;
-  flex-shrink: 0 !important;
+/* Halftone field behind every tab — comic page feel */
+.lore-nav-btn::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.05) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  opacity: 0.5 !important;
+  mix-blend-mode: screen !important;
+  z-index: 0;
 }
+/* Gold bar at the bottom edge — fills on active, draws on hover */
+.lore-nav-btn::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 3px !important;
+  background: var(--yellow, #d4a84a) !important;
+  transform: scaleX(0) !important;
+  transform-origin: left center !important;
+  transition: transform 280ms cubic-bezier(.2,.7,.2,1) !important;
+  z-index: 1;
+}
+
+.lore-nav-btn:hover {
+  background: rgba(212,168,74,0.05) !important;
+  border-color: rgba(212,168,74,0.45) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  transform: translateY(-1px) !important;
+}
+.lore-nav-btn:hover::after {
+  transform: scaleX(0.3) !important;
+}
+
+/* Number — Druk display, gold, slightly oversized */
+.lore-nav-num {
+  grid-row: 1; grid-column: 1;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 17px !important;
+  letter-spacing: -0.01em !important;
+  color: var(--yellow, #d4a84a) !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  padding-right: 10px !important;
+  border-right: 1px solid rgba(212,168,74,0.22) !important;
+}
+/* Icon — slightly more presence, gold tone */
 .lore-nav-icon {
+  grid-row: 1; grid-column: 2;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   width: 18px !important;
   height: 18px !important;
-  color: inherit !important;
+  color: var(--yellow, #d4a84a) !important;
   flex-shrink: 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  opacity: 0.75 !important;
+  transition: opacity 220ms cubic-bezier(.2,.7,.2,1), transform 220ms cubic-bezier(.2,.7,.2,1) !important;
 }
 .lore-nav-icon svg { stroke: currentColor !important; }
+.lore-nav-btn:hover .lore-nav-icon { opacity: 1 !important; transform: scale(1.08) !important; }
+
+/* Label — Druk display, comic editorial weight */
 .lore-nav-label {
+  grid-row: 1; grid-column: 3;
   display: inline-block !important;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
   color: inherit !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   min-width: 0 !important;
-  flex: 1 1 auto !important;
   line-height: 1.1 !important;
+  position: relative !important;
+  z-index: 2 !important;
 }
 
+/* ACTIVE — bold gold-fill, dark text, comic ink offset on label,
+   raised slightly with a soft shadow underneath */
 .lore-nav-item.is-active .lore-nav-btn {
-  background: rgba(212,168,74,0.14) !important;
-  border-color: rgba(212,168,74,0.7) !important;
-  border-bottom-color: var(--yellow, #d4a84a) !important;
-  color: var(--yellow, #d4a84a) !important;
+  background: linear-gradient(180deg, rgba(212,168,74,0.22) 0%, rgba(212,168,74,0.08) 100%) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  transform: translateY(-2px) !important;
   box-shadow:
-    0 12px 24px -18px rgba(0,0,0,0.9),
-    inset 0 1px 0 rgba(255,255,255,0.04) !important;
+    0 14px 28px -18px rgba(0,0,0,0.95),
+    inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+.lore-nav-item.is-active .lore-nav-btn::after {
+  transform: scaleX(1) !important;
+  height: 3px !important;
+}
+.lore-nav-item.is-active .lore-nav-num {
+  color: var(--yellow, #d4a84a) !important;
+  text-shadow:
+    -1px 0 0 rgba(227,27,35,0.55),
+     1px 0 0 rgba(46,188,212,0.4) !important;
+}
+.lore-nav-item.is-active .lore-nav-icon {
+  opacity: 1 !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+.lore-nav-item.is-active .lore-nav-label {
+  color: var(--text-1, #f5f1e8) !important;
+  text-shadow:
+    -1px 0 0 rgba(227,27,35,0.4),
+     1px 0 0 rgba(46,188,212,0.28) !important;
 }
 
 @media (max-width: 900px) {
   .lore-nav { padding: 12px 16px 14px !important; }
-  .lore-nav-item { min-width: 140px !important; flex: 0 0 auto !important; }
+  .lore-nav-item { min-width: 150px !important; flex: 0 0 auto !important; }
+  .lore-nav-label { font-size: 12px !important; }
 }
+
+/* Inline icon inside the home CTA "APPLICATIONS OPEN" stamp — give
+   the flag glyph a margin-right so it doesn't touch the A. Same fix
+   for the programme stamp icon if any. */
+.home-cta-stamp,
+.home-programme-stamp,
+.home-hero-stamp {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.home-cta-stamp .icon,
+.home-programme-stamp .icon,
+.home-hero-stamp .icon {
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+}
+
 
 /* Lore page itself — drop the right-rail padding now that the nav lives
    at the top */
