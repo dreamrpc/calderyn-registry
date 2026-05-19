@@ -2204,12 +2204,12 @@ function FacultyRegistryView(){
    LORE TABS
 ═══════════════════════════════════════════════════════════════════════════ */
 const LORE_TABS = [
-  { id: "world",     label: "The World",              icon: "map" },
-  { id: "history",   label: "The Programme",          icon: "scroll-text" },
-  { id: "vanguard",  label: "The Vanguard",           icon: "shield" },
-  { id: "houses",    label: "The Houses",             icon: "flag" },
-  { id: "dean",      label: "The Dean",               icon: "users" },
-  { id: "incidents", label: "The Cassandra Incident", icon: "alert-triangle" },
+  { id: "world",     label: "World",     icon: "map"            },
+  { id: "history",   label: "Programme", icon: "scroll-text"    },
+  { id: "vanguard",  label: "Vanguard",  icon: "shield"         },
+  { id: "houses",    label: "Houses",    icon: "flag"           },
+  { id: "dean",      label: "Dean",      icon: "users"          },
+  { id: "incidents", label: "Cassandra", icon: "alert-triangle" },
 ];
 
 function HousesTab(){

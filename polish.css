@@ -15928,6 +15928,179 @@ nav.lore-scrollnav,
   margin: 0 !important;
 }
 
+/* ════════════════════════════════════════════════════════════════════════
+   LORE · HOUSES 4-UP GRID
+   The four house cards were rendering on a single column (the
+   responsive rule on .lore-houses-grid dropped to 1fr below 1240px).
+   Force a 4-column champion-select-style layout above 1100px so all
+   four houses sit side by side with proper breathing room, padding,
+   and a cinematic top stripe in the house colour. Each card is a
+   self-contained dossier.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.lore-section .lore-houses-grid,
+.lore-houses-grid,
+.lore-main .lore-houses-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 18px !important;
+  margin: 18px 0 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  max-width: none !important;
+}
+@media (min-width: 720px) {
+  .lore-section .lore-houses-grid,
+  .lore-houses-grid,
+  .lore-main .lore-houses-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 18px !important;
+  }
+}
+@media (min-width: 1100px) {
+  .lore-section .lore-houses-grid,
+  .lore-houses-grid,
+  .lore-main .lore-houses-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+  }
+}
+
+/* Individual house card — comic dossier panel */
+.lore-section .lore-house,
+.lore-houses-grid .lore-house {
+  display: flex !important;
+  flex-direction: column !important;
+  background: linear-gradient(180deg, #0c0c12 0%, #08080b 100%) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-top: 4px solid var(--h-c, currentColor) !important;
+  padding: 28px 24px 26px !important;
+  margin: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow:
+    0 22px 40px -22px rgba(0,0,0,0.85),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+  min-height: 100% !important;
+}
+.lore-section .lore-house::before,
+.lore-houses-grid .lore-house::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.04) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  opacity: 0.55 !important;
+  mix-blend-mode: screen !important;
+  z-index: 0;
+}
+
+/* Header row — crest + identity stacked, breathing room */
+.lore-section .lore-house-hd,
+.lore-houses-grid .lore-house-hd {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  gap: 14px !important;
+  margin-bottom: 18px !important;
+  padding-bottom: 16px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Crest — bigger, centred, with a soft house-color glow underneath */
+.lore-section .lore-house-crest,
+.lore-houses-grid .lore-house-crest {
+  width: 92px !important;
+  height: 92px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto !important;
+  filter: drop-shadow(0 0 14px rgba(212,168,74,0.18))
+          drop-shadow(0 8px 18px rgba(0,0,0,0.6)) !important;
+}
+
+.lore-section .lore-house-virtue,
+.lore-houses-grid .lore-house-virtue {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  margin: 0 0 4px !important;
+  line-height: 1 !important;
+}
+
+.lore-section .lore-house-name,
+.lore-houses-grid .lore-house-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 30px !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.012em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 6px !important;
+  text-transform: uppercase !important;
+  text-shadow:
+    -1.5px 0 0 rgba(227,27,35,0.45),
+     1.5px 0 0 rgba(46,188,212,0.32) !important;
+}
+
+.lore-section .lore-house-namesake,
+.lore-houses-grid .lore-house-namesake {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+}
+
+/* Description paragraphs — proper line height, reasonable max width */
+.lore-section .lore-house-desc,
+.lore-houses-grid .lore-house-desc {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 12px !important;
+  max-width: none !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+.lore-section .lore-house-desc:last-child,
+.lore-houses-grid .lore-house-desc:last-child { margin-bottom: 0 !important; }
+.lore-section .lore-house-desc em,
+.lore-houses-grid .lore-house-desc em {
+  color: var(--yellow, #d4a84a) !important;
+  font-style: italic !important;
+}
+.lore-section .lore-house-desc strong,
+.lore-houses-grid .lore-house-desc strong {
+  color: var(--text-1, #f5f1e8) !important;
+  font-weight: 600 !important;
+}
+
+/* Per-house color binding (override the inline borderTopColor style by
+   driving it through a CSS var). Use :nth-of-type so the order matches
+   the JSX: Valaris / Saberis / Orenne / Grimere. */
+.lore-section .lore-house:nth-of-type(1),
+.lore-houses-grid .lore-house:nth-of-type(1) { --h-c: #c41a1a; }
+.lore-section .lore-house:nth-of-type(2),
+.lore-houses-grid .lore-house:nth-of-type(2) { --h-c: #15803d; }
+.lore-section .lore-house:nth-of-type(3),
+.lore-houses-grid .lore-house:nth-of-type(3) { --h-c: #d4901a; }
+.lore-section .lore-house:nth-of-type(4),
+.lore-houses-grid .lore-house:nth-of-type(4) { --h-c: #1e40af; }
+
 
 /* Lore page itself — drop the right-rail padding now that the nav lives
    at the top */
