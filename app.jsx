@@ -805,12 +805,12 @@ function HomeToday(){
    scrolls.
    ──────────────────────────────────────────────────────────────────── */
 const HOME_SECTIONS = [
-  { id: "home-hero",     label: "Hero",      icon: "flag" },
-  { id: "home-vanguard", label: "Vanguard",  icon: "shield" },
-  { id: "home-today",    label: "Today",     icon: "sun" },
-  { id: "home-programme",label: "Programme", icon: "book-open" },
-  { id: "home-dorm",     label: "Dorms",     icon: "map" },
-  { id: "home-cta",      label: "Apply",     icon: "sparkles" },
+  { id: "home-hero",     label: "Hero" },
+  { id: "home-vanguard", label: "Vanguard" },
+  { id: "home-today",    label: "Today" },
+  { id: "home-programme",label: "Programme" },
+  { id: "home-dorm",     label: "Dorms" },
+  { id: "home-cta",      label: "Apply" },
 ];
 
 function HomeScrollNav(){
@@ -864,9 +864,7 @@ function HomeScrollNav(){
               aria-label={`Jump to ${s.label}`}
               data-label={s.label}
             >
-              <span className="home-scrollnav-icon" aria-hidden="true">
-                <Icon name={s.icon} size={18} stroke={1.8}/>
-              </span>
+              <span className="home-scrollnav-dot" aria-hidden="true"/>
               <span className="home-scrollnav-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
               <span className="home-scrollnav-label">{s.label}</span>
             </button>
@@ -2204,12 +2202,12 @@ function FacultyRegistryView(){
    LORE TABS
 ═══════════════════════════════════════════════════════════════════════════ */
 const LORE_TABS = [
-  { id: "world",     label: "The World",              icon: "map",            roman: "I",   kicker: "ORIENTATION READING",     deck: "How supes went public. STRATA. Geneva. Where Calderyn sits in 2026." },
-  { id: "history",   label: "The Programme",          icon: "scroll-text",    roman: "II",  kicker: "PROGRAMME HISTORY",       deck: "Sixty years of preparation for a war that never came." },
-  { id: "vanguard",  label: "The Vanguard",           icon: "shield",         roman: "III", kicker: "DOSSIER · THE VANGUARD",  deck: "Paragon. Vigil. Aegis. Switchboard. The four." },
-  { id: "houses",    label: "The Houses",             icon: "flag",           roman: "IV",  kicker: "THE FOUR HOUSES",         deck: "Valaris, Orenne, Saberis, Grimere. Pick yours." },
-  { id: "dean",      label: "The Dean",               icon: "users",          roman: "V",   kicker: "OFFICE OF THE DEAN",      deck: "Dr. Devika Ravindrakumar. Fifteen metres. The line." },
-  { id: "incidents", label: "The Cassandra Incident", icon: "alert-triangle", roman: "VI",  kicker: "INCIDENT 23-AUG-CASS",    deck: "August 2023. The night the wave came in." },
+  { id: "world",     label: "The World" },
+  { id: "history",   label: "The Programme" },
+  { id: "vanguard",  label: "The Vanguard" },
+  { id: "houses",    label: "The Houses" },
+  { id: "dean",      label: "The Dean" },
+  { id: "incidents", label: "The Cassandra Incident" },
 ];
 
 function HousesTab(){
@@ -2296,71 +2294,20 @@ function HousesTab(){
                 aria-label={`Jump to ${t.label}`}
                 data-label={t.label}
               >
-                <span className="home-scrollnav-icon" aria-hidden="true">
-                  <Icon name={t.icon} size={18} stroke={1.8}/>
-                </span>
+                <span className="home-scrollnav-dot" aria-hidden="true"/>
               </button>
             </li>
           ))}
         </ol>
       </nav>
 
-      <div className="lore-page codex">
-        {LORE_TABS.map((t, i) => {
-          const next = LORE_TABS[i + 1];
-          const Body = {
-            world: LoreWorld, history: LoreHistory, vanguard: LoreVanguard,
-            houses: LoreHouses, dean: LoreDean, incidents: LoreIncidents,
-          }[t.id];
-          return (
-            <section key={t.id} id={"lore-" + t.id} className="lore-section codex-chapter">
-              <header className="codex-head">
-                <div className="codex-head-rail">
-                  <span className="codex-head-roman">{t.roman}</span>
-                  <span className="codex-head-bar" aria-hidden="true"/>
-                  <span className="codex-head-icon" aria-hidden="true">
-                    <Icon name={t.icon} size={22} stroke={1.6}/>
-                  </span>
-                </div>
-                <div className="codex-head-meta">
-                  <div className="codex-head-kicker">{t.kicker}</div>
-                  <div className="codex-head-title">{t.label}</div>
-                  <div className="codex-head-deck">{t.deck}</div>
-                </div>
-                <div className="codex-head-page">
-                  <span>FOLIO</span>
-                  <strong>P. {String(i + 1).padStart(3, "0")}</strong>
-                  <span>OF VI</span>
-                </div>
-              </header>
-
-              <div className="codex-body">
-                <Body/>
-              </div>
-
-              <footer className="codex-foot">
-                <div className="codex-foot-end">
-                  <span className="codex-foot-diamond" aria-hidden="true">◆</span>
-                  <span className="codex-foot-label">END · CHAPTER {t.roman}</span>
-                  <span className="codex-foot-diamond" aria-hidden="true">◆</span>
-                </div>
-                {next && (
-                  <button
-                    type="button"
-                    className="codex-foot-next"
-                    onClick={() => goTo(next.id)}
-                  >
-                    <span className="codex-foot-next-meta">
-                      <span>NEXT · CHAPTER {next.roman}</span>
-                      <span className="codex-foot-next-title">{next.label}</span>
-                    </span>
-                    <Icon name="arrow-right" size={18} stroke={1.6}/>
-                  </button>
-                )}
-              </footer>
-            </section>
-          );
-        })}
+      <div className="lore-page">
+        <section id="lore-world"     className="lore-section"><LoreWorld/></section>
+        <section id="lore-history"   className="lore-section"><LoreHistory/></section>
+        <section id="lore-vanguard"  className="lore-section"><LoreVanguard/></section>
+        <section id="lore-houses"    className="lore-section"><LoreHouses/></section>
+        <section id="lore-dean"      className="lore-section"><LoreDean/></section>
+        <section id="lore-incidents" className="lore-section"><LoreIncidents/></section>
       </div>
     </div>
   );
