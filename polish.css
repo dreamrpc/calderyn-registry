@@ -21273,3 +21273,246 @@ button.map-nav-btn:hover {
   .map-stage.is-poster-expanded { grid-template-columns: 1fr !important; }
   .map-stage-poster-expand { display: none !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   OUTSIDE · tabs aligned with the rest of the site
+   Drops the chip chrome (background + border) so all 9 tabs fit on one
+   line without horizontal scroll. Same quiet underline pattern as the
+   map/home/lore/curriculum nav: text + count, gold underline on
+   hover/active, no width animation.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.orgs-toolbar {
+  padding: 8px clamp(20px, 4vw, 32px) 0 !important;
+  background: rgba(8,8,10,0.92) !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+  margin: 0 !important;
+}
+.orgs-toolbar .orgs-filters,
+.orgs-filters {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  overflow-x: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(212,168,74,0.3) transparent !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  max-width: 1500px !important;
+}
+.orgs-filters::-webkit-scrollbar { height: 3px !important; }
+.orgs-filters::-webkit-scrollbar-thumb { background: rgba(212,168,74,0.3) !important; }
+.orgs-filters::-webkit-scrollbar-track { background: transparent !important; }
+
+.orgs-toolbar .orgs-pill,
+.orgs-pill,
+button.orgs-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  height: 40px !important;
+  min-height: 0 !important;
+  padding: 0 14px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  background: transparent !important;
+  color: var(--text-3, #948d80) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  position: relative !important;
+  overflow: visible !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: color 180ms ease !important;
+}
+.orgs-toolbar .orgs-pill::before,
+.orgs-pill::before { content: none !important; }
+.orgs-toolbar .orgs-pill::after,
+.orgs-pill::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 14px !important;
+  right: 14px !important;
+  bottom: 0 !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+  transform: scaleX(0) !important;
+  transform-origin: left center !important;
+  transition: transform 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.orgs-toolbar .orgs-pill:hover,
+.orgs-pill:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 14px !important;
+  width: auto !important;
+}
+.orgs-pill:hover::after { transform: scaleX(0.35) !important; }
+.orgs-toolbar .orgs-pill.on,
+.orgs-pill.on {
+  color: var(--yellow, #d4a84a) !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 14px !important;
+}
+.orgs-pill.on::after { transform: scaleX(1) !important; }
+
+.orgs-toolbar .orgs-pill .orgs-pill-n,
+.orgs-pill .orgs-pill-n {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  color: var(--text-3, #948d80) !important;
+  opacity: 0.6 !important;
+  margin: 0 0 0 2px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.orgs-pill.on .orgs-pill-n {
+  color: var(--yellow, #d4a84a) !important;
+  opacity: 0.9 !important;
+}
+
+@media (max-width: 760px) {
+  .orgs-toolbar { padding: 6px 16px 0 !important; }
+  .orgs-pill, button.orgs-pill { height: 36px !important; padding: 0 12px !important; font-size: 10px !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   POWERS PAGE · uniform padding / margins / headings
+   - index.html sets .bay-hd to display:grid with title+blurb side-by-side
+     (and align-items:end). That looks misaligned and clashes. Force it
+     to a clean block layout: title above, blurb below, left-aligned.
+   - Uniform horizontal padding on every panel (intro col, tier card,
+     status card, banned bay): 24px desktop, 18px mobile.
+   - Uniform inter-section spacing (40px), uniform inter-card spacing
+     (16px).
+   ════════════════════════════════════════════════════════════════════════ */
+
+.pg-guide .bay-hd,
+.bay-hd {
+  display: block !important;
+  grid-template-columns: none !important;
+  grid-template-rows: none !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 0 22px !important;
+  padding: 0 0 14px !important;
+  align-items: stretch !important;
+  border: 0 !important;
+  border-bottom: 2px solid rgba(212,168,74,0.32) !important;
+  position: relative !important;
+}
+.pg-guide .bay-hd::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: -2px !important;
+  width: 60px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+.pg-guide .bay-hd-tag {
+  display: inline-block !important;
+  grid-column: auto !important;
+  padding: 4px 11px !important;
+  background: rgba(212,168,74,0.08) !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  margin: 0 0 14px !important;
+  border-radius: 0 !important;
+  width: max-content !important;
+}
+.pg-guide .bay-hd-title {
+  display: block !important;
+  grid-column: auto !important;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(28px, 3.2vw, 38px) !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1.04 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+}
+.pg-guide .bay-hd-blurb {
+  display: block !important;
+  grid-column: auto !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14.5px !important;
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 760px !important;
+  text-align: left !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  align-self: auto !important;
+}
+
+/* Uniform inter-bay spacing */
+.pg-guide .intro-bay,
+.pg-guide .tier-bay,
+.pg-guide .status-bay { margin: 0 0 40px !important; }
+
+/* Uniform inner padding across all panels */
+.pg-guide .intro-bay-col       { padding: 24px 26px !important; }
+.pg-guide .tier-card-bracket   { padding: 18px 24px 4px !important; }
+.pg-guide .tier-card-tagline   { padding: 0 24px 8px !important; }
+.pg-guide .tier-card-deployment{ padding: 0 24px 20px !important; }
+.pg-guide .status-card-tag     { margin: 20px 24px 12px !important; }
+.pg-guide .status-card-desc    { padding: 0 24px 22px !important; }
+.pg-guide .banned-bay          { padding: 24px 26px !important; }
+
+/* Uniform grid gap so the inter-card rhythm matches the inter-bay rhythm */
+.pg-guide .intro-bay-body,
+.pg-guide .tier-ladder,
+.pg-guide .status-cards { gap: 16px !important; }
+@media (min-width: 900px) {
+  .pg-guide .intro-bay-body,
+  .pg-guide .tier-ladder,
+  .pg-guide .status-cards { gap: 16px 18px !important; }
+}
+
+/* Number rails — align the tag chip / bracket text to the same baseline
+   as the big number on the left rail so the cards don't read crooked */
+.pg-guide .status-card-num    { padding: 20px 0 0 !important; }
+.pg-guide .tier-card-top      { padding: 20px 8px !important; }
+
+/* Banned bay rows — uniform with the rest */
+.pg-guide .banned-bay-list { margin-top: 16px !important; gap: 6px !important; }
+.pg-guide .banned-bay-item { padding: 12px 16px !important; }
+
+@media (max-width: 600px) {
+  .pg-guide .intro-bay-col,
+  .pg-guide .banned-bay         { padding: 20px 18px !important; }
+  .pg-guide .tier-card-bracket,
+  .pg-guide .tier-card-tagline,
+  .pg-guide .tier-card-deployment,
+  .pg-guide .status-card-tag,
+  .pg-guide .status-card-desc   { padding-left: 18px !important; padding-right: 18px !important; }
+  .pg-guide .status-card-tag    { margin-left: 18px !important; margin-right: 18px !important; }
+}

@@ -3856,21 +3856,14 @@ function OrgsTable({data}){
 
 // Short labels for the Outside filter tabs so the row fits on one line.
 const OUTSIDE_SHORT = {
-  "government-civic":            "Government",
-  "law-enforcement":              "Law Enforcement",
-  "press-broadcast":              "Press",
-  "press-and-broadcast":          "Press",
-  "private-security":             "Security",
-  "rivals-collectives":           "Rivals",
-  "criminal-organised":           "Criminal",
-  "organised-crime":              "Criminal",
-  "civic-services":               "Services",
-  "international":                "International",
-  "intelligence":                 "Intelligence",
-  "diplomatic":                   "Diplomatic",
-  "medical-emergency":            "Medical",
-  "academia":                     "Academia",
-  "advocacy":                     "Advocacy",
+  "government-civic":      "Government",
+  "law-enforcement":       "Law",
+  "press-media":           "Press",
+  "medical-emergency":     "Medical",
+  "independent-operators": "Independent",
+  "underworld":            "Underworld",
+  "professional-powerball":"Powerball",
+  "local-business-trade":  "Business",
 };
 
 function OutsideTab(){
