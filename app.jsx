@@ -6803,9 +6803,10 @@ function MapTab(){
         )}
       </div>
 
-      {/* District nav — horizontal chip strip, always visible, every
-          district has its own icon + name + count. Replaces the old
-          left sidebar that some users never noticed. */}
+      {/* Map shell — 2-column grid that fits inside one viewport height.
+          Left = sticky vertical zone selector + a thin tall district
+          poster. Right = scrollable location list for the active zone. */}
+      <div className="map-shell">
       <nav className="map-nav" aria-label="Campus districts">
         <ol className="map-nav-list">
           {districtsWithItems.map((d, i) => {
@@ -6960,6 +6961,7 @@ function MapTab(){
           )}
         </main>
       </div>
+      </div>{/* /.map-shell */}
     </div>
   );
 }
