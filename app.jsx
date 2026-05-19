@@ -2356,7 +2356,11 @@ function StaffSlotCard({person, slot, isHead, deptColor}){
               : <span>{person.char}</span>}
             {person.npc && <NpcBadge/>}
           </div>
-          {person.stage && <div className="freg-slot-stage">{person.stage}</div>}
+          {person.tier
+            ? <div className="freg-slot-tier"><TierChip tier={person.tier}/></div>
+            : (person.stage && person.stage.toLowerCase() !== (person.char || "").toLowerCase()
+                ? <div className="freg-slot-stage">{person.stage}</div>
+                : null)}
           <div className="freg-slot-role">{person.role}</div>
           {person.power && <div className="freg-slot-power"><span>Power</span> {person.power}</div>}
         </>

@@ -24435,3 +24435,18 @@ button.orgs-pill {
    sticky strip doesn't kiss the primer panel below */
 .curr-main { padding-top: 28px !important; }
 
+
+/* Staff slot tier chip — replaces the duplicate stage-name display
+   when the person has a tier set. Sits between name and role like
+   the old stage label did, but uses the premium TierChip. */
+.freg-slot-tier {
+  display: inline-flex !important;
+  margin-top: 4px !important;
+  margin-bottom: 2px !important;
+}
+.freg-slot-tier .tier-pill {
+  min-width: auto !important;
+  padding: 3px 8px !important;
+  font-size: 9.5px !important;
+}
+
