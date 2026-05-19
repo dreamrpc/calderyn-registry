@@ -1161,157 +1161,207 @@ function RulesTab(){
 /* ═══════════════════════════════════════════════════════════════════════════
    CURRICULUM
 ═══════════════════════════════════════════════════════════════════════════ */
+/* ─── Curriculum helpers — shared by CurriculumView, ClassCard, etc. ── */
+const YEAR_KEY  = { FR: 0, SO: 1, JR: 2, SR: 3 };
+const YEAR_TABS = [
+  { idx: 0, key: "FR", label: "Freshman" },
+  { idx: 1, key: "SO", label: "Sophomore" },
+  { idx: 2, key: "JR", label: "Junior" },
+  { idx: 3, key: "SR", label: "Senior" },
+];
+
+// Resolve a department class's faculty using the triad rule.
+function resolveDeptFaculty(dept, cls){
+  if (cls.headSubs || cls.type === "shared") return dept.head;
+  if (cls.type === "hero")     return dept.taHero;
+  if (cls.type === "sidekick") return dept.taSidekick;
+  return dept.head;
+}
+
+// Gather every class in the curriculum into a single flat array, with
+// resolved faculty + per-class type/kind. Pulls from FACULTY rows AND
+// the departments triads.
+function gatherCurriculum(){
+  const all = [];
+  FACULTY.forEach(sec => {
+    sec.rows.forEach(r => {
+      if (!r.subjects || !r.tracks) return;
+      r.subjects.forEach(subj => {
+        if (typeof subj === "string") return; // legacy
+        const type = subj.type ?? (
+          (r.tracks || []).length > 1 ? "shared"
+          : (r.tracks || [])[0] === "hero"     ? "hero"
+          : (r.tracks || [])[0] === "sidekick" ? "sidekick"
+          : "shared"
+        );
+        const kind = subj.kind ?? (sec.section.includes("ELECTIVE") ? "elective" : "required");
+        all.push({
+          title: subj.title,
+          desc: subj.desc || null,
+          year: subj.year || null,
+          type, kind,
+          mandatory: !!subj.mandatory,
+          dept: null,
+          deptName: null,
+          deptColor: null,
+          headSubs: false,
+          faculty: {
+            char:  r.char  || null,
+            role:  r.role,
+            link:  r.link  || null,
+            npc:   !!r.npc,
+            stage: r.stage || null,
+          },
+        });
+      });
+    });
+  });
+  (D.departments || []).forEach(dept => {
+    (dept.classes || []).forEach(cls => {
+      const fac = resolveDeptFaculty(dept, cls);
+      all.push({
+        title: cls.title,
+        desc: cls.desc || null,
+        year: cls.year,
+        type: cls.type,
+        kind: "required",
+        mandatory: false,
+        dept: dept.id,
+        deptName: dept.name,
+        deptColor: dept.color,
+        headSubs: !!cls.headSubs,
+        faculty: fac ? {
+          char:  fac.char  || null,
+          role:  fac.role,
+          link:  fac.link  || null,
+          npc:   !!fac.npc,
+          stage: fac.stage || null,
+        } : null,
+      });
+    });
+  });
+  return all;
+}
+
+/* Single class card — used in the year-timetable columns and the
+   electives grid at the bottom. All info visible at a glance. */
+function ClassCard({cls}){
+  const fac = cls.faculty;
+  const facName = fac ? (fac.char || fac.role || "—") : "—";
+  const facOpen = !fac?.char;
+  const typeClass = "t-" + (cls.type || "shared");
+  const tags = [];
+  if (cls.kind === "elective") tags.push({label: "ELECTIVE", cls: "is-elective"});
+  else tags.push({label: "REQUIRED", cls: "is-required"});
+  if (cls.mandatory) tags.push({label: "MANDATORY", cls: "is-mandatory"});
+  if (cls.headSubs) tags.push({label: "HoD COVER", cls: "is-subs"});
+
+  return (
+    <article className={"curr-class " + typeClass + (cls.kind === "elective" ? " is-elective" : "")}>
+      <div className="curr-class-stripe" aria-hidden="true"/>
+      <header className="curr-class-hd">
+        {cls.year && <span className="curr-class-year">{cls.year}</span>}
+        <span className={"curr-class-type " + typeClass}>
+          {cls.type === "hero" ? "Heroes" : cls.type === "sidekick" ? "Sidekicks" : "Shared"}
+        </span>
+        {cls.deptName && (
+          <span className="curr-class-dept" style={{"--dept-c": cls.deptColor || "#d4a84a"}}>
+            {cls.deptName}
+          </span>
+        )}
+      </header>
+      <h5 className="curr-class-title">{cls.title}</h5>
+      {cls.desc && <p className="curr-class-desc">{cls.desc}</p>}
+      <footer className="curr-class-foot">
+        <div className="curr-class-fac">
+          <span className="curr-class-fac-lbl">Taught by</span>
+          <span className={"curr-class-fac-val" + (facOpen ? " is-open" : "")}>
+            {facOpen
+              ? <span className="curr-class-fac-open">OPEN · {fac?.role || "unassigned"}</span>
+              : (fac?.link
+                  ? <CLink name={facName} link={fac.link}/>
+                  : <span>{facName}</span>)}
+            {fac?.npc && !facOpen && <NpcBadge/>}
+          </span>
+        </div>
+        <div className="curr-class-tags">
+          {tags.map((t, i) => (
+            <span key={i} className={"curr-class-tag " + t.cls}>{t.label}</span>
+          ))}
+        </div>
+      </footer>
+    </article>
+  );
+}
+
 function CurriculumView(){
   const tracks = D.curriculumTracks;
-  const [yearIdx, setYearIdx] = useState(0);
-  const [filter, setFilter] = useState("all"); // all / hero / sidekick / shared
+  const [activeYear, setActiveYear] = useState("FR");
 
-  const YEAR_KEY = { FR: 0, SO: 1, JR: 2, SR: 3 };
-  const SECTION_OF = {};
-  FACULTY.forEach(sec => {
-    const tag = sec.section.includes("ELECTIVE") ? "elective"
-              : sec.section.includes("SHARED")   ? "shared"
-              : (sec.section.includes("HEROES") || sec.section.includes("SIDEKICKS")) ? "core"
-              : null;
-    sec.rows.forEach(r => { if (r.role && tag) SECTION_OF[r.role] = tag; });
-  });
+  // Build the curriculum once.
+  const allClasses = gatherCurriculum();
 
-  // Resolve a department class's faculty using the triad rule:
-  //   type "shared"   OR headSubs:true  → head
-  //   type "hero"                       → taHero
-  //   type "sidekick"                   → taSidekick
-  function resolveDeptFaculty(dept, cls){
-    if (cls.headSubs || cls.type === "shared") return dept.head;
-    if (cls.type === "hero")     return dept.taHero;
-    if (cls.type === "sidekick") return dept.taSidekick;
-    return dept.head;
-  }
-  function profLabel(faculty){
-    if (!faculty) return "—";
-    return faculty.char || faculty.role || "—";
-  }
+  // Required classes, bucketed by [year][type].
+  // year = "FR"|"SO"|"JR"|"SR", type = "shared"|"hero"|"sidekick"
+  const required = allClasses.filter(c => c.kind === "required" && c.year);
+  const bucket = (year, type) => required
+    .filter(c => c.year === year && c.type === type)
+    .sort((a, b) => a.title.localeCompare(b.title));
 
-  function subjectsForTrackYear(trackId, yIdx){
-    const out = [];
-    // 1) Existing FACULTY-row-driven subjects
-    FACULTY.forEach(sec => {
-      sec.rows.forEach(r => {
-        if (!r.subjects || !r.tracks) return;
-        if (!r.tracks.includes(trackId)) return;
-        r.subjects.forEach(subj => {
-          let year, title, desc;
-          if (typeof subj === "string"){
-            const m = subj.match(/^(FR|SO|JR|SR)\s*·\s*(.+)$/);
-            if (!m) return;
-            year = m[1]; title = m[2].trim(); desc = null;
-          } else {
-            year = subj.year; title = subj.title; desc = subj.desc || null;
-          }
-          if (YEAR_KEY[year] !== yIdx) return;
-          out.push({
-            subject: title,
-            desc: desc,
-            prof: r.role,
-            shared: r.tracks.length > 1,
-            kind: SECTION_OF[r.role] || "core",
-          });
-        });
-      });
-    });
-    // 2) Department-driven classes (Combat + Media)
-    (D.departments || []).forEach(dept => {
-      dept.classes.forEach(cls => {
-        if (YEAR_KEY[cls.year] !== yIdx) return;
-        const matches =
-          cls.type === "shared" ||
-          (cls.type === "hero"     && trackId === "hero") ||
-          (cls.type === "sidekick" && trackId === "sidekick");
-        if (!matches) return;
-        const fac = resolveDeptFaculty(dept, cls);
-        out.push({
-          subject: cls.title,
-          desc: cls.desc,
-          prof: profLabel(fac),
-          shared: cls.type === "shared",
-          kind: "core",
-          dept: dept.id,
-          deptName: dept.name,
-          deptColor: dept.color,
-          classType: cls.type,
-          headSubs: !!cls.headSubs,
-        });
-      });
-    });
-    return out;
-  }
+  // Electives — no year, just title-sorted.
+  const electives = allClasses
+    .filter(c => c.kind === "elective")
+    .sort((a, b) => a.title.localeCompare(b.title));
 
-  const YEAR_TABS = [
-    { idx: 0, key: "FR", label: "Freshman" },
-    { idx: 1, key: "SO", label: "Sophomore" },
-    { idx: 2, key: "JR", label: "Junior" },
-    { idx: 3, key: "SR", label: "Senior" },
-  ];
+  // Scroll-spy on year sections — anchor jumps highlight the active tab.
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const trigger = window.innerHeight * 0.28;
+      let current = "FR";
+      for (const yt of YEAR_TABS) {
+        const el = document.getElementById("curr-year-" + yt.key);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top - trigger <= 0) current = yt.key;
+      }
+      setActiveYear(current);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    update();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  const jumpToYear = (key) => {
+    const el = document.getElementById("curr-year-" + key);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const heroTrack     = tracks.find(t => t.title.toLowerCase() === "heroes");
   const sidekickTrack = tracks.find(t => t.title.toLowerCase() === "sidekicks");
-  const heroYr     = heroTrack?.years?.[yearIdx];
-  const sidekickYr = sidekickTrack?.years?.[yearIdx];
 
-  const heroSubs = subjectsForTrackYear("hero", yearIdx);
-  const sideSubs = subjectsForTrackYear("sidekick", yearIdx);
-
-  const seen = new Map();
-  function addSubject(s, trackId){
-    const key = s.subject;
-    if (seen.has(key)){
-      const ex = seen.get(key);
-      if (!ex.tracks.includes(trackId)) ex.tracks.push(trackId);
-    } else {
-      seen.set(key, { ...s, tracks: [trackId], required: s.kind !== "elective" });
-    }
-  }
-  heroSubs.forEach(s => addSubject(s, "hero"));
-  sideSubs.forEach(s => addSubject(s, "sidekick"));
-
-  // Department triads for this year — each one shows up as a panel above
-  // the subject list with the HoD + TAs + the year's class(es).
-  const deptTriads = (D.departments || []).map(dept => {
-    const yearClasses = dept.classes.filter(c => YEAR_KEY[c.year] === yearIdx);
-    return { dept, yearClasses };
-  }).filter(d => d.yearClasses.length > 0);
-
-  // Single unified list, alphabetical, with required-first secondary sort
-  const allSubs = Array.from(seen.values()).sort((a, b) => {
-    if (a.required !== b.required) return a.required ? -1 : 1;
-    return a.subject.localeCompare(b.subject);
-  });
-  const requiredCount = allSubs.filter(s => s.required).length;
-  const electiveCount = allSubs.length - requiredCount;
-
-  // Apply filter
-  const filtered = allSubs.filter(s => {
-    if (filter === "all") return true;
-    const isHero = s.tracks.includes("hero");
-    const isSide = s.tracks.includes("sidekick");
-    if (filter === "shared")    return isHero && isSide;
-    if (filter === "hero")      return isHero && !isSide;
-    if (filter === "sidekick")  return isSide && !isHero;
-    return true;
+  // For per-year track summary cards (hero year text + sidekick year text)
+  const yearText = (key) => ({
+    hero: heroTrack?.years?.[YEAR_KEY[key]],
+    side: sidekickTrack?.years?.[YEAR_KEY[key]],
   });
 
   return (
     <div className="curr">
-      {/* Year nav — quiet underline strip, same pattern as the lore + home
-          + map page navs. Sticks below the global header. */}
-      <nav className="lore-nav curr-nav" aria-label="Curriculum years">
+      {/* Year nav — anchor jumps, scroll-spy keeps the active year lit. */}
+      <nav className="lore-nav curr-nav" aria-label="Jump to year">
         <ol className="lore-nav-list">
           {YEAR_TABS.map(yt => (
-            <li key={yt.idx} className={"lore-nav-item" + (yt.idx === yearIdx ? " is-active" : "")}>
+            <li key={yt.idx} className={"lore-nav-item" + (yt.key === activeYear ? " is-active" : "")}>
               <button
                 type="button"
                 className="lore-nav-btn"
-                onClick={() => setYearIdx(yt.idx)}
-                aria-current={yt.idx === yearIdx ? "page" : undefined}
+                onClick={() => jumpToYear(yt.key)}
+                aria-current={yt.key === activeYear ? "page" : undefined}
               >
                 <span className="lore-nav-icon" aria-hidden="true">
                   <Icon name="book-open" size={14} stroke={1.7}/>
@@ -1325,132 +1375,135 @@ function CurriculumView(){
 
       <main className="curr-main">
 
-        <header className="curr-yearhead">
-          <div className="curr-yearhead-eyebrow">Year {yearIdx+1} · {YEAR_TABS[yearIdx].label}</div>
-          <h3 className="curr-yearhead-title">
-            What the {YEAR_TABS[yearIdx].label.toLowerCase()} year actually looks like.
-          </h3>
-        </header>
+        {/* SECTION C · DEPARTMENTS (always visible, year-agnostic) */}
+        <section className="curr-depts">
+          <header className="curr-depts-hd">
+            <div className="curr-depts-tag">Departments</div>
+            <h3 className="curr-depts-title">Combat &amp; Media · the two triads.</h3>
+            <p className="curr-depts-blurb">
+              Two teaching departments run on a head + two TA structure. The Head of Department teaches the shared/cross-track classes; track-specific classes are taught by the matching TA. A head may step in for a single class when the story calls for it — those are flagged below.
+            </p>
+          </header>
+          <div className="curr-depts-grid">
+            {(D.departments || []).map(dept => (
+              <article key={dept.id} className="curr-dept" style={{"--dept-c": dept.color || "#d4a84a"}}>
+                <header className="curr-dept-hd">
+                  <div className="curr-dept-hd-l">
+                    <span className="curr-dept-hd-eyebrow">Department</span>
+                    <h4 className="curr-dept-hd-name">{dept.name}</h4>
+                  </div>
+                  <span className="curr-dept-hd-count">
+                    {dept.classes.length} {dept.classes.length === 1 ? "class" : "classes"}
+                  </span>
+                </header>
+                {dept.blurb && <p className="curr-dept-blurb">{dept.blurb}</p>}
+                <div className="curr-dept-triad">
+                  <DeptPerson faculty={dept.taHero}     label="TA · Heroes"             color={dept.color} deptId={dept.id}/>
+                  <DeptPerson faculty={dept.head}       label="Head of Department" isHead color={dept.color} deptId={dept.id}/>
+                  <DeptPerson faculty={dept.taSidekick} label="TA · Sidekicks"          color={dept.color} deptId={dept.id}/>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
-        <div className="curr-summary">
-          <article className="curr-track curr-track-hero">
-            <div className="curr-track-hd">
-              <span className="curr-track-tag">Track One · Heroes</span>
-              <h4 className="curr-track-name">{heroYr?.t || "—"}</h4>
-            </div>
-            {heroYr?.d && <p className="curr-track-desc">{heroYr.d}</p>}
-            {heroTrack?.stamps && (
-              <div className="curr-track-stamps">
-                {heroTrack.stamps.map(s => <span key={s} className="curr-stamp">{s}</span>)}
+        {/* SECTION B · per-year TIMETABLE (4 year sections stacked) */}
+        {YEAR_TABS.map(yt => {
+          const sharedCol = bucket(yt.key, "shared");
+          const heroCol   = bucket(yt.key, "hero");
+          const sideCol   = bucket(yt.key, "sidekick");
+          const total     = sharedCol.length + heroCol.length + sideCol.length;
+          const yt_text   = yearText(yt.key);
+          return (
+            <section
+              key={yt.key}
+              id={"curr-year-" + yt.key}
+              className="curr-year"
+            >
+              <header className="curr-year-hd">
+                <div className="curr-year-hd-l">
+                  <div className="curr-year-tag">Year {yt.idx + 1}</div>
+                  <h3 className="curr-year-title">{yt.label}</h3>
+                </div>
+                <div className="curr-year-hd-r">
+                  <span className="curr-year-count">{total} {total === 1 ? "class" : "classes"}</span>
+                </div>
+              </header>
+
+              {/* SECTION A · two-track summary cards, per year */}
+              <div className="curr-summary">
+                <article className="curr-track curr-track-hero">
+                  <div className="curr-track-hd">
+                    <span className="curr-track-tag">Track One · Heroes</span>
+                    <h4 className="curr-track-name">{yt_text.hero?.t || "—"}</h4>
+                  </div>
+                  {yt_text.hero?.d && <p className="curr-track-desc">{yt_text.hero.d}</p>}
+                </article>
+                <article className="curr-track curr-track-side">
+                  <div className="curr-track-hd">
+                    <span className="curr-track-tag">Track Two · Sidekicks</span>
+                    <h4 className="curr-track-name">{yt_text.side?.t || "—"}</h4>
+                  </div>
+                  {yt_text.side?.d && <p className="curr-track-desc">{yt_text.side.d}</p>}
+                </article>
               </div>
-            )}
-          </article>
 
-          <article className="curr-track curr-track-side">
-            <div className="curr-track-hd">
-              <span className="curr-track-tag">Track Two · Sidekicks</span>
-              <h4 className="curr-track-name">{sidekickYr?.t || "—"}</h4>
-            </div>
-            {sidekickYr?.d && <p className="curr-track-desc">{sidekickYr.d}</p>}
-            {sidekickTrack?.stamps && (
-              <div className="curr-track-stamps">
-                {sidekickTrack.stamps.map(s => <span key={s} className="curr-stamp">{s}</span>)}
+              {/* Timetable — 3 columns: Shared / Heroes / Sidekicks */}
+              <div className="curr-timetable">
+                <div className="curr-col curr-col-shared">
+                  <header className="curr-col-hd">
+                    <span className="curr-col-marker"/>
+                    <span className="curr-col-name">Shared</span>
+                    <span className="curr-col-count">{sharedCol.length}</span>
+                  </header>
+                  <div className="curr-col-body">
+                    {sharedCol.length === 0
+                      ? <div className="curr-col-empty">No shared modules this year.</div>
+                      : sharedCol.map((c, i) => <ClassCard key={i} cls={c}/>)}
+                  </div>
+                </div>
+                <div className="curr-col curr-col-hero">
+                  <header className="curr-col-hd">
+                    <span className="curr-col-marker"/>
+                    <span className="curr-col-name">Heroes</span>
+                    <span className="curr-col-count">{heroCol.length}</span>
+                  </header>
+                  <div className="curr-col-body">
+                    {heroCol.length === 0
+                      ? <div className="curr-col-empty">No hero-track modules this year.</div>
+                      : heroCol.map((c, i) => <ClassCard key={i} cls={c}/>)}
+                  </div>
+                </div>
+                <div className="curr-col curr-col-side">
+                  <header className="curr-col-hd">
+                    <span className="curr-col-marker"/>
+                    <span className="curr-col-name">Sidekicks</span>
+                    <span className="curr-col-count">{sideCol.length}</span>
+                  </header>
+                  <div className="curr-col-body">
+                    {sideCol.length === 0
+                      ? <div className="curr-col-empty">No sidekick-track modules this year.</div>
+                      : sideCol.map((c, i) => <ClassCard key={i} cls={c}/>)}
+                  </div>
+                </div>
               </div>
-            )}
-          </article>
-        </div>
+            </section>
+          );
+        })}
 
-        {/* DEPARTMENT TRIADS — Combat + Media. Each panel shows the Head
-            of Department (centre) flanked by the two TAs, and below them
-            the actual class(es) for the active year. */}
-        {deptTriads.length > 0 && (
-          <section className="curr-depts">
-            <header className="curr-depts-hd">
-              <div className="curr-depts-tag">Year {yearIdx + 1} · Departments</div>
-              <h4 className="curr-depts-title">Combat &amp; Media · the two triads.</h4>
-              <p className="curr-depts-blurb">
-                Each department runs on a head + two TA structure. Shared classes
-                (foundations + capstone) are taught by the Head of Department.
-                Track-specific classes are taught by the matching TA. A Head may
-                step in for a single class when the story calls for it — those
-                are flagged below.
+        {/* SECTION D · ELECTIVES (year-agnostic, bottom) */}
+        {electives.length > 0 && (
+          <section className="curr-electives">
+            <header className="curr-electives-hd">
+              <div className="curr-electives-tag">Electives</div>
+              <h3 className="curr-electives-title">Open to both tracks · year-flexible.</h3>
+              <p className="curr-electives-blurb">
+                Students self-select based on aptitude, ambition, and what they want their post-Calderyn life to look like. Some align naturally with house culture; none are gated by house.
               </p>
             </header>
-            <div className="curr-depts-grid">
-              {deptTriads.map(({ dept, yearClasses }) => (
-                <DepartmentTriad
-                  key={dept.id}
-                  dept={dept}
-                  yearClasses={yearClasses}
-                  resolveDeptFaculty={resolveDeptFaculty}
-                  profLabel={profLabel}
-                />
-              ))}
+            <div className="curr-electives-grid">
+              {electives.map((c, i) => <ClassCard key={i} cls={c}/>)}
             </div>
-          </section>
-        )}
-
-        {/* SUBJECT LIST — the actual modules taught this year.
-            Audit #7: the year tabs were "underused" because clicking
-            them only updated the two track summary cards above; the
-            computed subject list was never rendered. Now the writer
-            sees the full module roster per year, filterable by track. */}
-        {allSubs.length > 0 && (
-          <section className="curr-classes">
-            <header className="curr-classes-hd">
-              <div className="curr-classes-tag">Year {yearIdx+1} · Modules</div>
-              <h4 className="curr-classes-title">
-                {filtered.length} {filtered.length === 1 ? "subject" : "subjects"}
-                {filter !== "all" && (
-                  <span className="curr-classes-title-sub">
-                    {" · "}{filter === "shared" ? "Shared only"
-                          : filter === "hero" ? "Hero only"
-                          : "Sidekick only"}
-                  </span>
-                )}
-                {filter === "all" && (
-                  <span className="curr-classes-title-sub">
-                    {" · "}{requiredCount} required, {electiveCount} elective
-                  </span>
-                )}
-              </h4>
-              <div className="curr-classes-filter">
-                <button
-                  type="button"
-                  className={"sf-pill" + (filter === "all" ? " on" : "")}
-                  onClick={() => setFilter("all")}
-                  aria-pressed={filter === "all"}
-                >All</button>
-                <button
-                  type="button"
-                  className={"sf-pill" + (filter === "hero" ? " on" : "")}
-                  onClick={() => setFilter("hero")}
-                  aria-pressed={filter === "hero"}
-                >Heroes</button>
-                <button
-                  type="button"
-                  className={"sf-pill" + (filter === "sidekick" ? " on" : "")}
-                  onClick={() => setFilter("sidekick")}
-                  aria-pressed={filter === "sidekick"}
-                >Sidekicks</button>
-                <button
-                  type="button"
-                  className={"sf-pill" + (filter === "shared" ? " on" : "")}
-                  onClick={() => setFilter("shared")}
-                  aria-pressed={filter === "shared"}
-                >Shared</button>
-              </div>
-            </header>
-            <ol className="curr-rows">
-              {filtered.length === 0 && (
-                <li className="curr-rows-empty">
-                  No subjects in this filter for {YEAR_TABS[yearIdx].label} year.
-                </li>
-              )}
-              {filtered.map((s, i) => (
-                <ClassRow key={`${yearIdx}-${i}-${s.subject}`} subject={s}/>
-              ))}
-            </ol>
           </section>
         )}
       </main>
@@ -1478,121 +1531,8 @@ function DeptPerson({faculty, label, isHead, color, deptId}){
   );
 }
 
-function DepartmentTriad({dept, yearClasses, resolveDeptFaculty, profLabel}){
-  return (
-    <article className="curr-dept" style={{"--dept-c": dept.color || "#d4a84a"}}>
-      <header className="curr-dept-hd">
-        <div className="curr-dept-hd-l">
-          <span className="curr-dept-hd-eyebrow">Department</span>
-          <h5 className="curr-dept-hd-name">{dept.name}</h5>
-        </div>
-        <span className="curr-dept-hd-count">
-          {yearClasses.length} {yearClasses.length === 1 ? "class" : "classes"}
-        </span>
-      </header>
-      {dept.blurb && <p className="curr-dept-blurb">{dept.blurb}</p>}
-
-      {/* Triad — TA-Hero | HoD (centre) | TA-Sidekick */}
-      <div className="curr-dept-triad">
-        <DeptPerson
-          faculty={dept.taHero}
-          label="TA · Heroes"
-          color={dept.color}
-          deptId={dept.id}
-        />
-        <DeptPerson
-          faculty={dept.head}
-          label="Head of Department"
-          isHead
-          color={dept.color}
-          deptId={dept.id}
-        />
-        <DeptPerson
-          faculty={dept.taSidekick}
-          label="TA · Sidekicks"
-          color={dept.color}
-          deptId={dept.id}
-        />
-      </div>
-
-      {/* This year's classes */}
-      <ul className="curr-dept-classes">
-        {yearClasses.map((cls, i) => {
-          const fac = resolveDeptFaculty(dept, cls);
-          const facName = profLabel(fac);
-          const typeLabel = cls.type === "shared" ? "Shared"
-                          : cls.type === "hero"   ? "Heroes"
-                          : "Sidekicks";
-          return (
-            <li key={i} className={"curr-dept-class t-" + cls.type + (cls.headSubs ? " is-subs" : "")}>
-              <div className="curr-dept-class-hd">
-                <span className={"curr-dept-class-type t-" + cls.type}>{typeLabel}</span>
-                <h6 className="curr-dept-class-title">{cls.title}</h6>
-                {cls.headSubs && <span className="curr-dept-class-subs">HoD COVER</span>}
-              </div>
-              <div className="curr-dept-class-fac">
-                <span className="curr-dept-class-fac-lbl">Taught by</span>
-                <span className="curr-dept-class-fac-val">{facName}</span>
-              </div>
-              {cls.desc && <p className="curr-dept-class-desc">{cls.desc}</p>}
-            </li>
-          );
-        })}
-      </ul>
-    </article>
-  );
-}
-
-/* eslint-disable-next-line */
-function ClassRow({subject}){
-  const [open, setOpen] = useState(false);
-  const hasDesc = !!subject.desc;
-  const isHero = subject.tracks.includes("hero");
-  const isSide = subject.tracks.includes("sidekick");
-  const trackLabel = (isHero && isSide) ? "Shared" : isHero ? "Heroes" : isSide ? "Sidekicks" : null;
-  const trackKind  = (isHero && isSide) ? "shared" : isHero ? "hero"   : isSide ? "sidekick"  : "";
-  const required = subject.required;
-  return (
-    <li className={"curr-row" + (open ? " is-open" : "") + (hasDesc ? " has-desc" : "")}>
-      <button
-        type="button"
-        className="curr-row-btn"
-        onClick={() => hasDesc && setOpen(!open)}
-        disabled={!hasDesc}
-        aria-expanded={open}
-      >
-        <span className="curr-row-name">
-          {subject.subject}
-          {subject.deptName && (
-            <span className="curr-row-dept" style={{"--dept-c": subject.deptColor || "#d4a84a"}}>
-              {subject.deptName}{subject.headSubs && " · HoD"}
-            </span>
-          )}
-        </span>
-        {subject.prof && (
-          <span className="curr-row-prof">
-            <span className="curr-row-prof-lbl">Faculty</span>
-            <span className="curr-row-prof-val">{subject.prof}</span>
-          </span>
-        )}
-        <span className={"curr-row-kind " + (required ? "is-required" : "is-elective")}>
-          {required ? "Required" : "Elective"}
-        </span>
-        {trackLabel && (
-          <span className={"curr-row-track t-" + trackKind}>{trackLabel}</span>
-        )}
-        {hasDesc && (
-          <span className="curr-row-toggle" aria-hidden="true">
-            <Icon name={open ? "chevron-up" : "chevron-down"} size={14}/>
-          </span>
-        )}
-      </button>
-      {open && hasDesc && (
-        <div className="curr-row-desc">{subject.desc}</div>
-      )}
-    </li>
-  );
-}
+/* DepartmentTriad / ClassRow components removed — CurriculumView now
+   renders triads inline via DeptPerson + ClassCard directly. */
 
 /* ═══════════════════════════════════════════════════════════════════════════
    POWERS

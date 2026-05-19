@@ -18849,6 +18849,365 @@ div.cp-staff-block,
 }
 
 /* ════════════════════════════════════════════════════════════════════════
+   CURRICULUM TIMETABLE · all years stacked, 3-column timetable per year
+   Loaded LAST so cascade wins. Owns: .curr-year, .curr-timetable,
+   .curr-col, .curr-class, .curr-electives.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Page wrapper — wider gutter, room to breathe */
+.curr-main {
+  max-width: 1440px !important;
+}
+
+/* Each year section — anchor target + scroll margin so the sticky nav
+   doesn't sit on top of the heading when you jump */
+.curr-year {
+  margin: clamp(40px, 5vw, 64px) 0 0 !important;
+  padding: 0 !important;
+  scroll-margin-top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + 56px) !important;
+}
+.curr-year-hd {
+  position: relative !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  margin: 0 0 22px !important;
+  padding: 0 0 16px !important;
+  border-bottom: 2px solid rgba(212,168,74,0.32) !important;
+}
+.curr-year-hd::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; bottom: -2px !important;
+  width: 100px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+.curr-year-tag {
+  display: inline-block !important;
+  padding: 4px 11px !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  background: rgba(212,168,74,0.08) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  margin: 0 0 12px !important;
+  border-radius: 0 !important;
+}
+.curr-year-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(34px, 4vw, 50px) !important;
+  letter-spacing: -0.022em !important;
+  line-height: 1 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 !important;
+  text-transform: none !important;
+  text-shadow:
+    -1.5px 0 0 rgba(227,27,35,0.4),
+     1.5px 0 0 rgba(46,188,212,0.28) !important;
+}
+.curr-year-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 5px 11px !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  background: rgba(212,168,74,0.06) !important;
+}
+
+/* 3-column timetable */
+.curr-timetable {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 16px !important;
+  margin-top: 22px !important;
+}
+@media (min-width: 900px)  { .curr-timetable { grid-template-columns: repeat(3, 1fr) !important; gap: 14px !important; } }
+
+.curr-col {
+  background: linear-gradient(180deg, #0c0c12 0%, #08080b 100%) !important;
+  border: 1px solid rgba(212,168,74,0.18) !important;
+  border-top: 4px solid var(--col-c, var(--yellow, #d4a84a)) !important;
+  padding: 16px 14px 16px !important;
+  position: relative !important;
+  min-width: 0 !important;
+}
+.curr-col-shared { --col-c: var(--yellow, #d4a84a); }
+.curr-col-hero   { --col-c: #c41a1a; }
+.curr-col-side   { --col-c: #1e40af; }
+
+.curr-col-hd {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin: 0 0 12px !important;
+  padding: 0 0 10px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+}
+.curr-col-marker {
+  display: inline-block !important;
+  width: 10px !important;
+  height: 10px !important;
+  background: var(--col-c) !important;
+  flex-shrink: 0 !important;
+}
+.curr-col-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+  letter-spacing: -0.005em !important;
+  text-transform: uppercase !important;
+  color: var(--text-1, #f5f1e8) !important;
+  flex: 1 1 auto !important;
+}
+.curr-col-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--col-c) !important;
+  padding: 3px 9px !important;
+  border: 1px solid currentColor !important;
+}
+.curr-col-body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+.curr-col-empty {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 12.5px !important;
+  font-style: italic !important;
+  color: var(--text-3, #948d80) !important;
+  text-align: center !important;
+  padding: 18px 8px !important;
+  background: rgba(20,20,24,0.4) !important;
+  border: 1px dashed rgba(212,168,74,0.2) !important;
+}
+
+/* Individual class card */
+.curr-class {
+  position: relative !important;
+  background: rgba(20,20,24,0.55) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-radius: 0 !important;
+  padding: 12px 14px 12px 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  overflow: hidden !important;
+  --class-c: var(--yellow, #d4a84a);
+}
+.curr-class.t-hero      { --class-c: #c41a1a; }
+.curr-class.t-sidekick  { --class-c: #1e40af; }
+.curr-class.t-shared    { --class-c: var(--yellow, #d4a84a); }
+.curr-class .curr-class-stripe {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 3px !important;
+  background: var(--class-c) !important;
+}
+.curr-class.is-elective { border-style: dashed !important; }
+
+.curr-class-hd {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin-bottom: 2px !important;
+}
+.curr-class-year {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  padding: 2px 7px !important;
+  background: rgba(212,168,74,0.08) !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+.curr-class-type {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 2px 7px !important;
+  background: color-mix(in srgb, var(--class-c) 14%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--class-c) 55%, transparent) !important;
+  color: var(--class-c) !important;
+}
+.curr-class-dept {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 8.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 2px 7px !important;
+  background: color-mix(in srgb, var(--dept-c, var(--yellow, #d4a84a)) 12%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--dept-c, var(--yellow, #d4a84a)) 55%, transparent) !important;
+  color: var(--dept-c, var(--yellow, #d4a84a)) !important;
+}
+
+.curr-class-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 15px !important;
+  letter-spacing: -0.005em !important;
+  line-height: 1.15 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 2px 0 !important;
+  text-transform: none !important;
+}
+.curr-class-desc {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+}
+.curr-class-foot {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  margin-top: 4px !important;
+  padding-top: 8px !important;
+  border-top: 1px solid rgba(212,168,74,0.14) !important;
+}
+.curr-class-fac {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1px !important;
+}
+.curr-class-fac-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 8.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.curr-class-fac-val {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+.curr-class-fac-val .clink,
+.curr-class-fac-val .cname { color: inherit !important; }
+.curr-class-fac-open {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 3px 8px !important;
+  background: rgba(227,27,35,0.08) !important;
+  border: 1px dashed rgba(227,27,35,0.6) !important;
+  color: rgba(255,140,148,0.95) !important;
+}
+.curr-class-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+}
+.curr-class-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 8.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 2px 7px !important;
+  border: 1px solid currentColor !important;
+}
+.curr-class-tag.is-required { color: var(--yellow, #d4a84a) !important; background: rgba(212,168,74,0.08) !important; }
+.curr-class-tag.is-elective { color: var(--text-3, #948d80) !important; background: rgba(212,168,74,0.04) !important; }
+.curr-class-tag.is-mandatory { color: #fff !important; background: var(--red, #e31b23) !important; border-color: var(--red, #e31b23) !important; }
+.curr-class-tag.is-subs {
+  color: rgba(255,120,128,0.95) !important;
+  background: rgba(227,27,35,0.16) !important;
+  border-color: rgba(227,27,35,0.55) !important;
+}
+
+/* Electives section at the bottom */
+.curr-electives {
+  margin: clamp(48px, 6vw, 80px) 0 0 !important;
+  padding-top: 18px !important;
+  border-top: 1px solid rgba(212,168,74,0.22) !important;
+}
+.curr-electives-hd {
+  position: relative !important;
+  padding-bottom: 14px !important;
+  margin-bottom: 22px !important;
+  border-bottom: 2px solid rgba(212,168,74,0.32) !important;
+}
+.curr-electives-hd::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; bottom: -2px !important;
+  width: 80px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+.curr-electives-tag {
+  display: inline-block !important;
+  padding: 4px 11px !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  background: rgba(212,168,74,0.08) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  margin: 0 0 12px !important;
+}
+.curr-electives-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: clamp(24px, 2.8vw, 32px) !important;
+  letter-spacing: -0.012em !important;
+  line-height: 1.04 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 10px !important;
+  text-transform: none !important;
+}
+.curr-electives-blurb {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+  max-width: 760px !important;
+}
+.curr-electives-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 12px !important;
+  margin-top: 18px !important;
+}
+@media (min-width: 720px)  { .curr-electives-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+@media (min-width: 1100px) { .curr-electives-grid { grid-template-columns: repeat(3, 1fr) !important; } }
+
+/* Hide the OBSOLETE flat row list — we no longer render .curr-classes */
+.curr-classes { display: none !important; }
+
+/* ════════════════════════════════════════════════════════════════════════
    POWERS PAGE · DOSSIER OVERHAUL
    Pulls the Powers Guide + Registry into the same editorial chrome
    as the Rules page: dark panels, gold-left stripes, Druk display
