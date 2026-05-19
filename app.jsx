@@ -2246,12 +2246,18 @@ function HousesTab(){
     const io = new IntersectionObserver((entries) => {
       const visible = entries.filter(e => e.isIntersecting);
       if (visible.length === 0) return;
-      const top = visible.sort(
-        (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
+      // Pick the section whose top is CLOSEST to (just past) the
+      // top-trigger line — i.e. the "most recently entered from
+      // above". Largest .top value wins. Earlier we picked
+      // smallest .top, which incorrectly stuck on the previous
+      // section when its body still overlapped the lower active
+      // band even after the next section's heading had appeared.
+      const newest = visible.sort(
+        (a, b) => b.boundingClientRect.top - a.boundingClientRect.top
       )[0];
-      const id = top.target.id.replace(/^lore-/, "");
+      const id = newest.target.id.replace(/^lore-/, "");
       if (LORE_TABS.find(t => t.id === id)) setActive(id);
-    }, { rootMargin: "-20% 0px -60% 0px", threshold: 0 });
+    }, { rootMargin: "-12% 0px -78% 0px", threshold: 0 });
 
     sections.forEach(s => io.observe(s));
     return () => io.disconnect();
