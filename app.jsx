@@ -3536,76 +3536,80 @@ function StrataTab(){
 /* ═══════════════════════════════════════════════════════════════════════════
    OUTSIDE — orgs-first, collapsible sections
 ═══════════════════════════════════════════════════════════════════════════ */
-function OrgsTable({data, startCollapsed}){
-  const [openSecs, setOpenSecs] = useState(() => {
-    const init = {};
-    data.forEach(sec => { init[sec.section] = !startCollapsed; });
-    return init;
-  });
-  useEffect(() => {
-    const init = {};
-    data.forEach(sec => { init[sec.section] = !startCollapsed; });
-    setOpenSecs(init);
-  }, [startCollapsed, data]);
-
-  const toggleSec = (key) => setOpenSecs(prev => ({...prev, [key]: !prev[key]}));
-
+function OrgsTable({data}){
+  // No more collapsible dropdowns — sections always visible. Easier
+  // to scan and matches the rest of the site's pattern (no hidden
+  // content behind toggle buttons).
   return (
     <div className="orgs">
       {data.map((sec, si) => {
-        const isOpen = !!openSecs[sec.section];
         const orgCount = (sec.orgs || []).length;
+        const sectionFilled = (sec.orgs || []).reduce(
+          (n, o) => n + ((o.roles || []).filter(r => r.char).length),
+          0
+        );
+        const sectionRoles = (sec.orgs || []).reduce(
+          (n, o) => n + ((o.roles || []).length),
+          0
+        );
         return (
-          <section key={si} className={"orgs-group" + (isOpen ? " is-open" : "")}>
-            <button
-              type="button"
-              className="orgs-group-hd"
-              onClick={() => toggleSec(sec.section)}
-              aria-expanded={isOpen}
-            >
-              <span className="orgs-group-name">{sec.section}</span>
-              <span className="orgs-group-meta">
+          <section key={si} className="orgs-group">
+            <header className="orgs-group-hd">
+              <div className="orgs-group-hd-lhs">
+                <div className="orgs-group-eyebrow">SECTION · {String(si + 1).padStart(2, "0")}</div>
+                <h3 className="orgs-group-name">{sec.section}</h3>
+              </div>
+              <div className="orgs-group-meta">
                 <span className="orgs-group-count">
-                  {orgCount} {orgCount === 1 ? "entry" : "entries"}
+                  <span className="orgs-group-count-num">{orgCount}</span>
+                  <span className="orgs-group-count-lbl">{orgCount === 1 ? "ORG" : "ORGS"}</span>
                 </span>
-                <span className="orgs-group-toggle" aria-hidden="true">
-                  {isOpen ? "▲" : "▼"}
+                <span className="orgs-group-fill">
+                  <span className="orgs-group-fill-num">{sectionFilled}/{sectionRoles}</span>
+                  <span className="orgs-group-fill-lbl">FILLED</span>
                 </span>
-              </span>
-            </button>
-            {isOpen && (
-              <>
-                {sec.note && (
-                  <p className="orgs-group-note">{sec.note}</p>
-                )}
-                <div className="orgs-list">
-                  {sec.orgs.map((org, oi) => (
-                    <article key={oi} className="orgs-item">
-                      <header className="orgs-item-hd">
-                        <h4 className="orgs-item-name">{org.name}</h4>
-                        <div className="orgs-item-type">{org.type}</div>
-                      </header>
-                      {org.note && <p className="orgs-item-note">{org.note}</p>}
-                      {org.roles && org.roles.length > 0 && (
-                        <ul className="orgs-roles">
-                          {org.roles.map((r, ri) => (
-                            <li key={ri} className={"orgs-role" + (!r.char ? " is-vacant" : "")}>
-                              <span className="orgs-role-label">{r.role}</span>
-                              <span className="orgs-role-sep">·</span>
-                              <span className="orgs-role-who">
-                                {r.char
-                                  ? <><CLink name={r.char} link={r.link||null}/>{r.npc && <NpcBadge/>}</>
-                                  : <span className="orgs-role-open">Open</span>}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </article>
-                  ))}
-                </div>
-              </>
+              </div>
+            </header>
+            {sec.note && (
+              <p className="orgs-group-note">{sec.note}</p>
             )}
+            <div className="orgs-list">
+              {sec.orgs.map((org, oi) => {
+                const filled = (org.roles || []).filter(r => r.char).length;
+                const total = (org.roles || []).length;
+                return (
+                  <article key={oi} className="orgs-item">
+                    <header className="orgs-item-hd">
+                      <div className="orgs-item-hd-text">
+                        <div className="orgs-item-type">{org.type}</div>
+                        <h4 className="orgs-item-name">{org.name}</h4>
+                      </div>
+                      {total > 0 && (
+                        <div className="orgs-item-roster">
+                          <span className="orgs-item-roster-num">{filled}<span className="orgs-item-roster-of">/{total}</span></span>
+                          <span className="orgs-item-roster-lbl">ON FILE</span>
+                        </div>
+                      )}
+                    </header>
+                    {org.note && <p className="orgs-item-note">{org.note}</p>}
+                    {org.roles && org.roles.length > 0 && (
+                      <ul className="orgs-roles">
+                        {org.roles.map((r, ri) => (
+                          <li key={ri} className={"orgs-role" + (!r.char ? " is-vacant" : "")}>
+                            <span className="orgs-role-label">{r.role}</span>
+                            <span className="orgs-role-who">
+                              {r.char
+                                ? <><CLink name={r.char} link={r.link||null}/>{r.npc && <NpcBadge/>}</>
+                                : <span className="orgs-role-open">— OPEN</span>}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </article>
+                );
+              })}
+            </div>
           </section>
         );
       })}
@@ -3652,7 +3656,7 @@ function OutsideTab(){
           ))}
         </div>
       </div>
-      <OrgsTable data={visible} startCollapsed={active === "all"}/>
+      <OrgsTable data={visible}/>
     </div>
   );
 }
