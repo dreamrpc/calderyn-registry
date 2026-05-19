@@ -12299,3 +12299,32 @@ html { scroll-behavior: smooth; }
 @media (max-width: 900px) {
   .home-scrollnav { display: none !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   HOME · SCROLLNAV — backdrop for legibility against any section
+   The labels were unreadable against the red CTA bg. Adding a
+   subtle dark pill backdrop with blur so the rail reads cleanly
+   against ALL section colours (dark, red, cream, etc) without
+   dominating the layout.
+   ════════════════════════════════════════════════════════════════════ */
+
+.home-scrollnav-list {
+  padding: 10px 12px !important;
+  background: rgba(8, 8, 10, 0.78) !important;
+  border: 1px solid rgba(212, 168, 74, 0.32) !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Tighten dot + label contrast inside the dark backdrop so they
+   read consistently across red / cream / dark backgrounds */
+.home-scrollnav-dot {
+  background: rgba(255, 255, 255, 0.35) !important;
+}
+.home-scrollnav-label {
+  color: var(--text-2, #c9c3b5) !important;
+}
+.home-scrollnav-num {
+  color: var(--text-3, #948d80) !important;
+}
