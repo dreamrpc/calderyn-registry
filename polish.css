@@ -23104,3 +23104,172 @@ button.orgs-pill {
 /* Hide the OLD banned-bay block (it lived inside the Guide tab) */
 .banned-bay { display: none !important; }
 .pg-guide .banned-bay { display: none !important; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   FACULTY REGISTRY · collapsible department dossier cards
+   Each dept section is collapsed by default. Click the header to expand
+   the full staff + class catalogue. Keeps the page short and scannable
+   when a new member lands on the registry tab.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.freg-dept-section {
+  padding: 0 !important;
+  overflow: hidden !important;
+  transition: border-color 200ms ease !important;
+}
+
+/* Whole header is a button on collapsible sections */
+.freg-dept-section-toggle {
+  display: block !important;
+  width: 100% !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 22px 24px !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  position: relative !important;
+  z-index: 2 !important;
+  color: inherit !important;
+  font: inherit !important;
+  border-radius: 0 !important;
+  transition: background 180ms ease !important;
+}
+.freg-dept-section-toggle:hover {
+  background: rgba(212,168,74,0.04) !important;
+}
+
+/* Header re-layout — left has eyebrow + name + HoD line; right has
+   counts + chevron */
+.freg-dept-section-toggle .freg-dept-section-hd,
+.freg-dept-section.is-static .freg-dept-section-hd {
+  padding: 0 !important;
+  margin: 0 !important;
+  border-bottom: 0 !important;
+}
+.freg-dept-section-toggle .freg-dept-section-hd::after,
+.freg-dept-section.is-static .freg-dept-section-hd::after { display: none !important; }
+.freg-dept-section-hd {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  gap: 18px !important;
+  align-items: center !important;
+}
+.freg-dept-section-hd-l {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+}
+.freg-dept-section-hd-r {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+.freg-dept-section-head-line {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+  margin-top: 4px !important;
+}
+.freg-dept-section-head-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.freg-dept-section-head-name {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.freg-dept-section-head-open {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 2px 8px !important;
+  background: rgba(212,168,74,0.06) !important;
+  border: 1px dashed rgba(212,168,74,0.5) !important;
+  color: var(--text-3, #948d80) !important;
+}
+.freg-dept-section-chev {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  background: rgba(212,168,74,0.08) !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  color: var(--yellow, #d4a84a) !important;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease !important;
+}
+.freg-dept-section-toggle:hover .freg-dept-section-chev {
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+.freg-dept-section.is-expanded .freg-dept-section-chev {
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+
+/* Body wrapper — appears only when expanded */
+.freg-dept-section-body {
+  padding: 16px 24px 22px !important;
+  border-top: 1px solid rgba(212,168,74,0.18) !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+.freg-fellowship .freg-dept-section-body {
+  padding: 18px 24px 22px !important;
+}
+
+/* Class catalogue header inside the expanded body */
+.freg-classes {
+  margin: 14px 0 0 !important;
+  padding: 12px 0 0 !important;
+  border-top: 1px solid rgba(212,168,74,0.14) !important;
+}
+.freg-classes-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  margin: 0 0 8px !important;
+  padding-bottom: 6px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.14) !important;
+}
+.freg-classes-hd-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+.freg-classes-hd-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 2px 8px !important;
+  border: 1px solid rgba(212,168,74,0.3) !important;
+}
+
+/* Old class-catalogue toggle button — no longer used */
+.freg-classes-toggle { display: none !important; }
+
+@media (max-width: 760px) {
+  .freg-dept-section-toggle { padding: 18px 18px !important; }
+  .freg-dept-section-body { padding: 14px 18px 18px !important; }
+  .freg-dept-section-hd-r { flex-wrap: wrap !important; justify-content: flex-start !important; }
+}
