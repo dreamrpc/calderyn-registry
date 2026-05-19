@@ -560,7 +560,7 @@ faculty: [
     section: "OFFICE OF THE DEAN",
     note: "The Dean is the operational head of Calderyn College. Final authority on admission, discipline, expulsion, and reassignment. Reports to the STRATA executive board and to no one else.",
     rows: [
-      { role: "Dean", char: "Dr. Devika Ravindrakumar", power: "Power Nullification (15m field)", npc: true },
+      { role: "Dean", char: "Dr. Devika Ravindrakumar", tier: "A", power: "Power Nullification (15m field)", npc: true },
       { role: "Director of Admissions" },
       { role: "Registrar" },
     ],
@@ -691,7 +691,7 @@ faculty: [
     section: "SUPPORT STAFF",
     note: "The Diagnostic Wing is overseen, in name and in practice, by Iris Grimere (Switchboard). Day-to-day medical staff report through her. Switchboards is not on teaching faculty; her institutional presence runs through the Wing and through the bots that run the campus.",
     rows: [
-      { role: "Diagnostic Wing — Director", char: "Iris Grimere", stage: "Switchboard", power: "Technokinesis", npc: true },
+      { role: "Diagnostic Wing — Director", char: "Iris Grimere", tier: "A", stage: "Switchboard", power: "Technokinesis", npc: true },
       { role: "Chief Medical Officer" },
       { role: "Security Chief" },
       { role: "Head Groundskeeper" },

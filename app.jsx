@@ -1456,7 +1456,6 @@ function CurriculumView(){
         <span className="curr-nav-sep" aria-hidden="true"/>
 
         <div className="curr-nav-filter" role="group" aria-label="Filter by designation">
-          <span className="curr-filter-lbl">Designation</span>
           <button type="button"
             className={"curr-filter-pill" + (filterDesig === "all" ? " is-active" : "")}
             onClick={() => setFilterDesig("all")}
@@ -1473,6 +1472,10 @@ function CurriculumView(){
             aria-pressed={filterDesig === "sidekick"}
           >Sidekicks</button>
         </div>
+
+        <span className="curr-nav-count">
+          {allClasses.filter(filterMatch).length} classes
+        </span>
       </nav>
 
       <main className="curr-main">
@@ -2710,10 +2713,15 @@ function FacultyRegistryView(){
             <div className="dean-card-eyebrow">Office of the Dean</div>
             <div className="dean-card-name">
               <CLink name={deanRow.char} link={deanRow.link||null}/>
+              {deanRow.tier && <span className="dean-card-tier"><TierChip tier={deanRow.tier}/></span>}
             </div>
-            <div className="dean-card-stage">
-              {deanRow.stage ? deanRow.stage : "STAGE NAME · N/A"}
-            </div>
+            {deanRow.tier
+              ? null
+              : (
+                <div className="dean-card-stage">
+                  {deanRow.stage ? deanRow.stage : "STAGE NAME · N/A"}
+                </div>
+              )}
             {deanRow.power && (
               <div className="dean-card-power">
                 <span className="dean-card-power-tag">Power</span>
@@ -2746,6 +2754,7 @@ function FacultyRegistryView(){
                         {r.link
                           ? <CLink name={r.char} link={r.link}/>
                           : <span>{r.char}</span>}
+                        {r.tier && <TierChip tier={r.tier}/>}
                         {r.npc && <NpcBadge/>}
                       </>
                     : <span className="freg-dean-staff-open">OPEN</span>}
@@ -2787,6 +2796,7 @@ function FacultyRegistryView(){
                       {r.link
                         ? <CLink name={r.char} link={r.link}/>
                         : <span>{r.char}</span>}
+                      {r.tier && <TierChip tier={r.tier}/>}
                       {r.npc && <NpcBadge/>}
                     </>
                   ) : (
@@ -5268,10 +5278,32 @@ const APPLICATION_TYPES = [
 // Helper: build dropdown options of OPEN faculty roles by section
 function getOpenFacultyRoles(){
   const out = [];
+  // Office of the Dean + Support Staff rows
   FACULTY.forEach(sec => {
     sec.rows.forEach(r => {
       if (!r.char && !r.clf){
         out.push({ section: sec.section, role: r.role });
+      }
+    });
+  });
+  // Department slots — Head of Department + numbered profs + instructional
+  // staff. Reserved heads (e.g. MDA Room Owner) and filled slots are
+  // excluded.
+  (D.departments || []).forEach(dept => {
+    const sectionLabel = `${dept.code} · ${dept.name}`;
+    const head = dept.head;
+    if (head && !head.char && !head.reserved){
+      out.push({ section: sectionLabel, role: head.role || "Head of Department" });
+    }
+    (dept.staff || []).forEach(s => {
+      if (!s.char){
+        const slot = s.slot ? `${s.slot} — ` : "";
+        out.push({ section: sectionLabel, role: `${slot}${s.role || "Faculty"}` });
+      }
+    });
+    (dept.instructional || []).forEach(p => {
+      if (!p.char){
+        out.push({ section: sectionLabel, role: p.role || "Instructional Staff" });
       }
     });
   });
@@ -5506,6 +5538,11 @@ function JoinTab(){
   const [form, setForm]   = useState({});
   const [status, setStatus] = useState({ state: "idle", msg: "" });
   const [confirmed, setConfirmed] = useState(false);
+  // Reentrancy guard — React 18 StrictMode + fast double-clicks can
+  // race the `disabled` state on the submit button and fire the
+  // webhook twice. The ref is checked synchronously inside submit()
+  // so a second call short-circuits before the fetch.
+  const submittingRef = useRef(false);
   // Wizard step. 0 = type picker; 1..N = wizard pages for the chosen
   // type. Resets to 0 when type changes or form is reset.
   const [step, setStep] = useState(0);
@@ -5653,6 +5690,13 @@ function JoinTab(){
       return;
     }
     if (!canSubmit) return;
+    // Hard reentrancy guard. Without this, a double-click between
+    // setStatus(loading) committing to state and the button receiving
+    // its disabled prop will fire the Worker (and the Discord webhook)
+    // twice. The ref flips synchronously so the second call returns
+    // before reaching fetch.
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     setStatus({ state: "loading", msg: "Sending…" });
 
     // The Worker builds the Discord embed + attaches Approve/Reject
@@ -5671,6 +5715,7 @@ function JoinTab(){
       setStatus({ state: "idle", msg: "" });
     } catch (err) {
       setStatus({ state: "error", msg: "Failed to send — " + (err.message || String(err)) });
+      submittingRef.current = false; // allow a manual retry on error
     }
   };
 

@@ -26081,3 +26081,72 @@ button.orgs-pill {
   text-overflow: ellipsis !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   CURRICULUM NAV · SINGLE-ROW LOCK
+   The bar must stay on one horizontal line with optional horizontal
+   scroll on narrow viewports — no wrap, no second row. Year tabs +
+   designation pills + class count all sit on one row.
+   ════════════════════════════════════════════════════════════════════ */
+.lore-nav.curr-nav,
+.curr > nav.lore-nav {
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+}
+.lore-nav.curr-nav::-webkit-scrollbar,
+.curr > nav.lore-nav::-webkit-scrollbar { display: none !important; }
+
+.lore-nav.curr-nav .lore-nav-list,
+.curr > nav.lore-nav .lore-nav-list {
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+.lore-nav.curr-nav .curr-nav-filter {
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  flex: 0 0 auto !important;
+}
+.lore-nav.curr-nav .curr-nav-search { flex: 0 0 240px !important; }
+
+/* Count badge on the far right of the bar */
+.curr-nav-count {
+  margin-left: auto !important;
+  padding: 0 6px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   DEAN CARD · tier chip slot
+   When the Dean record has `tier`, render the chip next to the name.
+   ════════════════════════════════════════════════════════════════════ */
+.dean-card-tier {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin-left: 10px !important;
+  vertical-align: middle !important;
+}
+.dean-card-tier .tier-pill {
+  font-size: 9.5px !important;
+  padding: 3px 8px !important;
+}
+
+/* Support/Admin staff rows · inline tier chip after the name */
+.freg-dean-staff-who .tier-pill,
+.freg-support-item-r .tier-pill {
+  margin-left: 8px !important;
+  font-size: 9px !important;
+  padding: 2px 7px !important;
+  min-width: 0 !important;
+}
+
