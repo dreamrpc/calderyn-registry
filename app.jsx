@@ -1529,7 +1529,13 @@ function PowersRegistry(){
     return true;
   }), [status, q]);
   const groups = useMemo(() => POWER_STATUSES
-    .map(s => ({s, list: rows.filter(p => p.status === s.id)}))
+    .map(s => ({
+      s,
+      list: rows
+        .filter(p => p.status === s.id)
+        .slice()
+        .sort((a, b) => (a.char || a.alias || "").localeCompare(b.char || b.alias || "", undefined, { sensitivity: "base" })),
+    }))
     .filter(g => g.list.length > 0)
   , [rows]);
 
@@ -1775,7 +1781,7 @@ function StudentRosterFull(){
         if (!hay.includes(ql)) return false;
       }
       return true;
-    }).sort((a, b) => (a.char || "").split(" ").pop().localeCompare((b.char || "").split(" ").pop()));
+    }).sort((a, b) => (a.char || "").localeCompare(b.char || "", undefined, { sensitivity: "base" }));
   }, [q, house, tier, track]);
 
   const Pill = ({active, onClick, children}) => (
@@ -2080,7 +2086,17 @@ function FacultyRegistryView(){
 
       {FACULTY.map((sec, si) => {
         // Skip rendering the dean row in its normal table — it's promoted to the card above
-        const rowsToShow = sec.rows.filter(r => !(deanRow && r === deanRow));
+        const rowsToShow = sec.rows
+          .filter(r => !(deanRow && r === deanRow))
+          .slice()
+          .sort((a, b) => {
+            const an = (a.char || a.role || "").toLowerCase();
+            const bn = (b.char || b.role || "").toLowerCase();
+            // Rows without a character (open positions) sink to the bottom
+            if (!a.char && b.char) return 1;
+            if (a.char && !b.char) return -1;
+            return an.localeCompare(bn, undefined, { sensitivity: "base" });
+          });
         if (rowsToShow.length === 0) return null;
 
         return (
