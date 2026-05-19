@@ -1159,14 +1159,14 @@ function RulesTab(){
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CURRICULUM · Y1/Y2/Y3/Fellowship · eight-department model
+   CURRICULUM · Freshman/Sophomore/Junior/Senior · eight-department model
 ═══════════════════════════════════════════════════════════════════════════ */
-const YEAR_KEY  = { Y1: 0, Y2: 1, Y3: 2, FELLOWSHIP: 3 };
+const YEAR_KEY  = { FR: 0, SO: 1, JR: 2, SR: 3 };
 const YEAR_TABS = [
-  { idx: 0, key: "Y1",         label: "Y1",         long: "Year One · Shared Core"   },
-  { idx: 1, key: "Y2",         label: "Y2",         long: "Year Two · Specialisation" },
-  { idx: 2, key: "Y3",         label: "Y3",         long: "Year Three · Field Placement" },
-  { idx: 3, key: "FELLOWSHIP", label: "FELLOWSHIP", long: "Fellowship · Invitation Only" },
+  { idx: 0, key: "FR", label: "Freshman",  long: "Year One · Freshman"   },
+  { idx: 1, key: "SO", label: "Sophomore", long: "Year Two · Sophomore"  },
+  { idx: 2, key: "JR", label: "Junior",    long: "Year Three · Junior"   },
+  { idx: 3, key: "SR", label: "Senior",    long: "Year Four · Senior"    },
 ];
 
 const DESIG_COLORS = { hero: "#c41a1a", sidekick: "#1e40af" };
@@ -1338,7 +1338,7 @@ function DeptStaffCard({person, slot, isHead, deptColor}){
 }
 
 function CurriculumView(){
-  const [activeYear, setActiveYear] = useState("Y1");
+  const [activeYear, setActiveYear] = useState("FR");
   const [filterDesig, setFilterDesig] = useState("all"); // all | hero | sidekick
 
   const allClasses = gatherCurriculumClasses();
@@ -1354,10 +1354,10 @@ function CurriculumView(){
   };
   const byYear = (y) => allClasses.filter(c => c.year === y && filterMatch(c));
 
-  // Y1 splits: shared core (all departments + TUT-101) + Y1 designation modules
-  const y1Shared = byYear("Y1").filter(c => c.kind === "shared-core")
+  // Year 1 splits: shared core (all departments + TUT-101) + Year 1 designation modules
+  const y1Shared = byYear("FR").filter(c => c.kind === "shared-core")
     .sort((a, b) => (a.code || "").localeCompare(b.code || ""));
-  const y1Desig = byYear("Y1").filter(c => c.kind === "designation")
+  const y1Desig = byYear("FR").filter(c => c.kind === "designation")
     .sort((a, b) => (a.code || "").localeCompare(b.code || ""));
 
   // Y2/Y3 grouped by department + designation modules at the bottom
@@ -1372,9 +1372,9 @@ function CurriculumView(){
       .sort((a, b) => (a.code || "").localeCompare(b.code || ""));
     return { groups, designation };
   };
-  const y2 = groupYearByDept("Y2");
-  const y3 = groupYearByDept("Y3");
-  const yFEL = groupYearByDept("FELLOWSHIP");
+  const y2 = groupYearByDept("SO");
+  const y3 = groupYearByDept("JR");
+  const ySR = groupYearByDept("SR");
 
   // Year tabs are state-driven now — only the active year renders, so
   // a new member sees one focused page at a time instead of scrolling
@@ -1391,7 +1391,7 @@ function CurriculumView(){
 
   return (
     <div className="curr">
-      {/* Year nav — Y1 / Y2 / Y3 / Fellowship anchor jumps */}
+      {/* Year nav — Freshman / Sophomore / Junior / Senior anchor jumps */}
       <nav className="lore-nav curr-nav" aria-label="Jump to year">
         <ol className="lore-nav-list">
           {YEAR_TABS.map(yt => (
@@ -1418,9 +1418,9 @@ function CurriculumView(){
         <section className="curr-primer">
           <div className="curr-primer-l">
             <span className="curr-primer-tag">How the curriculum works</span>
-            <h3 className="curr-primer-title">Three years + Fellowship.</h3>
+            <h3 className="curr-primer-title">Four years, eight departments.</h3>
             <p className="curr-primer-body">
-              Year 1 is unified — every student takes the same shared core, regardless of department or designation. Year 2 declares a Home Department and specialisation begins. Year 3 is deep specialisation and the first supervised field placements. Fellowship is the invitation-only postgraduate tier, issued at the end of Y2.
+              Freshman year is unified — every student takes the same shared core. Sophomore year declares a Home Department and specialisation begins. Junior and Senior years are deep specialisation, capstone modules, and field placement. STRATA contract conversations start in the spring of Senior year.
             </p>
             <p className="curr-primer-body curr-primer-body-quiet">
               Heroes and Sidekicks designations run alongside the academic track. Designation modules (HRO- / SDK-) are flagged on each card. To see the full faculty roster, head to the <strong>Faculty Registry</strong> tab.
@@ -1428,10 +1428,10 @@ function CurriculumView(){
           </div>
           <div className="curr-primer-r">
             <ul className="curr-primer-list">
-              <li><span className="curr-primer-list-k">Y1</span><span className="curr-primer-list-v">Shared core. No specialisation yet.</span></li>
-              <li><span className="curr-primer-list-k">Y2</span><span className="curr-primer-list-v">Home Department declared. Specialisation begins.</span></li>
-              <li><span className="curr-primer-list-k">Y3</span><span className="curr-primer-list-v">Deep specialisation. Field placement.</span></li>
-              <li><span className="curr-primer-list-k">FELLOWSHIP</span><span className="curr-primer-list-v">Invitation only. Issued end of Y2.</span></li>
+              <li><span className="curr-primer-list-k">Freshman</span><span className="curr-primer-list-v">Shared core. No specialisation yet.</span></li>
+              <li><span className="curr-primer-list-k">Sophomore</span><span className="curr-primer-list-v">Home Department declared. Specialisation begins.</span></li>
+              <li><span className="curr-primer-list-k">Junior</span><span className="curr-primer-list-v">Deep specialisation. Field placement begins.</span></li>
+              <li><span className="curr-primer-list-k">Senior</span><span className="curr-primer-list-v">Capstones. Final placements. Contract talks.</span></li>
             </ul>
           </div>
         </section>
@@ -1457,15 +1457,15 @@ function CurriculumView(){
           >Sidekicks</button>
         </div>
 
-        {/* Y1 · Shared Core */}
-        {activeYear === "Y1" && (
-        <section id="curr-year-Y1" className="curr-year">
+        {/* Freshman · Shared Core */}
+        {activeYear === "FR" && (
+        <section id="curr-year-FR" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
-              <div className="curr-year-tag">Y1 · Shared Core</div>
+              <div className="curr-year-tag">Freshman · Foundation</div>
               <h3 className="curr-year-title">Shared core. Everyone takes everything.</h3>
               <p className="curr-year-blurb">
-                Year 1 is unified. Every student takes the shared-core literacy floor — Combat, Media, Sciences, Humanities, Doctrine, Athletics — regardless of intended department or assigned designation. Designation is issued at end of orientation; the HRO-/SDK- modules begin in Y1 alongside the core.
+                Freshman year is unified. Every student takes the shared-core literacy floor — Combat, Media, Sciences, Humanities, Doctrine, Athletics — regardless of intended department or assigned designation. Designation is issued at end of orientation; the HRO-/SDK- modules begin in Freshman year alongside the core.
               </p>
             </div>
             <div className="curr-year-hd-r">
@@ -1497,15 +1497,15 @@ function CurriculumView(){
         </section>
         )}
 
-        {/* Y2 · Specialisation begins */}
-        {activeYear === "Y2" && (
-        <section id="curr-year-Y2" className="curr-year">
+        {/* Sophomore · Specialisation begins */}
+        {activeYear === "SO" && (
+        <section id="curr-year-SO" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
-              <div className="curr-year-tag">Y2 · Specialisation</div>
+              <div className="curr-year-tag">Sophomore · Specialisation</div>
               <h3 className="curr-year-title">Home Department declared.</h3>
               <p className="curr-year-blurb">
-                Year 2 is when departments matter. Students take required modules in their declared Home Department, plus mandatory electives from at least two other departments. Fellowship invitations are issued at the end of this year, based on Y1–Y2 performance and faculty nomination.
+                Sophomore year is when departments matter. Students take required modules in their declared Home Department, plus mandatory electives from at least two other departments. Combat-literacy and Media-literacy requirements (one module from a defined pool) sit inside the Combat and Media &amp; Arts blocks below.
               </p>
             </div>
             <div className="curr-year-hd-r">
@@ -1542,15 +1542,15 @@ function CurriculumView(){
         </section>
         )}
 
-        {/* Y3 · Deep specialisation + field placement */}
-        {activeYear === "Y3" && (
-        <section id="curr-year-Y3" className="curr-year">
+        {/* Junior · Deep specialisation */}
+        {activeYear === "JR" && (
+        <section id="curr-year-JR" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
-              <div className="curr-year-tag">Y3 · Field Placement</div>
-              <h3 className="curr-year-title">Deep specialisation. Supervised field placement.</h3>
+              <div className="curr-year-tag">Junior · Specialisation</div>
+              <h3 className="curr-year-title">Deep specialisation, the first field placements.</h3>
               <p className="curr-year-blurb">
-                Year 3 is the final year of the standard programme. Students go deep inside their declared department, take their designation specialism, and run supervised field placements. Students finish here as standard practitioners; STRATA contract conversations start in the spring.
+                Junior year. Students go deep inside their declared department, take their designation specialism, and run their first supervised field placements. The classes here set up the Senior capstones — what you choose this year decides what you defend next.
               </p>
             </div>
             <div className="curr-year-hd-r">
@@ -1587,25 +1587,25 @@ function CurriculumView(){
         </section>
         )}
 
-        {/* Fellowship · invitation-only postgraduate tier */}
-        {activeYear === "FELLOWSHIP" && (
-        <section id="curr-year-FELLOWSHIP" className="curr-year">
+        {/* Senior · capstone year */}
+        {activeYear === "SR" && (
+        <section id="curr-year-SR" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
-              <div className="curr-year-tag">Fellowship · Invitation Only</div>
-              <h3 className="curr-year-title">The postgraduate tier. Issued, not enrolled.</h3>
+              <div className="curr-year-tag">Senior · Capstone</div>
+              <h3 className="curr-year-title">Final year. Department capstones and field placement.</h3>
               <p className="curr-year-blurb">
-                Fellowship is the institution's invitation-only postgraduate tier. Invitations are issued at the end of Y2 — never applied for — based on faculty nomination, Y1–Y2 performance, and Dean's approval. Fellowship-tier modules are the morally heaviest curriculum on offer: COM-303 Field Command, HIS-303, the senior policy capstone. Fellows finish as institutional practitioners; most go straight into STRATA contracts.
+                Senior year is the final year of the programme. Department capstones, field placement, the institution's most morally serious modules — COM-303 Field Command, HIS-303, the senior policy capstone. Students finish here as standard practitioners and start STRATA contract conversations in the spring.
               </p>
             </div>
             <div className="curr-year-hd-r">
               <span className="curr-year-count">
-                {yFEL.groups.reduce((n, g) => n + g.classes.length, 0) + yFEL.designation.length} modules
+                {ySR.groups.reduce((n, g) => n + g.classes.length, 0) + ySR.designation.length} classes
               </span>
             </div>
           </header>
 
-          {yFEL.groups.map(g => (
+          {ySR.groups.map(g => (
             <div key={g.dept.id} className="curr-block" style={{"--dept-c": g.dept.color || "#d4a84a"}}>
               <header className="curr-block-hd is-dept">
                 <span className="curr-block-marker"/>
@@ -1618,14 +1618,14 @@ function CurriculumView(){
             </div>
           ))}
 
-          {yFEL.designation.length > 0 && (
+          {ySR.designation.length > 0 && (
             <div className="curr-block">
               <header className="curr-block-hd">
                 <span className="curr-block-tag">Designation Modules</span>
-                <span className="curr-block-count">{yFEL.designation.length}</span>
+                <span className="curr-block-count">{ySR.designation.length}</span>
               </header>
               <div className="curr-class-grid">
-                {yFEL.designation.map((c, i) => <ClassCard key={i} cls={c}/>)}
+                {ySR.designation.map((c, i) => <ClassCard key={i} cls={c}/>)}
               </div>
             </div>
           )}
@@ -2307,7 +2307,7 @@ function FacultyTab(){
       <div className="subnav">
         <div className="subnav-inner">
           {[
-            ["curriculum", "Curriculum",       "Eight departments · Y1–Y3 + Fellowship"],
+            ["curriculum", "Curriculum",       "Eight departments · Four years"],
             ["registry",   "Faculty Registry", "Subjects · People"],
           ].map(([id, lbl, sub]) => (
             <button
@@ -2466,14 +2466,21 @@ function DepartmentSection({dept}){
 function FacultyRegistryView(){
   const [filterDesig, setFilterDesig] = useState("all"); // all | hero | sidekick
 
-  // Filter a dept's classes by selected designation. Classes without a
-  // designation tag are visible regardless (shared / required modules).
+  // Filter a dept's classes + instructional staff by selected
+  // designation. Classes without a designation tag are visible
+  // regardless (shared / required modules). Instructional rows
+  // that mention the opposite lane in their role get hidden.
   const filteredDept = (dept) => {
     if (filterDesig === "all") return dept;
     const classes = (dept.classes || []).filter(
       c => !c.designation || c.designation === filterDesig
     );
-    return { ...dept, classes };
+    const otherLane = filterDesig === "hero" ? "sidekicks lane" : "heroes lane";
+    const instructional = (dept.instructional || []).filter(p => {
+      const role = (p.role || "").toLowerCase();
+      return !role.includes(otherLane);
+    });
+    return { ...dept, classes, instructional };
   };
 
   // Find the dean — first row in the Office of the Dean section, role === "Dean"
