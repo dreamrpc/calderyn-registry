@@ -805,12 +805,12 @@ function HomeToday(){
    scrolls.
    ──────────────────────────────────────────────────────────────────── */
 const HOME_SECTIONS = [
-  { id: "home-hero",     label: "Hero" },
-  { id: "home-vanguard", label: "Vanguard" },
-  { id: "home-today",    label: "Today" },
-  { id: "home-programme",label: "Programme" },
-  { id: "home-dorm",     label: "Dorms" },
-  { id: "home-cta",      label: "Apply" },
+  { id: "home-hero",     label: "Hero",      icon: "flag" },
+  { id: "home-vanguard", label: "Vanguard",  icon: "shield" },
+  { id: "home-today",    label: "Today",     icon: "sun" },
+  { id: "home-programme",label: "Programme", icon: "book-open" },
+  { id: "home-dorm",     label: "Dorms",     icon: "map" },
+  { id: "home-cta",      label: "Apply",     icon: "sparkles" },
 ];
 
 function HomeScrollNav(){
@@ -864,7 +864,9 @@ function HomeScrollNav(){
               aria-label={`Jump to ${s.label}`}
               data-label={s.label}
             >
-              <span className="home-scrollnav-dot" aria-hidden="true"/>
+              <span className="home-scrollnav-icon" aria-hidden="true">
+                <Icon name={s.icon} size={18} stroke={1.8}/>
+              </span>
               <span className="home-scrollnav-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
               <span className="home-scrollnav-label">{s.label}</span>
             </button>
@@ -2202,12 +2204,12 @@ function FacultyRegistryView(){
    LORE TABS
 ═══════════════════════════════════════════════════════════════════════════ */
 const LORE_TABS = [
-  { id: "world",     label: "The World" },
-  { id: "history",   label: "The Programme" },
-  { id: "vanguard",  label: "The Vanguard" },
-  { id: "houses",    label: "The Houses" },
-  { id: "dean",      label: "The Dean" },
-  { id: "incidents", label: "The Cassandra Incident" },
+  { id: "world",     label: "The World",              icon: "map" },
+  { id: "history",   label: "The Programme",          icon: "scroll-text" },
+  { id: "vanguard",  label: "The Vanguard",           icon: "shield" },
+  { id: "houses",    label: "The Houses",             icon: "flag" },
+  { id: "dean",      label: "The Dean",               icon: "users" },
+  { id: "incidents", label: "The Cassandra Incident", icon: "alert-triangle" },
 ];
 
 function HousesTab(){
@@ -2294,7 +2296,9 @@ function HousesTab(){
                 aria-label={`Jump to ${t.label}`}
                 data-label={t.label}
               >
-                <span className="home-scrollnav-dot" aria-hidden="true"/>
+                <span className="home-scrollnav-icon" aria-hidden="true">
+                  <Icon name={t.icon} size={18} stroke={1.8}/>
+                </span>
               </button>
             </li>
           ))}
@@ -2473,11 +2477,57 @@ function LoreWorld(){
   );
 }
 
+const LORE_VG_ROSTER = [
+  {
+    key: "paragon", alias: "PARAGON", name: "Adrian Valaris", age: 45,
+    tag: "The symbol", color: "#c41a1a", sfx: "KRRSH",
+    portrait: "https://i.ibb.co/Tx8LND9D/884dff81-b7c4-448a-be91-1d79b440f8e3.png",
+  },
+  {
+    key: "vigil", alias: "VIGIL", name: "Caius Saberis", age: 42,
+    tag: "The strategist", color: "#15803d", sfx: "SHRRK",
+    portrait: "https://i.ibb.co/SDY1sLN8/2377bc73-8c3f-40c6-951d-7f0365013c2a.png",
+  },
+  {
+    key: "aegis", alias: "AEGIS", name: "Margery Orenne", age: 39,
+    tag: "The rescuer", color: "#d4901a", sfx: "WHAM",
+    portrait: "https://i.ibb.co/fKV1tKH/ccf8e712-87c2-4da0-af44-d290385a7e8c.png",
+  },
+  {
+    key: "switchboard", alias: "SWITCHBOARD", name: "Iris Grimere", age: 35,
+    tag: "The architect", color: "#1e40af", sfx: "BZZZT",
+    portrait: "https://i.ibb.co/LzyQcRcL/a18a925b-91f4-45d8-b2e3-66821aaf9661.png",
+  },
+];
+
+function LoreVgDossierBody({k}){
+  switch(k){
+    case "paragon": return <>
+      <p className="lore-vg-dossier-p">The sun feeds him. Nothing measurable runs him down. His strength has no documented ceiling. His flight is officially uncatalogued because the equipment that tries to clock him fails when he reaches full speed. Heat vision in coherent ranged beams, calibrated by something the medical wing has elected to call <em>intent</em> because no one has come up with a better word. His senses run well beyond baseline — he can pick a single conversation out of a crowded street from above, read a license plate at altitude, hear a heartbeat through a wall. Whether that's a separate ability or simply what comes with the rest of him, the medical wing has stopped trying to settle.</p>
+      <p className="lore-vg-dossier-p">In person he is quiet, unfailingly polite, and stands up when you walk into a room. He is the most beloved man in Britain.</p>
+    </>;
+    case "vigil": return <>
+      <p className="lore-vg-dossier-p">Precognition, in a window ninety seconds wide and roughly thirty metres deep. He sees every branch of every possible action laid out around him with the clarity of sheet music. The bullet leaving the barrel. The door opening. The word leaving the mouth. He picks the branch he wants. The other branches collapse and are not.</p>
+      <p className="lore-vg-dossier-p">Fights with a folded-steel longsword that Switchboard made him in 2018, and which he has never named. <em>Naming weapons</em>, he said in one of his rare interviews, <em>is something young men do.</em> The cost is migraines. He has been wrong twice in eleven years.</p>
+    </>;
+    case "aegis": return <>
+      <p className="lore-vg-dossier-p">Her body does not break the way bodies break. Blades go in. Bullets go in. The damage simply does not propagate outward through her the way damage is supposed to. She bleeds, but the bleeding stops sooner than it ought. She heals six times faster than is decent.</p>
+      <p className="lore-vg-dossier-p">Cruises at three hundred miles an hour, holds position indefinitely, lifts roughly four hundred kilograms without breaking a sweat. Paragon saves the world. Aegis saves the people in it. Her record under field conditions is fifty-one hours. She broke nine bones during it and did not notice until the third day.</p>
+    </>;
+    case "switchboard": return <>
+      <p className="lore-vg-dossier-p">Technokinesis. She speaks to electronics, by thought, in a range that has no precise edge but seems to extend as far as she can perceive a device. She does not need to touch them. She does not need to see them. They listen.</p>
+      <p className="lore-vg-dossier-p">Not physically superhuman. Strength, durability, and reflexes are baseline human, and her health is, if anything, slightly under, because she forgets to eat. Every piece of gear the Vanguard uses is hers. Vigil's sword. Aegis's flight harness. Paragon's gauntlets. Three cats, named after pre-Socratic philosophers.</p>
+    </>;
+  }
+  return null;
+}
+
 function LoreVanguard(){
+  const [hovered, setHovered] = useState(null);
   return (
     <div className="lore">
       <section className="lore-block lore-intro">
-        <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
+        <div className="lore-intro-stamp">PUBLIC RECORD · ACTIVE ROSTER</div>
         <h2 className="lore-intro-title">The <span className="accent">Vanguard.</span></h2>
         <p className="lore-lead">
           There are four of them. They have been a team since March 2015, and by every public
@@ -2486,103 +2536,61 @@ function LoreVanguard(){
         </p>
       </section>
 
-      <section className="lore-block">
-        <div className="lore-vanguard">
-          <article className="lore-vg" style={{"--vg-color": "#c41a1a"}}>
-            <div className="lore-vg-portrait">
-              <img src="https://i.ibb.co/Tx8LND9D/884dff81-b7c4-448a-be91-1d79b440f8e3.png" alt="Paragon" loading="lazy"/>
-            </div>
-            <div className="lore-vg-text">
-              <div className="lore-vg-alias">PARAGON</div>
-            <div className="lore-vg-name">Adrian Valaris · 45</div>
-            <div className="lore-vg-tag">The symbol</div>
-            <p className="lore-vg-desc">
-              The sun feeds him. Nothing measurable runs him down. His strength has no
-              documented ceiling. His flight is officially uncatalogued because the
-              equipment that tries to clock him fails when he reaches full speed. Heat
-              vision in coherent ranged beams, calibrated by something the medical wing has
-              elected to call <em>intent</em> because no one has come up with a better word.
-              His senses run well beyond baseline — he can pick a single conversation out of
-              a crowded street from above, read a license plate at altitude, hear a heartbeat
-              through a wall. Whether that's a separate ability or simply what comes with the
-              rest of him, the medical wing has stopped trying to settle.
-            </p>
-            <p className="lore-vg-desc">
-              In person he is quiet, unfailingly polite, and stands up when you walk into a
-              room. He is the most beloved man in Britain.
-            </p>
-            </div>
-          </article>
-          <article className="lore-vg" style={{"--vg-color": "#15803d"}}>
-            <div className="lore-vg-portrait">
-              <img src="https://i.ibb.co/SDY1sLN8/2377bc73-8c3f-40c6-951d-7f0365013c2a.png" alt="Vigil" loading="lazy"/>
-            </div>
-            <div className="lore-vg-text">
-              <div className="lore-vg-alias">VIGIL</div>
-            <div className="lore-vg-name">Caius Saberis · 42</div>
-            <div className="lore-vg-tag">The strategist</div>
-            <p className="lore-vg-desc">
-              Precognition, in a window ninety seconds wide and roughly thirty metres deep.
-              He sees every branch of every possible action laid out around him with the
-              clarity of sheet music. The bullet leaving the barrel. The door opening. The
-              word leaving the mouth. He picks the branch he wants. The other branches
-              collapse and are not.
-            </p>
-            <p className="lore-vg-desc">
-              Fights with a folded-steel longsword that Switchboard made him in 2018, and
-              which he has never named. <em>Naming weapons</em>, he said in one of his rare
-              interviews, <em>is something young men do.</em> The cost is migraines. He has
-              been wrong twice in eleven years.
-            </p>
-            </div>
-          </article>
-          <article className="lore-vg" style={{"--vg-color": "#d4901a"}}>
-            <div className="lore-vg-portrait">
-              <img src="https://i.ibb.co/fKV1tKH/ccf8e712-87c2-4da0-af44-d290385a7e8c.png" alt="Aegis" loading="lazy"/>
-            </div>
-            <div className="lore-vg-text">
-              <div className="lore-vg-alias">AEGIS</div>
-            <div className="lore-vg-name">Margery Orenne · 39</div>
-            <div className="lore-vg-tag">The rescuer</div>
-            <p className="lore-vg-desc">
-              Her body does not break the way bodies break. Blades go in. Bullets go in.
-              The damage simply does not propagate outward through her the way damage is
-              supposed to. She bleeds, but the bleeding stops sooner than it ought. She
-              heals six times faster than is decent.
-            </p>
-            <p className="lore-vg-desc">
-              Cruises at three hundred miles an hour, holds position indefinitely, lifts
-              roughly four hundred kilograms without breaking a sweat. Paragon saves the
-              world. Aegis saves the people in it. Her record under field conditions is
-              fifty-one hours. She broke nine bones during it and did not notice until the
-              third day.
-            </p>
-            </div>
-          </article>
-          <article className="lore-vg" style={{"--vg-color": "#1e40af"}}>
-            <div className="lore-vg-portrait">
-              <img src="https://i.ibb.co/LzyQcRcL/a18a925b-91f4-45d8-b2e3-66821aaf9661.png" alt="Switchboard" loading="lazy"/>
-            </div>
-            <div className="lore-vg-text">
-              <div className="lore-vg-alias">SWITCHBOARD</div>
-            <div className="lore-vg-name">Iris Grimere · 35</div>
-            <div className="lore-vg-tag">The architect</div>
-            <p className="lore-vg-desc">
-              Technokinesis. She speaks to electronics, by thought, in a range that has no
-              precise edge but seems to extend as far as she can perceive a device. She
-              does not need to touch them. She does not need to see them. They listen.
-            </p>
-            <p className="lore-vg-desc">
-              Not physically superhuman. Strength, durability, and reflexes are baseline
-              human, and her health is, if anything, slightly under, because she forgets to
-              eat. Every piece of gear the Vanguard uses is hers. Vigil's sword. Aegis's
-              flight harness. Paragon's gauntlets. Three cats, named after pre-Socratic
-              philosophers.
-            </p>
-            </div>
-          </article>
+      {/* CHAMPION SELECT strip — full-bleed portraits, comic chrome,
+          click jumps to the dossier below. */}
+      <section className="lore-block lore-vg-strip-block">
+        <div className={"lore-vgcs" + (hovered != null ? " has-focus" : "")}>
+          {LORE_VG_ROSTER.map((v, i) => (
+            <a
+              key={v.key}
+              href={"#vg-" + v.key}
+              className={"lore-vgcs-panel" + (hovered === i ? " is-focus" : "")}
+              style={{"--vg-color": v.color, "--vg-i": i}}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById("vg-" + v.key);
+                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+            >
+              <div className="lore-vgcs-img">
+                <img src={v.portrait} alt={v.alias} loading="lazy"/>
+                <div className="lore-vgcs-halftone" aria-hidden="true"/>
+                <div className="lore-vgcs-glow" aria-hidden="true"/>
+                <div className="lore-vgcs-scan" aria-hidden="true"/>
+              </div>
+              <div className="lore-vgcs-sfx" aria-hidden="true">{v.sfx}!</div>
+              <div className="lore-vgcs-issue" aria-hidden="true">NO. {String(i + 1).padStart(2, "0")}</div>
+              <div className="lore-vgcs-plate">
+                <div className="lore-vgcs-tag">{v.tag}</div>
+                <h3 className="lore-vgcs-alias">{v.alias}</h3>
+                <div className="lore-vgcs-name">{v.name} · {v.age}</div>
+              </div>
+            </a>
+          ))}
         </div>
       </section>
+
+      {/* DOSSIERS — readable long-form profiles, one per operator */}
+      {LORE_VG_ROSTER.map((v, i) => (
+        <section
+          key={v.key}
+          id={"vg-" + v.key}
+          className="lore-block lore-vg-dossier"
+          style={{"--vg-color": v.color}}
+        >
+          <header className="lore-vg-dossier-head">
+            <span className="lore-vg-dossier-no">№ {String(i + 1).padStart(2, "0")}</span>
+            <span className="lore-vg-dossier-stamp">DOSSIER</span>
+            <span className="lore-vg-dossier-rule" aria-hidden="true"/>
+            <span className="lore-vg-dossier-tag">{v.tag}</span>
+          </header>
+          <h3 className="lore-vg-dossier-alias">{v.alias}</h3>
+          <div className="lore-vg-dossier-name">{v.name} · {v.age}</div>
+          <LoreVgDossierBody k={v.key}/>
+        </section>
+      ))}
     </div>
   );
 }

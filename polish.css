@@ -13983,3 +13983,392 @@ nav.home-scrollnav,
   .lore-section .lore-lead { font-size: 17px !important; }
   .lore-section .lore-p { font-size: 16px !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   LORE · VANGUARD CHAMPION-SELECT + DOSSIERS
+   Replaces the old left-portrait / right-text card list with a comic-cover
+   champion-select strip at the top, then long-form readable dossiers
+   stacked below. Clicking a panel in the strip smooth-scrolls to that
+   operator's dossier.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Hide the old card grid if it ever renders */
+.lore-section .lore-vanguard { display: none !important; }
+
+/* Strip block: ditch the default lore-block left padding/margin */
+.lore-section .lore-vg-strip-block {
+  padding-left: 0 !important;
+  margin: 0 0 72px !important;
+}
+.lore-section .lore-vg-strip-block::before { display: none !important; }
+
+/* ── Champion select grid ──────────────────────────────────────────── */
+.lore-vgcs {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 4px !important;
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  background: #000 !important;
+  padding: 4px !important;
+  border: 4px solid #000 !important;
+  box-shadow: 14px 14px 0 0 var(--red, #c11a2c) !important;
+  position: relative !important;
+}
+
+.lore-vgcs-panel {
+  position: relative !important;
+  display: block !important;
+  aspect-ratio: 3 / 5 !important;
+  overflow: hidden !important;
+  background: var(--bg-1, #0c0c10) !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  transition:
+    filter 0.4s ease,
+    transform 0.4s cubic-bezier(.22,1,.36,1) !important;
+}
+.lore-vgcs.has-focus .lore-vgcs-panel:not(.is-focus) {
+  filter: brightness(0.42) saturate(0.5) !important;
+}
+
+.lore-vgcs-img {
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+}
+.lore-vgcs-img img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: 50% 22% !important;
+  filter: contrast(1.1) saturate(0.95) !important;
+  transform: scale(1.05) !important;
+  transition: transform 1.2s cubic-bezier(.22,1,.36,1), filter 0.5s ease !important;
+}
+.lore-vgcs-panel.is-focus .lore-vgcs-img img {
+  transform: scale(1.12) !important;
+  filter: contrast(1.2) saturate(1.15) !important;
+}
+
+.lore-vgcs-halftone {
+  position: absolute !important;
+  inset: 0 !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(0,0,0,0.55) 1px, transparent 1.5px) !important;
+  background-size: 4px 4px !important;
+  pointer-events: none !important;
+  mix-blend-mode: multiply !important;
+  opacity: 0.6 !important;
+}
+.lore-vgcs-glow {
+  position: absolute !important;
+  inset: 0 !important;
+  background: radial-gradient(ellipse at 50% 30%,
+    color-mix(in srgb, var(--vg-color) 35%, transparent) 0%, transparent 60%) !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.5s ease !important;
+  mix-blend-mode: screen !important;
+}
+.lore-vgcs-panel.is-focus .lore-vgcs-glow { opacity: 1 !important; }
+.lore-vgcs-scan {
+  position: absolute !important;
+  top: 0; left: 0; right: 0 !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--vg-color) 70%, transparent), transparent) !important;
+  pointer-events: none !important;
+  opacity: 0.6 !important;
+  animation: lore-vgcs-scan 4s linear infinite !important;
+}
+@keyframes lore-vgcs-scan {
+  0%   { transform: translateY(0);    opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.7; }
+  100% { transform: translateY(800%); opacity: 0; }
+}
+.lore-vgcs-img::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0) 32%, rgba(0,0,0,0.88) 100%) !important;
+  pointer-events: none !important;
+}
+
+.lore-vgcs-sfx {
+  position: absolute !important;
+  top: 20px; right: 16px !important;
+  z-index: 4 !important;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(22px, 2.6vw, 32px) !important;
+  letter-spacing: 0.02em !important;
+  color: var(--yellow, #d4a84a) !important;
+  text-shadow: 3px 3px 0 #000, -2px 0 0 rgba(227,27,35,0.55) !important;
+  transform: rotate(-8deg) scale(0.9) !important;
+  opacity: 0.95 !important;
+  pointer-events: none !important;
+  text-transform: uppercase !important;
+  transition: transform 0.4s cubic-bezier(.5,1.6,.5,1), opacity 0.3s ease !important;
+}
+.lore-vgcs-panel.is-focus .lore-vgcs-sfx {
+  transform: rotate(-6deg) scale(1.05) !important;
+  opacity: 1 !important;
+}
+
+.lore-vgcs-issue {
+  position: absolute !important;
+  top: 14px; left: 14px !important;
+  z-index: 4 !important;
+  padding: 3px 8px !important;
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  pointer-events: none !important;
+  border-radius: 0 !important;
+}
+
+.lore-vgcs-plate {
+  position: absolute !important;
+  bottom: 0; left: 0; right: 0 !important;
+  z-index: 3 !important;
+  padding: 22px !important;
+  pointer-events: none !important;
+}
+.lore-vgcs-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--vg-color) !important;
+  margin-bottom: 6px !important;
+}
+.lore-vgcs-alias {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(22px, 2.6vw, 34px) !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.01em !important;
+  color: #fff !important;
+  margin: 0 0 4px !important;
+  text-transform: uppercase !important;
+  text-shadow:
+    -1.5px 0 0 rgba(227,27,35,0.65),
+     1.5px 0 0 rgba(46,188,212,0.45) !important;
+}
+.lore-vgcs-name {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.72) !important;
+}
+
+@media (max-width: 760px) {
+  .lore-vgcs {
+    grid-template-columns: repeat(2, 1fr) !important;
+    box-shadow: 8px 8px 0 0 var(--red, #c11a2c) !important;
+  }
+}
+
+/* ── Dossier blocks (long-form readable) ────────────────────────────── */
+.lore-section .lore-vg-dossier {
+  position: relative !important;
+  max-width: 880px !important;
+  margin: 0 0 72px !important;
+  padding: 36px 0 0 0 !important;
+  border-top: 1px solid rgba(212,168,74,0.22) !important;
+  scroll-margin-top: 96px !important;
+}
+.lore-section .lore-vg-dossier::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: -1px !important;
+  width: 80px !important;
+  height: 3px !important;
+  background: var(--vg-color, var(--yellow, #d4a84a)) !important;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--vg-color, #d4a84a) 60%, transparent) !important;
+}
+
+.lore-vg-dossier-head {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-bottom: 18px !important;
+  flex-wrap: wrap !important;
+}
+.lore-vg-dossier-no {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  color: var(--vg-color, var(--yellow, #d4a84a)) !important;
+  text-transform: uppercase !important;
+}
+.lore-vg-dossier-stamp {
+  display: inline-block !important;
+  padding: 3px 10px !important;
+  border: 1px solid rgba(212,168,74,0.45) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+}
+.lore-vg-dossier-rule {
+  flex: 1 1 auto !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, rgba(212,168,74,0.5), rgba(212,168,74,0)) !important;
+  min-width: 40px !important;
+}
+.lore-vg-dossier-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+
+.lore-section .lore-vg-dossier-alias {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(52px, 6vw, 88px) !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.022em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 4px !important;
+  text-transform: uppercase !important;
+  text-shadow:
+    -2px 0 0 color-mix(in srgb, var(--vg-color, #c41a1a) 60%, transparent),
+     2px 0 0 rgba(46,188,212,0.35) !important;
+}
+.lore-vg-dossier-name {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin: 0 0 22px !important;
+}
+.lore-section .lore-vg-dossier-p {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 17px !important;
+  line-height: 1.72 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 18px !important;
+  max-width: 760px !important;
+  font-weight: 400 !important;
+}
+.lore-section .lore-vg-dossier-p:last-child { margin-bottom: 0 !important; }
+.lore-section .lore-vg-dossier-p em {
+  color: var(--vg-color, var(--yellow, #d4a84a)) !important;
+  font-style: italic !important;
+}
+.lore-section .lore-vg-dossier-p strong {
+  color: var(--text-1, #f5f1e8) !important;
+  font-weight: 600 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SIDE NAV · CLEANUP
+   Drop the gold-border container, the visible tooltip text, and the
+   glass background. Icons float freely. Active state lights the icon
+   gold + a thin gold tick to its left. Hover gently brightens. No more
+   tooltip text chip — the icon is the affordance.
+   ════════════════════════════════════════════════════════════════════════ */
+
+nav.home-scrollnav,
+.home-scrollnav {
+  position: fixed !important;
+  top: 50% !important;
+  right: 22px !important;
+  transform: translateY(-50%) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  z-index: 90 !important;
+}
+
+.home-scrollnav-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  background: transparent !important;
+  border: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.home-scrollnav-item { margin: 0 !important; position: relative !important; }
+
+.home-scrollnav-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: rgba(245,241,232,0.4) !important;
+  cursor: pointer !important;
+  position: relative !important;
+  border-radius: 0 !important;
+  grid-template-columns: none !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  transition:
+    color 220ms cubic-bezier(.2,.7,.2,1),
+    transform 240ms cubic-bezier(.2,.7,.2,1) !important;
+}
+
+/* Suppress everything inside except the icon */
+.home-scrollnav-dot,
+.home-scrollnav-num,
+.home-scrollnav-label {
+  display: none !important;
+}
+.home-scrollnav-btn::before,
+.home-scrollnav-btn::after {
+  content: none !important;
+}
+
+.home-scrollnav-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 22px !important;
+  height: 22px !important;
+  color: inherit !important;
+  transition: transform 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.home-scrollnav-icon svg { stroke: currentColor !important; }
+
+.home-scrollnav-btn:hover {
+  color: rgba(245,241,232,0.85) !important;
+}
+.home-scrollnav-btn:hover .home-scrollnav-icon { transform: scale(1.12) !important; }
+
+.home-scrollnav-item.is-active .home-scrollnav-btn {
+  color: var(--yellow, #d4a84a) !important;
+}
+.home-scrollnav-item.is-active .home-scrollnav-icon {
+  transform: scale(1.15) !important;
+}
+
+@media (max-width: 900px) {
+  .home-scrollnav, nav.home-scrollnav { display: none !important; }
+}
