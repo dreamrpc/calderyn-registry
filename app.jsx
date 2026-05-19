@@ -6403,7 +6403,11 @@ function ResidenceBlocks({items}){
                 <span>{list.length === 1 ? "room" : "rooms"}</span>
               </span>
             </header>
-            <MapLocList items={list}/>
+            <ol className="map-stage-pins map-stage-pins-house">
+              {list.map((loc, i) => (
+                <MapStageLocation key={loc.id} loc={loc} idx={i}/>
+              ))}
+            </ol>
           </section>
         );
       })}
@@ -6423,7 +6427,11 @@ function ResidenceBlocks({items}){
           <p className="map-house-blurb">
             Houses are private; the residential quad is not. The lawn between the four buildings, the kitchen, the laundry, the snug and the garden courtyard belong to everyone — house colours come off at the door.
           </p>
-          <MapLocList items={communal}/>
+          <ol className="map-stage-pins map-stage-pins-house">
+            {communal.map((loc, i) => (
+              <MapStageLocation key={loc.id} loc={loc} idx={i}/>
+            ))}
+          </ol>
         </section>
       )}
     </div>

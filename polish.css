@@ -16050,6 +16050,18 @@ nav.home-scrollnav,
   .map-stage-pins { max-height: 520px !important; }
 }
 
+/* Residence house variant — no internal max-height, each house list is
+   already short. Also unhide the outer .map-residence container inside
+   the stage shell. */
+.map-stage.is-residence { max-height: none !important; }
+.map-stage.is-residence .map-stage-info { overflow-y: auto !important; max-height: 820px !important; }
+.map-stage-pins.map-stage-pins-house {
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+.map-stage-pins.map-stage-pins-house::-webkit-scrollbar { display: none !important; }
+
 /* Single pin row · rail (number marker + connector line) + body */
 .map-stage-pin {
   display: grid !important;
