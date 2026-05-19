@@ -16112,3 +16112,308 @@ nav.lore-scrollnav,
     padding-right: clamp(24px, 5vw, 96px) !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   FINAL · CASSANDRA DOSSIER STAMP + HOME NAV TOP STRIP
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── CASSANDRA · 'EYES ONLY' stamp ──────────────────────────────────────
+   The stamp was rendering as a full-width red bar instead of a small
+   pinned tag because an earlier rule in index.html sets it to a pill.
+   Force a small absolute-positioned pill in the top-right corner with
+   a comic offset-shadow stencil. */
+.lore-section .case-dossier,
+.case-dossier {
+  position: relative !important;
+  overflow: visible !important;
+  padding-top: 14px !important;
+}
+.lore-section .case-stamp,
+.case-stamp,
+.case-dossier > .case-stamp {
+  display: inline-block !important;
+  position: absolute !important;
+  top: -14px !important;
+  right: 24px !important;
+  left: auto !important;
+  width: auto !important;
+  max-width: max-content !important;
+  background: var(--red, #e31b23) !important;
+  color: #fff !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  padding: 7px 14px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow:
+    -2px 2px 0 0 #0a0a0e,
+    -4px 4px 0 0 var(--yellow, #d4a84a) !important;
+  z-index: 5 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
+}
+
+/* Dossier head — reduce padding-top so the meta line sits visually
+   correct under the stamp; drop the gold underline accent that read
+   as a header bar */
+.lore-section .case-dossier-hd,
+.case-dossier-hd {
+  padding: 32px 36px 24px !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(212,168,74,0.22) !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 18px !important;
+}
+.lore-section .case-dossier-hd::after,
+.case-dossier-hd::after { content: none !important; }
+
+/* ── HOME · revert width reservation ────────────────────────────────────
+   The right-rail nav is being moved to a top strip — sections no longer
+   need padding-right reserved for it. */
+@media (min-width: 900px) {
+  .home-vg-section,
+  .home-today,
+  .home-programme {
+    padding-right: clamp(24px, 5vw, 80px) !important;
+  }
+  .home-vg-section > .home-section-head,
+  .home-today > .home-section-head,
+  .home-programme > .home-section-head,
+  .home-vg-section .home-vg-cs,
+  .home-today .home-today-status,
+  .home-today .home-today-numbers,
+  .home-today .home-today-events,
+  .home-programme .home-programme-card {
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+@media (min-width: 1500px) {
+  .home-vg-section,
+  .home-today,
+  .home-programme {
+    padding-right: clamp(24px, 5vw, 80px) !important;
+  }
+  .home-vg-section > .home-section-head,
+  .home-today > .home-section-head,
+  .home-programme > .home-section-head,
+  .home-vg-section .home-vg-cs,
+  .home-today .home-today-status,
+  .home-today .home-today-numbers,
+  .home-today .home-today-events,
+  .home-programme .home-programme-card {
+    max-width: 1200px !important;
+  }
+}
+
+/* ── HOME · top sticky chapter nav (mirrors the lore-nav pattern) ─────── */
+nav.home-scrollnav,
+.home-scrollnav {
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px)) !important;
+  right: auto !important;
+  left: auto !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: none !important;
+  z-index: 35 !important;
+  margin: 0 0 12px !important;
+  padding: 14px 32px 16px !important;
+  background: linear-gradient(180deg, #0a0a0a 0%, #0a0a0a 88%, rgba(10,10,10,0) 100%) !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+}
+.home-scrollnav-list {
+  list-style: none !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+  max-width: 1280px !important;
+  overflow-x: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(212,168,74,0.4) transparent !important;
+  background: transparent !important;
+  border: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+.home-scrollnav-list::-webkit-scrollbar { height: 6px !important; }
+.home-scrollnav-list::-webkit-scrollbar-thumb { background: rgba(212,168,74,0.4) !important; border-radius: 0 !important; }
+.home-scrollnav-list::-webkit-scrollbar-track { background: transparent !important; }
+
+.home-scrollnav-item {
+  margin: 0 !important;
+  flex: 1 1 0 !important;
+  min-width: 150px !important;
+  position: relative !important;
+}
+
+.home-scrollnav-btn {
+  display: grid !important;
+  grid-template-columns: auto auto 1fr !important;
+  align-items: center !important;
+  gap: 0 12px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  padding: 13px 16px 11px !important;
+  background: transparent !important;
+  border: 1px solid rgba(212,168,74,0.18) !important;
+  border-bottom: 0 !important;
+  border-left: 1px solid rgba(212,168,74,0.18) !important;
+  color: var(--text-3, #948d80) !important;
+  cursor: pointer !important;
+  border-radius: 0 !important;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  text-align: left !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transform: translateY(0) !important;
+  transition:
+    background 220ms cubic-bezier(.2,.7,.2,1),
+    border-color 220ms cubic-bezier(.2,.7,.2,1),
+    color 220ms cubic-bezier(.2,.7,.2,1),
+    transform 240ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.home-scrollnav-btn::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.05) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  opacity: 0.5 !important;
+  mix-blend-mode: screen !important;
+  z-index: 0;
+}
+.home-scrollnav-btn::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 3px !important;
+  background: var(--yellow, #d4a84a) !important;
+  transform: scaleX(0) !important;
+  transform-origin: left center !important;
+  transition: transform 280ms cubic-bezier(.2,.7,.2,1) !important;
+  z-index: 1;
+}
+.home-scrollnav-btn:hover {
+  background: rgba(212,168,74,0.05) !important;
+  border-color: rgba(212,168,74,0.45) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  transform: translateY(-1px) !important;
+}
+.home-scrollnav-btn:hover::after { transform: scaleX(0.3) !important; }
+
+.home-scrollnav-dot { display: none !important; }
+.home-scrollnav-num {
+  display: inline-block !important;
+  grid-row: 1; grid-column: 1;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 17px !important;
+  letter-spacing: -0.01em !important;
+  color: var(--yellow, #d4a84a) !important;
+  line-height: 1 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  padding-right: 10px !important;
+  border-right: 1px solid rgba(212,168,74,0.22) !important;
+  background: transparent !important;
+}
+.home-scrollnav-icon {
+  grid-row: 1; grid-column: 2;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: var(--yellow, #d4a84a) !important;
+  flex-shrink: 0 !important;
+  opacity: 0.75 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  transition: opacity 220ms cubic-bezier(.2,.7,.2,1), transform 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.home-scrollnav-icon svg { stroke: currentColor !important; }
+.home-scrollnav-btn:hover .home-scrollnav-icon { opacity: 1 !important; transform: scale(1.08) !important; }
+
+.home-scrollnav-label {
+  grid-row: 1; grid-column: 3;
+  display: inline-block !important;
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  color: inherit !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-width: 0 !important;
+  line-height: 1.1 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  opacity: 1 !important;
+}
+
+.home-scrollnav-item.is-active .home-scrollnav-btn {
+  background: linear-gradient(180deg, rgba(212,168,74,0.22) 0%, rgba(212,168,74,0.08) 100%) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  transform: translateY(-2px) !important;
+  box-shadow:
+    0 14px 28px -18px rgba(0,0,0,0.95),
+    inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+.home-scrollnav-item.is-active .home-scrollnav-btn::after {
+  transform: scaleX(1) !important;
+}
+.home-scrollnav-item.is-active .home-scrollnav-num {
+  color: var(--yellow, #d4a84a) !important;
+  text-shadow:
+    -1px 0 0 rgba(227,27,35,0.55),
+     1px 0 0 rgba(46,188,212,0.4) !important;
+}
+.home-scrollnav-item.is-active .home-scrollnav-icon {
+  opacity: 1 !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+.home-scrollnav-item.is-active .home-scrollnav-label {
+  color: var(--text-1, #f5f1e8) !important;
+  text-shadow:
+    -1px 0 0 rgba(227,27,35,0.4),
+     1px 0 0 rgba(46,188,212,0.28) !important;
+}
+
+@media (max-width: 900px) {
+  nav.home-scrollnav,
+  .home-scrollnav {
+    display: block !important;
+    padding: 12px 16px 14px !important;
+  }
+  .home-scrollnav-item { min-width: 150px !important; flex: 0 0 auto !important; }
+  .home-scrollnav-label { font-size: 12px !important; }
+}
