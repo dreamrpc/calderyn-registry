@@ -23047,3 +23047,60 @@ button.orgs-pill {
   color: var(--yellow, #d4a84a) !important;
   border-color: var(--yellow, #d4a84a) !important;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   POWERS · BANNED TAB · table format matching Powers Registry chrome
+   ════════════════════════════════════════════════════════════════════════ */
+
+.pbanned .pbanned-group {
+  border-left: 4px solid var(--red, #e31b23) !important;
+}
+.pbanned-tbl tbody tr.pbanned-row {
+  background: transparent !important;
+}
+.pbanned-tbl tbody tr.pbanned-row:hover td {
+  background: rgba(227,27,35,0.05) !important;
+}
+.pbanned-tbl .pbanned-n {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  color: rgba(255,140,148,0.95) !important;
+  text-align: center !important;
+}
+.pbanned-tbl .pbanned-name {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  line-height: 1.45 !important;
+}
+.pbanned-tbl .pbanned-reason {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  font-style: italic !important;
+  color: var(--text-2, #c9c3b5) !important;
+  line-height: 1.5 !important;
+}
+.pbanned-tbl .pbanned-reason-default {
+  color: var(--text-3, #948d80) !important;
+}
+.pbanned-tbl .pbanned-status { text-align: right !important; }
+.pbanned-tbl .pbanned-tag {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  padding: 4px 10px !important;
+  background: rgba(227,27,35,0.14) !important;
+  border: 1px solid rgba(227,27,35,0.6) !important;
+  color: rgba(255,140,148,0.95) !important;
+  white-space: nowrap !important;
+}
+
+/* Hide the OLD banned-bay block (it lived inside the Guide tab) */
+.banned-bay { display: none !important; }
+.pg-guide .banned-bay { display: none !important; }

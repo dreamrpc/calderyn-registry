@@ -1688,21 +1688,58 @@ function PowersGuide(){
           ))}
         </div>
       </section>
+    </div>
+  );
+}
 
-      <section className="banned-bay">
-        <div className="banned-bay-hd">
-          <div className="banned-bay-stamp">Banned</div>
-          <div className="banned-bay-blurb">These exceed the registry's design. Applications including any of the below will be rejected at first review.</div>
+/* ─── Banned tab · table format, matches Powers Registry chrome ── */
+function PowersBanned(){
+  // Split each "{ability} — {reason}" entry into two columns; entries
+  // without an em-dash are name-only.
+  const rows = (BANNED_POWERS || []).map(b => {
+    const sep = b.indexOf(" — ");
+    if (sep > -1) return { name: b.slice(0, sep).trim(), reason: b.slice(sep + 3).trim() };
+    return { name: b.trim(), reason: "" };
+  });
+
+  return (
+    <div className="preg pbanned">
+      <div className="preg-hint">
+        Powers the registry will not accept. Applications including any of the entries below are rejected at first review — no appeal, no exceptions.
+      </div>
+      <section className="preg-group pbanned-group">
+        <div className="preg-group-hd">
+          <span className="preg-group-name">REJECTED ABILITIES</span>
+          <span className="preg-group-count">{rows.length} {rows.length === 1 ? "entry" : "entries"}</span>
         </div>
-        <ul className="banned-bay-list">
-          {BANNED_POWERS.map((b, i) => (
-            <li key={i} className="banned-bay-item">
-              <span className="banned-bay-num">{String(i+1).padStart(2,"0")}</span>
-              <span className="banned-bay-text">{b}</span>
-              <span className="banned-bay-tag">Rejected</span>
-            </li>
-          ))}
-        </ul>
+        <div className="preg-tbl-wrap">
+          <table className="preg-tbl pbanned-tbl">
+            <thead>
+              <tr>
+                <th style={{width:60}}>#</th>
+                <th style={{width:340}}>Banned Ability</th>
+                <th>Reason</th>
+                <th style={{width:120}}>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, i) => (
+                <tr key={i} className="preg-row pbanned-row">
+                  <td className="pbanned-n">{String(i+1).padStart(2, "0")}</td>
+                  <td className="pbanned-name">{r.name}</td>
+                  <td className="pbanned-reason">
+                    {r.reason
+                      ? r.reason
+                      : <span className="pbanned-reason-default">Exceeds registry design.</span>}
+                  </td>
+                  <td className="pbanned-status">
+                    <span className="pbanned-tag">REJECTED</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );
