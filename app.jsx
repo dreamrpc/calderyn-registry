@@ -1959,16 +1959,20 @@ function StudentRosterFull(){
     return collapsed.split(" · ").map(titleSegment).join(" · ");
   };
 
+  // Designation is the canonical field. For legacy data it comes from
+  // s.track (hero/sidekick). Fellows override via s.fellow === true.
+  const desigOf = (s) => s.fellow ? "fellow" : ((s.track || "").toLowerCase() || null);
+
   const [q, setQ] = useState("");
   const [house, setHouse] = useState("all");
   const [tier, setTier]   = useState("all");
-  const [track, setTrack] = useState("all");
+  const [designation, setDesignation] = useState("all");
 
   const filtered = useMemo(() => {
     const ql = q.trim().toLowerCase();
     return STUDENTS.filter(s => {
       if (house !== "all" && (s.house || "").toLowerCase() !== house) return false;
-      if (track !== "all" && (s.track || "").toLowerCase() !== track) return false;
+      if (designation !== "all" && desigOf(s) !== designation) return false;
       if (tier !== "all") {
         const t = (s.tier || "").toUpperCase();
         const letter = t[0] || "";
@@ -1980,7 +1984,7 @@ function StudentRosterFull(){
       }
       return true;
     }).sort((a, b) => (a.char || "").localeCompare(b.char || "", undefined, { sensitivity: "base" }));
-  }, [q, house, tier, track]);
+  }, [q, house, tier, designation]);
 
   const Pill = ({active, onClick, children}) => (
     <button
@@ -2028,13 +2032,24 @@ function StudentRosterFull(){
         </div>
 
         <div className="sfilter-group">
-          <span className="sfilter-lbl">Track</span>
-          <Pill active={track === "all"}      onClick={() => setTrack("all")}>All</Pill>
-          <Pill active={track === "hero"}     onClick={() => setTrack("hero")}>Hero</Pill>
-          <Pill active={track === "sidekick"} onClick={() => setTrack("sidekick")}>Sidekick</Pill>
+          <span className="sfilter-lbl">Designation</span>
+          <Pill active={designation === "all"}      onClick={() => setDesignation("all")}>All</Pill>
+          <Pill active={designation === "hero"}     onClick={() => setDesignation("hero")}>Hero</Pill>
+          <Pill active={designation === "sidekick"} onClick={() => setDesignation("sidekick")}>Sidekick</Pill>
+          <Pill active={designation === "fellow"}   onClick={() => setDesignation("fellow")}>Fellow</Pill>
         </div>
 
         <div className="sfilter-count">{filtered.length} entr{filtered.length === 1 ? "y" : "ies"}</div>
+      </div>
+
+      <div className="sfilter-reset-row">
+        {(q || house !== "all" || tier !== "all" || designation !== "all") && (
+          <button
+            type="button"
+            className="sfilter-reset"
+            onClick={() => { setQ(""); setHouse("all"); setTier("all"); setDesignation("all"); }}
+          >Reset filters</button>
+        )}
       </div>
 
       <div className="tw">
@@ -2045,7 +2060,7 @@ function StudentRosterFull(){
             <th>Stage Name</th>
             <th>House</th>
             <th>Year</th>
-            <th>Track</th>
+            <th>Designation</th>
             <th>Power / Ability</th>
             <th>Tier</th>
           </tr></thead>
@@ -2055,16 +2070,15 @@ function StudentRosterFull(){
                 <td colSpan={8} style={{padding:"60px 16px", textAlign:"center"}}>
                   <div className="empty-state-block">
                     <EmptyState label="No characters match these filters"/>
-                    <button type="button" className="empty-cta" onClick={() => {setQ(""); setHouse("all"); setTier("all"); setTrack("all");}}>Reset filters</button>
+                    <button type="button" className="empty-cta" onClick={() => {setQ(""); setHouse("all"); setTier("all"); setDesignation("all");}}>Reset filters</button>
                   </div>
                 </td>
               </tr>
             )}
             {filtered.map((s, i) => {
               const houseCol = s.house ? HC_PRIMARY[s.house.toLowerCase()] : null;
-              const trackLbl = (s.track || "").toLowerCase() === "hero" ? "Hero"
-                              : (s.track || "").toLowerCase() === "sidekick" ? "Sidekick"
-                              : "—";
+              const d = desigOf(s);
+              const desigLbl = d === "hero" ? "Hero" : d === "sidekick" ? "Sidekick" : d === "fellow" ? "Fellow" : "—";
               return (
                 <tr key={i} className="student-row" style={houseCol ? {boxShadow:`inset 4px 0 0 ${houseCol}`} : null}>
                   <td className="rn">{i+1}</td>
@@ -2073,7 +2087,9 @@ function StudentRosterFull(){
                   <td><HouseTag house={s.house}/></td>
                   <td style={{textTransform:"capitalize", fontSize:13, color:"var(--muted)", fontStyle:"italic"}}>{s.year}</td>
                   <td>
-                    <span className={"track-tag track-tag-" + ((s.track || "").toLowerCase() === "hero" ? "hero" : "sidekick")}>{trackLbl}</span>
+                    {d
+                      ? <span className={"desig-chip desig-chip-" + d}>{desigLbl}</span>
+                      : <span className="desig-chip-empty">—</span>}
                   </td>
                   <td className="student-col-power" style={{fontSize:13}}>{normalizePower(s.power)}</td>
                   <td>

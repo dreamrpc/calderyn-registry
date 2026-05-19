@@ -22977,3 +22977,73 @@ button.orgs-pill {
 .freg-detail,
 .freg-arc,
 .freg-arc-item { display: none !important; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   STUDENTS · designation chip (replaces the old track-tag chrome)
+   ════════════════════════════════════════════════════════════════════════ */
+
+.desig-chip {
+  display: inline-block !important;
+  padding: 3px 9px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  border: 1px solid currentColor !important;
+  border-radius: 0 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+.desig-chip-hero {
+  color: rgba(255,140,148,0.95) !important;
+  background: rgba(196,26,26,0.14) !important;
+  border-color: rgba(196,26,26,0.6) !important;
+}
+.desig-chip-sidekick {
+  color: rgba(140,178,255,0.95) !important;
+  background: rgba(30,64,175,0.16) !important;
+  border-color: rgba(30,64,175,0.6) !important;
+}
+.desig-chip-fellow {
+  color: #0a0a0a !important;
+  background: var(--yellow, #d4a84a) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+  box-shadow: -2px 2px 0 0 rgba(0,0,0,0.4) !important;
+}
+.desig-chip-empty {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  color: var(--text-3, #948d80) !important;
+  letter-spacing: 0.18em !important;
+}
+
+/* Sfilter — active designation pill mirrors the chip colour so the
+   filter row is self-consistent with the table */
+.sfilter-group .sf-pill.on:has(+ * .desig-chip-hero),
+.sfilter-group .sf-pill[data-desig="hero"].on { color: var(--text-1, #f5f1e8) !important; }
+
+/* Reset-filters action row sits beneath the chip strip */
+.sfilter-reset-row {
+  display: flex !important;
+  justify-content: flex-end !important;
+  padding: 8px clamp(16px, 3vw, 28px) 4px !important;
+}
+.sfilter-reset {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 5px 11px !important;
+  background: transparent !important;
+  color: var(--text-3, #948d80) !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  transition: color 180ms ease, border-color 180ms ease !important;
+}
+.sfilter-reset:hover {
+  color: var(--yellow, #d4a84a) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
