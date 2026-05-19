@@ -15666,3 +15666,48 @@ nav.home-scrollnav,
   background: var(--yellow, #d4a84a) !important;
   color: #0a0a0a !important;
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   HOME · RESERVE WIDTH FOR THE RIGHT-RAIL NAV
+   The home side nav rail (icon + always-visible label) is ~210px wide
+   plus a 22px right gutter. Above 900px (where the rail is visible),
+   shrink the Vanguard, Today, and Programme sections so their content
+   no longer slides under the rail.
+   ════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 900px) {
+  .home-vg-section,
+  .home-today,
+  .home-programme {
+    padding-right: clamp(240px, 18vw, 280px) !important;
+  }
+  /* Inner containers — keep them centred within the now-narrower section */
+  .home-vg-section > .home-section-head,
+  .home-today > .home-section-head,
+  .home-programme > .home-section-head,
+  .home-vg-section .home-vg-cs,
+  .home-today .home-today-status,
+  .home-today .home-today-numbers,
+  .home-today .home-today-events,
+  .home-programme .home-programme-card {
+    max-width: 1080px !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+  }
+}
+@media (min-width: 1500px) {
+  .home-vg-section,
+  .home-today,
+  .home-programme {
+    padding-right: 280px !important;
+  }
+  .home-vg-section > .home-section-head,
+  .home-today > .home-section-head,
+  .home-programme > .home-section-head,
+  .home-vg-section .home-vg-cs,
+  .home-today .home-today-status,
+  .home-today .home-today-numbers,
+  .home-today .home-today-events,
+  .home-programme .home-programme-card {
+    max-width: 1140px !important;
+  }
+}
