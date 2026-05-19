@@ -16385,3 +16385,18 @@ nav.home-scrollnav,
 .pg .strata-paper-title {
   color: #000 !important;
 }
+
+/* LEAGUE STAFF block — sharp corners, no rounding */
+.cp-staff-block,
+div.cp-staff-block,
+.cdet .cp-staff-block,
+.cdet .clubdf-body .cp-staff-block {
+  border-radius: 0 !important;
+}
+.cp-staff-block table,
+.cp-staff-block table tr,
+.cp-staff-block table td,
+.cp-staff-tag,
+.cp-staff-tbl {
+  border-radius: 0 !important;
+}
