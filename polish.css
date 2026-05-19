@@ -24830,3 +24830,97 @@ button.orgs-pill {
   margin: 0 clamp(20px, 4vw, 32px) !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   POWERS GUIDE · spacing fix
+   The "00 / READ FIRST" badge and "How the Registry Works" title
+   were kissing the top of their section with no breathing room.
+   Push the page-level top padding generously below the subnav and
+   give each .bay-hd its own internal top/bottom padding.
+   ════════════════════════════════════════════════════════════════════ */
+.pg-guide {
+  padding: 48px clamp(20px, 4vw, 32px) 64px !important;
+}
+.pg-guide .bay-hd {
+  padding: 28px 0 18px !important;
+  margin-bottom: 24px !important;
+}
+.pg-guide .bay-hd-tag {
+  margin: 0 0 16px !important;
+}
+.pg-guide .bay-hd-title {
+  margin: 0 0 10px !important;
+}
+.pg-guide .bay-hd-blurb {
+  margin-top: 2px !important;
+  margin-bottom: 6px !important;
+}
+.pg-guide section + section {
+  margin-top: 56px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   DESIGNATION FILTER STICKY · fix the "looks weird when it floats"
+   Two problems with the previous pass:
+   1) The thick gold top-rail (border-top: 2px solid #c9a84c) on the
+      sticky bar made it look like a separate piece of UI floating
+      over the page when scrolled. Replaced with a hairline.
+   2) The Curriculum filter offset (+44px) was too tight under the
+      year-tab strip — the two bars overlapped on tall headers. Use
+      the same `data-attr` based offset as the year tabs and let the
+      bars stack via their own margin instead of fighting in z-index.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Year-tab strip — drop the heavy hairline, keep a clean bottom rule */
+.curr-nav,
+.lore-nav.curr-nav,
+.curr > .lore-nav,
+.curr > nav.lore-nav {
+  border-top: 0 !important;
+  border-bottom: 1px solid rgba(212, 168, 74, 0.18) !important;
+  box-shadow: 0 8px 24px -22px rgba(0, 0, 0, 0.9) !important;
+  padding: 8px clamp(20px, 4vw, 32px) !important;
+}
+
+/* Curriculum designation filter — sit immediately under the year tabs,
+   not 44px below. Use the same sticky offset; the year-tab strip's
+   bottom edge naturally provides the line break. */
+.curr-filter-bar {
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px) + 40px) !important;
+  margin: 0 !important;
+  padding: 8px clamp(20px, 4vw, 32px) !important;
+  background: rgba(8, 8, 8, 0.94) !important;
+  border-top: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  box-shadow: 0 8px 22px -20px rgba(0, 0, 0, 0.9) !important;
+  gap: 8px !important;
+}
+
+/* Faculty designation filter — same chrome as curriculum, just pinned
+   directly below the subnav (no year tabs above on this view). */
+.sfilter.freg-sfilter {
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + var(--hdr-subnav-h, 60px)) !important;
+  margin: 0 !important;
+  padding: 10px clamp(20px, 4vw, 32px) !important;
+  background: rgba(8, 8, 8, 0.94) !important;
+  border-top: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  box-shadow: 0 8px 22px -20px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Give the freg-hint room to breathe below the sticky filter strip so
+   the "Eight departments · scroll to read" line doesn't kiss the bar. */
+.freg .freg-hint {
+  padding: 18px clamp(20px, 4vw, 32px) 14px !important;
+  margin: 0 !important;
+}
+
+/* Pull the first curriculum section + first faculty section down from
+   the sticky strip so the content has visible breathing room when the
+   user scrolls and the bar pins. */
+.curr-main { padding-top: 32px !important; }
+.freg > .dean-card,
+.freg > .freg-dept-section:first-of-type {
+  margin-top: 28px !important;
+}
+
