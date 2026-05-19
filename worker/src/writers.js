@@ -58,6 +58,7 @@ const RPC_TO_OOC_RAW = {
   // RPC accounts were never captured by a form approval).
   "bulk":          "Wilder",
   "Breakpoint":    "Star",
+  "Xenofire": "Skully",
   // AUTO-INSERT:writers — newly-approved writer mappings get added
   // by the relay Worker directly above this marker (one line per RPC
   // account). Do not remove. See worker/src/writer-mapping.js for the
