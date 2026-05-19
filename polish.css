@@ -16378,3 +16378,10 @@ nav.home-scrollnav,
   .home-scrollnav-btn { padding: 0 14px !important; height: 40px !important; }
   .home-scrollnav-label { font-size: 10px !important; }
 }
+
+/* THE FINANCIAL CORRESPONDENT masthead — force pure black */
+.strata-paper .strata-paper-title,
+.strata-paper-title,
+.pg .strata-paper-title {
+  color: #000 !important;
+}
