@@ -1803,7 +1803,7 @@ function PowersTab(){
   const ctx = React.useContext(RegContext);
   const [view, setView] = useState("guide");
   useEffect(() => {
-    if (ctx.targetSubview && ["guide","registry"].includes(ctx.targetSubview)){
+    if (ctx.targetSubview && ["guide","registry","banned"].includes(ctx.targetSubview)){
       setView(ctx.targetSubview);
       ctx.consumeSubview();
     }
@@ -1813,13 +1813,17 @@ function PowersTab(){
       <PageHead
         stamp="DOC · 08 · POWER REGISTRY"
         title={<>The powered</>}
-        body={<>One tier system (A–D). Six statuses. Read the <strong>Guide</strong> first; the <strong>Registry</strong> is the cast.</>}
+        body={<>One tier system (A–D). Six statuses. Read the <strong>Guide</strong> first; the <strong>Registry</strong> is the cast; the <strong>Banned</strong> list is what the registry refuses.</>}
         note={<>{POWERS.length} on file<br/>Same type is fine — same expression is not</>}
         pageNum="P. 008 / VIII"
       />
       <div className="subnav">
         <div className="subnav-inner">
-          {[["guide","Guide","How powers work"], ["registry","Registry","Who has what"]].map(([id, lbl, sub]) => (
+          {[
+            ["guide",    "Guide",    "How powers work"],
+            ["registry", "Registry", "Who has what"],
+            ["banned",   "Banned",   "What the registry refuses"],
+          ].map(([id, lbl, sub]) => (
             <button
               key={id}
               className={"subnav-btn" + (view === id ? " on" : "")}
@@ -1832,7 +1836,9 @@ function PowersTab(){
           ))}
         </div>
       </div>
-      {view === "guide" ? <PowersGuide/> : <PowersRegistry/>}
+      {view === "guide"    && <PowersGuide/>}
+      {view === "registry" && <PowersRegistry/>}
+      {view === "banned"   && <PowersBanned/>}
     </div>
   );
 }
@@ -6757,6 +6763,7 @@ function MapTab(){
   const locations = D.mapLocations;
   const districtsWithItems = districts.filter(d => locations.some(l => l.district === d.id));
   const [activeId, setActiveId] = useState(districtsWithItems[0]?.id);
+  const [posterExpanded, setPosterExpanded] = useState(false);
   const [query, setQuery] = useState("");
 
   const ql = query.trim().toLowerCase();
@@ -6907,7 +6914,7 @@ function MapTab(){
           ) : (
             activeDistrict && (
               <section
-                className={"map-stage" + (isResidence ? " is-residence" : "")}
+                className={"map-stage" + (isResidence ? " is-residence" : "") + (posterExpanded ? " is-poster-expanded" : "")}
                 style={{
                   "--district-c": activeDistrict.color,
                   "--district-c1": (DISTRICT_VISUALS[activeDistrict.id] || DISTRICT_VISUALS.academic).c1,
@@ -6933,6 +6940,16 @@ function MapTab(){
                     <span className="map-stage-poster-title-kicker">District {String(activeIdx + 1).padStart(2, "0")}</span>
                     <span className="map-stage-poster-title-name">{activeDistrict.name}</span>
                   </div>
+                  <button
+                    type="button"
+                    className="map-stage-poster-expand"
+                    onClick={() => setPosterExpanded(v => !v)}
+                    aria-label={posterExpanded ? "Collapse district image" : "Expand district image"}
+                    aria-pressed={posterExpanded}
+                  >
+                    <Icon name={posterExpanded ? "chevron-up" : "chevron-down"} size={12} stroke={2}/>
+                    <span>{posterExpanded ? "COLLAPSE" : "EXPAND"}</span>
+                  </button>
                 </aside>
 
                 {/* RIGHT · info column — deck (blurb) then sub-locations.
