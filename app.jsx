@@ -2299,6 +2299,7 @@ function HousesTab(){
                 <span className="home-scrollnav-icon" aria-hidden="true">
                   <Icon name={t.icon} size={18} stroke={1.8}/>
                 </span>
+                <span className="home-scrollnav-label">{t.label}</span>
               </button>
             </li>
           ))}
@@ -6528,49 +6529,55 @@ function MapTab(){
         )}
       </div>
 
-      <div className="map-page lore-shell">
-        <aside className="lore-toc">
-          <div className="lore-toc-inner">
-            <div className="lore-toc-stamp">DISTRICTS</div>
-            <ol className="lore-toc-list">
-              {districtsWithItems.map((d, i) => {
-                const dCount = searchActive
-                  ? locations.filter(l => l.district === d.id && matchLoc(l)).length
-                  : null;
-                const dimmed = searchActive && dCount === 0;
-                return (
-                  <li
-                    key={d.id}
-                    className={
-                      "lore-toc-item"
-                      + (d.id === activeId && !searchActive ? " on" : "")
-                      + (dimmed ? " is-dim" : "")
-                    }
-                  >
-                    <button
-                      type="button"
-                      className="lore-toc-btn"
-                      onClick={() => {
-                        setQuery("");
-                        setActiveId(d.id);
-                        window.scrollTo({top: 0, behavior: 'instant'});
-                      }}
-                      aria-current={d.id === activeId && !searchActive ? "page" : undefined}
-                    >
-                      <span className="lore-toc-n">{String(i + 1).padStart(2, "0")}</span>
-                      <span className="lore-toc-label">{d.name}</span>
-                      {searchActive && (
-                        <span className="lore-toc-count">{dCount}</span>
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-        </aside>
+      {/* District nav — horizontal chip strip, always visible, every
+          district has its own icon + name + count. Replaces the old
+          left sidebar that some users never noticed. */}
+      <nav className="map-nav" aria-label="Campus districts">
+        <ol className="map-nav-list">
+          {districtsWithItems.map((d, i) => {
+            const v = DISTRICT_VISUALS[d.id] || DISTRICT_VISUALS.academic;
+            const total = locations.filter(l => l.district === d.id).length;
+            const dCount = searchActive
+              ? locations.filter(l => l.district === d.id && matchLoc(l)).length
+              : total;
+            const dimmed = searchActive && dCount === 0;
+            const isActive = d.id === activeId && !searchActive;
+            return (
+              <li
+                key={d.id}
+                className={
+                  "map-nav-item"
+                  + (isActive ? " is-active" : "")
+                  + (dimmed ? " is-dim" : "")
+                }
+              >
+                <button
+                  type="button"
+                  className="map-nav-btn"
+                  onClick={() => {
+                    setQuery("");
+                    setActiveId(d.id);
+                  }}
+                  aria-current={isActive ? "page" : undefined}
+                  style={{"--map-nav-c": d.color}}
+                >
+                  <span className="map-nav-icon" aria-hidden="true">
+                    <Icon name={v.icon} size={18} stroke={1.7}/>
+                  </span>
+                  <span className="map-nav-body">
+                    <span className="map-nav-num">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="map-nav-name">{d.name}</span>
+                    <span className="map-nav-count">{dCount} {dCount === 1 ? "loc" : "locs"}</span>
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
 
-        <main className="lore-main map-main">
+      <div className="map-page">
+        <main className="map-main">
           {searchActive ? (
             <section className="map-district map-search-results">
               <header className="map-district-head">
