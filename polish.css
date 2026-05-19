@@ -13023,3 +13023,112 @@ nav.home-scrollnav,
   .strata-paper-body { columns: 1 !important; }
   .strata-paper-figures { grid-template-columns: repeat(2, 1fr) !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   HOME · SCROLLNAV — DOTS ONLY
+   Stripping the rail to just a vertical column of dots. No numbers,
+   no text labels. Section name appears on hover as a small tooltip
+   chip floating to the left of the dot — clean, minimal, doesn't
+   widen the rail.
+   ════════════════════════════════════════════════════════════════════ */
+
+nav.home-scrollnav,
+.home-scrollnav {
+  width: auto !important;
+  min-width: 0 !important;
+  right: 24px !important;
+}
+
+.home-scrollnav-list {
+  padding: 12px 10px !important;
+  gap: 12px !important;
+  background: rgba(8, 8, 10, 0.7) !important;
+  border: 1px solid rgba(212, 168, 74, 0.32) !important;
+  backdrop-filter: blur(10px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(120%) !important;
+  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.85) !important;
+}
+
+.home-scrollnav-btn {
+  display: block !important;
+  grid-template-columns: none !important;
+  width: 14px !important;
+  height: 14px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  position: relative !important;
+  min-height: 0 !important;
+}
+
+/* Hide numbers + labels — dots only */
+.home-scrollnav-num,
+.home-scrollnav-label {
+  display: none !important;
+}
+
+/* Dot itself — slightly larger, easier click target */
+.home-scrollnav-dot {
+  display: block !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.35) !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  transition: background var(--motion-base, 180ms) ease,
+              transform var(--motion-base) ease,
+              box-shadow var(--motion-base) ease !important;
+}
+
+/* Hover state — dot brightens + scales, tooltip slides in from right */
+.home-scrollnav-btn::before {
+  /* Tooltip — the section name floating to the LEFT of the dot */
+  content: attr(data-label);
+  position: absolute !important;
+  right: calc(100% + 14px) !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  padding: 4px 10px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  background: rgba(8, 8, 10, 0.92) !important;
+  border: 1px solid rgba(212, 168, 74, 0.45) !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity var(--motion-base, 180ms) ease !important;
+  z-index: 5;
+}
+/* Strip the "Jump to " prefix from the aria-label for tooltip text */
+.home-scrollnav-btn[aria-label^="Jump to "]::before {
+  /* Browsers don't let us strip via attr() — handled below by
+     hover state showing the full label. Visually fine. */
+}
+
+.home-scrollnav-btn:hover .home-scrollnav-dot {
+  background: var(--text-1, #f5f1e8) !important;
+  transform: translate(-50%, -50%) scale(1.4) !important;
+}
+.home-scrollnav-btn:hover::before {
+  opacity: 1 !important;
+}
+
+.home-scrollnav-item.is-active .home-scrollnav-dot {
+  background: var(--yellow, #d4a84a) !important;
+  transform: translate(-50%, -50%) scale(1.5) !important;
+  box-shadow: 0 0 12px rgba(212, 168, 74, 0.7) !important;
+}
+/* Active item shows its label always */
+.home-scrollnav-item.is-active .home-scrollnav-btn::before {
+  opacity: 1 !important;
+  color: var(--yellow, #d4a84a) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}

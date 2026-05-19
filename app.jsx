@@ -862,6 +862,7 @@ function HomeScrollNav(){
               onClick={() => goTo(s.id)}
               aria-current={active === s.id ? "true" : undefined}
               aria-label={`Jump to ${s.label}`}
+              data-label={s.label}
             >
               <span className="home-scrollnav-dot" aria-hidden="true"/>
               <span className="home-scrollnav-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
