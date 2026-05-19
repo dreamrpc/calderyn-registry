@@ -1253,28 +1253,30 @@ function CurriculumView(){
   });
 
   return (
-    <div className="curr lore-shell">
-      <aside className="lore-toc">
-        <div className="lore-toc-inner">
-          <div className="lore-toc-stamp">CURRICULUM · YEARS</div>
-          <ol className="lore-toc-list">
-            {YEAR_TABS.map(yt => (
-              <li key={yt.idx} className={"lore-toc-item" + (yt.idx === yearIdx ? " on" : "")}>
-                <button
-                  type="button"
-                  className="lore-toc-btn"
-                  onClick={() => setYearIdx(yt.idx)}
-                  aria-current={yt.idx === yearIdx ? "page" : undefined}
-                >
-                  <span className="lore-toc-n">{String(yt.idx + 1).padStart(2, "0")}</span>
-                  <span className="lore-toc-label">{yt.label}</span>
-                </button>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </aside>
-      <main className="lore-main">
+    <div className="curr">
+      {/* Year nav — quiet underline strip, same pattern as the lore + home
+          + map page navs. Sticks below the global header. */}
+      <nav className="lore-nav curr-nav" aria-label="Curriculum years">
+        <ol className="lore-nav-list">
+          {YEAR_TABS.map(yt => (
+            <li key={yt.idx} className={"lore-nav-item" + (yt.idx === yearIdx ? " is-active" : "")}>
+              <button
+                type="button"
+                className="lore-nav-btn"
+                onClick={() => setYearIdx(yt.idx)}
+                aria-current={yt.idx === yearIdx ? "page" : undefined}
+              >
+                <span className="lore-nav-icon" aria-hidden="true">
+                  <Icon name="book-open" size={14} stroke={1.7}/>
+                </span>
+                <span className="lore-nav-label">{yt.label}</span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      <main className="curr-main">
 
         <header className="curr-yearhead">
           <div className="curr-yearhead-eyebrow">Year {yearIdx+1} · {YEAR_TABS[yearIdx].label}</div>
@@ -1379,6 +1381,7 @@ function CurriculumView(){
   );
 }
 
+/* eslint-disable-next-line */
 function ClassRow({subject}){
   const [open, setOpen] = useState(false);
   const hasDesc = !!subject.desc;

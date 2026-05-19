@@ -15498,6 +15498,449 @@ nav.home-scrollnav,
   .map-list-name { font-size: 19px !important; }
 }
 
+/* ════════════════════════════════════════════════════════════════════════
+   CURRICULUM PAGE · REDESIGN TO MATCH HOME + LORE
+   Drops the left-sidebar lore-shell pattern. Top quiet underline nav for
+   year selection (reuses .lore-nav classes), single-column main content
+   with track summary cards, subject list as a clean dark editorial list.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.curr {
+  display: block !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+}
+.curr.lore-shell { /* override the old shell rule completely */
+  display: block !important;
+  grid-template-columns: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.curr > .lore-toc,
+.curr .lore-toc {
+  display: none !important;
+}
+
+.curr-main {
+  display: block !important;
+  width: 100% !important;
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  padding: 24px 32px 64px !important;
+  min-width: 0 !important;
+}
+
+/* ── Year header — same chrome as district head ───────────────────── */
+.curr-main .curr-yearhead {
+  position: relative !important;
+  background: #0a0a0e !important;
+  border: 1px solid rgba(212,168,74,0.28) !important;
+  padding: 28px 32px 24px !important;
+  margin: 0 0 24px !important;
+  border-radius: 0 !important;
+}
+.curr-main .curr-yearhead::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 32px !important;
+  bottom: -1px !important;
+  width: 80px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+.curr-main .curr-yearhead-eyebrow {
+  display: inline-block !important;
+  padding: 4px 11px !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  background: rgba(212,168,74,0.08) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  margin: 0 0 16px !important;
+}
+.curr-main .curr-yearhead-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(28px, 3.4vw, 44px) !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1.04 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 !important;
+  max-width: 880px !important;
+  text-transform: none !important;
+}
+
+/* ── Track summary cards (hero / sidekick) ─────────────────────────── */
+.curr-main .curr-summary {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 16px !important;
+  margin: 0 0 28px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  max-width: none !important;
+}
+@media (min-width: 760px) {
+  .curr-main .curr-summary { grid-template-columns: 1fr 1fr !important; }
+}
+
+.curr-main .curr-track {
+  background: linear-gradient(180deg, #0c0c12 0%, #08080b 100%) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-top: 4px solid var(--track-c, var(--yellow, #d4a84a)) !important;
+  border-radius: 0 !important;
+  padding: 24px 24px !important;
+  margin: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow:
+    0 22px 40px -22px rgba(0,0,0,0.85),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+.curr-main .curr-track-hero { --track-c: #c41a1a; }
+.curr-main .curr-track-side { --track-c: #1e40af; }
+.curr-main .curr-track::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.04) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  opacity: 0.5 !important;
+  mix-blend-mode: screen !important;
+  z-index: 0;
+}
+
+.curr-main .curr-track-hd {
+  position: relative !important;
+  z-index: 1 !important;
+  margin: 0 0 14px !important;
+  padding: 0 0 14px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+}
+.curr-main .curr-track-tag {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--track-c, var(--yellow, #d4a84a)) !important;
+  margin: 0 0 10px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+.curr-main .curr-track-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: clamp(22px, 2.6vw, 30px) !important;
+  letter-spacing: -0.012em !important;
+  line-height: 1.04 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 !important;
+  text-transform: none !important;
+  text-shadow:
+    -1px 0 0 rgba(227,27,35,0.32),
+     1px 0 0 rgba(46,188,212,0.22) !important;
+}
+.curr-main .curr-track-desc {
+  position: relative !important;
+  z-index: 1 !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 14px !important;
+  max-width: none !important;
+}
+.curr-main .curr-track-stamps {
+  position: relative !important;
+  z-index: 1 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin: 14px 0 0 !important;
+  padding: 0 !important;
+}
+.curr-main .curr-stamp {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  padding: 3px 9px !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  background: rgba(212,168,74,0.05) !important;
+  color: var(--text-3, #948d80) !important;
+  border-radius: 0 !important;
+}
+
+/* ── Classes / subjects section ─────────────────────────────────────── */
+.curr-main .curr-classes {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  max-width: none !important;
+}
+.curr-main .curr-classes-hd {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin: 0 0 18px !important;
+  padding: 18px 0 14px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.22) !important;
+  position: relative !important;
+}
+.curr-main .curr-classes-hd::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: -1px !important;
+  width: 60px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+.curr-main .curr-classes-tag {
+  display: inline-block !important;
+  padding: 4px 11px !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  background: rgba(212,168,74,0.08) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+.curr-main .curr-classes-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: clamp(20px, 2.4vw, 26px) !important;
+  letter-spacing: -0.008em !important;
+  line-height: 1.1 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 !important;
+  text-transform: none !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+.curr-main .curr-classes-title-sub {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin-left: 6px !important;
+}
+.curr-main .curr-classes-filter {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin: 0 !important;
+}
+.curr-main .curr-classes-filter .sf-pill {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  padding: 6px 11px !important;
+  background: rgba(20,20,24,0.7) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  color: var(--text-3, #948d80) !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease !important;
+}
+.curr-main .curr-classes-filter .sf-pill:hover {
+  background: rgba(212,168,74,0.05) !important;
+  border-color: rgba(212,168,74,0.5) !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.curr-main .curr-classes-filter .sf-pill.on {
+  background: rgba(212,168,74,0.12) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+
+/* ── Subject rows ─────────────────────────────────────────────────── */
+.curr-main .curr-rows {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+.curr-main .curr-row {
+  position: relative !important;
+  background: linear-gradient(180deg, rgba(20,20,24,0.6) 0%, rgba(14,14,18,0.6) 100%) !important;
+  border: 1px solid rgba(212,168,74,0.18) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  transition:
+    background 220ms cubic-bezier(.2,.7,.2,1),
+    border-color 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.curr-main .curr-row.has-desc:hover {
+  background: rgba(212,168,74,0.04) !important;
+  border-color: rgba(212,168,74,0.45) !important;
+}
+.curr-main .curr-row.is-open {
+  background: rgba(212,168,74,0.06) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+.curr-main .curr-row-btn {
+  display: grid !important;
+  grid-template-columns: 1fr auto auto auto auto !important;
+  align-items: center !important;
+  gap: 16px !important;
+  width: 100% !important;
+  padding: 14px 18px !important;
+  background: transparent !important;
+  border: 0 !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  border-radius: 0 !important;
+}
+.curr-main .curr-row-btn:disabled { cursor: default !important; }
+.curr-main .curr-row-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  letter-spacing: -0.005em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  line-height: 1.1 !important;
+  text-transform: none !important;
+}
+.curr-main .curr-row-prof {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 2px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+}
+.curr-main .curr-row-prof-lbl {
+  font-size: 8.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  line-height: 1 !important;
+}
+.curr-main .curr-row-prof-val {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  letter-spacing: 0 !important;
+  line-height: 1.1 !important;
+  text-transform: none !important;
+}
+.curr-main .curr-row-kind {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 3px 9px !important;
+  border: 1px solid currentColor !important;
+  border-radius: 0 !important;
+  white-space: nowrap !important;
+}
+.curr-main .curr-row-kind.is-required {
+  color: var(--yellow, #d4a84a) !important;
+  background: rgba(212,168,74,0.08) !important;
+}
+.curr-main .curr-row-kind.is-elective {
+  color: var(--text-3, #948d80) !important;
+  background: transparent !important;
+}
+.curr-main .curr-row-track {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 3px 9px !important;
+  border: 1px solid currentColor !important;
+  border-radius: 0 !important;
+  white-space: nowrap !important;
+}
+.curr-main .curr-row-track.t-hero    { color: #ff8a8a !important; background: rgba(196,26,26,0.12) !important; }
+.curr-main .curr-row-track.t-sidekick{ color: #8ab0ff !important; background: rgba(30,64,175,0.14) !important; }
+.curr-main .curr-row-track.t-shared  { color: var(--yellow, #d4a84a) !important; background: rgba(212,168,74,0.1) !important; }
+.curr-main .curr-row-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 24px !important;
+  height: 24px !important;
+  color: var(--text-3, #948d80) !important;
+  transition: transform 220ms cubic-bezier(.2,.7,.2,1), color 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.curr-main .curr-row.is-open .curr-row-toggle { color: var(--yellow, #d4a84a) !important; }
+.curr-main .curr-row-desc {
+  padding: 0 18px 16px 18px !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  border-top: 1px solid rgba(212,168,74,0.18) !important;
+  margin-top: -1px !important;
+  padding-top: 14px !important;
+  background: transparent !important;
+}
+.curr-main .curr-rows-empty {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  font-style: italic !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 32px 18px !important;
+  background: rgba(20,20,24,0.5) !important;
+  border: 1px dashed rgba(212,168,74,0.28) !important;
+  text-align: center !important;
+}
+
+@media (max-width: 760px) {
+  .curr-main { padding: 20px 16px 48px !important; }
+  .curr-main .curr-yearhead { padding: 22px 18px 18px !important; }
+  .curr-main .curr-yearhead::after { left: 18px !important; }
+  .curr-main .curr-row-btn {
+    grid-template-columns: 1fr auto !important;
+    grid-template-rows: auto auto !important;
+    gap: 8px 12px !important;
+  }
+  .curr-main .curr-row-name { grid-column: 1 / -1; }
+  .curr-main .curr-row-prof { grid-column: 1; align-items: flex-start !important; }
+  .curr-main .curr-row-kind { grid-column: 2; justify-self: end; }
+  .curr-main .curr-row-track { grid-column: 1; }
+  .curr-main .curr-row-toggle { grid-column: 2; justify-self: end; }
+}
+
+
 /* ── District banner — tighten + match the new chrome ───────────────── */
 .map-banner {
   margin-bottom: 0 !important;
