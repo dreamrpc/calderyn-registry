@@ -14756,3 +14756,366 @@ nav.home-scrollnav,
   .case-stamp { right: 14px !important; }
 }
 
+/* ════════════════════════════════════════════════════════════════════════
+   POWERS REGISTRY · TOOLBAR HARD-RESET
+   Earlier rules in index.html turn .preg-toolbar into a 1-column grid
+   with align-items:stretch, which under sticky positioning produces a
+   massive empty gap between the filter row and the search row — the
+   toolbar visually eats half the viewport with the records nowhere in
+   sight. Force a tight single-row flex layout that wraps cleanly, with
+   small padding and no implicit stretching.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.preg { padding: 0 32px 32px !important; }
+
+.preg-toolbar,
+div.preg-toolbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 40 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px 18px !important;
+  padding: 12px 0 14px !important;
+  margin: 0 0 16px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  background: #0a0a0a !important;
+  border-top: 0 !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+  box-shadow: 0 12px 24px -18px rgba(0,0,0,0.85) !important;
+  grid-template-columns: none !important;
+  grid-template-rows: none !important;
+}
+
+.preg-filters,
+div.preg-filters {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.preg-search-wrap,
+div.preg-search-wrap {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  margin: 0 0 0 auto !important;
+  padding: 0 !important;
+  align-self: center !important;
+}
+
+@media (max-width: 760px) {
+  .preg-search-wrap,
+  div.preg-search-wrap {
+    flex: 1 1 100% !important;
+    margin-left: 0 !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SIDE NAV · ICON + LABEL ALWAYS VISIBLE (home + lore)
+   Earlier passes hid the text label — users couldn't tell what each
+   icon meant. Restore the label permanently next to the icon, with a
+   clear active highlight (gold text + gold stripe).
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+nav.home-scrollnav,
+.home-scrollnav {
+  position: fixed !important;
+  top: 50% !important;
+  right: 18px !important;
+  transform: translateY(-50%) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  z-index: 90 !important;
+}
+
+.home-scrollnav-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 8px 6px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  background: transparent !important;
+  border: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.home-scrollnav-item {
+  margin: 0 !important;
+  position: relative !important;
+}
+
+.home-scrollnav-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+  width: 100% !important;
+  min-width: 168px !important;
+  height: auto !important;
+  padding: 10px 14px 10px 14px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 2px solid transparent !important;
+  color: rgba(245,241,232,0.55) !important;
+  cursor: pointer !important;
+  position: relative !important;
+  border-radius: 0 !important;
+  text-align: left !important;
+  grid-template-columns: none !important;
+  overflow: visible !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  line-height: 1.1 !important;
+  transition:
+    color 220ms cubic-bezier(.2,.7,.2,1),
+    background 220ms cubic-bezier(.2,.7,.2,1),
+    border-left-color 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+
+/* Suppress old dot + num spans */
+.home-scrollnav-dot,
+.home-scrollnav-num {
+  display: none !important;
+}
+
+/* Tooltip pseudo (from older rules) — gone */
+.home-scrollnav-btn::before,
+.home-scrollnav-btn::after {
+  content: none !important;
+}
+
+.home-scrollnav-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 18px !important;
+  height: 18px !important;
+  color: inherit !important;
+  flex-shrink: 0 !important;
+  transition: transform 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+.home-scrollnav-icon svg { stroke: currentColor !important; }
+
+.home-scrollnav-label {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: inherit !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  opacity: 1 !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  transition: color 220ms cubic-bezier(.2,.7,.2,1) !important;
+}
+
+/* Hover */
+.home-scrollnav-btn:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  background: rgba(212,168,74,0.05) !important;
+  border-left-color: rgba(212,168,74,0.4) !important;
+}
+.home-scrollnav-btn:hover .home-scrollnav-icon {
+  transform: scale(1.1) !important;
+}
+
+/* Active */
+.home-scrollnav-item.is-active .home-scrollnav-btn {
+  color: var(--yellow, #d4a84a) !important;
+  background: rgba(212,168,74,0.1) !important;
+  border-left-color: var(--yellow, #d4a84a) !important;
+}
+.home-scrollnav-item.is-active .home-scrollnav-icon {
+  transform: scale(1.12) !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+.home-scrollnav-item.is-active .home-scrollnav-label {
+  color: var(--yellow, #d4a84a) !important;
+}
+
+@media (max-width: 1100px) {
+  .home-scrollnav-btn { min-width: 144px !important; padding: 9px 12px !important; }
+  .home-scrollnav-label { font-size: 10px !important; letter-spacing: 0.18em !important; }
+}
+@media (max-width: 900px) {
+  .home-scrollnav,
+  nav.home-scrollnav { display: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   CASSANDRA CARDS · BREATHING ROOM
+   The stats and diptych were rendering edge-to-edge (no gap, content
+   crushed against the outer border). Restructure as gap-separated
+   cards inside a transparent shell, with generous interior padding
+   so the prose doesn't kiss the borders.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* STATS — gap-separated cards instead of shared-border grid */
+.lore-section .case-stats,
+.case-stats {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 14px !important;
+  border: 0 !important;
+  background: transparent !important;
+  margin: 22px 0 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+.lore-section .case-stats::before,
+.case-stats::before { content: none !important; }
+
+.lore-section .case-stat,
+.case-stat {
+  padding: 28px 24px 26px !important;
+  background: #0a0a0e !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  border-right: 1px solid rgba(212,168,74,0.32) !important;
+  border-bottom: 0 !important;
+  box-shadow:
+    0 18px 32px -20px rgba(0,0,0,0.85),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+  position: relative !important;
+  z-index: 1;
+  overflow: hidden !important;
+}
+.lore-section .case-stat::before,
+.case-stat::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.05) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  opacity: 0.6 !important;
+  mix-blend-mode: screen !important;
+  z-index: -1;
+}
+.lore-section .case-stat:nth-child(2),
+.case-stat:nth-child(2) {
+  background: #14080a !important;
+  border-color: rgba(227,27,35,0.55) !important;
+}
+.lore-section .case-stat:nth-child(2)::after,
+.case-stat:nth-child(2)::after { content: none !important; }
+
+@media (max-width: 760px) {
+  .lore-section .case-stats,
+  .case-stats { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+  .lore-section .case-stat,
+  .case-stat { border-right: 1px solid rgba(212,168,74,0.32) !important; border-bottom: 0 !important; }
+}
+
+/* DIPTYCH — gap-separated columns with proper interior padding */
+.lore-section .case-diptych,
+.case-diptych {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 18px !important;
+  border: 0 !important;
+  background: transparent !important;
+  margin: 22px 0 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+.lore-section .case-col,
+.case-col {
+  padding: 40px 36px !important;
+  background: #0a0a0e !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  border-right: 1px solid rgba(212,168,74,0.32) !important;
+  box-shadow:
+    0 22px 40px -22px rgba(0,0,0,0.85),
+    inset 0 1px 0 rgba(255,255,255,0.03) !important;
+  position: relative !important;
+}
+.lore-section .case-col:first-child,
+.case-col:first-child {
+  border-right: 1px solid rgba(212,168,74,0.32) !important;
+  background:
+    radial-gradient(700px 380px at 0% 0%, rgba(46,188,212,0.05) 0%, transparent 60%),
+    #0a0a0e !important;
+}
+.lore-section .case-col:last-child,
+.case-col:last-child {
+  background:
+    radial-gradient(700px 380px at 100% 100%, rgba(227,27,35,0.07) 0%, transparent 60%),
+    #08080b !important;
+  border-color: rgba(227,27,35,0.32) !important;
+}
+
+@media (max-width: 760px) {
+  .lore-section .case-diptych,
+  .case-diptych { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .lore-section .case-col,
+  .case-col { padding: 32px 24px !important; border-right: 1px solid rgba(212,168,74,0.32) !important; }
+}
+
+/* DOSSIER — interior padding bumped so quote + paragraphs breathe */
+.lore-section .case-dossier,
+.case-dossier {
+  margin-top: 40px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+.lore-section .case-dossier-hd,
+.case-dossier-hd {
+  padding: 40px 40px 26px !important;
+}
+.lore-section .case-dossier-hd::after,
+.case-dossier-hd::after { left: 40px !important; }
+.lore-section .case-dossier-body,
+.case-dossier-body {
+  padding: 32px 40px 40px !important;
+}
+.lore-section .case-quote,
+.case-quote {
+  padding: 28px 32px !important;
+  margin: 18px 0 0 !important;
+}
+
+@media (max-width: 720px) {
+  .lore-section .case-dossier-hd,
+  .case-dossier-hd { padding: 28px 22px 18px !important; }
+  .lore-section .case-dossier-hd::after,
+  .case-dossier-hd::after { left: 22px !important; }
+  .lore-section .case-dossier-body,
+  .case-dossier-body { padding: 24px 22px 28px !important; }
+  .lore-section .case-quote,
+  .case-quote { padding: 22px 22px !important; }
+}
