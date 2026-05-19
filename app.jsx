@@ -2241,32 +2241,160 @@ function FacultyTab(){
 }
 
 // Short department label for the faculty registry's Department column.
-function deptShortFromSection(sectionName){
-  const s = (sectionName || "").toLowerCase();
-  if (s.includes("heroes"))    return "Heroes Track";
-  if (s.includes("sidekicks")) return "Sidekicks Track";
-  if (s.includes("shared"))    return "Shared";
-  if (s.includes("elective"))  return "Electives";
-  if (s.includes("dean"))      return "Dean's Office";
-  if (s.includes("support"))   return "Support Staff";
-  if (s.includes("admin"))     return "Admin";
-  return sectionName || "—";
+/* Map a faculty row's department slot to the slot label.
+   Used to label HoD vs Prof. 1/2/3 in the staff grid. */
+function slotLabelFor(deptSlot){
+  if (deptSlot === "head") return "Head of Department";
+  if (deptSlot === "prof1") return "Prof. 1";
+  if (deptSlot === "prof2") return "Prof. 2";
+  if (deptSlot === "prof3") return "Prof. 3";
+  return null;
+}
+
+/* Single staff card — used inside dept sections for HoD + 3 profs */
+function StaffSlotCard({person, slot, isHead, deptColor}){
+  const filled = !!person?.char;
+  return (
+    <div
+      className={"freg-slot" + (isHead ? " is-head" : "") + (filled ? " is-filled" : " is-open")}
+      style={{ "--dept-c": deptColor || "#d4a84a" }}
+    >
+      <div className="freg-slot-tag">{slot}</div>
+      {filled ? (
+        <>
+          <div className="freg-slot-name">
+            {person.link
+              ? <CLink name={person.char} link={person.link}/>
+              : <span>{person.char}</span>}
+            {person.npc && <NpcBadge/>}
+          </div>
+          {person.stage && <div className="freg-slot-stage">{person.stage}</div>}
+          <div className="freg-slot-role">{person.role}</div>
+          {person.power && <div className="freg-slot-power"><span>Power</span> {person.power}</div>}
+        </>
+      ) : (
+        <>
+          <div className="freg-slot-name">
+            <span className="freg-slot-open">OPEN</span>
+          </div>
+          <div className="freg-slot-role">{person?.role || "Open position"}</div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* One department section — staff grid + expandable class catalogue */
+function DepartmentSection({dept, expanded, onToggle}){
+  return (
+    <section className="freg-dept-section" style={{"--dept-c": dept.color || "#d4a84a"}}>
+      <header className="freg-dept-section-hd">
+        <div className="freg-dept-section-hd-l">
+          <span className="freg-dept-section-eyebrow">{dept.code} · Department</span>
+          <h3 className="freg-dept-section-name">{dept.name}</h3>
+        </div>
+        <div className="freg-dept-section-hd-r">
+          <span className="freg-dept-section-staff-count">
+            {1 + (dept.staff?.length || 0) + (dept.instructional?.length || 0)} roles
+          </span>
+          <span className="freg-dept-section-class-count">
+            {(dept.classes || []).length} classes
+          </span>
+        </div>
+      </header>
+      {dept.blurb && <p className="freg-dept-section-blurb">{dept.blurb}</p>}
+
+      {/* Staff grid · HoD + 3 profs as 4 columns on wide */}
+      <div className="freg-dept-staff">
+        <StaffSlotCard person={dept.head} slot="Head of Department" isHead deptColor={dept.color}/>
+        {(dept.staff || []).map((p, i) => (
+          <StaffSlotCard key={i} person={p} slot={p.slot || ("Prof. " + (i+1))} deptColor={dept.color}/>
+        ))}
+      </div>
+
+      {/* Instructional Staff (TAs, technicians, house trainers) */}
+      {(dept.instructional && dept.instructional.length > 0) && (
+        <div className="freg-dept-aux">
+          <span className="freg-dept-aux-lbl">Instructional Staff</span>
+          <ul className="freg-dept-aux-list">
+            {dept.instructional.map((p, i) => (
+              <li key={i} className={"freg-dept-aux-item" + (p.char ? " is-filled" : " is-open")}>
+                {p.char ? (
+                  <>
+                    {p.link
+                      ? <CLink name={p.char} link={p.link}/>
+                      : <span>{p.char}</span>}
+                    <span className="freg-dept-aux-role">· {p.role}</span>
+                    {p.npc && <NpcBadge/>}
+                  </>
+                ) : (
+                  <span className="freg-dept-aux-open">OPEN · {p.role}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Class catalogue toggle */}
+      {(dept.classes || []).length > 0 && (
+        <>
+          <button
+            type="button"
+            className={"freg-classes-toggle" + (expanded ? " is-open" : "")}
+            onClick={onToggle}
+            aria-expanded={expanded}
+          >
+            <span>{expanded ? "HIDE" : "VIEW"} CLASS CATALOGUE · {dept.classes.length}</span>
+            <Icon name={expanded ? "chevron-up" : "chevron-down"} size={12} stroke={2}/>
+          </button>
+          {expanded && (
+            <div className="freg-classes">
+              <ol className="freg-classes-list">
+                {dept.classes.map((cls, i) => (
+                  <li key={i} className="freg-classes-item">
+                    <span className="freg-classes-code">{cls.code}</span>
+                    <span className="freg-classes-year">{cls.year}</span>
+                    <span className="freg-classes-title">{cls.title}</span>
+                    <span className="freg-classes-by">{cls.taughtBy || "—"}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </>
+      )}
+
+      {dept.facilities && (
+        <div className="freg-dept-facilities">
+          <span className="freg-dept-facilities-lbl">Facilities</span>
+          <p>{dept.facilities}</p>
+        </div>
+      )}
+    </section>
+  );
 }
 
 function FacultyRegistryView(){
-  const [openIdx, setOpenIdx] = useState({});
-  const toggleRow = (key) => setOpenIdx(prev => ({...prev, [key]: !prev[key]}));
+  const [openDept, setOpenDept] = useState({});
+  const toggleDept = (id) => setOpenDept(prev => ({...prev, [id]: !prev[id]}));
 
   // Find the dean — first row in the Office of the Dean section, role === "Dean"
   const deanSection = FACULTY.find(s => /office of the dean/i.test(s.section));
-  const deanRow = deanSection ? deanSection.rows.find(r => /dean/i.test(r.role) && r.char) : null;
+  const deanRow = deanSection ? deanSection.rows.find(r => /^dean$/i.test(r.role) && r.char) : null;
+  const deanOtherRows = deanSection ? deanSection.rows.filter(r => !(deanRow && r === deanRow)) : [];
+  const fellowshipCoord = deanOtherRows.find(r => /fellowship coordinator/i.test(r.role));
+
+  // Find Support Staff section
+  const supportSection = FACULTY.find(s => /support staff/i.test(s.section));
 
   return (
     <div className="freg">
       <div className="freg-hint">
-        Click any row to read that professor's four-year course arc.
+        Eight departments, one Fellowship. Click any department to view its class catalogue.
       </div>
 
+      {/* DEAN · the existing portrait-card treatment stays */}
       {deanRow && (
         <div className="dean-card">
           <div className="dean-card-portrait">
@@ -2295,177 +2423,112 @@ function FacultyRegistryView(){
         </div>
       )}
 
-      {/* Department triads — Combat + Media. The triad model makes the
-          chain of command legible: Head of Department centre, TAs flanking,
-          and a small class roster underneath. */}
-      {D.departments && D.departments.length > 0 && (
-        <section className="freg-group freg-departments">
-          <div className="freg-group-hd">
-            <span className="freg-group-name">DEPARTMENT TRIADS</span>
-            <span className="freg-group-count">
-              {D.departments.length} {D.departments.length === 1 ? "department" : "departments"}
-            </span>
-          </div>
-          <p className="freg-group-note">
-            Two departments — Combat Training and Media Training — run on a head-plus-two-TAs model. Shared classes are taught by the Head of Department; track-specific classes are taught by the matching TA.
-          </p>
-          <div className="freg-depts-grid">
-            {D.departments.map(dept => (
-              <article key={dept.id} className="freg-dept" style={{"--dept-c": dept.color || "#d4a84a"}}>
-                <header className="freg-dept-hd">
-                  <span className="freg-dept-hd-eyebrow">Department</span>
-                  <h4 className="freg-dept-hd-name">{dept.name}</h4>
-                </header>
-                {dept.blurb && <p className="freg-dept-blurb">{dept.blurb}</p>}
-                <div className="freg-dept-triad">
-                  <DeptPerson faculty={dept.taHero}     label="TA · Heroes"             color={dept.color} deptId={dept.id}/>
-                  <DeptPerson faculty={dept.head}       label="Head of Department" isHead color={dept.color} deptId={dept.id}/>
-                  <DeptPerson faculty={dept.taSidekick} label="TA · Sidekicks"          color={dept.color} deptId={dept.id}/>
-                </div>
-              </article>
+      {/* Office of the Dean · other roles (Admissions, Registrar, Fellowship Coordinator) */}
+      {deanOtherRows.length > 0 && (
+        <section className="freg-dean-staff">
+          <header className="freg-dean-staff-hd">
+            <span className="freg-dean-staff-eyebrow">Office of the Dean</span>
+            <span className="freg-dean-staff-name">Administrative Staff</span>
+          </header>
+          <ul className="freg-dean-staff-list">
+            {deanOtherRows.map((r, i) => (
+              <li key={i} className={"freg-dean-staff-item" + (r.char ? " is-filled" : " is-open")}>
+                <span className="freg-dean-staff-role">{r.role}</span>
+                <span className="freg-dean-staff-who">
+                  {r.char
+                    ? <>
+                        {r.link
+                          ? <CLink name={r.char} link={r.link}/>
+                          : <span>{r.char}</span>}
+                        {r.npc && <NpcBadge/>}
+                      </>
+                    : <span className="freg-dean-staff-open">OPEN</span>}
+                </span>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )}
 
-      {FACULTY.map((sec, si) => {
-        // Skip rendering the dean row in its normal table — it's promoted to the card above
-        const rowsToShow = sec.rows
-          .filter(r => !(deanRow && r === deanRow))
-          .slice()
-          .sort((a, b) => {
-            const an = (a.char || a.role || "").toLowerCase();
-            const bn = (b.char || b.role || "").toLowerCase();
-            // Rows without a character (open positions) sink to the bottom
-            if (!a.char && b.char) return 1;
-            if (a.char && !b.char) return -1;
-            return an.localeCompare(bn, undefined, { sensitivity: "base" });
-          });
-        if (rowsToShow.length === 0) return null;
+      {/* 8 DEPARTMENT SECTIONS */}
+      {(D.departments || []).map(dept => (
+        <DepartmentSection
+          key={dept.id}
+          dept={dept}
+          expanded={!!openDept[dept.id]}
+          onToggle={() => toggleDept(dept.id)}
+        />
+      ))}
 
-        return (
-          <section key={si} className="freg-group">
-            <header className="freg-group-hd">
-              <div className="freg-group-hd-lhs">
-                <span className="freg-group-eyebrow">Section · {String(si + 1).padStart(2, "0")}</span>
-                <h3 className="freg-group-name">{sec.section}</h3>
-              </div>
-              <span className="freg-group-count">
-                {rowsToShow.length} {rowsToShow.length === 1 ? "role" : "roles"}
-              </span>
-            </header>
-            {sec.note && !(deanRow && sec === deanSection) && (
-              <p className="freg-group-note">{sec.note}</p>
-            )}
-            <div className="freg-tbl-wrap">
-              <table className="freg-tbl">
-                <thead>
-                  <tr>
-                    <th style={{width:260}}>Subject</th>
-                    <th style={{width:140}}>Department</th>
-                    <th style={{width:110}}>Tracks</th>
-                    <th style={{width:200}}>Professor</th>
-                    <th style={{width:150}}>Stage Name</th>
-                    <th>Power</th>
-                    <th style={{width:130}} aria-label="Details"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rowsToShow.map((r, ri) => {
-                    const key = `${si}-${ri}`;
-                    const isOpen = !!openIdx[key];
-                    const subs = (r.subjects || []).map(s => {
-                      if (typeof s === "string"){
-                        const m = s.match(/^(FR|SO|JR|SR)\s*·\s*(.+)$/);
-                        return m ? { year: m[1], title: m[2].trim() } : null;
-                      }
-                      return s;
-                    }).filter(Boolean);
-                    const YEAR_KEY_REG = { FR: 0, SO: 1, JR: 2, SR: 3 };
-                    subs.sort((a, b) => (YEAR_KEY_REG[a.year] ?? 99) - (YEAR_KEY_REG[b.year] ?? 99));
-                    const hasArc = subs.length > 0;
-                    const isOpenRole = !r.char && !r.clf;
-                    const trackLabel = (() => {
-                      if (!r.tracks || r.tracks.length === 0) return null;
-                      if (r.tracks.length === 2) return "Both";
-                      if (r.tracks[0] === "hero") return "Heroes";
-                      if (r.tracks[0] === "sidekick") return "Sidekicks";
-                      return null;
-                    })();
-                    const deptShort = deptShortFromSection(sec.section);
+      {/* VANGUARD FELLOWSHIP · ninth section. Not a dept; a postgrad year. */}
+      <section className="freg-dept-section freg-fellowship" style={{"--dept-c": "#d4a84a"}}>
+        <header className="freg-dept-section-hd">
+          <div className="freg-dept-section-hd-l">
+            <span className="freg-dept-section-eyebrow">Postgraduate · By Invitation</span>
+            <h3 className="freg-dept-section-name">Vanguard Fellowship</h3>
+          </div>
+          <div className="freg-dept-section-hd-r">
+            <span className="freg-dept-section-class-count">Closed seminar</span>
+          </div>
+        </header>
+        <p className="freg-dept-section-blurb">
+          Not a department. Nominations are drawn from across all eight departments by the Dean, issued at the end of Y2 to students who show dual-track capability or exceptional cross-domain performance. Fellows attend Y3 modules plus Fellowship-exclusive seminars; the schedule is run by the Fellowship Coordinator under the Dean's office.
+        </p>
+        <div className="freg-dept-staff">
+          {fellowshipCoord && (
+            <StaffSlotCard
+              person={fellowshipCoord}
+              slot="Fellowship Coordinator"
+              isHead
+              deptColor="#d4a84a"
+            />
+          )}
+          <div className="freg-slot freg-slot-fellow">
+            <div className="freg-slot-tag">Active Fellows</div>
+            <div className="freg-slot-name"><span className="freg-slot-open">CLASSIFIED</span></div>
+            <div className="freg-slot-role">Cohort identities are not on the public registry; ask admin for the current Fellows list.</div>
+          </div>
+        </div>
+      </section>
 
-                    return (
-                      <React.Fragment key={ri}>
-                        <tr
-                          className={"freg-row" + (isOpen ? " is-open" : "") + (hasArc ? " is-clickable" : "") + (isOpenRole ? " is-vacant" : "")}
-                          onClick={() => hasArc && toggleRow(key)}
-                        >
-                          <td className="freg-col-subj">{r.role}</td>
-                          <td className="freg-col-dept">
-                            <span className={"freg-dept-chip freg-dept-chip--" + (deptShort.toLowerCase().split(/\s+/)[0])}>{deptShort}</span>
-                          </td>
-                          <td className="freg-col-tracks">
-                            {trackLabel || <span className="freg-na">N/A</span>}
-                          </td>
-                          <td className="freg-col-prof">
-                            {r.clf ? (
-                              <Chip variant="classified">■ CLASSIFIED</Chip>
-                            ) : r.char ? (
-                              <>
-                                <CLink name={r.char} link={r.link||null}/>
-                                {r.npc && <NpcBadge/>}
-                              </>
-                            ) : (
-                              <span className="freg-open-stamp">OPEN ROLE</span>
-                            )}
-                          </td>
-                          <td className="freg-col-stage">
-                            {r.stage
-                              ? <span className="stage-name">{r.stage}</span>
-                              : <span className="freg-na">N/A</span>}
-                          </td>
-                          <td className="freg-col-power">
-                            {r.power
-                              ? r.power
-                              : <span className="freg-na">N/A</span>}
-                          </td>
-                          <td className="freg-col-toggle">
-                            {hasArc && (
-                              <span className={"freg-view-btn" + (isOpen ? " is-open" : "")} aria-hidden="true">
-                                <span className="freg-view-btn-lbl">{isOpen ? "HIDE ARC" : "VIEW ARC"}</span>
-                                <span className="freg-view-arrow">
-                                  <Icon name={isOpen ? "chevron-up" : "arrow-right"} size={12} stroke={2}/>
-                                </span>
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-                        {isOpen && hasArc && (
-                          <tr className="freg-detail-row">
-                            <td colSpan={7}>
-                              <div className="freg-detail">
-                                <span className="freg-detail-label">Course Arc · {subs.length} {subs.length === 1 ? "class" : "classes"}</span>
-                                <ol className="freg-arc">
-                                  {subs.map((s, sj) => (
-                                    <li key={sj} className="freg-arc-item">
-                                      <span className="freg-arc-year">{s.year || "—"}</span>
-                                      <span className="freg-arc-title">{s.title}</span>
-                                    </li>
-                                  ))}
-                                </ol>
-                              </div>
-                            </td>
-                          </tr>
-                        )}
-                      </React.Fragment>
-                    );
-                  })}
-                </tbody>
-              </table>
+      {/* SUPPORT STAFF · Switchboards stays here per canon */}
+      {supportSection && (
+        <section className="freg-support">
+          <header className="freg-support-hd">
+            <div className="freg-support-hd-l">
+              <span className="freg-support-eyebrow">Non-Teaching</span>
+              <h3 className="freg-support-name">{supportSection.section}</h3>
             </div>
-          </section>
-        );
-      })}
+            <span className="freg-support-count">{supportSection.rows.length} roles</span>
+          </header>
+          {supportSection.note && (
+            <p className="freg-support-note">{supportSection.note}</p>
+          )}
+          <ul className="freg-support-list">
+            {supportSection.rows.map((r, i) => (
+              <li key={i} className={"freg-support-item" + (r.char ? " is-filled" : " is-open")}>
+                <div className="freg-support-item-l">
+                  <span className="freg-support-item-role">{r.role}</span>
+                  {r.stage && <span className="freg-support-item-stage">{r.stage}</span>}
+                </div>
+                <div className="freg-support-item-r">
+                  {r.char ? (
+                    <>
+                      {r.link
+                        ? <CLink name={r.char} link={r.link}/>
+                        : <span>{r.char}</span>}
+                      {r.npc && <NpcBadge/>}
+                    </>
+                  ) : (
+                    <span className="freg-support-item-open">OPEN</span>
+                  )}
+                </div>
+                {r.power && <div className="freg-support-item-power">Power · {r.power}</div>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

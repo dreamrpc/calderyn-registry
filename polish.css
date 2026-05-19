@@ -22383,3 +22383,597 @@ button.orgs-pill {
   .curr-main .curr-primer { padding: 18px 18px !important; }
   .curr-main .curr-class { padding: 12px 14px !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   FACULTY REGISTRY · 8 dept sections + Fellowship + Support Staff
+   Each dept renders as a dossier card: header (code · name · counts),
+   blurb, 4-up staff grid (HoD + 3 profs), instructional staff strip,
+   collapsible class catalogue, facilities note. Office of the Dean
+   keeps its portrait card.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.freg {
+  padding: 0 !important;
+}
+.freg .freg-hint {
+  padding: 14px clamp(20px, 4vw, 32px) !important;
+  background: #08080b !important;
+  border-bottom: 1px solid rgba(212,168,74,0.14) !important;
+  color: var(--text-3, #948d80) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+}
+
+/* Office of the Dean · staff list (Admissions, Registrar, Fellowship Coordinator) */
+.freg-dean-staff {
+  margin: clamp(20px, 3vw, 32px) clamp(20px, 4vw, 32px) 0 !important;
+  max-width: 1500px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  background: linear-gradient(180deg, #0c0c12 0%, #08080b 100%) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-left: 4px solid var(--yellow, #d4a84a) !important;
+  padding: 18px 22px !important;
+}
+.freg-dean-staff-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 14px !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 12px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+}
+.freg-dean-staff-eyebrow {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+.freg-dean-staff-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 18px !important;
+  letter-spacing: -0.005em !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.freg-dean-staff-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+}
+@media (min-width: 720px) { .freg-dean-staff-list { grid-template-columns: 1fr 1fr !important; gap: 0 18px !important; } }
+.freg-dean-staff-item {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: baseline !important;
+  gap: 12px !important;
+  padding: 8px 0 !important;
+  border-bottom: 1px solid rgba(212,168,74,0.1) !important;
+}
+.freg-dean-staff-item:last-child { border-bottom: 0 !important; }
+.freg-dean-staff-role {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  color: var(--text-2, #c9c3b5) !important;
+}
+.freg-dean-staff-who {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  color: var(--text-1, #f5f1e8) !important;
+  display: inline-flex !important;
+  gap: 6px !important;
+  align-items: center !important;
+}
+.freg-dean-staff-who .clink,
+.freg-dean-staff-who .cname { color: inherit !important; }
+.freg-dean-staff-open {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  font-style: italic !important;
+}
+
+/* Department section */
+.freg-dept-section {
+  margin: clamp(24px, 3vw, 36px) clamp(20px, 4vw, 32px) 0 !important;
+  max-width: 1500px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  background: linear-gradient(180deg, #0c0c12 0%, #08080b 100%) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-left: 4px solid var(--dept-c, var(--yellow, #d4a84a)) !important;
+  padding: 22px 24px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.freg-dept-section::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.035) 1px, transparent 1.5px);
+  background-size: 6px 6px;
+  opacity: 0.45 !important;
+  mix-blend-mode: screen !important;
+  z-index: 0;
+}
+.freg-dept-section > * { position: relative !important; z-index: 1 !important; }
+
+.freg-dept-section-hd {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  padding-bottom: 14px !important;
+  margin-bottom: 14px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.22) !important;
+  position: relative !important;
+}
+.freg-dept-section-hd::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; bottom: -1px !important;
+  width: 60px !important;
+  height: 2px !important;
+  background: var(--dept-c, var(--yellow, #d4a84a)) !important;
+}
+.freg-dept-section-eyebrow {
+  display: block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--dept-c, var(--yellow, #d4a84a)) !important;
+  margin-bottom: 6px !important;
+}
+.freg-dept-section-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(24px, 2.8vw, 32px) !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+}
+.freg-dept-section-hd-r {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  align-items: flex-end !important;
+}
+.freg-dept-section-staff-count,
+.freg-dept-section-class-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 3px 9px !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  background: rgba(212,168,74,0.04) !important;
+  white-space: nowrap !important;
+}
+.freg-dept-section-blurb {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 16px !important;
+  max-width: 880px !important;
+}
+
+/* Staff grid · HoD (wider) + 3 profs */
+.freg-dept-staff {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+  margin: 0 0 14px !important;
+  background: #08080b !important;
+  border: 1px solid rgba(212,168,74,0.18) !important;
+}
+@media (min-width: 760px)  { .freg-dept-staff { grid-template-columns: 1fr 1fr !important; } }
+@media (min-width: 1100px) { .freg-dept-staff { grid-template-columns: 1.2fr 1fr 1fr 1fr !important; } }
+
+.freg-slot {
+  padding: 16px 14px !important;
+  border-right: 1px solid rgba(212,168,74,0.14) !important;
+  border-bottom: 1px solid rgba(212,168,74,0.14) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  align-items: center !important;
+  text-align: center !important;
+  position: relative !important;
+  background: transparent !important;
+}
+.freg-slot:last-child { border-right: 0 !important; }
+.freg-slot.is-head {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--dept-c, #d4a84a) 14%, transparent) 0%,
+    color-mix(in srgb, var(--dept-c, #d4a84a) 4%, transparent) 100%) !important;
+}
+.freg-slot.is-head::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; right: 0 !important;
+  top: 0 !important;
+  height: 2px !important;
+  background: var(--dept-c, var(--yellow, #d4a84a)) !important;
+}
+.freg-slot-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin: 0 0 6px !important;
+}
+.freg-slot.is-head .freg-slot-tag { color: var(--dept-c, var(--yellow, #d4a84a)) !important; }
+.freg-slot-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 15px !important;
+  letter-spacing: -0.005em !important;
+  line-height: 1.15 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 !important;
+}
+.freg-slot.is-head .freg-slot-name { font-size: 18px !important; }
+.freg-slot-name .clink,
+.freg-slot-name .cname { color: inherit !important; }
+.freg-slot-stage {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--dept-c, var(--yellow, #d4a84a)) !important;
+}
+.freg-slot-role {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 11.5px !important;
+  font-style: italic !important;
+  color: var(--text-3, #948d80) !important;
+  margin: 2px 0 0 !important;
+  line-height: 1.35 !important;
+}
+.freg-slot-power {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin-top: 4px !important;
+}
+.freg-slot-power span {
+  color: var(--text-3, #948d80) !important;
+  margin-right: 4px !important;
+}
+.freg-slot-open {
+  display: inline-block !important;
+  padding: 3px 9px !important;
+  border: 1px dashed rgba(212,168,74,0.55) !important;
+  background: rgba(212,168,74,0.04) !important;
+  color: var(--text-3, #948d80) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+}
+
+/* Instructional staff strip (TAs, technicians, house trainers) */
+.freg-dept-aux {
+  margin: 14px 0 !important;
+  padding: 12px 14px !important;
+  background: rgba(20,20,24,0.5) !important;
+  border: 1px solid rgba(212,168,74,0.14) !important;
+}
+.freg-dept-aux-lbl {
+  display: block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin-bottom: 8px !important;
+}
+.freg-dept-aux-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+.freg-dept-aux-item {
+  display: inline-flex !important;
+  gap: 6px !important;
+  align-items: baseline !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 12px !important;
+  color: var(--text-2, #c9c3b5) !important;
+  padding: 4px 10px !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  background: rgba(212,168,74,0.04) !important;
+}
+.freg-dept-aux-item .freg-dept-aux-role {
+  color: var(--text-3, #948d80) !important;
+  font-size: 11px !important;
+}
+.freg-dept-aux-open {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,140,148,0.9) !important;
+}
+
+/* Class catalogue toggle + list */
+.freg-classes-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 8px 14px !important;
+  background: rgba(212,168,74,0.08) !important;
+  border: 1px solid rgba(212,168,74,0.45) !important;
+  color: var(--yellow, #d4a84a) !important;
+  cursor: pointer !important;
+  border-radius: 0 !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  margin-top: 4px !important;
+  transition: background 180ms ease, color 180ms ease !important;
+}
+.freg-classes-toggle:hover {
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+}
+.freg-classes-toggle.is-open {
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+}
+.freg-classes-toggle svg { stroke: currentColor !important; }
+
+.freg-classes {
+  margin-top: 12px !important;
+  padding: 12px 0 0 !important;
+  border-top: 1px solid rgba(212,168,74,0.14) !important;
+}
+.freg-classes-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+.freg-classes-item {
+  display: grid !important;
+  grid-template-columns: 80px 44px 1fr auto !important;
+  gap: 14px !important;
+  align-items: baseline !important;
+  padding: 9px 10px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.1) !important;
+}
+.freg-classes-item:last-child { border-bottom: 0 !important; }
+.freg-classes-item:hover { background: rgba(212,168,74,0.04) !important; }
+.freg-classes-code {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  color: var(--yellow, #d4a84a) !important;
+  text-transform: uppercase !important;
+}
+.freg-classes-year {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.freg-classes-title {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  color: var(--text-1, #f5f1e8) !important;
+  line-height: 1.35 !important;
+}
+.freg-classes-by {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  white-space: nowrap !important;
+}
+@media (max-width: 640px) {
+  .freg-classes-item {
+    grid-template-columns: 70px 1fr !important;
+    grid-template-rows: auto auto !important;
+  }
+  .freg-classes-year { grid-column: 2; }
+  .freg-classes-title { grid-column: 1 / -1; }
+  .freg-classes-by { grid-column: 1 / -1; }
+}
+
+/* Facilities note */
+.freg-dept-facilities {
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(212,168,74,0.14) !important;
+}
+.freg-dept-facilities-lbl {
+  display: block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin-bottom: 4px !important;
+}
+.freg-dept-facilities p {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 12.5px !important;
+  font-style: italic !important;
+  line-height: 1.55 !important;
+  color: var(--text-3, #948d80) !important;
+  margin: 0 !important;
+}
+
+/* Support Staff section · simple list */
+.freg-support {
+  margin: clamp(24px, 3vw, 36px) clamp(20px, 4vw, 32px) clamp(36px, 4vw, 60px) !important;
+  max-width: 1500px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  background: #08080b !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-left: 4px solid #5fc3d4 !important;
+  padding: 22px 24px !important;
+}
+.freg-support-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 14px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+}
+.freg-support-eyebrow {
+  display: block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: rgba(120,210,230,0.95) !important;
+  margin-bottom: 6px !important;
+}
+.freg-support-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 24px !important;
+  letter-spacing: -0.012em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+}
+.freg-support-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 4px 10px !important;
+  border: 1px solid rgba(120,210,230,0.4) !important;
+  background: rgba(46,188,212,0.06) !important;
+  white-space: nowrap !important;
+}
+.freg-support-note {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 16px !important;
+  max-width: 880px !important;
+}
+.freg-support-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+.freg-support-item {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  gap: 10px !important;
+  padding: 12px 0 !important;
+  border-bottom: 1px solid rgba(212,168,74,0.12) !important;
+}
+.freg-support-item:last-child { border-bottom: 0 !important; padding-bottom: 0 !important; }
+.freg-support-item-l { min-width: 0; }
+.freg-support-item-role {
+  display: block !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  color: var(--text-1, #f5f1e8) !important;
+  line-height: 1.3 !important;
+}
+.freg-support-item-stage {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: rgba(120,210,230,0.95) !important;
+  margin-top: 2px !important;
+}
+.freg-support-item-r {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  color: var(--text-1, #f5f1e8) !important;
+  display: inline-flex !important;
+  gap: 6px !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+}
+.freg-support-item-r .clink,
+.freg-support-item-r .cname { color: inherit !important; }
+.freg-support-item-open {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  font-style: italic !important;
+}
+.freg-support-item-power {
+  grid-column: 1 / -1 !important;
+  margin-top: 4px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+
+/* Hide every legacy registry element */
+.freg-group,
+.freg-departments,
+.freg-depts-grid,
+.freg-dept,
+.freg-tbl-wrap,
+.freg-tbl,
+.freg-detail-row,
+.freg-detail,
+.freg-arc,
+.freg-arc-item { display: none !important; }
