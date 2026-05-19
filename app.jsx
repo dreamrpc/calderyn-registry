@@ -3848,8 +3848,28 @@ function OrgsTable({data}){
   );
 }
 
+// Short labels for the Outside filter tabs so the row fits on one line.
+const OUTSIDE_SHORT = {
+  "government-civic":            "Government",
+  "law-enforcement":              "Law Enforcement",
+  "press-broadcast":              "Press",
+  "press-and-broadcast":          "Press",
+  "private-security":             "Security",
+  "rivals-collectives":           "Rivals",
+  "criminal-organised":           "Criminal",
+  "organised-crime":              "Criminal",
+  "civic-services":               "Services",
+  "international":                "International",
+  "intelligence":                 "Intelligence",
+  "diplomatic":                   "Diplomatic",
+  "medical-emergency":            "Medical",
+  "academia":                     "Academia",
+  "advocacy":                     "Advocacy",
+};
+
 function OutsideTab(){
   const [active, setActive] = useState("all");
+  const [query, setQuery] = useState("");
   const sections = OUTSIDE.map(s => ({
     id: s.section.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
     label: s.section,
@@ -3857,12 +3877,22 @@ function OutsideTab(){
   }));
   const totalOrgs = sections.reduce((a, s) => a + s.count, 0);
 
-  const visible = active === "all"
-    ? OUTSIDE
-    : OUTSIDE.filter(s => {
+  const ql = query.trim().toLowerCase();
+  const orgMatches = (org) => {
+    if (!ql) return true;
+    const hay = [
+      org.name, org.type, org.note,
+      ...(org.roles || []).flatMap(r => [r.role, r.char]),
+    ].filter(Boolean).join(" ").toLowerCase();
+    return hay.includes(ql);
+  };
+
+  const visible = (active === "all" ? OUTSIDE : OUTSIDE.filter(s => {
         const sid = s.section.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
         return sid === active;
-      });
+      }))
+    .map(sec => ({ ...sec, orgs: (sec.orgs || []).filter(orgMatches) }))
+    .filter(sec => sec.orgs.length > 0);
 
   return (
     <div>
@@ -3872,19 +3902,46 @@ function OutsideTab(){
         body="Characters who live and work in Greenwich, London — the borough Calderyn College leases its campus from. Organised by the institutions they belong to. One character may appear in multiple rows."
         pageNum="P. 007 / VIII"
       />
+      <div className="orgs-search-bar" role="search">
+        <div className="orgs-search-input-wrap">
+          <span className="orgs-search-icon" aria-hidden="true">
+            <Icon name="search" size={14}/>
+          </span>
+          <input
+            type="text"
+            className="orgs-search-input"
+            placeholder="Search orgs, roles, characters…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search outside organisations"
+          />
+          {query && (
+            <button
+              type="button"
+              className="orgs-search-clear"
+              onClick={() => setQuery("")}
+              aria-label="Clear search"
+            >×</button>
+          )}
+        </div>
+      </div>
       <div className="orgs-toolbar">
         <div className="orgs-filters">
           <button
             className={"orgs-pill" + (active === "all" ? " on" : "")}
             onClick={() => setActive("all")}
           >All <span className="orgs-pill-n">{totalOrgs}</span></button>
-          {sections.map(s => (
-            <button
-              key={s.id}
-              className={"orgs-pill" + (active === s.id ? " on" : "")}
-              onClick={() => setActive(s.id)}
-            >{s.label} <span className="orgs-pill-n">{s.count}</span></button>
-          ))}
+          {sections.map(s => {
+            const short = OUTSIDE_SHORT[s.id] || s.label;
+            return (
+              <button
+                key={s.id}
+                className={"orgs-pill" + (active === s.id ? " on" : "")}
+                onClick={() => setActive(s.id)}
+                title={s.label}
+              >{short} <span className="orgs-pill-n">{s.count}</span></button>
+            );
+          })}
         </div>
       </div>
       <OrgsTable data={visible}/>

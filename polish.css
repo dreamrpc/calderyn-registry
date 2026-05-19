@@ -19177,6 +19177,170 @@ nav.map-nav,
 }
 
 /* ════════════════════════════════════════════════════════════════════════
+   OUTSIDE · search bar + single-row scrollable tab strip (issue 3)
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Search bar — same vocabulary as the map search */
+.orgs-search-bar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding: 14px clamp(20px, 4vw, 32px) 12px !important;
+  margin: 0 !important;
+  background: rgba(8,8,10,0.94) !important;
+  border-bottom: 1px solid rgba(212,168,74,0.14) !important;
+}
+.orgs-search-input-wrap {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex: 1 1 auto !important;
+  padding: 8px 14px !important;
+  background: rgba(20,20,24,0.7) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  max-width: 480px !important;
+  min-width: 0 !important;
+}
+.orgs-search-input-wrap:focus-within {
+  border-color: var(--yellow, #d4a84a) !important;
+  background: rgba(20,20,24,0.95) !important;
+  box-shadow: 0 0 0 3px rgba(212,168,74,0.12) !important;
+}
+.orgs-search-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+  color: var(--text-3, #948d80) !important;
+}
+.orgs-search-icon svg { stroke: currentColor !important; }
+.orgs-search-input {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  color: var(--text-1, #f5f1e8) !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  padding: 0 !important;
+}
+.orgs-search-input::placeholder { color: var(--text-3, #948d80) !important; }
+.orgs-search-clear {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 22px !important;
+  height: 22px !important;
+  background: transparent !important;
+  border: 0 !important;
+  color: var(--text-3, #948d80) !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  font-size: 16px !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+}
+.orgs-search-clear:hover { color: var(--text-1, #f5f1e8) !important; }
+
+/* Tab strip — single row, horizontal scroll. NO width animation on hover. */
+.orgs-toolbar {
+  padding: 12px clamp(20px, 4vw, 32px) 14px !important;
+  margin: 0 !important;
+  background: rgba(8,8,10,0.92) !important;
+  border-bottom: 1px solid rgba(212,168,74,0.14) !important;
+}
+.orgs-toolbar .orgs-filters,
+.orgs-filters {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(212,168,74,0.4) transparent !important;
+  padding: 0 0 6px !important;
+  margin: 0 !important;
+  max-width: 1500px !important;
+}
+.orgs-filters::-webkit-scrollbar { height: 5px !important; }
+.orgs-filters::-webkit-scrollbar-thumb { background: rgba(212,168,74,0.4) !important; border-radius: 0 !important; }
+.orgs-filters::-webkit-scrollbar-track { background: transparent !important; }
+
+.orgs-toolbar .orgs-pill,
+.orgs-pill,
+button.orgs-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: 32px !important;
+  padding: 0 12px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  background: rgba(20,20,24,0.7) !important;
+  color: var(--text-3, #948d80) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+  transform: none !important;
+  /* Only colour + border transitions — NO width / padding animation. */
+  transition:
+    color 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease !important;
+}
+.orgs-toolbar .orgs-pill:hover,
+.orgs-pill:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  background: rgba(212,168,74,0.06) !important;
+  border-color: rgba(212,168,74,0.5) !important;
+  /* explicitly DO NOT change width or padding on hover */
+  padding: 0 12px !important;
+  width: auto !important;
+  flex-basis: auto !important;
+}
+.orgs-toolbar .orgs-pill.on,
+.orgs-pill.on {
+  background: rgba(212,168,74,0.14) !important;
+  color: var(--yellow, #d4a84a) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+  padding: 0 12px !important;
+}
+.orgs-toolbar .orgs-pill .orgs-pill-n,
+.orgs-pill .orgs-pill-n {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  color: var(--text-3, #948d80) !important;
+  opacity: 0.7 !important;
+  margin-left: 2px !important;
+}
+.orgs-pill.on .orgs-pill-n {
+  color: var(--yellow, #d4a84a) !important;
+  opacity: 0.9 !important;
+}
+
+@media (max-width: 760px) {
+  .orgs-search-bar { padding: 12px 16px 10px !important; }
+  .orgs-toolbar { padding: 10px 16px 12px !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
    CURRICULUM TIMETABLE · all years stacked, 3-column timetable per year
    Loaded LAST so cascade wins. Owns: .curr-year, .curr-timetable,
    .curr-col, .curr-class, .curr-electives.
