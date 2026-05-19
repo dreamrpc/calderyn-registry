@@ -9977,3 +9977,318 @@ html { scroll-behavior: smooth; }
   .strata-paper-body { columns: 1; }
   .strata-paper-figures { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   MAP · DISTRICT BANNER (placeholder)
+   Cinematic banner card per district, sits above the existing
+   district header. Gradient + halftone + grain + watermark icon +
+   meta block, with a "IMAGE · PLACEHOLDER" stamp so the team knows
+   to swap in photography later.
+   ════════════════════════════════════════════════════════════════════ */
+.map-banner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2.4 / 1;
+  min-height: 200px;
+  margin: 0 0 var(--space-5);
+  background: linear-gradient(135deg, var(--db-c1), var(--db-c2));
+  border: 4px solid #000;
+  box-shadow: 10px 10px 0 0 #000;
+  overflow: hidden;
+}
+
+/* Halftone dot field */
+.map-banner-halftone {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 1.5px at 50% 50%, rgba(0, 0, 0, 0.45) 1.5px, transparent 2px);
+  background-size: 6px 6px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+/* Grain (SVG noise data URL) */
+.map-banner-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  pointer-events: none;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+}
+
+/* Watermark icon — large, low opacity, on the right side */
+.map-banner-icon {
+  position: absolute;
+  top: 50%; right: 6%;
+  transform: translateY(-50%);
+  color: #ffffff;
+  opacity: 0.12;
+  line-height: 0;
+}
+.map-banner-icon .icon { width: clamp(100px, 16vw, 180px); height: clamp(100px, 16vw, 180px); }
+
+/* Meta block bottom-left — tag + district number + name + count */
+.map-banner-meta {
+  position: absolute;
+  left: var(--space-5);
+  bottom: var(--space-5);
+  right: var(--space-5);
+  z-index: 2;
+}
+.map-banner-num {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--yellow, #d4a84a);
+  margin-bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.map-banner-num-tag {
+  background: var(--yellow, #d4a84a);
+  color: #0a0a0a !important;
+  padding: 3px 8px;
+  letter-spacing: 0.28em;
+}
+.map-banner-num-divider { color: rgba(255, 255, 255, 0.4); }
+.map-banner-num-n { color: #ffffff; }
+
+.map-banner-name {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 900;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 0.92;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: 0 0 var(--space-2);
+  text-shadow:
+    -2px 0 0 rgba(227, 27, 35, 0.5),
+     2px 0 0 rgba(46, 188, 212, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.map-banner-count {
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Top-right placeholder stamp */
+.map-banner-placeholder-stamp {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid var(--yellow, #d4a84a);
+  font-family: var(--mono, 'Söhne Mono', monospace);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--yellow, #d4a84a);
+  z-index: 3;
+}
+
+@media (max-width: 760px) {
+  .map-banner { aspect-ratio: 16 / 9; min-height: 160px; }
+  .map-banner-icon { right: 4%; }
+  .map-banner-icon .icon { width: 80px; height: 80px; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   CLUBS · POLISH PASS — bring in line with the comic aesthetic
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Directory sidebar — HUD-style dark column with gold top accent */
+.cdir {
+  background: #0a0a0a !important;
+  border: 4px solid #000 !important;
+  box-shadow: 8px 8px 0 0 var(--yellow, #d4a84a) !important;
+}
+.cdir-hd {
+  border-bottom: 2px solid var(--yellow, #d4a84a) !important;
+  padding: var(--space-3) var(--space-4) !important;
+  background: linear-gradient(180deg, #14140e, #0a0a0a) !important;
+}
+.cdir-hd-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+.cdir-hd-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  color: var(--text-1, #f5f1e8) !important;
+  font-weight: 700;
+  font-size: 12px;
+}
+.cdir-hd-count em { color: var(--text-3, #948d80) !important; font-style: normal !important; }
+
+.cdir-row {
+  padding: var(--space-3) var(--space-4) !important;
+  border-bottom: 1px solid var(--rule-faint, #1c1c24) !important;
+  background: transparent !important;
+  transition: background var(--motion-base, 180ms) ease, box-shadow var(--motion-base) ease;
+}
+.cdir-row:hover {
+  background: rgba(212, 168, 74, 0.05) !important;
+  box-shadow: inset 3px 0 0 0 var(--yellow, #d4a84a) !important;
+}
+.cdir-row.on {
+  background: rgba(212, 168, 74, 0.12) !important;
+  box-shadow: inset 4px 0 0 0 var(--accent, var(--yellow, #d4a84a)) !important;
+}
+.cdir-row-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 18px !important;
+  letter-spacing: -0.005em !important;
+  text-transform: uppercase !important;
+  color: var(--text-1, #f5f1e8) !important;
+  line-height: 1.05;
+}
+.cdir-row-cat {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.cdir-row-stat {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  color: var(--text-2, #c9c3b5) !important;
+  letter-spacing: 0.12em;
+}
+.cdir-row-stat .lbl {
+  font-size: 9px !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase;
+  color: var(--text-3, #948d80) !important;
+  margin-left: 4px;
+}
+
+/* Club detail header — comic-panel cover treatment with halftone */
+.cdh {
+  position: relative;
+  border: 4px solid #000 !important;
+  box-shadow: 10px 10px 0 0 var(--accent, var(--red, #c11a2c)) !important;
+  overflow: hidden;
+  margin-bottom: var(--space-5) !important;
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--accent, #c11a2c) 90%, #000),
+      color-mix(in srgb, var(--accent, #c11a2c) 30%, #000)) !important;
+}
+.cdh::after {
+  /* Halftone overlay */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle 1.5px at 50% 50%, rgba(0, 0, 0, 0.4) 1.5px, transparent 2px);
+  background-size: 6px 6px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.45;
+}
+.cdh-inner {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-6) var(--space-6) !important;
+}
+.cdh-cat {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 4px 10px;
+  display: inline-block;
+  margin-bottom: var(--space-3) !important;
+}
+.cdh-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(40px, 5.5vw, 72px) !important;
+  letter-spacing: -0.02em !important;
+  line-height: 0.9 !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  margin: 0 0 var(--space-2) !important;
+  text-shadow:
+    -2px 0 0 rgba(0, 0, 0, 0.55),
+     2px 0 0 rgba(255, 255, 255, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.5);
+}
+.cdh-sub {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-style: italic !important;
+  font-size: 16px !important;
+  line-height: 1.45 !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  max-width: 560px;
+}
+
+/* Meta cells row under the header — HUD chips */
+.cdet-meta {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+  gap: 1px !important;
+  background: var(--rule, #2a2a34) !important;
+  border: 1px solid var(--rule, #2a2a34) !important;
+  margin-bottom: var(--space-5) !important;
+}
+.cdet-meta-cell {
+  padding: var(--space-3) var(--space-4) !important;
+  background: var(--bg-1, #0c0c10) !important;
+}
+.cdet-meta-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  display: block;
+  margin-bottom: 4px;
+}
+.cdet-meta-val {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.cdet-meta-val .rn-big {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 26px !important;
+  letter-spacing: -0.01em;
+}
+.cdet-meta-val .rn-tot {
+  color: var(--text-3, #948d80) !important;
+  font-weight: 700;
+}
+.cdet-meta-val .rn-suf {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--yellow, #d4a84a) !important;
+  margin-left: 6px;
+}

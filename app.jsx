@@ -6257,6 +6257,59 @@ function ResidenceBlocks({items}){
   );
 }
 
+/* ──────────────────────────────────────────────────────────────────────
+   DISTRICT VISUAL PRESETS — used for the placeholder banner image
+   on each district until real photography is dropped in. Keyed to the
+   district id from data.js mapDistricts.
+   ──────────────────────────────────────────────────────────────────── */
+const DISTRICT_VISUALS = {
+  academic:  { c1: "#3b4a6e", c2: "#10172b", icon: "book-open",   tag: "STUDIES" },
+  training:  { c1: "#a82431", c2: "#3a070d", icon: "shield",      tag: "COMBAT" },
+  residence: { c1: "#a87520", c2: "#2c1c0a", icon: "users",       tag: "DORMS"  },
+  strata:    { c1: "#1e3a5f", c2: "#08111e", icon: "file-text",   tag: "CORP"   },
+  athletics: { c1: "#2d6b3a", c2: "#0c1d12", icon: "sparkles",    tag: "FIELD"  },
+  commons:   { c1: "#c18b3c", c2: "#3c2812", icon: "users",       tag: "COMMON" },
+  perimeter: { c1: "#3a3a44", c2: "#0e0e14", icon: "shield",      tag: "BORDER" },
+  outside:   { c1: "#2c5d6e", c2: "#0a1820", icon: "map",         tag: "EXTERNAL"},
+};
+
+function DistrictBanner({ district, idx, count }){
+  const v = DISTRICT_VISUALS[district.id] || DISTRICT_VISUALS.academic;
+  return (
+    <div
+      className="map-banner"
+      style={{
+        "--db-c1": v.c1,
+        "--db-c2": v.c2,
+      }}
+      role="img"
+      aria-label={`${district.name} — placeholder banner`}
+    >
+      {/* Gradient + halftone overlay handled in CSS; this div is the
+          structural container only. */}
+      <div className="map-banner-halftone" aria-hidden="true"/>
+      <div className="map-banner-grain" aria-hidden="true"/>
+      <div className="map-banner-icon" aria-hidden="true">
+        <Icon name={v.icon} size={140} stroke={1}/>
+      </div>
+      <div className="map-banner-meta">
+        <div className="map-banner-num">
+          <span className="map-banner-num-tag">{v.tag}</span>
+          <span className="map-banner-num-divider">·</span>
+          <span className="map-banner-num-n">DISTRICT {String(idx + 1).padStart(2, "0")}</span>
+        </div>
+        <div className="map-banner-name">{district.name}</div>
+        <div className="map-banner-count">
+          {count} {count === 1 ? "LOCATION" : "LOCATIONS"} ON RECORD
+        </div>
+      </div>
+      <div className="map-banner-placeholder-stamp" aria-hidden="true">
+        IMAGE · PLACEHOLDER
+      </div>
+    </div>
+  );
+}
+
 function MapTab(){
   const districts = D.mapDistricts;
   const locations = D.mapLocations;
@@ -6407,6 +6460,11 @@ function MapTab(){
           ) : (
             activeDistrict && (
               <section className="map-district">
+                {/* DISTRICT BANNER — placeholder image-card per district.
+                    Uses a gradient + iconography keyed to the district id
+                    until real photography lands. Halftone overlay keeps
+                    it on-brand with the rest of the comic visual lang. */}
+                <DistrictBanner district={activeDistrict} idx={activeIdx} count={activeItems.length}/>
                 <header className="map-district-head">
                   <div className="lore-eyebrow"><Icon name="sparkles" size={11} className="inline-icon"/> District {String(activeIdx + 1).padStart(2, "0")}</div>
                   <h2 className="lore-h map-district-h">{activeDistrict.name}.</h2>
