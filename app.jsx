@@ -1176,8 +1176,24 @@ function CurriculumView(){
     sec.rows.forEach(r => { if (r.role && tag) SECTION_OF[r.role] = tag; });
   });
 
+  // Resolve a department class's faculty using the triad rule:
+  //   type "shared"   OR headSubs:true  → head
+  //   type "hero"                       → taHero
+  //   type "sidekick"                   → taSidekick
+  function resolveDeptFaculty(dept, cls){
+    if (cls.headSubs || cls.type === "shared") return dept.head;
+    if (cls.type === "hero")     return dept.taHero;
+    if (cls.type === "sidekick") return dept.taSidekick;
+    return dept.head;
+  }
+  function profLabel(faculty){
+    if (!faculty) return "—";
+    return faculty.char || faculty.role || "—";
+  }
+
   function subjectsForTrackYear(trackId, yIdx){
     const out = [];
+    // 1) Existing FACULTY-row-driven subjects
     FACULTY.forEach(sec => {
       sec.rows.forEach(r => {
         if (!r.subjects || !r.tracks) return;
@@ -1199,6 +1215,30 @@ function CurriculumView(){
             shared: r.tracks.length > 1,
             kind: SECTION_OF[r.role] || "core",
           });
+        });
+      });
+    });
+    // 2) Department-driven classes (Combat + Media)
+    (D.departments || []).forEach(dept => {
+      dept.classes.forEach(cls => {
+        if (YEAR_KEY[cls.year] !== yIdx) return;
+        const matches =
+          cls.type === "shared" ||
+          (cls.type === "hero"     && trackId === "hero") ||
+          (cls.type === "sidekick" && trackId === "sidekick");
+        if (!matches) return;
+        const fac = resolveDeptFaculty(dept, cls);
+        out.push({
+          subject: cls.title,
+          desc: cls.desc,
+          prof: profLabel(fac),
+          shared: cls.type === "shared",
+          kind: "core",
+          dept: dept.id,
+          deptName: dept.name,
+          deptColor: dept.color,
+          classType: cls.type,
+          headSubs: !!cls.headSubs,
         });
       });
     });
@@ -1232,6 +1272,13 @@ function CurriculumView(){
   }
   heroSubs.forEach(s => addSubject(s, "hero"));
   sideSubs.forEach(s => addSubject(s, "sidekick"));
+
+  // Department triads for this year — each one shows up as a panel above
+  // the subject list with the HoD + TAs + the year's class(es).
+  const deptTriads = (D.departments || []).map(dept => {
+    const yearClasses = dept.classes.filter(c => YEAR_KEY[c.year] === yearIdx);
+    return { dept, yearClasses };
+  }).filter(d => d.yearClasses.length > 0);
 
   // Single unified list, alphabetical, with required-first secondary sort
   const allSubs = Array.from(seen.values()).sort((a, b) => {
@@ -1313,6 +1360,36 @@ function CurriculumView(){
           </article>
         </div>
 
+        {/* DEPARTMENT TRIADS — Combat + Media. Each panel shows the Head
+            of Department (centre) flanked by the two TAs, and below them
+            the actual class(es) for the active year. */}
+        {deptTriads.length > 0 && (
+          <section className="curr-depts">
+            <header className="curr-depts-hd">
+              <div className="curr-depts-tag">Year {yearIdx + 1} · Departments</div>
+              <h4 className="curr-depts-title">Combat &amp; Media · the two triads.</h4>
+              <p className="curr-depts-blurb">
+                Each department runs on a head + two TA structure. Shared classes
+                (foundations + capstone) are taught by the Head of Department.
+                Track-specific classes are taught by the matching TA. A Head may
+                step in for a single class when the story calls for it — those
+                are flagged below.
+              </p>
+            </header>
+            <div className="curr-depts-grid">
+              {deptTriads.map(({ dept, yearClasses }) => (
+                <DepartmentTriad
+                  key={dept.id}
+                  dept={dept}
+                  yearClasses={yearClasses}
+                  resolveDeptFaculty={resolveDeptFaculty}
+                  profLabel={profLabel}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* SUBJECT LIST — the actual modules taught this year.
             Audit #7: the year tabs were "underused" because clicking
             them only updated the two track summary cards above; the
@@ -1381,6 +1458,91 @@ function CurriculumView(){
   );
 }
 
+/* Department triad — head of department + two track TAs + the year's
+   classes laid out so the chain of command is legible. */
+function DeptPerson({faculty, label, isHead, color, deptId}){
+  const isOpen = !faculty?.char;
+  return (
+    <div className={"curr-dept-person" + (isHead ? " is-head" : "") + (isOpen ? " is-open" : "")} style={{"--dept-c": color}} data-dept-id={deptId}>
+      <div className="curr-dept-person-tag">{label}</div>
+      <div className="curr-dept-person-name">
+        {faculty?.char
+          ? <CLink name={faculty.char} link={faculty.link || null}/>
+          : <span className="curr-dept-person-open">OPEN POSITION</span>}
+      </div>
+      <div className="curr-dept-person-role">{faculty?.role || "—"}</div>
+      {faculty?.stage && (
+        <div className="curr-dept-person-stage">{faculty.stage}</div>
+      )}
+    </div>
+  );
+}
+
+function DepartmentTriad({dept, yearClasses, resolveDeptFaculty, profLabel}){
+  return (
+    <article className="curr-dept" style={{"--dept-c": dept.color || "#d4a84a"}}>
+      <header className="curr-dept-hd">
+        <div className="curr-dept-hd-l">
+          <span className="curr-dept-hd-eyebrow">Department</span>
+          <h5 className="curr-dept-hd-name">{dept.name}</h5>
+        </div>
+        <span className="curr-dept-hd-count">
+          {yearClasses.length} {yearClasses.length === 1 ? "class" : "classes"}
+        </span>
+      </header>
+      {dept.blurb && <p className="curr-dept-blurb">{dept.blurb}</p>}
+
+      {/* Triad — TA-Hero | HoD (centre) | TA-Sidekick */}
+      <div className="curr-dept-triad">
+        <DeptPerson
+          faculty={dept.taHero}
+          label="TA · Heroes"
+          color={dept.color}
+          deptId={dept.id}
+        />
+        <DeptPerson
+          faculty={dept.head}
+          label="Head of Department"
+          isHead
+          color={dept.color}
+          deptId={dept.id}
+        />
+        <DeptPerson
+          faculty={dept.taSidekick}
+          label="TA · Sidekicks"
+          color={dept.color}
+          deptId={dept.id}
+        />
+      </div>
+
+      {/* This year's classes */}
+      <ul className="curr-dept-classes">
+        {yearClasses.map((cls, i) => {
+          const fac = resolveDeptFaculty(dept, cls);
+          const facName = profLabel(fac);
+          const typeLabel = cls.type === "shared" ? "Shared"
+                          : cls.type === "hero"   ? "Heroes"
+                          : "Sidekicks";
+          return (
+            <li key={i} className={"curr-dept-class t-" + cls.type + (cls.headSubs ? " is-subs" : "")}>
+              <div className="curr-dept-class-hd">
+                <span className={"curr-dept-class-type t-" + cls.type}>{typeLabel}</span>
+                <h6 className="curr-dept-class-title">{cls.title}</h6>
+                {cls.headSubs && <span className="curr-dept-class-subs">HoD COVER</span>}
+              </div>
+              <div className="curr-dept-class-fac">
+                <span className="curr-dept-class-fac-lbl">Taught by</span>
+                <span className="curr-dept-class-fac-val">{facName}</span>
+              </div>
+              {cls.desc && <p className="curr-dept-class-desc">{cls.desc}</p>}
+            </li>
+          );
+        })}
+      </ul>
+    </article>
+  );
+}
+
 /* eslint-disable-next-line */
 function ClassRow({subject}){
   const [open, setOpen] = useState(false);
@@ -1399,7 +1561,14 @@ function ClassRow({subject}){
         disabled={!hasDesc}
         aria-expanded={open}
       >
-        <span className="curr-row-name">{subject.subject}</span>
+        <span className="curr-row-name">
+          {subject.subject}
+          {subject.deptName && (
+            <span className="curr-row-dept" style={{"--dept-c": subject.deptColor || "#d4a84a"}}>
+              {subject.deptName}{subject.headSubs && " · HoD"}
+            </span>
+          )}
+        </span>
         {subject.prof && (
           <span className="curr-row-prof">
             <span className="curr-row-prof-lbl">Faculty</span>
@@ -2085,6 +2254,39 @@ function FacultyRegistryView(){
             )}
           </div>
         </div>
+      )}
+
+      {/* Department triads — Combat + Media. The triad model makes the
+          chain of command legible: Head of Department centre, TAs flanking,
+          and a small class roster underneath. */}
+      {D.departments && D.departments.length > 0 && (
+        <section className="freg-group freg-departments">
+          <div className="freg-group-hd">
+            <span className="freg-group-name">DEPARTMENT TRIADS</span>
+            <span className="freg-group-count">
+              {D.departments.length} {D.departments.length === 1 ? "department" : "departments"}
+            </span>
+          </div>
+          <p className="freg-group-note">
+            Two departments — Combat Training and Media Training — run on a head-plus-two-TAs model. Shared classes are taught by the Head of Department; track-specific classes are taught by the matching TA.
+          </p>
+          <div className="freg-depts-grid">
+            {D.departments.map(dept => (
+              <article key={dept.id} className="freg-dept" style={{"--dept-c": dept.color || "#d4a84a"}}>
+                <header className="freg-dept-hd">
+                  <span className="freg-dept-hd-eyebrow">Department</span>
+                  <h4 className="freg-dept-hd-name">{dept.name}</h4>
+                </header>
+                {dept.blurb && <p className="freg-dept-blurb">{dept.blurb}</p>}
+                <div className="freg-dept-triad">
+                  <DeptPerson faculty={dept.taHero}     label="TA · Heroes"             color={dept.color} deptId={dept.id}/>
+                  <DeptPerson faculty={dept.head}       label="Head of Department" isHead color={dept.color} deptId={dept.id}/>
+                  <DeptPerson faculty={dept.taSidekick} label="TA · Sidekicks"          color={dept.color} deptId={dept.id}/>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
       )}
 
       {FACULTY.map((sec, si) => {

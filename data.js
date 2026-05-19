@@ -569,12 +569,6 @@ faculty: [
     section: "HEROES TRACK FACULTY",
     note: "Professors who teach exclusively on the Heroes track (Track One). Combat, deployment, public-facing capability. Each prof tracks their students through all four years — the freshman instructor is the senior instructor.",
     rows: [
-      { role: "Combat Training", char: "Theron", stage: "THERON", power: "Biokinetic Augmentation · Kinetic Absorption & Release", expression: "Theron's body absorbs and redistributes incoming force, dampening damage and channelling that energy into momentum. Strength scales with motion, favouring charges, grapples, and sustained pressure. In Break State his biological inhibitors fail, deepening output at the cost of self-damage.", drawbacks: "Not invulnerable — repeated impacts, piercing attacks, and concentrated force still fracture and bleed him. Heavy absorption strains his system, slowing reactions and pushing him toward overheating, fatigue, and eventual shutdown. Break State worsens injury suppression and risks collapse.", link: "https://roleplay.chat/profile.php?user=bulk", tracks: ["hero"], subjects: [
-        { year: "FR", title: "Combat Training I",   desc: "Unarmed basics, conditioning, controlled-arena sparring. Most physical washouts come out of this class — STRATA wants the unwillable broken early." },
-        { year: "SO", title: "Combat Training II",  desc: "Weapon familiarisation, formation work with track partners, sustained-engagement endurance. First time you fight someone who fights back at full intent." },
-        { year: "JR", title: "Combat Training III", desc: "Multi-opponent engagement, terrain exploitation, integrating power use into combat reflex rather than treating it as a separate tool. Live sparring against juniors from rival houses." },
-        { year: "SR", title: "Combat Training IV",  desc: "Specialisation to your power signature and tier. Top performers begin shadowing the instructor as junior trainers — most contracted A-listers came through this seat." },
-      ]},
       { role: "Deployment & Field Ops", tracks: ["hero"], subjects: [
         { year: "FR", title: "Deployment & Field Ops I",   desc: "Pre-deployment theory. Operational doctrine, hostile profiling fundamentals, the difference between a sanctioned op and a fight you happened to win. No live ops yet — supervised arena scenarios only." },
         { year: "SO", title: "Deployment & Field Ops II",  desc: "Civilian-adjacent shadowing. Sponsored low-stakes appearances with established heroes, threat assessment in friendly environments, learning to read a crowd before you have to read a crisis." },
@@ -628,12 +622,6 @@ faculty: [
         { year: "SO", title: "Crisis Management II",  desc: "Scene control during your shadowing-year sponsored appearances. Reading a low-stakes incident as it develops, calling the right people, knowing when to step back." },
         { year: "JR", title: "Crisis Management III", desc: "Multi-vector incidents — a fire and a hostage and a power outage at the same time. Triage of crises, not just casualties. After-action reviews, witness coordination, the architecture of cleanup. Joint sessions with Media & PR juniors." },
         { year: "SR", title: "Crisis Management IV",  desc: "Leadership at a crisis scene. Commanding junior responders, coordinating with civilian emergency services, owning the incident report. Most senior thesis incidents come out of this class." },
-      ]},
-      { role: "Media & Public Relations", char: "Reserved by Owner", npc: true, tracks: ["hero", "sidekick"], subjects: [
-        { year: "FR", title: "Media & PR I",   desc: "Camera presence, interview basics, the press kit. Sitting still under hot lights without flinching. Transcript analysis of historical incidents — learning the difference between what gets said and what gets cleared." },
-        { year: "SO", title: "Media & PR II",  desc: "Identity management — public name, working alias, the legal architecture of a hero identity. Case study: Paragon, the world's most famous no-separation supe. Plus on-camera discipline at scale: scripted appearances, sponsor obligations, when to refuse a question and when to refuse it visibly." },
-        { year: "JR", title: "Media & PR III", desc: "Damage control and live drafting. Crisis comms after a real incident, drafted in real time, with real consequences. You write press releases for the graduating cohort's first live ops and watch which lines survive into print. Joint sessions with Crisis Management juniors." },
-        { year: "SR", title: "Media & PR IV",  desc: "Contract-period press. Building your own brand voice, sustained press tour discipline, the press conference you give in your debut year. Witness coordination, the architecture of the public apology, the press-release voice as second nature." },
       ]},
       { role: "Contract Law & Ethics", tracks: ["hero", "sidekick"], subjects: [
         { year: "FR", title: "Contract Law I",   desc: "Foundations of powered ethics. The Geneva 2009 framework, STRATA's regulatory authority, the legal status of registered abilities. You read the rules before you read the contracts." },
@@ -700,6 +688,80 @@ faculty: [
       { role: "Security Chief" },
       { role: "Head Groundskeeper" },
       { role: "Residential Warden" },
+    ],
+  },
+],
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DEPARTMENT TRIADS
+   Two departments — Combat Training and Media Training — run on a triad
+   model: one Head of Department who teaches the SHARED (cross-track)
+   classes, plus one TA per track who teaches the track-specific classes.
+   The HoD can substitute into any class via the optional `headSubs: true`
+   flag on a class entry.
+
+   Faculty for a class is computed at view-time:
+     - type "shared"        → head
+     - type "hero"          → taHero
+     - type "sidekick"      → taSidekick
+     - headSubs: true       → head (overrides the TA for that class)
+═══════════════════════════════════════════════════════════════════════════ */
+departments: [
+  {
+    id: "combat",
+    name: "Combat Training",
+    blurb: "Theron's domain. Foundations and capstone in his hands; the Hero and Sidekick mid-years split between two TAs trained to his doctrine.",
+    color: "#c41a1a",
+    head: {
+      role: "Head of Combat Training",
+      char: "Theron",
+      stage: "THERON",
+      power: "Biokinetic Augmentation · Kinetic Absorption & Release",
+      expression: "Theron's body absorbs and redistributes incoming force, dampening damage and channelling that energy into momentum. Strength scales with motion, favouring charges, grapples, and sustained pressure. In Break State his biological inhibitors fail, deepening output at the cost of self-damage.",
+      drawbacks: "Not invulnerable — repeated impacts, piercing attacks, and concentrated force still fracture and bleed him. Heavy absorption strains his system, slowing reactions and pushing him toward overheating, fatigue, and eventual shutdown. Break State worsens injury suppression and risks collapse.",
+      link: "https://roleplay.chat/profile.php?user=bulk",
+      npc: false,
+    },
+    taHero:     { role: "TA · Combat Training (Heroes)" },
+    taSidekick: { role: "TA · Combat Training (Sidekicks)" },
+    classes: [
+      { year: "FR", type: "shared",   title: "Combat Foundations",
+        desc: "First-year unified combat doctrine. Heroes and Sidekicks alike start in the same arena — stance, conditioning, the controlled-sparring framework. Theron teaches it himself because the foundation is the same; the divergence comes later." },
+      { year: "SO", type: "hero",     title: "Strike Doctrine (Hero)",
+        desc: "Hero-track sophomores break off into the offensive doctrine. Weapon familiarisation, formation work with track partners, sustained-engagement endurance against opponents who fight back at full intent." },
+      { year: "SO", type: "sidekick", title: "Field Support Combat (Sidekick)",
+        desc: "Sidekick-track sophomores learn defensive-and-extraction combat. Threat denial, partner extraction under fire, the difference between holding a line and holding a doorway. Not about winning a fight — about ending one without making it worse." },
+      { year: "JR", type: "hero",     title: "Advanced Heroic Combat",
+        desc: "Multi-opponent engagement, terrain exploitation, integrating power use into combat reflex rather than treating it as a separate tool. Live sparring against juniors from rival houses." },
+      { year: "JR", type: "sidekick", title: "Sidekick Tactical Defence",
+        desc: "Crisis-scene defensive work. Civilian shielding, structural assessment under stress, knowing when to fall back and when to set the perimeter. The class that decides whether your hero comes home from their first live op." },
+      { year: "SR", type: "shared",   title: "Joint Field Operations Capstone",
+        desc: "Theron takes the room back. Senior heroes and their paired sidekicks run joint scenarios under live conditions — the doctrine only works if both sides do it the same way. Final assessment is paired." },
+    ],
+  },
+  {
+    id: "media",
+    name: "Media Training",
+    blurb: "The press room before the press room. Foundations and crisis-comms capstone live with the HoD; TAs handle the track-specific persona work in between.",
+    color: "#d4901a",
+    head: {
+      role: "Head of Media Training · TBA",
+    },
+    taHero:     { role: "TA · Media Training (Heroes)" },
+    taSidekick: { role: "TA · Media Training (Sidekicks)" },
+    classes: [
+      { year: "FR", type: "shared",   title: "Media Foundations",
+        desc: "Freshman year, both tracks together. Camera presence, interview basics, the press kit, transcripts of historical incidents dissected line by line. You learn what gets said and what gets cleared before you learn how to say either." },
+      { year: "SO", type: "hero",     title: "Heroic Persona & Brand (Hero)",
+        desc: "Hero-track persona work. Public name, working alias, the legal architecture of a hero identity. Case study: Paragon, the world's most famous no-separation supe. On-camera discipline at scale — scripted appearances, sponsor obligations, refusing a question visibly when the refusal is the message." },
+      { year: "SO", type: "sidekick", title: "Sidekick PR & Cover Identity (Sidekick)",
+        desc: "Sidekick-track identity management. Coverage as backbone — you are not the face, you are the explanation, the apology, the version of the story that holds. Cover-identity discipline, handler-to-press protocol, when to speak in your hero's place and when never to." },
+      { year: "JR", type: "hero",     title: "Press & Interview Craft (Hero)",
+        desc: "Hero-track junior interview work. Live-fire press conferences, sitting under hostile questioning without flinching, the architecture of the public apology when it has to be yours. Most footage from this class gets used as case study by future cohorts." },
+      { year: "JR", type: "sidekick", title: "Discreet Press & Handler Liaison (Sidekick)",
+        desc: "Sidekick-track handler comms. Drafting the press release that goes out under your hero's name. The phone call to STRATA corporate when something has gone wrong. The quiet line that holds the loud one together." },
+      { year: "SR", type: "shared",   title: "Crisis Comms Capstone",
+        desc: "Senior capstone, both tracks in the same room. Crisis comms drafted in real time after a sanctioned live op — your hero made a decision, you wrote the press release. The HoD teaches it because at this level both sides are speaking the same voice." },
     ],
   },
 ],
