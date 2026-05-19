@@ -1339,9 +1339,20 @@ function DeptStaffCard({person, slot, isHead, deptColor}){
 
 function CurriculumView(){
   const [activeYear, setActiveYear] = useState("FR");
+  const [filterDesig, setFilterDesig] = useState("all"); // all | hero | sidekick
 
   const allClasses = gatherCurriculumClasses();
-  const byYear = (y) => allClasses.filter(c => c.year === y);
+
+  // Apply the hero/sidekick/all filter before year bucketing. A class
+  // matches the filter when its designation matches OR it has no
+  // designation lock (i.e. shared / required / specialism modules are
+  // visible to everyone regardless of designation choice).
+  const filterMatch = (c) => {
+    if (filterDesig === "all") return true;
+    if (!c.designation) return true; // unscoped classes visible to all
+    return c.designation === filterDesig;
+  };
+  const byYear = (y) => allClasses.filter(c => c.year === y && filterMatch(c));
 
   // Y1 splits: shared core (all departments + TUT-101) + Y1 designation modules
   const y1Shared = byYear("FR").filter(c => c.kind === "shared-core")
@@ -1424,6 +1435,27 @@ function CurriculumView(){
             </ul>
           </div>
         </section>
+
+        {/* Designation filter — hero / sidekick / all. Applies across
+            every year section. */}
+        <div className="curr-filter-bar" role="group" aria-label="Filter by designation">
+          <span className="curr-filter-lbl">Designation</span>
+          <button type="button"
+            className={"curr-filter-pill" + (filterDesig === "all" ? " is-active" : "")}
+            onClick={() => setFilterDesig("all")}
+            aria-pressed={filterDesig === "all"}
+          >All Tracks</button>
+          <button type="button"
+            className={"curr-filter-pill t-hero" + (filterDesig === "hero" ? " is-active" : "")}
+            onClick={() => setFilterDesig("hero")}
+            aria-pressed={filterDesig === "hero"}
+          >Heroes</button>
+          <button type="button"
+            className={"curr-filter-pill t-sidekick" + (filterDesig === "sidekick" ? " is-active" : "")}
+            onClick={() => setFilterDesig("sidekick")}
+            aria-pressed={filterDesig === "sidekick"}
+          >Sidekicks</button>
+        </div>
 
         {/* Y1 · Shared Core */}
         {activeYear === "FR" && (
@@ -2456,7 +2488,18 @@ function DepartmentSection({dept, expanded, onToggle}){
 
 function FacultyRegistryView(){
   const [openDept, setOpenDept] = useState({});
+  const [filterDesig, setFilterDesig] = useState("all"); // all | hero | sidekick
   const toggleDept = (id) => setOpenDept(prev => ({...prev, [id]: !prev[id]}));
+
+  // Filter a dept's classes by selected designation. Classes without a
+  // designation tag are visible regardless (shared / required modules).
+  const filteredDept = (dept) => {
+    if (filterDesig === "all") return dept;
+    const classes = (dept.classes || []).filter(
+      c => !c.designation || c.designation === filterDesig
+    );
+    return { ...dept, classes };
+  };
 
   // Find the dean — first row in the Office of the Dean section, role === "Dean"
   const deanSection = FACULTY.find(s => /office of the dean/i.test(s.section));
@@ -2469,7 +2512,28 @@ function FacultyRegistryView(){
   return (
     <div className="freg">
       <div className="freg-hint">
-        Eight departments, one Fellowship. Click any department to view its class catalogue.
+        Eight departments. Click any department to view its class catalogue.
+      </div>
+
+      {/* Designation filter — filters which classes show up inside
+          each department's catalogue. All / Heroes / Sidekicks. */}
+      <div className="freg-filter-bar" role="group" aria-label="Filter classes by designation">
+        <span className="freg-filter-lbl">Show classes for</span>
+        <button type="button"
+          className={"freg-filter-pill" + (filterDesig === "all" ? " is-active" : "")}
+          onClick={() => setFilterDesig("all")}
+          aria-pressed={filterDesig === "all"}
+        >All Tracks</button>
+        <button type="button"
+          className={"freg-filter-pill t-hero" + (filterDesig === "hero" ? " is-active" : "")}
+          onClick={() => setFilterDesig("hero")}
+          aria-pressed={filterDesig === "hero"}
+        >Heroes</button>
+        <button type="button"
+          className={"freg-filter-pill t-sidekick" + (filterDesig === "sidekick" ? " is-active" : "")}
+          onClick={() => setFilterDesig("sidekick")}
+          aria-pressed={filterDesig === "sidekick"}
+        >Sidekicks</button>
       </div>
 
       {/* DEAN · the existing portrait-card treatment stays */}
@@ -2528,11 +2592,11 @@ function FacultyRegistryView(){
         </section>
       )}
 
-      {/* 8 DEPARTMENT SECTIONS */}
+      {/* 8 DEPARTMENT SECTIONS — class catalogues filtered by designation */}
       {(D.departments || []).map(dept => (
         <DepartmentSection
           key={dept.id}
-          dept={dept}
+          dept={filteredDept(dept)}
           expanded={!!openDept[dept.id]}
           onToggle={() => toggleDept(dept.id)}
         />

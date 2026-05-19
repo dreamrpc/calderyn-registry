@@ -23416,3 +23416,315 @@ button.orgs-pill {
   letter-spacing: -0.015em !important;
 }
 .freg-support-eyebrow { font-size: 10px !important; letter-spacing: 0.3em !important; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   CURRICULUM + FACULTY · SOPHISTICATED PASS
+   Drops blocky chrome. Cards lose their solid fills and heavy borders;
+   sections become lighter, more editorial, with thin underline rules
+   doing the structural work instead of bordered panels.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* PRIMER — fix the cut-off key column, lighter panel */
+.curr-main .curr-primer {
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(212,168,74,0.18) !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+  border-left: 0 !important;
+  padding: 28px 4px !important;
+  margin: 4px 0 !important;
+}
+.curr-main .curr-primer-list li {
+  grid-template-columns: 130px 1fr !important;
+  gap: 18px !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid rgba(212,168,74,0.08) !important;
+}
+.curr-main .curr-primer-list-k {
+  font-size: 11px !important;
+  letter-spacing: 0.26em !important;
+  white-space: nowrap !important;
+}
+.curr-main .curr-primer-list-v { font-size: 13.5px !important; }
+
+/* YEAR SECTIONS — lighter, more editorial */
+.curr-main .curr-year { margin: clamp(36px, 4vw, 56px) 0 0 !important; }
+.curr-main .curr-year-hd {
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+  padding-bottom: 14px !important;
+  margin-bottom: 18px !important;
+}
+.curr-main .curr-year-hd::after { display: none !important; }
+.curr-main .curr-year-tag {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.32em !important;
+  margin-bottom: 10px !important;
+}
+
+/* BLOCK HEADERS · single underline, no chips */
+.curr-main .curr-block-hd {
+  border-bottom: 1px solid rgba(212,168,74,0.16) !important;
+  padding-bottom: 6px !important;
+  margin-bottom: 14px !important;
+  gap: 12px !important;
+}
+.curr-main .curr-block-marker {
+  width: 0 !important;
+  height: 14px !important;
+  border-left: 3px solid var(--dept-c, var(--yellow, #d4a84a)) !important;
+  background: transparent !important;
+  padding-right: 8px !important;
+}
+.curr-main .curr-block-count {
+  padding: 2px 8px !important;
+  border: 1px solid rgba(212,168,74,0.25) !important;
+  color: var(--text-3, #948d80) !important;
+  font-size: 10px !important;
+}
+
+/* CLASS CARDS · sophisticated · no panel fill, no border outline,
+   structure comes from a single thin gold left-stripe + internal
+   dividers. Hover lights up subtly. */
+.curr-main .curr-class {
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 2px solid rgba(212,168,74,0.22) !important;
+  padding: 4px 0 4px 16px !important;
+  gap: 5px !important;
+  transition: border-left-color 180ms ease !important;
+}
+.curr-main .curr-class:hover {
+  background: transparent !important;
+  border-left-color: var(--yellow, #d4a84a) !important;
+}
+.curr-main .curr-class.is-designation {
+  border-left-width: 2px !important;
+  border-left-color: var(--class-c) !important;
+}
+.curr-main .curr-class.is-designation:hover { border-left-color: var(--class-c) !important; }
+
+.curr-main .curr-class-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 10px !important;
+  margin-bottom: 0 !important;
+}
+.curr-main .curr-class-code {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.22em !important;
+}
+.curr-main .curr-class-kind {
+  font-size: 9px !important;
+  color: var(--text-3, #948d80) !important;
+  letter-spacing: 0.22em !important;
+}
+.curr-main .curr-class-title {
+  font-size: 16.5px !important;
+  letter-spacing: -0.008em !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+}
+.curr-main .curr-class-desc {
+  font-size: 12.5px !important;
+  line-height: 1.55 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 4px 0 0 !important;
+}
+.curr-main .curr-class-foot {
+  border-top: 0 !important;
+  padding-top: 6px !important;
+  margin-top: 4px !important;
+  gap: 12px !important;
+}
+.curr-main .curr-class-fac-val { font-size: 12.5px !important; }
+.curr-main .curr-class-fac-open {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: var(--text-3, #948d80) !important;
+  font-style: italic !important;
+}
+.curr-main .curr-class-dept {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: var(--class-c) !important;
+  font-size: 9.5px !important;
+  letter-spacing: 0.22em !important;
+}
+
+.curr-main .curr-class-grid {
+  gap: 14px 24px !important;
+}
+
+/* FACULTY REGISTRY · sophisticated · drop the panel-with-stripe vibe */
+.freg-dept-section {
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(212,168,74,0.18) !important;
+  border-left: 0 !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  max-width: 1500px !important;
+}
+.freg-dept-section::before { display: none !important; }
+.freg-dept-section + .freg-dept-section { border-top: 1px solid rgba(212,168,74,0.18) !important; }
+.freg-dept-section-toggle { padding: 22px clamp(20px, 4vw, 32px) !important; }
+.freg-dept-section-toggle:hover { background: rgba(212,168,74,0.03) !important; }
+.freg-dept-section-eyebrow { color: var(--dept-c, var(--yellow, #d4a84a)) !important; }
+.freg-dept-section-name {
+  font-size: clamp(26px, 3vw, 36px) !important;
+  border-left: 4px solid var(--dept-c, var(--yellow, #d4a84a)) !important;
+  padding-left: 14px !important;
+  margin-top: 6px !important;
+}
+.freg-dept-section-staff-count,
+.freg-dept-section-class-count {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  font-size: 10.5px !important;
+  color: var(--text-3, #948d80) !important;
+}
+.freg-dept-section-chev {
+  background: transparent !important;
+  border: 1px solid rgba(212,168,74,0.5) !important;
+  width: 32px !important;
+  height: 32px !important;
+}
+.freg-dept-section-toggle:hover .freg-dept-section-chev,
+.freg-dept-section.is-expanded .freg-dept-section-chev {
+  background: rgba(212,168,74,0.18) !important;
+  color: var(--yellow, #d4a84a) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+}
+
+.freg-dept-section-body {
+  padding: 4px clamp(20px, 4vw, 32px) 26px !important;
+  border-top: 0 !important;
+}
+
+/* Staff slots · no shared panel, calmer borders */
+.freg-dept-staff {
+  background: transparent !important;
+  border: 0 !important;
+  margin: 6px 0 16px !important;
+  gap: 0 !important;
+}
+.freg-slot {
+  border-right: 1px solid rgba(212,168,74,0.12) !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+  padding: 12px 14px !important;
+}
+.freg-slot.is-head {
+  background: rgba(212,168,74,0.04) !important;
+  border-right: 1px solid rgba(212,168,74,0.22) !important;
+}
+.freg-slot.is-head::before { height: 1px !important; }
+.freg-slot:last-child { border-right: 0 !important; }
+
+/* Class catalogue table · no enclosing panel */
+.freg-classes {
+  margin: 14px 0 0 !important;
+  padding: 12px 0 0 !important;
+  border-top: 1px solid rgba(212,168,74,0.12) !important;
+}
+.freg-classes-hd-lbl { color: var(--yellow, #d4a84a) !important; font-size: 11.5px !important; }
+.freg-classes-item:hover { background: rgba(212,168,74,0.025) !important; }
+
+/* Dean's office + Support · no panel chrome */
+.freg-dean-staff,
+.freg-support {
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(212,168,74,0.18) !important;
+  border-left: 0 !important;
+  padding: 22px clamp(20px, 4vw, 32px) !important;
+  margin: 0 auto !important;
+  max-width: 1500px !important;
+}
+.freg-support {
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+  margin-bottom: clamp(36px, 4vw, 60px) !important;
+}
+.freg-dean-staff-name,
+.freg-support-name {
+  border-left: 4px solid var(--yellow, #d4a84a) !important;
+  padding-left: 14px !important;
+  margin-top: 6px !important;
+}
+.freg-support-name { border-left-color: rgba(120,210,230,0.85) !important; }
+.freg-support-eyebrow { color: rgba(120,210,230,0.95) !important; }
+
+/* ── DESIGNATION FILTER (added to curriculum + faculty registry) ── */
+.curr-filter-bar,
+.freg-filter-bar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  flex-wrap: wrap !important;
+  padding: 14px 0 !important;
+  margin: 0 0 8px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.12) !important;
+}
+.curr-filter-lbl,
+.freg-filter-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.curr-filter-pill,
+.freg-filter-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 14px !important;
+  background: transparent !important;
+  border: 1px solid rgba(212,168,74,0.28) !important;
+  color: var(--text-3, #948d80) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease !important;
+}
+.curr-filter-pill:hover,
+.freg-filter-pill:hover {
+  color: var(--text-1, #f5f1e8) !important;
+  border-color: rgba(212,168,74,0.6) !important;
+}
+.curr-filter-pill.is-active,
+.freg-filter-pill.is-active {
+  color: var(--yellow, #d4a84a) !important;
+  border-color: var(--yellow, #d4a84a) !important;
+  background: rgba(212,168,74,0.08) !important;
+}
+.curr-filter-pill.is-active.t-hero,
+.freg-filter-pill.is-active.t-hero {
+  color: rgba(255,140,148,0.95) !important;
+  border-color: rgba(196,26,26,0.7) !important;
+  background: rgba(196,26,26,0.1) !important;
+}
+.curr-filter-pill.is-active.t-sidekick,
+.freg-filter-pill.is-active.t-sidekick {
+  color: rgba(140,178,255,0.95) !important;
+  border-color: rgba(30,64,175,0.7) !important;
+  background: rgba(30,64,175,0.12) !important;
+}
