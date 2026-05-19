@@ -825,9 +825,24 @@ function HomeScrollNav(){
       if (!vis.length) return;
       const top = vis.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
       setActive(top.target.id);
-    }, { rootMargin: "-25% 0px -60% 0px", threshold: 0 });
+    }, { rootMargin: "-30% 0px -30% 0px", threshold: 0 });
     els.forEach(el => io.observe(el));
-    return () => io.disconnect();
+
+    // Edge case: the last section (CTA) often can't reach the
+    // observer's active band because there's no scroll-room below
+    // it. Watch for near-bottom scroll and force-set the last
+    // section as active in that state.
+    const onScroll = () => {
+      const nearBottom = window.innerHeight + window.scrollY
+        >= document.documentElement.scrollHeight - 80;
+      if (nearBottom) setActive(HOME_SECTIONS[HOME_SECTIONS.length - 1].id);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   const goTo = (id) => {

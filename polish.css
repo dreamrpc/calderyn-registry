@@ -11009,3 +11009,50 @@ html { scroll-behavior: smooth; }
   background: rgba(10, 10, 10, 0.85) !important;
   color: var(--yellow, #d4a84a) !important;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   HOME · CTA & SCROLL-NAV — fix flush-to-edge content + nav overlap
+   ════════════════════════════════════════════════════════════════════ */
+
+/* CTA — push internal padding out so content clears the viewport edge
+   (the .home-page negative-margin bleed was eating the section padding).
+   Also cap the content width for legibility on wide screens. */
+.home-cta {
+  padding: var(--space-8) clamp(var(--space-5), 6vw, 96px) !important;
+}
+.home-cta > .home-cta-stamp,
+.home-cta > .home-cta-title,
+.home-cta > .home-cta-sub,
+.home-cta > .home-cta-buttons {
+  max-width: 1100px;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  position: relative;
+  z-index: 2;
+}
+.home-cta > .home-cta-stamp   { margin-bottom: var(--space-4) !important; }
+.home-cta > .home-cta-title   { margin-top: 0; margin-bottom: var(--space-3) !important; }
+.home-cta > .home-cta-sub     { margin-top: 0; margin-bottom: var(--space-5) !important; }
+.home-cta > .home-cta-buttons { margin-bottom: 0 !important; }
+
+/* Reserve room on the right so the side scroll-nav doesn't cover
+   the CTA's right-aligned page badge or stretch into buttons */
+@media (min-width: 900px) {
+  .home-cta {
+    padding-right: clamp(var(--space-7), 8vw, 140px) !important;
+  }
+}
+
+/* Scroll-nav — give it a slightly recessed background plate so it
+   reads as floating over the section without colliding with content.
+   Also bump z-index to clear the section ::after page badge. */
+.home-scrollnav {
+  z-index: 90 !important;
+}
+.home-scrollnav-list {
+  background: rgba(0, 0, 0, 0.78) !important;
+  border-color: rgba(201, 168, 76, 0.4) !important;
+  box-shadow:
+    0 12px 32px -16px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(0, 0, 0, 0.5);
+}
