@@ -5264,11 +5264,15 @@ function JoinTab(){
                   type="button"
                   className={"join-type" + (type === t.id ? " on" : "")}
                   onClick={() => {
-                    setType(t.id);
-                    setForm({});
-                    setStatus({state:"idle",msg:""});
-                    // For wizardized types, advance immediately to step 1
-                    // so the writer drops into the first real page.
+                    // Only wipe the form when switching to a DIFFERENT
+                    // type — clicking the same type just advances back
+                    // into the wizard preserving the data the writer
+                    // already entered.
+                    if (type !== t.id){
+                      setType(t.id);
+                      setForm({});
+                      setStatus({state:"idle",msg:""});
+                    }
                     if (JOIN_WIZARD[t.id]) setStep(1);
                   }}
                 >
@@ -5311,7 +5315,7 @@ function JoinTab(){
               <button
                 type="button"
                 className="join-wiz-btn join-wiz-btn-back"
-                onClick={() => step > 1 ? setStep(step - 1) : reset()}
+                onClick={() => setStep(Math.max(0, step - 1))}
               >
                 <Icon name="arrow-left" size={14}/> Back
               </button>
