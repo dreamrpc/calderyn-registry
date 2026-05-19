@@ -1769,44 +1769,45 @@ function PowersBanned(){
   });
 
   return (
-    <div className="preg pbanned">
-      <div className="preg-hint">
-        Powers the registry will not accept. Applications including any of the entries below are rejected at first review — no appeal, no exceptions.
+    <div className="pbanned">
+      <div className="pbanned-intro">
+        <div className="pbanned-intro-eyebrow">Banned · No Appeal</div>
+        <p className="pbanned-intro-body">
+          Powers the registry will not accept. Applications including any of the entries below are rejected at first review — no appeal, no exceptions.
+        </p>
+        <div className="pbanned-intro-meta">
+          <span className="pbanned-intro-meta-k">Entries</span>
+          <span className="pbanned-intro-meta-v">{rows.length}</span>
+        </div>
       </div>
-      <section className="preg-group pbanned-group">
-        <div className="preg-group-hd">
-          <span className="preg-group-name">REJECTED ABILITIES</span>
-          <span className="preg-group-count">{rows.length} {rows.length === 1 ? "entry" : "entries"}</span>
-        </div>
-        <div className="preg-tbl-wrap">
-          <table className="preg-tbl pbanned-tbl">
-            <thead>
-              <tr>
-                <th style={{width:60}}>#</th>
-                <th style={{width:340}}>Banned Ability</th>
-                <th>Reason</th>
-                <th style={{width:120}}>Status</th>
+      <div className="tw pbanned-tw">
+        <table>
+          <thead>
+            <tr>
+              <th className="rn">#</th>
+              <th>Banned Ability</th>
+              <th>Reason</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i} className="pbanned-row">
+                <td className="rn">{String(i+1).padStart(2, "0")}</td>
+                <td className="pbanned-name">{r.name}</td>
+                <td className="pbanned-reason">
+                  {r.reason
+                    ? r.reason
+                    : <span className="pbanned-reason-default">Exceeds registry design.</span>}
+                </td>
+                <td className="pbanned-status">
+                  <span className="pbanned-tag">REJECTED</span>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {rows.map((r, i) => (
-                <tr key={i} className="preg-row pbanned-row">
-                  <td className="pbanned-n">{String(i+1).padStart(2, "0")}</td>
-                  <td className="pbanned-name">{r.name}</td>
-                  <td className="pbanned-reason">
-                    {r.reason
-                      ? r.reason
-                      : <span className="pbanned-reason-default">Exceeds registry design.</span>}
-                  </td>
-                  <td className="pbanned-status">
-                    <span className="pbanned-tag">REJECTED</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -2523,25 +2524,29 @@ function FacultyRegistryView(){
         Eight departments. All staff, class catalogues, and facilities visible inline — scroll to read.
       </div>
 
-      {/* Designation filter — filters which classes show up inside
-          each department's catalogue. All / Heroes / Sidekicks. */}
-      <div className="freg-filter-bar" role="group" aria-label="Filter classes by designation">
-        <span className="freg-filter-lbl">Show classes for</span>
-        <button type="button"
-          className={"freg-filter-pill" + (filterDesig === "all" ? " is-active" : "")}
-          onClick={() => setFilterDesig("all")}
-          aria-pressed={filterDesig === "all"}
-        >All Tracks</button>
-        <button type="button"
-          className={"freg-filter-pill t-hero" + (filterDesig === "hero" ? " is-active" : "")}
-          onClick={() => setFilterDesig("hero")}
-          aria-pressed={filterDesig === "hero"}
-        >Heroes</button>
-        <button type="button"
-          className={"freg-filter-pill t-sidekick" + (filterDesig === "sidekick" ? " is-active" : "")}
-          onClick={() => setFilterDesig("sidekick")}
-          aria-pressed={filterDesig === "sidekick"}
-        >Sidekicks</button>
+      {/* Designation filter — same chrome as the Students roster filter
+          so the two pages read as siblings. Filters classes + off-lane
+          instructional staff inside each department's catalogue. */}
+      <div className="sfilter freg-sfilter" role="search" aria-label="Filter faculty by designation">
+        <div className="sfilter-group">
+          <span className="sfilter-lbl">Designation</span>
+          <button type="button"
+            className={"sf-pill" + (filterDesig === "all" ? " on" : "")}
+            onClick={() => setFilterDesig("all")}
+            aria-pressed={filterDesig === "all"}
+          >All</button>
+          <button type="button"
+            className={"sf-pill" + (filterDesig === "hero" ? " on" : "")}
+            onClick={() => setFilterDesig("hero")}
+            aria-pressed={filterDesig === "hero"}
+          >Hero</button>
+          <button type="button"
+            className={"sf-pill" + (filterDesig === "sidekick" ? " on" : "")}
+            onClick={() => setFilterDesig("sidekick")}
+            aria-pressed={filterDesig === "sidekick"}
+          >Sidekick</button>
+        </div>
+        <div className="sfilter-count">{(D.departments || []).length} departments</div>
       </div>
 
       {/* DEAN · the existing portrait-card treatment stays */}
