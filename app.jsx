@@ -177,7 +177,7 @@ const HOME_VANGUARD = [
 const JOIN_WIZARD = {
   student: [
     { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
-    { id: "role",    title: "Enrollment",  subtitle: "Where in Calderyn they sit.",         required: ["house", "year", "track", "tier", "age"] },
+    { id: "role",    title: "Enrollment",  subtitle: "Where in Calderyn they sit.",         required: ["house", "year", "track", "tier"] },
     { id: "power",   title: "Power",       subtitle: "What they can do, and what it costs.", required: (f) => f.fullyHuman ? [] : ["power", "powerExpression", "drawbacks"] },
     { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
   ],
@@ -1918,7 +1918,26 @@ function PowersRegistry(){
                         <CLink name={p.char} link={p.link || null}/>
                         {p.npc && <NpcBadge/>}
                       </td>
-                      <td><span className="stage-name">{p.alias || "—"}</span></td>
+                      <td style={{
+                        color: "#d4a843",
+                        fontFamily: "Söhne Mono, ui-monospace, monospace",
+                        fontSize: "13px",
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        fontStyle: "normal",
+                        whiteSpace: "nowrap",
+                      }}>
+                        <span className="stage-name" style={{
+                          color: "#d4a843",
+                          fontFamily: "Söhne Mono, ui-monospace, monospace",
+                          fontSize: "13px",
+                          fontWeight: 700,
+                          letterSpacing: "0.08em",
+                          textTransform: "uppercase",
+                          fontStyle: "normal",
+                        }}>{p.alias || "—"}</span>
+                      </td>
                       <td><TierChip tier={p.tier}/></td>
                       <td>
                         <span className="preg-status-chip" style={{background:p._status.bg, color:p._status.text}}>
