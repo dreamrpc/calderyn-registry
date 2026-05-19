@@ -2202,143 +2202,112 @@ function FacultyRegistryView(){
    LORE TABS
 ═══════════════════════════════════════════════════════════════════════════ */
 const LORE_TABS = [
-  { id: "world",     label: "The World",              short: "World",      icon: "map",            roman: "I",   kicker: "ORIENTATION READING",     deck: "How supes went public. STRATA. The Geneva Convention. Where Calderyn sits in 2026." },
-  { id: "history",   label: "The Programme",          short: "Programme",  icon: "scroll-text",    roman: "II",  kicker: "PROGRAMME HISTORY",       deck: "Sixty years of preparation for a war that never came." },
-  { id: "vanguard",  label: "The Vanguard",           short: "Vanguard",   icon: "shield",         roman: "III", kicker: "DOSSIER · THE VANGUARD",  deck: "Paragon. Vigil. Aegis. Switchboard. The four." },
-  { id: "houses",    label: "The Houses",             short: "Houses",     icon: "flag",           roman: "IV",  kicker: "THE FOUR HOUSES",         deck: "Valaris, Orenne, Saberis, Grimere. Pick yours." },
-  { id: "dean",      label: "The Dean",               short: "Dean",       icon: "users",          roman: "V",   kicker: "OFFICE OF THE DEAN",      deck: "Dr. Devika Ravindrakumar. Fifteen metres. The line." },
-  { id: "incidents", label: "The Cassandra Incident", short: "Cassandra",  icon: "alert-triangle", roman: "VI",  kicker: "INCIDENT 23-AUG-CASS",    deck: "August 2023. The night the wave came in." },
+  { id: "world",     label: "The World" },
+  { id: "history",   label: "The Programme" },
+  { id: "vanguard",  label: "The Vanguard" },
+  { id: "houses",    label: "The Houses" },
+  { id: "dean",      label: "The Dean" },
+  { id: "incidents", label: "The Cassandra Incident" },
 ];
-
-const LORE_BODY = {
-  world: LoreWorld, history: LoreHistory, vanguard: LoreVanguard,
-  houses: LoreHouses, dean: LoreDean, incidents: LoreIncidents,
-};
 
 function HousesTab(){
   const ctx = React.useContext(RegContext);
+  // active = which section the sidebar should highlight. Defaults
+  // to the first; updated by the IntersectionObserver as the writer
+  // scrolls and by sidebar-click optimistic updates.
   const [active, setActive] = useState(LORE_TABS[0]?.id || "world");
-  const stageRef = React.useRef(null);
 
-  // Deep-link via #lore/<id>
+  // Honour deep-link hashes like #lore/vanguard on mount by scrolling
+  // to that anchor.
   useEffect(() => {
     if (ctx.targetSubview && LORE_TABS.find(t => t.id === ctx.targetSubview)){
+      const el = document.getElementById("lore-" + ctx.targetSubview);
+      if (el) {
+        // Defer to next frame so the section has mounted
+        requestAnimationFrame(() => {
+          el.scrollIntoView({ behavior: "instant", block: "start" });
+        });
+      }
       setActive(ctx.targetSubview);
       ctx.consumeSubview();
     }
   }, [ctx]);
 
-  // When the active chapter changes, smooth-scroll the stage into view
-  // (so the masthead is visible) — no scroll within the chapter for
-  // navigation purposes. Body still scrolls if the chapter is taller
-  // than the viewport, which is fine.
+  // SCROLL-SPY — observe each section, set `active` to whichever
+  // is currently nearest the top of the viewport. rootMargin pulls
+  // the trigger zone down 20% from the top of the viewport so the
+  // sidebar updates as a section enters the upper third, not the
+  // moment its bottom edge crosses in.
+  useEffect(() => {
+    const sections = LORE_TABS
+      .map(t => document.getElementById("lore-" + t.id))
+      .filter(Boolean);
+    if (!sections.length) return;
+
+    const io = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting);
+      if (visible.length === 0) return;
+      // Pick the section whose top is CLOSEST to (just past) the
+      // top-trigger line — i.e. the "most recently entered from
+      // above". Largest .top value wins. Earlier we picked
+      // smallest .top, which incorrectly stuck on the previous
+      // section when its body still overlapped the lower active
+      // band even after the next section's heading had appeared.
+      const newest = visible.sort(
+        (a, b) => b.boundingClientRect.top - a.boundingClientRect.top
+      )[0];
+      const id = newest.target.id.replace(/^lore-/, "");
+      if (LORE_TABS.find(t => t.id === id)) setActive(id);
+    }, { rootMargin: "-12% 0px -78% 0px", threshold: 0 });
+
+    sections.forEach(s => io.observe(s));
+    return () => io.disconnect();
+  }, []);
+
   const goTo = (id) => {
-    if (id === active) return;
+    const el = document.getElementById("lore-" + id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     setActive(id);
-    requestAnimationFrame(() => {
-      if (stageRef.current) {
-        stageRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
   };
 
-  const activeIdx = LORE_TABS.findIndex(t => t.id === active);
-  const prev = LORE_TABS[activeIdx - 1];
-  const next = LORE_TABS[activeIdx + 1];
-  const chapter = LORE_TABS[activeIdx] || LORE_TABS[0];
-  const Body = LORE_BODY[chapter.id];
-
   return (
-    <div className="subnav-host lore-reader">
+    <div className="subnav-host">
       <PageHead
         stamp="DOC · 02 · LORE"
         title={<>The <em>lore</em></>}
-        body="Six chapters. Pick one — the rail on the right switches between them. No infinite scroll."
+        body="Six sections. Read in order or jump to whichever you need. The dot rail on the right tracks where you are."
         note={<>Public record · IC-visible<br/>Plot-locked content lives elsewhere</>}
         pageNum="P. 002 / VIII"
       />
 
-      {/* Right rail — chapter picker (icons only, slide-in tooltip on hover/active) */}
-      <nav className="lore-rail" aria-label="Lore chapters">
-        <ol className="lore-rail-list">
+      {/* Floating dots-only nav — same pattern as the home page side
+          scroll-nav. Replaces the previous left sidebar TOC. */}
+      <nav className="home-scrollnav lore-scrollnav" aria-label="Lore sections">
+        <ol className="home-scrollnav-list">
           {LORE_TABS.map((t, i) => (
-            <li key={t.id} className={"lore-rail-item" + (active === t.id ? " is-active" : "")}>
+            <li key={t.id} className={"home-scrollnav-item" + (active === t.id ? " is-active" : "")}>
               <button
                 type="button"
-                className="lore-rail-btn"
+                className="home-scrollnav-btn"
                 onClick={() => goTo(t.id)}
                 aria-current={active === t.id ? "true" : undefined}
-                aria-label={`Go to ${t.label}`}
-                data-label={t.short}
-                data-roman={t.roman}
+                aria-label={`Jump to ${t.label}`}
+                data-label={t.label}
               >
-                <span className="lore-rail-icon" aria-hidden="true">
-                  <Icon name={t.icon} size={18} stroke={1.7}/>
-                </span>
+                <span className="home-scrollnav-dot" aria-hidden="true"/>
               </button>
             </li>
           ))}
         </ol>
       </nav>
 
-      <div className="lore-stage" ref={stageRef}>
-        <article key={chapter.id} className="lore-spread" data-chapter={chapter.id}>
-          <header className="lore-spread-head">
-            <div className="lore-spread-rail">
-              <span className="lore-spread-roman" aria-hidden="true">{chapter.roman}</span>
-              <span className="lore-spread-rule" aria-hidden="true"/>
-              <span className="lore-spread-glyph" aria-hidden="true">
-                <Icon name={chapter.icon} size={22} stroke={1.6}/>
-              </span>
-            </div>
-            <div className="lore-spread-masthead">
-              <div className="lore-spread-kicker">{chapter.kicker}</div>
-              <h2 className="lore-spread-title">{chapter.label}</h2>
-              <p className="lore-spread-deck">{chapter.deck}</p>
-            </div>
-            <div className="lore-spread-folio">
-              <span>CHAPTER</span>
-              <strong>{String(activeIdx + 1).padStart(2, "0")}</strong>
-              <span>OF {String(LORE_TABS.length).padStart(2, "0")}</span>
-            </div>
-          </header>
-
-          <div className="lore-spread-body" id={"lore-" + chapter.id}>
-            <Body/>
-          </div>
-
-          <footer className="lore-spread-foot">
-            <button
-              type="button"
-              className="lore-spread-step lore-spread-step-prev"
-              onClick={() => prev && goTo(prev.id)}
-              disabled={!prev}
-              aria-label={prev ? `Previous chapter: ${prev.label}` : "No previous chapter"}
-            >
-              <Icon name="arrow-left" size={16} stroke={1.7}/>
-              <span className="lore-spread-step-meta">
-                <span className="lore-spread-step-kicker">{prev ? `CHAPTER ${prev.roman}` : "—"}</span>
-                <span className="lore-spread-step-title">{prev ? prev.label : "Start of file"}</span>
-              </span>
-            </button>
-
-            <div className="lore-spread-foot-mark" aria-hidden="true">◆ ◆ ◆</div>
-
-            <button
-              type="button"
-              className="lore-spread-step lore-spread-step-next"
-              onClick={() => next && goTo(next.id)}
-              disabled={!next}
-              aria-label={next ? `Next chapter: ${next.label}` : "End of file"}
-            >
-              <span className="lore-spread-step-meta">
-                <span className="lore-spread-step-kicker">{next ? `CHAPTER ${next.roman}` : "—"}</span>
-                <span className="lore-spread-step-title">{next ? next.label : "End of file"}</span>
-              </span>
-              <Icon name="arrow-right" size={16} stroke={1.7}/>
-            </button>
-          </footer>
-        </article>
+      <div className="lore-page">
+        <section id="lore-world"     className="lore-section"><LoreWorld/></section>
+        <section id="lore-history"   className="lore-section"><LoreHistory/></section>
+        <section id="lore-vanguard"  className="lore-section"><LoreVanguard/></section>
+        <section id="lore-houses"    className="lore-section"><LoreHouses/></section>
+        <section id="lore-dean"      className="lore-section"><LoreDean/></section>
+        <section id="lore-incidents" className="lore-section"><LoreIncidents/></section>
       </div>
     </div>
   );
