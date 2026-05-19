@@ -4735,8 +4735,7 @@ function humanizeFieldKey(k){
                                                        ● INTAKE OPEN
 
    - Tier chips show writer's current usage / limit per pool, sourced
-     from the same /quota-stats Worker endpoint that powers the inline
-     QuotaStatsPanel.
+     from the /quota-stats Worker endpoint.
    - Active pool (the one THIS form contributes to) is labeled
      "(THIS FORM)" so the writer always knows where they're spending.
    - Before a writer tag is entered (quotaStats null), chips render
@@ -5826,63 +5825,6 @@ function CollectiveFieldset({form, set, Common, wizardPageId}){
 // per-tier character counts the moment they pick their Writer Tag.
 // Counts come from the Worker's /quota-stats endpoint; the OOC mapping
 // and character lists never leave the server.
-function QuotaStatsPanel({stats, activePool}){
-  if (!stats) return null;
-  const TIERS = [
-    { id: "A-List", label: "A", className: "tier-a" },
-    { id: "B-List", label: "B", className: "tier-b" },
-    { id: "C-List", label: "C", className: "tier-c" },
-    { id: "D-List", label: "D", className: "tier-d" },
-  ];
-  const limits = stats.limits || {};
-  const renderPool = (pool, label) => {
-    const counts = stats[pool] || {};
-    const isActive = pool === activePool;
-    return (
-      <div className={"quota-pool" + (isActive ? " is-active" : "")}>
-        <div className="quota-pool-label">
-          {label}
-          {isActive && <span className="quota-pool-flag">· THIS FORM</span>}
-        </div>
-        <div className="quota-pool-chips">
-          {TIERS.map(t => {
-            const count = counts[t.id] || 0;
-            const limit = limits[t.id];
-            const isUncapped = limit == null;
-            const isFull = !isUncapped && count >= limit;
-            const isOver = !isUncapped && count > limit;
-            return (
-              <span
-                key={t.id}
-                className={
-                  "quota-chip quota-chip-" + t.className
-                  + (isFull ? " is-full" : "")
-                  + (isOver ? " is-over" : "")
-                }
-              >
-                <span className="quota-chip-tier">{t.label}</span>
-                <span className="quota-chip-count">
-                  {count}{isUncapped ? "" : <>/<span className="quota-chip-limit">{limit}</span></>}
-                </span>
-              </span>
-            );
-          })}
-        </div>
-      </div>
-    );
-  };
-  return (
-    <div className="quota-stats">
-      <div className="quota-stats-head">
-        <span className="quota-stats-tag">YOUR CURRENT QUOTA</span>
-        <span className="quota-stats-sep"/>
-        <span className="quota-stats-sub">Live from STRATA admin</span>
-      </div>
-      {renderPool("student", "STUDENTS")}
-      {renderPool("adult",   "ADULTS")}
-    </div>
-  );
-}
 
 function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
   // wizardPageId: when present, render only the fields belonging to
@@ -5939,7 +5881,8 @@ function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
             placeholder="Type your handle"
           />
         )}
-        <QuotaStatsPanel stats={quotaStats} activePool={activePool}/>
+        {/* Inline quota panel removed — the top sticky HUD shows the
+            same data once a writer tag is entered. */}
       </Field>
     </>
   );

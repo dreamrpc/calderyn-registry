@@ -11208,140 +11208,6 @@ html { scroll-behavior: smooth; }
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   QUOTA STATS PANEL — REDESIGN
-   Inline panel inside the Writer Tag field. Was rendering as a soft
-   rounded debug box. Now matches the Intake HUD chip language —
-   dark fill, gold top accent, mono caps tier chips with colored
-   left stripes. Compact, sits under the field cleanly.
-   ════════════════════════════════════════════════════════════════════ */
-
-.quota-stats {
-  margin: var(--space-3) 0 0;
-  padding: var(--space-3) var(--space-4);
-  background: #0a0a0a;
-  border: 1px solid rgba(201, 168, 76, 0.18);
-  border-top: 2px solid #c9a84c;
-  border-radius: 0;
-  font-family: var(--mono, 'Söhne Mono', monospace);
-  font-size: 12px;
-  color: var(--text-1, #f5f1e8);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.quota-stats-head {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
-}
-.quota-stats-tag {
-  font-family: var(--mono, 'Söhne Mono', monospace);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--yellow, #d4a84a);
-  padding: 3px 8px;
-  border: 1px solid rgba(201, 168, 76, 0.45);
-  background: rgba(201, 168, 76, 0.06);
-}
-.quota-stats-sep {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(201, 168, 76, 0.18), transparent);
-}
-.quota-stats-sub {
-  font-family: var(--mono, 'Söhne Mono', monospace);
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--text-3, #948d80);
-}
-
-.quota-pool {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-.quota-pool-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono, 'Söhne Mono', monospace);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--text-3, #948d80);
-  min-width: 80px;
-}
-.quota-pool.is-active .quota-pool-label {
-  color: var(--text-1, #f5f1e8);
-}
-.quota-pool-flag {
-  font-size: 8.5px;
-  letter-spacing: 0.3em;
-  color: var(--yellow, #d4a84a);
-  font-weight: 700;
-  margin-left: 2px;
-}
-
-.quota-pool-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.quota-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
-  background: #14140e;
-  border-left: 2px solid var(--rule, #2a2a34);
-  font-family: var(--mono, 'Söhne Mono', monospace);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: background var(--motion-base, 180ms) ease, border-color var(--motion-base) ease;
-}
-.quota-chip-tier-a { border-left-color: #d4a84a; }
-.quota-chip-tier-b { border-left-color: #b8b8b8; }
-.quota-chip-tier-c { border-left-color: #b87333; }
-.quota-chip-tier-d { border-left-color: #555555; }
-
-.quota-chip.is-full {
-  background: rgba(212, 168, 74, 0.10);
-}
-.quota-chip.is-over {
-  background: rgba(193, 26, 44, 0.18);
-  border-left-color: var(--red-bright, #ff2a32) !important;
-}
-.quota-chip-tier {
-  color: var(--text-3, #948d80);
-  font-weight: 700;
-}
-.quota-chip-count {
-  color: var(--text-1, #f5f1e8);
-  font-weight: 700;
-}
-.quota-chip-limit { color: var(--text-3, #948d80); font-weight: 700; }
-.quota-chip.is-over .quota-chip-count { color: var(--red-bright, #ff2a32); }
-
-/* Dim non-active pool slightly to direct the eye to the relevant one */
-.quota-pool:not(.is-active) .quota-chip {
-  opacity: 0.55;
-}
-
-/* ════════════════════════════════════════════════════════════════════
    OUTSIDE · SECTION HEADER FIX
    - Eyebrow was clipping behind the sticky .orgs-toolbar.
    - Right-side stats (orgs / filled) rendered cramped.
@@ -11754,4 +11620,171 @@ html { scroll-behavior: smooth; }
   float: left;
   margin: 6px 12px 0 0;
   color: var(--yellow, #d4a84a);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   JOIN · FORM SECTION LAYOUT — premium tightening
+   With the inline quota panel gone, the field stack reads cleaner.
+   Locking every container to sharp comic-square edges, Druk for any
+   section header, Söhne for labels + values. No rounded boxes, no
+   shaded debug-style panels.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Fieldset container — sharp corners, dark fill, no rounded edges */
+.join-fieldset,
+.join-fieldset[data-wiz-page] {
+  border-radius: 0 !important;
+  background: var(--bg-1, #0c0c10) !important;
+  background-image: none !important;
+  border: 1px solid var(--rule, #2a2a34) !important;
+  padding: var(--space-6) var(--space-6) !important;
+  margin: 0 auto var(--space-5) !important;
+  max-width: 900px !important;
+}
+
+/* Section header inside a fieldset — Druk caps, gold under-rule */
+.join-section-header {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  padding: 0 0 var(--space-2) !important;
+  margin: var(--space-5) 0 var(--space-4) !important;
+  border-bottom: 1.5px solid rgba(212, 168, 74, 0.32) !important;
+  background: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--space-3) !important;
+}
+.join-section-header:first-of-type,
+.join-section-header:first-child {
+  margin-top: 0 !important;
+}
+/* Drop the v1 leading rule on every header (the hairline-before
+   element was leftover from an earlier treatment) */
+.join-section-header::before {
+  display: none !important;
+}
+
+/* Individual field — Söhne label, sharp input, no rounded corners */
+.join-field {
+  margin: 0 0 var(--space-4) !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+.join-field-label {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin-bottom: 6px !important;
+  display: flex !important;
+  align-items: baseline !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+.join-field-required {
+  color: var(--red-bright, #ff2a32) !important;
+  font-weight: 700 !important;
+}
+.join-field-hint {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  color: var(--text-3, #948d80) !important;
+  margin-left: auto;
+  text-align: right;
+  flex: 1 1 100%;
+  margin-top: 2px;
+}
+
+/* Inputs / selects / textareas — sharp, dark, gold focus */
+.join-input,
+.join-select,
+.join-textarea {
+  width: 100% !important;
+  padding: 10px 12px !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.01em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  background: var(--bg-2, #15151a) !important;
+  border: 1px solid var(--rule, #2a2a34) !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  transition:
+    border-color var(--motion-base, 180ms) ease,
+    background-color var(--motion-base) ease,
+    box-shadow var(--motion-base) ease !important;
+}
+.join-input:hover,
+.join-select:hover,
+.join-textarea:hover {
+  border-color: var(--text-3, #948d80) !important;
+}
+.join-input:focus,
+.join-select:focus,
+.join-textarea:focus {
+  border-color: var(--yellow, #d4a84a) !important;
+  background: var(--bg-1, #0c0c10) !important;
+  box-shadow: 0 0 0 3px rgba(212, 168, 74, 0.16) !important;
+}
+.join-input::placeholder,
+.join-textarea::placeholder {
+  color: var(--text-3, #948d80) !important;
+  opacity: 0.8;
+}
+
+/* Textarea sizing */
+.join-textarea {
+  resize: vertical;
+}
+.join-textarea.is-medium { min-height: 120px; }
+.join-textarea.is-large  { min-height: 180px; }
+
+/* Checkbox row — clean Söhne label, no rounded boxes */
+.join-checkbox {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: var(--space-3) !important;
+  padding: var(--space-3) var(--space-4) !important;
+  background: var(--bg-2, #15151a) !important;
+  border: 1px solid var(--rule, #2a2a34) !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  transition: border-color var(--motion-base, 180ms) ease;
+}
+.join-checkbox:hover {
+  border-color: var(--text-3, #948d80) !important;
+}
+.join-checkbox input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  accent-color: var(--yellow, #d4a84a);
+}
+.join-checkbox span {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+
+/* Char count tail under textareas — subtle mono caps */
+.join-char-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  text-align: right;
+  margin-top: 4px;
 }
