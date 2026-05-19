@@ -1163,10 +1163,10 @@ function RulesTab(){
 ═══════════════════════════════════════════════════════════════════════════ */
 const YEAR_KEY  = { Y1: 0, Y2: 1, Y3: 2, FEL: 3 };
 const YEAR_TABS = [
-  { idx: 0, key: "Y1",  label: "Y1",         long: "Year One"  },
-  { idx: 1, key: "Y2",  label: "Y2",         long: "Year Two"  },
-  { idx: 2, key: "Y3",  label: "Y3",         long: "Year Three"},
-  { idx: 3, key: "FEL", label: "Fellowship", long: "Vanguard Fellowship" },
+  { idx: 0, key: "Y1",  label: "Freshman",   short: "Freshman",   long: "Year One · Freshman"   },
+  { idx: 1, key: "Y2",  label: "Sophomore",  short: "Sophomore",  long: "Year Two · Sophomore"  },
+  { idx: 2, key: "Y3",  label: "Junior",     short: "Junior",     long: "Year Three · Junior"   },
+  { idx: 3, key: "FEL", label: "Fellowship", short: "Fellowship", long: "Vanguard Fellowship · Postgraduate" },
 ];
 
 const DESIG_COLORS = { hero: "#c41a1a", sidekick: "#1e40af" };
@@ -1416,10 +1416,10 @@ function CurriculumView(){
           </div>
           <div className="curr-primer-r">
             <ul className="curr-primer-list">
-              <li><span className="curr-primer-list-k">Y1</span><span className="curr-primer-list-v">Shared core, no specialisation yet.</span></li>
-              <li><span className="curr-primer-list-k">Y2</span><span className="curr-primer-list-v">Home Department declared.</span></li>
-              <li><span className="curr-primer-list-k">Y3</span><span className="curr-primer-list-v">Deep specialisation and capstones.</span></li>
-              <li><span className="curr-primer-list-k">FEL</span><span className="curr-primer-list-v">Vanguard Fellowship · invitation only.</span></li>
+              <li><span className="curr-primer-list-k">Freshman</span><span className="curr-primer-list-v">Shared core, no specialisation yet.</span></li>
+              <li><span className="curr-primer-list-k">Sophomore</span><span className="curr-primer-list-v">Home Department declared.</span></li>
+              <li><span className="curr-primer-list-k">Junior</span><span className="curr-primer-list-v">Deep specialisation and capstones.</span></li>
+              <li><span className="curr-primer-list-k">Fellowship</span><span className="curr-primer-list-v">Postgraduate, invitation only.</span></li>
             </ul>
           </div>
         </section>
@@ -1429,7 +1429,7 @@ function CurriculumView(){
         <section id="curr-year-Y1" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
-              <div className="curr-year-tag">Y1 · Foundation</div>
+              <div className="curr-year-tag">Freshman · Foundation</div>
               <h3 className="curr-year-title">Shared core. Everyone takes everything.</h3>
               <p className="curr-year-blurb">
                 Year 1 is unified. Every student takes the shared-core literacy floor — Combat, Media, Sciences, Humanities, Doctrine, Athletics — regardless of intended department or assigned designation. Designation is issued at end of orientation; the HRO-/SDK- modules begin in Y1 alongside the core.
@@ -1469,7 +1469,7 @@ function CurriculumView(){
         <section id="curr-year-Y2" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
-              <div className="curr-year-tag">Y2 · Specialisation</div>
+              <div className="curr-year-tag">Sophomore · Specialisation</div>
               <h3 className="curr-year-title">Home Department declared.</h3>
               <p className="curr-year-blurb">
                 Year 2 is when departments matter. Students take required modules in their declared Home Department, plus mandatory electives from at least two other departments. Combat-literacy and Media-literacy requirements (one module from a defined pool) sit inside the Combat and Media &amp; Arts blocks below.
@@ -1514,7 +1514,7 @@ function CurriculumView(){
         <section id="curr-year-Y3" className="curr-year">
           <header className="curr-year-hd">
             <div className="curr-year-hd-l">
-              <div className="curr-year-tag">Y3 · Capstone</div>
+              <div className="curr-year-tag">Junior · Capstone</div>
               <h3 className="curr-year-title">Deep specialisation, capstone modules, field placement.</h3>
               <p className="curr-year-blurb">
                 Year 3 is the last year of the standard programme. Department capstones, the HRO-/SDK- specialism, and the institution's most morally serious modules — COM-301, HIS-303, the senior policy capstone. Students who finish here graduate as standard practitioners; nominations for the Fellowship are issued from this cohort.
