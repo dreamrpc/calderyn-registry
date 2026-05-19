@@ -13492,3 +13492,51 @@ nav.home-scrollnav,
     padding: 3px 9px !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   LORE · DROP CAP — FINAL CONSOLIDATION
+   Three earlier rule blocks (lines ~10785, ~11614, ~12454) were
+   competing. The 11614 one targeted ALL .lore-lead inside .lore-intro
+   which caused both lead paragraphs in LoreWorld to get drop caps.
+   This final block:
+     1. Nukes every variant by selector that any earlier block
+        could have applied to.
+     2. Re-applies a single drop cap rule on the FIRST .lore-lead
+        of each section's .lore-intro — and ONLY that one.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Step 1 — nuke every prior drop-cap rule, including overrides */
+.lore .lore-lead::first-letter,
+.lore .lore-p::first-letter,
+.lore .lore-block .lore-lead::first-letter,
+.lore .lore-block .lore-p::first-letter,
+.lore .lore-intro .lore-lead::first-letter,
+.lore .lore-block.lore-intro + .lore-block .lore-p::first-letter,
+.lore .lore-block.lore-intro + .lore-block .lore-p:first-child::first-letter,
+.lore-section .lore-lead::first-letter,
+.lore-section .lore-p::first-letter,
+.lore-section .lore-intro .lore-lead::first-letter,
+.lore-section .lore-block .lore-lead::first-letter,
+.lore-section .lore-block .lore-p::first-letter,
+.lore-section .lore-block.lore-intro + .lore-block .lore-p::first-letter,
+.lore-section .lore-block.lore-intro + .lore-block .lore-p:first-child::first-letter {
+  font-family: inherit !important;
+  font-weight: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  float: none !important;
+  margin: 0 !important;
+  color: inherit !important;
+}
+
+/* Step 2 — single canonical drop cap rule. Fires on the FIRST
+   .lore-lead inside the .lore-intro block, ONCE per section. */
+.lore-section .lore-intro .lore-lead:first-of-type::first-letter {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 64px !important;
+  line-height: 0.85 !important;
+  float: left !important;
+  margin: 6px 12px 0 0 !important;
+  color: var(--yellow, #d4a84a) !important;
+}
