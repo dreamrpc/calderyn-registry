@@ -7875,9 +7875,7 @@ code, pre, kbd, samp, var, tt,
    ════════════════════════════════════════════════════════════════════ */
 
 .join-hud {
-  position: sticky;
-  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px));
-  z-index: 60;
+  position: static;
   background: #0a0a0a;
   border-top: 2px solid #c9a84c;
   border-bottom: 1px solid rgba(201, 168, 76, 0.18);
@@ -7923,9 +7921,9 @@ code, pre, kbd, samp, var, tt,
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: #c9a84c;
-  padding: 4px 10px;
-  border: 1.5px solid rgba(201, 168, 76, 0.45);
-  background: rgba(201, 168, 76, 0.06);
+  padding: 0;
+  border: 0;
+  background: transparent;
   white-space: nowrap;
 }
 
@@ -25881,7 +25879,9 @@ button.orgs-pill {
    - INTAKE OPEN status pill on far right with a glowing dot.
    ════════════════════════════════════════════════════════════════════ */
 .join-hud {
-  position: relative !important;
+  position: static !important;
+  top: auto !important;
+  z-index: auto !important;
   width: 100vw !important;
   margin-left: calc(50% - 50vw) !important;
   margin-right: calc(50% - 50vw) !important;
@@ -25927,9 +25927,18 @@ button.orgs-pill {
   letter-spacing: 0.28em !important;
   text-transform: uppercase !important;
   color: #d4a843 !important;
-  padding: 6px 16px 6px 0 !important;
-  border-right: 1px solid #1f1f24 !important;
+  padding: 0 !important;
   margin-right: 16px !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+/* Plain pipe separator after the badge — no boxed chrome */
+.join-hud-badge::after {
+  content: "·" !important;
+  display: inline-block !important;
+  margin-left: 16px !important;
+  color: #4a4a52 !important;
+  font-weight: 400 !important;
 }
 .join-hud-pool {
   display: flex !important;
