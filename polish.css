@@ -25879,9 +25879,13 @@ button.orgs-pill {
    - INTAKE OPEN status pill on far right with a glowing dot.
    ════════════════════════════════════════════════════════════════════ */
 .join-hud {
-  position: static !important;
-  top: auto !important;
-  z-index: auto !important;
+  /* Sticky inside the #join wizard — pins under the site nav + tabs
+     strip while writers scroll the form. Safe to leave global since
+     JoinHUD is no longer mounted on any non-join page (StudentsTab
+     mount was reverted). */
+  position: sticky !important;
+  top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px)) !important;
+  z-index: 60 !important;
   width: 100vw !important;
   margin-left: calc(50% - 50vw) !important;
   margin-right: calc(50% - 50vw) !important;

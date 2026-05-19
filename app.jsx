@@ -2365,22 +2365,6 @@ function StudentsTab(){
     }
   }, [ctx]);
 
-  // Live tier counts from the STUDENTS roster, shaped to the JoinHUD
-  // contract: { limits, student: { "A-List": n, ... } }. Limits match
-  // the Worker defaults (A:5, B:8, C:10); D-List is uncapped so the
-  // chip renders as "OPEN".
-  const studentQuotaStats = useMemo(() => {
-    const buckets = { "A-List": 0, "B-List": 0, "C-List": 0, "D-List": 0 };
-    (STUDENTS || []).forEach(s => {
-      const t = (s.tier || "").trim();
-      if (buckets[t] != null) buckets[t] += 1;
-    });
-    return {
-      limits:  { "A-List": 5, "B-List": 8, "C-List": 10 },
-      student: buckets,
-    };
-  }, []);
-
   return (
     <div className="subnav-host">
       <PageHead
@@ -2390,7 +2374,6 @@ function StudentsTab(){
         note={<>No cap on student numbers<br/>New characters always welcome</>}
         pageNum="P. 004 / VIII"
       />
-      <JoinHUD type="student" quotaStats={studentQuotaStats} alwaysShow={true}/>
       <div className="subnav">
         <div className="subnav-inner">
           {[
