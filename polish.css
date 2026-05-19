@@ -21516,3 +21516,870 @@ button.orgs-pill {
   .pg-guide .status-card-desc   { padding-left: 18px !important; padding-right: 18px !important; }
   .pg-guide .status-card-tag    { margin-left: 18px !important; margin-right: 18px !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   CURRICULUM · Y1/Y2/Y3/Fellowship · 8-department layout
+   Department staff grid (HoD + 3 profs), per-year blocks grouped by
+   department, class cards with code + kind + designation chips.
+   Loaded LAST so cascade wins.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Year block */
+.curr-main .curr-year {
+  margin: clamp(40px, 5vw, 64px) 0 0 !important;
+  padding: 0 !important;
+  scroll-margin-top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + 56px) !important;
+}
+.curr-main .curr-year-hd {
+  position: relative !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  margin: 0 0 22px !important;
+  padding: 0 0 16px !important;
+  border-bottom: 2px solid rgba(212,168,74,0.32) !important;
+}
+.curr-main .curr-year-hd::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; bottom: -2px !important;
+  width: 100px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+.curr-main .curr-year-hd-l { flex: 1 1 auto !important; min-width: 0 !important; }
+.curr-main .curr-year-hd-r { flex: 0 0 auto !important; }
+.curr-main .curr-year-tag {
+  display: inline-block !important;
+  padding: 4px 11px !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  background: rgba(212,168,74,0.08) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  margin: 0 0 12px !important;
+  border-radius: 0 !important;
+}
+.curr-main .curr-year-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: clamp(30px, 3.6vw, 44px) !important;
+  letter-spacing: -0.022em !important;
+  line-height: 1.02 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 12px !important;
+  text-transform: none !important;
+  text-shadow:
+    -1.5px 0 0 rgba(227,27,35,0.36),
+     1.5px 0 0 rgba(46,188,212,0.26) !important;
+}
+.curr-main .curr-year-blurb {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14.5px !important;
+  line-height: 1.6 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+  max-width: 880px !important;
+}
+.curr-main .curr-year-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 5px 11px !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  background: rgba(212,168,74,0.06) !important;
+  white-space: nowrap !important;
+}
+
+/* Per-year block (shared core, department group, designation group) */
+.curr-main .curr-block {
+  margin: 22px 0 0 !important;
+  --dept-c: var(--yellow, #d4a84a);
+}
+.curr-main .curr-block-hd {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 0 0 10px !important;
+  margin: 0 0 14px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.22) !important;
+  position: relative !important;
+}
+.curr-main .curr-block-hd::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; bottom: -1px !important;
+  width: 60px !important;
+  height: 2px !important;
+  background: var(--dept-c, var(--yellow, #d4a84a)) !important;
+}
+.curr-main .curr-block-marker {
+  display: inline-block !important;
+  width: 10px !important;
+  height: 10px !important;
+  background: var(--dept-c, var(--yellow, #d4a84a)) !important;
+  flex-shrink: 0 !important;
+}
+.curr-main .curr-block-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--text-1, #f5f1e8) !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+.curr-main .curr-block-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  color: var(--dept-c, var(--yellow, #d4a84a)) !important;
+  padding: 3px 9px !important;
+  border: 1px solid currentColor !important;
+}
+
+/* Class grid (2-up wide, 1 col mobile) */
+.curr-main .curr-class-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 12px !important;
+}
+@media (min-width: 900px)  { .curr-main .curr-class-grid { grid-template-columns: 1fr 1fr !important; } }
+@media (min-width: 1300px) { .curr-main .curr-class-grid { grid-template-columns: 1fr 1fr 1fr !important; } }
+
+/* Class card — code-led, dept stripe (or designation stripe) */
+.curr-main .curr-class {
+  position: relative !important;
+  background: linear-gradient(180deg, rgba(20,20,24,0.65) 0%, rgba(14,14,18,0.65) 100%) !important;
+  border: 1px solid rgba(212,168,74,0.18) !important;
+  border-radius: 0 !important;
+  padding: 14px 16px 14px 18px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  overflow: hidden !important;
+  --class-c: var(--yellow, #d4a84a);
+}
+.curr-main .curr-class.t-hero      { --class-c: #c41a1a; }
+.curr-main .curr-class.t-sidekick  { --class-c: #1e40af; }
+.curr-main .curr-class .curr-class-stripe {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 3px !important;
+  background: var(--class-c) !important;
+}
+.curr-main .curr-class-hd {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+.curr-main .curr-class-code {
+  display: inline-block !important;
+  padding: 3px 8px !important;
+  background: rgba(212,168,74,0.12) !important;
+  border: 1px solid rgba(212,168,74,0.45) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+}
+.curr-main .curr-class-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 8.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 2px 7px !important;
+  border: 1px solid currentColor !important;
+}
+.curr-main .curr-class-tag.is-required    { color: var(--text-3, #948d80) !important; }
+.curr-main .curr-class-tag.is-shared-core { color: var(--yellow, #d4a84a) !important; background: rgba(212,168,74,0.1) !important; }
+.curr-main .curr-class-tag.is-specialism  { color: var(--text-3, #948d80) !important; }
+.curr-main .curr-class-tag.is-literacy    { color: var(--yellow, #d4a84a) !important; background: rgba(212,168,74,0.06) !important; }
+.curr-main .curr-class-tag.is-elective    { color: var(--text-3, #948d80) !important; }
+.curr-main .curr-class-tag.is-designation { color: var(--class-c) !important; background: color-mix(in srgb, var(--class-c) 16%, transparent) !important; }
+.curr-main .curr-class-desig {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 8.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 2px 7px !important;
+  color: #fff !important;
+  background: var(--class-c) !important;
+  border: 1px solid var(--class-c) !important;
+}
+.curr-main .curr-class-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  letter-spacing: -0.005em !important;
+  line-height: 1.15 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 2px 0 !important;
+  text-transform: none !important;
+}
+.curr-main .curr-class-desc {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 12.5px !important;
+  line-height: 1.55 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+}
+.curr-main .curr-class-foot {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  margin-top: 4px !important;
+  padding-top: 8px !important;
+  border-top: 1px solid rgba(212,168,74,0.14) !important;
+}
+.curr-main .curr-class-dept {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--class-c) !important;
+}
+.curr-main .curr-class-fac {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1px !important;
+}
+.curr-main .curr-class-fac-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 8.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.curr-main .curr-class-fac-val {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13px !important;
+  color: var(--text-1, #f5f1e8) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+.curr-main .curr-class-fac-val .clink,
+.curr-main .curr-class-fac-val .cname { color: inherit !important; }
+.curr-main .curr-class-fac-open {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  padding: 3px 8px !important;
+  background: rgba(227,27,35,0.06) !important;
+  border: 1px dashed rgba(227,27,35,0.55) !important;
+  color: rgba(255,140,148,0.95) !important;
+}
+
+/* Department triad grid — HoD + 3 profs as 4 columns on wide screens */
+.curr-main .curr-dept-staff {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+  background: #08080b !important;
+  border: 1px solid rgba(212,168,74,0.2) !important;
+  margin: 14px 0 0 !important;
+}
+@media (min-width: 760px)  { .curr-main .curr-dept-staff { grid-template-columns: 1fr 1fr !important; } }
+@media (min-width: 1100px) { .curr-main .curr-dept-staff { grid-template-columns: 1.1fr 1fr 1fr 1fr !important; } }
+
+.curr-main .curr-staff {
+  padding: 14px 12px !important;
+  background: transparent !important;
+  border-right: 1px solid rgba(212,168,74,0.16) !important;
+  border-bottom: 1px solid rgba(212,168,74,0.16) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  align-items: center !important;
+  text-align: center !important;
+  position: relative !important;
+}
+.curr-main .curr-staff:last-child { border-right: 0 !important; }
+.curr-main .curr-staff.is-head {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--dept-c, #d4a84a) 14%, transparent) 0%, color-mix(in srgb, var(--dept-c, #d4a84a) 4%, transparent) 100%) !important;
+  border-right: 1px solid color-mix(in srgb, var(--dept-c, #d4a84a) 40%, transparent) !important;
+}
+.curr-main .curr-staff.is-head::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; right: 0 !important;
+  top: 0 !important;
+  height: 2px !important;
+  background: var(--dept-c, var(--yellow, #d4a84a)) !important;
+}
+.curr-main .curr-staff-slot {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin: 0 0 4px !important;
+}
+.curr-main .curr-staff.is-head .curr-staff-slot {
+  color: var(--dept-c, var(--yellow, #d4a84a)) !important;
+}
+.curr-main .curr-staff-name {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 15px !important;
+  letter-spacing: -0.005em !important;
+  line-height: 1.15 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 !important;
+}
+.curr-main .curr-staff.is-head .curr-staff-name { font-size: 17px !important; }
+.curr-main .curr-staff-name .clink,
+.curr-main .curr-staff-name .cname { color: inherit !important; }
+.curr-main .curr-staff-stage {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--dept-c, var(--yellow, #d4a84a)) !important;
+}
+.curr-main .curr-staff-role {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 11.5px !important;
+  font-style: italic !important;
+  color: var(--text-3, #948d80) !important;
+  margin: 2px 0 0 !important;
+}
+.curr-main .curr-staff-open {
+  display: inline-block !important;
+  padding: 3px 9px !important;
+  border: 1px dashed rgba(212,168,74,0.55) !important;
+  background: rgba(212,168,74,0.05) !important;
+  color: var(--text-3, #948d80) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+}
+
+/* Instructional Staff line beneath the triad */
+.curr-main .curr-dept-aux {
+  margin: 14px 0 0 !important;
+  padding: 12px 14px !important;
+  background: rgba(20,20,24,0.5) !important;
+  border: 1px solid rgba(212,168,74,0.14) !important;
+}
+.curr-main .curr-dept-aux-lbl {
+  display: block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  margin: 0 0 8px !important;
+}
+.curr-main .curr-dept-aux-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+.curr-main .curr-dept-aux-item {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 12px !important;
+  color: var(--text-2, #c9c3b5) !important;
+  padding: 3px 9px !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  background: rgba(212,168,74,0.04) !important;
+}
+.curr-main .curr-dept-aux-open {
+  color: rgba(255,140,148,0.95) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+}
+
+/* Eight-department grid for the DEPARTMENTS section */
+.curr-main .curr-depts-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 18px !important;
+}
+@media (min-width: 1100px) { .curr-main .curr-depts-grid { grid-template-columns: 1fr 1fr !important; } }
+
+/* Fellowship section */
+.curr-main .curr-year-fellowship .curr-fellowship-card {
+  background: linear-gradient(180deg, #0c0c12 0%, #08080b 100%) !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  border-left: 4px solid var(--yellow, #d4a84a) !important;
+  padding: 24px 28px !important;
+  margin: 22px 0 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+.curr-main .curr-fellowship-card::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background-image: radial-gradient(circle 1px at 50% 50%, rgba(244,200,110,0.04) 1px, transparent 1.5px);
+  background-size: 6px 6px !important;
+  opacity: 0.5 !important;
+  mix-blend-mode: screen !important;
+  z-index: 0;
+}
+.curr-main .curr-fellowship-card > * { position: relative !important; z-index: 1 !important; }
+.curr-main .curr-fellowship-card-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  flex-wrap: wrap !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 14px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+}
+.curr-main .curr-fellowship-stamp {
+  display: inline-block !important;
+  padding: 5px 12px !important;
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3em !important;
+  text-transform: uppercase !important;
+}
+.curr-main .curr-fellowship-meta {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.curr-main .curr-fellowship-body {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+}
+
+/* Hide every legacy curriculum element that no longer applies */
+.curr-main .curr-yearhead,
+.curr-main .curr-summary,
+.curr-main .curr-classes,
+.curr-main .curr-timetable,
+.curr-main .curr-electives,
+.curr-main .curr-dept-triad,
+.curr-main .curr-dept-classes,
+.curr-main .curr-dept-class,
+.curr-main .curr-rows { display: none !important; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   CURRICULUM · STREAMLINE (replaces heavy chrome from the first cut)
+   Drops the DEPARTMENTS card grid (lives on Faculty Registry instead).
+   Calmer year sections, lighter block headers, streamlined class cards.
+   Reads cleanly for a new member.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Page wrap */
+.curr-main { padding: 24px clamp(20px, 4vw, 32px) 80px !important; max-width: 1320px !important; }
+
+/* Drop the heavy 8-card DEPARTMENTS section entirely */
+.curr-main .curr-depts { display: none !important; }
+
+/* Overview primer · sits at the top, replaces the DEPARTMENTS card grid */
+.curr-main .curr-primer {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 18px !important;
+  background: linear-gradient(180deg, #0c0c12 0%, #08080b 100%) !important;
+  border: 1px solid rgba(212,168,74,0.22) !important;
+  border-left: 4px solid var(--yellow, #d4a84a) !important;
+  padding: 24px 26px !important;
+  margin: 8px 0 0 !important;
+}
+@media (min-width: 900px) { .curr-main .curr-primer { grid-template-columns: 1.4fr 1fr !important; gap: 28px !important; } }
+.curr-primer-tag {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+  padding: 4px 11px !important;
+  background: rgba(212,168,74,0.08) !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  margin-bottom: 12px !important;
+}
+.curr-primer-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: clamp(22px, 2.4vw, 28px) !important;
+  letter-spacing: -0.012em !important;
+  line-height: 1.1 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 10px !important;
+  text-transform: none !important;
+}
+.curr-primer-body {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14.5px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 10px !important;
+  max-width: 720px !important;
+}
+.curr-primer-body-quiet { color: var(--text-3, #948d80) !important; font-size: 13.5px !important; }
+.curr-primer-body strong { color: var(--text-1, #f5f1e8) !important; font-weight: 600 !important; }
+.curr-primer-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+.curr-primer-list li {
+  display: grid !important;
+  grid-template-columns: 50px 1fr !important;
+  gap: 12px !important;
+  align-items: baseline !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid rgba(212,168,74,0.12) !important;
+}
+.curr-primer-list li:last-child { border-bottom: 0 !important; padding-bottom: 0 !important; }
+.curr-primer-list-k {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--yellow, #d4a84a) !important;
+}
+.curr-primer-list-v {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.45 !important;
+  color: var(--text-2, #c9c3b5) !important;
+}
+
+/* Year section — lighter header, no chunky gold-stripe-under-everything */
+.curr-main .curr-year {
+  margin: clamp(36px, 4vw, 56px) 0 0 !important;
+  scroll-margin-top: calc(var(--hdr-h, 100px) + var(--tabs-h, 53px) + 56px) !important;
+}
+.curr-main .curr-year-hd {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 18px !important;
+  margin: 0 0 18px !important;
+  padding: 0 0 12px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.22) !important;
+  position: relative !important;
+}
+.curr-main .curr-year-hd::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important; bottom: -1px !important;
+  width: 60px !important;
+  height: 2px !important;
+  background: var(--yellow, #d4a84a) !important;
+}
+.curr-main .curr-year-tag {
+  display: inline-block !important;
+  padding: 3px 10px !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  background: rgba(212,168,74,0.08) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  margin: 0 0 10px !important;
+}
+.curr-main .curr-year-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: clamp(24px, 2.8vw, 32px) !important;
+  letter-spacing: -0.015em !important;
+  line-height: 1.06 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 0 8px !important;
+  text-shadow: none !important;
+}
+.curr-main .curr-year-blurb {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: var(--text-3, #948d80) !important;
+  margin: 0 !important;
+  max-width: 820px !important;
+}
+.curr-main .curr-year-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 4px 10px !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  background: rgba(212,168,74,0.04) !important;
+  white-space: nowrap !important;
+}
+
+/* Per-block heading (Shared Core, Designation, per-dept) — light */
+.curr-main .curr-block {
+  margin: 18px 0 0 !important;
+  --dept-c: var(--yellow, #d4a84a);
+}
+.curr-main .curr-block-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 10px !important;
+  padding: 0 0 8px !important;
+  margin: 0 0 12px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.14) !important;
+  background: transparent !important;
+}
+.curr-main .curr-block-hd::after { display: none !important; }
+.curr-main .curr-block-marker {
+  display: inline-block !important;
+  width: 8px !important; height: 8px !important;
+  background: var(--dept-c, var(--yellow, #d4a84a)) !important;
+  flex-shrink: 0 !important;
+}
+.curr-main .curr-block-tag {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-1, #f5f1e8) !important;
+  flex: 1 1 auto !important;
+}
+.curr-main .curr-block-count {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+/* Class grid — wider, more classes per row */
+.curr-main .curr-class-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+}
+@media (min-width: 720px)  { .curr-main .curr-class-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; } }
+@media (min-width: 1100px) { .curr-main .curr-class-grid { grid-template-columns: 1fr 1fr 1fr !important; } }
+
+/* Streamlined class card */
+.curr-main .curr-class {
+  position: relative !important;
+  background: linear-gradient(180deg, rgba(20,20,24,0.55) 0%, rgba(14,14,18,0.55) 100%) !important;
+  border: 1px solid rgba(212,168,74,0.18) !important;
+  border-radius: 0 !important;
+  padding: 14px 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  overflow: hidden !important;
+  --class-c: var(--yellow, #d4a84a);
+  transition: border-color 180ms ease, background 180ms ease !important;
+}
+.curr-main .curr-class:hover {
+  border-color: rgba(212,168,74,0.45) !important;
+  background: linear-gradient(180deg, rgba(24,24,28,0.7) 0%, rgba(18,18,22,0.7) 100%) !important;
+}
+.curr-main .curr-class.is-designation {
+  border-left: 3px solid var(--class-c) !important;
+}
+.curr-main .curr-class .curr-class-stripe { display: none !important; }
+
+.curr-main .curr-class-hd {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+}
+.curr-main .curr-class-code {
+  display: inline-block !important;
+  padding: 3px 8px !important;
+  background: rgba(212,168,74,0.1) !important;
+  border: 1px solid rgba(212,168,74,0.4) !important;
+  color: var(--yellow, #d4a84a) !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+}
+.curr-main .curr-class-kind {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.curr-main .curr-class.is-designation .curr-class-kind {
+  color: var(--class-c) !important;
+}
+.curr-main .curr-class-title {
+  font-family: var(--display, 'Druk', sans-serif) !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  letter-spacing: -0.005em !important;
+  line-height: 1.18 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 2px 0 !important;
+  text-transform: none !important;
+}
+.curr-main .curr-class-desc {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 12.5px !important;
+  line-height: 1.55 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+}
+.curr-main .curr-class-foot {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-top: 4px !important;
+  padding-top: 8px !important;
+  border-top: 1px solid rgba(212,168,74,0.12) !important;
+}
+.curr-main .curr-class-fac {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  min-width: 0 !important;
+}
+.curr-main .curr-class-fac-lbl {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  line-height: 1 !important;
+  margin-bottom: 2px !important;
+}
+.curr-main .curr-class-fac-val {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--text-1, #f5f1e8) !important;
+  line-height: 1.2 !important;
+}
+.curr-main .curr-class-fac-val .clink,
+.curr-main .curr-class-fac-val .cname { color: inherit !important; }
+.curr-main .curr-class-fac-open {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  font-style: italic !important;
+  line-height: 1.2 !important;
+}
+.curr-main .curr-class-dept {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  padding: 2px 8px !important;
+  background: color-mix(in srgb, var(--class-c) 12%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--class-c) 45%, transparent) !important;
+  color: var(--class-c) !important;
+  white-space: nowrap !important;
+}
+
+/* Fellowship card */
+.curr-main .curr-fellowship-card {
+  background: linear-gradient(180deg, rgba(20,20,24,0.65) 0%, rgba(14,14,18,0.65) 100%) !important;
+  border: 1px solid rgba(212,168,74,0.32) !important;
+  border-left: 4px solid var(--yellow, #d4a84a) !important;
+  padding: 22px 24px !important;
+  margin: 18px 0 0 !important;
+}
+.curr-main .curr-fellowship-card-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+  margin-bottom: 14px !important;
+  padding-bottom: 12px !important;
+  border-bottom: 1px solid rgba(212,168,74,0.18) !important;
+}
+.curr-main .curr-fellowship-stamp {
+  padding: 4px 11px !important;
+  background: var(--yellow, #d4a84a) !important;
+  color: #0a0a0a !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+}
+.curr-main .curr-fellowship-meta {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.curr-main .curr-fellowship-body {
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 720px) {
+  .curr-main { padding: 16px 16px 60px !important; }
+  .curr-main .curr-primer { padding: 18px 18px !important; }
+  .curr-main .curr-class { padding: 12px 14px !important; }
+}

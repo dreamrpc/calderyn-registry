@@ -1159,167 +1159,218 @@ function RulesTab(){
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CURRICULUM
+   CURRICULUM · Y1/Y2/Y3/Fellowship · eight-department model
 ═══════════════════════════════════════════════════════════════════════════ */
-/* ─── Curriculum helpers — shared by CurriculumView, ClassCard, etc. ── */
-const YEAR_KEY  = { FR: 0, SO: 1, JR: 2, SR: 3 };
+const YEAR_KEY  = { Y1: 0, Y2: 1, Y3: 2, FEL: 3 };
 const YEAR_TABS = [
-  { idx: 0, key: "FR", label: "Freshman" },
-  { idx: 1, key: "SO", label: "Sophomore" },
-  { idx: 2, key: "JR", label: "Junior" },
-  { idx: 3, key: "SR", label: "Senior" },
+  { idx: 0, key: "Y1",  label: "Y1",         long: "Year One"  },
+  { idx: 1, key: "Y2",  label: "Y2",         long: "Year Two"  },
+  { idx: 2, key: "Y3",  label: "Y3",         long: "Year Three"},
+  { idx: 3, key: "FEL", label: "Fellowship", long: "Vanguard Fellowship" },
 ];
 
-// Resolve a department class's faculty using the triad rule.
-function resolveDeptFaculty(dept, cls){
-  if (cls.headSubs || cls.type === "shared") return dept.head;
-  if (cls.type === "hero")     return dept.taHero;
-  if (cls.type === "sidekick") return dept.taSidekick;
+const DESIG_COLORS = { hero: "#c41a1a", sidekick: "#1e40af" };
+
+/* Resolve a department class's faculty using the new staff[] model.
+   taughtBy = "HoD" → dept.head. "Prof. 1/2/3" → dept.staff[0..2]. */
+function resolveCourseFaculty(dept, cls){
+  if (!dept) return null;
+  const t = (cls?.taughtBy || "").toLowerCase();
+  if (t === "hod" || t.startsWith("head")) return dept.head;
+  const m = t.match(/prof\.?\s*([123])/);
+  if (m) return (dept.staff || [])[parseInt(m[1], 10) - 1];
   return dept.head;
 }
 
-// Gather every class in the curriculum into a single flat array, with
-// resolved faculty + per-class type/kind. Pulls from FACULTY rows AND
-// the departments triads.
-function gatherCurriculum(){
-  const all = [];
-  FACULTY.forEach(sec => {
-    sec.rows.forEach(r => {
-      if (!r.subjects || !r.tracks) return;
-      r.subjects.forEach(subj => {
-        if (typeof subj === "string") return; // legacy
-        const type = subj.type ?? (
-          (r.tracks || []).length > 1 ? "shared"
-          : (r.tracks || [])[0] === "hero"     ? "hero"
-          : (r.tracks || [])[0] === "sidekick" ? "sidekick"
-          : "shared"
-        );
-        const kind = subj.kind ?? (sec.section.includes("ELECTIVE") ? "elective" : "required");
-        all.push({
-          title: subj.title,
-          desc: subj.desc || null,
-          year: subj.year || null,
-          type, kind,
-          mandatory: !!subj.mandatory,
-          dept: null,
-          deptName: null,
-          deptColor: null,
-          headSubs: false,
-          faculty: {
-            char:  r.char  || null,
-            role:  r.role,
-            link:  r.link  || null,
-            npc:   !!r.npc,
-            stage: r.stage || null,
-          },
-        });
-      });
-    });
-  });
+function profLabel(fac){
+  if (!fac) return null;
+  return fac.char || fac.role || null;
+}
+
+/* Gather every class in the curriculum into a single flat array.
+   Pulls from departments[].classes + designationModules + sharedCoreExtra.
+   Each entry: {code, year, kind, title, desc, designation?, dept?, ...} */
+function gatherCurriculumClasses(){
+  const out = [];
   (D.departments || []).forEach(dept => {
     (dept.classes || []).forEach(cls => {
-      const fac = resolveDeptFaculty(dept, cls);
-      all.push({
-        title: cls.title,
-        desc: cls.desc || null,
+      const fac = resolveCourseFaculty(dept, cls);
+      out.push({
+        code: cls.code,
         year: cls.year,
-        type: cls.type,
-        kind: "required",
-        mandatory: false,
+        kind: cls.kind,
+        title: cls.title,
+        desc: cls.desc,
+        taughtBy: cls.taughtBy || null,
+        designation: cls.designation || null,
         dept: dept.id,
         deptName: dept.name,
+        deptCode: dept.code,
         deptColor: dept.color,
-        headSubs: !!cls.headSubs,
         faculty: fac ? {
-          char:  fac.char  || null,
-          role:  fac.role,
-          link:  fac.link  || null,
+          char:  fac.char || null,
+          role:  fac.role || (typeof cls.taughtBy === "string" ? cls.taughtBy : null),
+          link:  fac.link || null,
           npc:   !!fac.npc,
-          stage: fac.stage || null,
         } : null,
       });
     });
   });
-  return all;
+  (D.designationModules || []).forEach(cls => {
+    out.push({
+      code: cls.code,
+      year: cls.year,
+      kind: "designation",
+      title: cls.title,
+      desc: cls.desc,
+      designation: cls.designation,
+      dept: null,
+      deptName: cls.designation === "hero" ? "Heroes Track" : "Sidekicks Track",
+      deptCode: cls.designation === "hero" ? "HRO" : "SDK",
+      deptColor: DESIG_COLORS[cls.designation] || "#d4a84a",
+      faculty: null,
+    });
+  });
+  (D.sharedCoreExtra || []).forEach(cls => {
+    out.push({
+      code: cls.code,
+      year: cls.year,
+      kind: cls.kind || "shared-core",
+      title: cls.title,
+      desc: cls.desc,
+      taughtBy: cls.taughtBy || null,
+      designation: null,
+      dept: null,
+      deptName: "Tutorial System",
+      deptCode: "TUT",
+      deptColor: "#d4a84a",
+      faculty: null,
+    });
+  });
+  return out;
 }
 
-/* Single class card — used in the year-timetable columns and the
-   electives grid at the bottom. All info visible at a glance. */
+/* Single class card · streamlined. Code chip + Druk title up top, short
+   desc, single kind tag at the bottom-left, faculty + dept chip on the
+   bottom-right. Designation cards get a red/blue accent corner. */
 function ClassCard({cls}){
   const fac = cls.faculty;
-  const facName = fac ? (fac.char || fac.role || "—") : "—";
-  const facOpen = !fac?.char;
-  const typeClass = "t-" + (cls.type || "shared");
-  const tags = [];
-  if (cls.kind === "elective") tags.push({label: "ELECTIVE", cls: "is-elective"});
-  else tags.push({label: "REQUIRED", cls: "is-required"});
-  if (cls.mandatory) tags.push({label: "MANDATORY", cls: "is-mandatory"});
-  if (cls.headSubs) tags.push({label: "HoD COVER", cls: "is-subs"});
+  const facName = fac?.char || null;
+  const facRole = fac?.role || cls.taughtBy || null;
+  const facOpen = !facName;
+  const accentColor = cls.designation
+    ? (DESIG_COLORS[cls.designation] || "#d4a84a")
+    : (cls.deptColor || "#d4a84a");
+
+  const kindLabel =
+      cls.kind === "shared-core" ? "Shared Core"
+    : cls.kind === "designation" ? (cls.designation === "hero" ? "Heroes Track" : "Sidekicks Track")
+    : cls.kind === "elective"    ? "Elective"
+    : cls.kind === "specialism"  ? "Specialism"
+    : cls.kind === "literacy"    ? "Literacy Pool"
+    : "Required";
 
   return (
-    <article className={"curr-class " + typeClass + (cls.kind === "elective" ? " is-elective" : "")}>
-      <div className="curr-class-stripe" aria-hidden="true"/>
+    <article
+      className={"curr-class" + (cls.designation ? " is-designation t-" + cls.designation : "")}
+      style={{ "--class-c": accentColor }}
+    >
       <header className="curr-class-hd">
-        {cls.year && <span className="curr-class-year">{cls.year}</span>}
-        <span className={"curr-class-type " + typeClass}>
-          {cls.type === "hero" ? "Heroes" : cls.type === "sidekick" ? "Sidekicks" : "Shared"}
-        </span>
-        {cls.deptName && (
-          <span className="curr-class-dept" style={{"--dept-c": cls.deptColor || "#d4a84a"}}>
-            {cls.deptName}
-          </span>
-        )}
+        <span className="curr-class-code">{cls.code}</span>
+        <span className="curr-class-kind">{kindLabel}</span>
       </header>
       <h5 className="curr-class-title">{cls.title}</h5>
       {cls.desc && <p className="curr-class-desc">{cls.desc}</p>}
       <footer className="curr-class-foot">
         <div className="curr-class-fac">
-          <span className="curr-class-fac-lbl">Taught by</span>
-          <span className={"curr-class-fac-val" + (facOpen ? " is-open" : "")}>
-            {facOpen
-              ? <span className="curr-class-fac-open">OPEN · {fac?.role || "unassigned"}</span>
-              : (fac?.link
+          {facOpen ? (
+            <span className="curr-class-fac-open">Open · {facRole || "unassigned"}</span>
+          ) : (
+            <>
+              <span className="curr-class-fac-lbl">Taught by</span>
+              <span className="curr-class-fac-val">
+                {fac.link
                   ? <CLink name={facName} link={fac.link}/>
-                  : <span>{facName}</span>)}
-            {fac?.npc && !facOpen && <NpcBadge/>}
-          </span>
+                  : <span>{facName}</span>}
+                {fac.npc && <NpcBadge/>}
+              </span>
+            </>
+          )}
         </div>
-        <div className="curr-class-tags">
-          {tags.map((t, i) => (
-            <span key={i} className={"curr-class-tag " + t.cls}>{t.label}</span>
-          ))}
-        </div>
+        {cls.deptName && (
+          <span className="curr-class-dept">{cls.deptName}</span>
+        )}
       </footer>
     </article>
   );
 }
 
+/* Single staff card · used inside the department triad grid */
+function DeptStaffCard({person, slot, isHead, deptColor}){
+  const filled = !!person?.char;
+  return (
+    <div
+      className={"curr-staff" + (isHead ? " is-head" : "") + (filled ? " is-filled" : " is-open")}
+      style={{ "--dept-c": deptColor || "#d4a84a" }}
+    >
+      <div className="curr-staff-slot">{slot}</div>
+      {filled ? (
+        <>
+          <div className="curr-staff-name">
+            {person.link
+              ? <CLink name={person.char} link={person.link}/>
+              : <span>{person.char}</span>}
+            {person.npc && <NpcBadge/>}
+          </div>
+          {person.stage && <div className="curr-staff-stage">{person.stage}</div>}
+          <div className="curr-staff-role">{person.role}</div>
+        </>
+      ) : (
+        <>
+          <div className="curr-staff-name">
+            <span className="curr-staff-open">OPEN</span>
+          </div>
+          {person?.role && <div className="curr-staff-role">{person.role}</div>}
+        </>
+      )}
+    </div>
+  );
+}
+
 function CurriculumView(){
-  const tracks = D.curriculumTracks;
-  const [activeYear, setActiveYear] = useState("FR");
+  const [activeYear, setActiveYear] = useState("Y1");
 
-  // Build the curriculum once.
-  const allClasses = gatherCurriculum();
+  const allClasses = gatherCurriculumClasses();
+  const byYear = (y) => allClasses.filter(c => c.year === y);
 
-  // Required classes, bucketed by [year][type].
-  // year = "FR"|"SO"|"JR"|"SR", type = "shared"|"hero"|"sidekick"
-  const required = allClasses.filter(c => c.kind === "required" && c.year);
-  const bucket = (year, type) => required
-    .filter(c => c.year === year && c.type === type)
-    .sort((a, b) => a.title.localeCompare(b.title));
+  // Y1 splits: shared core (all departments + TUT-101) + Y1 designation modules
+  const y1Shared = byYear("Y1").filter(c => c.kind === "shared-core")
+    .sort((a, b) => (a.code || "").localeCompare(b.code || ""));
+  const y1Desig = byYear("Y1").filter(c => c.kind === "designation")
+    .sort((a, b) => (a.code || "").localeCompare(b.code || ""));
 
-  // Electives — no year, just title-sorted.
-  const electives = allClasses
-    .filter(c => c.kind === "elective")
-    .sort((a, b) => a.title.localeCompare(b.title));
+  // Y2/Y3 grouped by department + designation modules at the bottom
+  const groupYearByDept = (y) => {
+    const list = byYear(y).filter(c => c.kind !== "designation");
+    const groups = (D.departments || []).map(dept => ({
+      dept,
+      classes: list.filter(c => c.dept === dept.id)
+        .sort((a, b) => (a.code || "").localeCompare(b.code || "")),
+    })).filter(g => g.classes.length > 0);
+    const designation = byYear(y).filter(c => c.kind === "designation")
+      .sort((a, b) => (a.code || "").localeCompare(b.code || ""));
+    return { groups, designation };
+  };
+  const y2 = groupYearByDept("Y2");
+  const y3 = groupYearByDept("Y3");
 
-  // Scroll-spy on year sections — anchor jumps highlight the active tab.
+  // Year scroll-spy
   useEffect(() => {
     let raf = 0;
     const update = () => {
       raf = 0;
       const trigger = window.innerHeight * 0.28;
-      let current = "FR";
+      let current = "Y1";
       for (const yt of YEAR_TABS) {
         const el = document.getElementById("curr-year-" + yt.key);
         if (!el) continue;
@@ -1335,24 +1386,14 @@ function CurriculumView(){
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);
-
   const jumpToYear = (key) => {
     const el = document.getElementById("curr-year-" + key);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const heroTrack     = tracks.find(t => t.title.toLowerCase() === "heroes");
-  const sidekickTrack = tracks.find(t => t.title.toLowerCase() === "sidekicks");
-
-  // For per-year track summary cards (hero year text + sidekick year text)
-  const yearText = (key) => ({
-    hero: heroTrack?.years?.[YEAR_KEY[key]],
-    side: sidekickTrack?.years?.[YEAR_KEY[key]],
-  });
-
   return (
     <div className="curr">
-      {/* Year nav — anchor jumps, scroll-spy keeps the active year lit. */}
+      {/* Year nav — Y1 / Y2 / Y3 / Fellowship anchor jumps */}
       <nav className="lore-nav curr-nav" aria-label="Jump to year">
         <ol className="lore-nav-list">
           {YEAR_TABS.map(yt => (
@@ -1375,137 +1416,176 @@ function CurriculumView(){
 
       <main className="curr-main">
 
-        {/* SECTION C · DEPARTMENTS (always visible, year-agnostic) */}
-        <section className="curr-depts">
-          <header className="curr-depts-hd">
-            <div className="curr-depts-tag">Departments</div>
-            <h3 className="curr-depts-title">Combat &amp; Media · the two triads.</h3>
-            <p className="curr-depts-blurb">
-              Two teaching departments run on a head + two TA structure. The Head of Department teaches the shared/cross-track classes; track-specific classes are taught by the matching TA. A head may step in for a single class when the story calls for it — those are flagged below.
+        {/* OVERVIEW PRIMER · what to read first */}
+        <section className="curr-primer">
+          <div className="curr-primer-l">
+            <span className="curr-primer-tag">How the curriculum works</span>
+            <h3 className="curr-primer-title">Three years, eight departments, one Fellowship.</h3>
+            <p className="curr-primer-body">
+              Year 1 is unified — every student takes the same shared core. Year 2 declares a Home Department and specialisation begins. Year 3 is capstone and field placement. A small postgraduate Fellowship cohort is invited from across the eight departments at the end of Year 2.
             </p>
-          </header>
-          <div className="curr-depts-grid">
-            {(D.departments || []).map(dept => (
-              <article key={dept.id} className="curr-dept" style={{"--dept-c": dept.color || "#d4a84a"}}>
-                <header className="curr-dept-hd">
-                  <div className="curr-dept-hd-l">
-                    <span className="curr-dept-hd-eyebrow">Department</span>
-                    <h4 className="curr-dept-hd-name">{dept.name}</h4>
-                  </div>
-                  <span className="curr-dept-hd-count">
-                    {dept.classes.length} {dept.classes.length === 1 ? "class" : "classes"}
-                  </span>
-                </header>
-                {dept.blurb && <p className="curr-dept-blurb">{dept.blurb}</p>}
-                <div className="curr-dept-triad">
-                  <DeptPerson faculty={dept.taHero}     label="TA · Heroes"             color={dept.color} deptId={dept.id}/>
-                  <DeptPerson faculty={dept.head}       label="Head of Department" isHead color={dept.color} deptId={dept.id}/>
-                  <DeptPerson faculty={dept.taSidekick} label="TA · Sidekicks"          color={dept.color} deptId={dept.id}/>
-                </div>
-              </article>
-            ))}
+            <p className="curr-primer-body curr-primer-body-quiet">
+              Heroes and Sidekicks designations run alongside the academic track. Designation modules (HRO- / SDK-) are flagged on each card. To see the full faculty roster, head to the <strong>Faculty Registry</strong> tab.
+            </p>
+          </div>
+          <div className="curr-primer-r">
+            <ul className="curr-primer-list">
+              <li><span className="curr-primer-list-k">Y1</span><span className="curr-primer-list-v">Shared core, no specialisation yet.</span></li>
+              <li><span className="curr-primer-list-k">Y2</span><span className="curr-primer-list-v">Home Department declared.</span></li>
+              <li><span className="curr-primer-list-k">Y3</span><span className="curr-primer-list-v">Deep specialisation and capstones.</span></li>
+              <li><span className="curr-primer-list-k">FEL</span><span className="curr-primer-list-v">Vanguard Fellowship · invitation only.</span></li>
+            </ul>
           </div>
         </section>
 
-        {/* SECTION B · per-year TIMETABLE (4 year sections stacked) */}
-        {YEAR_TABS.map(yt => {
-          const sharedCol = bucket(yt.key, "shared");
-          const heroCol   = bucket(yt.key, "hero");
-          const sideCol   = bucket(yt.key, "sidekick");
-          const total     = sharedCol.length + heroCol.length + sideCol.length;
-          const yt_text   = yearText(yt.key);
-          return (
-            <section
-              key={yt.key}
-              id={"curr-year-" + yt.key}
-              className="curr-year"
-            >
-              <header className="curr-year-hd">
-                <div className="curr-year-hd-l">
-                  <div className="curr-year-tag">Year {yt.idx + 1}</div>
-                  <h3 className="curr-year-title">{yt.label}</h3>
-                </div>
-                <div className="curr-year-hd-r">
-                  <span className="curr-year-count">{total} {total === 1 ? "class" : "classes"}</span>
-                </div>
-              </header>
-
-              {/* SECTION A · two-track summary cards, per year */}
-              <div className="curr-summary">
-                <article className="curr-track curr-track-hero">
-                  <div className="curr-track-hd">
-                    <span className="curr-track-tag">Track One · Heroes</span>
-                    <h4 className="curr-track-name">{yt_text.hero?.t || "—"}</h4>
-                  </div>
-                  {yt_text.hero?.d && <p className="curr-track-desc">{yt_text.hero.d}</p>}
-                </article>
-                <article className="curr-track curr-track-side">
-                  <div className="curr-track-hd">
-                    <span className="curr-track-tag">Track Two · Sidekicks</span>
-                    <h4 className="curr-track-name">{yt_text.side?.t || "—"}</h4>
-                  </div>
-                  {yt_text.side?.d && <p className="curr-track-desc">{yt_text.side.d}</p>}
-                </article>
-              </div>
-
-              {/* Timetable — 3 columns: Shared / Heroes / Sidekicks */}
-              <div className="curr-timetable">
-                <div className="curr-col curr-col-shared">
-                  <header className="curr-col-hd">
-                    <span className="curr-col-marker"/>
-                    <span className="curr-col-name">Shared</span>
-                    <span className="curr-col-count">{sharedCol.length}</span>
-                  </header>
-                  <div className="curr-col-body">
-                    {sharedCol.length === 0
-                      ? <div className="curr-col-empty">No shared modules this year.</div>
-                      : sharedCol.map((c, i) => <ClassCard key={i} cls={c}/>)}
-                  </div>
-                </div>
-                <div className="curr-col curr-col-hero">
-                  <header className="curr-col-hd">
-                    <span className="curr-col-marker"/>
-                    <span className="curr-col-name">Heroes</span>
-                    <span className="curr-col-count">{heroCol.length}</span>
-                  </header>
-                  <div className="curr-col-body">
-                    {heroCol.length === 0
-                      ? <div className="curr-col-empty">No hero-track modules this year.</div>
-                      : heroCol.map((c, i) => <ClassCard key={i} cls={c}/>)}
-                  </div>
-                </div>
-                <div className="curr-col curr-col-side">
-                  <header className="curr-col-hd">
-                    <span className="curr-col-marker"/>
-                    <span className="curr-col-name">Sidekicks</span>
-                    <span className="curr-col-count">{sideCol.length}</span>
-                  </header>
-                  <div className="curr-col-body">
-                    {sideCol.length === 0
-                      ? <div className="curr-col-empty">No sidekick-track modules this year.</div>
-                      : sideCol.map((c, i) => <ClassCard key={i} cls={c}/>)}
-                  </div>
-                </div>
-              </div>
-            </section>
-          );
-        })}
-
-        {/* SECTION D · ELECTIVES (year-agnostic, bottom) */}
-        {electives.length > 0 && (
-          <section className="curr-electives">
-            <header className="curr-electives-hd">
-              <div className="curr-electives-tag">Electives</div>
-              <h3 className="curr-electives-title">Open to both tracks · year-flexible.</h3>
-              <p className="curr-electives-blurb">
-                Students self-select based on aptitude, ambition, and what they want their post-Calderyn life to look like. Some align naturally with house culture; none are gated by house.
+        {/* Y1 · Shared Core */}
+        <section id="curr-year-Y1" className="curr-year">
+          <header className="curr-year-hd">
+            <div className="curr-year-hd-l">
+              <div className="curr-year-tag">Y1 · Foundation</div>
+              <h3 className="curr-year-title">Shared core. Everyone takes everything.</h3>
+              <p className="curr-year-blurb">
+                Year 1 is unified. Every student takes the shared-core literacy floor — Combat, Media, Sciences, Humanities, Doctrine, Athletics — regardless of intended department or assigned designation. Designation is issued at end of orientation; the HRO-/SDK- modules begin in Y1 alongside the core.
               </p>
-            </header>
-            <div className="curr-electives-grid">
-              {electives.map((c, i) => <ClassCard key={i} cls={c}/>)}
             </div>
-          </section>
-        )}
+            <div className="curr-year-hd-r">
+              <span className="curr-year-count">{y1Shared.length + y1Desig.length} classes</span>
+            </div>
+          </header>
+
+          <div className="curr-block">
+            <header className="curr-block-hd">
+              <span className="curr-block-tag">Shared Core</span>
+              <span className="curr-block-count">{y1Shared.length}</span>
+            </header>
+            <div className="curr-class-grid">
+              {y1Shared.map((c, i) => <ClassCard key={i} cls={c}/>)}
+            </div>
+          </div>
+
+          {y1Desig.length > 0 && (
+            <div className="curr-block">
+              <header className="curr-block-hd">
+                <span className="curr-block-tag">Designation Modules</span>
+                <span className="curr-block-count">{y1Desig.length}</span>
+              </header>
+              <div className="curr-class-grid">
+                {y1Desig.map((c, i) => <ClassCard key={i} cls={c}/>)}
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* Y2 · Specialisation begins */}
+        <section id="curr-year-Y2" className="curr-year">
+          <header className="curr-year-hd">
+            <div className="curr-year-hd-l">
+              <div className="curr-year-tag">Y2 · Specialisation</div>
+              <h3 className="curr-year-title">Home Department declared.</h3>
+              <p className="curr-year-blurb">
+                Year 2 is when departments matter. Students take required modules in their declared Home Department, plus mandatory electives from at least two other departments. Combat-literacy and Media-literacy requirements (one module from a defined pool) sit inside the Combat and Media &amp; Arts blocks below.
+              </p>
+            </div>
+            <div className="curr-year-hd-r">
+              <span className="curr-year-count">
+                {y2.groups.reduce((n, g) => n + g.classes.length, 0) + y2.designation.length} classes
+              </span>
+            </div>
+          </header>
+
+          {y2.groups.map(g => (
+            <div key={g.dept.id} className="curr-block" style={{"--dept-c": g.dept.color || "#d4a84a"}}>
+              <header className="curr-block-hd is-dept">
+                <span className="curr-block-marker"/>
+                <span className="curr-block-tag">{g.dept.code} · {g.dept.name}</span>
+                <span className="curr-block-count">{g.classes.length}</span>
+              </header>
+              <div className="curr-class-grid">
+                {g.classes.map((c, i) => <ClassCard key={i} cls={c}/>)}
+              </div>
+            </div>
+          ))}
+
+          {y2.designation.length > 0 && (
+            <div className="curr-block">
+              <header className="curr-block-hd">
+                <span className="curr-block-tag">Designation Modules</span>
+                <span className="curr-block-count">{y2.designation.length}</span>
+              </header>
+              <div className="curr-class-grid">
+                {y2.designation.map((c, i) => <ClassCard key={i} cls={c}/>)}
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* Y3 · Deep specialisation */}
+        <section id="curr-year-Y3" className="curr-year">
+          <header className="curr-year-hd">
+            <div className="curr-year-hd-l">
+              <div className="curr-year-tag">Y3 · Capstone</div>
+              <h3 className="curr-year-title">Deep specialisation, capstone modules, field placement.</h3>
+              <p className="curr-year-blurb">
+                Year 3 is the last year of the standard programme. Department capstones, the HRO-/SDK- specialism, and the institution's most morally serious modules — COM-301, HIS-303, the senior policy capstone. Students who finish here graduate as standard practitioners; nominations for the Fellowship are issued from this cohort.
+              </p>
+            </div>
+            <div className="curr-year-hd-r">
+              <span className="curr-year-count">
+                {y3.groups.reduce((n, g) => n + g.classes.length, 0) + y3.designation.length} classes
+              </span>
+            </div>
+          </header>
+
+          {y3.groups.map(g => (
+            <div key={g.dept.id} className="curr-block" style={{"--dept-c": g.dept.color || "#d4a84a"}}>
+              <header className="curr-block-hd is-dept">
+                <span className="curr-block-marker"/>
+                <span className="curr-block-tag">{g.dept.code} · {g.dept.name}</span>
+                <span className="curr-block-count">{g.classes.length}</span>
+              </header>
+              <div className="curr-class-grid">
+                {g.classes.map((c, i) => <ClassCard key={i} cls={c}/>)}
+              </div>
+            </div>
+          ))}
+
+          {y3.designation.length > 0 && (
+            <div className="curr-block">
+              <header className="curr-block-hd">
+                <span className="curr-block-tag">Designation Modules</span>
+                <span className="curr-block-count">{y3.designation.length}</span>
+              </header>
+              <div className="curr-class-grid">
+                {y3.designation.map((c, i) => <ClassCard key={i} cls={c}/>)}
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* Fellowship */}
+        <section id="curr-year-FEL" className="curr-year curr-year-fellowship">
+          <header className="curr-year-hd">
+            <div className="curr-year-hd-l">
+              <div className="curr-year-tag">Vanguard Fellowship · Postgraduate</div>
+              <h3 className="curr-year-title">By invitation only.</h3>
+              <p className="curr-year-blurb">
+                The Fellowship is not a department. Nominations are drawn from across all eight departments by the Dean, issued at the end of Y2 to students who show dual-track capability or exceptional cross-domain performance. Fellows have access to all Y3 modules plus Fellowship-exclusive seminars, scheduled by the Fellowship Coordinator under the Dean's office.
+              </p>
+            </div>
+            <div className="curr-year-hd-r">
+              <span className="curr-year-count">Closed seminar</span>
+            </div>
+          </header>
+          <div className="curr-fellowship-card">
+            <div className="curr-fellowship-card-hd">
+              <span className="curr-fellowship-stamp">FELLOWSHIP · NOMINATION</span>
+              <span className="curr-fellowship-meta">Annual cohort · cap classified</span>
+            </div>
+            <p className="curr-fellowship-body">
+              Specific seminar codes and reading lists are not published. Fellows attend by invitation each term. Combat and Media &amp; Arts nominations carry the most weight in practice; History &amp; Doctrine's nomination carries the most weight in theory. The Fellowship coordinates with STRATA on placement; some Fellows leave the year on contract.
+            </p>
+          </div>
+        </section>
       </main>
     </div>
   );
