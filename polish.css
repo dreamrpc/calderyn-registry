@@ -25714,3 +25714,18 @@ button.orgs-pill {
   margin: 0 0 24px !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   POWERS GUIDE · UNSANCTIONED chip visible chrome
+   The "Unsanctioned" status has data bg #0e0e10 which is nearly the
+   same as the card panel bg (#0d0d11) — the chip rendered as invisible
+   chrome around red text, creating an apparent gap between the label
+   and the body copy. Every other chip has a saturated bg so they read
+   regardless. Add a 1px currentColor border to all status-card-tags
+   so dark-bg chips (UNSANCTIONED) get a visible colored outline while
+   light-text-on-saturated-bg chips inherit a near-invisible border.
+   ════════════════════════════════════════════════════════════════════ */
+.pg-guide .status-card-tag {
+  border: 1px solid currentColor !important;
+}
+
