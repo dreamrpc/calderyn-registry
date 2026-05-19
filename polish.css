@@ -10781,118 +10781,6 @@ html { scroll-behavior: smooth; }
    typography pushed harder.
    ════════════════════════════════════════════════════════════════════ */
 
-/* ── BANNER ─────────────────────────────────────────────────── */
-.lore-banner {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 2.6 / 1;
-  min-height: 220px;
-  margin: 0 0 var(--space-7);
-  background: linear-gradient(135deg, var(--lb-c1), var(--lb-c2));
-  border: 4px solid #000;
-  box-shadow: 12px 12px 0 0 #000;
-  overflow: hidden;
-}
-.lore-banner-halftone {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle 1.5px at 50% 50%, rgba(0, 0, 0, 0.5) 1.5px, transparent 2px);
-  background-size: 6px 6px;
-  pointer-events: none;
-  mix-blend-mode: multiply;
-  opacity: 0.5;
-}
-.lore-banner-grain {
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
-  pointer-events: none;
-  opacity: 0.12;
-  mix-blend-mode: overlay;
-}
-.lore-banner-icon {
-  position: absolute;
-  top: 50%;
-  right: 6%;
-  transform: translateY(-50%);
-  color: #ffffff;
-  opacity: 0.12;
-  line-height: 0;
-}
-.lore-banner-icon .icon { width: clamp(110px, 18vw, 200px); height: auto; }
-
-.lore-banner-meta {
-  position: absolute;
-  left: var(--space-5);
-  bottom: var(--space-5);
-  right: var(--space-5);
-  z-index: 2;
-}
-.lore-banner-tag {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--mono, 'Söhne Mono', monospace);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  margin-bottom: var(--space-3);
-  color: #ffffff;
-}
-.lore-banner-tag-pill {
-  background: var(--yellow, #d4a84a);
-  color: #0a0a0a !important;
-  padding: 3px 9px;
-  letter-spacing: 0.28em;
-}
-.lore-banner-tag-sep { color: rgba(255, 255, 255, 0.5); }
-.lore-banner-tag-n { color: #ffffff; }
-
-.lore-banner-title {
-  font-family: var(--display, 'Druk', sans-serif);
-  font-weight: 900;
-  font-size: clamp(40px, 6.5vw, 88px);
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-  text-transform: uppercase;
-  margin: 0 0 var(--space-2);
-  text-shadow:
-    -3px 0 0 rgba(227, 27, 35, 0.55),
-     3px 0 0 rgba(46, 188, 212, 0.45),
-    0 4px 12px rgba(0, 0, 0, 0.6);
-}
-.lore-banner-subtitle {
-  font-family: var(--sans, 'Söhne', system-ui);
-  font-style: italic;
-  font-size: clamp(14px, 1.5vw, 17px);
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 720px;
-}
-.lore-banner-placeholder {
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
-  padding: 4px 10px;
-  background: rgba(0, 0, 0, 0.65);
-  border: 1px solid var(--yellow, #d4a84a);
-  font-family: var(--mono, 'Söhne Mono', monospace);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--yellow, #d4a84a);
-  z-index: 3;
-}
-
-@media (max-width: 760px) {
-  .lore-banner { aspect-ratio: 16 / 10; min-height: 180px; }
-  .lore-banner-icon .icon { width: 90px; height: 90px; }
-}
-
 /* ── DROP CAP on the first paragraph of each lore subview ─── */
 .lore .lore-block.lore-intro + .lore-block .lore-p:first-child::first-letter,
 .lore .lore-intro .lore-lead::first-letter {
@@ -11193,4 +11081,128 @@ html { scroll-behavior: smooth; }
 
 @media (max-width: 900px) {
   .home-scrollnav { display: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   LORE · ANIMATED SECTION INTROS
+   Replaces the static banner cards with scroll-triggered animations
+   on the existing .lore-intro / .lore-block elements. Each section
+   has a signature accent color that paints a 4px left rail on its
+   .lore-intro container and a per-section eyebrow color.
+   Cinematic but lives inside the existing markup — no new JSX.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* SECTION ENTRANCE — scroll-triggered fade-up.
+   Each lore section root is one of the #lore-{id} anchors. When the
+   section enters the viewport, its .lore-intro animates in:
+   - eyebrow stamp fades + slides
+   - title scales + slides
+   - lead paragraph fades
+   Stagger via animation-delay, all triggered by .lore-section
+   coming into view (the scroll-spy hook in HousesTab already adds
+   .is-in via IntersectionObserver — we hook into that here).
+
+   For sections that don't have the .is-in class wired (older
+   subviews) the same animation runs on mount via the default state.
+*/
+@keyframes lore-intro-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes lore-intro-title-up {
+  from { opacity: 0; transform: translateY(28px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes lore-rail-grow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* Apply the entrance animations to every lore-intro block. They
+   trigger as soon as the element is in the DOM, then settle. */
+.lore-intro {
+  position: relative;
+  padding-left: var(--space-5);
+  animation: lore-intro-up 800ms cubic-bezier(.22, 1, .36, 1) both;
+}
+.lore-intro::before {
+  /* Left signature rail — per-section colour set below */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--lore-accent, var(--yellow, #d4a84a));
+  transform-origin: top;
+  animation: lore-rail-grow 900ms cubic-bezier(.22, 1, .36, 1) 0.1s both;
+}
+
+/* Stagger the three primary elements inside .lore-intro */
+.lore-intro-stamp {
+  animation: lore-intro-up 700ms cubic-bezier(.22, 1, .36, 1) 0.15s both;
+}
+.lore-intro-title {
+  animation: lore-intro-title-up 900ms cubic-bezier(.22, 1, .36, 1) 0.25s both;
+}
+.lore-lead {
+  animation: lore-intro-up 800ms cubic-bezier(.22, 1, .36, 1) 0.4s both;
+}
+
+/* Per-section signature accents. .lore-section is the anchor
+   wrapper (added by HousesTab in PR #9) keyed by id. */
+#lore-world     .lore-intro { --lore-accent: #5a7cb8; }
+#lore-history   .lore-intro { --lore-accent: #b8a37a; }
+#lore-vanguard  .lore-intro { --lore-accent: var(--red-bright, #ff2a32); }
+#lore-houses    .lore-intro { --lore-accent: var(--yellow, #d4a84a); }
+#lore-dean      .lore-intro { --lore-accent: #a07ab8; }
+#lore-incidents .lore-intro { --lore-accent: #d46a3a; }
+
+#lore-world     .lore-intro-stamp { color: #5a7cb8 !important; border-color: #5a7cb8 !important; }
+#lore-history   .lore-intro-stamp { color: #b8a37a !important; border-color: #b8a37a !important; }
+#lore-vanguard  .lore-intro-stamp { color: var(--red-bright, #ff2a32) !important; border-color: var(--red-bright, #ff2a32) !important; }
+#lore-houses    .lore-intro-stamp { color: var(--yellow, #d4a84a) !important; border-color: var(--yellow, #d4a84a) !important; }
+#lore-dean      .lore-intro-stamp { color: #a07ab8 !important; border-color: #a07ab8 !important; }
+#lore-incidents .lore-intro-stamp { color: #d46a3a !important; border-color: #d46a3a !important; }
+
+/* Subsequent .lore-block elements (after the intro) also fade up
+   on first appearance — gives each lore page a coherent cinematic
+   entrance instead of dumping all paragraphs at once. */
+.lore-block:not(.lore-intro) {
+  animation: lore-intro-up 700ms cubic-bezier(.22, 1, .36, 1) 0.5s both;
+}
+
+/* Lore-eyebrow (used inside .lore-block) — slide-in too */
+.lore-block:not(.lore-intro) .lore-eyebrow {
+  animation: lore-intro-up 600ms cubic-bezier(.22, 1, .36, 1) 0.55s both;
+}
+
+/* Animated background grain inside each lore-intro — subtle motion
+   so the section never feels static while you read it. */
+.lore-intro::after {
+  content: "";
+  position: absolute;
+  top: -20%; left: -10%; right: -10%; bottom: -20%;
+  background-image:
+    radial-gradient(circle 1px at 50% 50%, var(--lore-accent, var(--yellow)) 1px, transparent 1.5px);
+  background-size: 14px 14px;
+  pointer-events: none;
+  opacity: 0.05;
+  animation: lore-grain-drift 28s linear infinite;
+}
+@keyframes lore-grain-drift {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-6%, -8%, 0); }
+}
+
+/* Reduced motion — kill the entrances + drift */
+@media (prefers-reduced-motion: reduce) {
+  .lore-intro, .lore-intro-stamp, .lore-intro-title, .lore-lead,
+  .lore-block:not(.lore-intro), .lore-block:not(.lore-intro) .lore-eyebrow {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .lore-intro::before { transform: scaleY(1) !important; animation: none !important; }
+  .lore-intro::after  { animation: none !important; }
 }

@@ -2367,55 +2367,9 @@ function LoreStart({onJump}){
   );
 }
 
-/* ──────────────────────────────────────────────────────────────────────
-   LORE BANNER — cinematic header card per lore subview
-   ──────────────────────────────────────────────────────────────────── */
-const LORE_BANNER_VISUALS = {
-  world:     { n: "01", c1: "#1e3a5f", c2: "#08111e", icon: "book-open",      tag: "ORIENTATION" },
-  history:   { n: "02", c1: "#3b2818", c2: "#100806", icon: "scroll-text",    tag: "HISTORICAL"  },
-  vanguard:  { n: "03", c1: "#8b1a0f", c2: "#3a070a", icon: "shield",         tag: "ACTIVE ROSTER" },
-  houses:    { n: "04", c1: "#3a3a44", c2: "#0f0f14", icon: "users",          tag: "STUDENT BODY" },
-  dean:      { n: "05", c1: "#5a2a52", c2: "#1e0c1c", icon: "sparkles",       tag: "ADMINISTRATION" },
-  incidents: { n: "06", c1: "#6e2a14", c2: "#1f0a04", icon: "alert-triangle", tag: "CLASSIFIED · L2" },
-};
-
-function LoreBanner({ section, title, subtitle }){
-  const v = LORE_BANNER_VISUALS[section] || LORE_BANNER_VISUALS.world;
-  return (
-    <div
-      className="lore-banner"
-      style={{
-        "--lb-c1": v.c1,
-        "--lb-c2": v.c2,
-      }}
-      role="img"
-      aria-label={`${title} — section banner`}
-    >
-      <div className="lore-banner-halftone" aria-hidden="true"/>
-      <div className="lore-banner-grain" aria-hidden="true"/>
-      <div className="lore-banner-icon" aria-hidden="true">
-        <Icon name={v.icon} size={160} stroke={1}/>
-      </div>
-      <div className="lore-banner-meta">
-        <div className="lore-banner-tag">
-          <span className="lore-banner-tag-pill">{v.tag}</span>
-          <span className="lore-banner-tag-sep">·</span>
-          <span className="lore-banner-tag-n">CHAPTER {v.n}</span>
-        </div>
-        <div className="lore-banner-title">{title}</div>
-        {subtitle && <div className="lore-banner-subtitle">{subtitle}</div>}
-      </div>
-      <div className="lore-banner-placeholder" aria-hidden="true">
-        IMAGE · PLACEHOLDER
-      </div>
-    </div>
-  );
-}
-
 function LoreWorld(){
   return (
     <div className="lore">
-      <LoreBanner section="world" title="THE WORLD" subtitle="Eleven years on. STRATA. Calderyn. 2026."/>
       <section className="lore-block lore-intro">
         <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
         <h2 className="lore-intro-title">It is 2026, and there are <span className="accent">gods</span> walking around.</h2>
@@ -2505,7 +2459,6 @@ function LoreWorld(){
 function LoreVanguard(){
   return (
     <div className="lore">
-        <LoreBanner section="vanguard" title="THE VANGUARD" subtitle="Four members. The most powerful superhumans alive."/>
       <section className="lore-block lore-intro">
         <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
         <h2 className="lore-intro-title">The <span className="accent">Vanguard.</span></h2>
@@ -2623,7 +2576,6 @@ function LoreHouses(){
 
   return (
     <div className="lore">
-        <LoreBanner section="houses" title="THE HOUSES" subtitle="Valaris · Orenne · Saberis · Grimere. Pick yours."/>
       <section className="lore-block lore-intro">
         <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
         <h2 className="lore-intro-title">The <span className="accent">Houses.</span></h2>
@@ -2798,7 +2750,6 @@ function LoreHouses(){
 function LoreDean(){
   return (
     <div className="lore">
-        <LoreBanner section="dean" title="THE DEAN" subtitle="Dr. Devika Ravindrakumar. Fifty-three. Field nullification at fifteen metres."/>
       <section className="lore-block lore-intro lore-intro-portrait">
         <div className="lore-intro-portrait-wrap">
           <div className="lore-intro-portrait-text">
@@ -2861,7 +2812,6 @@ function LoreDean(){
 function LoreHistory(){
   return (
     <div className="lore">
-        <LoreBanner section="history" title="THE PROGRAMME" subtitle="Sixty years of preparation for a war that never came."/>
       <section className="lore-block lore-intro">
         <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
         <h2 className="lore-intro-title">Where the <span className="accent">powered</span> come from.</h2>
@@ -3054,7 +3004,6 @@ function LoreHistory(){
 function LoreIncidents(){
   return (
     <div className="lore">
-        <LoreBanner section="incidents" title="INCIDENTS" subtitle="What the press cycle remembers. What it was made to forget."/>
       <section className="lore-block lore-intro">
         <div className="lore-intro-stamp">RESTRICTED · BOARD-LEVEL CIRCULATION</div>
         <h2 className="lore-intro-title">The MV <span className="accent">Cassandra.</span></h2>
