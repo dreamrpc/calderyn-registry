@@ -1160,17 +1160,44 @@ function HomeCalendar(){
                   + (inBreak ? `, ${brk || "school"} break` : ", term in session")
                 }
               >
-                <span className="cal-cell-num">{d}</span>
-                {isToday && <span className="cal-cell-today-dot" aria-hidden="true"/>}
+                <div className="cal-cell-head">
+                  <span className="cal-cell-num">{d}</span>
+                  {isToday && <span className="cal-cell-today-dot" aria-hidden="true"/>}
+                </div>
                 {hasEvents && (
-                  <span className="cal-cell-markers" aria-hidden="true">
-                    {events.slice(0, 3).map((ev, j) => (
-                      <span
-                        key={j}
-                        className={"cal-cell-marker" + (ev.kind === "term-start" || ev.kind === "term-end" ? " is-term-marker" : "")}
-                      />
-                    ))}
-                  </span>
+                  <div className="cal-cell-events" aria-hidden="true">
+                    {events.slice(0, 2).map((ev, j) => {
+                      const isBoundary = ev.kind === "term-start" || ev.kind === "term-end";
+                      // Compact label for the cell — full title would
+                      // never fit. Strip the marketing context and
+                      // keep just the essence.
+                      const label = (() => {
+                        if (isBoundary) {
+                          if (ev.kind === "term-start") return ev.title.replace(/ term begins.*/i, " starts").toUpperCase();
+                          return ev.title.replace(/ term ends.*/i, " ends").toUpperCase();
+                        }
+                        // User events — first noun phrase up to about
+                        // 22 chars, uppercased.
+                        const t = (ev.title || "").split(/[·:]/)[0].trim();
+                        return t.length > 22 ? t.slice(0, 21).trim() + "…" : t.toUpperCase();
+                      })();
+                      return (
+                        <span
+                          key={j}
+                          className={"cal-event-chip" + (isBoundary ? " is-boundary" : " is-user")}
+                          title={ev.title}
+                        >
+                          <span className="cal-event-chip-bar" aria-hidden="true"/>
+                          <span className="cal-event-chip-text">{label}</span>
+                        </span>
+                      );
+                    })}
+                    {events.length > 2 && (
+                      <span className="cal-event-chip is-more">
+                        +{events.length - 2} more
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             );
