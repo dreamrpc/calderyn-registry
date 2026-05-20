@@ -2610,6 +2610,7 @@ function DepartmentSection({dept}){
 
 function FacultyRegistryView(){
   const [filterDesig, setFilterDesig] = useState("all"); // all | hero | sidekick
+  const [filterDept, setFilterDept]   = useState("all"); // all | dept.id
   const [q, setQ] = useState("");
   const ql = q.trim().toLowerCase();
 
@@ -2626,6 +2627,10 @@ function FacultyRegistryView(){
     ].filter(Boolean).join(" ").toLowerCase();
     return haystack.includes(ql);
   };
+
+  // Combined dept-level filter: search query + selected dept pill.
+  const deptMatches = (dept) =>
+    deptMatchesSearch(dept) && (filterDept === "all" || dept.id === filterDept);
 
   // Filter a dept's classes + instructional staff by selected
   // designation. Classes without a designation tag are visible
@@ -2678,6 +2683,23 @@ function FacultyRegistryView(){
           )}
         </div>
         <div className="sfilter-group">
+          <span className="sfilter-lbl">Department</span>
+          <button type="button"
+            className={"sf-pill" + (filterDept === "all" ? " on" : "")}
+            onClick={() => setFilterDept("all")}
+            aria-pressed={filterDept === "all"}
+          >All</button>
+          {(D.departments || []).map(d => (
+            <button key={d.id} type="button"
+              className={"sf-pill" + (filterDept === d.id ? " on" : "")}
+              onClick={() => setFilterDept(filterDept === d.id ? "all" : d.id)}
+              aria-pressed={filterDept === d.id}
+              style={filterDept === d.id ? {borderColor: d.color, color: d.color} : {}}
+              title={d.name}
+            >{d.code}</button>
+          ))}
+        </div>
+        <div className="sfilter-group">
           <span className="sfilter-lbl">Designation</span>
           <button type="button"
             className={"sf-pill" + (filterDesig === "all" ? " on" : "")}
@@ -2697,7 +2719,7 @@ function FacultyRegistryView(){
         </div>
         <div className="sfilter-count">
           {(() => {
-            const n = (D.departments || []).filter(deptMatchesSearch).length;
+            const n = (D.departments || []).filter(deptMatches).length;
             return `${n} ${n === 1 ? "department" : "departments"}`;
           })()}
         </div>
@@ -2766,7 +2788,7 @@ function FacultyRegistryView(){
       )}
 
       {/* 8 DEPARTMENT SECTIONS — always expanded, class catalogues filtered by designation */}
-      {(D.departments || []).filter(deptMatchesSearch).map(dept => (
+      {(D.departments || []).filter(deptMatches).map(dept => (
         <DepartmentSection key={dept.id} dept={filteredDept(dept)}/>
       ))}
 
