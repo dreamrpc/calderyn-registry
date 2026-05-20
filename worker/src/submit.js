@@ -4,7 +4,7 @@ import { ensureWriterMapping } from "./writer-mapping.js";
 import { lookupOocByRpc } from "./writers.js";
 import { extractRpcUsername, getOocForForm } from "./quota.js";
 
-export async function handleSubmit(request, env) {
+export async function handleSubmit(request, env, ctx) {
   let body;
   try {
     body = await request.json();
@@ -66,11 +66,20 @@ export async function handleSubmit(request, env) {
   const rpcUsername = extractRpcUsername(form.rpcLink);
   const ooc = getOocForForm(form);
   if (rpcUsername && ooc && !lookupOocByRpc(rpcUsername)) {
-    ctx.waitUntil(
-      ensureWriterMapping(env, rpcUsername, ooc).catch(err =>
-        console.error("submit-time writer-mapping failed:", err.message)
-      )
+    // Run the GitHub commit out-of-band when we have a ctx (normal
+    // Cloudflare request path); fall back to await only if ctx is
+    // missing (defensive — should never happen in production, but a
+    // missing ctx used to crash the whole request and emit a 503 with
+    // no CORS headers, which masked itself as a "preflight failed"
+    // browser error).
+    const work = ensureWriterMapping(env, rpcUsername, ooc).catch(err =>
+      console.error("submit-time writer-mapping failed:", err.message)
     );
+    if (ctx && typeof ctx.waitUntil === "function") {
+      ctx.waitUntil(work);
+    } else {
+      await work;
+    }
   }
 
   return json({ ok: true, id });

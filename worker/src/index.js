@@ -5,37 +5,59 @@ import { handleWriterTags } from "./writer-tags.js";
 
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
-
-    if (request.method === "OPTIONS") {
-      return preflight(env, request);
-    }
-
-    if (url.pathname === "/submit" && request.method === "POST") {
-      return withCors(await handleSubmit(request, env, ctx), env, request);
-    }
-
-    if (url.pathname === "/quota-stats" && request.method === "POST") {
-      return withCors(await handleQuotaStats(request, env, ctx), env, request);
-    }
-
-    if (url.pathname === "/writer-tags" && request.method === "GET") {
-      return withCors(await handleWriterTags(request, env, ctx), env, request);
-    }
-
-    if (url.pathname === "/interactions" && request.method === "POST") {
-      return handleInteraction(request, env, ctx);
-    }
-
-    if (url.pathname === "/" || url.pathname === "/health") {
-      return new Response("calderyn-registry-relay ok", {
-        headers: { "content-type": "text/plain" },
+    try {
+      return await route(request, env, ctx);
+    } catch (err) {
+      // Belt-and-suspenders. Without this, a thrown error inside any
+      // handler escaped to Cloudflare's default 5xx page, which has no
+      // CORS headers — so the browser reported "Failed to fetch" (CORS
+      // preflight-style) and admins had no idea the Worker had actually
+      // crashed. Wrap any uncaught throw in a JSON 500 + CORS headers
+      // so the failure mode is visible at the network layer.
+      console.error("worker dispatch failed:", err && err.stack || err);
+      const body = JSON.stringify({
+        error: "internal_error",
+        detail: String(err && err.message || err).slice(0, 400),
       });
+      const headers = new Headers({ "content-type": "application/json" });
+      headers.set("access-control-allow-origin", pickAllowedOrigin(env, request));
+      headers.append("vary", "origin");
+      return new Response(body, { status: 500, headers });
     }
-
-    return new Response("not found", { status: 404 });
   },
 };
+
+async function route(request, env, ctx) {
+  const url = new URL(request.url);
+
+  if (request.method === "OPTIONS") {
+    return preflight(env, request);
+  }
+
+  if (url.pathname === "/submit" && request.method === "POST") {
+    return withCors(await handleSubmit(request, env, ctx), env, request);
+  }
+
+  if (url.pathname === "/quota-stats" && request.method === "POST") {
+    return withCors(await handleQuotaStats(request, env, ctx), env, request);
+  }
+
+  if (url.pathname === "/writer-tags" && request.method === "GET") {
+    return withCors(await handleWriterTags(request, env, ctx), env, request);
+  }
+
+  if (url.pathname === "/interactions" && request.method === "POST") {
+    return handleInteraction(request, env, ctx);
+  }
+
+  if (url.pathname === "/" || url.pathname === "/health") {
+    return new Response("calderyn-registry-relay ok", {
+      headers: { "content-type": "text/plain" },
+    });
+  }
+
+  return new Response("not found", { status: 404 });
+}
 
 function preflight(env, request) {
   const origin = pickAllowedOrigin(env, request);
