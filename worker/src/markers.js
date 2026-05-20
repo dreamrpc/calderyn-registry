@@ -120,12 +120,76 @@ function buildStudent(form, id) {
   return out;
 }
 
+// Code → dept.id map for the 8 academic departments. Used to route
+// faculty submissions whose facultySection looks like "COM · Combat"
+// into the auxFaculty[] sidecar table instead of the legacy FACULTY[]
+// rows array (departments[] head/staff/instructional don't take inline
+// appends — the renderer merges aux entries by deptId + role).
+const DEPT_CODE_TO_ID = {
+  COM: "combat",
+  MDA: "media-arts",
+  SCI: "sciences",
+  ENG: "engineering",
+  HIS: "history-doctrine",
+  ATH: "athletics",
+  HUM: "humanities",
+  POL: "politics",
+};
+
+function resolveDeptSlot(form){
+  // facultySection: "COM · Combat" | "OFFICE OF THE DEAN" | "SUPPORT STAFF"
+  const sec = String(form?.facultySection || "");
+  const m = sec.match(/^([A-Z]{3,4})\s*·\s*/);
+  if (!m) return null; // not a dept-prefixed section
+  const deptId = DEPT_CODE_TO_ID[m[1]];
+  if (!deptId) return null;
+
+  // facultyRole patterns from getOpenFacultyRoles:
+  //   "Head of <Dept Name>"
+  //   "Prof. N — <subject>"           (em-dash separator)
+  //   "<other instructional role>"    (e.g. "TA · Combat (Heroes lane)",
+  //                                    "Workshop Technician",
+  //                                    "House Trainer · Valaris")
+  const role = String(form?.facultyRole || "").trim();
+  if (/^Head of /i.test(role)) {
+    return { deptId, slotKind: "head", role };
+  }
+  if (/^Prof\.\s*\d/i.test(role)) {
+    return { deptId, slotKind: "staff", role };
+  }
+  return { deptId, slotKind: "instructional", role };
+}
+
 function buildFaculty(form, id) {
   const linkFrag  = form.rpcLink    ? `, link: ${q(form.rpcLink)}`    : "";
   const humanFrag = form.fullyHuman ? `, human: true`                 : "";
   const powerFrag = form.fullyHuman ? ""
     : `, power: ${q(form.power)}, expression: ${q(form.powerExpression)}, drawbacks: ${q(form.drawbacks)}`;
   const stageFrag = form.alias ? q(form.alias) : '""';
+
+  // Dept-slot submission → sidecar auxFaculty[] (marker insert). The
+  // render path merges entries onto matching dept head/staff/instruct
+  // rows by deptId + role. Tier letter (A/B/C/D) is stripped from
+  // "A-List" to match the powers[] convention.
+  const deptSlot = resolveDeptSlot(form);
+  if (deptSlot) {
+    const tierLetter = (form.tier || "").replace(/-List$/, "");
+    const tierFrag = tierLetter ? `, tier: ${q(tierLetter)}` : "";
+    const aliasFrag = form.alias ? `, alias: ${q(form.alias)}` : "";
+    const auxLine =
+      `  { deptId: ${q(deptSlot.deptId)}, slotKind: ${q(deptSlot.slotKind)}, role: ${q(deptSlot.role)}, char: ${q(form.char)}${aliasFrag}${tierFrag}${powerFrag}${humanFrag}${linkFrag} }, // sub:${id}`;
+    const out = [{ kind: "marker", marker: "auxFaculty", line: auxLine }];
+    if (!form.fullyHuman) {
+      out.push({
+        kind: "marker",
+        marker: "powers",
+        line: powersLine(form, id, "faculty"),
+      });
+    }
+    return out;
+  }
+
+  // Legacy Dean / Support Staff section → FACULTY[].rows path insert.
   const facultyLine = `{ role: ${q(form.facultyRole)}, char: ${q(form.char)}, stage: ${stageFrag}${powerFrag}${humanFrag}${linkFrag} }, // sub:${id}`;
   const out = [{
     kind: "path",

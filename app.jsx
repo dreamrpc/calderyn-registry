@@ -251,6 +251,56 @@ const HOUSES         = D.houses;
 const TIER_C          = {"A-List":"#e31b23","B-List":"#1e40af","C-List":"#15803d","D-List":"#54545c","Unclassified":"#555"};
 const STUDENTS       = D.students;
 const FACULTY        = D.faculty;
+const AUX_FACULTY    = D.auxFaculty || [];
+// Forward declaration so applyAuxFaculty can be defined below and
+// still reference AUX_FACULTY. DEPARTMENTS is initialised after the
+// helper exists. Every D.departments read in the app should use
+// DEPARTMENTS instead so approved-via-form profs render everywhere.
+let DEPARTMENTS = [];
+
+// Merge approved-via-form profs from auxFaculty[] onto a department's
+// head / staff / instructional slots. Match by deptId + role; the
+// first OPEN slot (no char) for the matching role gets filled with
+// the aux entry's person data. Pure (returns a new dept object).
+function applyAuxFaculty(dept){
+  if (!dept || !AUX_FACULTY.length) return dept;
+  const mine = AUX_FACULTY.filter(a => a && a.deptId === dept.id);
+  if (mine.length === 0) return dept;
+
+  let head = dept.head;
+  const staff = (dept.staff || []).map(s => ({...s}));
+  const instructional = (dept.instructional || []).map(p => ({...p}));
+
+  for (const a of mine) {
+    const fields = {
+      char: a.char,
+      link: a.link,
+      alias: a.alias,
+      tier: a.tier,
+      power: a.power,
+      npc: a.npc,
+    };
+    if (a.slotKind === "head") {
+      if (head && !head.char) head = { ...head, ...fields };
+    } else if (a.slotKind === "staff") {
+      // Match by Prof slot number when present, otherwise by role text.
+      const profMatch = String(a.role || "").match(/Prof\.\s*(\d)/i);
+      const idx = profMatch
+        ? staff.findIndex(s => s.slot && String(s.slot).match(new RegExp("Prof\\.\\s*" + profMatch[1])) && !s.char)
+        : staff.findIndex(s => !s.char && (s.role || "") === a.role);
+      if (idx >= 0) staff[idx] = { ...staff[idx], ...fields };
+    } else if (a.slotKind === "instructional") {
+      const idx = instructional.findIndex(p => !p.char && (p.role || "") === a.role);
+      if (idx >= 0) instructional[idx] = { ...instructional[idx], ...fields };
+    }
+  }
+  return { ...dept, head, staff, instructional };
+}
+
+// Initialise the merged departments list. Use this everywhere instead
+// of `D.departments` so approved-via-form profs show in the Faculty
+// Registry, dropdowns, and global search.
+DEPARTMENTS = (D.departments || []).map(applyAuxFaculty);
 const STRATA         = D.strata;
 const OUTSIDE        = D.outside;
 const POWERS         = D.powers;
@@ -342,7 +392,7 @@ const SEARCH_INDEX = (() => {
 
   // Dept staff (head + numbered profs + instructional) — single source
   // of truth for departmental faculty.
-  (D.departments || []).forEach(dept => {
+  DEPARTMENTS.forEach(dept => {
     const sectionLabel = `${dept.code} · ${dept.name}`;
     const addRow = (r, defaultRole) => {
       if (!r) return;
@@ -1217,7 +1267,7 @@ function profLabel(fac){
    Each entry: {code, year, kind, title, desc, designation?, dept?, ...} */
 function gatherCurriculumClasses(){
   const out = [];
-  (D.departments || []).forEach(dept => {
+  DEPARTMENTS.forEach(dept => {
     (dept.classes || []).forEach(cls => {
       const fac = resolveCourseFaculty(dept, cls);
       out.push({
@@ -1417,7 +1467,7 @@ function CurriculumView(){
   // Y2/Y3 grouped by department + designation modules at the bottom
   const groupYearByDept = (y) => {
     const list = byYear(y).filter(c => c.kind !== "designation");
-    const groups = (D.departments || []).map(dept => ({
+    const groups = DEPARTMENTS.map(dept => ({
       dept,
       classes: list.filter(c => c.dept === dept.id)
         .sort((a, b) => (a.code || "").localeCompare(b.code || "")),
@@ -2719,7 +2769,7 @@ function FacultyRegistryView(){
             onClick={() => setFilterDept("all")}
             aria-pressed={filterDept === "all"}
           >All</button>
-          {(D.departments || []).map(d => (
+          {DEPARTMENTS.map(d => (
             <button key={d.id} type="button"
               className={"sf-pill" + (filterDept === d.id ? " on" : "")}
               onClick={() => setFilterDept(filterDept === d.id ? "all" : d.id)}
@@ -2749,7 +2799,7 @@ function FacultyRegistryView(){
         </div>
         <div className="sfilter-count">
           {(() => {
-            const n = (D.departments || []).filter(deptMatches).length;
+            const n = DEPARTMENTS.filter(deptMatches).length;
             return `${n} ${n === 1 ? "department" : "departments"}`;
           })()}
         </div>
@@ -2818,7 +2868,7 @@ function FacultyRegistryView(){
       )}
 
       {/* 8 DEPARTMENT SECTIONS — always expanded, class catalogues filtered by designation */}
-      {(D.departments || []).filter(deptMatches).map(dept => (
+      {DEPARTMENTS.filter(deptMatches).map(dept => (
         <DepartmentSection key={dept.id} dept={filteredDept(dept)}/>
       ))}
 
@@ -5358,7 +5408,7 @@ function getOpenFacultyRoles(){
   // Department slots — Head of Department + numbered profs + instructional
   // staff. Reserved heads (e.g. MDA Room Owner) and filled slots are
   // excluded.
-  (D.departments || []).forEach(dept => {
+  DEPARTMENTS.forEach(dept => {
     const sectionLabel = `${dept.code} · ${dept.name}`;
     const head = dept.head;
     if (head && !head.char && !head.reserved){

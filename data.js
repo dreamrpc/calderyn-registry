@@ -701,6 +701,21 @@ faculty: [
 ],
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   AUX FACULTY · approved-via-form professors that fill departments[] slots
+   When a writer applies for a department position via the join form and
+   their submission is approved, the Worker appends an entry here rather
+   than mutating the departments[] tree in place. The Faculty Registry
+   render path merges these onto the matching dept head / staff / instruct
+   slot before rendering.
+   Entry shape:
+     { deptId, slotKind, role, char, link, alias, tier, npc, // sub:<id> }
+   slotKind ∈ "head" | "staff" | "instructional"
+   ═══════════════════════════════════════════════════════════════════════════ */
+auxFaculty: [
+  // AUTO-INSERT:auxFaculty — approved Faculty form entries (department slots) get inserted directly above this marker by the relay Worker. Do not remove.
+],
+
+/* ═══════════════════════════════════════════════════════════════════════════
    DEPARTMENT TRIADS
    Two departments — Combat Training and Media Training — run on a triad
    model: one Head of Department who teaches the SHARED (cross-track)
