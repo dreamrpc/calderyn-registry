@@ -1169,17 +1169,18 @@ function HomeCalendar(){
                     {events.slice(0, 2).map((ev, j) => {
                       const isBoundary = ev.kind === "term-start" || ev.kind === "term-end";
                       // Compact label for the cell — full title would
-                      // never fit. Strip the marketing context and
-                      // keep just the essence.
+                      // never fit. Sentence-case, short noun phrase,
+                      // no aggressive truncation since the chip text
+                      // is readable now.
                       const label = (() => {
                         if (isBoundary) {
-                          if (ev.kind === "term-start") return ev.title.replace(/ term begins.*/i, " starts").toUpperCase();
-                          return ev.title.replace(/ term ends.*/i, " ends").toUpperCase();
+                          if (ev.kind === "term-start") return ev.title.replace(/ term begins.*/i, " starts");
+                          return ev.title.replace(/ term ends.*/i, " ends");
                         }
-                        // User events — first noun phrase up to about
-                        // 22 chars, uppercased.
+                        // User events — first noun phrase up to ~24
+                        // chars, kept in sentence case.
                         const t = (ev.title || "").split(/[·:]/)[0].trim();
-                        return t.length > 22 ? t.slice(0, 21).trim() + "…" : t.toUpperCase();
+                        return t.length > 24 ? t.slice(0, 23).trim() + "…" : t;
                       })();
                       return (
                         <span
@@ -1187,8 +1188,7 @@ function HomeCalendar(){
                           className={"cal-event-chip" + (isBoundary ? " is-boundary" : " is-user")}
                           title={ev.title}
                         >
-                          <span className="cal-event-chip-bar" aria-hidden="true"/>
-                          <span className="cal-event-chip-text">{label}</span>
+                          {label}
                         </span>
                       );
                     })}
