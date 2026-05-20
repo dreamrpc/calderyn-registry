@@ -28427,7 +28427,7 @@ button.orgs-pill {
    it (with a "+N more" pill when there are more). Reads like a
    proper calendar grid. */
 .cal-cell {
-  aspect-ratio: 0.78 / 1;
+  aspect-ratio: 1 / 1;
   padding: 6px 5px 6px 6px;
   display: flex;
   flex-direction: column;
@@ -28517,22 +28517,21 @@ button.orgs-pill {
   padding-left: 5px;
 }
 
-/* Tighter cells on smaller viewports — keep chip text legible until
-   phone-sized, then collapse to coloured bars only. */
+/* Tighter cells on smaller viewports — chip text + padding scale
+   down, but cells remain square so the grid keeps its calendar
+   geometry. */
 @media (max-width: 1100px) {
-  .cal-cell { aspect-ratio: 0.75 / 1; }
   .cal-event-chip { font-size: 10.5px; padding: 2px 5px 2px 7px; }
 }
 @media (max-width: 900px) {
-  .cal-cell { aspect-ratio: 0.72 / 1; padding: 5px 4px; }
+  .cal-cell { padding: 5px 4px; }
   .cal-cell-num { font-size: 12px; }
   .cal-event-chip { font-size: 10px; }
 }
 @media (max-width: 700px) {
   /* Cells get too narrow for legible text on mobile; collapse the
      chips to coloured bars and surface the full title on long-press
-     via the title attribute. */
-  .cal-cell { aspect-ratio: 0.7 / 1; }
+     via the title attribute. Cells stay square. */
   .cal-event-chip {
     font-size: 0;
     padding: 0;
