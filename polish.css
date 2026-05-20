@@ -6967,6 +6967,22 @@ html, body { overflow-x: clip; }
   align-items: center;
   gap: 8px;
   color: var(--yellow, #d4a84a) !important;
+  white-space: nowrap;
+}
+.join-confirm-receipt-status-text {
+  letter-spacing: 0.08em;
+}
+/* Decided-at timestamp sits on its own line under the status badge
+   instead of trailing inline with it, so "APPROVED · 20 MAY, 13:19"
+   doesn't wrap mid-phrase inside narrow receipt cells. */
+.join-confirm-receipt-decided-at {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-mid, rgba(255, 255, 255, 0.55));
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
 }
 .join-confirm-status-dot {
   display: inline-block;

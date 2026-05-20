@@ -7241,8 +7241,11 @@ function JoinTab(){
                 <div className="join-confirm-receipt-label">{decidedDate ? "Decided" : "Status"}</div>
                 <div className={"join-confirm-receipt-value join-confirm-receipt-status" + statusClass}>
                   <span className="join-confirm-status-dot" aria-hidden="true"/>
-                  {decidedDate ? <>{statusLabel} <span style={{opacity:0.6}}>· {decidedDate}</span></> : statusLabel}
+                  <span className="join-confirm-receipt-status-text">{statusLabel}</span>
                 </div>
+                {decidedDate && (
+                  <div className="join-confirm-receipt-decided-at">{decidedDate}</div>
+                )}
               </div>
             </div>
 
