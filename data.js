@@ -2211,14 +2211,15 @@ clubs: [
           mvp: "Cesare Delgado", mvp_team: "grimere",
           mvp_link: "https://roleplay.chat/profile.php?user=delgado",
           note: "Upset of the season. Delgado dragged Grimere through Valaris's Defence from the Playmaker slot — 14 assists, possession for 28 of 48 minutes, three of those assists landing in the final eight to seal the 3-point margin. His second MVP of the season." },
-        // Cup final scheduled for the morning so the Powerball squads
-        // can play and still make Stella's GOSH visit later the same
-        // day. Game ends ~11:30 BST → arena clears → shuttle to
-        // Great Ormond Street departs the West Gate around 15:30.
-        { id: 6, date: "2026-06-13", time: "10:00 BST", venue: "Powerball Arena · Greenwich · CUP FINAL",
+        // Cup final shifted off Stella's GOSH-visit Saturday so the
+        // Powerball squads aren't being asked to do both in one day.
+        // Now sits on the following Saturday — still inside the
+        // summer term, evening kickoff back as is normal for the
+        // league.
+        { id: 6, date: "2026-06-20", time: "19:30 BST", venue: "Powerball Arena · Greenwich · CUP FINAL",
           home: "orenne",   away: "grimere", status: "upcoming",
           home_score: null, away_score: null,
-          note: "CUP FINAL · A Grimere win or draw seals the title. An Orenne win on differential could throw it back open. Morning kickoff so players can join the GOSH ward visit later the same day." },
+          note: "CUP FINAL · A Grimere win or draw seals the title. An Orenne win on differential could throw it back open." },
       ],
     },
   },
