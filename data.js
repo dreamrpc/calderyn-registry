@@ -2169,13 +2169,9 @@ clubs: [
         { id: 4, date: "2026-03-14", time: "19:00 GMT", venue: "Powerball Arena · Greenwich",
           home: "valaris",  away: "orenne",  status: "played",
           home_score: 23, away_score: 21,
-          // Defence MVP — rare but earned. Carter logged the season
-          // high for interceptions in a single game (7) and broke up
-          // the Orenne possession run that would otherwise have tied
-          // it in the final 90 seconds.
-          mvp: "Riley Carter", mvp_team: "valaris",
-          mvp_link: "https://roleplay.chat/profile.php?user=pressure",
-          note: "Valaris snuck this one out in the final 90 seconds. Carter set a Calderyn single-game interception record (7) on the Defence line and turned the game-deciding rebound into a counter Orenne couldn't catch." },
+          mvp: "Enzo Krüger", mvp_team: "valaris",
+          mvp_link: "https://roleplay.chat/profile.php?user=Breakpoint",
+          note: "Valaris snuck this one out in the final 90 seconds. Krüger turned away 14 Orenne shots from the goal area — three in the final two minutes when the line had collapsed in front of him — to hold the 2-point margin." },
         { id: 5, date: "2026-05-09", time: "19:00 BST", venue: "Powerball Arena · Greenwich",
           home: "valaris",  away: "grimere", status: "played",
           home_score: 21, away_score: 24,

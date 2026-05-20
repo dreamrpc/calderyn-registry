@@ -27098,14 +27098,18 @@ button.orgs-pill {
   color: var(--text-mid);
 }
 .pb-break-title {
-  font-family: var(--display, 'Druk', sans-serif);
-  font-weight: 400;
-  font-size: 30px;
-  letter-spacing: 0.02em;
+  font-family: var(--display, 'Druk', 'Druk Wide', 'Impact', sans-serif);
+  font-weight: 800;
+  font-size: 38px;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
   color: var(--text);
-  line-height: 0.95;
+  line-height: 0.92;
   margin: 4px 0 0;
+  text-shadow:
+    0 1px 0 #0a0a0e,
+    0 2px 0 #0a0a0e,
+    0 3px 14px rgba(0, 0, 0, 0.55);
 }
 .pb-break-sub {
   font-family: var(--mono);
@@ -27204,8 +27208,8 @@ button.orgs-pill {
 
 .pb-hero-matchup {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 32px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 20px;
   align-items: center;
   position: relative;
   z-index: 1;
@@ -27215,9 +27219,10 @@ button.orgs-pill {
   flex-direction: column;
   gap: 6px;
   min-width: 0;
+  overflow: hidden;
 }
-.pb-hero-side-home { text-align: left; }
-.pb-hero-side-away { text-align: right; }
+.pb-hero-side-home { text-align: left; align-items: flex-start; }
+.pb-hero-side-away { text-align: right; align-items: flex-end; }
 .pb-hero-side-tag {
   font-family: var(--mono);
   font-size: 10px;
@@ -27228,14 +27233,21 @@ button.orgs-pill {
 .pb-hero-side-home .pb-hero-side-tag { color: var(--pb-hero-home, var(--text-mid)); }
 .pb-hero-side-away .pb-hero-side-tag { color: var(--pb-hero-away, var(--text-mid)); }
 .pb-hero-side-name {
-  font-family: var(--display, 'Druk', sans-serif);
-  font-weight: 400;
-  font-size: 68px;
+  font-family: var(--display, 'Druk', 'Druk Wide', 'Impact', sans-serif);
+  font-weight: 800;
+  font-size: clamp(36px, 5vw, 56px);
   line-height: 0.88;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.015em;
   text-transform: uppercase;
   color: var(--text);
-  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
+  text-shadow:
+    0 1px 0 #0a0a0e,
+    0 2px 0 #0a0a0e,
+    0 4px 18px rgba(0, 0, 0, 0.55);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .pb-hero-side-record {
   font-family: var(--mono);
@@ -27346,29 +27358,34 @@ button.orgs-pill {
 .pb-game-date-rel.is-future { color: var(--gold-bright, var(--yellow)); }
 
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .lt-head, .lt-row {
+    grid-template-columns: 52px minmax(180px, 1fr) 100px 130px minmax(140px, 1fr) 80px;
+    gap: 14px;
+    padding: 12px 14px;
+  }
+}
 @media (max-width: 900px) {
   .pb-hero {
     padding: 28px 20px 22px;
   }
-  .pb-hero-side-name { font-size: 46px; }
-  .pb-hero-center-vs { font-size: 40px; }
-  .pb-hero-matchup { gap: 18px; }
+  .pb-hero-center-vs { font-size: 56px; }
+  .pb-hero-matchup { gap: 16px; }
   .pb-hero-corner { font-size: 9px; padding: 3px 7px; }
   .pb-game { grid-template-columns: 1fr; gap: 12px; padding: 12px; }
   .pb-game-date { border-right: none; border-bottom: 1px solid var(--rule-soft); padding: 0 0 10px; text-align: left; }
   .pb-game-meta { justify-content: flex-start; text-align: left; }
-  .pb-break-title { font-size: 24px; }
+  .pb-break-title { font-size: 30px; }
 }
 @media (max-width: 640px) {
   .pb-hero-matchup {
     grid-template-columns: 1fr;
     gap: 14px;
   }
-  .pb-hero-side-home, .pb-hero-side-away { text-align: center; }
-  .pb-hero-side-name { font-size: 42px; }
+  .pb-hero-side-home, .pb-hero-side-away { text-align: center; align-items: center; }
   .pb-hero-center { flex-direction: row; min-width: 0; gap: 12px; padding: 8px 0; }
   .pb-hero-center-date { flex-direction: row; gap: 6px; }
-  .pb-hero-center-vs { font-size: 28px; padding: 0; }
+  .pb-hero-center-vs { font-size: 44px; padding: 0; }
   .pb-hero-corner { display: none; }
   .pb-break { grid-template-columns: 4px 1fr; gap: 12px; margin: 28px 0 14px; }
   .pb-break-title { font-size: 22px; }
@@ -27389,20 +27406,20 @@ button.orgs-pill {
 }
 .lt-head {
   display: grid;
-  grid-template-columns: 48px 1.4fr 90px 130px 1.4fr 80px;
-  gap: 14px;
-  padding: 0 16px 8px;
+  grid-template-columns: 56px minmax(220px, 1fr) 110px 150px minmax(160px, 1.1fr) 90px;
+  gap: 16px;
+  padding: 0 18px 10px;
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--text-mid);
   border-bottom: 1px solid var(--rule-soft);
   align-items: center;
 }
 .lt-head-rank { text-align: center; }
-.lt-head-house { padding-left: 16px; }
+.lt-head-house { padding-left: 0; }
 .lt-head-gp, .lt-head-form, .lt-head-diff { text-align: center; }
 .lt-head-pts { text-align: right; color: var(--gold-bright, var(--yellow)); }
 
@@ -27418,14 +27435,11 @@ button.orgs-pill {
 .lt-row {
   position: relative;
   display: grid;
-  grid-template-columns: 48px 1.4fr 90px 130px 1.4fr 80px;
-  gap: 14px;
+  grid-template-columns: 56px minmax(220px, 1fr) 110px 150px minmax(160px, 1.1fr) 90px;
+  gap: 16px;
   align-items: center;
-  padding: 14px 16px;
-  background: linear-gradient(90deg,
-    color-mix(in srgb, var(--lt-house) 11%, transparent) 0%,
-    rgba(255, 255, 255, 0.02) 60%,
-    rgba(255, 255, 255, 0.02) 100%);
+  padding: 14px 18px;
+  background: transparent;
   border: 1px solid var(--rule-soft);
   transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
   overflow: hidden;
@@ -28094,10 +28108,12 @@ button.orgs-pill {
   height: 56px;
 }
 .lt-rank-num {
-  font-size: 36px;
-  letter-spacing: -0.03em;
+  font-family: var(--display, 'Druk', 'Druk Wide', 'Impact', sans-serif);
+  font-weight: 900;
+  font-size: 32px;
+  letter-spacing: -0.04em;
   font-feature-settings: var(--lt-tnum);
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
 }
 .lt-rank-crown {
   width: 20px;
@@ -28107,9 +28123,12 @@ button.orgs-pill {
   font-size: 10px;
 }
 .lt-house-name {
-  font-size: 26px;
-  letter-spacing: 0.025em;
-  line-height: 0.95;
+  font-family: var(--display, 'Druk', 'Druk Wide', 'Impact', sans-serif);
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  line-height: 0.92;
+  text-shadow: 0 1px 0 #0a0a0e;
 }
 .lt-house-record {
   font-size: 10.5px;
@@ -28154,11 +28173,13 @@ button.orgs-pill {
   gap: 5px;
 }
 .lt-pts-num {
+  font-family: var(--display, 'Druk', 'Druk Wide', 'Impact', sans-serif);
+  font-weight: 900;
   font-size: 44px;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
   line-height: 0.9;
   font-feature-settings: var(--lt-tnum);
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
 }
 .lt-pts-lbl {
   font-size: 9.5px;
@@ -28739,11 +28760,11 @@ button.orgs-pill {
 .pb-hero-center-vs {
   position: relative;
   display: inline-block;
-  font-family: var(--display, 'Druk', sans-serif);
-  font-weight: 400;
-  font-size: 64px;
+  font-family: var(--display, 'Druk', 'Druk Wide', 'Impact', sans-serif);
+  font-weight: 900;
+  font-size: 72px;
   line-height: 1;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.06em;
   padding: 8px 6px;
   z-index: 1;
 }
