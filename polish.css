@@ -27047,14 +27047,11 @@ button.orgs-pill {
 .cps-schedule li { display: block; }
 
 /* ── HOME PAGE WIDGET ──────────────────────────────────────────── */
-.home-today-powerball {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4, 16px);
-  margin-top: var(--space-5, 20px);
-  padding-top: var(--space-5, 20px);
-  border-top: 1px solid var(--rule-soft);
-}
+/* Standalone Powerball section on the home page (sibling of
+   HomeToday). Gets the home-section padding + intro-fade treatment
+   so it reads as its own beat in the page. */
+.home-powerball { /* uses .home-section base styles inherited from
+                     the surrounding home-page layout */ }
 .hpb-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -27102,3 +27099,30 @@ button.orgs-pill {
   .pb-game-date { border-right: none; border-bottom: 1px solid var(--rule-soft); padding: 0 0 10px; text-align: left; }
   .pb-game-meta { justify-content: flex-start; text-align: left; }
 }
+
+/* ── PB · relative time stamp (e.g. "11 DAYS AGO" / "IN 24 DAYS") ── */
+.pb-game-date-rel {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  margin-top: 5px;
+  text-transform: uppercase;
+}
+.pb-game-date-rel.is-past   { color: var(--text-mid); }
+.pb-game-date-rel.is-future { color: var(--gold-bright, var(--yellow)); }
+
+/* ── PB · previous matches block (home page section) ─────────────── */
+.hpb-card-history {
+  grid-column: 1 / -1;
+  grid-row: 3;
+}
+.hpb-history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hpb-history li { display: block; }

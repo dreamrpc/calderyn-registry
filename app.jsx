@@ -103,6 +103,7 @@ const ICON_PATHS = {
   "scroll-text":    <><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></>,
   "search":         <><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></>,
   "shield":         <><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></>,
+  "trophy":         <><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></>,
   "sparkles":       <><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></>,
   "users":          <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
   "x":              <><path d="M18 6 6 18"/><path d="m6 6 12 12"/></>,
@@ -766,6 +767,7 @@ function HomeTab({setTab}){
       <HomeHero setTab={setTab}/>
       <HomeVanguard/>
       <HomeToday/>
+      <HomePowerball setTab={setTab}/>
       <HomeProgramme/>
       <HomeDormNotice/>
       <HomeCTA setTab={setTab}/>
@@ -853,32 +855,39 @@ function HomeToday(){
         ))}
       </div>
 
-      <HomePowerball/>
     </section>
   );
 }
 
-// Live Powerball season widget for the home page "today" strip:
-// upcoming game + last result + the league table (compact). Pulls
-// from the Powerball club entry's schedule field so the home page
-// and the club page stay in sync.
-function HomePowerball(){
+// Standalone home-page section: Powerball Cup season status. Lives
+// at the top level of the home page (sibling of HomeToday rather
+// than nested inside it) so the side-rail can scroll to it and the
+// section reads as a distinct beat on the page. Pulls from the
+// Powerball club's schedule[] so the home + club page stay in sync.
+function HomePowerball({setTab}){
+  const [ref, inView] = useInView(0.15);
   const powerball = useMemo(() => (D.clubs || []).find(c => c && c.name === "Powerball"), []);
   if (!powerball || !powerball.schedule) return null;
   const sch = powerball.schedule;
   const standings = useMemo(() => computeStandings(sch), [sch]);
   const upcoming = nextGame(sch);
   const recent = lastGame(sch);
-
-  // Top of the table — featured separately so the eye lands there.
   const leader = standings[0];
 
+  // Past results, newest first — every played game so writers can
+  // see the season at a glance with dates.
+  const pastGames = (sch.games || []).filter(g => g.status === "played").reverse();
+
   return (
-    <div className="home-today-powerball">
-      <header className="home-today-events-head">
-        <div className="home-today-events-tag">POWERBALL CUP · {sch.season}</div>
-        <h3 className="home-today-events-title">Inter-house league</h3>
-      </header>
+    <section id="home-powerball" ref={ref} className={"home-section home-powerball " + (inView ? "is-in" : "")}>
+      <div className="home-section-head">
+        <div className="home-section-stamp">DOSSIER · 03 · INTER-HOUSE LEAGUE</div>
+        <h2 className="home-section-title">POWERBALL <span className="home-section-title-accent">CUP</span></h2>
+        <p className="home-section-lede">
+          Calderyn's marquee sport — six-game round-robin between the four houses, capped by the cup final.
+          Current season: <strong>{sch.season}</strong>. League points 3-1-0.
+        </p>
+      </div>
 
       <div className="hpb-grid">
         {/* Next game block */}
@@ -916,6 +925,7 @@ function HomePowerball(){
               <tr>
                 <th className="cps-table-rank">#</th>
                 <th className="cps-table-team">House</th>
+                <th>GP</th>
                 <th>W-D-L</th>
                 <th>+/−</th>
                 <th className="cps-table-pts">PTS</th>
@@ -929,6 +939,7 @@ function HomePowerball(){
                     <span className="cps-house-swatch" style={{background: houseColor(s.id)}}/>
                     {houseName(s.id)}
                   </td>
+                  <td>{s.gp}</td>
                   <td>{s.w}-{s.d}-{s.l}</td>
                   <td className={s.pf - s.pa > 0 ? "cps-pos" : s.pf - s.pa < 0 ? "cps-neg" : ""}>
                     {s.pf - s.pa > 0 ? "+" : ""}{s.pf - s.pa}
@@ -939,8 +950,24 @@ function HomePowerball(){
             </tbody>
           </table>
         </div>
+
+        {/* Previous matches — every played game listed with its
+            actual date and result, newest first. Gives writers the
+            full season at a glance without leaving the home page. */}
+        {pastGames.length > 0 && (
+          <div className="hpb-card hpb-card-history">
+            <div className="hpb-card-eyebrow">
+              <i className="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> PREVIOUS MATCHES
+            </div>
+            <ol className="hpb-history">
+              {pastGames.map(g => (
+                <li key={g.id}><PowerballGameCard game={g}/></li>
+              ))}
+            </ol>
+          </div>
+        )}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -955,6 +982,7 @@ const HOME_SECTIONS = [
   { id: "home-hero",     label: "Hero",      icon: "flag" },
   { id: "home-vanguard", label: "Vanguard",  icon: "shield" },
   { id: "home-today",    label: "Today",     icon: "sun" },
+  { id: "home-powerball",label: "Powerball", icon: "trophy" },
   { id: "home-programme",label: "Programme", icon: "book-open" },
   { id: "home-dorm",     label: "Dorms",     icon: "map" },
   { id: "home-cta",      label: "Apply",     icon: "sparkles" },
@@ -5284,17 +5312,42 @@ function PowerballGameCard({ game, highlight }){
   const homeWin = isPlayed && game.home_score > game.away_score;
   const awayWin = isPlayed && game.away_score > game.home_score;
 
-  // Format date for display: "13 JUN · SAT" UK-style.
+  // Format date for display: "18 OCT 2025 · SAT" UK-style.
+  // Includes the year so 2025 fixtures are clearly distinguishable
+  // from 2026 ones at a glance.
+  const gameDate = (() => {
+    try { return new Date(game.date + "T12:00:00Z"); }
+    catch { return null; }
+  })();
   const fmtDate = (() => {
-    try {
-      const d = new Date(game.date + "T12:00:00Z");
-      const day = String(d.getUTCDate()).padStart(2, "0");
-      const mons = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-      const dows = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
-      return day + " " + mons[d.getUTCMonth()] + " · " + dows[d.getUTCDay()];
-    } catch {
-      return game.date;
+    if (!gameDate) return game.date;
+    const day = String(gameDate.getUTCDate()).padStart(2, "0");
+    const mons = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+    const dows = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+    return day + " " + mons[gameDate.getUTCMonth()] + " " + gameDate.getUTCFullYear() + " · " + dows[gameDate.getUTCDay()];
+  })();
+
+  // Relative time stamp so writers see "PLAYED · 11 DAYS AGO" or
+  // "UPCOMING · IN 24 DAYS" without doing date math themselves.
+  const relStamp = (() => {
+    if (!gameDate) return null;
+    const ms = gameDate.getTime() - Date.now();
+    const days = Math.round(ms / (1000 * 60 * 60 * 24));
+    if (isPlayed) {
+      const past = Math.abs(days);
+      if (past === 0) return "EARLIER TODAY";
+      if (past === 1) return "1 DAY AGO";
+      if (past < 14) return past + " DAYS AGO";
+      if (past < 60) return Math.round(past / 7) + " WEEKS AGO";
+      return Math.round(past / 30) + " MONTHS AGO";
     }
+    if (isUpcoming) {
+      if (days <= 0) return "TODAY";
+      if (days === 1) return "TOMORROW";
+      if (days < 14) return "IN " + days + " DAYS";
+      return "IN " + Math.round(days / 7) + " WEEKS";
+    }
+    return null;
   })();
 
   return (
@@ -5302,6 +5355,7 @@ function PowerballGameCard({ game, highlight }){
       <div className="pb-game-date">
         <div className="pb-game-date-main">{fmtDate}</div>
         {game.time && <div className="pb-game-date-time">{game.time} · GMT</div>}
+        {relStamp && <div className={"pb-game-date-rel" + (isUpcoming ? " is-future" : " is-past")}>{relStamp}</div>}
       </div>
 
       <div className="pb-game-teams">
