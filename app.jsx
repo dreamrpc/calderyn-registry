@@ -5547,7 +5547,9 @@ function LeagueTable({ schedule, compact }){
               <div className="lt-house" role="cell">
                 <span className="lt-house-name">{houseName(s.id)}</span>
                 <span className="lt-house-record">
-                  {s.gp} {s.gp === 1 ? "GAME" : "GAMES"} · {s.pf} FOR · {s.pa} AGAINST
+                  <strong>{s.gp}</strong>{s.gp === 1 ? "GAME" : "GAMES"} ·{" "}
+                  <strong>{s.pf}</strong>FOR ·{" "}
+                  <strong>{s.pa}</strong>AGAINST
                 </span>
               </div>
 
@@ -5724,34 +5726,36 @@ function PowerballGameCard({ game, highlight }){
         {game.venue && <span className="pb-game-venue">{game.venue}</span>}
       </div>
 
-      {(game.mvp || game.note) && highlight && (
-        <div className="pb-game-detail">
-          {game.mvp && (
-            <div className="pb-game-mvp">
-              <span className="pb-game-mvp-lbl">MVP</span>
-              {game.mvp_link ? (
-                <a
-                  className="pb-game-mvp-name pb-game-mvp-link"
-                  href={game.mvp_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={`Open ${game.mvp}'s RPC profile`}
-                >
-                  {game.mvp}
-                  <i className="fa-solid fa-arrow-up-right-from-square pb-game-mvp-icon" aria-hidden="true"></i>
-                </a>
-              ) : (
-                <span className="pb-game-mvp-name">{game.mvp}</span>
-              )}
-              {game.mvp_team && (
-                <span className="pb-game-mvp-house" style={{color: houseColor(game.mvp_team)}}>
-                  · {houseName(game.mvp_team)}
-                </span>
-              )}
-            </div>
+      {game.mvp && (
+        <div className="pb-game-mvp-row">
+          <span className="pb-game-mvp-lbl">MVP</span>
+          {game.mvp_link ? (
+            <a
+              className="pb-game-mvp-name pb-game-mvp-link"
+              href={game.mvp_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={`Open ${game.mvp}'s RPC profile`}
+            >
+              {game.mvp}
+              <i className="fa-solid fa-arrow-up-right-from-square pb-game-mvp-icon" aria-hidden="true"></i>
+            </a>
+          ) : (
+            <span className="pb-game-mvp-name">{game.mvp}</span>
           )}
-          {game.note && <p className="pb-game-note">{game.note}</p>}
+          {game.mvp_team && (
+            <span
+              className="pb-game-mvp-house"
+              style={{ "--mvp-house": houseColor(game.mvp_team) }}
+            >
+              {houseName(game.mvp_team)}
+            </span>
+          )}
         </div>
+      )}
+
+      {game.note && highlight && (
+        <p className="pb-game-note">{game.note}</p>
       )}
     </div>
   );

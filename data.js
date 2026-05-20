@@ -2165,9 +2165,13 @@ clubs: [
         { id: 5, date: "2026-05-09", time: "19:00", venue: "Powerball Arena · Greenwich",
           home: "valaris",  away: "grimere", status: "played",
           home_score: 215, away_score: 240,
-          mvp: "Cesare Delgado", mvp_team: "grimere",
-          mvp_link: "https://roleplay.chat/profile.php?user=delgado",
-          note: "Upset of the season. Grimere's Defence locked Valaris's Attack pair to seven scores total; Delgado finished 12-for-15." },
+          // Losing-side MVP: Krüger logged 22 saves against a Grimere
+          // Attack pair that finished a combined 28-of-34 from the
+          // scoring zone. Without him the margin would have been
+          // double-digits worse.
+          mvp: "Enzo Krüger", mvp_team: "valaris",
+          mvp_link: "https://roleplay.chat/profile.php?user=Breakpoint",
+          note: "Upset of the season. Grimere's Defence locked Valaris's Attack pair to seven scores total — but Krüger turned away 22 shots in the goal area and kept the margin to 25, a result Valaris's pundits called the best goalkeeping line in a decade of league play." },
         { id: 6, date: "2026-06-13", time: "19:30", venue: "Powerball Arena · Greenwich · CUP FINAL",
           home: "orenne",   away: "grimere", status: "upcoming",
           home_score: null, away_score: null,

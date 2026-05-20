@@ -27817,3 +27817,266 @@ button.orgs-pill {
   border-color: rgba(212, 168, 74, 0.25);
   background: linear-gradient(90deg, rgba(212, 168, 74, 0.05), rgba(255, 255, 255, 0.02));
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY PASS · league table + powerball game cards
+   Replaces the prior sizes with a stronger hierarchy: dramatic rank
+   numbers, larger house names with tighter tracking, punchier W/D/L
+   pills, bigger points readouts, better small-caps treatment on
+   eyebrow labels. All numerals use OpenType tabular figures so
+   columns align cleanly.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── LEAGUE TABLE · refined typography ──────────────────────────── */
+.lt {
+  --lt-tnum: "tnum" 1, "lnum" 1;
+}
+.lt-head {
+  padding: 0 18px 10px;
+  gap: 16px;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  font-weight: 800;
+}
+.lt-row {
+  padding: 18px;
+  gap: 16px;
+}
+.lt-rank {
+  width: 56px;
+  height: 56px;
+}
+.lt-rank-num {
+  font-size: 36px;
+  letter-spacing: -0.03em;
+  font-feature-settings: var(--lt-tnum);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+.lt-rank-crown {
+  width: 20px;
+  height: 20px;
+  top: -8px;
+  right: -8px;
+  font-size: 10px;
+}
+.lt-house-name {
+  font-size: 26px;
+  letter-spacing: 0.025em;
+  line-height: 0.95;
+}
+.lt-house-record {
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  margin-top: 6px;
+  font-feature-settings: var(--lt-tnum);
+}
+.lt-house-record strong {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  margin-right: 1px;
+}
+.lt-gp-text {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  font-feature-settings: var(--lt-tnum);
+}
+.lt-pill {
+  padding: 6px 9px;
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  min-width: 38px;
+  gap: 4px;
+}
+.lt-pill strong {
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  font-feature-settings: var(--lt-tnum);
+  line-height: 1;
+}
+.lt-diff-val {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0;
+  font-feature-settings: var(--lt-tnum);
+}
+.lt-pts {
+  gap: 5px;
+}
+.lt-pts-num {
+  font-size: 44px;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  font-feature-settings: var(--lt-tnum);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+.lt-pts-lbl {
+  font-size: 9.5px;
+  letter-spacing: 0.28em;
+}
+.lt-pts-bar { width: 72px; height: 3px; }
+
+/* ── POWERBALL GAME CARD · refined typography ───────────────────── */
+.pb-game-date {
+  min-width: 124px;
+  padding-right: 20px;
+}
+.pb-game-date-main {
+  font-size: 18px;
+  letter-spacing: 0.05em;
+}
+.pb-game-date-time {
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  font-weight: 800;
+  margin-top: 5px;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+.pb-game-date-rel {
+  font-size: 9.5px;
+  letter-spacing: 0.26em;
+  margin-top: 6px;
+}
+.pb-game-team {
+  font-size: 19px;
+  letter-spacing: 0.05em;
+  gap: 11px;
+}
+.pb-game-team-swatch {
+  width: 16px;
+  height: 16px;
+  box-shadow: 0 0 8px color-mix(in srgb, currentColor 40%, transparent);
+}
+.pb-game-team-score {
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  padding: 0 14px;
+  min-width: 64px;
+  line-height: 1;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+.pb-game-team.is-winner .pb-game-team-score {
+  text-shadow: 0 0 14px rgba(212, 168, 74, 0.45);
+}
+.pb-game-vs {
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.pb-game-tag {
+  font-size: 9.5px;
+  letter-spacing: 0.26em;
+  padding: 4px 8px;
+  font-weight: 800;
+}
+.pb-game-venue {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+}
+
+/* ── MVP ROW · now visible on every game card, not just highlights ── */
+.pb-game-mvp-row {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  padding-top: 12px;
+  margin-top: 2px;
+  border-top: 1px solid var(--rule-soft);
+  font-family: var(--mono);
+}
+.pb-game.is-highlight .pb-game-mvp-row {
+  padding-top: 14px;
+  margin-top: 4px;
+}
+.pb-game-mvp-lbl {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  color: var(--text-mid);
+  padding: 3px 7px;
+  border: 1px solid var(--rule-soft);
+  background: rgba(212, 168, 74, 0.06);
+  color: var(--gold-bright, var(--yellow));
+}
+.pb-game-mvp-name {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 15px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 1.1;
+}
+.pb-game-mvp-link {
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+  transition: color 140ms ease, border-color 140ms ease;
+}
+.pb-game-mvp-link:hover,
+.pb-game-mvp-link:focus-visible {
+  color: var(--gold-bright, var(--yellow));
+  border-bottom-color: currentColor;
+}
+.pb-game-mvp-icon {
+  margin-left: 5px;
+  font-size: 9px;
+  opacity: 0.55;
+  vertical-align: 1px;
+  transition: opacity 140ms ease;
+}
+.pb-game-mvp-link:hover .pb-game-mvp-icon { opacity: 1; }
+.pb-game-mvp-house {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mvp-house, var(--text-mid));
+  padding: 3px 7px;
+  border: 1px solid color-mix(in srgb, var(--mvp-house, var(--rule-soft)) 45%, var(--rule-soft));
+  background: color-mix(in srgb, var(--mvp-house, transparent) 8%, transparent);
+}
+.pb-game-mvp-house::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--mvp-house, currentColor);
+}
+
+/* The match note paragraph (highlight only) */
+.pb-game-note {
+  grid-column: 1 / -1;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-mid);
+  margin: 10px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule-soft);
+  letter-spacing: 0.01em;
+}
+.pb-game.is-highlight .pb-game-note { padding-top: 14px; }
+
+@media (max-width: 720px) {
+  .lt-rank { width: 48px; height: 48px; }
+  .lt-rank-num { font-size: 30px; }
+  .lt-house-name { font-size: 22px; }
+  .lt-pill strong { font-size: 17px; }
+  .lt-pts-num { font-size: 36px; }
+  .pb-game-team { font-size: 16px; }
+  .pb-game-team-score { font-size: 22px; min-width: 54px; }
+}
