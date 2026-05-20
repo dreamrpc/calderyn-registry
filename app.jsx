@@ -8785,8 +8785,19 @@ function MapTab(){
               >
                 {/* LEFT · the cinematic poster — gradient + halftone +
                     massive icon glyph + overlay name. Stays in view on
-                    desktop while the right column scrolls. */}
-                <aside className="map-stage-poster" aria-hidden="true">
+                    desktop while the right column scrolls. When the
+                    district has a hero image, it layers in behind the
+                    overlays with a dark vignette for title legibility. */}
+                <aside className={"map-stage-poster" + (activeDistrict.image ? " is-image" : "")} aria-hidden="true">
+                  {activeDistrict.image && (
+                    <img
+                      className="map-stage-poster-img"
+                      src={activeDistrict.image}
+                      alt=""
+                      loading="lazy"
+                    />
+                  )}
+                  {activeDistrict.image && <div className="map-stage-poster-img-vignette" aria-hidden="true"/>}
                   <div className="map-stage-poster-halftone"/>
                   <div className="map-stage-poster-grain"/>
                   <div className="map-stage-poster-glyph">
