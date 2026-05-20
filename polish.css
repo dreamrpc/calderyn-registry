@@ -26248,3 +26248,96 @@ button.orgs-pill {
 /* Hide the legacy support-list markup defensively */
 .freg-support-list { display: none !important; }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   POWERS GUIDE · STATUS CARDS · cleaner tag chip + tighter layout
+   Two complaints from the user:
+   - The status-tag chip (UNSANCTIONED / CIVILIAN / etc.) renders
+     with tiny text inside a big bordered box. Bump the font, kill
+     the wraparound border, tighten the chrome.
+   - Whole page reads as scattered with too much blank space. Pull
+     paddings in, use uniform clamp() margins, even the grid spacing.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Uniform page padding for every Guide section panel */
+.pg-guide .intro-bay,
+.pg-guide .tier-bay,
+.pg-guide .status-bay,
+.pg-guide .banned-bay {
+  padding: 32px clamp(24px, 3.5vw, 44px) 36px !important;
+  margin: 0 auto 28px !important;
+}
+.pg-guide section + section { margin-top: 0 !important; }
+
+/* Bay header rhythm — tighten internal gaps so the badge, title and
+   blurb read as a single typographic block, not three floating
+   elements. */
+.pg-guide .bay-hd {
+  padding: 0 !important;
+  margin: 0 0 22px !important;
+}
+.pg-guide .bay-hd-tag    { margin: 0 0 12px !important; padding: 5px 12px !important; }
+.pg-guide .bay-hd-title  { margin: 0 0 8px !important; line-height: 1.05 !important; }
+.pg-guide .bay-hd-blurb  { margin: 0 !important; }
+
+/* ── Status card grid ─────────────────────────────────────────────── */
+.pg-guide .status-cards {
+  grid-template-columns: 1fr !important;
+  gap: 14px !important;
+}
+@media (min-width: 900px) {
+  .pg-guide .status-cards { grid-template-columns: repeat(2, 1fr) !important; gap: 14px 18px !important; }
+}
+
+.pg-guide .status-card {
+  grid-template-columns: 64px 1fr !important;
+  grid-template-rows: auto auto !important;
+  padding: 0 !important;
+}
+.pg-guide .status-card-num {
+  padding: 18px 0 0 !important;
+  font-size: 26px !important;
+}
+
+/* ── The chip itself · CLEAN ───────────────────────────────────────── */
+.pg-guide .status-card-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: max-content !important;
+  max-width: max-content !important;
+  margin: 20px 22px 8px !important;
+  padding: 6px 14px !important;
+  border: 0 !important;
+  border-bottom: 2px solid currentColor !important;
+  border-radius: 0 !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  line-height: 1.1 !important;
+  /* No box-shadow — the inset highlights were what made the tag
+     read as an oversized container. */
+  box-shadow: none !important;
+}
+.pg-guide .status-card-tag > span {
+  display: inline-block !important;
+  line-height: 1.1 !important;
+}
+
+/* UNSANCTIONED specifically — its inline bg (#0e0e10) is essentially
+   the card colour, which is what made the chip look invisible.
+   Override to a tinted red wash so the chip reads as a saturated
+   badge like the others without depending on the wrap border. */
+.pg-guide .status-card-tag[style*="#0e0e10"] {
+  background: rgba(255, 42, 50, 0.16) !important;
+}
+
+/* Description copy below the chip · tighter vertical rhythm */
+.pg-guide .status-card-desc {
+  padding: 0 22px 20px !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+}
+
