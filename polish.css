@@ -24709,9 +24709,13 @@ button.orgs-pill {
   margin: 24px clamp(20px, 4vw, 32px) 48px !important;
   background: transparent !important;
   border: 0 !important;
+  max-width: calc(100% - 2 * clamp(20px, 4vw, 32px)) !important;
+  box-sizing: border-box !important;
+  overflow-x: auto !important;
 }
 .pbanned-tw table {
   width: 100% !important;
+  table-layout: fixed !important;
   border-collapse: collapse !important;
   border-spacing: 0 !important;
 }
@@ -24744,17 +24748,26 @@ button.orgs-pill {
 .pbanned-tw tbody tr:hover td {
   background: #121212 !important;
 }
-.pbanned-tw tbody td.rn {
+.pbanned-tw tbody td.rn,
+.pbanned-tw thead th:first-child {
   font-family: var(--mono, 'Söhne Mono', monospace) !important;
   font-size: 11px !important;
   color: var(--text-3, #948d80) !important;
-  width: 56px !important;
+  width: 48px !important;
   letter-spacing: 0.08em !important;
 }
-.pbanned-tw tbody td.pbanned-name {
+.pbanned-tw tbody td.pbanned-name,
+.pbanned-tw thead th:nth-child(2) {
   font-weight: 600 !important;
   color: #f5f1e8 !important;
-  width: 30% !important;
+  width: 28% !important;
+  word-wrap: break-word !important;
+  overflow-wrap: anywhere !important;
+}
+.pbanned-tw tbody td.pbanned-reason,
+.pbanned-tw thead th:nth-child(3) {
+  word-wrap: break-word !important;
+  overflow-wrap: anywhere !important;
 }
 .pbanned-tw tbody td.pbanned-reason {
   color: #b8b1a3 !important;
@@ -24765,7 +24778,11 @@ button.orgs-pill {
   color: var(--text-3, #948d80) !important;
   font-style: italic !important;
 }
-.pbanned-tw tbody td.pbanned-status { width: 110px !important; }
+.pbanned-tw tbody td.pbanned-status,
+.pbanned-tw thead th:nth-child(4) {
+  width: 100px !important;
+  text-align: right !important;
+}
 .pbanned-tag {
   display: inline-block !important;
   font-family: var(--mono, 'Söhne Mono', monospace) !important;
