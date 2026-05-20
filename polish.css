@@ -6058,9 +6058,11 @@ html, body { overflow-x: clip; }
   }
 
   /* Mobile tab rows — bigger tap targets, left-aligned, label
-     comfortable */
-  .tabs.is-open .tab,
-  .tabs-inner .tab {
+     comfortable. Scoped to .tabs.is-open only so the drawer's
+     full-width display:flex doesn't apply to every .tab while
+     the nav is closed (which was causing the bar to endlessly
+     expand on mobile). */
+  .tabs.is-open .tab {
     display: flex !important;
     width: 100%;
     height: auto !important;
