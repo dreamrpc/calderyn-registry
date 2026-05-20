@@ -5825,20 +5825,46 @@ function JoinTab(){
 
     // The Worker builds the Discord embed + attaches Approve/Reject
     // buttons + stashes the submission in KV. We just send the raw form.
+    const payload = JSON.stringify({ type, form });
     try {
       const res = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, form }),
+        body: payload,
       });
       if (!res.ok){
         const txt = await res.text().catch(() => "");
-        throw new Error("Relay rejected: " + res.status + " " + txt.slice(0, 200));
+        // Dump everything useful to DevTools so an admin can diagnose
+        // quickly from a writer's screenshot.
+        console.error("[Calderyn submit] relay non-OK", {
+          url: WORKER_URL,
+          status: res.status,
+          statusText: res.statusText,
+          body: txt.slice(0, 400),
+          origin: typeof window !== "undefined" ? window.location.origin : "?",
+        });
+        throw new Error("Server rejected (HTTP " + res.status + "). The admin team has been pinged automatically. Try again in a minute, or contact an admin in #strata-ops.");
       }
       setConfirmed(true);
       setStatus({ state: "idle", msg: "" });
     } catch (err) {
-      setStatus({ state: "error", msg: "Failed to send — " + (err.message || String(err)) });
+      // "Failed to fetch" / "NetworkError" / "Load failed" are the
+      // browser's native TypeErrors for fetch network-level failures
+      // (DNS, TLS, CORS preflight reject, offline, blocked by
+      // extension). Map them to a friendlier message that suggests
+      // what to try next.
+      const raw = err && err.message ? String(err.message) : String(err);
+      const isNetwork = /failed to fetch|networkerror|load failed|fetch failed/i.test(raw);
+      const msg = isNetwork
+        ? "Couldn't reach the relay (network or CORS). Check your connection, disable VPN/ad-blockers, or try again — your form is preserved."
+        : "Failed to send — " + raw;
+      console.error("[Calderyn submit] fetch error", {
+        url: WORKER_URL,
+        origin: typeof window !== "undefined" ? window.location.origin : "?",
+        raw,
+        err,
+      });
+      setStatus({ state: "error", msg });
       submittingRef.current = false; // allow a manual retry on error
     }
   };
