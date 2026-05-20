@@ -1068,19 +1068,23 @@ function HomeCalendar(){
     return all.sort((a, b) => a.day - b.day);
   }, [eventsByDay]);
 
-  // Upcoming events — anything in the future regardless of viewed
-  // month. Limited to the next 5 so the list stays scannable.
+  // Upcoming events — limited to today + the remainder of this month
+  // + the entire next calendar month. So in late May the list shows
+  // through end of June, then on June 1 it extends through end of
+  // July, etc. Prevents the rollup from trailing off into term
+  // boundaries many months away.
   const upcoming = useMemo(() => {
     const ms = Date.now();
+    const horizon = Date.UTC(todayY, todayM + 2, 1); // first day of month-after-next
     return HOME_EVENTS
       .map(ev => {
         const t = ev.start ? Date.parse(ev.start) : Date.parse(ev.date + "T12:00:00Z");
         return { ...ev, _t: t };
       })
-      .filter(ev => Number.isFinite(ev._t) && ev._t >= ms - (1000 * 60 * 60 * 24)) // include today
+      .filter(ev => Number.isFinite(ev._t) && ev._t >= ms - (1000 * 60 * 60 * 24) && ev._t < horizon)
       .sort((a, b) => a._t - b._t)
       .slice(0, 5);
-  }, []);
+  }, [todayY, todayM]);
 
   return (
     <div className="home-today-events">
@@ -1524,6 +1528,7 @@ function PowerballHero({ game, standings, schedule }){
 
       <div className="pb-hero-matchup">
         <div className="pb-hero-side pb-hero-side-home">
+          <HouseCrest id={game.home} size={96} className="pb-hero-side-crest"/>
           <div className="pb-hero-side-head">
             <span className="pb-hero-side-tag">HOME</span>
             {homeRank > 0 && (
@@ -1552,6 +1557,7 @@ function PowerballHero({ game, standings, schedule }){
         </div>
 
         <div className="pb-hero-side pb-hero-side-away">
+          <HouseCrest id={game.away} size={96} className="pb-hero-side-crest"/>
           <div className="pb-hero-side-head pb-hero-side-head-away">
             {awayRank > 0 && (
               <span className="pb-hero-side-rank">
@@ -5804,6 +5810,37 @@ function houseName(id){
 function houseColor(id){
   return (HOUSE_LOOKUP[id] && HOUSE_LOOKUP[id].bg) || "#444";
 }
+function houseCrest(id){
+  return (HOUSE_LOOKUP[id] && HOUSE_LOOKUP[id].crest) || null;
+}
+
+// Renders an <img> of the house's crest (or a fallback square in the
+// house colour if no crest URL is set). Used everywhere we previously
+// showed a flat coloured swatch.
+function HouseCrest({ id, size = 32, className = "" }){
+  const src = houseCrest(id);
+  const sty = { width: size, height: size };
+  if (!src) {
+    return (
+      <span
+        className={"house-crest is-fallback " + className}
+        style={{ ...sty, background: houseColor(id) }}
+        aria-hidden="true"
+      />
+    );
+  }
+  return (
+    <img
+      className={"house-crest " + className}
+      src={src}
+      alt=""
+      width={size}
+      height={size}
+      style={sty}
+      loading="lazy"
+    />
+  );
+}
 
 // Find the next not-yet-played game and the most recent played game.
 function nextGame(schedule){
@@ -5870,12 +5907,15 @@ function LeagueTable({ schedule, compact }){
               </div>
 
               <div className="lt-house" role="cell">
-                <span className="lt-house-name">{houseName(s.id)}</span>
-                <span className="lt-house-record">
-                  <strong>{s.gp}</strong> {s.gp === 1 ? "GAME" : "GAMES"} ·{" "}
-                  <strong>{s.pf}</strong> FOR ·{" "}
-                  <strong>{s.pa}</strong> AGAINST
-                </span>
+                <HouseCrest id={s.id} size={44} className="lt-house-crest"/>
+                <div className="lt-house-text">
+                  <span className="lt-house-name">{houseName(s.id)}</span>
+                  <span className="lt-house-record">
+                    <strong>{s.gp}</strong> {s.gp === 1 ? "GAME" : "GAMES"} ·{" "}
+                    <strong>{s.pf}</strong> FOR ·{" "}
+                    <strong>{s.pa}</strong> AGAINST
+                  </span>
+                </div>
               </div>
 
               {!compact && (
@@ -6041,15 +6081,17 @@ function PowerballGameCard({ game, highlight }){
 
       <div className="pb-game-teams">
         <div className={"pb-game-team pb-game-team-home" + (homeWin ? " is-winner" : "")}>
-          <span className="pb-game-team-swatch" style={{background: homeColor}}/>
+          <HouseCrest id={game.home} size={32} className="pb-game-team-crest"/>
           <span className="pb-game-team-name">{homeName}</span>
           {isPlayed && <span className="pb-game-team-score">{game.home_score}</span>}
         </div>
-        <div className="pb-game-vs" aria-hidden="true">vs</div>
+        <div className="pb-game-vs" aria-hidden="true">
+          <i className="fa-solid fa-xmark" aria-hidden="true"></i>
+        </div>
         <div className={"pb-game-team pb-game-team-away" + (awayWin ? " is-winner" : "")}>
           {isPlayed && <span className="pb-game-team-score">{game.away_score}</span>}
           <span className="pb-game-team-name">{awayName}</span>
-          <span className="pb-game-team-swatch" style={{background: awayColor}}/>
+          <HouseCrest id={game.away} size={32} className="pb-game-team-crest"/>
         </div>
       </div>
 

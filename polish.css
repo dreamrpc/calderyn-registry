@@ -27199,8 +27199,8 @@ button.orgs-pill {
   text-align: center;
   margin: 12px 0 22px;
 }
-.pb-hero.is-final .pb-hero-eyebrow::before { content: "▸ "; }
-.pb-hero.is-final .pb-hero-eyebrow::after  { content: " ◂"; }
+/* Cup-final eyebrow has its own visual treatment via the corner
+   pulse + colour — no inline character decorations. */
 
 .pb-hero-matchup {
   display: grid;
@@ -28806,4 +28806,164 @@ button.orgs-pill {
   .pb-hero-form-away { flex-direction: row; justify-content: center; }
   .pb-hero-side-head { justify-content: center; }
   .pb-hero-side-head-away { justify-content: center; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   HOUSE CREST · shared image element
+   Used in the league table, on game cards, and in the next-match
+   hero. Backed by a tiny faded "spotlight" radial behind so the
+   crest pops off whatever background it lands on.
+   ═══════════════════════════════════════════════════════════════════════ */
+.house-crest {
+  display: inline-block;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55))
+          drop-shadow(0 0 12px rgba(0, 0, 0, 0.35));
+  vertical-align: middle;
+}
+.house-crest.is-fallback {
+  /* graceful fallback when no crest URL — flat coloured square */
+  border-radius: 4px;
+}
+
+/* ── LEAGUE TABLE · crest variant + refined typography ──────────── */
+.lt-house {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.lt-house-crest {
+  width: 44px;
+  height: 44px;
+}
+.lt-house-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* Cleaner, less-blocky table treatment:
+   - softer row backgrounds (less heavy house gradient)
+   - 1px top hairline instead of full borders
+   - drop the row stripe (the crest carries the house identity now)
+   - more breathing room
+   - subtle hover lift */
+.lt-body {
+  border-top: 1px solid var(--rule-soft);
+  padding-top: 0;
+  gap: 0;
+}
+.lt-row {
+  border: none;
+  border-bottom: 1px solid var(--rule-soft);
+  padding: 18px 18px;
+  background: transparent;
+  position: relative;
+  transition: background 200ms ease;
+}
+.lt-row:last-child { border-bottom: none; }
+.lt-row::before {
+  /* Soft house-colour wash from the left edge, opacity-faded.
+     Replaces the heavy gradient + stripe combo. */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 240px;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--lt-house) 14%, transparent) 0%,
+    transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.lt-row > * { position: relative; z-index: 1; }
+.lt-row:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+.lt-row:hover::before {
+  width: 320px;
+  transition: width 250ms ease;
+}
+.lt-row.is-top {
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--lt-house) 10%, transparent) 0%,
+    rgba(212, 168, 74, 0.04) 50%,
+    transparent 100%);
+  border-bottom-color: rgba(212, 168, 74, 0.25);
+}
+.lt-row.is-top::before {
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--lt-house) 20%, transparent) 0%,
+    color-mix(in srgb, var(--gold-bright, #d4a84a) 8%, transparent) 60%,
+    transparent 100%);
+  width: 360px;
+}
+.lt-row.is-bottom { opacity: 0.7; }
+
+/* Hide the old left stripe — crest replaces it as the colour cue */
+.lt-row-stripe { display: none; }
+
+/* Tighten rank pill — drop the heavy border, lean on type weight */
+.lt-rank {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  width: 52px;
+  height: 52px;
+}
+.lt-row.is-top .lt-rank {
+  background: linear-gradient(180deg, rgba(212, 168, 74, 0.22), rgba(212, 168, 74, 0.06));
+  border-color: rgba(212, 168, 74, 0.55);
+}
+
+/* ── POWERBALL GAME CARDS · crests instead of swatches ─────────── */
+.pb-game-team-crest {
+  width: 32px;
+  height: 32px;
+}
+.pb-game-team {
+  gap: 13px;
+}
+
+/* The "vs" divider now wraps an FA icon (fa-xmark) instead of text */
+.pb-game-vs {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--rule-soft);
+  font-size: 11px;
+  color: var(--text-mid);
+  background: rgba(0, 0, 0, 0.3);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ── HERO · big crests above each team name ────────────────────── */
+.pb-hero-side {
+  align-items: flex-start;
+}
+.pb-hero-side-home { align-items: flex-start; }
+.pb-hero-side-away { align-items: flex-end; }
+.pb-hero-side-crest {
+  width: 96px;
+  height: 96px;
+  margin-bottom: 6px;
+}
+
+/* ── RESPONSIVE adjustments for crest sizing ───────────────────── */
+@media (max-width: 900px) {
+  .lt-house-crest { width: 36px; height: 36px; }
+  .lt-house { gap: 10px; }
+  .pb-game-team-crest { width: 26px; height: 26px; }
+  .pb-hero-side-crest { width: 72px; height: 72px; }
+  .lt-row { padding: 14px; }
+}
+@media (max-width: 640px) {
+  .pb-hero-side-crest { width: 60px; height: 60px; margin-bottom: 4px; }
+  .lt-house-crest { width: 32px; height: 32px; }
 }
