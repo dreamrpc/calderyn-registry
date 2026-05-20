@@ -7899,6 +7899,226 @@ function Footer(){
 /* ═══════════════════════════════════════════════════════════════════════════
    APP
 ═══════════════════════════════════════════════════════════════════════════ */
+const MUSIC_TRACK = {
+  title: "Don't Be A Hero",
+  artist: "Lyrica",
+  src: "https://file.garden/afN5Az6TPxbx7GGe/Upchuck/Don't%20Be%20A%20Hero.wav",
+};
+
+function NowPlaying(){
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  // Volume defaults to 0.3 per the brief. Persisted so writers don't
+  // get blasted on every revisit if they turned it down. Clamped to
+  // [0, 1] on read so corrupt storage doesn't crash the player.
+  const [volume, setVolume] = useState(() => {
+    try {
+      const v = parseFloat(localStorage.getItem("calderyn:musicVolume"));
+      return Number.isFinite(v) ? Math.max(0, Math.min(1, v)) : 0.3;
+    } catch { return 0.3; }
+  });
+  const [needsInteraction, setNeedsInteraction] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    try { return localStorage.getItem("calderyn:musicCollapsed") === "1"; } catch { return false; }
+  });
+
+  // Push volume changes onto the actual audio element + persist.
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = volume;
+    try { localStorage.setItem("calderyn:musicVolume", String(volume)); } catch {}
+  }, [volume]);
+
+  useEffect(() => {
+    try { localStorage.setItem("calderyn:musicCollapsed", collapsed ? "1" : "0"); } catch {}
+  }, [collapsed]);
+
+  // Autoplay attempt on mount. Chrome / Safari / Firefox all block
+  // audio autoplay until the user has interacted with the page in some
+  // way (a click, a keypress, etc.). If audio.play() rejects, we latch
+  // a single capture-phase global listener that re-attempts on the
+  // user's first interaction. We don't preventDefault, so the original
+  // click still reaches its intended target — the audio just starts
+  // alongside it.
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = volume;
+    let cancelled = false;
+    const start = () => {
+      const p = audio.play();
+      if (!p || typeof p.then !== "function") return;
+      p.then(
+        () => { if (!cancelled) { setIsPlaying(true); setNeedsInteraction(false); } },
+        () => { if (!cancelled) setNeedsInteraction(true); }
+      );
+    };
+    start();
+    const onFirstGesture = () => {
+      start();
+      document.removeEventListener("click", onFirstGesture, true);
+      document.removeEventListener("keydown", onFirstGesture, true);
+      document.removeEventListener("touchstart", onFirstGesture, true);
+    };
+    document.addEventListener("click", onFirstGesture, true);
+    document.addEventListener("keydown", onFirstGesture, true);
+    document.addEventListener("touchstart", onFirstGesture, true);
+    return () => {
+      cancelled = true;
+      document.removeEventListener("click", onFirstGesture, true);
+      document.removeEventListener("keydown", onFirstGesture, true);
+      document.removeEventListener("touchstart", onFirstGesture, true);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const togglePlay = () => {
+    const a = audioRef.current;
+    if (!a) return;
+    if (a.paused) {
+      const p = a.play();
+      if (p && typeof p.then === "function") p.catch(() => {});
+    } else {
+      a.pause();
+    }
+  };
+
+  const seek = (e) => {
+    const a = audioRef.current;
+    if (!a || !duration || !Number.isFinite(duration)) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    a.currentTime = pct * duration;
+    setCurrentTime(a.currentTime);
+  };
+
+  const fmt = (s) => {
+    if (!Number.isFinite(s) || s < 0) return "0:00";
+    const m = Math.floor(s / 60);
+    const r = Math.floor(s % 60);
+    return m + ":" + (r < 10 ? "0" : "") + r;
+  };
+
+  const pct = duration ? (currentTime / duration) * 100 : 0;
+  const muted = volume === 0;
+
+  return (
+    <div
+      className={"np" + (collapsed ? " np-collapsed" : "") + (isPlaying ? " is-playing" : "")}
+      role="region"
+      aria-label="Music player"
+    >
+      <audio
+        ref={audioRef}
+        src={MUSIC_TRACK.src}
+        preload="metadata"
+        loop
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration || 0)}
+        onError={() => setNeedsInteraction(false)}
+      />
+      <button
+        className="np-cover"
+        onClick={togglePlay}
+        aria-label={isPlaying ? "Pause" : "Play"}
+      >
+        <div className={"np-cover-art" + (isPlaying ? " is-playing" : "")}>
+          <span className="np-cover-mono">L</span>
+        </div>
+        <div className="np-cover-play" aria-hidden="true">
+          {isPlaying ? (
+            <svg viewBox="0 0 16 16" width="14" height="14">
+              <rect x="3" y="2" width="3" height="12" rx="1"/>
+              <rect x="10" y="2" width="3" height="12" rx="1"/>
+            </svg>
+          ) : (
+            <svg viewBox="0 0 16 16" width="14" height="14">
+              <path d="M3.5 2 L13 8 L3.5 14 Z"/>
+            </svg>
+          )}
+        </div>
+      </button>
+
+      <div className="np-mid">
+        <div className="np-track">
+          <div className="np-title" title={MUSIC_TRACK.title}>{MUSIC_TRACK.title}</div>
+          <div className="np-artist" title={MUSIC_TRACK.artist}>{MUSIC_TRACK.artist}</div>
+        </div>
+        <div className="np-progress">
+          <div className="np-time">{fmt(currentTime)}</div>
+          <div
+            className="np-bar"
+            onClick={seek}
+            role="slider"
+            aria-label="Seek"
+            aria-valuemin={0}
+            aria-valuemax={Math.floor(duration) || 0}
+            aria-valuenow={Math.floor(currentTime) || 0}
+            tabIndex={0}
+          >
+            <div className="np-bar-fill" style={{width: pct + "%"}}/>
+            <div className="np-bar-handle" style={{left: pct + "%"}}/>
+          </div>
+          <div className="np-time">{fmt(duration)}</div>
+        </div>
+      </div>
+
+      <div className="np-vol">
+        <button
+          className="np-mute"
+          onClick={() => setVolume(v => v > 0 ? 0 : 0.3)}
+          aria-label={muted ? "Unmute" : "Mute"}
+        >
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+            <path d="M2 6 H5 L9 3 V13 L5 10 H2 Z"/>
+            {muted ? (
+              <path d="M11 5 L15 11 M15 5 L11 11" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
+            ) : volume < 0.5 ? (
+              <path d="M11 6 Q13 8 11 10" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
+            ) : (
+              <>
+                <path d="M11 6 Q13 8 11 10" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
+                <path d="M13 4 Q16 8 13 12" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
+              </>
+            )}
+          </svg>
+        </button>
+        <input
+          type="range"
+          min="0" max="1" step="0.01"
+          value={volume}
+          onChange={(e) => setVolume(parseFloat(e.target.value))}
+          className="np-vol-slider"
+          style={{"--np-vol-pct": (volume * 100) + "%"}}
+          aria-label="Volume"
+        />
+      </div>
+
+      <button
+        className="np-collapse"
+        onClick={() => setCollapsed(c => !c)}
+        aria-label={collapsed ? "Expand player" : "Collapse player"}
+        title={collapsed ? "Expand" : "Collapse"}
+      >
+        {collapsed ? (
+          <svg viewBox="0 0 12 12" width="12" height="12"><path d="M3 5 L6 8 L9 5 Z" fill="currentColor" transform="rotate(180 6 6)"/></svg>
+        ) : (
+          <svg viewBox="0 0 12 12" width="12" height="12"><path d="M3 5 L6 8 L9 5 Z" fill="currentColor"/></svg>
+        )}
+      </button>
+
+      {needsInteraction && !isPlaying && (
+        <button className="np-tap" onClick={togglePlay}>
+          ▶ Click anywhere to play
+        </button>
+      )}
+    </div>
+  );
+}
+
 function App(){
   const validIds = TABS.map(t => t.id);
 
@@ -8066,6 +8286,7 @@ function App(){
       <Footer/>
 
       <GlobalSearch open={gsOpen} onClose={() => setGsOpen(false)} onJump={handleJump}/>
+      <NowPlaying/>
     </RegContext.Provider>
   );
 }
