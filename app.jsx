@@ -2797,7 +2797,7 @@ function FacultyRegistryView(){
               </thead>
               <tbody>
                 {supportSection.rows.map((r, i) => (
-                  <tr key={i} className={"support-row" + (r.char ? " is-filled" : " is-open")} style={{boxShadow: "inset 4px 0 0 #5fc3d4"}}>
+                  <tr key={i} className={"support-row" + (r.char ? " is-filled" : " is-open")}>
                     <td className="rn">{String(i + 1).padStart(2, "0")}</td>
                     <td className="support-col-role">{r.role}</td>
                     <td className="support-col-stage">{r.stage ? <span className="support-stage">{r.stage}</span> : <span className="support-na">—</span>}</td>
