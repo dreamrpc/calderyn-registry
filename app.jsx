@@ -324,17 +324,42 @@ const SEARCH_INDEX = (() => {
     });
   });
 
-  FACULTY.forEach(sec => sec.rows.forEach(r => {
-    if (r.clf) return;
-    push({
-      kind: "Faculty",
-      label: r.char || r.role,
-      sub: r.char ? r.role : `${sec.section} · open`,
-      tab: "faculty",
-      link: r.link || null,
-      keys: hay(r.role, r.char, sec.section),
+  FACULTY.forEach(sec => {
+    // Skip the legacy 8 dept sections (now sourced from D.departments).
+    if (!/office of the dean|support staff/i.test(sec.section)) return;
+    sec.rows.forEach(r => {
+      if (r.clf) return;
+      push({
+        kind: "Faculty",
+        label: r.char || r.role,
+        sub: r.char ? r.role : `${sec.section} · open`,
+        tab: "faculty",
+        link: r.link || null,
+        keys: hay(r.role, r.char, sec.section),
+      });
     });
-  }));
+  });
+
+  // Dept staff (head + numbered profs + instructional) — single source
+  // of truth for departmental faculty.
+  (D.departments || []).forEach(dept => {
+    const sectionLabel = `${dept.code} · ${dept.name}`;
+    const addRow = (r, defaultRole) => {
+      if (!r) return;
+      const role = r.role || defaultRole;
+      push({
+        kind: "Faculty",
+        label: r.char || role,
+        sub: r.char ? role : `${sectionLabel} · open`,
+        tab: "faculty",
+        link: r.link || null,
+        keys: hay(role, r.char, sectionLabel),
+      });
+    };
+    addRow(dept.head, "Head of Department");
+    (dept.staff || []).forEach(s => addRow(s, "Faculty"));
+    (dept.instructional || []).forEach(p => addRow(p, "Instructional Staff"));
+  });
 
   STRATA.forEach(sec => sec.rows.forEach(r => {
     if (r.clf) return;
@@ -2568,6 +2593,7 @@ function DepartmentSection({dept}){
                         ? <CLink name={p.char} link={p.link}/>
                         : <span>{p.char}</span>}
                       <span className="freg-dept-aux-role">· {p.role}</span>
+                      {p.tier && <TierChip tier={p.tier}/>}
                       {p.npc && <NpcBadge/>}
                     </>
                   ) : (
@@ -5317,8 +5343,12 @@ const APPLICATION_TYPES = [
 // Helper: build dropdown options of OPEN faculty roles by section
 function getOpenFacultyRoles(){
   const out = [];
-  // Office of the Dean + Support Staff rows
+  // Office of the Dean + Support Staff rows. Skip every other FACULTY
+  // section because the 8 department sections are now sourced from
+  // D.departments below; including them here would double every dept
+  // slot in the dropdown.
   FACULTY.forEach(sec => {
+    if (!/office of the dean|support staff/i.test(sec.section)) return;
     sec.rows.forEach(r => {
       if (!r.char && !r.clf){
         out.push({ section: sec.section, role: r.role });
