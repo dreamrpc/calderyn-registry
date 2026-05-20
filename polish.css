@@ -27046,78 +27046,284 @@ button.orgs-pill {
 }
 .cps-schedule li { display: block; }
 
-/* ── HOME PAGE WIDGET ──────────────────────────────────────────── */
-/* Standalone Powerball section on the home page (sibling of
-   HomeToday). Gets the home-section padding + intro-fade treatment
-   so it reads as its own beat in the page. */
-.home-powerball { /* uses .home-section base styles inherited from
-                     the surrounding home-page layout */ }
-.hpb-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 14px;
-}
-.hpb-card-next   { grid-column: 1; grid-row: 1; }
-.hpb-card-recent { grid-column: 2; grid-row: 1; }
-.hpb-card-table  { grid-column: 1 / -1; grid-row: 2; }
+/* ═══════════════════════════════════════════════════════════════════════
+   POWERBALL · HOME SECTION
+   Editorial-comic spread instead of the old nested-card layout. The
+   section flows: hero matchup → red-stripe section break → standings
+   → break → latest result → break → season archive. Content sits
+   directly on the page background between dividers — no wrapper
+   rectangles — so the typography + colour treatment do the work.
+   ═══════════════════════════════════════════════════════════════════════ */
 
-.hpb-card {
+/* ── SECTION BREAK (red stripe + tag + Druk title + sub) ─────────── */
+.pb-break {
+  display: grid;
+  grid-template-columns: 6px 1fr;
+  gap: 18px;
+  margin: 36px 0 18px;
+  align-items: stretch;
+}
+.pb-break-stripe {
+  background: linear-gradient(180deg, var(--red, #c41a1a) 0%, #7a1521 100%);
+  box-shadow: 0 0 20px rgba(196, 26, 26, 0.35);
+}
+.pb-break-body {
+  padding: 4px 0 6px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--rule-soft);
+  gap: 4px;
 }
-.hpb-card-eyebrow {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  color: var(--gold-bright, var(--yellow));
-  text-transform: uppercase;
+.pb-break-row {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-}
-.hpb-leader-tag {
-  margin-left: auto;
-  color: var(--text-mid);
-  font-weight: 700;
-  letter-spacing: 0.18em;
-}
-.hpb-mini-table { font-size: 11px; }
-.hpb-mini-table .cps-table-team { font-size: 12px; }
-
-@media (max-width: 900px) {
-  .hpb-grid { grid-template-columns: 1fr; }
-  .hpb-card-next, .hpb-card-recent, .hpb-card-table {
-    grid-column: 1; grid-row: auto;
-  }
-  .pb-game { grid-template-columns: 1fr; gap: 12px; padding: 12px; }
-  .pb-game-date { border-right: none; border-bottom: 1px solid var(--rule-soft); padding: 0 0 10px; text-align: left; }
-  .pb-game-meta { justify-content: flex-start; text-align: left; }
-}
-
-/* ── PB · relative time stamp (e.g. "11 DAYS AGO" / "IN 24 DAYS") ── */
-.pb-game-date-rel {
+  gap: 12px;
   font-family: var(--mono);
-  font-size: 9px;
+}
+.pb-break-n {
+  font-family: var(--mono);
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.22em;
-  margin-top: 5px;
+  color: var(--gold-bright, var(--yellow));
+  padding: 3px 7px;
+  border: 1px solid var(--gold-bright, var(--yellow));
+  background: rgba(212, 168, 74, 0.05);
+}
+.pb-break-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
+  color: var(--text-mid);
 }
-.pb-game-date-rel.is-past   { color: var(--text-mid); }
-.pb-game-date-rel.is-future { color: var(--gold-bright, var(--yellow)); }
+.pb-break-title {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 30px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 0.95;
+  margin: 4px 0 0;
+}
+.pb-break-sub {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-mid);
+  margin-top: 2px;
+}
 
-/* ── PB · previous matches block (home page section) ─────────────── */
-.hpb-card-history {
-  grid-column: 1 / -1;
-  grid-row: 3;
+/* ── HERO · the next match (full-bleed two-tone comic spread) ────── */
+.pb-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 36px 32px 30px;
+  margin: 0 0 12px;
+  border-top: 4px solid var(--red, #c41a1a);
+  border-bottom: 1px solid var(--rule-soft);
+  background: #07070b;
+  color: var(--text);
 }
-.hpb-history {
+.pb-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.pb-hero-bg-home,
+.pb-hero-bg-away {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 56%;
+  opacity: 0.18;
+}
+.pb-hero-bg-home {
+  left: 0;
+  background:
+    linear-gradient(90deg, var(--pb-hero-home, #444) 0%, transparent 90%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.45));
+  clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%);
+}
+.pb-hero-bg-away {
+  right: 0;
+  background:
+    linear-gradient(270deg, var(--pb-hero-away, #444) 0%, transparent 90%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.45));
+  clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
+}
+.pb-hero-bg-slash {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  width: 6px;
+  height: 120%;
+  background: linear-gradient(180deg, transparent 0%, var(--gold-bright, var(--yellow)) 25%, var(--gold-bright, var(--yellow)) 75%, transparent 100%);
+  transform: translateX(-50%) rotate(8deg);
+  opacity: 0.6;
+  box-shadow: 0 0 24px rgba(212, 168, 74, 0.4);
+}
+
+/* Comic-panel corner labels */
+.pb-hero-corner {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: var(--text-mid);
+  padding: 4px 10px;
+  border: 1px solid var(--rule-soft);
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+.pb-hero-corner-tl { top: 18px; left: 18px; }
+.pb-hero-corner-tr {
+  top: 18px;
+  right: 18px;
+  color: var(--gold-bright, var(--yellow));
+  border-color: var(--gold-bright, var(--yellow));
+  background: rgba(212, 168, 74, 0.06);
+}
+
+.pb-hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-bright, var(--yellow));
+  text-align: center;
+  margin: 12px 0 22px;
+}
+.pb-hero.is-final .pb-hero-eyebrow::before { content: "▸ "; }
+.pb-hero.is-final .pb-hero-eyebrow::after  { content: " ◂"; }
+
+.pb-hero-matchup {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 32px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.pb-hero-side {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.pb-hero-side-home { text-align: left; }
+.pb-hero-side-away { text-align: right; }
+.pb-hero-side-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  color: var(--text-mid);
+}
+.pb-hero-side-home .pb-hero-side-tag { color: var(--pb-hero-home, var(--text-mid)); }
+.pb-hero-side-away .pb-hero-side-tag { color: var(--pb-hero-away, var(--text-mid)); }
+.pb-hero-side-name {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 68px;
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
+}
+.pb-hero-side-record {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+.pb-hero-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 110px;
+  padding: 0 4px;
+  position: relative;
+}
+.pb-hero-center-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--mono);
+}
+.pb-hero-center-dow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  color: var(--text-mid);
+}
+.pb-hero-center-full {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--gold-bright, var(--yellow));
+}
+.pb-hero-center-vs {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--gold-bright, var(--yellow));
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+  padding: 6px 0;
+}
+.pb-hero-center-time {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.pb-hero-footer {
+  margin-top: 26px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+.pb-hero-venue {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+.pb-hero-note {
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-mid);
+  margin: 0;
+  letter-spacing: 0.01em;
+  max-width: 720px;
+}
+
+/* ── SEASON ARCHIVE LIST ─────────────────────────────────────────── */
+.pb-archive {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -27125,7 +27331,48 @@ button.orgs-pill {
   flex-direction: column;
   gap: 8px;
 }
-.hpb-history li { display: block; }
+.pb-archive li { display: block; }
+
+/* Relative-time stamp on game cards */
+.pb-game-date-rel {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  margin-top: 5px;
+  text-transform: uppercase;
+}
+.pb-game-date-rel.is-past   { color: var(--text-mid); }
+.pb-game-date-rel.is-future { color: var(--gold-bright, var(--yellow)); }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .pb-hero {
+    padding: 28px 20px 22px;
+  }
+  .pb-hero-side-name { font-size: 46px; }
+  .pb-hero-center-vs { font-size: 40px; }
+  .pb-hero-matchup { gap: 18px; }
+  .pb-hero-corner { font-size: 9px; padding: 3px 7px; }
+  .pb-game { grid-template-columns: 1fr; gap: 12px; padding: 12px; }
+  .pb-game-date { border-right: none; border-bottom: 1px solid var(--rule-soft); padding: 0 0 10px; text-align: left; }
+  .pb-game-meta { justify-content: flex-start; text-align: left; }
+  .pb-break-title { font-size: 24px; }
+}
+@media (max-width: 640px) {
+  .pb-hero-matchup {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .pb-hero-side-home, .pb-hero-side-away { text-align: center; }
+  .pb-hero-side-name { font-size: 42px; }
+  .pb-hero-center { flex-direction: row; min-width: 0; gap: 12px; padding: 8px 0; }
+  .pb-hero-center-date { flex-direction: row; gap: 6px; }
+  .pb-hero-center-vs { font-size: 28px; padding: 0; }
+  .pb-hero-corner { display: none; }
+  .pb-break { grid-template-columns: 4px 1fr; gap: 12px; margin: 28px 0 14px; }
+  .pb-break-title { font-size: 22px; }
+}
 
 /* ═══════════════════════════════════════════════════════════════════════
    LEAGUE TABLE · visual card-row variant

@@ -1326,10 +1326,10 @@ function CalEventRow({ ev, month, upcoming }){
 }
 
 // Standalone home-page section: Powerball Cup season status. Lives
-// at the top level of the home page (sibling of HomeToday rather
-// than nested inside it) so the side-rail can scroll to it and the
-// section reads as a distinct beat on the page. Pulls from the
-// Powerball club's schedule[] so the home + club page stay in sync.
+// at the top level of the home page so the side-rail can scroll
+// here. Editorial-comic layout — no nested cards; content flows
+// freely between section breaks (red stripe + tag + label) that
+// match the rest of the home page's typographic chrome.
 function HomePowerball({setTab}){
   const [ref, inView] = useInView(0.15);
   const powerball = useMemo(() => (D.clubs || []).find(c => c && c.name === "Powerball"), []);
@@ -1339,9 +1339,6 @@ function HomePowerball({setTab}){
   const upcoming = nextGame(sch);
   const recent = lastGame(sch);
   const leader = standings[0];
-
-  // Past results, newest first — every played game so writers can
-  // see the season at a glance with dates.
   const pastGames = (sch.games || []).filter(g => g.status === "played").reverse();
 
   return (
@@ -1350,62 +1347,159 @@ function HomePowerball({setTab}){
         <div className="home-section-stamp">DOSSIER · 03 · INTER-HOUSE LEAGUE</div>
         <h2 className="home-section-title">POWERBALL <span className="home-section-title-accent">CUP</span></h2>
         <p className="home-section-lede">
-          Calderyn's marquee sport — six-game round-robin between the four houses, capped by the cup final.
-          Current season: <strong>{sch.season}</strong>. League points 3-1-0.
+          Calderyn's marquee sport — six-game round-robin between the four houses,
+          capped by the cup final. Current season <strong>{sch.season}</strong>.
+          {leader && leader.gp > 0 && (
+            <> Current leader <strong style={{color: houseColor(leader.id)}}>{houseName(leader.id)}</strong>.</>
+          )}
         </p>
       </div>
 
-      <div className="hpb-grid">
-        {/* Next game block */}
-        {upcoming && (
-          <div className="hpb-card hpb-card-next">
-            <div className="hpb-card-eyebrow">
-              <i className="fa-regular fa-calendar" aria-hidden="true"></i> NEXT MATCH
-            </div>
-            <PowerballGameCard game={upcoming} highlight/>
-          </div>
-        )}
+      {/* ── HERO · the next match, full-bleed comic spread ────────── */}
+      {upcoming && <PowerballHero game={upcoming} standings={standings}/>}
 
-        {/* Recent result */}
-        {recent && (
-          <div className="hpb-card hpb-card-recent">
-            <div className="hpb-card-eyebrow">
-              <i className="fa-solid fa-flag-checkered" aria-hidden="true"></i> LATEST RESULT
-            </div>
-            <PowerballGameCard game={recent} highlight/>
-          </div>
-        )}
+      {/* ── THE TABLE ─────────────────────────────────────────────── */}
+      <PowerballBreak
+        n="01"
+        tag="STANDINGS"
+        title="The Table"
+        sub="3 pts for a win · 1 for a draw · 0 for a loss"
+      />
+      <LeagueTable schedule={sch}/>
 
-        {/* Standings — visual league table */}
-        <div className="hpb-card hpb-card-table">
-          <div className="hpb-card-eyebrow">
-            <i className="fa-solid fa-trophy" aria-hidden="true"></i> STANDINGS
-            {leader && leader.gp > 0 && (
-              <span className="hpb-leader-tag">
-                · LEADER · <span style={{color: houseColor(leader.id)}}>{houseName(leader.id)}</span>
-              </span>
-            )}
-          </div>
-          <LeagueTable schedule={sch}/>
+      {/* ── LATEST RESULT ─────────────────────────────────────────── */}
+      {recent && (
+        <>
+          <PowerballBreak
+            n="02"
+            tag="LAST OUT"
+            title="Latest Result"
+            sub={(() => {
+              try {
+                const d = new Date(recent.date + "T12:00:00Z");
+                const days = Math.round((Date.now() - d.getTime()) / (1000 * 60 * 60 * 24));
+                return days <= 0 ? "Earlier today" : days + " days ago";
+              } catch { return ""; }
+            })()}
+          />
+          <PowerballGameCard game={recent} highlight/>
+        </>
+      )}
+
+      {/* ── SEASON ARCHIVE ────────────────────────────────────────── */}
+      {pastGames.length > 0 && (
+        <>
+          <PowerballBreak
+            n="03"
+            tag={`${pastGames.length} PLAYED · ${sch.games.length - pastGames.length} LEFT`}
+            title="Season So Far"
+            sub="Every result on the table, newest first"
+          />
+          <ol className="pb-archive">
+            {pastGames.map(g => (
+              <li key={g.id}><PowerballGameCard game={g}/></li>
+            ))}
+          </ol>
+        </>
+      )}
+    </section>
+  );
+}
+
+// Comic-editorial section divider. Red angled stripe, eyebrow tag
+// in mono caps, big Druk title, optional sub line. Used between
+// the Powerball section's beats so the page reads like a magazine
+// spread instead of a stack of cards.
+function PowerballBreak({ n, tag, title, sub }){
+  return (
+    <div className="pb-break" role="separator">
+      <div className="pb-break-stripe" aria-hidden="true"/>
+      <div className="pb-break-body">
+        <div className="pb-break-row">
+          {n && <span className="pb-break-n">{n}</span>}
+          <span className="pb-break-tag">{tag}</span>
+        </div>
+        <h3 className="pb-break-title">{title}</h3>
+        {sub && <div className="pb-break-sub">{sub}</div>}
+      </div>
+    </div>
+  );
+}
+
+// Hero block for the next match. Two-tone diagonal split using the
+// home and away house colours, massive Druk team names, a centred
+// VS treatment with date/time and venue, and the season note
+// beneath. Standings record + league points show under each name.
+function PowerballHero({ game, standings }){
+  const homeStand = standings.find(s => s.id === game.home);
+  const awayStand = standings.find(s => s.id === game.away);
+  const homeColor = houseColor(game.home);
+  const awayColor = houseColor(game.away);
+
+  const fmtDate = (() => {
+    try {
+      const d = new Date(game.date + "T12:00:00Z");
+      const day = String(d.getUTCDate()).padStart(2, "0");
+      const mons = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+      const dows = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+      return { full: day + " " + mons[d.getUTCMonth()] + " " + d.getUTCFullYear(), dow: dows[d.getUTCDay()] };
+    } catch { return { full: game.date, dow: "" }; }
+  })();
+
+  const recordLine = (s) => {
+    if (!s) return "—";
+    return `${s.w}-${s.d}-${s.l} · ${s.pts} pts`;
+  };
+
+  return (
+    <div
+      className={"pb-hero" + (/CUP FINAL/i.test(game.venue || "") ? " is-final" : "")}
+      style={{
+        "--pb-hero-home": homeColor,
+        "--pb-hero-away": awayColor,
+      }}
+    >
+      <div className="pb-hero-bg" aria-hidden="true">
+        <div className="pb-hero-bg-home"/>
+        <div className="pb-hero-bg-away"/>
+        <div className="pb-hero-bg-slash"/>
+      </div>
+
+      <div className="pb-hero-corner pb-hero-corner-tl" aria-hidden="true">№ 06</div>
+      <div className="pb-hero-corner pb-hero-corner-tr" aria-hidden="true">UPCOMING</div>
+
+      <div className="pb-hero-eyebrow">
+        {/CUP FINAL/i.test(game.venue || "") ? "Cup Final · 2025-26" : "Next Match"}
+      </div>
+
+      <div className="pb-hero-matchup">
+        <div className="pb-hero-side pb-hero-side-home">
+          <div className="pb-hero-side-tag">HOME</div>
+          <div className="pb-hero-side-name">{houseName(game.home)}</div>
+          <div className="pb-hero-side-record">{recordLine(homeStand)}</div>
         </div>
 
-        {/* Previous matches — every played game listed with its
-            actual date and result, newest first. Gives writers the
-            full season at a glance without leaving the home page. */}
-        {pastGames.length > 0 && (
-          <div className="hpb-card hpb-card-history">
-            <div className="hpb-card-eyebrow">
-              <i className="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> PREVIOUS MATCHES
-            </div>
-            <ol className="hpb-history">
-              {pastGames.map(g => (
-                <li key={g.id}><PowerballGameCard game={g}/></li>
-              ))}
-            </ol>
+        <div className="pb-hero-center">
+          <div className="pb-hero-center-date">
+            <span className="pb-hero-center-dow">{fmtDate.dow}</span>
+            <span className="pb-hero-center-full">{fmtDate.full}</span>
           </div>
-        )}
+          <div className="pb-hero-center-vs">VS</div>
+          <div className="pb-hero-center-time">{game.time || ""}</div>
+        </div>
+
+        <div className="pb-hero-side pb-hero-side-away">
+          <div className="pb-hero-side-tag">AWAY</div>
+          <div className="pb-hero-side-name">{houseName(game.away)}</div>
+          <div className="pb-hero-side-record">{recordLine(awayStand)}</div>
+        </div>
       </div>
-    </section>
+
+      <div className="pb-hero-footer">
+        {game.venue && <div className="pb-hero-venue">{game.venue}</div>}
+        {game.note && <p className="pb-hero-note">{game.note}</p>}
+      </div>
+    </div>
   );
 }
 
