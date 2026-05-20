@@ -743,6 +743,7 @@ departments: [
     head: {
       role: "Head of Combat",
       char: "Theron",
+      alias: "Bulk",
       tier: "A",
       power: "Biokinetic Augmentation · Kinetic Absorption & Release",
       expression: "Theron's body absorbs and redistributes incoming force, dampening damage and channelling that energy into momentum. Strength scales with motion, favouring charges, grapples, and sustained pressure. In Break State his biological inhibitors fail, deepening output at the cost of self-damage.",
@@ -1893,7 +1894,7 @@ powers: [
   },
   {
     char: "Theron",
-    alias: "THERON",
+    alias: "Bulk",
     status: "faculty",
     tier: "A",
     power: "Biokinetic Augmentation · Kinetic Absorption & Release",
