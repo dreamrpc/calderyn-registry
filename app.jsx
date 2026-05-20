@@ -1356,7 +1356,7 @@ function HomePowerball({setTab}){
       </div>
 
       {/* ── HERO · the next match, full-bleed comic spread ────────── */}
-      {upcoming && <PowerballHero game={upcoming} standings={standings}/>}
+      {upcoming && <PowerballHero game={upcoming} standings={standings} schedule={sch}/>}
 
       {/* ── THE TABLE ─────────────────────────────────────────────── */}
       <PowerballBreak
@@ -1426,15 +1426,41 @@ function PowerballBreak({ n, tag, title, sub }){
   );
 }
 
+// Compute the last N played games for a given house, returning a
+// W/D/L tag per game so the hero can render a recent-form streak.
+function recentForm(schedule, houseId, n = 3){
+  if (!schedule || !Array.isArray(schedule.games)) return [];
+  const out = [];
+  for (const g of schedule.games) {
+    if (g.status !== "played") continue;
+    if (g.home !== houseId && g.away !== houseId) continue;
+    const isHome = g.home === houseId;
+    const ours = isHome ? g.home_score : g.away_score;
+    const theirs = isHome ? g.away_score : g.home_score;
+    let r = "D";
+    if (ours > theirs) r = "W";
+    else if (ours < theirs) r = "L";
+    out.push({ id: g.id, r, ours, theirs });
+  }
+  return out.slice(-n);
+}
+
 // Hero block for the next match. Two-tone diagonal split using the
-// home and away house colours, massive Druk team names, a centred
-// VS treatment with date/time and venue, and the season note
-// beneath. Standings record + league points show under each name.
-function PowerballHero({ game, standings }){
+// home and away house colours, massive Druk team names with rank
+// chips + recent-form streaks, a centred VS treatment with
+// date/time and venue, and the season note beneath. Cup finals
+// get a TITLE DECIDER badge and an animated action-line accent
+// behind the VS.
+function PowerballHero({ game, standings, schedule }){
   const homeStand = standings.find(s => s.id === game.home);
   const awayStand = standings.find(s => s.id === game.away);
   const homeColor = houseColor(game.home);
   const awayColor = houseColor(game.away);
+  const homeRank = standings.findIndex(s => s.id === game.home) + 1;
+  const awayRank = standings.findIndex(s => s.id === game.away) + 1;
+  const homeForm = useMemo(() => recentForm(schedule, game.home), [schedule, game.home]);
+  const awayForm = useMemo(() => recentForm(schedule, game.away), [schedule, game.away]);
+  const isFinal = /CUP FINAL/i.test(game.venue || "");
 
   const fmtDate = (() => {
     try {
@@ -1446,14 +1472,33 @@ function PowerballHero({ game, standings }){
     } catch { return { full: game.date, dow: "" }; }
   })();
 
-  const recordLine = (s) => {
-    if (!s) return "—";
-    return `${s.w}-${s.d}-${s.l} · ${s.pts} pts`;
+  const ordSuffix = (n) => {
+    const v = n % 100;
+    if (v >= 11 && v <= 13) return "TH";
+    switch (n % 10) { case 1: return "ST"; case 2: return "ND"; case 3: return "RD"; default: return "TH"; }
   };
+
+  const renderForm = (form, side) => (
+    <div className={"pb-hero-form pb-hero-form-" + side} aria-label="Recent form">
+      <span className="pb-hero-form-lbl">FORM</span>
+      <div className="pb-hero-form-row">
+        {form.length === 0 && <span className="pb-hero-form-empty">—</span>}
+        {form.map((f, i) => (
+          <span
+            key={f.id}
+            className={"pb-hero-form-pip is-" + f.r.toLowerCase()}
+            title={`${f.r} · ${f.ours}-${f.theirs}`}
+          >
+            {f.r}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <div
-      className={"pb-hero" + (/CUP FINAL/i.test(game.venue || "") ? " is-final" : "")}
+      className={"pb-hero" + (isFinal ? " is-final" : "")}
       style={{
         "--pb-hero-home": homeColor,
         "--pb-hero-away": awayColor,
@@ -1462,36 +1507,63 @@ function PowerballHero({ game, standings }){
       <div className="pb-hero-bg" aria-hidden="true">
         <div className="pb-hero-bg-home"/>
         <div className="pb-hero-bg-away"/>
+        <div className="pb-hero-bg-halftone"/>
+        <div className="pb-hero-bg-grain"/>
         <div className="pb-hero-bg-slash"/>
       </div>
 
-      <div className="pb-hero-corner pb-hero-corner-tl" aria-hidden="true">№ 06</div>
-      <div className="pb-hero-corner pb-hero-corner-tr" aria-hidden="true">UPCOMING</div>
+      <div className="pb-hero-corner pb-hero-corner-tl" aria-hidden="true">№ {String(game.id).padStart(2, "0")}</div>
+      <div className="pb-hero-corner pb-hero-corner-tr" aria-hidden="true">
+        <span className="pb-hero-corner-pulse"/>
+        {isFinal ? "TITLE DECIDER" : "UPCOMING"}
+      </div>
 
       <div className="pb-hero-eyebrow">
-        {/CUP FINAL/i.test(game.venue || "") ? "Cup Final · 2025-26" : "Next Match"}
+        {isFinal ? "Cup Final · 2025-26" : "Next Match"}
       </div>
 
       <div className="pb-hero-matchup">
         <div className="pb-hero-side pb-hero-side-home">
-          <div className="pb-hero-side-tag">HOME</div>
+          <div className="pb-hero-side-head">
+            <span className="pb-hero-side-tag">HOME</span>
+            {homeRank > 0 && (
+              <span className="pb-hero-side-rank">
+                <span className="pb-hero-side-rank-n">{homeRank}</span>
+                <span className="pb-hero-side-rank-ord">{ordSuffix(homeRank)}</span>
+              </span>
+            )}
+          </div>
           <div className="pb-hero-side-name">{houseName(game.home)}</div>
-          <div className="pb-hero-side-record">{recordLine(homeStand)}</div>
+          <div className="pb-hero-side-record">{homeStand ? `${homeStand.w}-${homeStand.d}-${homeStand.l} · ${homeStand.pts} pts` : "—"}</div>
+          {renderForm(homeForm, "home")}
         </div>
 
         <div className="pb-hero-center">
+          <div className="pb-hero-center-actionlines" aria-hidden="true"/>
           <div className="pb-hero-center-date">
             <span className="pb-hero-center-dow">{fmtDate.dow}</span>
             <span className="pb-hero-center-full">{fmtDate.full}</span>
           </div>
-          <div className="pb-hero-center-vs">VS</div>
+          <div className="pb-hero-center-vs" aria-hidden="true">
+            <span className="pb-hero-center-vs-shadow">VS</span>
+            <span className="pb-hero-center-vs-fg">VS</span>
+          </div>
           <div className="pb-hero-center-time">{game.time || ""}</div>
         </div>
 
         <div className="pb-hero-side pb-hero-side-away">
-          <div className="pb-hero-side-tag">AWAY</div>
+          <div className="pb-hero-side-head pb-hero-side-head-away">
+            {awayRank > 0 && (
+              <span className="pb-hero-side-rank">
+                <span className="pb-hero-side-rank-n">{awayRank}</span>
+                <span className="pb-hero-side-rank-ord">{ordSuffix(awayRank)}</span>
+              </span>
+            )}
+            <span className="pb-hero-side-tag">AWAY</span>
+          </div>
           <div className="pb-hero-side-name">{houseName(game.away)}</div>
-          <div className="pb-hero-side-record">{recordLine(awayStand)}</div>
+          <div className="pb-hero-side-record">{awayStand ? `${awayStand.w}-${awayStand.d}-${awayStand.l} · ${awayStand.pts} pts` : "—"}</div>
+          {renderForm(awayForm, "away")}
         </div>
       </div>
 
@@ -5957,7 +6029,10 @@ function PowerballGameCard({ game, highlight }){
   })();
 
   return (
-    <div className={"pb-game" + (highlight ? " is-highlight" : "") + (isUpcoming ? " is-upcoming" : "") + (isPlayed ? " is-played" : "")}>
+    <div
+      className={"pb-game" + (highlight ? " is-highlight" : "") + (isUpcoming ? " is-upcoming" : "") + (isPlayed ? " is-played" : "")}
+      style={{ "--pb-game-home": homeColor, "--pb-game-away": awayColor }}
+    >
       <div className="pb-game-date">
         <div className="pb-game-date-main">{fmtDate}</div>
         {game.time && <div className="pb-game-date-time">{game.time}</div>}
