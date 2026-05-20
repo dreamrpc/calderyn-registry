@@ -853,29 +853,94 @@ function HomeToday(){
         ))}
       </div>
 
-      {/* Events — currently nothing scheduled. Empty-state panel so
-          the section reads as "calendar exists, nothing on it" rather
-          than absent. */}
-      <div className="home-today-events">
-        <header className="home-today-events-head">
-          <div className="home-today-events-tag">CAMPUS CALENDAR · TERM 2 · 2026</div>
-          <h3 className="home-today-events-title">Scheduled events</h3>
-        </header>
-        <div className="home-today-events-empty">
-          <div className="home-today-events-empty-icon" aria-hidden="true">
-            <Icon name="file-text" size={26}/>
-          </div>
-          <div className="home-today-events-empty-body">
-            <div className="home-today-events-empty-title">No events on the public calendar.</div>
-            <div className="home-today-events-empty-sub">
-              When admin or the Student Body President posts something — practicals,
-              Vanguard appearances, inter-house matches — it appears here. Until then
-              the schedule is quiet.
+      <HomePowerball/>
+    </section>
+  );
+}
+
+// Live Powerball season widget for the home page "today" strip:
+// upcoming game + last result + the league table (compact). Pulls
+// from the Powerball club entry's schedule field so the home page
+// and the club page stay in sync.
+function HomePowerball(){
+  const powerball = useMemo(() => (D.clubs || []).find(c => c && c.name === "Powerball"), []);
+  if (!powerball || !powerball.schedule) return null;
+  const sch = powerball.schedule;
+  const standings = useMemo(() => computeStandings(sch), [sch]);
+  const upcoming = nextGame(sch);
+  const recent = lastGame(sch);
+
+  // Top of the table — featured separately so the eye lands there.
+  const leader = standings[0];
+
+  return (
+    <div className="home-today-powerball">
+      <header className="home-today-events-head">
+        <div className="home-today-events-tag">POWERBALL CUP · {sch.season}</div>
+        <h3 className="home-today-events-title">Inter-house league</h3>
+      </header>
+
+      <div className="hpb-grid">
+        {/* Next game block */}
+        {upcoming && (
+          <div className="hpb-card hpb-card-next">
+            <div className="hpb-card-eyebrow">
+              <i className="fa-regular fa-calendar" aria-hidden="true"></i> NEXT MATCH
             </div>
+            <PowerballGameCard game={upcoming} highlight/>
           </div>
+        )}
+
+        {/* Recent result */}
+        {recent && (
+          <div className="hpb-card hpb-card-recent">
+            <div className="hpb-card-eyebrow">
+              <i className="fa-solid fa-flag-checkered" aria-hidden="true"></i> LATEST RESULT
+            </div>
+            <PowerballGameCard game={recent} highlight/>
+          </div>
+        )}
+
+        {/* Compact standings */}
+        <div className="hpb-card hpb-card-table">
+          <div className="hpb-card-eyebrow">
+            <i className="fa-solid fa-trophy" aria-hidden="true"></i> STANDINGS
+            {leader && leader.gp > 0 && (
+              <span className="hpb-leader-tag">
+                · LEADER · <span style={{color: houseColor(leader.id)}}>{houseName(leader.id)}</span>
+              </span>
+            )}
+          </div>
+          <table className="cps-table hpb-mini-table">
+            <thead>
+              <tr>
+                <th className="cps-table-rank">#</th>
+                <th className="cps-table-team">House</th>
+                <th>W-D-L</th>
+                <th>+/−</th>
+                <th className="cps-table-pts">PTS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {standings.map((s, i) => (
+                <tr key={s.id} className={"cps-row" + (i === 0 ? " is-top" : "")}>
+                  <td className="cps-table-rank">{i + 1}</td>
+                  <td className="cps-table-team">
+                    <span className="cps-house-swatch" style={{background: houseColor(s.id)}}/>
+                    {houseName(s.id)}
+                  </td>
+                  <td>{s.w}-{s.d}-{s.l}</td>
+                  <td className={s.pf - s.pa > 0 ? "cps-pos" : s.pf - s.pa < 0 ? "cps-neg" : ""}>
+                    {s.pf - s.pa > 0 ? "+" : ""}{s.pf - s.pa}
+                  </td>
+                  <td className="cps-table-pts">{s.pts}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -4873,10 +4938,12 @@ function ClubPanel({club, onClose}){
 
   const hasRules = !!club.rules;
   const hasTeams = !!club.teams;
+  const hasSeason = !!(club.schedule && Array.isArray(club.schedule.games));
 
   const tabs = [
     {id: "about",  label: "About",  icon: "fa-circle-info"},
     ...(hasRules ? [{id: "rules", label: "Rules", icon: "fa-book"}] : []),
+    ...(hasSeason ? [{id: "season", label: "Season", icon: "fa-trophy"}] : []),
     {id: "roster", label: "Roster", icon: "fa-users"},
   ];
 
@@ -4919,6 +4986,7 @@ function ClubPanel({club, onClose}){
         <div className="club-side-body">
           {tab === "about" && <ClubPanelAbout club={club}/>}
           {tab === "rules" && hasRules && <ClubRules rules={club.rules}/>}
+          {tab === "season" && hasSeason && <ClubPanelSeason club={club}/>}
           {tab === "roster" && <ClubPanelRoster club={club} hasTeams={hasTeams}/>}
         </div>
       </aside>
@@ -5049,6 +5117,227 @@ function ClubPanelAbout({club}){
               </div>
             </div>
           </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── POWERBALL · season helpers ─────────────────────────────────────
+// Compute the league table from a club.schedule.games[] array. Each
+// played game contributes to both houses' W-L-D record + PF/PA. Uses
+// schedule.pointsForWin / pointsForDraw (defaults 3/1) for the
+// standings sort.
+function computeStandings(schedule){
+  if (!schedule || !Array.isArray(schedule.games)) return [];
+  const win = schedule.pointsForWin ?? 3;
+  const draw = schedule.pointsForDraw ?? 1;
+  const t = {};
+  const bump = (id) => {
+    if (!t[id]) t[id] = { id, w: 0, l: 0, d: 0, gp: 0, pf: 0, pa: 0, pts: 0 };
+    return t[id];
+  };
+  for (const g of schedule.games) {
+    if (g.status !== "played") continue;
+    const h = bump(g.home); const a = bump(g.away);
+    h.gp += 1; a.gp += 1;
+    h.pf += g.home_score || 0; h.pa += g.away_score || 0;
+    a.pf += g.away_score || 0; a.pa += g.home_score || 0;
+    if (g.home_score > g.away_score) { h.w += 1; a.l += 1; h.pts += win; }
+    else if (g.away_score > g.home_score) { a.w += 1; h.l += 1; a.pts += win; }
+    else { h.d += 1; a.d += 1; h.pts += draw; a.pts += draw; }
+  }
+  // Include houses that haven't played yet so the table never goes
+  // empty pre-season.
+  const allHouses = ["valaris", "orenne", "saberis", "grimere"];
+  for (const h of allHouses) bump(h);
+  return Object.values(t).sort((x, y) => {
+    if (y.pts !== x.pts) return y.pts - x.pts;
+    if ((y.pf - y.pa) !== (x.pf - x.pa)) return (y.pf - y.pa) - (x.pf - x.pa);
+    return y.pf - x.pf;
+  });
+}
+
+// Lookup helpers for the four house entries (id, label, bg colour).
+const HOUSE_LOOKUP = (() => {
+  const map = {};
+  (D.houses || []).forEach(h => { if (h && h.id) map[h.id] = h; });
+  return map;
+})();
+function houseName(id){
+  const h = HOUSE_LOOKUP[id];
+  if (h && h.name) return h.name;
+  return id ? id.toUpperCase() : "—";
+}
+function houseColor(id){
+  return (HOUSE_LOOKUP[id] && HOUSE_LOOKUP[id].bg) || "#444";
+}
+
+// Find the next not-yet-played game and the most recent played game.
+function nextGame(schedule){
+  if (!schedule || !Array.isArray(schedule.games)) return null;
+  return schedule.games.find(g => g.status === "upcoming") || null;
+}
+function lastGame(schedule){
+  if (!schedule || !Array.isArray(schedule.games)) return null;
+  const played = schedule.games.filter(g => g.status === "played");
+  return played.length ? played[played.length - 1] : null;
+}
+
+function ClubPanelSeason({club}){
+  const sch = club.schedule;
+  const standings = useMemo(() => computeStandings(sch), [sch]);
+  const upcoming = nextGame(sch);
+
+  return (
+    <div className="cps">
+      {/* Season header */}
+      <div className="cps-head">
+        <div className="cps-head-eyebrow">SEASON · {sch.season}</div>
+        <div className="cps-head-title">League · Cup race</div>
+        <div className="cps-head-sub">
+          Six-game round-robin · {sch.pointsForWin ?? 3} pts for a win, {sch.pointsForDraw ?? 1} for a draw
+        </div>
+      </div>
+
+      {/* Standings table */}
+      <div className="cps-section">
+        <header className="cps-section-head">
+          <span className="cps-section-tag"><i className="fa-solid fa-table-list" aria-hidden="true"></i> Standings</span>
+        </header>
+        <table className="cps-table">
+          <thead>
+            <tr>
+              <th className="cps-table-rank">#</th>
+              <th className="cps-table-team">House</th>
+              <th>GP</th>
+              <th>W</th>
+              <th>D</th>
+              <th>L</th>
+              <th>PF</th>
+              <th>PA</th>
+              <th>+/−</th>
+              <th className="cps-table-pts">PTS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {standings.map((s, i) => (
+              <tr key={s.id} className={"cps-row" + (i === 0 ? " is-top" : "")}>
+                <td className="cps-table-rank">{i + 1}</td>
+                <td className="cps-table-team">
+                  <span className="cps-house-swatch" style={{background: houseColor(s.id)}}/>
+                  {houseName(s.id)}
+                </td>
+                <td>{s.gp}</td>
+                <td>{s.w}</td>
+                <td>{s.d}</td>
+                <td>{s.l}</td>
+                <td>{s.pf}</td>
+                <td>{s.pa}</td>
+                <td className={s.pf - s.pa > 0 ? "cps-pos" : s.pf - s.pa < 0 ? "cps-neg" : ""}>
+                  {s.pf - s.pa > 0 ? "+" : ""}{s.pf - s.pa}
+                </td>
+                <td className="cps-table-pts">{s.pts}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Upcoming highlight */}
+      {upcoming && (
+        <div className="cps-section">
+          <header className="cps-section-head">
+            <span className="cps-section-tag"><i className="fa-regular fa-calendar" aria-hidden="true"></i> Next match</span>
+          </header>
+          <PowerballGameCard game={upcoming} highlight/>
+        </div>
+      )}
+
+      {/* Full schedule */}
+      <div className="cps-section">
+        <header className="cps-section-head">
+          <span className="cps-section-tag"><i className="fa-solid fa-list-ol" aria-hidden="true"></i> Full schedule</span>
+        </header>
+        <ol className="cps-schedule">
+          {sch.games.map(g => (
+            <li key={g.id}>
+              <PowerballGameCard game={g}/>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+// One game row — used by the Powerball season tab AND the home page
+// "today" widget. Highlight mode renders the "next match" hero with
+// larger team blocks; default mode is a compact row.
+function PowerballGameCard({ game, highlight }){
+  const homeName  = houseName(game.home);
+  const awayName  = houseName(game.away);
+  const homeColor = houseColor(game.home);
+  const awayColor = houseColor(game.away);
+  const isPlayed   = game.status === "played";
+  const isUpcoming = game.status === "upcoming";
+  const homeWin = isPlayed && game.home_score > game.away_score;
+  const awayWin = isPlayed && game.away_score > game.home_score;
+
+  // Format date for display: "13 JUN · SAT" UK-style.
+  const fmtDate = (() => {
+    try {
+      const d = new Date(game.date + "T12:00:00Z");
+      const day = String(d.getUTCDate()).padStart(2, "0");
+      const mons = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+      const dows = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+      return day + " " + mons[d.getUTCMonth()] + " · " + dows[d.getUTCDay()];
+    } catch {
+      return game.date;
+    }
+  })();
+
+  return (
+    <div className={"pb-game" + (highlight ? " is-highlight" : "") + (isUpcoming ? " is-upcoming" : "") + (isPlayed ? " is-played" : "")}>
+      <div className="pb-game-date">
+        <div className="pb-game-date-main">{fmtDate}</div>
+        {game.time && <div className="pb-game-date-time">{game.time} · GMT</div>}
+      </div>
+
+      <div className="pb-game-teams">
+        <div className={"pb-game-team pb-game-team-home" + (homeWin ? " is-winner" : "")}>
+          <span className="pb-game-team-swatch" style={{background: homeColor}}/>
+          <span className="pb-game-team-name">{homeName}</span>
+          {isPlayed && <span className="pb-game-team-score">{game.home_score}</span>}
+        </div>
+        <div className="pb-game-vs" aria-hidden="true">vs</div>
+        <div className={"pb-game-team pb-game-team-away" + (awayWin ? " is-winner" : "")}>
+          {isPlayed && <span className="pb-game-team-score">{game.away_score}</span>}
+          <span className="pb-game-team-name">{awayName}</span>
+          <span className="pb-game-team-swatch" style={{background: awayColor}}/>
+        </div>
+      </div>
+
+      <div className="pb-game-meta">
+        {isUpcoming && <span className="pb-game-tag is-upcoming">UPCOMING</span>}
+        {isPlayed && <span className="pb-game-tag is-final">FINAL</span>}
+        {game.venue && <span className="pb-game-venue">{game.venue}</span>}
+      </div>
+
+      {(game.mvp || game.note) && highlight && (
+        <div className="pb-game-detail">
+          {game.mvp && (
+            <div className="pb-game-mvp">
+              <span className="pb-game-mvp-lbl">MVP</span>
+              <span className="pb-game-mvp-name">{game.mvp}</span>
+              {game.mvp_team && (
+                <span className="pb-game-mvp-house" style={{color: houseColor(game.mvp_team)}}>
+                  · {houseName(game.mvp_team)}
+                </span>
+              )}
+            </div>
+          )}
+          {game.note && <p className="pb-game-note">{game.note}</p>}
         </div>
       )}
     </div>
@@ -7921,62 +8210,58 @@ const MUSIC_TRACK = {
 // All four are derived; nothing is fetched. The chips animate, pulse,
 // and update on a 1s timer in MastChrome.
 
-// Term anchors for the current academic year. Calderyn runs three
-// 10-week terms with vacation breaks between, modelled on UK boarding
-// school cycles (Michaelmas / Lent / Trinity).
+// Calderyn academic-year structure. Modelled on the Hogwarts /
+// British boarding-school three-term cycle:
+//   AUTUMN TERM · 1 Sep  → 19 Dec   (15 weeks)  ← arrival / first half
+//   SPRING TERM · 6 Jan  → 9 Apr    (13 weeks)  ← coursework heavy
+//   SUMMER TERM · 18 Apr → 30 Jun   (11 weeks)  ← finals + Powerball cup
+// Outside those windows the school is on holiday (Christmas / Easter /
+// Summer break) and the chip reads "HOLIDAY · <next term>".
+//
+// The academic year is named by the September start, so a date in
+// May 2026 belongs to academic year "2025-26".
 function calderynTerm(now){
-  const y = now.getUTCFullYear();
-  const anchors = [
-    { name: "MICHAELMAS", start: Date.UTC(y, 8, 8) },     // Sep 8
-    { name: "LENT",       start: Date.UTC(y, 0, 5) },     // Jan 5
-    { name: "TRINITY",    start: Date.UTC(y, 3, 20) },    // Apr 20
-  ];
   const t = now.getTime();
-  let best = null;
-  for (const a of anchors) {
-    const wks = (t - a.start) / (1000 * 60 * 60 * 24 * 7);
-    if (wks >= 0 && wks < 11 && (!best || wks < best.weeks)) {
-      best = { name: a.name, weeks: wks };
+  // Figure out which academic year we're in. Sep 1 onwards = next year.
+  const cal = now.getUTCFullYear();
+  const startYear = (now.getUTCMonth() >= 8) ? cal : cal - 1;
+  const yearLabel = startYear + "-" + String((startYear + 1) % 100).padStart(2, "0");
+
+  const terms = [
+    { name: "AUTUMN", start: Date.UTC(startYear,     8, 1),  end: Date.UTC(startYear,     11, 19) }, // Sep 1 → Dec 19
+    { name: "SPRING", start: Date.UTC(startYear + 1, 0, 6),  end: Date.UTC(startYear + 1, 3,  9)  }, // Jan 6 → Apr 9
+    { name: "SUMMER", start: Date.UTC(startYear + 1, 3, 18), end: Date.UTC(startYear + 1, 5, 30) }, // Apr 18 → Jun 30
+  ];
+
+  // In-term?
+  for (const term of terms) {
+    if (t >= term.start && t <= term.end) {
+      const wks = (t - term.start) / (1000 * 60 * 60 * 24 * 7);
+      const totalWks = (term.end - term.start) / (1000 * 60 * 60 * 24 * 7);
+      return {
+        name: term.name,
+        week: Math.floor(wks) + 1,
+        totalWeeks: Math.ceil(totalWks),
+        year: yearLabel,
+        inSession: true,
+      };
     }
   }
-  if (best) return { name: best.name, week: Math.floor(best.weeks) + 1 };
-  // Between terms — show the upcoming term as VAC + name.
-  const nextStart = anchors
-    .map(a => ({ ...a, delta: a.start - t }))
-    .filter(a => a.delta > 0)
-    .sort((a, b) => a.delta - b.delta)[0];
-  return { name: nextStart ? "VAC · " + nextStart.name : "RECESS", week: 0 };
+  // On holiday — figure out which break and what's next.
+  const next = terms.find(term => t < term.start);
+  let breakName = "SUMMER BREAK";
+  if (next) {
+    if (next.name === "SPRING") breakName = "CHRISTMAS BREAK";
+    else if (next.name === "SUMMER") breakName = "EASTER BREAK";
+    else breakName = "SUMMER BREAK";
+  }
+  return {
+    name: breakName,
+    nextTerm: next ? next.name : null,
+    year: yearLabel,
+    inSession: false,
+  };
 }
-
-// Hour-of-day-driven STRATA threat level. Quiet overnight, baseline
-// amber through the school day, ramped overnight when training and
-// incident sims happen.
-function strataStatus(now){
-  const h = now.getUTCHours();
-  if (h < 7)   return { label: "GREEN",      tone: "green"  };
-  if (h < 17)  return { label: "AMBER",      tone: "amber"  };
-  if (h < 22)  return { label: "AMBER-HIGH", tone: "orange" };
-  return         { label: "RED-WATCH",   tone: "red"    };
-}
-
-// Total registered characters across the registry. Computed once at
-// module load — these don't change during a session.
-const ROSTER_COUNT = (() => {
-  let n = 0;
-  try { n += (D.students || []).length; } catch {}
-  try { (D.faculty || []).forEach(s => { n += (s.rows || []).length; }); } catch {}
-  try {
-    (D.departments || []).forEach(d => {
-      if (d.head && d.head.char) n += 1;
-      n += (d.staff || []).filter(s => s.char).length;
-      n += (d.instructional || []).filter(p => p.char).length;
-    });
-  } catch {}
-  try {
-    (D.strata || []).forEach(s => { n += (s.rows || []).filter(r => r.char).length; });
-  } catch {}
-  return n;
-})();
 
 function MastChrome(){
   const [now, setNow] = useState(() => new Date());
@@ -8000,7 +8285,6 @@ function MastChrome(){
   }, []);
 
   const term = calderynTerm(now);
-  const status = strataStatus(now);
 
   // GMT date / time formatted for in-world chrome:
   //   "20 MAY · 14:32:08 GMT"
@@ -8012,6 +8296,10 @@ function MastChrome(){
   const ss = String(now.getUTCSeconds()).padStart(2, "0");
   const dateStr = String(day).padStart(2, "0") + " " + mon;
   const timeStr = hh + ":" + mm + ":" + ss;
+
+  const termTitle = term.inSession
+    ? `Academic year ${term.year} · ${term.name} term, week ${term.week} of ${term.totalWeeks}`
+    : `${term.year} academic year · currently on ${term.name.toLowerCase()}`;
 
   return (
     <div className="mast-chrome" role="group" aria-label="Live registry chrome">
@@ -8025,35 +8313,18 @@ function MastChrome(){
         </span>
       </div>
 
-      <div className="mast-chip mast-chip-term" title={`Calderyn academic term — ${term.name}, week ${term.week}`}>
-        <span className="mast-chip-eyebrow">TERM</span>
+      <div className={"mast-chip mast-chip-term" + (term.inSession ? " is-in-session" : " is-on-holiday")} title={termTitle}>
+        <span className="mast-chip-eyebrow">{term.inSession ? "TERM" : "BREAK"}</span>
         <span className="mast-chip-value">
-          {term.name}
-          {term.week > 0 && (
+          {term.inSession ? (
             <>
+              {term.name}
               <span className="mast-chip-sep">·</span>
-              <span className="mast-chip-week">WK {String(term.week).padStart(2, "0")}</span>
+              <span className="mast-chip-week">WK {String(term.week).padStart(2, "0")} / {term.totalWeeks}</span>
             </>
+          ) : (
+            <>{term.name}</>
           )}
-        </span>
-      </div>
-
-      <div
-        className={"mast-chip mast-chip-status is-" + status.tone}
-        title={`STRATA threat readiness — ${status.label}`}
-      >
-        <span className="mast-chip-eyebrow">STATUS</span>
-        <span className="mast-chip-value">
-          <span className="mast-chip-pulse" aria-hidden="true"/>
-          {status.label}
-        </span>
-      </div>
-
-      <div className="mast-chip mast-chip-roster" title="Total registered characters across the registry">
-        <span className="mast-chip-eyebrow">ON ROSTER</span>
-        <span className="mast-chip-value">
-          <span className="mast-chip-count">{ROSTER_COUNT}</span>
-          <span className="mast-chip-unit">CHR</span>
         </span>
       </div>
     </div>

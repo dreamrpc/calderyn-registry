@@ -26739,60 +26739,366 @@ button.orgs-pill {
   margin-left: 2px;
 }
 .mast-chip-week { color: var(--gold-bright, var(--yellow)); }
-.mast-chip-count {
-  font-family: var(--display, 'Druk', sans-serif);
-  font-weight: 400;
-  font-size: 15px;
-  letter-spacing: 0.02em;
-  color: var(--gold-bright, var(--yellow));
-}
-.mast-chip-unit {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  color: var(--text-mid, rgba(255, 255, 255, 0.45));
-  margin-left: 1px;
-}
-
-/* STATUS pulse dot — colour varies by tone, animation only while the
-   level is at AMBER or higher. GREEN holds steady (the "all quiet"
-   signal); RED-WATCH gets a faster pulse for tension. */
-.mast-chip-status .mast-chip-pulse {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 6px currentColor;
-}
-.mast-chip-status.is-green   { color: #3fa55a; }
-.mast-chip-status.is-amber   { color: var(--gold-bright, var(--yellow)); }
-.mast-chip-status.is-orange  { color: #e08742; }
-.mast-chip-status.is-red     { color: #d04545; }
-
-.mast-chip-status.is-amber   .mast-chip-pulse,
-.mast-chip-status.is-orange  .mast-chip-pulse {
-  animation: mast-chip-pulse 1.6s ease-in-out infinite;
-}
-.mast-chip-status.is-red .mast-chip-pulse {
-  animation: mast-chip-pulse 0.9s ease-in-out infinite;
-}
-@keyframes mast-chip-pulse {
-  0%, 100% { opacity: 1;   box-shadow: 0 0 6px currentColor; }
-  50%      { opacity: 0.45; box-shadow: 0 0 10px currentColor; }
-}
-.mast-chip-status .mast-chip-value { color: currentColor; }
+.mast-chip-term.is-on-holiday .mast-chip-value { color: var(--gold-bright, var(--yellow)); opacity: 0.85; }
 
 /* ── RESPONSIVE — collapse chips on narrower viewports ─────────── */
-@media (max-width: 1440px) {
-  .mast-chip-roster { display: none; }
-}
-@media (max-width: 1280px) {
-  .mast-chip-term { display: none; }
-}
 @media (max-width: 1100px) {
-  .mast-chip-status { display: none; }
+  .mast-chip-term { display: none; }
 }
 @media (max-width: 980px) {
   .mast-chrome { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   POWERBALL · SEASON TAB (club panel) + HOME WIDGET
+   Round-robin standings table + per-game cards. Used on the Powerball
+   club panel's Season tab and in the home page's Today section. Both
+   surfaces share the same .pb-game card to stay visually consistent.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.cps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 24px);
+  padding: var(--space-5, 20px) 0;
+}
+.cps-head { padding-bottom: var(--space-4, 16px); border-bottom: 1px solid var(--rule-soft); }
+.cps-head-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--gold-bright, var(--yellow));
+  margin-bottom: 6px;
+}
+.cps-head-title {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+.cps-head-sub {
+  font-size: 12px;
+  color: var(--text-mid);
+  margin-top: 6px;
+}
+
+.cps-section { display: flex; flex-direction: column; gap: 10px; }
+.cps-section-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cps-section-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-bright, var(--yellow));
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── STANDINGS TABLE ──────────────────────────────────────────── */
+.cps-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.cps-table thead th {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  padding: 8px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--rule-soft);
+  background: rgba(255, 255, 255, 0.02);
+}
+.cps-table thead th.cps-table-team { text-align: left; padding-left: 14px; }
+.cps-table thead th.cps-table-rank { width: 28px; }
+.cps-table thead th.cps-table-pts  { color: var(--gold-bright, var(--yellow)); }
+.cps-table tbody td {
+  padding: 9px 6px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+.cps-table .cps-table-team {
+  text-align: left;
+  padding-left: 14px;
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  font-size: 13px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cps-table .cps-table-rank {
+  color: var(--text-mid);
+  font-weight: 700;
+}
+.cps-table .cps-table-pts {
+  color: var(--gold-bright, var(--yellow));
+  font-weight: 800;
+  font-size: 14px;
+}
+.cps-row.is-top td {
+  background: linear-gradient(90deg, rgba(212, 168, 74, 0.08) 0%, transparent 100%);
+}
+.cps-row.is-top .cps-table-rank {
+  color: var(--gold-bright, var(--yellow));
+}
+.cps-house-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.cps-pos { color: #45c97a; }
+.cps-neg { color: #d05865; }
+
+/* ── GAME CARD ─────────────────────────────────────────────────── */
+.pb-game {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--rule-soft);
+}
+.pb-game.is-highlight {
+  background: linear-gradient(180deg, rgba(212, 168, 74, 0.06) 0%, rgba(0, 0, 0, 0.2) 100%);
+  border-color: rgba(212, 168, 74, 0.35);
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 16px 22px;
+}
+.pb-game.is-highlight .pb-game-meta,
+.pb-game.is-highlight .pb-game-detail {
+  grid-column: 1 / -1;
+}
+
+.pb-game-date {
+  font-family: var(--mono);
+  text-align: center;
+  border-right: 1px solid var(--rule-soft);
+  padding-right: 18px;
+  min-width: 110px;
+}
+.pb-game-date-main {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold-bright, var(--yellow));
+}
+.pb-game-date-time {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--text-mid);
+  margin-top: 4px;
+}
+
+.pb-game-teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.pb-game-team {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.pb-game-team-home { justify-content: flex-end; text-align: right; }
+.pb-game-team-away { justify-content: flex-start; text-align: left; }
+.pb-game-team-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.pb-game-team-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pb-game-team-score {
+  font-family: var(--mono);
+  font-weight: 800;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  padding: 0 10px;
+  min-width: 50px;
+  text-align: center;
+}
+.pb-game-team.is-winner .pb-game-team-score { color: var(--gold-bright, var(--yellow)); }
+.pb-game-team.is-winner .pb-game-team-name { color: var(--gold-bright, var(--yellow)); }
+.pb-game-vs {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-mid);
+  opacity: 0.7;
+}
+
+.pb-game-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  min-width: 110px;
+  text-align: right;
+}
+.pb-game-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  padding: 3px 7px;
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+}
+.pb-game-tag.is-upcoming { color: var(--gold-bright, var(--yellow)); }
+.pb-game-tag.is-final    { color: #45c97a; }
+.pb-game-venue { color: var(--text-mid); font-size: 10px; letter-spacing: 0.12em; }
+
+.pb-game-detail {
+  padding-top: 12px;
+  border-top: 1px solid var(--rule-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pb-game-mvp {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--mono);
+}
+.pb-game-mvp-lbl {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: var(--text-mid);
+}
+.pb-game-mvp-name {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.pb-game-mvp-house {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.pb-game-note {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-mid);
+  margin: 0;
+}
+
+.cps-schedule {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: pbgame;
+}
+.cps-schedule li { display: block; }
+
+/* ── HOME PAGE WIDGET ──────────────────────────────────────────── */
+.home-today-powerball {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+  margin-top: var(--space-5, 20px);
+  padding-top: var(--space-5, 20px);
+  border-top: 1px solid var(--rule-soft);
+}
+.hpb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 14px;
+}
+.hpb-card-next   { grid-column: 1; grid-row: 1; }
+.hpb-card-recent { grid-column: 2; grid-row: 1; }
+.hpb-card-table  { grid-column: 1 / -1; grid-row: 2; }
+
+.hpb-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--rule-soft);
+}
+.hpb-card-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--gold-bright, var(--yellow));
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.hpb-leader-tag {
+  margin-left: auto;
+  color: var(--text-mid);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+.hpb-mini-table { font-size: 11px; }
+.hpb-mini-table .cps-table-team { font-size: 12px; }
+
+@media (max-width: 900px) {
+  .hpb-grid { grid-template-columns: 1fr; }
+  .hpb-card-next, .hpb-card-recent, .hpb-card-table {
+    grid-column: 1; grid-row: auto;
+  }
+  .pb-game { grid-template-columns: 1fr; gap: 12px; padding: 12px; }
+  .pb-game-date { border-right: none; border-bottom: 1px solid var(--rule-soft); padding: 0 0 10px; text-align: left; }
+  .pb-game-meta { justify-content: flex-start; text-align: left; }
 }

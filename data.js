@@ -2126,6 +2126,48 @@ clubs: [
       { pos: "Assistant Coach" },
       { pos: "Referee — Senior" },
     ],
+    // Six-game round-robin season — Calderyn's collegiate league
+    // structure mirrors the four-house format that anchors a
+    // British boarding-school sporting year: each house plays each
+    // other house exactly once, then the cup is awarded on points.
+    // Two games per term (autumn/spring), the cup final closes out
+    // the summer term. League points: 3 for a win, 1 for a draw.
+    schedule: {
+      season: "2025-26",
+      pointsForWin: 3,
+      pointsForDraw: 1,
+      games: [
+        { id: 1, date: "2025-10-18", time: "19:00", venue: "Powerball Arena · Greenwich",
+          home: "valaris",  away: "saberis", status: "played",
+          home_score: 180, away_score: 210,
+          mvp: "Enzo Krüger", mvp_team: "valaris",
+          note: "Tight all four quarters. Saberis Attack capitalised on a Valaris four-second penalty in Q4 to sneak the win." },
+        { id: 2, date: "2025-11-15", time: "19:00", venue: "Powerball Arena · Greenwich",
+          home: "orenne",   away: "grimere", status: "played",
+          home_score: 240, away_score: 160,
+          mvp: "Jason McTavish", mvp_team: "orenne",
+          note: "McTavish ran the floor end-to-end. Orenne controlled possession for 26 of 48 minutes." },
+        { id: 3, date: "2026-02-07", time: "19:00", venue: "Powerball Arena · Greenwich",
+          home: "valaris",  away: "orenne",  status: "played",
+          home_score: 220, away_score: 200,
+          mvp: "Tyler Caldwell", mvp_team: "valaris",
+          note: "Valaris caught Orenne on the rebound in the final two minutes. Caldwell finished 14 of 18 from the scoring zone." },
+        { id: 4, date: "2026-03-14", time: "19:00", venue: "Powerball Arena · Greenwich",
+          home: "saberis",  away: "grimere", status: "played",
+          home_score: 170, away_score: 190,
+          mvp: "Cesare Delgado", mvp_team: "grimere",
+          note: "Grimere's Playmaker ran a half-court clinic. Saberis Defence took two flagrants late." },
+        { id: 5, date: "2026-05-09", time: "19:00", venue: "Powerball Arena · Greenwich",
+          home: "valaris",  away: "grimere", status: "played",
+          home_score: 260, away_score: 240,
+          mvp: "Katniss Saunders", mvp_team: "valaris",
+          note: "Highest-scoring league game in five seasons. Saunders set a Calderyn single-game scoring record (38)." },
+        { id: 6, date: "2026-06-13", time: "19:30", venue: "Powerball Arena · Greenwich · CUP FINAL",
+          home: "saberis",  away: "orenne",  status: "upcoming",
+          home_score: null, away_score: null,
+          note: "CUP FINAL · the loser of this match cannot catch Valaris on the table; the winner overtakes them." },
+      ],
+    },
   },
   {
     name: "Cheer Squad",
