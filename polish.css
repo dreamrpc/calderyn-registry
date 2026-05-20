@@ -26341,3 +26341,41 @@ button.orgs-pill {
   line-height: 1.6 !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   INTAKE HUD · live tier preview
+   When the writer picks a tier in the form, the matching chip
+   bumps its count by 1 and shows a "+1" hint so the writer sees
+   what the count will become if this submission is approved.
+   ════════════════════════════════════════════════════════════════════ */
+.join-hud-chip-bump {
+  display: inline-block !important;
+  margin-left: 6px !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  color: #5cf07f !important;
+  text-transform: uppercase !important;
+}
+.join-hud-chip.is-proposed .join-hud-chip-count {
+  color: #f5f1e8 !important;
+}
+.join-hud-chip.is-proposed {
+  background: rgba(212, 168, 67, 0.10) !important;
+}
+.join-hud-chip.is-proposed.is-full {
+  background: rgba(196, 26, 26, 0.14) !important;
+}
+.join-hud-chip.is-proposed.is-over {
+  background: rgba(196, 26, 26, 0.22) !important;
+}
+.join-hud-chip.is-proposed .join-hud-chip-bump {
+  /* When the proposed submission would exceed limit, flip +1 red */
+  color: #5cf07f !important;
+}
+.join-hud-chip.is-proposed.is-over .join-hud-chip-bump,
+.join-hud-chip.is-proposed.is-full .join-hud-chip-bump {
+  color: #ff2a32 !important;
+}
+

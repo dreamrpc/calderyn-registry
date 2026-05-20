@@ -5494,30 +5494,34 @@ const QUOTA_TIERS = [
   { id: "D-List", label: "D", className: "tier-d" },
 ];
 
-function QuotaChip({ tier, count, limit }){
+function QuotaChip({ tier, count, limit, proposedHere }){
   const isUncapped = limit == null;
-  const isFull = !isUncapped && count >= limit;
-  const isOver = !isUncapped && count > limit;
+  const baseCount  = count == null ? null : count;
+  const liveCount  = baseCount == null ? null : baseCount + (proposedHere ? 1 : 0);
+  const isFull = !isUncapped && liveCount != null && liveCount >= limit;
+  const isOver = !isUncapped && liveCount != null && liveCount >  limit;
   return (
     <div className={
       "join-hud-chip join-hud-chip-" + tier.className
       + (isFull ? " is-full" : "")
       + (isOver ? " is-over" : "")
+      + (proposedHere ? " is-proposed" : "")
     }>
       <span className="join-hud-chip-tier">{tier.label}-LIST</span>
       <span className="join-hud-chip-count">
-        {count == null
+        {liveCount == null
           ? "—"
           : isUncapped
             ? "OPEN"
-            : <>{count}<span className="join-hud-chip-slash">/</span>{limit}</>
+            : <>{liveCount}<span className="join-hud-chip-slash">/</span>{limit}</>
         }
+        {proposedHere && <span className="join-hud-chip-bump" aria-label="includes this submission">+1</span>}
       </span>
     </div>
   );
 }
 
-function JoinHUD({ type, quotaStats, step, alwaysShow }){
+function JoinHUD({ type, quotaStats, step, alwaysShow, proposedTier }){
   // Hide entirely on the archetype picker — the HUD only appears once
   // a writer is inside the wizard for a specific form. Belt + braces:
   // gate on both `type` (no type selected = picker) AND `step` (back
@@ -5554,6 +5558,7 @@ function JoinHUD({ type, quotaStats, step, alwaysShow }){
                   tier={t}
                   count={quotaStats ? (counts[t.id] || 0) : null}
                   limit={limits[t.id]}
+                  proposedHere={proposedTier === t.id}
                 />
               ))}
             </div>
@@ -5772,7 +5777,7 @@ function JoinTab(){
     return (
       <div className="join">
         <div className="join-form-wrap">
-          <JoinHUD type={type} quotaStats={quotaStats} step={step}/>
+          <JoinHUD type={type} quotaStats={quotaStats} step={step} proposedTier={form.tier}/>
           <div className="join-confirm-aaa">
             {/* CINEMATIC MOMENT — the Vanguard has just been briefed.
                 The four portraits flicker in sequence for ~2s as if
@@ -5936,7 +5941,7 @@ function JoinTab(){
         {/* STATS BAR — persistent slot availability strip. Shows
             global overview before a type is picked, then switches
             to type-specific stats. */}
-        <JoinHUD type={type} quotaStats={quotaStats} step={step}/>
+        <JoinHUD type={type} quotaStats={quotaStats} step={step} proposedTier={form.tier}/>
 
         {/* FORM MASTER HEADER — display name of the application as a
             top-level identity ("STUDENT APPLICATION" / "CLUB POSITION
