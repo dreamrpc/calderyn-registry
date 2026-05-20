@@ -27873,10 +27873,11 @@ button.orgs-pill {
 .lt-house-record strong {
   font-family: var(--display, 'Druk', sans-serif);
   font-weight: 400;
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 0.02em;
   color: var(--text);
-  margin-right: 1px;
+  margin-right: 4px;
+  vertical-align: baseline;
 }
 .lt-gp-text {
   font-size: 11px;

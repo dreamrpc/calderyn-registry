@@ -5706,9 +5706,9 @@ function LeagueTable({ schedule, compact }){
               <div className="lt-house" role="cell">
                 <span className="lt-house-name">{houseName(s.id)}</span>
                 <span className="lt-house-record">
-                  <strong>{s.gp}</strong>{s.gp === 1 ? "GAME" : "GAMES"} ·{" "}
-                  <strong>{s.pf}</strong>FOR ·{" "}
-                  <strong>{s.pa}</strong>AGAINST
+                  <strong>{s.gp}</strong> {s.gp === 1 ? "GAME" : "GAMES"} ·{" "}
+                  <strong>{s.pf}</strong> FOR ·{" "}
+                  <strong>{s.pa}</strong> AGAINST
                 </span>
               </div>
 
@@ -5767,7 +5767,12 @@ function ClubPanelSeason({club}){
         <div className="cps-head-eyebrow">SEASON · {sch.season}</div>
         <div className="cps-head-title">League · Cup race</div>
         <div className="cps-head-sub">
-          Six-game round-robin · {sch.pointsForWin ?? 3} pts for a win, {sch.pointsForDraw ?? 1} for a draw
+          Six-game round-robin · each house plays each other once.
+          <strong> {sch.pointsForWin ?? 3} pts</strong> for a win,
+          <strong> {sch.pointsForDraw ?? 1} pt</strong> for a draw,
+          <strong> 0 pts</strong> for a loss.
+          Tiebreakers: league points → goal difference (PF − PA) → points for.
+          Scoring follows the club rules — every score is one point, converted by the Attack pair from inside the scoring zone.
         </div>
       </div>
 
@@ -5861,7 +5866,7 @@ function PowerballGameCard({ game, highlight }){
     <div className={"pb-game" + (highlight ? " is-highlight" : "") + (isUpcoming ? " is-upcoming" : "") + (isPlayed ? " is-played" : "")}>
       <div className="pb-game-date">
         <div className="pb-game-date-main">{fmtDate}</div>
-        {game.time && <div className="pb-game-date-time">{game.time} · GMT</div>}
+        {game.time && <div className="pb-game-date-time">{game.time}</div>}
         {relStamp && <div className={"pb-game-date-rel" + (isUpcoming ? " is-future" : " is-past")}>{relStamp}</div>}
       </div>
 

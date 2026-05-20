@@ -2132,50 +2132,67 @@ clubs: [
     // other house exactly once, then the cup is awarded on points.
     // Saberis play all three of their games in the first half of
     // the season; the cup final is between the top two contenders.
-    // League points: 3 for a win, 1 for a draw.
+    //
+    // SCORING ALIGNS WITH CLUB RULES — every score is one point
+    // (only Attack can convert, only from inside the scoring zone),
+    // so a 48-minute game lands in the 17-30 range per side. Bigger
+    // scoreboard numbers seen elsewhere in basketball-style sports
+    // would imply hundreds of scoring plays per game; Powerball
+    // doesn't work that way.
+    //
+    // LEAGUE POINTS · standard three-one-zero (3 for a win, 1 for a
+    // draw, 0 for a loss). Tiebreakers used on the table sort:
+    // (1) league points, (2) goal difference (PF − PA), (3) PF.
     schedule: {
       season: "2025-26",
       pointsForWin: 3,
       pointsForDraw: 1,
       games: [
-        { id: 1, date: "2025-10-18", time: "19:00", venue: "Powerball Arena · Greenwich",
+        { id: 1, date: "2025-10-18", time: "19:00 BST", venue: "Powerball Arena · Greenwich",
           home: "valaris",  away: "saberis", status: "played",
-          home_score: 260, away_score: 180,
+          home_score: 26, away_score: 18,
           mvp: "Tyler Caldwell", mvp_team: "valaris",
           mvp_link: "https://roleplay.chat/profile.php?user=BLACK+VEIN",
-          note: "Valaris opened the season with a statement win. Caldwell ran the floor; Saberis never recovered from a 14-2 first quarter." },
-        { id: 2, date: "2025-11-15", time: "19:00", venue: "Powerball Arena · Greenwich",
+          note: "Valaris opened the season with a statement win. Caldwell ran the floor from Playmaker — 14 assists, never lost the four-second clock — and Saberis never recovered from a 6-1 first quarter." },
+        { id: 2, date: "2025-11-15", time: "19:00 GMT", venue: "Powerball Arena · Greenwich",
           home: "orenne",   away: "saberis", status: "played",
-          home_score: 220, away_score: 170,
+          home_score: 22, away_score: 17,
           mvp: "Jason McTavish", mvp_team: "orenne",
           mvp_link: "https://roleplay.chat/profile.php?user=stormcaller",
-          note: "Orenne controlled possession for 27 of 48 minutes. McTavish set the league assist record for a single game (19)." },
-        { id: 3, date: "2026-02-07", time: "19:00", venue: "Powerball Arena · Greenwich",
+          note: "Orenne controlled possession for 27 of 48 minutes. McTavish set the Calderyn single-game assist record (13) from the Playmaker slot — feeding the Orenne Attack pair into the scoring zone shot after shot." },
+        { id: 3, date: "2026-02-07", time: "19:00 GMT", venue: "Powerball Arena · Greenwich",
           home: "grimere",  away: "saberis", status: "played",
-          home_score: 250, away_score: 170,
+          home_score: 25, away_score: 17,
           mvp: "Cesare Delgado", mvp_team: "grimere",
           mvp_link: "https://roleplay.chat/profile.php?user=delgado",
-          note: "Grimere finished Saberis's season at 0-3. Delgado scored 22 of his side's 32 goals from the Playmaker slot." },
-        { id: 4, date: "2026-03-14", time: "19:00", venue: "Powerball Arena · Greenwich",
+          note: "Grimere finished Saberis's season at 0-3. Delgado assisted 16 of his side's 25 scores from the Playmaker slot — Grimere held possession for 31 minutes flat and never gave up the floor." },
+        { id: 4, date: "2026-03-14", time: "19:00 GMT", venue: "Powerball Arena · Greenwich",
           home: "valaris",  away: "orenne",  status: "played",
-          home_score: 230, away_score: 210,
-          mvp: "Katniss Saunders", mvp_team: "valaris",
-          mvp_link: "https://roleplay.chat/profile.php?user=Katniss",
-          note: "Valaris snuck this one out in the final 90 seconds. Saunders converted three from the scoring zone with the clock under ten." },
-        { id: 5, date: "2026-05-09", time: "19:00", venue: "Powerball Arena · Greenwich",
+          home_score: 23, away_score: 21,
+          // Defence MVP — rare but earned. Carter logged the season
+          // high for interceptions in a single game (7) and broke up
+          // the Orenne possession run that would otherwise have tied
+          // it in the final 90 seconds.
+          mvp: "Riley Carter", mvp_team: "valaris",
+          mvp_link: "https://roleplay.chat/profile.php?user=pressure",
+          note: "Valaris snuck this one out in the final 90 seconds. Carter set a Calderyn single-game interception record (7) on the Defence line and turned the game-deciding rebound into a counter Orenne couldn't catch." },
+        { id: 5, date: "2026-05-09", time: "19:00 BST", venue: "Powerball Arena · Greenwich",
           home: "valaris",  away: "grimere", status: "played",
-          home_score: 215, away_score: 240,
-          // Losing-side MVP: Krüger logged 22 saves against a Grimere
-          // Attack pair that finished a combined 28-of-34 from the
-          // scoring zone. Without him the margin would have been
-          // double-digits worse.
+          home_score: 21, away_score: 24,
+          // Losing-side MVP: Krüger's save line was historic — Grimere
+          // shot from the scoring zone 43 times and converted 24;
+          // every other save kept Valaris in arm's reach of the win.
           mvp: "Enzo Krüger", mvp_team: "valaris",
           mvp_link: "https://roleplay.chat/profile.php?user=Breakpoint",
-          note: "Upset of the season. Grimere's Defence locked Valaris's Attack pair to seven scores total — but Krüger turned away 22 shots in the goal area and kept the margin to 25, a result Valaris's pundits called the best goalkeeping line in a decade of league play." },
-        { id: 6, date: "2026-06-13", time: "19:30", venue: "Powerball Arena · Greenwich · CUP FINAL",
+          note: "Upset of the season. Grimere's Defence held the Valaris Attack pair to 21 — well below their season average of 27 — and Krüger turned away 19 shots in the goal area to keep the margin to 3. Valaris's pundits called it the best goalkeeping line in a decade of league play." },
+        // Cup final scheduled for the morning so the Powerball squads
+        // can play and still make Stella's GOSH visit later the same
+        // day. Game ends ~11:30 BST → arena clears → shuttle to
+        // Great Ormond Street departs the West Gate around 15:30.
+        { id: 6, date: "2026-06-13", time: "10:00 BST", venue: "Powerball Arena · Greenwich · CUP FINAL",
           home: "orenne",   away: "grimere", status: "upcoming",
           home_score: null, away_score: null,
-          note: "CUP FINAL · A Grimere win or draw seals the title. An Orenne win on differential could throw it back open." },
+          note: "CUP FINAL · A Grimere win or draw seals the title. An Orenne win on differential could throw it back open. Morning kickoff so players can join the GOSH ward visit later the same day." },
       ],
     },
   },
