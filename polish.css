@@ -27126,3 +27126,546 @@ button.orgs-pill {
   gap: 8px;
 }
 .hpb-history li { display: block; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LEAGUE TABLE · visual card-row variant
+   Replaces the plain <table> standings. Each row is a full-width
+   card with a coloured house stripe, large rank pill, name + meta
+   line, games-played progress dial, W/D/L pills, a centred goal-
+   difference bar (positive green / negative red), and a large
+   POINTS readout backed by a progress bar so the table tier-list
+   reads at a glance.
+   ═══════════════════════════════════════════════════════════════════════ */
+.lt {
+  display: block;
+  width: 100%;
+}
+.lt-head {
+  display: grid;
+  grid-template-columns: 48px 1.4fr 90px 130px 1.4fr 80px;
+  gap: 14px;
+  padding: 0 16px 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  border-bottom: 1px solid var(--rule-soft);
+  align-items: center;
+}
+.lt-head-rank { text-align: center; }
+.lt-head-house { padding-left: 16px; }
+.lt-head-gp, .lt-head-form, .lt-head-diff { text-align: center; }
+.lt-head-pts { text-align: right; color: var(--gold-bright, var(--yellow)); }
+
+.lt-body {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+}
+.lt-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 48px 1.4fr 90px 130px 1.4fr 80px;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--lt-house) 11%, transparent) 0%,
+    rgba(255, 255, 255, 0.02) 60%,
+    rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid var(--rule-soft);
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+  overflow: hidden;
+}
+.lt-row:hover {
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--lt-house) 18%, transparent) 0%,
+    rgba(255, 255, 255, 0.03) 60%,
+    rgba(255, 255, 255, 0.03) 100%);
+  border-color: color-mix(in srgb, var(--lt-house) 45%, var(--rule-soft));
+}
+.lt-row.is-top {
+  border-color: color-mix(in srgb, var(--gold-bright, #d4a84a) 55%, var(--rule-soft));
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--lt-house) 18%, transparent) 0%,
+    color-mix(in srgb, var(--gold-bright, #d4a84a) 10%, transparent) 40%,
+    rgba(0, 0, 0, 0.15) 100%);
+  box-shadow: inset 0 0 0 1px rgba(212, 168, 74, 0.18);
+}
+.lt-row.is-bottom { opacity: 0.85; }
+
+.lt-row-stripe {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--lt-house);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--lt-house) 60%, transparent);
+}
+
+/* ── RANK ──────────────────────────────────────────────────────── */
+.lt-rank {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--rule-soft);
+}
+.lt-rank-num {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.lt-row.is-top .lt-rank {
+  background: linear-gradient(180deg, rgba(212, 168, 74, 0.32), rgba(212, 168, 74, 0.1));
+  border-color: var(--gold-bright, #d4a84a);
+}
+.lt-row.is-top .lt-rank-num { color: var(--gold-bright, #d4a84a); }
+.lt-rank-crown {
+  position: absolute;
+  top: -7px; right: -7px;
+  width: 18px;
+  height: 18px;
+  background: var(--gold-bright, #d4a84a);
+  color: #0a0a0e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* ── HOUSE NAME + RECORD ──────────────────────────────────────── */
+.lt-house {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding-left: 4px;
+}
+.lt-house-name {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lt-row.is-top .lt-house-name { color: var(--gold-bright, #d4a84a); }
+.lt-house-record {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--text-mid);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── GAMES PLAYED DIAL ────────────────────────────────────────── */
+.lt-gp {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+}
+.lt-gp-dial {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+.lt-gp-dial-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: var(--lt-house);
+  transition: width 240ms ease;
+}
+.lt-gp-text {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-mid);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── W/D/L PILLS ──────────────────────────────────────────────── */
+.lt-form {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+.lt-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  border: 1px solid var(--rule-soft);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-mid);
+  min-width: 32px;
+  justify-content: center;
+}
+.lt-pill strong {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0;
+  color: var(--text);
+}
+.lt-pill-w { color: #45c97a; }
+.lt-pill-w strong { color: #45c97a; }
+.lt-pill-d { color: var(--gold-bright, #d4a84a); }
+.lt-pill-d strong { color: var(--gold-bright, #d4a84a); }
+.lt-pill-l { color: #d05865; }
+.lt-pill-l strong { color: #d05865; }
+
+/* ── GOAL DIFFERENCE BAR ──────────────────────────────────────── */
+.lt-diff {
+  display: grid;
+  grid-template-columns: 1fr 52px;
+  gap: 8px;
+  align-items: center;
+}
+.lt-diff-track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+.lt-diff-zero {
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  bottom: -2px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.35);
+}
+.lt-diff-bar {
+  position: absolute;
+  top: 0; bottom: 0;
+  transition: width 280ms ease;
+}
+.lt-diff-bar.is-pos {
+  left: 50%;
+  background: linear-gradient(90deg, rgba(69, 201, 122, 0.65), rgba(69, 201, 122, 0.95));
+}
+.lt-diff-bar.is-neg {
+  right: 50%;
+  background: linear-gradient(270deg, rgba(208, 88, 101, 0.65), rgba(208, 88, 101, 0.95));
+}
+.lt-diff-val {
+  font-family: var(--mono);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-align: right;
+  color: var(--text-mid);
+  font-variant-numeric: tabular-nums;
+}
+.lt-diff-val.is-pos { color: #45c97a; }
+.lt-diff-val.is-neg { color: #d05865; }
+
+/* ── POINTS ──────────────────────────────────────────────────── */
+.lt-pts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.lt-pts-num {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.lt-row.is-top .lt-pts-num { color: var(--gold-bright, #d4a84a); }
+.lt-pts-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: var(--text-mid);
+}
+.lt-pts-bar {
+  width: 60px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+.lt-pts-bar-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: var(--gold-bright, #d4a84a);
+  transition: width 280ms ease;
+}
+
+/* ── COMPACT VARIANT (currently unused, kept for tighter contexts) ── */
+.lt.is-compact .lt-head { grid-template-columns: 36px 1.4fr 110px 1fr 70px; }
+.lt.is-compact .lt-row  { grid-template-columns: 36px 1.4fr 110px 1fr 70px; padding: 10px 12px; }
+.lt.is-compact .lt-rank { width: 36px; height: 36px; }
+.lt.is-compact .lt-rank-num { font-size: 22px; }
+.lt.is-compact .lt-house-name { font-size: 18px; }
+.lt.is-compact .lt-pts-num { font-size: 26px; }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .lt-head, .lt-row { grid-template-columns: 40px 1fr 110px 90px; }
+  .lt-head-gp, .lt-head-diff, .lt-gp, .lt-diff { display: none; }
+  .lt-rank { width: 40px; height: 40px; }
+  .lt-rank-num { font-size: 24px; }
+  .lt-pts-num { font-size: 26px; }
+}
+@media (max-width: 600px) {
+  .lt-head { display: none; }
+  .lt-row { grid-template-columns: 40px 1fr 88px; gap: 10px; padding: 12px; }
+  .lt-form { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MVP LINK — opens RPC profile in a new tab.
+   ═══════════════════════════════════════════════════════════════════════ */
+.pb-game-mvp-link {
+  text-decoration: none;
+  color: var(--text);
+  border-bottom: 1px dashed transparent;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.pb-game-mvp-link:hover,
+.pb-game-mvp-link:focus-visible {
+  color: var(--gold-bright, var(--yellow));
+  border-bottom-color: currentColor;
+}
+.pb-game-mvp-icon {
+  margin-left: 5px;
+  font-size: 9px;
+  opacity: 0.6;
+  vertical-align: 1px;
+}
+.pb-game-mvp-link:hover .pb-game-mvp-icon { opacity: 1; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CAMPUS CALENDAR · home page Today section
+   Month-view grid (Mon→Sun columns) with today highlighted, event
+   markers under cells, and a list-form rundown of the month's events
+   below. Empty state renders when no events fall in the current month.
+   ═══════════════════════════════════════════════════════════════════════ */
+.cal {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--rule-soft);
+}
+.cal-dow-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  padding: 0 0 6px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.cal-dow {
+  text-align: center;
+}
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding-top: 4px;
+}
+.cal-cell {
+  position: relative;
+  aspect-ratio: 1.4 / 1;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.cal-cell.is-blank {
+  background: transparent;
+  pointer-events: none;
+}
+.cal-cell-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text);
+  line-height: 1;
+}
+.cal-cell.is-today {
+  background: linear-gradient(180deg, rgba(212, 168, 74, 0.16), rgba(212, 168, 74, 0.04));
+  border-color: var(--gold-bright, var(--yellow));
+}
+.cal-cell.is-today .cal-cell-num { color: var(--gold-bright, var(--yellow)); }
+.cal-cell-today-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold-bright, var(--yellow));
+  box-shadow: 0 0 6px var(--gold-bright, var(--yellow));
+  animation: cal-today-pulse 1.8s ease-in-out infinite;
+}
+@keyframes cal-today-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.85); }
+}
+.cal-cell.has-events {
+  background: rgba(255, 255, 255, 0.045);
+}
+.cal-cell.has-events:hover {
+  background: rgba(212, 168, 74, 0.06);
+  border-color: rgba(212, 168, 74, 0.35);
+}
+.cal-cell-markers {
+  display: inline-flex;
+  gap: 3px;
+}
+.cal-cell-marker {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold-bright, var(--yellow));
+}
+
+/* List of this month's events below the grid */
+.cal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+.cal-list-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--rule-soft);
+}
+.cal-list-date {
+  text-align: center;
+  border-right: 1px solid var(--rule-soft);
+  padding-right: 12px;
+}
+.cal-list-day {
+  font-family: var(--display, 'Druk', sans-serif);
+  font-weight: 400;
+  font-size: 22px;
+  color: var(--gold-bright, var(--yellow));
+  line-height: 1;
+}
+.cal-list-mon {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-mid);
+  margin-top: 3px;
+}
+.cal-list-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.cal-list-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: var(--gold-bright, var(--yellow));
+}
+.cal-list-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.cal-list-title a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+}
+.cal-list-title a:hover { color: var(--gold-bright, var(--yellow)); border-bottom-color: currentColor; }
+.cal-list-icon {
+  margin-left: 6px;
+  font-size: 9px;
+  opacity: 0.6;
+}
+
+/* Empty state shown when no events in the current month */
+.cal-empty {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--rule-soft);
+  margin-top: 4px;
+}
+.cal-empty-icon {
+  font-size: 22px;
+  color: var(--gold-bright, var(--yellow));
+  opacity: 0.6;
+  margin-top: 2px;
+}
+.cal-empty-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.cal-empty-sub {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.55;
+}
+
+@media (max-width: 700px) {
+  .cal-cell { padding: 4px 5px; }
+  .cal-cell-num { font-size: 10px; }
+  .cal-cell-today-dot { top: 4px; right: 4px; width: 4px; height: 4px; }
+  .cal-cell-marker { width: 4px; height: 4px; }
+}

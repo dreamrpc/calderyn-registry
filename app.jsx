@@ -855,7 +855,150 @@ function HomeToday(){
         ))}
       </div>
 
+      {/* Campus calendar — live month-view grid keyed off the current
+          UTC date. Today's cell highlights. Future cells with scheduled
+          events get a marker; empty months show an empty-state line
+          beneath the grid so the section reads as "calendar exists,
+          nothing on it yet" rather than absent. */}
+      <HomeCalendar/>
+
     </section>
+  );
+}
+
+// Month-view calendar widget. Renders the current month with today
+// highlighted. Scheduled events are passed in via the EVENTS const
+// (none yet — admin / Student Body President will populate this as
+// term moves on). Each event lives at { date: "YYYY-MM-DD", title,
+// tag, link? }.
+const HOME_EVENTS = [
+  // Empty for now. Add entries here when admin posts something:
+  //   { date: "2026-06-13", title: "Powerball Cup Final", tag: "POWERBALL", link: "https://…" },
+];
+
+function HomeCalendar(){
+  // Anchor on the current UTC date so the calendar always reflects
+  // wall-clock "today" without ever flipping mid-render.
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = now.getUTCMonth();
+  const todayDay = now.getUTCDate();
+
+  const months = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
+  const dows = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
+
+  // First day of the month (Mon=0..Sun=6 — UK convention).
+  const firstDow = (() => {
+    const d = new Date(Date.UTC(year, month, 1)).getUTCDay(); // 0=Sun
+    return (d + 6) % 7; // shift so Monday is 0
+  })();
+  const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+
+  // Build the cells: [...leading blanks, ...1..N, ...trailing blanks
+  // up to a multiple of 7].
+  const cells = [];
+  for (let i = 0; i < firstDow; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+  while (cells.length % 7 !== 0) cells.push(null);
+
+  // Index events by day-of-month so cell lookup is O(1).
+  const eventsByDay = useMemo(() => {
+    const map = {};
+    for (const ev of HOME_EVENTS) {
+      try {
+        const d = new Date(ev.date + "T12:00:00Z");
+        if (d.getUTCFullYear() === year && d.getUTCMonth() === month) {
+          const day = d.getUTCDate();
+          if (!map[day]) map[day] = [];
+          map[day].push(ev);
+        }
+      } catch {}
+    }
+    return map;
+  }, [year, month]);
+
+  // All events in this month, sorted by date — listed below the grid.
+  const monthEvents = useMemo(() => {
+    const all = [];
+    for (const day in eventsByDay) {
+      for (const ev of eventsByDay[day]) all.push({ day: parseInt(day, 10), ...ev });
+    }
+    return all.sort((a, b) => a.day - b.day);
+  }, [eventsByDay]);
+
+  return (
+    <div className="home-today-events">
+      <header className="home-today-events-head">
+        <div className="home-today-events-tag">CAMPUS CALENDAR · {months[month]} {year}</div>
+        <h3 className="home-today-events-title">Scheduled events</h3>
+      </header>
+
+      <div className="cal">
+        <div className="cal-dow-row" role="row">
+          {dows.map(d => <div key={d} className="cal-dow" role="columnheader">{d}</div>)}
+        </div>
+        <div className="cal-grid">
+          {cells.map((d, i) => {
+            if (d === null) return <div key={"e" + i} className="cal-cell is-blank"/>;
+            const isToday = d === todayDay;
+            const events = eventsByDay[d];
+            const hasEvents = !!(events && events.length);
+            return (
+              <div
+                key={d}
+                className={"cal-cell" + (isToday ? " is-today" : "") + (hasEvents ? " has-events" : "")}
+                role="gridcell"
+                aria-label={`${d} ${months[month]} ${year}${hasEvents ? ", " + events.length + " event" + (events.length > 1 ? "s" : "") : ""}${isToday ? ", today" : ""}`}
+              >
+                <span className="cal-cell-num">{d}</span>
+                {isToday && <span className="cal-cell-today-dot" aria-hidden="true"/>}
+                {hasEvents && (
+                  <span className="cal-cell-markers" aria-hidden="true">
+                    {events.slice(0, 3).map((_, j) => <span key={j} className="cal-cell-marker"/>)}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {monthEvents.length > 0 ? (
+        <ul className="cal-list">
+          {monthEvents.map((ev, i) => (
+            <li key={i} className="cal-list-item">
+              <div className="cal-list-date">
+                <div className="cal-list-day">{String(ev.day).padStart(2, "0")}</div>
+                <div className="cal-list-mon">{months[month].slice(0, 3)}</div>
+              </div>
+              <div className="cal-list-body">
+                {ev.tag && <div className="cal-list-tag">{ev.tag}</div>}
+                <div className="cal-list-title">
+                  {ev.link ? (
+                    <a href={ev.link} target="_blank" rel="noopener noreferrer">
+                      {ev.title}
+                      <i className="fa-solid fa-arrow-up-right-from-square cal-list-icon" aria-hidden="true"></i>
+                    </a>
+                  ) : ev.title}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="cal-empty">
+          <i className="fa-regular fa-calendar cal-empty-icon" aria-hidden="true"></i>
+          <div className="cal-empty-body">
+            <div className="cal-empty-title">Nothing on the calendar yet for {months[month]}.</div>
+            <div className="cal-empty-sub">
+              When admin or the Student Body President posts something — practicals,
+              Vanguard appearances, inter-house matches, Powerball fixtures — it
+              appears here.
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -910,7 +1053,7 @@ function HomePowerball({setTab}){
           </div>
         )}
 
-        {/* Compact standings */}
+        {/* Standings — visual league table */}
         <div className="hpb-card hpb-card-table">
           <div className="hpb-card-eyebrow">
             <i className="fa-solid fa-trophy" aria-hidden="true"></i> STANDINGS
@@ -920,35 +1063,7 @@ function HomePowerball({setTab}){
               </span>
             )}
           </div>
-          <table className="cps-table hpb-mini-table">
-            <thead>
-              <tr>
-                <th className="cps-table-rank">#</th>
-                <th className="cps-table-team">House</th>
-                <th>GP</th>
-                <th>W-D-L</th>
-                <th>+/−</th>
-                <th className="cps-table-pts">PTS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {standings.map((s, i) => (
-                <tr key={s.id} className={"cps-row" + (i === 0 ? " is-top" : "")}>
-                  <td className="cps-table-rank">{i + 1}</td>
-                  <td className="cps-table-team">
-                    <span className="cps-house-swatch" style={{background: houseColor(s.id)}}/>
-                    {houseName(s.id)}
-                  </td>
-                  <td>{s.gp}</td>
-                  <td>{s.w}-{s.d}-{s.l}</td>
-                  <td className={s.pf - s.pa > 0 ? "cps-pos" : s.pf - s.pa < 0 ? "cps-neg" : ""}>
-                    {s.pf - s.pa > 0 ? "+" : ""}{s.pf - s.pa}
-                  </td>
-                  <td className="cps-table-pts">{s.pts}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <LeagueTable schedule={sch}/>
         </div>
 
         {/* Previous matches — every played game listed with its
@@ -5212,6 +5327,109 @@ function lastGame(schedule){
   return played.length ? played[played.length - 1] : null;
 }
 
+// Visual league table. Four rows, one per house, each rendered as a
+// horizontal card with: rank pill (gold for #1), house colour stripe
+// + name, games-played dial, W/D/L pill row, goal-difference bar
+// (centred at zero, positive in green / negative in red), and a
+// large points value on the right. Used on both the home Powerball
+// section and the club page's Season tab.
+function LeagueTable({ schedule, compact }){
+  const standings = useMemo(() => computeStandings(schedule), [schedule]);
+  // Goal-difference range across the table — drives the bar widths so
+  // a small differential at the start of the season still reads
+  // visually, but later in the season the bars scale to the spread.
+  const maxAbs = Math.max(1, ...standings.map(s => Math.abs(s.pf - s.pa)));
+  const topPts = Math.max(1, ...standings.map(s => s.pts));
+
+  const totalGames = (schedule && schedule.games) ? schedule.games.length : 0;
+  const perHouseTotal = Math.max(1, Math.floor((totalGames * 2) / 4)); // 6 games × 2 sides / 4 houses
+
+  return (
+    <div className={"lt" + (compact ? " is-compact" : "")} role="table" aria-label="League standings">
+      <div className="lt-head" role="row">
+        <div className="lt-head-rank" role="columnheader">RANK</div>
+        <div className="lt-head-house" role="columnheader">HOUSE</div>
+        {!compact && <div className="lt-head-gp" role="columnheader">PLAYED</div>}
+        <div className="lt-head-form" role="columnheader">FORM</div>
+        <div className="lt-head-diff" role="columnheader">GOAL DIFFERENCE</div>
+        <div className="lt-head-pts" role="columnheader">PTS</div>
+      </div>
+
+      <ol className="lt-body">
+        {standings.map((s, i) => {
+          const diff = s.pf - s.pa;
+          const pct = Math.min(100, (Math.abs(diff) / maxAbs) * 100);
+          const ptsPct = (s.pts / topPts) * 100;
+          const gpPct = (s.gp / perHouseTotal) * 100;
+          return (
+            <li
+              key={s.id}
+              className={"lt-row" + (i === 0 ? " is-top" : "") + (i === standings.length - 1 ? " is-bottom" : "")}
+              style={{ "--lt-house": houseColor(s.id) }}
+              role="row"
+            >
+              {/* Coloured house stripe down the left */}
+              <span className="lt-row-stripe" aria-hidden="true"/>
+
+              <div className="lt-rank" role="cell">
+                {i === 0 ? (
+                  <span className="lt-rank-crown" aria-hidden="true">
+                    <i className="fa-solid fa-crown"></i>
+                  </span>
+                ) : null}
+                <span className="lt-rank-num">{i + 1}</span>
+              </div>
+
+              <div className="lt-house" role="cell">
+                <span className="lt-house-name">{houseName(s.id)}</span>
+                <span className="lt-house-record">
+                  {s.gp} {s.gp === 1 ? "GAME" : "GAMES"} · {s.pf} FOR · {s.pa} AGAINST
+                </span>
+              </div>
+
+              {!compact && (
+                <div className="lt-gp" role="cell">
+                  <div className="lt-gp-dial" role="progressbar" aria-valuenow={s.gp} aria-valuemin={0} aria-valuemax={perHouseTotal}>
+                    <div className="lt-gp-dial-fill" style={{ width: gpPct + "%" }}/>
+                  </div>
+                  <div className="lt-gp-text">{s.gp} / {perHouseTotal}</div>
+                </div>
+              )}
+
+              <div className="lt-form" role="cell">
+                <span className="lt-pill lt-pill-w" title={`${s.w} wins`}><strong>{s.w}</strong>W</span>
+                <span className="lt-pill lt-pill-d" title={`${s.d} draws`}><strong>{s.d}</strong>D</span>
+                <span className="lt-pill lt-pill-l" title={`${s.l} losses`}><strong>{s.l}</strong>L</span>
+              </div>
+
+              <div className="lt-diff" role="cell">
+                <div className="lt-diff-track">
+                  <div className="lt-diff-zero" aria-hidden="true"/>
+                  <div
+                    className={"lt-diff-bar" + (diff >= 0 ? " is-pos" : " is-neg")}
+                    style={{ width: pct + "%" }}
+                  />
+                </div>
+                <div className={"lt-diff-val" + (diff > 0 ? " is-pos" : diff < 0 ? " is-neg" : "")}>
+                  {diff > 0 ? "+" : ""}{diff}
+                </div>
+              </div>
+
+              <div className="lt-pts" role="cell">
+                <span className="lt-pts-num">{s.pts}</span>
+                <span className="lt-pts-lbl">PTS</span>
+                <div className="lt-pts-bar" aria-hidden="true">
+                  <div className="lt-pts-bar-fill" style={{ width: ptsPct + "%" }}/>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
+
 function ClubPanelSeason({club}){
   const sch = club.schedule;
   const standings = useMemo(() => computeStandings(sch), [sch]);
@@ -5228,48 +5446,12 @@ function ClubPanelSeason({club}){
         </div>
       </div>
 
-      {/* Standings table */}
+      {/* Standings — visual card-row table */}
       <div className="cps-section">
         <header className="cps-section-head">
           <span className="cps-section-tag"><i className="fa-solid fa-table-list" aria-hidden="true"></i> Standings</span>
         </header>
-        <table className="cps-table">
-          <thead>
-            <tr>
-              <th className="cps-table-rank">#</th>
-              <th className="cps-table-team">House</th>
-              <th>GP</th>
-              <th>W</th>
-              <th>D</th>
-              <th>L</th>
-              <th>PF</th>
-              <th>PA</th>
-              <th>+/−</th>
-              <th className="cps-table-pts">PTS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {standings.map((s, i) => (
-              <tr key={s.id} className={"cps-row" + (i === 0 ? " is-top" : "")}>
-                <td className="cps-table-rank">{i + 1}</td>
-                <td className="cps-table-team">
-                  <span className="cps-house-swatch" style={{background: houseColor(s.id)}}/>
-                  {houseName(s.id)}
-                </td>
-                <td>{s.gp}</td>
-                <td>{s.w}</td>
-                <td>{s.d}</td>
-                <td>{s.l}</td>
-                <td>{s.pf}</td>
-                <td>{s.pa}</td>
-                <td className={s.pf - s.pa > 0 ? "cps-pos" : s.pf - s.pa < 0 ? "cps-neg" : ""}>
-                  {s.pf - s.pa > 0 ? "+" : ""}{s.pf - s.pa}
-                </td>
-                <td className="cps-table-pts">{s.pts}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <LeagueTable schedule={sch}/>
       </div>
 
       {/* Upcoming highlight */}
@@ -5383,7 +5565,20 @@ function PowerballGameCard({ game, highlight }){
           {game.mvp && (
             <div className="pb-game-mvp">
               <span className="pb-game-mvp-lbl">MVP</span>
-              <span className="pb-game-mvp-name">{game.mvp}</span>
+              {game.mvp_link ? (
+                <a
+                  className="pb-game-mvp-name pb-game-mvp-link"
+                  href={game.mvp_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`Open ${game.mvp}'s RPC profile`}
+                >
+                  {game.mvp}
+                  <i className="fa-solid fa-arrow-up-right-from-square pb-game-mvp-icon" aria-hidden="true"></i>
+                </a>
+              ) : (
+                <span className="pb-game-mvp-name">{game.mvp}</span>
+              )}
               {game.mvp_team && (
                 <span className="pb-game-mvp-house" style={{color: houseColor(game.mvp_team)}}>
                   · {houseName(game.mvp_team)}
