@@ -2754,13 +2754,17 @@ function PowersRegistry(){
                 {p.expression && (
                   <>
                     <span className="preg-detail-label">Expression</span>
-                    <p className="preg-detail-text">{p.expression}</p>
+                    {p.expression.split(/\n{2,}/).map((para, i) => (
+                      <p key={i} className="preg-detail-text">{para.trim()}</p>
+                    ))}
                   </>
                 )}
                 {p.drawbacks && (
                   <>
                     <span className="preg-detail-label">Drawbacks / Limits</span>
-                    <p className="preg-detail-text">{p.drawbacks}</p>
+                    {p.drawbacks.split(/\n{2,}/).map((para, i) => (
+                      <p key={i} className="preg-detail-text">{para.trim()}</p>
+                    ))}
                   </>
                 )}
                 {p.note && (
