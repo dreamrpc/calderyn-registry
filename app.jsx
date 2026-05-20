@@ -8627,6 +8627,22 @@ function MapTab(){
   const [posterExpanded, setPosterExpanded] = useState(false);
   const [query, setQuery] = useState("");
 
+  // Warm the browser cache for every district hero image the moment the
+  // map tab mounts, so switching districts is instant. The images are
+  // served from catbox.moe which has no CDN — without this prefetch each
+  // click pays the full network round-trip again.
+  useEffect(() => {
+    const prefetched = districts
+      .filter(d => d.image)
+      .map(d => {
+        const img = new Image();
+        img.decoding = "async";
+        img.src = d.image;
+        return img;
+      });
+    return () => { prefetched.length = 0; };
+  }, [districts]);
+
   const ql = query.trim().toLowerCase();
   const matchLoc = (l) => {
     if (!ql) return true;
@@ -8794,7 +8810,8 @@ function MapTab(){
                       className="map-stage-poster-img"
                       src={activeDistrict.image}
                       alt=""
-                      loading="lazy"
+                      decoding="async"
+                      fetchpriority="high"
                     />
                   )}
                   {activeDistrict.image && <div className="map-stage-poster-img-vignette" aria-hidden="true"/>}

@@ -21230,9 +21230,12 @@ button.map-nav-btn:hover {
       transparent 72%,
       rgba(0,0,0,0.22) 100%) !important;
 }
-/* When an image is present, mute the gradient/grain/halftone so they
-   don't muddle the photograph, and hide the giant icon glyph entirely. */
-.map-stage-poster.is-image { background: #0a0a0e !important; }
+/* When an image is present, mute the grain/halftone so they don't
+   muddle the photograph, and hide the giant icon glyph entirely.
+   The gradient background is INTENTIONALLY kept — it shows through
+   while the hero image is still downloading, so the user sees the
+   district's colours instead of a black panel during load. Once the
+   image decodes it covers the gradient (object-fit: cover, z-index 0). */
 .map-stage-poster.is-image .map-stage-poster-halftone { opacity: 0.18 !important; mix-blend-mode: multiply !important; }
 .map-stage-poster.is-image .map-stage-poster-grain { opacity: 0.35 !important; }
 .map-stage-poster.is-image .map-stage-poster-glyph { display: none !important; }
