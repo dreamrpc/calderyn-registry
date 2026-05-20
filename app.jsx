@@ -7911,6 +7911,155 @@ const MUSIC_TRACK = {
 // default volume with the same browser-policy-aware autoplay
 // fallback as before (capture-phase listener that catches the user's
 // first click anywhere).
+// ─── MAST CHROME ────────────────────────────────────────────────────
+// Live in-world readouts that live in the top nav between the music
+// player and the search bar. Four chips:
+//   · GREENWICH CLOCK   live ticking date + time in GMT/BST
+//   · ACADEMIC TERM     current Calderyn term + week number
+//   · STRATA STATUS     hour-of-day-driven threat level (atmospheric)
+//   · ROSTER COUNT      total registered characters across the registry
+// All four are derived; nothing is fetched. The chips animate, pulse,
+// and update on a 1s timer in MastChrome.
+
+// Term anchors for the current academic year. Calderyn runs three
+// 10-week terms with vacation breaks between, modelled on UK boarding
+// school cycles (Michaelmas / Lent / Trinity).
+function calderynTerm(now){
+  const y = now.getUTCFullYear();
+  const anchors = [
+    { name: "MICHAELMAS", start: Date.UTC(y, 8, 8) },     // Sep 8
+    { name: "LENT",       start: Date.UTC(y, 0, 5) },     // Jan 5
+    { name: "TRINITY",    start: Date.UTC(y, 3, 20) },    // Apr 20
+  ];
+  const t = now.getTime();
+  let best = null;
+  for (const a of anchors) {
+    const wks = (t - a.start) / (1000 * 60 * 60 * 24 * 7);
+    if (wks >= 0 && wks < 11 && (!best || wks < best.weeks)) {
+      best = { name: a.name, weeks: wks };
+    }
+  }
+  if (best) return { name: best.name, week: Math.floor(best.weeks) + 1 };
+  // Between terms — show the upcoming term as VAC + name.
+  const nextStart = anchors
+    .map(a => ({ ...a, delta: a.start - t }))
+    .filter(a => a.delta > 0)
+    .sort((a, b) => a.delta - b.delta)[0];
+  return { name: nextStart ? "VAC · " + nextStart.name : "RECESS", week: 0 };
+}
+
+// Hour-of-day-driven STRATA threat level. Quiet overnight, baseline
+// amber through the school day, ramped overnight when training and
+// incident sims happen.
+function strataStatus(now){
+  const h = now.getUTCHours();
+  if (h < 7)   return { label: "GREEN",      tone: "green"  };
+  if (h < 17)  return { label: "AMBER",      tone: "amber"  };
+  if (h < 22)  return { label: "AMBER-HIGH", tone: "orange" };
+  return         { label: "RED-WATCH",   tone: "red"    };
+}
+
+// Total registered characters across the registry. Computed once at
+// module load — these don't change during a session.
+const ROSTER_COUNT = (() => {
+  let n = 0;
+  try { n += (D.students || []).length; } catch {}
+  try { (D.faculty || []).forEach(s => { n += (s.rows || []).length; }); } catch {}
+  try {
+    (D.departments || []).forEach(d => {
+      if (d.head && d.head.char) n += 1;
+      n += (d.staff || []).filter(s => s.char).length;
+      n += (d.instructional || []).filter(p => p.char).length;
+    });
+  } catch {}
+  try {
+    (D.strata || []).forEach(s => { n += (s.rows || []).filter(r => r.char).length; });
+  } catch {}
+  return n;
+})();
+
+function MastChrome(){
+  const [now, setNow] = useState(() => new Date());
+
+  // 1s tick. Use setTimeout aligned to the next second rather than a
+  // 1000ms interval so the clock advances cleanly with the wall clock
+  // (an interval drifts by a few ms per minute over long sessions).
+  useEffect(() => {
+    let cancel = false;
+    const schedule = () => {
+      const ms = 1000 - (Date.now() % 1000);
+      const t = setTimeout(() => {
+        if (cancel) return;
+        setNow(new Date());
+        schedule();
+      }, ms);
+      return t;
+    };
+    const t = schedule();
+    return () => { cancel = true; clearTimeout(t); };
+  }, []);
+
+  const term = calderynTerm(now);
+  const status = strataStatus(now);
+
+  // GMT date / time formatted for in-world chrome:
+  //   "20 MAY · 14:32:08 GMT"
+  const day = now.getUTCDate();
+  const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  const mon = months[now.getUTCMonth()];
+  const hh = String(now.getUTCHours()).padStart(2, "0");
+  const mm = String(now.getUTCMinutes()).padStart(2, "0");
+  const ss = String(now.getUTCSeconds()).padStart(2, "0");
+  const dateStr = String(day).padStart(2, "0") + " " + mon;
+  const timeStr = hh + ":" + mm + ":" + ss;
+
+  return (
+    <div className="mast-chrome" role="group" aria-label="Live registry chrome">
+      <div className="mast-chip mast-chip-clock" title="Greenwich Mean Time">
+        <span className="mast-chip-eyebrow">GREENWICH</span>
+        <span className="mast-chip-value">
+          <span className="mast-chip-date">{dateStr}</span>
+          <span className="mast-chip-sep">·</span>
+          <span className="mast-chip-time">{timeStr}</span>
+          <span className="mast-chip-tz">GMT</span>
+        </span>
+      </div>
+
+      <div className="mast-chip mast-chip-term" title={`Calderyn academic term — ${term.name}, week ${term.week}`}>
+        <span className="mast-chip-eyebrow">TERM</span>
+        <span className="mast-chip-value">
+          {term.name}
+          {term.week > 0 && (
+            <>
+              <span className="mast-chip-sep">·</span>
+              <span className="mast-chip-week">WK {String(term.week).padStart(2, "0")}</span>
+            </>
+          )}
+        </span>
+      </div>
+
+      <div
+        className={"mast-chip mast-chip-status is-" + status.tone}
+        title={`STRATA threat readiness — ${status.label}`}
+      >
+        <span className="mast-chip-eyebrow">STATUS</span>
+        <span className="mast-chip-value">
+          <span className="mast-chip-pulse" aria-hidden="true"/>
+          {status.label}
+        </span>
+      </div>
+
+      <div className="mast-chip mast-chip-roster" title="Total registered characters across the registry">
+        <span className="mast-chip-eyebrow">ON ROSTER</span>
+        <span className="mast-chip-value">
+          <span className="mast-chip-count">{ROSTER_COUNT}</span>
+          <span className="mast-chip-unit">CHR</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function NowPlaying(){
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -8222,6 +8371,7 @@ function App(){
             </span>
           </div>
           <NowPlaying/>
+          <MastChrome/>
           <button
             type="button"
             className="mast-search"
