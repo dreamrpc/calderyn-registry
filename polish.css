@@ -21194,6 +21194,55 @@ button.map-nav-btn:hover {
 }
 
 /* ════════════════════════════════════════════════════════════════════════
+   MAP STAGE POSTER · DISTRICT HERO IMAGE
+   When a district has an `image` field in data.js, the poster swaps its
+   gradient placeholder for the photo. The image fills the panel
+   (object-fit: cover) and a dark vignette sits over it so the corner
+   stamps + bottom title block stay legible. The decorative icon glyph
+   is suppressed in this mode — the photograph carries the visual.
+   ════════════════════════════════════════════════════════════════════════ */
+.map-stage-poster-img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  /* Slight desaturation pulls the photos into the muted dossier palette */
+  filter: saturate(0.92) contrast(1.02) !important;
+}
+.map-stage-poster-img-vignette {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  background:
+    linear-gradient(180deg,
+      rgba(0,0,0,0.45) 0%,
+      rgba(0,0,0,0.10) 28%,
+      rgba(0,0,0,0.20) 60%,
+      rgba(0,0,0,0.80) 100%),
+    linear-gradient(90deg,
+      rgba(0,0,0,0.22) 0%,
+      transparent 28%,
+      transparent 72%,
+      rgba(0,0,0,0.22) 100%) !important;
+}
+/* When an image is present, mute the gradient/grain/halftone so they
+   don't muddle the photograph, and hide the giant icon glyph entirely. */
+.map-stage-poster.is-image { background: #0a0a0e !important; }
+.map-stage-poster.is-image .map-stage-poster-halftone { opacity: 0.18 !important; mix-blend-mode: multiply !important; }
+.map-stage-poster.is-image .map-stage-poster-grain { opacity: 0.35 !important; }
+.map-stage-poster.is-image .map-stage-poster-glyph { display: none !important; }
+/* Keep the stamp + title block on top of the vignette */
+.map-stage-poster.is-image .map-stage-poster-stamp,
+.map-stage-poster.is-image .map-stage-poster-title,
+.map-stage-poster.is-image .map-stage-poster-count,
+.map-stage-poster.is-image .map-stage-poster-expand { z-index: 4 !important; }
+
+/* ════════════════════════════════════════════════════════════════════════
    OUTSIDE · tabs aligned with the rest of the site
    Drops the chip chrome (background + border) so all 9 tabs fit on one
    line without horizontal scroll. Same quiet underline pattern as the
