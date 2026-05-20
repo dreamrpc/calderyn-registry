@@ -7929,14 +7929,27 @@ function NowPlaying(){
     try { localStorage.setItem("calderyn:musicVolume", String(volume)); } catch {}
   }, [volume]);
 
-  // Autoplay attempt on mount. If blocked by browser policy, latch a
-  // one-shot capture-phase listener that starts on the user's first
-  // gesture anywhere (without preventDefault so the original click
-  // still reaches its target).
+  // Autoplay strategy:
+  //   1. Start the audio MUTED at the configured volume. Every major
+  //      browser (Chrome, Safari, Firefox, mobile) allows muted
+  //      autoplay without prior user interaction, so the track begins
+  //      buffering and playing immediately on page load.
+  //   2. Latch a one-shot capture-phase listener for click / keydown /
+  //      touchstart on the document. On the first real user gesture
+  //      anywhere on the page, the audio is unmuted — by which point
+  //      it's already playing, so the writer hears it instantly with
+  //      no extra "tap to play" friction.
+  //   3. We also explicitly re-issue play() on first gesture in case
+  //      a browser still refused the muted autoplay (some iOS Safari
+  //      configurations); that play() call now happens INSIDE a user
+  //      gesture and so always succeeds.
+  // We never preventDefault, so the original click still reaches its
+  // intended target — the music just turns on alongside it.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
     audio.volume = volume;
+    audio.muted = true;
     let cancelled = false;
     const start = () => {
       const p = audio.play();
@@ -7946,8 +7959,14 @@ function NowPlaying(){
         () => {}
       );
     };
+    // Attempt right away, and again once the media is ready in case
+    // mount fired before the source could even start buffering.
     start();
+    const onCanPlay = () => start();
+    audio.addEventListener("canplay", onCanPlay);
+
     const onFirstGesture = () => {
+      audio.muted = false;
       start();
       document.removeEventListener("click", onFirstGesture, true);
       document.removeEventListener("keydown", onFirstGesture, true);
@@ -7958,6 +7977,7 @@ function NowPlaying(){
     document.addEventListener("touchstart", onFirstGesture, true);
     return () => {
       cancelled = true;
+      audio.removeEventListener("canplay", onCanPlay);
       document.removeEventListener("click", onFirstGesture, true);
       document.removeEventListener("keydown", onFirstGesture, true);
       document.removeEventListener("touchstart", onFirstGesture, true);
