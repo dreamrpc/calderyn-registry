@@ -8624,7 +8624,6 @@ function MapTab(){
   const locations = D.mapLocations;
   const districtsWithItems = districts.filter(d => locations.some(l => l.district === d.id));
   const [activeId, setActiveId] = useState(districtsWithItems[0]?.id);
-  const [posterExpanded, setPosterExpanded] = useState(false);
   const [query, setQuery] = useState("");
 
   // Warm the browser cache for every district hero image the moment the
@@ -8791,7 +8790,7 @@ function MapTab(){
           ) : (
             activeDistrict && (
               <section
-                className={"map-stage" + (isResidence ? " is-residence" : "") + (posterExpanded ? " is-poster-expanded" : "")}
+                className={"map-section" + (isResidence ? " is-residence" : "")}
                 style={{
                   "--district-c": activeDistrict.color,
                   "--district-c1": (DISTRICT_VISUALS[activeDistrict.id] || DISTRICT_VISUALS.academic).c1,
@@ -8799,72 +8798,51 @@ function MapTab(){
                 }}
                 data-district={activeDistrict.id}
               >
-                {/* LEFT · the cinematic poster — gradient + halftone +
-                    massive icon glyph + overlay name. Stays in view on
-                    desktop while the right column scrolls. When the
-                    district has a hero image, it layers in behind the
-                    overlays with a dark vignette for title legibility. */}
-                <aside className={"map-stage-poster" + (activeDistrict.image ? " is-image" : "")} aria-hidden="true">
+                {/* Cinematic widescreen hero — image (or gradient placeholder),
+                    dark gradient at the bottom, tag stamp + big district name
+                    overlaid. Replaces the old 2-column poster/info split so
+                    locations flow naturally with page scroll instead of being
+                    trapped in an inner scrollbar. */}
+                <div className={"map-hero" + (activeDistrict.image ? " has-image" : "")}>
                   {activeDistrict.image && (
                     <img
-                      className="map-stage-poster-img"
+                      className="map-hero-img"
                       src={activeDistrict.image}
                       alt=""
                       decoding="async"
                       fetchpriority="high"
                     />
                   )}
-                  {activeDistrict.image && <div className="map-stage-poster-img-vignette" aria-hidden="true"/>}
-                  <div className="map-stage-poster-halftone"/>
-                  <div className="map-stage-poster-grain"/>
-                  <div className="map-stage-poster-glyph">
-                    <Icon name={(DISTRICT_VISUALS[activeDistrict.id] || DISTRICT_VISUALS.academic).icon} size={220} stroke={0.9}/>
+                  <div className="map-hero-vignette" aria-hidden="true"/>
+                  <div className="map-hero-meta">
+                    <div className="map-hero-tag">
+                      <span className="map-hero-tag-label">{(DISTRICT_VISUALS[activeDistrict.id] || DISTRICT_VISUALS.academic).tag}</span>
+                      <span className="map-hero-tag-sep">·</span>
+                      <span className="map-hero-tag-num">District {String(activeIdx + 1).padStart(2, "0")}</span>
+                    </div>
+                    <h2 className="map-hero-name">{activeDistrict.name}</h2>
                   </div>
-                  <div className="map-stage-poster-stamp">
-                    <span className="map-stage-poster-stamp-tag">{(DISTRICT_VISUALS[activeDistrict.id] || DISTRICT_VISUALS.academic).tag}</span>
-                    <span className="map-stage-poster-stamp-sep">·</span>
-                    <span className="map-stage-poster-stamp-n">№ {String(activeIdx + 1).padStart(2, "0")}</span>
-                  </div>
-                  <div className="map-stage-poster-title">
-                    <span className="map-stage-poster-title-kicker">District {String(activeIdx + 1).padStart(2, "0")}</span>
-                    <span className="map-stage-poster-title-name">{activeDistrict.name}</span>
-                  </div>
-                  <button
-                    type="button"
-                    className="map-stage-poster-expand"
-                    onClick={() => setPosterExpanded(v => !v)}
-                    aria-label={posterExpanded ? "Collapse district image" : "Expand district image"}
-                    aria-pressed={posterExpanded}
-                  >
-                    <Icon name={posterExpanded ? "chevron-up" : "chevron-down"} size={12} stroke={2}/>
-                    <span>{posterExpanded ? "COLLAPSE" : "EXPAND"}</span>
-                  </button>
-                </aside>
-
-                {/* RIGHT · info column — deck (blurb) then sub-locations.
-                    Header chrome lives entirely in the poster on the left;
-                    don't duplicate the district name or stamp here. */}
-                <div className="map-stage-info">
-                  <header className="map-stage-head">
-                    <p className="map-stage-deck">{activeDistrict.blurb}</p>
-                  </header>
-
-                  {isResidence ? (
-                    <ResidenceBlocks items={activeItems}/>
-                  ) : (
-                    <section className="map-stage-locations">
-                      <header className="map-stage-locations-hd">
-                        <span className="map-stage-locations-lbl">Field Guide · Locations</span>
-                        <span className="map-stage-locations-count">{activeItems.length}</span>
-                      </header>
-                      <ol className="map-stage-pins">
-                        {activeItems.map((loc, i) => (
-                          <MapStageLocation key={loc.id} loc={loc} idx={i}/>
-                        ))}
-                      </ol>
-                    </section>
-                  )}
                 </div>
+
+                {/* Deck (blurb) + count badge on one row */}
+                <div className="map-section-deck-row">
+                  <p className="map-section-deck">{activeDistrict.blurb}</p>
+                  <div className="map-section-count-badge">
+                    <b>{activeItems.length}</b>
+                    <span>{activeItems.length === 1 ? "location" : "locations"} on record</span>
+                  </div>
+                </div>
+
+                {/* Locations — flow naturally, no inner scrollbar */}
+                {isResidence ? (
+                  <ResidenceBlocks items={activeItems}/>
+                ) : (
+                  <ol className="map-stage-pins map-section-pins">
+                    {activeItems.map((loc, i) => (
+                      <MapStageLocation key={loc.id} loc={loc} idx={i}/>
+                    ))}
+                  </ol>
+                )}
               </section>
             )
           )}
