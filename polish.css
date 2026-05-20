@@ -427,6 +427,7 @@ body {
   background: linear-gradient(180deg, #0a0a0e 0%, #07070b 100%) !important;
   border-bottom: 1px solid var(--rule-soft) !important;
   box-shadow: 0 1px 0 rgba(212, 168, 74, 0.22) !important;
+  overflow: hidden !important;
 }
 
 .mast-inner {
@@ -29104,4 +29105,114 @@ button.orgs-pill {
   color: var(--gold-bright, var(--yellow));
   font-size: 12px;
   letter-spacing: 0.14em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MOBILE MASTHEAD · defensive cap
+   Bug report from Skully: "on mobile the top expands until you can't
+   read anything." Cause was a stale grid-column: 4 on the search
+   button forcing an implicit 4th column at ≤720px (where the grid
+   template only defines 3), plus an 80px brand-mark exceeding the
+   84px mast-inner height, plus no overflow guard on .masthead so
+   anything that didn't fit just bled vertically.
+   This block locks the masthead down on phones in one place rather
+   than patching the upstream rules and risking a cascade regression.
+   ═══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 720px) {
+  .masthead {
+    overflow: hidden !important;
+  }
+  .mast-inner {
+    /* Simpler 3-column grid: brand left · music + search right.
+       grid-template-areas explicitly places each child so a
+       stale grid-column override on the search button can't
+       cause an implicit 4th column. */
+    grid-template-columns: auto 1fr auto auto !important;
+    grid-template-rows: auto !important;
+    grid-auto-rows: 0 !important;
+    grid-auto-flow: column !important;
+    gap: 8px !important;
+    padding: 0 12px !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    max-height: 64px !important;
+    overflow: hidden !important;
+    align-items: center !important;
+  }
+  /* Explicit column placement — overrides any earlier grid-column
+     rules that targeted the wider desktop grid. */
+  .mast-brand   { grid-column: 1 !important; grid-row: 1 !important; }
+  .mast-np      { grid-column: 3 !important; grid-row: 1 !important;
+                  justify-self: end !important; }
+  .mast-search  { grid-column: 4 !important; grid-row: 1 !important;
+                  justify-self: end !important; }
+  .mast-chrome,
+  .mast-meta,
+  .mast-strata  { display: none !important; }
+
+  /* Brand mark: was 80px (taller than the 64px bar). Scale down so
+     the bar can hold the crest without pushing the height up. */
+  .mast-brand-mark {
+    width: 44px !important;
+    height: 44px !important;
+    background-size: 120% auto !important;
+  }
+  .mast-brand-text { display: none !important; }
+
+  /* Music player: just the cover, no internal text or volume. */
+  .mast-np {
+    height: 44px !important;
+    padding: 0 !important;
+    border: 1px solid var(--rule-soft) !important;
+    background: transparent !important;
+  }
+  .mast-np-cover { width: 44px !important; height: 44px !important; flex: 0 0 44px !important; }
+  .mast-np-mid,
+  .mast-np-times,
+  .mast-np-vol { display: none !important; }
+
+  /* Search: icon-only square the same height as the music + brand. */
+  .mast-search {
+    height: 44px !important;
+    width: 44px !important;
+    min-width: 0 !important;
+    max-width: 44px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .mast-search-text,
+  .mast-search-kbd { display: none !important; }
+
+  /* Header height var: pages that key off --hdr-h need to match the
+     new 64px bar so sticky offsets don't leave a gap. */
+  :root { --hdr-h: 64px !important; }
+}
+
+/* Extra-narrow safety net — 380px and below (small phones) keep the
+   same layout but ensure the brand mark, music cover, and search
+   button all fit on one row without forcing scroll. */
+@media (max-width: 380px) {
+  .mast-inner {
+    gap: 6px !important;
+    padding: 0 8px !important;
+  }
+  .mast-brand-mark,
+  .mast-np-cover,
+  .mast-search {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .mast-search { max-width: 40px !important; }
+  .mast-np { height: 40px !important; }
+}
+
+/* Guard: kill any descender-level inline-block element that might
+   force the masthead to grow vertically on iOS Safari. */
+@media (max-width: 720px) {
+  .mast-inner > * {
+    max-height: 100% !important;
+    box-sizing: border-box !important;
+  }
 }
