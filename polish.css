@@ -29105,38 +29105,86 @@ button.orgs-pill {
   font-size: 12px;
 
 /* ═══════════════════════════════════════════════════════════════════════
-   MOBILE MASTHEAD · narrow override
-   Skully reported the masthead expanding vertically on phones. Root
-   cause was the search button keeping its desktop grid-column: 4
-   when the mobile grid template only defines 3 columns — that
-   forced an implicit 4th column and the row grew. Scoped fix:
-   keep the existing 84px bar, just align the grid to the 3 visible
-   children at ≤720px and contain horizontally. No global --hdr-h
-   override and no page-content overrides — leave everything else
-   to the existing breakpoints already in this file.
+   MOBILE MASTHEAD · hard cap
+   Skully kept reporting the masthead expanding vertically on phones
+   so the "top expands until you can't read anything". The previous
+   overrides didn't actually clamp the bar — children were still
+   pushing the box height because nothing was containing them.
+   This block FORCES the masthead to a fixed height with overflow
+   contained. Children that overflow get clipped, period, instead
+   of pushing the row.
    ═══════════════════════════════════════════════════════════════════════ */
-@media (max-width: 720px) {
-  .mast-inner {
-    /* Three visible children at this breakpoint: brand, music
-       player, search. Match the template to that count so the
-       search button's grid-column: 4 stops forcing a phantom
-       fourth column. */
-    grid-template-columns: auto 1fr auto auto !important;
-    overflow-x: hidden !important;
+@media (max-width: 760px) {
+  .masthead {
+    height: 64px !important;
+    min-height: 64px !important;
+    max-height: 64px !important;
+    overflow: hidden !important;
+    contain: size layout !important;
   }
-  /* Land each visible child in a defined column */
-  .mast-brand   { grid-column: 1 !important; }
-  .mast-np      { grid-column: 3 !important; justify-self: end !important; }
-  .mast-search  { grid-column: 4 !important; justify-self: end !important; }
+  .mast-inner {
+    height: 64px !important;
+    min-height: 64px !important;
+    max-height: 64px !important;
+    grid-template-columns: auto 1fr auto auto !important;
+    gap: 8px !important;
+    padding: 0 12px !important;
+    overflow: hidden !important;
+    align-items: center !important;
+  }
+  /* Pin every visible child into a real column so none of them
+     can spill onto an implicit 5th column or wrap to row 2. */
+  .mast-brand   { grid-column: 1 !important; grid-row: 1 !important; }
+  .mast-np      { grid-column: 3 !important; grid-row: 1 !important; justify-self: end !important; }
+  .mast-search  { grid-column: 4 !important; grid-row: 1 !important; justify-self: end !important; }
+  .mast-chrome  { display: none !important; }
 
-  /* Constrain the brand mark so it can't push the 84px row taller
-     than the bar. (The inline rule in index.html sets it to 80px
-     square, which on iOS Safari has been observed to push the
-     row up by a pixel or two; cap it cleanly here.) */
+  /* Cap every direct child of .mast-inner to the row height so
+     nothing leaks out of the bar. */
+  .mast-inner > * {
+    max-height: 48px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Brand mark: smaller + full image visible (the source PNG is
+     portrait — crest above wordmark — so background-size: contain
+     keeps the whole thing inside the 48x48 frame). */
   .mast-brand-mark {
-    width: 56px !important;
-    height: 56px !important;
+    width: 48px !important;
+    height: 48px !important;
     background-size: contain !important;
     background-position: center center !important;
+    background-repeat: no-repeat !important;
   }
+  .mast-brand { gap: 0 !important; }
+  .mast-brand-text { display: none !important; }
+
+  /* Music player + search: square 44px controls that fit cleanly
+     in the 48px row height. */
+  .mast-np {
+    height: 44px !important;
+    padding: 0 !important;
+  }
+  .mast-np-cover { flex: 0 0 44px !important; width: 44px !important; height: 44px !important; margin: 0 !important; }
+  .mast-np-mid,
+  .mast-np-times,
+  .mast-np-vol { display: none !important; }
+
+  .mast-search {
+    height: 44px !important;
+    width: 44px !important;
+    min-width: 0 !important;
+    max-width: 44px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .mast-search-text,
+  .mast-search-kbd { display: none !important; }
+
+  /* The CSS var --hdr-h is used by sticky positioning further down
+     the page (tabs nav, sub-navs, table headers). Tighten it so
+     those stickies sit flush against the new shorter bar. */
+  :root { --hdr-h: 64px !important; }
 }
