@@ -871,43 +871,97 @@ function HomeToday(){
 // (none yet — admin / Student Body President will populate this as
 // term moves on). Each event lives at { date: "YYYY-MM-DD", title,
 // tag, link? }.
+// Campus events. Each entry's `start` is an ISO UTC timestamp — the
+// canonical source of truth — and the calendar renders it in the
+// viewer's local timezone via toLocaleString. `date` (YYYY-MM-DD)
+// keys the grid marker. Add { date, start, title, tag, host?,
+// hostLink?, location?, link? } entries to publish a new event.
 const HOME_EVENTS = [
-  // Empty for now. Add entries here when admin posts something:
-  //   { date: "2026-06-13", title: "Powerball Cup Final", tag: "POWERBALL", link: "https://…" },
+  {
+    date:  "2026-06-13",
+    // 12:00 noon US Eastern, Saturday June 13 2026. June is in DST so
+    // Eastern resolves to UTC-4 (EDT) on that date → 16:00 UTC.
+    start: "2026-06-13T16:00:00Z",
+    title: "Great Ormond Street Hospital · ward visit",
+    tag:   "OUTREACH · POWERBALL + CHEER",
+    host:  "Celestia \"Stella\" Starkov",
+    hostLink: "https://roleplay.chat/profile.php?user=illuminate",
+    location: "Great Ormond Street Hospital · London WC1N",
+    desc: "Stella leads a Saturday delegation to GOSH's powered-paediatric ward. Members of the Powerball squads and the Cheer team are riding along — signatures, photos, and a short cheer routine in the atrium for the kids who can't come down. Campus shuttle leaves the West Gate at 09:00 local time.",
+  },
 ];
 
-function HomeCalendar(){
-  // Anchor on the current UTC date so the calendar always reflects
-  // wall-clock "today" without ever flipping mid-render.
-  const now = new Date();
-  const year = now.getUTCFullYear();
-  const month = now.getUTCMonth();
-  const todayDay = now.getUTCDate();
+// Format an event's start time for the viewer's local timezone.
+// "Sun, 14 Jun · 12:00 PM EDT" / "Sun, 14 Jun · 5:00 PM BST" depending
+// on where the viewer is. Falls back to the raw date if start is
+// missing or unparseable.
+function formatEventTime(ev, opts = {}){
+  if (!ev) return "";
+  if (!ev.start) {
+    try {
+      const d = new Date(ev.date + "T12:00:00Z");
+      return d.toLocaleDateString(undefined, { weekday: "short", day: "2-digit", month: "short" });
+    } catch { return ev.date || ""; }
+  }
+  try {
+    const d = new Date(ev.start);
+    return d.toLocaleString(undefined, {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      ...(opts.includeYear ? { year: "numeric" } : {}),
+      hour: "numeric",
+      minute: "2-digit",
+      timeZoneName: "short",
+    });
+  } catch { return ev.date || ""; }
+}
 
+function HomeCalendar(){
   const months = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
   const dows = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
 
-  // First day of the month (Mon=0..Sun=6 — UK convention).
+  // Anchor on wall-clock today for the "is this cell today?" check.
+  const now = new Date();
+  const todayY = now.getUTCFullYear();
+  const todayM = now.getUTCMonth();
+  const todayD = now.getUTCDate();
+
+  // Viewed month — starts on today's month, advances via prev/next.
+  const [viewYear, setViewYear] = useState(todayY);
+  const [viewMonth, setViewMonth] = useState(todayM);
+
+  const goPrev = () => {
+    if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
+    else setViewMonth(m => m - 1);
+  };
+  const goNext = () => {
+    if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
+    else setViewMonth(m => m + 1);
+  };
+  const goToday = () => { setViewYear(todayY); setViewMonth(todayM); };
+  const isViewingThisMonth = (viewYear === todayY && viewMonth === todayM);
+
+  // First day of the viewed month (Mon=0..Sun=6 — UK convention).
   const firstDow = (() => {
-    const d = new Date(Date.UTC(year, month, 1)).getUTCDay(); // 0=Sun
+    const d = new Date(Date.UTC(viewYear, viewMonth, 1)).getUTCDay(); // 0=Sun
     return (d + 6) % 7; // shift so Monday is 0
   })();
-  const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  const daysInMonth = new Date(Date.UTC(viewYear, viewMonth + 1, 0)).getUTCDate();
 
-  // Build the cells: [...leading blanks, ...1..N, ...trailing blanks
-  // up to a multiple of 7].
+  // Build the cells.
   const cells = [];
   for (let i = 0; i < firstDow; i++) cells.push(null);
   for (let d = 1; d <= daysInMonth; d++) cells.push(d);
   while (cells.length % 7 !== 0) cells.push(null);
 
-  // Index events by day-of-month so cell lookup is O(1).
+  // Index events by day-of-month for the viewed month.
   const eventsByDay = useMemo(() => {
     const map = {};
     for (const ev of HOME_EVENTS) {
       try {
         const d = new Date(ev.date + "T12:00:00Z");
-        if (d.getUTCFullYear() === year && d.getUTCMonth() === month) {
+        if (d.getUTCFullYear() === viewYear && d.getUTCMonth() === viewMonth) {
           const day = d.getUTCDate();
           if (!map[day]) map[day] = [];
           map[day].push(ev);
@@ -915,9 +969,9 @@ function HomeCalendar(){
       } catch {}
     }
     return map;
-  }, [year, month]);
+  }, [viewYear, viewMonth]);
 
-  // All events in this month, sorted by date — listed below the grid.
+  // Sorted list of this month's events (for the listing below the grid).
   const monthEvents = useMemo(() => {
     const all = [];
     for (const day in eventsByDay) {
@@ -926,12 +980,61 @@ function HomeCalendar(){
     return all.sort((a, b) => a.day - b.day);
   }, [eventsByDay]);
 
+  // Upcoming events — anything in the future regardless of viewed
+  // month. Limited to the next 5 so the list stays scannable.
+  const upcoming = useMemo(() => {
+    const ms = Date.now();
+    return HOME_EVENTS
+      .map(ev => {
+        const t = ev.start ? Date.parse(ev.start) : Date.parse(ev.date + "T12:00:00Z");
+        return { ...ev, _t: t };
+      })
+      .filter(ev => Number.isFinite(ev._t) && ev._t >= ms - (1000 * 60 * 60 * 24)) // include today
+      .sort((a, b) => a._t - b._t)
+      .slice(0, 5);
+  }, []);
+
   return (
     <div className="home-today-events">
       <header className="home-today-events-head">
-        <div className="home-today-events-tag">CAMPUS CALENDAR · {months[month]} {year}</div>
+        <div className="home-today-events-tag">CAMPUS CALENDAR</div>
         <h3 className="home-today-events-title">Scheduled events</h3>
       </header>
+
+      {/* Month navigation strip */}
+      <div className="cal-nav" role="group" aria-label="Calendar month navigation">
+        <button
+          type="button"
+          className="cal-nav-btn"
+          onClick={goPrev}
+          aria-label="Previous month"
+        >
+          <i className="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <div className="cal-nav-title">
+          <span className="cal-nav-month">{months[viewMonth]}</span>
+          <span className="cal-nav-year">{viewYear}</span>
+        </div>
+        <div className="cal-nav-right">
+          {!isViewingThisMonth && (
+            <button
+              type="button"
+              className="cal-nav-today"
+              onClick={goToday}
+            >
+              Today
+            </button>
+          )}
+          <button
+            type="button"
+            className="cal-nav-btn"
+            onClick={goNext}
+            aria-label="Next month"
+          >
+            <i className="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
 
       <div className="cal">
         <div className="cal-dow-row" role="row">
@@ -940,7 +1043,7 @@ function HomeCalendar(){
         <div className="cal-grid">
           {cells.map((d, i) => {
             if (d === null) return <div key={"e" + i} className="cal-cell is-blank"/>;
-            const isToday = d === todayDay;
+            const isToday = (d === todayD && viewMonth === todayM && viewYear === todayY);
             const events = eventsByDay[d];
             const hasEvents = !!(events && events.length);
             return (
@@ -948,7 +1051,7 @@ function HomeCalendar(){
                 key={d}
                 className={"cal-cell" + (isToday ? " is-today" : "") + (hasEvents ? " has-events" : "")}
                 role="gridcell"
-                aria-label={`${d} ${months[month]} ${year}${hasEvents ? ", " + events.length + " event" + (events.length > 1 ? "s" : "") : ""}${isToday ? ", today" : ""}`}
+                aria-label={`${d} ${months[viewMonth]} ${viewYear}${hasEvents ? ", " + events.length + " event" + (events.length > 1 ? "s" : "") : ""}${isToday ? ", today" : ""}`}
               >
                 <span className="cal-cell-num">{d}</span>
                 {isToday && <span className="cal-cell-today-dot" aria-hidden="true"/>}
@@ -963,33 +1066,16 @@ function HomeCalendar(){
         </div>
       </div>
 
+      {/* Events in the viewed month */}
       {monthEvents.length > 0 ? (
         <ul className="cal-list">
-          {monthEvents.map((ev, i) => (
-            <li key={i} className="cal-list-item">
-              <div className="cal-list-date">
-                <div className="cal-list-day">{String(ev.day).padStart(2, "0")}</div>
-                <div className="cal-list-mon">{months[month].slice(0, 3)}</div>
-              </div>
-              <div className="cal-list-body">
-                {ev.tag && <div className="cal-list-tag">{ev.tag}</div>}
-                <div className="cal-list-title">
-                  {ev.link ? (
-                    <a href={ev.link} target="_blank" rel="noopener noreferrer">
-                      {ev.title}
-                      <i className="fa-solid fa-arrow-up-right-from-square cal-list-icon" aria-hidden="true"></i>
-                    </a>
-                  ) : ev.title}
-                </div>
-              </div>
-            </li>
-          ))}
+          {monthEvents.map((ev, i) => <CalEventRow key={i} ev={ev} month={months[viewMonth]}/>)}
         </ul>
       ) : (
         <div className="cal-empty">
           <i className="fa-regular fa-calendar cal-empty-icon" aria-hidden="true"></i>
           <div className="cal-empty-body">
-            <div className="cal-empty-title">Nothing on the calendar yet for {months[month]}.</div>
+            <div className="cal-empty-title">Nothing on the calendar yet for {months[viewMonth]} {viewYear}.</div>
             <div className="cal-empty-sub">
               When admin or the Student Body President posts something — practicals,
               Vanguard appearances, inter-house matches, Powerball fixtures — it
@@ -998,7 +1084,85 @@ function HomeCalendar(){
           </div>
         </div>
       )}
+
+      {/* Upcoming events from any future month — so writers see what's
+          coming even when they're viewing a month with no events. */}
+      {upcoming.length > 0 && (
+        <div className="cal-upcoming">
+          <header className="cal-upcoming-head">
+            <span className="cal-upcoming-tag">
+              <i className="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> UPCOMING
+            </span>
+            <span className="cal-upcoming-sub">Times shown in your local timezone.</span>
+          </header>
+          <ul className="cal-upcoming-list">
+            {upcoming.map((ev, i) => <CalEventRow key={i} ev={ev} upcoming/>)}
+          </ul>
+        </div>
+      )}
     </div>
+  );
+}
+
+// Single event row — used in the month listing AND the upcoming
+// rollup. Renders the date tile, tag, title, host link, location,
+// and the time in the viewer's local timezone.
+function CalEventRow({ ev, month, upcoming }){
+  const monthsShort = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  // Figure out the day + month label for the tile.
+  let tileDay = ev.day;
+  let tileMon = month ? month.slice(0, 3) : "";
+  if (!tileDay) {
+    try {
+      const d = new Date((ev.start || ev.date + "T12:00:00Z"));
+      tileDay = d.getUTCDate();
+      tileMon = monthsShort[d.getUTCMonth()];
+    } catch {}
+  }
+  const localTime = formatEventTime(ev, { includeYear: !!upcoming });
+  return (
+    <li className={"cal-list-item" + (upcoming ? " is-upcoming-row" : "")}>
+      <div className="cal-list-date">
+        <div className="cal-list-day">{String(tileDay).padStart(2, "0")}</div>
+        <div className="cal-list-mon">{tileMon}</div>
+      </div>
+      <div className="cal-list-body">
+        {ev.tag && <div className="cal-list-tag">{ev.tag}</div>}
+        <div className="cal-list-title">
+          {ev.link ? (
+            <a href={ev.link} target="_blank" rel="noopener noreferrer">
+              {ev.title}
+              <i className="fa-solid fa-arrow-up-right-from-square cal-list-icon" aria-hidden="true"></i>
+            </a>
+          ) : ev.title}
+        </div>
+        <div className="cal-list-meta">
+          <span className="cal-list-time">
+            <i className="fa-regular fa-clock cal-list-meta-icon" aria-hidden="true"></i>
+            {localTime}
+          </span>
+          {ev.location && (
+            <span className="cal-list-loc">
+              <i className="fa-solid fa-location-dot cal-list-meta-icon" aria-hidden="true"></i>
+              {ev.location}
+            </span>
+          )}
+          {ev.host && (
+            <span className="cal-list-host">
+              <i className="fa-regular fa-user cal-list-meta-icon" aria-hidden="true"></i>
+              Hosted by{" "}
+              {ev.hostLink ? (
+                <a href={ev.hostLink} target="_blank" rel="noopener noreferrer">
+                  {ev.host}
+                  <i className="fa-solid fa-arrow-up-right-from-square cal-list-icon" aria-hidden="true"></i>
+                </a>
+              ) : ev.host}
+            </span>
+          )}
+        </div>
+        {ev.desc && <p className="cal-list-desc">{ev.desc}</p>}
+      </div>
+    </li>
   );
 }
 
