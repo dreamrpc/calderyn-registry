@@ -9402,14 +9402,11 @@ function App(){
   const [tab, setTabState] = useState(initial.tab);
   const [gsOpen, setGsOpen] = useState(false);
   const [targetSubview, setTargetSubview] = useState(initial.subview);
-  // Mobile nav drawer (visible only below the breakpoint where the
-  // inline horizontal tab strip collapses). Closes automatically on
-  // tab selection so the user lands on the chosen page cleanly.
-  const [navOpen, setNavOpen] = useState(false);
-
+  // Mobile nav drawer state retired — the viewport meta now forces a
+  // 1200px logical width on every device, so the desktop tab strip
+  // shows on phones too and the hamburger is gone.
   const setTab = useCallback((id) => {
     setTabState(id);
-    setNavOpen(false);
     try{ window.location.hash = id; }catch(e){}
   }, []);
 
@@ -9506,26 +9503,10 @@ function App(){
       </header>
 
       <nav
-        className={"tabs" + (navOpen ? " is-open" : "")}
+        className="tabs"
         role="tablist"
         aria-label="Registry sections"
       >
-        {/* Mobile toggle — visible only below ~760px via CSS. Shows the
-            active tab's label so the closed state still tells you where
-            you are. Tap to open the drawer. */}
-        <button
-          type="button"
-          className="tabs-mobile-toggle"
-          onClick={() => setNavOpen(o => !o)}
-          aria-expanded={navOpen}
-          aria-controls="tabs-drawer"
-        >
-          <Icon name={navOpen ? "x" : "menu"} size={18}/>
-          <span className="tabs-mobile-current">
-            {(TABS.find(t => t.id === tab) || TABS[0]).label}
-          </span>
-        </button>
-
         <div className="tabs-inner" id="tabs-drawer">
           {TABS.map((t, i) => (
             <button
