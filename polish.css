@@ -12040,6 +12040,10 @@ html { scroll-behavior: smooth; }
   line-height: 1.65 !important;
   color: var(--text-2, #c9c3b5) !important;
   margin: 0 0 var(--space-4) !important;
+  /* Single \n in the data becomes a line break (for bullet-style power
+     lists); paragraph-level breaks come from the JSX splitting on \n\n
+     and rendering separate <p> tags. */
+  white-space: pre-line !important;
 }
 .preg-detail-text:last-of-type { margin-bottom: 0 !important; }
 .preg-detail-note {
@@ -25305,13 +25309,17 @@ button.orgs-pill {
 }
 .preg-detail-label:first-child { margin-top: 0 !important; }
 .preg-detail-text {
-  margin: 0 !important;
+  margin: 0 0 10px !important;
   font-family: var(--sans, 'Söhne', system-ui) !important;
   font-size: 13.5px !important;
   line-height: 1.6 !important;
   color: #cfcabe !important;
-  white-space: pre-wrap !important;
+  /* Single \n becomes a line break (bullet-style power lists);
+     paragraph-level breaks come from the JSX splitting on \n\n
+     and rendering separate <p> tags, which get the margin above. */
+  white-space: pre-line !important;
 }
+.preg-detail-text:last-of-type { margin-bottom: 0 !important; }
 .preg-detail-note { color: rgba(255, 180, 100, 0.85) !important; }
 
 /* Hide the old group ribbons / row card chrome — superseded by the
