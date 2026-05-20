@@ -5927,15 +5927,15 @@ function LeagueTable({ schedule, compact }){
               </div>
 
               <div className="lt-house" role="cell">
-                <HouseCrest id={s.id} size={44} className="lt-house-crest"/>
-                <div className="lt-house-text">
+                <div className="lt-house-line">
+                  <HouseCrest id={s.id} size={36} className="lt-house-crest"/>
                   <span className="lt-house-name">{houseName(s.id)}</span>
-                  <span className="lt-house-record">
-                    <strong>{s.gp}</strong> {s.gp === 1 ? "GAME" : "GAMES"} ·{" "}
-                    <strong>{s.pf}</strong> FOR ·{" "}
-                    <strong>{s.pa}</strong> AGAINST
-                  </span>
                 </div>
+                <span className="lt-house-record">
+                  <strong>{s.gp}</strong> {s.gp === 1 ? "GAME" : "GAMES"} ·{" "}
+                  <strong>{s.pf}</strong> FOR ·{" "}
+                  <strong>{s.pa}</strong> AGAINST
+                </span>
               </div>
 
               {!compact && (

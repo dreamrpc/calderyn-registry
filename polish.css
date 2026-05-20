@@ -24709,13 +24709,9 @@ button.orgs-pill {
   margin: 24px clamp(20px, 4vw, 32px) 48px !important;
   background: transparent !important;
   border: 0 !important;
-  max-width: calc(100% - 2 * clamp(20px, 4vw, 32px)) !important;
-  box-sizing: border-box !important;
-  overflow-x: auto !important;
 }
 .pbanned-tw table {
   width: 100% !important;
-  table-layout: fixed !important;
   border-collapse: collapse !important;
   border-spacing: 0 !important;
 }
@@ -24748,26 +24744,17 @@ button.orgs-pill {
 .pbanned-tw tbody tr:hover td {
   background: #121212 !important;
 }
-.pbanned-tw tbody td.rn,
-.pbanned-tw thead th:first-child {
+.pbanned-tw tbody td.rn {
   font-family: var(--mono, 'Söhne Mono', monospace) !important;
   font-size: 11px !important;
   color: var(--text-3, #948d80) !important;
-  width: 48px !important;
+  width: 56px !important;
   letter-spacing: 0.08em !important;
 }
-.pbanned-tw tbody td.pbanned-name,
-.pbanned-tw thead th:nth-child(2) {
+.pbanned-tw tbody td.pbanned-name {
   font-weight: 600 !important;
   color: #f5f1e8 !important;
-  width: 28% !important;
-  word-wrap: break-word !important;
-  overflow-wrap: anywhere !important;
-}
-.pbanned-tw tbody td.pbanned-reason,
-.pbanned-tw thead th:nth-child(3) {
-  word-wrap: break-word !important;
-  overflow-wrap: anywhere !important;
+  width: 30% !important;
 }
 .pbanned-tw tbody td.pbanned-reason {
   color: #b8b1a3 !important;
@@ -24778,11 +24765,7 @@ button.orgs-pill {
   color: var(--text-3, #948d80) !important;
   font-style: italic !important;
 }
-.pbanned-tw tbody td.pbanned-status,
-.pbanned-tw thead th:nth-child(4) {
-  width: 100px !important;
-  text-align: right !important;
-}
+.pbanned-tw tbody td.pbanned-status { width: 110px !important; }
 .pbanned-tag {
   display: inline-block !important;
   font-family: var(--mono, 'Söhne Mono', monospace) !important;
@@ -26356,38 +26339,52 @@ button.orgs-pill {
 }
 
 /* ── The chip itself · CLEAN ───────────────────────────────────────── */
+/* Status chip — flat single-line label, no inset shadows, no
+   accidental box-decoration leak. The inline style sets
+   background + colour from the data (s.bg, s.text); CSS just
+   handles geometry + typography so every chip lines up uniformly
+   regardless of which colour it carries. */
 .pg-guide .status-card-tag {
   display: inline-flex !important;
   align-items: center !important;
-  justify-content: flex-start !important;
+  justify-content: center !important;
   width: max-content !important;
-  max-width: max-content !important;
-  margin: 20px 22px 8px !important;
-  padding: 6px 14px !important;
+  max-width: calc(100% - 44px) !important;
+  margin: 18px 22px 10px !important;
+  padding: 6px 12px !important;
   border: 0 !important;
-  border-bottom: 2px solid currentColor !important;
-  border-radius: 0 !important;
+  border-radius: 999px !important;
   font-family: var(--mono, 'Söhne Mono', monospace) !important;
-  font-size: 14px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.16em !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
   text-transform: uppercase !important;
-  line-height: 1.1 !important;
-  /* No box-shadow — the inset highlights were what made the tag
-     read as an oversized container. */
+  line-height: 1 !important;
   box-shadow: none !important;
+  /* Belt-and-braces: kill any inherited decorations from earlier
+     overrides further up the cascade (the old rules left a 2px
+     gold border-bottom + an inset highlight that read as a broken
+     chip frame in some browsers). */
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  text-decoration: none !important;
+  background-clip: padding-box !important;
 }
 .pg-guide .status-card-tag > span {
   display: inline-block !important;
-  line-height: 1.1 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
 }
 
-/* UNSANCTIONED specifically — its inline bg (#0e0e10) is essentially
-   the card colour, which is what made the chip look invisible.
-   Override to a tinted red wash so the chip reads as a saturated
-   badge like the others without depending on the wrap border. */
+/* UNSANCTIONED specifically — its inline bg (#0e0e10) is the card
+   colour, so the chip would look invisible against the panel.
+   Override to a tinted red wash + red text so it reads as a
+   saturated badge like the others. */
 .pg-guide .status-card-tag[style*="#0e0e10"] {
-  background: rgba(255, 42, 50, 0.16) !important;
+  background: rgba(255, 42, 50, 0.18) !important;
+  color: #ff8c94 !important;
 }
 
 /* Description copy below the chip · tighter vertical rhythm */
@@ -28884,13 +28881,20 @@ button.orgs-pill {
 /* ── LEAGUE TABLE · crest variant + refined typography ──────────── */
 .lt-house {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+.lt-house-line {
+  display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
 }
 .lt-house-crest {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
 }
 .lt-house-text {
   display: flex;
