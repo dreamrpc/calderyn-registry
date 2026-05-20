@@ -796,8 +796,7 @@ departments: [
     blurb: "The public-presentation faculty. Press on one wing, identity craft on the other, performance training as the spine that joins them. The department whose graduates the public actually recognises.",
     head: {
       role: "Head of Media & Arts",
-      reserved: "Room owner",
-      bio: "Retired public-facing figure who's worked both sides: real press incidents and a known persona of her own. Carries scar tissue and glamour. Theron treats her with a particular respect, which is institutionally noticeable.",
+      bio: "Open. Retired public-facing figure who's worked both sides preferred — real press incidents and a known persona of her own. Carries scar tissue and glamour. The role anchors the department: Press on one wing, identity craft on the other, performance training joining them.",
     },
     staff: [
       { slot: "Prof. 1", role: "Press, Statement Craft & Statutory Liaison",        bio: "Former STRATA press officer. Teaches how the powered sector communicates with the state and the public, and where the two diverge." },
