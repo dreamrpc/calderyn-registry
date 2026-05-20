@@ -839,7 +839,15 @@ function HomeToday(){
           <div className="home-today-status-lbl">Cycle status</div>
           <div className="home-today-status-val">
             <span className="home-today-pulse" aria-hidden="true"/>
-            INTAKE OPEN · TERM 2 · 2026
+            {(() => {
+              // Derived live from the academic calendar — no
+              // hardcoded "Term 2 · 2026" string to drift out of date.
+              const t = calderynTerm(today);
+              if (t.inSession) {
+                return `INTAKE OPEN · ${t.name} TERM · WK ${String(t.week).padStart(2, "0")} / ${t.totalWeeks}`;
+              }
+              return `INTAKE OPEN · ${t.name}${t.nextTerm ? ` · ${t.nextTerm} TERM NEXT` : ""}`;
+            })()}
           </div>
         </div>
       </div>
@@ -871,12 +879,42 @@ function HomeToday(){
 // (none yet — admin / Student Body President will populate this as
 // term moves on). Each event lives at { date: "YYYY-MM-DD", title,
 // tag, link? }.
+// Auto-generated term boundary + break events for a given academic
+// year (academic year starts in September of `startYear`). Used to
+// pin the start/end of each term and the break boundaries on the
+// campus calendar so writers can see when school is in session
+// without leaving the home page.
+function termEventsForYear(startYear){
+  const y = startYear;
+  const next = startYear + 1;
+  const pad = (n) => String(n).padStart(2, "0");
+  const iso = (yr, mo, dy) => `${yr}-${pad(mo)}-${pad(dy)}`;
+  return [
+    { date: iso(y, 9, 1),    title: "Autumn term begins",   tag: "TERM · START",  kind: "term-start",   auto: true },
+    { date: iso(y, 12, 19),  title: "Autumn term ends · Christmas break begins", tag: "TERM · END",    kind: "term-end",     auto: true },
+    { date: iso(next, 1, 6), title: "Spring term begins",   tag: "TERM · START",  kind: "term-start",   auto: true },
+    { date: iso(next, 4, 9), title: "Spring term ends · Easter break begins",    tag: "TERM · END",    kind: "term-end",     auto: true },
+    { date: iso(next, 4, 18),title: "Summer term begins",   tag: "TERM · START",  kind: "term-start",   auto: true },
+    { date: iso(next, 6, 30),title: "Summer term ends · Summer break begins",    tag: "TERM · END",    kind: "term-end",     auto: true },
+  ];
+}
+
+// Range of academic years to surface term events for — covers the
+// last full year + the next few so the calendar's navigation can
+// roam back to January and forward without losing context.
+const TERM_BOUNDARY_EVENTS = (() => {
+  const years = [2024, 2025, 2026, 2027];
+  const out = [];
+  for (const y of years) out.push(...termEventsForYear(y));
+  return out;
+})();
+
 // Campus events. Each entry's `start` is an ISO UTC timestamp — the
 // canonical source of truth — and the calendar renders it in the
 // viewer's local timezone via toLocaleString. `date` (YYYY-MM-DD)
 // keys the grid marker. Add { date, start, title, tag, host?,
 // hostLink?, location?, link? } entries to publish a new event.
-const HOME_EVENTS = [
+const HOME_USER_EVENTS = [
   {
     date:  "2026-06-13",
     // 12:00 noon US Eastern, Saturday June 13 2026. June is in DST so
@@ -890,6 +928,42 @@ const HOME_EVENTS = [
     desc: "Stella leads a Saturday delegation to GOSH's powered-paediatric ward. Members of the Powerball squads and the Cheer team are riding along — signatures, photos, and a short cheer routine in the atrium for the kids who can't come down. Campus shuttle leaves the West Gate at 09:00 local time.",
   },
 ];
+
+// Combined event source for the calendar — user-published events
+// plus the auto-generated term boundaries (so term starts/ends and
+// break boundaries show up as markers in the grid).
+const HOME_EVENTS = [...HOME_USER_EVENTS, ...TERM_BOUNDARY_EVENTS];
+
+// Is the given Date inside an out-of-term break? Mirrors the term
+// windows from calderynTerm — Sep 1 → Dec 19 (autumn), Jan 6 → Apr 9
+// (spring), Apr 18 → Jun 30 (summer). Any date outside those is a
+// break. Used to tint break cells in the calendar grid.
+function isInBreak(year, month, day){
+  const t = Date.UTC(year, month, day);
+  // Walk through every academic year that could contain this date.
+  const yrs = [year - 1, year];
+  for (const startY of yrs) {
+    const next = startY + 1;
+    const inAutumn = t >= Date.UTC(startY, 8, 1)  && t <= Date.UTC(startY, 11, 19);
+    const inSpring = t >= Date.UTC(next, 0, 6)    && t <= Date.UTC(next, 3, 9);
+    const inSummer = t >= Date.UTC(next, 3, 18)   && t <= Date.UTC(next, 5, 30);
+    if (inAutumn || inSpring || inSummer) return false;
+  }
+  return true;
+}
+
+// Which kind of break is this date in? Used for cell labelling.
+// Returns "christmas" | "easter" | "summer" | null.
+function breakKindFor(year, month, day){
+  const t = Date.UTC(year, month, day);
+  // Christmas window: Dec 20 → Jan 5 (crosses year boundary).
+  if (t >= Date.UTC(year, 11, 20) || t <= Date.UTC(year, 0, 5)) return "christmas";
+  // Easter window: Apr 10 → Apr 17.
+  if (t >= Date.UTC(year, 3, 10) && t <= Date.UTC(year, 3, 17)) return "easter";
+  // Summer window: Jul 1 → Aug 31.
+  if (t >= Date.UTC(year, 6, 1) && t <= Date.UTC(year, 7, 31)) return "summer";
+  return null;
+}
 
 // Format an event's start time for the viewer's local timezone.
 // "Sun, 14 Jun · 12:00 PM EDT" / "Sun, 14 Jun · 5:00 PM BST" depending
@@ -931,11 +1005,25 @@ function HomeCalendar(){
   const [viewYear, setViewYear] = useState(todayY);
   const [viewMonth, setViewMonth] = useState(todayM);
 
+  // Calendar navigation bounds: can roam back to Jan 2026 (start of
+  // the publication year) and forward 18 months past today so writers
+  // can plan for next term + the term after, without an unbounded
+  // back-button that goes nowhere useful.
+  const MIN_YEAR = 2026;
+  const MIN_MONTH = 0;
+  const maxDate = new Date(Date.UTC(todayY, todayM + 18, 1));
+  const MAX_YEAR = maxDate.getUTCFullYear();
+  const MAX_MONTH = maxDate.getUTCMonth();
+  const canGoPrev = viewYear > MIN_YEAR || (viewYear === MIN_YEAR && viewMonth > MIN_MONTH);
+  const canGoNext = viewYear < MAX_YEAR || (viewYear === MAX_YEAR && viewMonth < MAX_MONTH);
+
   const goPrev = () => {
+    if (!canGoPrev) return;
     if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
     else setViewMonth(m => m - 1);
   };
   const goNext = () => {
+    if (!canGoNext) return;
     if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
     else setViewMonth(m => m + 1);
   };
@@ -1007,6 +1095,7 @@ function HomeCalendar(){
           type="button"
           className="cal-nav-btn"
           onClick={goPrev}
+          disabled={!canGoPrev}
           aria-label="Previous month"
         >
           <i className="fa-solid fa-chevron-left" aria-hidden="true"></i>
@@ -1029,6 +1118,7 @@ function HomeCalendar(){
             type="button"
             className="cal-nav-btn"
             onClick={goNext}
+            disabled={!canGoNext}
             aria-label="Next month"
           >
             <i className="fa-solid fa-chevron-right" aria-hidden="true"></i>
@@ -1046,23 +1136,65 @@ function HomeCalendar(){
             const isToday = (d === todayD && viewMonth === todayM && viewYear === todayY);
             const events = eventsByDay[d];
             const hasEvents = !!(events && events.length);
+            const inBreak = isInBreak(viewYear, viewMonth, d);
+            const brk = inBreak ? breakKindFor(viewYear, viewMonth, d) : null;
+            // If any of this cell's events is a term boundary (auto),
+            // mark the cell so the marker styling pops.
+            const hasTermBoundary = hasEvents && events.some(ev => ev.kind === "term-start" || ev.kind === "term-end");
+            const cls =
+              "cal-cell"
+              + (isToday ? " is-today" : "")
+              + (hasEvents ? " has-events" : "")
+              + (inBreak ? " is-break" : " is-term")
+              + (brk ? " is-break-" + brk : "")
+              + (hasTermBoundary ? " has-term-boundary" : "");
             return (
               <div
                 key={d}
-                className={"cal-cell" + (isToday ? " is-today" : "") + (hasEvents ? " has-events" : "")}
+                className={cls}
                 role="gridcell"
-                aria-label={`${d} ${months[viewMonth]} ${viewYear}${hasEvents ? ", " + events.length + " event" + (events.length > 1 ? "s" : "") : ""}${isToday ? ", today" : ""}`}
+                aria-label={
+                  `${d} ${months[viewMonth]} ${viewYear}`
+                  + (hasEvents ? `, ${events.length} event${events.length > 1 ? "s" : ""}` : "")
+                  + (isToday ? ", today" : "")
+                  + (inBreak ? `, ${brk || "school"} break` : ", term in session")
+                }
               >
                 <span className="cal-cell-num">{d}</span>
                 {isToday && <span className="cal-cell-today-dot" aria-hidden="true"/>}
                 {hasEvents && (
                   <span className="cal-cell-markers" aria-hidden="true">
-                    {events.slice(0, 3).map((_, j) => <span key={j} className="cal-cell-marker"/>)}
+                    {events.slice(0, 3).map((ev, j) => (
+                      <span
+                        key={j}
+                        className={"cal-cell-marker" + (ev.kind === "term-start" || ev.kind === "term-end" ? " is-term-marker" : "")}
+                      />
+                    ))}
                   </span>
                 )}
               </div>
             );
           })}
+        </div>
+
+        {/* Legend strip — explains the break tint + term-boundary
+            marker so the visual treatment isn't a mystery. */}
+        <div className="cal-legend" aria-hidden="true">
+          <span className="cal-legend-item">
+            <span className="cal-legend-sw is-term"/>In session
+          </span>
+          <span className="cal-legend-item">
+            <span className="cal-legend-sw is-break"/>On break
+          </span>
+          <span className="cal-legend-item">
+            <span className="cal-legend-sw is-today"/>Today
+          </span>
+          <span className="cal-legend-item">
+            <span className="cal-legend-dot is-term-marker"/>Term boundary
+          </span>
+          <span className="cal-legend-item">
+            <span className="cal-legend-dot"/>Event
+          </span>
         </div>
       </div>
 

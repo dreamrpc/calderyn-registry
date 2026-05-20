@@ -28080,3 +28080,94 @@ button.orgs-pill {
   .pb-game-team { font-size: 16px; }
   .pb-game-team-score { font-size: 22px; min-width: 54px; }
 }
+
+/* ── CALENDAR · break / in-session cell treatment ─────────────────
+   In-session cells stay the default faint white tint. Break cells
+   pick up a coloured wash (christmas blue / easter green / summer
+   gold) so the academic-year rhythm reads from the grid without
+   needing to inspect events. */
+.cal-cell.is-break {
+  background: linear-gradient(180deg, rgba(120, 120, 140, 0.045), rgba(120, 120, 140, 0.015));
+}
+.cal-cell.is-break .cal-cell-num { color: var(--text-mid); }
+.cal-cell.is-break-christmas {
+  background: linear-gradient(180deg, rgba(70, 110, 180, 0.10), rgba(70, 110, 180, 0.025));
+}
+.cal-cell.is-break-easter {
+  background: linear-gradient(180deg, rgba(95, 175, 110, 0.08), rgba(95, 175, 110, 0.02));
+}
+.cal-cell.is-break-summer {
+  background: linear-gradient(180deg, rgba(212, 168, 74, 0.08), rgba(212, 168, 74, 0.02));
+}
+
+/* Term-boundary markers (start/end of term) render as a thin
+   vertical bar instead of a dot, in gold, so they read as a
+   different signal from event dots. */
+.cal-cell-marker.is-term-marker {
+  width: 2px;
+  height: 8px;
+  border-radius: 0;
+  background: var(--gold-bright, var(--yellow));
+  box-shadow: 0 0 4px var(--gold-bright, var(--yellow));
+}
+.cal-cell.has-term-boundary {
+  border-left: 2px solid var(--gold-bright, var(--yellow));
+  padding-left: 6px;
+}
+
+/* Legend strip under the grid */
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 10px 4px 0;
+  border-top: 1px dashed var(--rule-soft);
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+.cal-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.cal-legend-sw {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--rule-soft);
+}
+.cal-legend-sw.is-term  { background: rgba(255, 255, 255, 0.04); }
+.cal-legend-sw.is-break { background: linear-gradient(180deg, rgba(70, 110, 180, 0.20), rgba(70, 110, 180, 0.05)); }
+.cal-legend-sw.is-today {
+  background: linear-gradient(180deg, rgba(212, 168, 74, 0.4), rgba(212, 168, 74, 0.08));
+  border-color: var(--gold-bright, var(--yellow));
+}
+.cal-legend-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold-bright, var(--yellow));
+}
+.cal-legend-dot.is-term-marker {
+  width: 2px;
+  height: 9px;
+  border-radius: 0;
+}
+
+/* Disabled nav buttons (at the calendar's prev/next bounds) */
+.cal-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.01);
+}
+.cal-nav-btn:disabled:hover {
+  background: rgba(255, 255, 255, 0.01);
+  color: var(--text-mid);
+  border-color: var(--rule-soft);
+}
