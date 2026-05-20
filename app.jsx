@@ -3276,6 +3276,13 @@ function StaffSlotCard({person, slot, isHead, deptColor}){
               : <span>{person.char}</span>}
             {person.npc && <NpcBadge/>}
           </div>
+          {person.alias && person.alias.toLowerCase() !== "n/a" && person.alias.toLowerCase() !== (person.char || "").toLowerCase() && (
+            <div className="freg-slot-callsign">
+              <i className="fa-solid fa-id-badge" aria-hidden="true"></i>
+              <span className="freg-slot-callsign-lbl">Callsign</span>
+              <span className="freg-slot-callsign-val">{person.alias}</span>
+            </div>
+          )}
           {person.tier
             ? <div className="freg-slot-tier"><TierChip tier={person.tier}/></div>
             : (person.stage && person.stage.toLowerCase() !== (person.char || "").toLowerCase()
@@ -3352,6 +3359,12 @@ function DepartmentSection({dept}){
                       {p.link
                         ? <CLink name={p.char} link={p.link}/>
                         : <span>{p.char}</span>}
+                      {p.alias && p.alias.toLowerCase() !== "n/a" && p.alias.toLowerCase() !== (p.char || "").toLowerCase() && (
+                        <span className="freg-dept-aux-callsign">
+                          <i className="fa-solid fa-id-badge" aria-hidden="true"></i>
+                          {p.alias}
+                        </span>
+                      )}
                       <span className="freg-dept-aux-role">· {p.role}</span>
                       {p.tier && <TierChip tier={p.tier}/>}
                       {p.npc && <NpcBadge/>}
@@ -3527,6 +3540,13 @@ function FacultyRegistryView(){
               <CLink name={deanRow.char} link={deanRow.link||null}/>
               {deanRow.tier && <span className="dean-card-tier"><TierChip tier={deanRow.tier}/></span>}
             </div>
+            {deanRow.alias && deanRow.alias.toLowerCase() !== "n/a" && (
+              <div className="dean-card-callsign">
+                <i className="fa-solid fa-id-badge" aria-hidden="true"></i>
+                <span className="dean-card-callsign-lbl">Callsign</span>
+                <span className="dean-card-callsign-val">{deanRow.alias}</span>
+              </div>
+            )}
             {deanRow.tier
               ? null
               : (
@@ -3601,7 +3621,7 @@ function FacultyRegistryView(){
                 <tr>
                   <th className="rn">#</th>
                   <th>Role</th>
-                  <th>Stage Name</th>
+                  <th>Callsign</th>
                   <th>Name</th>
                   <th>Tier</th>
                   <th>Power / Ability</th>
@@ -3612,7 +3632,7 @@ function FacultyRegistryView(){
                   <tr key={i} className={"support-row" + (r.char ? " is-filled" : " is-open")}>
                     <td className="rn">{String(i + 1).padStart(2, "0")}</td>
                     <td className="support-col-role">{r.role}</td>
-                    <td className="support-col-stage">{r.stage ? <span className="support-stage">{r.stage}</span> : <span className="support-na">—</span>}</td>
+                    <td className="support-col-stage">{(r.alias && r.alias.toLowerCase() !== "n/a") ? <span className="support-stage">{r.alias}</span> : r.stage ? <span className="support-stage">{r.stage}</span> : <span className="support-na">—</span>}</td>
                     <td className="support-col-name">
                       {r.char ? (
                         <>

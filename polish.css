@@ -28988,3 +28988,83 @@ button.orgs-pill {
   .pb-hero-side-crest { width: 60px; height: 60px; margin-bottom: 4px; }
   .lt-house-crest { width: 32px; height: 32px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   FACULTY · CALLSIGN line
+   Shown beneath the character name on dept head + Prof slot cards
+   and the Dean card whenever a professor carries a hero alias.
+   Treated as identity metadata, not flavour text: small mono caps,
+   gold accent, leading id-badge icon, "CALLSIGN" label prefix that
+   reads like a press credit.
+   ═══════════════════════════════════════════════════════════════════════ */
+.freg-slot-callsign {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-bright, var(--yellow));
+}
+.freg-slot-callsign i {
+  font-size: 9px;
+  opacity: 0.7;
+}
+.freg-slot-callsign-lbl {
+  color: var(--text-mid);
+  letter-spacing: 0.22em;
+  font-weight: 700;
+}
+.freg-slot-callsign-val {
+  color: var(--gold-bright, var(--yellow));
+  letter-spacing: 0.12em;
+  font-size: 11px;
+}
+
+/* Compact inline variant for the dept instructional-staff list */
+.freg-dept-aux-callsign {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  padding: 2px 6px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-bright, var(--yellow));
+  border: 1px solid rgba(212, 168, 74, 0.35);
+  background: rgba(212, 168, 74, 0.06);
+}
+.freg-dept-aux-callsign i {
+  font-size: 8px;
+  opacity: 0.7;
+}
+
+/* Dean card variant — slightly larger to match the dean card scale */
+.dean-card-callsign {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.dean-card-callsign i {
+  font-size: 10px;
+  opacity: 0.7;
+  color: var(--gold-bright, var(--yellow));
+}
+.dean-card-callsign-lbl { color: var(--text-mid); letter-spacing: 0.22em; }
+.dean-card-callsign-val {
+  color: var(--gold-bright, var(--yellow));
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
