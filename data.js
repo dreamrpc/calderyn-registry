@@ -2179,12 +2179,9 @@ clubs: [
         { id: 5, date: "2026-05-09", time: "19:00 BST", venue: "Powerball Arena · Greenwich",
           home: "valaris",  away: "grimere", status: "played",
           home_score: 21, away_score: 24,
-          // Losing-side MVP: Krüger's save line was historic — Grimere
-          // shot from the scoring zone 43 times and converted 24;
-          // every other save kept Valaris in arm's reach of the win.
-          mvp: "Enzo Krüger", mvp_team: "valaris",
-          mvp_link: "https://roleplay.chat/profile.php?user=Breakpoint",
-          note: "Upset of the season. Grimere's Defence held the Valaris Attack pair to 21 — well below their season average of 27 — and Krüger turned away 19 shots in the goal area to keep the margin to 3. Valaris's pundits called it the best goalkeeping line in a decade of league play." },
+          mvp: "Cesare Delgado", mvp_team: "grimere",
+          mvp_link: "https://roleplay.chat/profile.php?user=delgado",
+          note: "Upset of the season. Delgado dragged Grimere through Valaris's Defence from the Playmaker slot — 14 assists, possession for 28 of 48 minutes, three of those assists landing in the final eight to seal the 3-point margin. His second MVP of the season." },
         // Cup final scheduled for the morning so the Powerball squads
         // can play and still make Stella's GOSH visit later the same
         // day. Game ends ~11:30 BST → arena clears → shuttle to
