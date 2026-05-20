@@ -6980,6 +6980,29 @@ html, body { overflow-x: clip; }
   50%      { opacity: 0.4; }
 }
 
+/* State-aware overrides for the receipt status block, eyebrow line,
+   and pulsing dot. Pending keeps the original amber pulse; approved
+   flips everything to green (steady, no pulse — the decision is in);
+   rejected flips to muted red. */
+.join-confirm-receipt-status.is-approved,
+.join-confirm-eyebrow.is-approved {
+  color: #45c97a !important;
+}
+.join-confirm-receipt-status.is-approved .join-confirm-status-dot,
+.join-confirm-eyebrow.is-approved .join-confirm-dot {
+  background: #45c97a;
+  animation: none;
+}
+.join-confirm-receipt-status.is-rejected,
+.join-confirm-eyebrow.is-rejected {
+  color: #d05865 !important;
+}
+.join-confirm-receipt-status.is-rejected .join-confirm-status-dot,
+.join-confirm-eyebrow.is-rejected .join-confirm-dot {
+  background: #d05865;
+  animation: none;
+}
+
 /* ── WHAT HAPPENS NEXT — three-step ordered list ────────── */
 .join-confirm-next {
   padding: var(--space-5) 0;

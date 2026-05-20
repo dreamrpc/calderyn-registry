@@ -37,6 +37,13 @@ const WORKER_BASE       = "https://calderyn-registry-relay.dreamroleplaywriter.w
 const WORKER_URL        = WORKER_BASE + "/submit";
 const QUOTA_URL         = WORKER_BASE + "/quota-stats";
 const WRITER_TAGS_URL   = WORKER_BASE + "/writer-tags";
+const STATUS_URL        = WORKER_BASE + "/status";
+
+// LocalStorage key for the writer's most recent submission receipt.
+// Survives refresh so a pending review still shows the receipt screen,
+// and the polling loop picks up the approve/reject state change once
+// the admin clicks the Discord button.
+const SUBMISSION_LS_KEY = "calderyn:lastSubmission";
 
 // Fallback Writer Tag list used until the live fetch from /writer-tags
 // returns (or if it fails). Keep it roughly in sync with the values
@@ -5661,12 +5668,73 @@ function JoinTab(){
   const [type, setType]   = useState(null);
   const [form, setForm]   = useState({});
   const [status, setStatus] = useState({ state: "idle", msg: "" });
-  const [confirmed, setConfirmed] = useState(false);
+  // Submission receipt. `null` until a form has been submitted (or
+  // restored from localStorage on mount). Shape:
+  //   { id, type, char, alias, submittedAt, state, decidedAt? }
+  // state ∈ "pending" | "approved" | "rejected" | "unknown"
+  // The receipt screen (rendered when this is non-null) polls
+  // /status while state === "pending" and updates live.
+  const [submission, setSubmission] = useState(null);
   // Reentrancy guard — React 18 StrictMode + fast double-clicks can
   // race the `disabled` state on the submit button and fire the
   // webhook twice. The ref is checked synchronously inside submit()
   // so a second call short-circuits before the fetch.
   const submittingRef = useRef(false);
+
+  // Restore the receipt on mount so a refresh during pending review
+  // doesn't blow away the writer's submission state. The polling
+  // effect below will pick up the current server-side state on the
+  // first tick.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(SUBMISSION_LS_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed.id === "string") setSubmission(parsed);
+    } catch {
+      // Corrupt localStorage entry — drop it silently.
+      try { localStorage.removeItem(SUBMISSION_LS_KEY); } catch {}
+    }
+  }, []);
+
+  // Live status polling while a submission is pending. Polls every 10s
+  // and also on tab focus so a writer returning from another tab gets
+  // an immediate refresh. Stops polling once a terminal state arrives.
+  useEffect(() => {
+    if (!submission || !submission.id) return;
+    if (submission.state !== "pending") return;
+    let cancelled = false;
+    const tick = async () => {
+      try {
+        const res = await fetch(STATUS_URL + "?id=" + encodeURIComponent(submission.id));
+        if (cancelled || !res.ok) return;
+        const data = await res.json();
+        if (cancelled) return;
+        // Worker returns "unknown" for expired/missing IDs — treat as
+        // pending still so we don't surprise the writer with a false
+        // "rejected" badge if KV briefly returns 404 during a deploy.
+        if (data && (data.state === "approved" || data.state === "rejected")) {
+          setSubmission(prev => {
+            if (!prev || prev.id !== submission.id) return prev;
+            const next = { ...prev, state: data.state, decidedAt: data.decidedAt || new Date().toISOString() };
+            try { localStorage.setItem(SUBMISSION_LS_KEY, JSON.stringify(next)); } catch {}
+            return next;
+          });
+        }
+      } catch {
+        // Network blip — next tick will try again.
+      }
+    };
+    tick(); // immediate catch-up on mount / state change
+    const handle = setInterval(tick, 10000);
+    const onVis = () => { if (!document.hidden) tick(); };
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      cancelled = true;
+      clearInterval(handle);
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [submission?.id, submission?.state]);
   // Wizard step. 0 = type picker; 1..N = wizard pages for the chosen
   // type. Resets to 0 when type changes or form is reset.
   const [step, setStep] = useState(0);
@@ -5703,9 +5771,10 @@ function JoinTab(){
     setType(null);
     setForm({});
     setStatus({ state: "idle", msg: "" });
-    setConfirmed(false);
+    setSubmission(null);
     setQuotaStats(null);
     setStep(0);
+    try { localStorage.removeItem(SUBMISSION_LS_KEY); } catch {}
   };
 
   // Wizard pages for the current type (null = type uses legacy
@@ -5808,9 +5877,19 @@ function JoinTab(){
     && status.state !== "loading";
 
   const submit = async () => {
-    // Honeypot check — if the hidden field has a value, silently 'succeed' but don't ship
+    // Honeypot check — if the hidden field has a value, silently
+    // 'succeed' but don't ship. Spammers see a normal-looking receipt
+    // (no live status — we never assigned a Worker ID, so polling
+    // immediately stops at "pending" and nothing ever flips).
     if (form.hp){
-      setConfirmed(true);
+      setSubmission({
+        id: "honeypot",
+        type: type || "student",
+        char: (form.char || form.alias || "Applicant").trim(),
+        alias: (form.alias || "").trim(),
+        submittedAt: new Date().toISOString(),
+        state: "approved", // spammer-facing decoy — don't reveal a poll loop
+      });
       return;
     }
     if (!canSubmit) return;
@@ -5845,7 +5924,26 @@ function JoinTab(){
         });
         throw new Error("Server rejected (HTTP " + res.status + "). The admin team has been pinged automatically. Try again in a minute, or contact an admin in #strata-ops.");
       }
-      setConfirmed(true);
+      // Pull the real Worker-assigned submission ID out of the
+      // response so the polling loop has something to look up. Fall
+      // back to a synthetic local ID only if the server omits it —
+      // the receipt screen will still render, but live status updates
+      // won't work (the writer would have to refresh).
+      let serverId = null;
+      try {
+        const data = await res.json();
+        if (data && typeof data.id === "string") serverId = data.id;
+      } catch { /* non-JSON response — receipt still renders */ }
+      const receipt = {
+        id: serverId || ("local-" + Date.now().toString(36)),
+        type,
+        char: (form.char || form.alias || "Applicant").trim(),
+        alias: (form.alias || "").trim(),
+        submittedAt: new Date().toISOString(),
+        state: "pending",
+      };
+      try { localStorage.setItem(SUBMISSION_LS_KEY, JSON.stringify(receipt)); } catch {}
+      setSubmission(receipt);
       setStatus({ state: "idle", msg: "" });
     } catch (err) {
       // "Failed to fetch" / "NetworkError" / "Load failed" are the
@@ -5869,21 +5967,43 @@ function JoinTab(){
     }
   };
 
-  if (confirmed){
-    // Submission receipt: derived from char name + timestamp so it's
-    // stable for the writer to reference, not a real DB id.
-    const submittedChar = (form.char || form.alias || "Applicant").trim();
-    const submissionId = (() => {
-      const t = Date.now().toString(36).toUpperCase().slice(-6);
-      const seed = (form.char || form.alias || form.rpcLink || "X")
-        .split("")
-        .reduce((a, c) => a + c.charCodeAt(0), 0)
-        .toString(36).toUpperCase().slice(-2);
-      return "CDR-" + seed + "-" + t;
+  if (submission){
+    // Submission receipt — driven entirely by the `submission` state
+    // object so a refresh during pending review restores the same
+    // view, and the polling loop above flips state to approved /
+    // rejected without a refresh.
+    const submittedChar = submission.char || "Applicant";
+    // Display ID: shorten the Worker's hex ID into a recognisable
+    // "CDR-XXXX-YYYY" badge for human reference, while keeping the
+    // raw ID intact internally for polling.
+    const submissionId = submission.id && submission.id.length >= 8
+      ? "CDR-" + submission.id.slice(0, 4).toUpperCase() + "-" + submission.id.slice(4, 8).toUpperCase()
+      : submission.id || "CDR-PENDING";
+    const submittedDate = (() => {
+      try {
+        return new Date(submission.submittedAt).toLocaleDateString("en-GB", {
+          year: "numeric", month: "short", day: "numeric"
+        });
+      } catch {
+        return "—";
+      }
     })();
-    const submittedDate = new Date().toLocaleDateString("en-GB", {
-      year: "numeric", month: "short", day: "numeric"
-    });
+    const decidedDate = submission.decidedAt ? (() => {
+      try {
+        return new Date(submission.decidedAt).toLocaleString("en-GB", {
+          month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+        });
+      } catch { return null; }
+    })() : null;
+    const isPending  = submission.state === "pending";
+    const isApproved = submission.state === "approved";
+    const isRejected = submission.state === "rejected";
+    const statusLabel = isApproved ? "APPROVED"
+      : isRejected ? "NOT APPROVED"
+      : "PENDING REVIEW";
+    const statusClass = isApproved ? " is-approved"
+      : isRejected ? " is-rejected"
+      : " is-pending";
     return (
       <div className="join">
         <div className="join-form-wrap">
@@ -5973,7 +6093,11 @@ function JoinTab(){
                     letterSpacing="4"
                   >
                     <textPath href="#wax-ring-path" startOffset="0">
-                      RECEIVED · UNDER REVIEW · CALDERYN COLLEGE ·
+                      {isApproved
+                        ? "APPROVED · ENROLLED · CALDERYN COLLEGE ·"
+                        : isRejected
+                        ? "DECISION RECEIVED · CALDERYN COLLEGE ·"
+                        : "RECEIVED · UNDER REVIEW · CALDERYN COLLEGE ·"}
                     </textPath>
                   </text>
                 </svg>
@@ -5981,19 +6105,26 @@ function JoinTab(){
               </div>
             </div>
 
-            <div className="join-confirm-eyebrow">
+            <div className={"join-confirm-eyebrow" + statusClass}>
               <span className="join-confirm-dot" aria-hidden="true"/>
-              SUBMISSION LOGGED · ADMIN CHANNEL NOTIFIED
+              {isApproved
+                ? "APPROVED · ROSTER UPDATED"
+                : isRejected
+                ? "DECISION RECEIVED · SEE YOUR RPC INBOX"
+                : "SUBMISSION LOGGED · ADMIN CHANNEL NOTIFIED"}
             </div>
 
             <h2 className="join-confirm-title">
-              Thank you, <span className="join-confirm-name">{submittedChar}</span>.
+              {isApproved ? <>Welcome to Calderyn, <span className="join-confirm-name">{submittedChar}</span>.</>
+                : isRejected ? <>Thank you for applying, <span className="join-confirm-name">{submittedChar}</span>.</>
+                : <>Thank you, <span className="join-confirm-name">{submittedChar}</span>.</>}
             </h2>
             <p className="join-confirm-lede">
-              Your application has been routed to the admin channel. We'll reach out
-              via the RPC profile you linked — usually within a few days, sometimes
-              sooner. Don't refresh this page if you're waiting on a confirmation,
-              just keep an eye on your roleplay.chat messages.
+              {isApproved
+                ? "An admin has approved your application. Your character is now part of the registry — refresh the relevant tab and you'll see them in the roster. Watch your linked RPC profile for any follow-up about channels or onboarding."
+                : isRejected
+                ? "Your application wasn't approved this time. An admin has reached out via your linked RPC profile with details and any next steps. You're welcome to revise and resubmit."
+                : <>Your application has been routed to the admin channel. We'll reach out via the RPC profile you linked — usually within a few days, sometimes sooner. <strong>This page updates live</strong> when an admin decides — leave it open, or refresh later and you'll still see your status.</>}
             </p>
 
             <div className="join-confirm-receipt" role="note">
@@ -6006,20 +6137,40 @@ function JoinTab(){
                 <div className="join-confirm-receipt-value">{submittedDate}</div>
               </div>
               <div className="join-confirm-receipt-col">
-                <div className="join-confirm-receipt-label">Status</div>
-                <div className="join-confirm-receipt-value join-confirm-receipt-status">
+                <div className="join-confirm-receipt-label">{decidedDate ? "Decided" : "Status"}</div>
+                <div className={"join-confirm-receipt-value join-confirm-receipt-status" + statusClass}>
                   <span className="join-confirm-status-dot" aria-hidden="true"/>
-                  PENDING REVIEW
+                  {decidedDate ? <>{statusLabel} <span style={{opacity:0.6}}>· {decidedDate}</span></> : statusLabel}
                 </div>
               </div>
             </div>
 
             <div className="join-confirm-next">
-              <div className="join-confirm-next-title">What happens next</div>
+              <div className="join-confirm-next-title">
+                {isApproved ? "You're in — what now"
+                  : isRejected ? "If you'd like to try again"
+                  : "What happens next"}
+              </div>
               <ol className="join-confirm-next-list">
-                <li>Admin reads your submission against the masterlist and quota.</li>
-                <li>You'll receive a message on your linked RPC profile with the decision and any follow-up questions.</li>
-                <li>If approved, you'll be added to the roster and the channel.</li>
+                {isApproved ? (
+                  <>
+                    <li>Your character is live on the registry — find them in the relevant tab (Students, Faculty, Hero List, etc.).</li>
+                    <li>An admin will follow up on your linked RPC profile with channel access and onboarding details.</li>
+                    <li>Start roleplaying — and submit any further applications (alts, clubs, government) the same way.</li>
+                  </>
+                ) : isRejected ? (
+                  <>
+                    <li>Read the admin's note on your linked RPC profile — it explains what didn't work and what would.</li>
+                    <li>Revise the character (often a tier shift, power scope, or quota wait is all that's needed).</li>
+                    <li>Click <em>Submit another application</em> below to start a fresh submission.</li>
+                  </>
+                ) : (
+                  <>
+                    <li>Admin reads your submission against the masterlist and quota.</li>
+                    <li>You'll receive a message on your linked RPC profile with the decision and any follow-up questions.</li>
+                    <li>If approved, you'll be added to the roster and the channel — this page will update automatically.</li>
+                  </>
+                )}
               </ol>
             </div>
 

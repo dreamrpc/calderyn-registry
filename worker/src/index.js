@@ -2,6 +2,7 @@ import { handleSubmit } from "./submit.js";
 import { handleInteraction } from "./interactions.js";
 import { handleQuotaStats } from "./quota-stats.js";
 import { handleWriterTags } from "./writer-tags.js";
+import { handleStatus } from "./status.js";
 
 export default {
   async fetch(request, env, ctx) {
@@ -44,6 +45,10 @@ async function route(request, env, ctx) {
 
   if (url.pathname === "/writer-tags" && request.method === "GET") {
     return withCors(await handleWriterTags(request, env, ctx), env, request);
+  }
+
+  if (url.pathname === "/status" && request.method === "GET") {
+    return withCors(await handleStatus(request, env, ctx), env, request);
   }
 
   if (url.pathname === "/interactions" && request.method === "POST") {
