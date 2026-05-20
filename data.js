@@ -942,7 +942,7 @@ departments: [
       { code: "CAL-101", year: "SOPHOMORE", kind: "required", title: "Introduction to Calderyn",
         taughtBy: "Prof. 1",
         desc: "Year-one shared core. The institution, its remit, its public history. The first reading list is mandatory. The second reading list is implied." },
-      { code: "HIS-101", year: "SOPHOMORE", kind: "required", title: "The Calderyn Doctrine, 1948–Present",
+      { code: "HIS-101", year: "FRESHMAN", kind: "shared-core", title: "The Calderyn Doctrine, 1948–Present",
         taughtBy: "Prof. 1",
         desc: "Year-one shared core. The public version of the institution's history. The professor teaches with the omissions visible at the edges; a careful student notices what is missing." },
       { code: "HIS-102", year: "SOPHOMORE", kind: "required",    title: "Foundations of Powered Law",

@@ -1364,14 +1364,16 @@ function CurriculumView(){
 
   const allClasses = gatherCurriculumClasses();
 
-  // Apply the path filter before year bucketing. Hero filter shows
-  // hero + both + elective (everything except sidekick-only). Mirror
-  // for sidekick. "All" shows everything. Search query (q) filters
-  // by class code or title — case-insensitive substring match.
+  // Designation filter shows MANDATORY classes only for the chosen
+  // path: hero-locked + both-path (shared core). Electives are
+  // dropped because they're optional, not required for the
+  // designation. Same mirror for sidekick. "All" shows everything.
+  // Search query (q) filters by class code/title/desc — case-
+  // insensitive substring match.
   const filterMatch = (c) => {
     if (filterDesig !== "all") {
       const p = classPath(c);
-      if (p !== "both" && p !== "elective" && p !== filterDesig) return false;
+      if (p !== "both" && p !== filterDesig) return false;
     }
     if (ql) {
       const hay = [c.code, c.title, c.desc, c.deptName].filter(Boolean).join(" ").toLowerCase();
@@ -2638,9 +2640,11 @@ function FacultyRegistryView(){
   // that mention the opposite lane in their role get hidden.
   const filteredDept = (dept) => {
     if (filterDesig === "all") return dept;
+    // Mandatory-only: shared (both) + designation-locked. Electives
+    // are optional and drop out of the filtered view.
     const classes = (dept.classes || []).filter(c => {
       const p = classPath(c);
-      return p === "both" || p === "elective" || p === filterDesig;
+      return p === "both" || p === filterDesig;
     });
     const otherLane = filterDesig === "hero" ? "sidekicks lane" : "heroes lane";
     const instructional = (dept.instructional || []).filter(p => {
