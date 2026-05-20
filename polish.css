@@ -26150,3 +26150,101 @@ button.orgs-pill {
   min-width: 0 !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════
+   SUPPORT STAFF · Students-style table
+   Replaces the bespoke key-value list with a `.tw` table that
+   matches the Students roster / Powers Registry / Banned tabs.
+   Teal left-rail (#5fc3d4) keeps the visual signature of the
+   non-teaching block; rest of the chrome is identical to .preg-tw.
+   ════════════════════════════════════════════════════════════════════ */
+.freg-support-tw {
+  margin: 18px 0 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.freg-support-tw table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+}
+.freg-support-tw thead th {
+  text-align: left !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 14px 16px !important;
+  background:
+    radial-gradient(circle 1px at 50% 50%, rgba(95, 195, 212, 0.16) 1px, transparent 1.5px) 0 0 / 6px 6px,
+    #0d0d0d !important;
+  border: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+}
+.freg-support-tw thead th.rn { width: 56px !important; }
+.freg-support-tw tbody tr.support-row {
+  position: relative !important;
+  transition: background 160ms ease !important;
+}
+.freg-support-tw tbody td {
+  background: #0a0a0a !important;
+  border: 0 !important;
+  border-bottom: 1px solid #1a1a1a !important;
+  padding: 14px 16px !important;
+  vertical-align: middle !important;
+  font-family: var(--sans, 'Söhne', system-ui) !important;
+  font-size: 13.5px !important;
+  color: #e7e3d6 !important;
+}
+.freg-support-tw tbody tr.support-row:hover td { background: #121212 !important; }
+.freg-support-tw tbody td.rn {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  color: var(--text-3, #948d80) !important;
+}
+.freg-support-tw tbody td.support-col-role {
+  font-weight: 600 !important;
+  color: #f5f1e8 !important;
+  white-space: nowrap !important;
+}
+.freg-support-tw .support-stage {
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: #5fc3d4 !important;
+  white-space: nowrap !important;
+}
+.freg-support-tw .support-na {
+  color: #4a4a52 !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 11px !important;
+}
+.freg-support-tw .support-open {
+  display: inline-block !important;
+  font-family: var(--mono, 'Söhne Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+  padding: 3px 9px !important;
+  border: 1px solid rgba(212, 168, 74, 0.45) !important;
+  background: rgba(212, 168, 74, 0.05) !important;
+}
+.freg-support-tw tbody td.support-col-power {
+  color: #888 !important;
+  font-size: 13px !important;
+  max-width: 460px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Hide the legacy support-list markup defensively */
+.freg-support-list { display: none !important; }
+

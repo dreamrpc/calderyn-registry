@@ -2783,30 +2783,43 @@ function FacultyRegistryView(){
           {supportSection.note && (
             <p className="freg-support-note">{supportSection.note}</p>
           )}
-          <ul className="freg-support-list">
-            {supportSection.rows.map((r, i) => (
-              <li key={i} className={"freg-support-item" + (r.char ? " is-filled" : " is-open")}>
-                <div className="freg-support-item-l">
-                  <span className="freg-support-item-role">{r.role}</span>
-                  {r.stage && <span className="freg-support-item-stage">{r.stage}</span>}
-                </div>
-                <div className="freg-support-item-r">
-                  {r.char ? (
-                    <>
-                      {r.link
-                        ? <CLink name={r.char} link={r.link}/>
-                        : <span>{r.char}</span>}
-                      {r.tier && <TierChip tier={r.tier}/>}
-                      {r.npc && <NpcBadge/>}
-                    </>
-                  ) : (
-                    <span className="freg-support-item-open">OPEN</span>
-                  )}
-                </div>
-                {r.power && <div className="freg-support-item-power">Power · {r.power}</div>}
-              </li>
-            ))}
-          </ul>
+          <div className="tw freg-support-tw">
+            <table>
+              <thead>
+                <tr>
+                  <th className="rn">#</th>
+                  <th>Role</th>
+                  <th>Stage Name</th>
+                  <th>Name</th>
+                  <th>Tier</th>
+                  <th>Power / Ability</th>
+                </tr>
+              </thead>
+              <tbody>
+                {supportSection.rows.map((r, i) => (
+                  <tr key={i} className={"support-row" + (r.char ? " is-filled" : " is-open")} style={{boxShadow: "inset 4px 0 0 #5fc3d4"}}>
+                    <td className="rn">{String(i + 1).padStart(2, "0")}</td>
+                    <td className="support-col-role">{r.role}</td>
+                    <td className="support-col-stage">{r.stage ? <span className="support-stage">{r.stage}</span> : <span className="support-na">—</span>}</td>
+                    <td className="support-col-name">
+                      {r.char ? (
+                        <>
+                          {r.link
+                            ? <CLink name={r.char} link={r.link}/>
+                            : <span>{r.char}</span>}
+                          {r.npc && <NpcBadge/>}
+                        </>
+                      ) : (
+                        <span className="support-open">OPEN</span>
+                      )}
+                    </td>
+                    <td>{r.tier ? <TierChip tier={r.tier}/> : <span className="support-na">—</span>}</td>
+                    <td className="support-col-power">{r.power || <span className="support-na">—</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
       )}
     </div>
