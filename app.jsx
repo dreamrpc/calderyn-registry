@@ -9175,15 +9175,35 @@ function NowPlaying(){
   //      it's already playing, so the writer hears it instantly with
   //      no extra "tap to play" friction.
   //   3. We also explicitly re-issue play() on first gesture in case
-  //      a browser still refused the muted autoplay (some iOS Safari
-  //      configurations); that play() call now happens INSIDE a user
-  //      gesture and so always succeeds.
-  // We never preventDefault, so the original click still reaches its
-  // intended target — the music just turns on alongside it.
+  // Autoplay strategy (mobile-friendly):
+  //   1. On mount, set audio.muted = true and call play() — muted
+  //      autoplay is permitted by every browser without user
+  //      interaction. The track starts buffering and playing
+  //      silently.
+  //   2. When the user taps the cover button, togglePlay() unmutes
+  //      AND ensures playback. Tapping the cover the first time
+  //      always becomes "make this audible" instead of "toggle".
+  //   3. Subsequent taps on the cover (audio already unmuted) toggle
+  //      play/pause normally.
+  // Previously a document-wide capture-phase gesture listener was
+  // also unmuting on any first click anywhere. That raced with the
+  // cover button's togglePlay on mobile (capture handler set
+  // muted=false + called play(); bubble reached togglePlay which
+  // then read audio.paused=false and PAUSED the just-started
+  // music). Removed the document listener — togglePlay alone now
+  // handles the unmute-on-first-tap path, no race.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.volume = volume;
+    // Saved volume from localStorage might be 0 (user muted in a
+    // previous session). Don't let that mean "silent forever" on
+    // a fresh visit — bump it back to 0.3 default if we're at 0
+    // so the first tap on the cover produces audible playback.
+    if (volume === 0) {
+      audio.volume = 0.3;
+    } else {
+      audio.volume = volume;
+    }
     audio.muted = true;
     let cancelled = false;
     const start = () => {
@@ -9199,23 +9219,9 @@ function NowPlaying(){
     start();
     const onCanPlay = () => start();
     audio.addEventListener("canplay", onCanPlay);
-
-    const onFirstGesture = () => {
-      audio.muted = false;
-      start();
-      document.removeEventListener("click", onFirstGesture, true);
-      document.removeEventListener("keydown", onFirstGesture, true);
-      document.removeEventListener("touchstart", onFirstGesture, true);
-    };
-    document.addEventListener("click", onFirstGesture, true);
-    document.addEventListener("keydown", onFirstGesture, true);
-    document.addEventListener("touchstart", onFirstGesture, true);
     return () => {
       cancelled = true;
       audio.removeEventListener("canplay", onCanPlay);
-      document.removeEventListener("click", onFirstGesture, true);
-      document.removeEventListener("keydown", onFirstGesture, true);
-      document.removeEventListener("touchstart", onFirstGesture, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -9223,6 +9229,24 @@ function NowPlaying(){
   const togglePlay = () => {
     const a = audioRef.current;
     if (!a) return;
+    // First tap when audio is muted (autoplay state) → unmute +
+    // ensure playing. Treats the cover as "make audible" rather
+    // than "toggle pause". Catches the mobile case where the cover
+    // is the user's first interaction with the page.
+    if (a.muted) {
+      a.muted = false;
+      // If volume got persisted to 0, restore a sensible default
+      // so unmute actually produces sound.
+      if (a.volume === 0) {
+        a.volume = 0.3;
+        setVolume(0.3);
+      }
+      if (a.paused) {
+        const p = a.play();
+        if (p && typeof p.then === "function") p.catch(() => {});
+      }
+      return;
+    }
     if (a.paused) {
       const p = a.play();
       if (p && typeof p.then === "function") p.catch(() => {});
@@ -9259,8 +9283,11 @@ function NowPlaying(){
       <audio
         ref={audioRef}
         src={MUSIC_TRACK.src}
-        preload="metadata"
+        preload="auto"
         loop
+        playsInline
+        webkit-playsinline="true"
+        x-webkit-airplay="allow"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
