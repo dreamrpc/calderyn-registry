@@ -24585,7 +24585,12 @@ button.orgs-pill {
 
 .pbanned {
   padding: 0 !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
+  /* Match the curr-main / registry content rhythm so the "ENTRIES N"
+     badge doesn't drift off to the far edge of the viewport when the
+     intro's grid resolves its auto column. */
+  max-width: 1280px !important;
+  width: 100% !important;
 }
 
 .pbanned-intro {
