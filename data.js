@@ -2037,6 +2037,8 @@ bannedPowers: [
   "Power absorption — plot-locked: only one slot for this ability exists, and it is taken.",
   "Permanent complete mind destruction or total memory wiping",
   "Mass resurrection or wide-scale death negation",
+  "Necromancy — raising, animating, or commanding the dead as servants, soldiers, or controllable bodies. Speaking with the dead in flavour-only, non-combat ways may be approved on a case-by-case basis.",
+  "True personal immortality or unkillability — abilities that remove any condition under which the character can die. Long lifespans, heavy regeneration, and self-resurrection on a cooldown are tier-gated and approved case-by-case; \"cannot be killed\" is not.",
   "Universal simultaneous telepathy — every mind at once",
   "Dimensional collapse or pocket-universe creation",
   "Mass cellular rewriting affecting third parties without their knowledge",
