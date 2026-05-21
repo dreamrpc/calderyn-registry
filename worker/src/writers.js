@@ -64,6 +64,7 @@ const RPC_TO_OOC_RAW = {
   "Airborne": "Skully",
   ".Haze": "Star",
   "Savory": "Skully",
+  "Dead%20Man%20Walkin": "Skully",
   // AUTO-INSERT:writers — newly-approved writer mappings get added
   // by the relay Worker directly above this marker (one line per RPC
   // account). Do not remove. See worker/src/writer-mapping.js for the
