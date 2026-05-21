@@ -2125,7 +2125,7 @@ clubs: [
       { house: "Valaris", bg: "#c41a1a", train: ["MON · 6:00 AM", "WED · 7:00 PM"], positions: [
         { pos: "Playmaker", char: "Tyler Caldwell", link: "https://roleplay.chat/profile.php?user=BLACK+VEIN" },
         { pos: "Attack", char: "Katniss Saunders", link: "https://roleplay.chat/profile.php?user=Katniss" }, { pos: "Attack", char: "Rhode Sterling", link: "https://roleplay.chat/profile.php?user=chronicles" },
-        { pos: "Defence", char: "Riley Carter", link: "https://roleplay.chat/profile.php?user=pressure" }, { pos: "Defence" },
+        { pos: "Defence", char: "Riley Carter", link: "https://roleplay.chat/profile.php?user=pressure" }, { pos: "Defence", char: "Sylas Luftborne", link: "https://roleplay.chat/profile.php?user=Airborne" }, // sub:fcdbf13d
         { pos: "Goalkeeper", captain: true, char: "Enzo Krüger", link: "https://roleplay.chat/profile.php?user=Starboy!" },
         { pos: "Reserve · Playmaker" },
         { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
@@ -2148,14 +2148,14 @@ clubs: [
         { pos: "Defence" }, { pos: "Defence" },
         { pos: "Goalkeeper" },
         { pos: "Reserve · Playmaker" },
-        { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
+        { pos: "Reserve · Attack", char: "Dexter Crowley", link: "https://roleplay.chat/profile.php?user=Gremlin" }, { pos: "Reserve · Attack" }, // sub:e31100af
         { pos: "Reserve · Defence" }, { pos: "Reserve · Defence" },
         { pos: "Reserve · Goalkeeper" },
       ]},
       { house: "Grimere", bg: "#1e40af", train: ["FRI · 6:00 AM", "TUE · 7:00 PM"], positions: [
         { pos: "Playmaker", captain: true, char: "Cesare Delgado", link: "https://roleplay.chat/profile.php?user=delgado" },
-        { pos: "Attack" }, { pos: "Attack" },
-        { pos: "Defence" }, { pos: "Defence" },
+        { pos: "Attack", char: "Xeno", link: "https://roleplay.chat/profile.php?user=Xenofire" }, { pos: "Attack" }, // sub:953a48bf
+        { pos: "Defence", char: "Khan Grimassi", link: "https://roleplay.chat/profile.php?user=Savory" }, { pos: "Defence" }, // sub:51c61fcc
         { pos: "Goalkeeper" },
         { pos: "Reserve · Playmaker" },
         { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
@@ -2378,7 +2378,7 @@ studentGov: [
     note: "Campus-wide ballot. One-year term. The Student Body President leads the government and chairs the Student Council. Real budget. Administration overrides routinely and without explanation.",
     seats: [
       { pos: "Student Body President", term: "2026–27", char: "Montgomery Farthing III", link: "https://roleplay.chat/profile.php?user=upchuck" },
-      { pos: "Treasurer",              term: "2026–27" },
+      { pos: "Treasurer",              term: "2026–27", char: "Sylas Luftborne", link: "https://roleplay.chat/profile.php?user=Airborne" }, // sub:fcdbf13d
       { pos: "Secretary",              term: "2026–27", char: "Natalie Neuman", link: "https://roleplay.chat/profile.php?user=AXIOM" }, // sub:2d32b02d
     ],
   },
@@ -2400,7 +2400,7 @@ studentGov: [
     seats: [
       { pos: "Committee Chair" },
       { pos: "Vice Chair" },
-      { pos: "Logistics Lead" },
+      { pos: "Logistics Lead", char: "Xeno", link: "https://roleplay.chat/profile.php?user=Xenofire" }, // sub:953a48bf
       { pos: "Programming Lead" },
       { pos: "Committee Member", char: "Ariana Ferreira", link: "https://roleplay.chat/profile.php?user=Morpha" },
       { pos: "Committee Member", char: "Lucrecia Sofìa Avalos-Perez", link: "https://roleplay.chat/profile.php?user=Rosetta!" },
