@@ -2379,7 +2379,7 @@ studentGov: [
     seats: [
       { pos: "Student Body President", term: "2026–27", char: "Montgomery Farthing III", link: "https://roleplay.chat/profile.php?user=upchuck" },
       { pos: "Treasurer",              term: "2026–27" },
-      { pos: "Secretary",              term: "2026–27" },
+      { pos: "Secretary",              term: "2026–27", char: "Natalie Neuman", link: "https://roleplay.chat/profile.php?user=AXIOM" }, // sub:2d32b02d
     ],
   },
   {

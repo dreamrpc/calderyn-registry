@@ -117,6 +117,33 @@ function buildStudent(form, id) {
       line: powersLine(form, id, "student"),
     });
   }
+
+  // Optional gov seat — student form sends optGovSeat/optGovSection
+  // (not the standalone-Gov form's govSeat/govSection). Without this
+  // path the student got approved into students/powers but the seat
+  // they ticked stayed empty. The seat line stays minimal — char/pos/
+  // term/link only, no power info — because the power is already
+  // sitting in the powers[] registry from the marker insert above.
+  if (form.optGovSeat && form.optGovSection) {
+    const term = form.optGovTerm || "2026–27";
+    const govLine = `{ pos: ${q(form.optGovSeat)}, term: ${q(term)}, char: ${q(form.char)}${linkFrag} }, // sub:${id}`;
+    out.push({
+      kind: "path",
+      path: ["studentGov", { section: form.optGovSection }, "seats"],
+      lines: [govLine],
+    });
+  }
+
+  // Optional club position — same field-name mismatch with the
+  // standalone-Club form (which uses clubName/clubPosition/clubTeam).
+  if (form.optClubName && form.optClubPosition) {
+    const clubLine = `{ pos: ${q(form.optClubPosition)}, char: ${q(form.char)}${linkFrag} }, // sub:${id}`;
+    const path = form.optClubTeam
+      ? ["clubs", { name: form.optClubName }, "teams", { house: form.optClubTeam }, "positions"]
+      : ["clubs", { name: form.optClubName }, "positions"];
+    out.push({ kind: "path", path, lines: [clubLine] });
+  }
+
   return out;
 }
 

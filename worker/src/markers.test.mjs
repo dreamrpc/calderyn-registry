@@ -80,6 +80,48 @@ roundTripCase({
   expectPlans: 1,
 });
 
+// Student with an Optional Gov Seat — the seat must land in
+// studentGov[<section>].seats too, not just students[] + powers[].
+// Regression test for the original bug: the student form sends
+// optGovSeat/optGovSection but buildStudent used to ignore them.
+roundTripCase({
+  name: "student: optional gov seat → studentGov[<section>].seats",
+  id: "stuoptgv",
+  sub: {
+    id: "stuoptgv", type: "student",
+    form: {
+      char: "Opt Gov Test", alias: "OGT", house: "Grimere", year: "Sophomore",
+      track: "Sidekicks", tier: "B-List",
+      power: "P", powerExpression: "PE", drawbacks: "D",
+      rpcLink: "https://example/og",
+      optGovSeat: "Treasurer",
+      optGovSection: "OFFICE OF THE PRESIDENT",
+    },
+  },
+  // students + powers + gov seat = 3 insertions, 3 // sub: markers.
+  expectPlans: 3,
+});
+
+// Student with an Optional Club position — same field-name mismatch
+// fix on the club side.
+roundTripCase({
+  name: "student: optional club position → clubs[<club>].positions",
+  id: "stuoptcb",
+  sub: {
+    id: "stuoptcb", type: "student",
+    form: {
+      char: "Opt Club Test", alias: "OCT", house: "Valaris", year: "Junior",
+      track: "Heroes", tier: "C-List",
+      power: "P", powerExpression: "PE", drawbacks: "D",
+      rpcLink: "https://example/oc",
+      optClubName: "Powerball",
+      optClubTeam: "Valaris",
+      optClubPosition: "Defence",
+    },
+  },
+  expectPlans: 3,
+});
+
 // ─── Faculty (Phase 2 — path insertion + powers[] for non-human) ────
 roundTripCase({
   name: "faculty: path into faculty[<section>].rows + powers entry",
