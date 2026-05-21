@@ -325,18 +325,6 @@ students: [
     link: "https://roleplay.chat/profile.php?user=Filament!"
   },
   {
-    char: "Elias Nyström",
-    alias: "Corrode",
-    house: "saberis",
-    year: "Junior",
-    track: "hero",
-    tier: "C-List",
-    power: "Caustic Secretion Physiology · Chemical Perception · Micro-Pressure Control · Accelerated Tissue Recovery",
-    expression: "Elias produces a reactive corrosive compound through several biological systems; the compound activates on air exposure and varies in potency by source. His sinus system is the primary high-pressure, high-potency output — cutting stream, adhesive resin, or aerosol mist. The oral system is moderate, close-range, and quiet. Lacrimal secretion (tears) is emotionally triggered and low potency. Circulatory exposure is unstable and reserved as a last resort. An internal pressure system continuously builds chemical pressure that he must regulate, vent, and release in controlled bursts, cycling through Controlled, Elevated, and Critical states. Refined olfactory chemical perception detects toxins, airborne agents, and chemical signatures; micro-pressure control allows fine valve work; accelerated tissue recovery offsets the damage his own compounds inflict on him.",
-    drawbacks: "Chronic sinus inflammation and chemical nosebleeds. Dehydration sharply reduces output. Emotional triggers disrupt control and force unwanted lacrimal discharge. His chemical perception can tip into sensory overload. Regenerative strain is fatiguing, and constant internal regulation is mentally exhausting. He is dangerous to allies at close range, suffers cumulative overuse strain, has unstable blood-state failure modes, and an energy drain from sustained regeneration.",
-    link: "https://roleplay.chat/profile.php?user=Corrode"
-  },
-  {
     char: "Jason McTavish",
     alias: "Storm",
     house: "orenne",
@@ -1774,16 +1762,6 @@ powers: [
     expression: "Generates and controls living filament strands through her hair, shifting between soft silk and reinforced high-tension fibre. Tensile reinforcement supports her weight or others, anchors to structures, and immobilises targets. Weave constructs form shields, barriers, and protective wraps (better against blunt than piercing). Filament strikes deliver whip motion, sweeps, and momentum redirection. Zone control places strands across an area to dictate movement. Soft Focus is a passive perceptual influence that lowers perceived threat, draws attention to her face, creates micro reaction-delays, and softens emotional tone — misdirection, not mind control.",
     drawbacks: "Filament growth and reinforcement drain energy; prolonged use brings fatigue and weaker strands. Managing multiple strands raises mental load and drops precision. Heat weakens fibres; cluttered spaces interfere with control. Greater length costs precision and response speed. Can't out-muscle physically dominant opponents and is vulnerable if restrained. Soft Focus breaks against trained or alert targets and under chaotic stimuli.",
     link: "https://roleplay.chat/profile.php?user=Filament!"
-  },
-  {
-    char: "Elias Nyström",
-    alias: "Corrode",
-    status: "student",
-    tier: "C",
-    power: "Caustic Secretion Physiology · Chemical Perception · Micro-Pressure Control · Accelerated Tissue Recovery",
-    expression: "Reactive corrosive compound produced through multiple biological systems, activating on air exposure. Sinus system is primary — high-pressure cutting stream, adhesive resin, or aerosol mist. Oral system is moderate, close-range, and quiet. Tears (lacrimal) are emotionally triggered and low potency. Blood (circulatory) is unstable and last resort. An internal pressure system continuously builds chemical pressure that he must regulate, vent, and release through Controlled, Elevated, and Critical states. Refined olfactory chemical perception detects toxins, airborne agents, and chemical signatures. Micro-pressure control enables fine valve work. Accelerated tissue recovery offsets self-inflicted damage from his own compounds.",
-    drawbacks: "Chronic sinus inflammation and chemical nosebleeds. Dehydration cuts output. Emotional triggers disrupt control and force lacrimal discharge. Sensory overload from chemical perception. Fatigue from regenerative strain. Constant need for internal regulation. Dangerous to allies at close range. Cumulative overuse strain, blood-state instability, and energy drain from sustained regeneration.",
-    link: "https://roleplay.chat/profile.php?user=Corrode"
   },
   {
     char: "Jason McTavish",
