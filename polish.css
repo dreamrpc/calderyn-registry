@@ -24585,7 +24585,12 @@ button.orgs-pill {
 
 .pbanned {
   padding: 0 !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
+  /* Cap the whole section so the table doesn't stretch full
+     viewport width — see also the intro grid below which uses
+     this width as its 1fr basis. */
+  max-width: 1280px !important;
+  width: 100% !important;
 }
 
 .pbanned-intro {
@@ -24594,12 +24599,7 @@ button.orgs-pill {
   gap: 8px 24px !important;
   align-items: end !important;
   padding: 28px clamp(20px, 4vw, 32px) 20px !important;
-  /* Centre + cap the intro row only — leaves the table below at full
-     width so the Reason column has room for multi-clause entries
-     (necromancy, immortality, etc.) without wrapping into a wall. */
-  margin: 0 auto !important;
-  max-width: 1280px !important;
-  width: 100% !important;
+  margin: 0 !important;
   border-bottom: 1px solid #1a1a1a !important;
 }
 .pbanned-intro-eyebrow {
@@ -24703,6 +24703,14 @@ button.orgs-pill {
   color: #b8b1a3 !important;
   font-size: 13px !important;
   line-height: 1.5 !important;
+  /* Override the universal `.tw table td { white-space: nowrap }`
+     rule applied elsewhere. Reason cells carry multi-clause text
+     (necromancy, immortality, Geneva-2009 line) that has to wrap
+     or it gets clipped at the table edge. Same pattern as the
+     POWER COLUMN WRAP escape hatch up at line ~4815. */
+  white-space: normal !important;
+  overflow: visible !important;
+  overflow-wrap: anywhere !important;
 }
 .pbanned-tw tbody td.pbanned-reason .pbanned-reason-default {
   color: var(--text-3, #948d80) !important;
