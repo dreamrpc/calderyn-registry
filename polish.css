@@ -24585,12 +24585,7 @@ button.orgs-pill {
 
 .pbanned {
   padding: 0 !important;
-  margin: 0 auto !important;
-  /* Match the curr-main / registry content rhythm so the "ENTRIES N"
-     badge doesn't drift off to the far edge of the viewport when the
-     intro's grid resolves its auto column. */
-  max-width: 1280px !important;
-  width: 100% !important;
+  margin: 0 !important;
 }
 
 .pbanned-intro {
@@ -24599,7 +24594,12 @@ button.orgs-pill {
   gap: 8px 24px !important;
   align-items: end !important;
   padding: 28px clamp(20px, 4vw, 32px) 20px !important;
-  margin: 0 !important;
+  /* Centre + cap the intro row only — leaves the table below at full
+     width so the Reason column has room for multi-clause entries
+     (necromancy, immortality, etc.) without wrapping into a wall. */
+  margin: 0 auto !important;
+  max-width: 1280px !important;
+  width: 100% !important;
   border-bottom: 1px solid #1a1a1a !important;
 }
 .pbanned-intro-eyebrow {
