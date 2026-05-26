@@ -2052,6 +2052,14 @@ function classPath(cls){
   return "elective";
 }
 
+/* Departments that every student takes regardless of designation —
+   Combat Training, Media & Arts, History & Doctrine. Everything
+   else (Sciences, Engineering, Athletics, Humanities, Politics) is
+   an elective pool. Used to label dept blocks on the curriculum
+   page and tag individual class cards. */
+const REQUIRED_DEPT_IDS = new Set(["combat", "media-arts", "history-doctrine"]);
+const isRequiredDept = (deptId) => REQUIRED_DEPT_IDS.has(deptId);
+
 function ClassCard({cls}){
   const fac = cls.faculty;
   const facName = fac?.char || null;
@@ -2341,7 +2349,7 @@ function CurriculumView(){
               <div className="curr-year-tag">Sophomore · Specialisation</div>
               <h3 className="curr-year-title">Home Department declared.</h3>
               <p className="curr-year-blurb">
-                Sophomore year is when departments matter. Students take required modules in their declared Home Department, plus mandatory electives from at least two other departments. Combat-literacy and Media-literacy requirements (one module from a defined pool) sit inside the Combat and Media &amp; Arts blocks below.
+                Sophomore year is when departments matter. Three tracks are mandatory for every student regardless of designation — Combat Training, Media &amp; Arts, and History &amp; Doctrine. The remaining five departments — Sciences, Engineering, Athletics, Humanities, Politics — run as elective pools; students pick from them based on interest and intended specialism. Required Track blocks are marked below.
               </p>
             </div>
             <div className="curr-year-hd-r">
@@ -2352,11 +2360,11 @@ function CurriculumView(){
           </header>
 
           {y2.groups.map(g => (
-            <div key={g.dept.id} className="curr-block" style={{"--dept-c": g.dept.color || "#d4a84a"}}>
+            <div key={g.dept.id} className={"curr-block" + (isRequiredDept(g.dept.id) ? " is-required-dept" : " is-elective-dept")} style={{"--dept-c": g.dept.color || "#d4a84a"}}>
               <header className="curr-block-hd is-dept">
                 <span className="curr-block-marker"/>
                 <span className="curr-block-tag">{g.dept.code} · {g.dept.name}</span>
-                <span className="curr-block-sublbl">Elective Pool</span>
+                <span className="curr-block-sublbl">{isRequiredDept(g.dept.id) ? "Required Track" : "Elective Pool"}</span>
                 <span className="curr-block-count">{g.classes.length}</span>
               </header>
               <div className="curr-class-grid">
@@ -2388,7 +2396,7 @@ function CurriculumView(){
               <div className="curr-year-tag">Junior · Specialisation</div>
               <h3 className="curr-year-title">Deep specialisation, the first field placements.</h3>
               <p className="curr-year-blurb">
-                Junior year. Students go deep inside their declared department, take their designation specialism, and run their first supervised field placements. The classes here set up the Senior capstones — what you choose this year decides what you defend next.
+                Junior year. The three required tracks — Combat, Media &amp; Arts, History &amp; Doctrine — keep running across the cohort. Inside the elective departments students go deeper into their chosen specialism and run their first supervised field placements. What you pick this year decides what you defend in your Senior capstone.
               </p>
             </div>
             <div className="curr-year-hd-r">
@@ -2399,11 +2407,11 @@ function CurriculumView(){
           </header>
 
           {y3.groups.map(g => (
-            <div key={g.dept.id} className="curr-block" style={{"--dept-c": g.dept.color || "#d4a84a"}}>
+            <div key={g.dept.id} className={"curr-block" + (isRequiredDept(g.dept.id) ? " is-required-dept" : " is-elective-dept")} style={{"--dept-c": g.dept.color || "#d4a84a"}}>
               <header className="curr-block-hd is-dept">
                 <span className="curr-block-marker"/>
                 <span className="curr-block-tag">{g.dept.code} · {g.dept.name}</span>
-                <span className="curr-block-sublbl">Elective Pool</span>
+                <span className="curr-block-sublbl">{isRequiredDept(g.dept.id) ? "Required Track" : "Elective Pool"}</span>
                 <span className="curr-block-count">{g.classes.length}</span>
               </header>
               <div className="curr-class-grid">
@@ -2446,11 +2454,11 @@ function CurriculumView(){
           </header>
 
           {ySR.groups.map(g => (
-            <div key={g.dept.id} className="curr-block" style={{"--dept-c": g.dept.color || "#d4a84a"}}>
+            <div key={g.dept.id} className={"curr-block" + (isRequiredDept(g.dept.id) ? " is-required-dept" : " is-elective-dept")} style={{"--dept-c": g.dept.color || "#d4a84a"}}>
               <header className="curr-block-hd is-dept">
                 <span className="curr-block-marker"/>
                 <span className="curr-block-tag">{g.dept.code} · {g.dept.name}</span>
-                <span className="curr-block-sublbl">Elective Pool</span>
+                <span className="curr-block-sublbl">{isRequiredDept(g.dept.id) ? "Required Track" : "Elective Pool"}</span>
                 <span className="curr-block-count">{g.classes.length}</span>
               </header>
               <div className="curr-class-grid">
