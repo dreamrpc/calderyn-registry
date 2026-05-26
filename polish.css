@@ -26053,6 +26053,22 @@ button.orgs-pill {
   margin-left: 10px !important;
 }
 
+/* Required-track depts (Combat, Media & Arts, History & Doctrine) get a
+   louder gold sub-label so they stand out from the elective pools.
+   Pool depts keep the dim default above. */
+.curr-block.is-required-dept .curr-block-sublbl {
+  color: var(--yellow, #d4a84a) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  padding: 2px 8px !important;
+  border: 1px solid rgba(212, 168, 74, 0.55) !important;
+  background: rgba(212, 168, 74, 0.08) !important;
+  margin-left: 12px !important;
+}
+.curr-block.is-elective-dept .curr-block-sublbl {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
 /* Non-dept block headers — Shared Core + Designation Modules.
    `.is-dept` is only set on Sophomore-Senior dept rows, so this
    selector hits Freshman Shared Core + every "Designation Modules"
