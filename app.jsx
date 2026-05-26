@@ -916,16 +916,16 @@ const TERM_BOUNDARY_EVENTS = (() => {
 // hostLink?, location?, link? } entries to publish a new event.
 const HOME_USER_EVENTS = [
   {
-    date:  "2026-06-13",
-    // 12:00 noon US Eastern, Saturday June 13 2026. June is in DST so
+    date:  "2026-06-14",
+    // 12:00 noon US Eastern, Sunday June 14 2026. June is in DST so
     // Eastern resolves to UTC-4 (EDT) on that date → 16:00 UTC.
-    start: "2026-06-13T16:00:00Z",
+    start: "2026-06-14T16:00:00Z",
     title: "Great Ormond Street Hospital · ward visit",
     tag:   "OUTREACH · POWERBALL + CHEER",
     host:  "Celestia \"Stella\" Starkov",
     hostLink: "https://roleplay.chat/profile.php?user=illuminate",
     location: "Great Ormond Street Hospital · London WC1N",
-    desc: "Stella leads a Saturday delegation to GOSH's powered-paediatric ward. Members of the Powerball squads and the Cheer team are riding along — signatures, photos, and a short cheer routine in the atrium for the kids who can't come down. Campus shuttle leaves the West Gate at 09:00 local time.",
+    desc: "Stella leads a Sunday delegation to GOSH's powered-paediatric ward. Members of the Powerball squads and the Cheer team are riding along — signatures, photos, and a short cheer routine in the atrium for the kids who can't come down. Campus shuttle leaves the West Gate at 09:00 local time.",
   },
 ];
 
