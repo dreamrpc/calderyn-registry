@@ -27756,7 +27756,7 @@ button.orgs-pill {
 }
 .cal-dow-row {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 4px;
   font-family: var(--mono);
   font-size: 9px;
@@ -27772,7 +27772,7 @@ button.orgs-pill {
 }
 .cal-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 4px;
   padding-top: 4px;
 }
@@ -27785,7 +27785,8 @@ button.orgs-pill {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: stretch;
+  overflow: hidden;
   transition: background 160ms ease, border-color 160ms ease;
 }
 .cal-cell.is-blank {
