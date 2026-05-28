@@ -481,6 +481,17 @@ body {
   line-height: 1 !important;
 }
 
+.mast-brand-founded {
+  font-family: var(--mono) !important;
+  font-size: 9px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 255, 255, 0.35) !important;
+  margin-top: 4px !important;
+  line-height: 1 !important;
+}
+
 /* Search: refined, ghost border, smaller kbd badge */
 .mast-search {
   justify-self: end !important;
@@ -9648,6 +9659,7 @@ html { scroll-behavior: smooth; }
   background: var(--bg-1, #0c0c10);
   border: 4px solid #000;
   box-shadow: 10px 10px 0 0 var(--red, #c11a2c);
+  padding-right: 14px;
 }
 .home-today-events-head {
   padding: var(--space-4) var(--space-5);
