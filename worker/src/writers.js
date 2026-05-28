@@ -71,6 +71,7 @@ const RPC_TO_OOC_RAW = {
   "Grave+Listener": "Skully",
   "Golden%20Fool": "Skully",
   "Bumblebee.": "Star",
+  "vein": "Dream",
   // AUTO-INSERT:writers — newly-approved writer mappings get added
   // by the relay Worker directly above this marker (one line per RPC
   // account). Do not remove. See worker/src/writer-mapping.js for the
