@@ -9658,8 +9658,7 @@ html { scroll-behavior: smooth; }
   max-width: 1200px;
   background: var(--bg-1, #0c0c10);
   border: 4px solid #000;
-  box-shadow: 10px 10px 0 0 var(--red, #c11a2c);
-  padding-right: 14px;
+  box-shadow: 0 10px 0 0 var(--red, #c11a2c);
 }
 .home-today-events-head {
   padding: var(--space-4) var(--space-5);
