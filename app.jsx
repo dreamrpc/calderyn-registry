@@ -9505,6 +9505,7 @@ function App(){
             <div className="mast-brand-text">
               <div className="mast-brand-name">Calderyn College</div>
               <div className="mast-brand-sub">Central Registry · Greenwich</div>
+              <div className="mast-brand-founded">Est. 1965</div>
             </div>
           </div>
           <div className="mast-meta">
