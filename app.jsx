@@ -4216,9 +4216,9 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The rescue house, the medical house, the pastoral house. It has the best
-            kitchen and the most actual friendships, and it is the house people transfer
-            into when a year has gone badly.
+            The house that does the work nobody notices and keeps doing it. Resilience,
+            reliability, and a quiet refusal to quit. It has the best kitchen and the most
+            actual friendships, and it is the house people underestimate until they need it.
           </p>
           <p className="lore-house-desc">
             Margery Orenne was here from 2005 to 2009, and she comes back every September
