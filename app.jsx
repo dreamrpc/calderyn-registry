@@ -4224,9 +4224,9 @@ function LoreHouses(){
             actual friendships, and it is the house people underestimate until they need it.
           </p>
           <p className="lore-house-desc">
-            Margery Orenne was here from 2005 to 2009, and she comes back every September
-            to give the welcome address, and stays after to talk to anyone who wants to
-            talk to her.
+            Jason Ra came out of Orenne. He is not someone who talks about it much, which
+            is itself very Orenne. The house does not produce the loudest names — it
+            produces the ones still in the field long after the loudest names have moved on.
           </p>
         </article>
 
