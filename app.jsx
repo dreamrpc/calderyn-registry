@@ -4175,14 +4175,12 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The house everyone is looking at. Valaris students are the front-line
-            operators — the ones whose names come up in debriefs, whose records stay
-            clean because they make sure of it, and who are first into a situation
-            because they decided that is where they belong. There is a boldness here
-            that is not performance, and a confidence that does not wait for consensus.
-            When something needs to be done and no one is moving, Valaris moves.
-            The pressure of being watched is real, and they carry it upright, and they
-            would not trade it.
+            Valaris runs on conviction. These are the students who step forward when
+            the room goes quiet, who take the hit without waiting to be asked, and who
+            carry the moral weight of a decision the same way they carry everything
+            else — without complaint, in front of everyone. They are not the most
+            cautious operators at Calderyn. They are the most certain, which is a
+            different thing entirely, and in the field it matters more.
           </p>
           <p className="lore-house-desc">
             Adrian Valaris himself never set foot in this school as a student. There is
@@ -4202,13 +4200,12 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The house that already knows how this ends. Saberis students are not cold —
-            they are precise, and the two have the same effect on a room. They watch,
-            they plan, and they arrive at conclusions before anyone else has identified
-            the problem. Ambition here is structural: not wanting to win, but knowing
-            which win matters and working backwards from there with patience that most
-            people find unsettling. They are not unfriendly. They are just three moves
-            into a conversation while everyone else is still on the greeting.
+            Saberis students walk into a room knowing more than you think they do.
+            They are not hostile — they are calculated, which has the same effect in
+            a way that tends to unsettle people. Patient to a degree that reads as
+            predatory. Precise in a way that never wastes a move. The ambition here
+            is not loud and does not need to be — Saberis students already know which
+            result they are working toward, and they started a long time ago.
           </p>
           <p className="lore-house-desc">
             Caius Saberis was here from 2002 to 2006, and the fencing salle still has
@@ -4228,20 +4225,19 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The warmest house on campus, which people consistently mistake for the
-            softest. Orenne students are the ones who showed up to the low-stakes match
-            to cheer, who remembered your name in the second week when everyone else had
-            moved on, who finished what they started even when no one was counting.
-            The kitchen in the Orenne common room is better than anywhere else on campus
-            — this is well known, undisputed, and not an accident. They work harder than
-            people realise, because hard work is not something Orenne announces. It is
-            just what happens here.
+            Orenne is the house that shows up — not for recognition, but because
+            showing up is what you do. These students have the best kitchen on campus,
+            the most actual friendships, and a track record of finishing what others
+            dropped. They are louder at matches than any other house and quieter about
+            their own achievements, and they are the last ones standing at the end of
+            a genuinely hard thing. People underestimate Orenne. Usually once.
           </p>
           <p className="lore-house-desc">
-            Jason Ra came out of Orenne. He is not someone who talks about it much,
-            which is itself very Orenne. The house does not produce the loudest names —
-            it produces the ones still in the field long after the loudest names have
-            moved on.
+            Margery Orenne was here from 2005 to 2009, and she comes back every
+            September to give the welcome address and stays after to talk to anyone
+            who wants to. She is the only Vanguard member the students still call by
+            first name, and the Orenne students take a quiet pride in that they would
+            not describe as pride.
           </p>
         </article>
 
@@ -4255,13 +4251,13 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The house that does not fit anywhere else and has stopped pretending to try.
-            Engineers, inventors, artists, and people whose power defies clean
-            categorisation — if you cannot explain what you do in a single sentence,
-            you are probably Grimere. The labs run all night. The common room looks
-            like a controlled explosion. Grimere students do not ask for permission to
-            be unconventional; they are often surprised to learn that permission was
-            ever a consideration in the first place.
+            The house that does not fit anywhere else and stopped apologising for it.
+            Engineers, artists, inventors, and people whose power nobody has found a
+            clean category for yet — if you cannot explain what you do in a single
+            sentence, you are probably Grimere. The labs run all night. The common
+            room looks like a controlled explosion. Grimere students are genuinely
+            surprised when they have to ask for permission, and the results tend to
+            speak for themselves, often at volume.
           </p>
           <p className="lore-house-desc">
             Iris Grimere was here from 2009 to 2013, and never quite left — she runs
