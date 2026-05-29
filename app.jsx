@@ -312,8 +312,9 @@ DEPARTMENTS = (D.departments || []).map(applyAuxFaculty);
 const STRATA         = D.strata;
 const OUTSIDE        = D.outside;
 const POWERS         = D.powers;
-const POWER_STATUSES = D.powerStatuses;
-const BANNED_POWERS  = D.bannedPowers;
+const POWER_STATUSES    = D.powerStatuses;
+const BANNED_POWERS     = D.bannedPowers;
+const RESTRICTED_POWERS = D.restrictedPowers || [];
 const POWER_TIERS    = D.powerTiers;
 const CLUBS          = D.clubs;
 const STUDENT_GOV    = D.studentGov;
@@ -2637,6 +2638,46 @@ function PowersBanned(){
           </tbody>
         </table>
       </div>
+      {RESTRICTED_POWERS.length > 0 && (
+        <div className="pbanned-restricted-wrap">
+          <div className="pbanned-intro">
+            <div className="pbanned-intro-eyebrow" style={{color:"#d4901a"}}>Restricted · Conditional</div>
+            <p className="pbanned-intro-body">
+              Powers on file but prohibited from operational use. These abilities are registered for monitoring purposes only. Holders may not deploy them in field, combat, or unsupervised contexts without explicit clearance.
+            </p>
+            <div className="pbanned-intro-meta">
+              <span className="pbanned-intro-meta-k">Entries</span>
+              <span className="pbanned-intro-meta-v">{RESTRICTED_POWERS.length}</span>
+            </div>
+          </div>
+          <div className="tw pbanned-tw">
+            <table>
+              <thead>
+                <tr>
+                  <th className="rn">#</th>
+                  <th>Restricted Ability</th>
+                  <th>Holder</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {RESTRICTED_POWERS.map((r, i) => (
+                  <tr key={i} className="pbanned-row">
+                    <td className="rn">{String(i+1).padStart(2, "0")}</td>
+                    <td className="pbanned-name">{r.name}</td>
+                    <td className="pbanned-reason">{r.holder || <span className="pbanned-reason-default">—</span>}</td>
+                    <td className="pbanned-reason">{r.reason || <span className="pbanned-reason-default">Operational deployment prohibited.</span>}</td>
+                    <td className="pbanned-status">
+                      <span className="pbanned-tag" style={{background:"#d4901a", color:"#1a0e00"}}>RESTRICTED</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
