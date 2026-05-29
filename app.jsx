@@ -4175,15 +4175,20 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The house that moves first. Valaris students do not wait to be certain —
-            they act on conviction, take the hit if it comes, and answer for it
-            afterwards. Not fearless. Decided. There is a difference, and Valaris
-            students understand it before anyone else does.
+            The house everyone is looking at. Valaris students are the front-line
+            operators — the ones whose names come up in debriefs, whose records stay
+            clean because they make sure of it, and who are first into a situation
+            because they decided that is where they belong. There is a boldness here
+            that is not performance, and a confidence that does not wait for consensus.
+            When something needs to be done and no one is moving, Valaris moves.
+            The pressure of being watched is real, and they carry it upright, and they
+            would not trade it.
           </p>
           <p className="lore-house-desc">
-            Adrian Valaris himself never set foot in this school as a student. There is no
-            portrait of him as a teenager because <em>no such portrait exists.</em> This is not a
-            thing Valaris students discuss. It is not, really, a thing anyone discusses.
+            Adrian Valaris himself never set foot in this school as a student. There is
+            no portrait of him as a teenager because <em>no such portrait exists.</em> This
+            is not a thing Valaris students discuss. It is not, really, a thing anyone
+            discusses.
           </p>
         </article>
 
@@ -4197,15 +4202,19 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The house with the longest memory. Saberis students are not in a hurry —
-            they are building toward something, and they know exactly what it is.
-            Precise where others are forceful. Ambitious in a way that does not
-            announce itself until it already has what it came for.
+            The house that already knows how this ends. Saberis students are not cold —
+            they are precise, and the two have the same effect on a room. They watch,
+            they plan, and they arrive at conclusions before anyone else has identified
+            the problem. Ambition here is structural: not wanting to win, but knowing
+            which win matters and working backwards from there with patience that most
+            people find unsettling. They are not unfriendly. They are just three moves
+            into a conversation while everyone else is still on the greeting.
           </p>
           <p className="lore-house-desc">
-            Caius Saberis was here from 2002 to 2006, and the fencing salle still has his
-            trophies on the wall, and Saberis students are expected to know which year he
-            won which one.
+            Caius Saberis was here from 2002 to 2006, and the fencing salle still has
+            his trophies on the wall, and Saberis students are expected to know which
+            year he won which one. There are people who find this excessive. They are
+            generally not Saberis students.
           </p>
         </article>
 
@@ -4219,14 +4228,20 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The house that does the work nobody notices and keeps doing it. Resilience,
-            reliability, and a quiet refusal to quit. It has the best kitchen and the most
-            actual friendships, and it is the house people underestimate until they need it.
+            The warmest house on campus, which people consistently mistake for the
+            softest. Orenne students are the ones who showed up to the low-stakes match
+            to cheer, who remembered your name in the second week when everyone else had
+            moved on, who finished what they started even when no one was counting.
+            The kitchen in the Orenne common room is better than anywhere else on campus
+            — this is well known, undisputed, and not an accident. They work harder than
+            people realise, because hard work is not something Orenne announces. It is
+            just what happens here.
           </p>
           <p className="lore-house-desc">
-            Jason Ra came out of Orenne. He is not someone who talks about it much, which
-            is itself very Orenne. The house does not produce the loudest names — it
-            produces the ones still in the field long after the loudest names have moved on.
+            Jason Ra came out of Orenne. He is not someone who talks about it much,
+            which is itself very Orenne. The house does not produce the loudest names —
+            it produces the ones still in the field long after the loudest names have
+            moved on.
           </p>
         </article>
 
