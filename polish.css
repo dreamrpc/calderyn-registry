@@ -17832,6 +17832,20 @@ nav.lore-scrollnav,
 .lore-section .lore-house:nth-of-type(4),
 .lore-houses-grid .lore-house:nth-of-type(4) { --h-c: #1e40af; }
 
+.lore-house-placement-note {
+  grid-column: 1 / -1;
+  padding: 18px 22px;
+  background: rgba(212, 168, 74, 0.06);
+  border-left: 3px solid var(--yellow, #d4a84a);
+  font-family: var(--sans, 'Söhne', system-ui, sans-serif);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-2, #c9c3b5);
+}
+.lore-house-placement-note strong {
+  color: var(--text-1, #f5f1e8);
+  font-weight: 600;
+}
 
 /* Lore page itself — drop the right-rail padding now that the nav lives
    at the top */

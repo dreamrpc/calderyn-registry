@@ -4162,6 +4162,9 @@ function LoreHouses(){
       </section>
 
       <section className="lore-block lore-houses-grid">
+        <div className="lore-house-placement-note">
+          <strong>House placement is not a choice — it is an assignment.</strong> Every student undergoes a battery of mental and physical assessments before arriving on campus. The results determine your house, and your house is printed on your acceptance letter. You know before you arrive. The college does not sort by preference; it sorts by fit. Your power, your instincts, and what the assessors read in how you handle pressure all go into that decision.
+        </div>
         <article className="lore-house" style={{borderTopColor: "#c41a1a"}}>
           <div className="lore-house-hd">
             <img src="https://i.ibb.co/G4q9m34x/Valaris.png" alt="Valaris crest" className="lore-house-crest" loading="lazy"/>
@@ -8052,6 +8055,9 @@ function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
         {onPage("role") && (
           <>
             <FieldGroup title="Enrollment"/>
+            <div className="join-info-card">
+              <strong>House placement is determined by your power and skillset — not chosen freely.</strong> Every incoming student is assessed both mentally and physically before arrival. Your house is assigned based on those results and will be confirmed in your acceptance letter before you set foot on campus. <strong>Valaris</strong> — public-facing heroes, charisma, and moral clarity. <strong>Orenne</strong> — resilience, support, and consistency under pressure. <strong>Saberis</strong> — strategy, ambition, and analytical precision. <strong>Grimere</strong> — technical, engineering, and cerebral ability (geniuses, inventors, and the unconventional). Select the house that matches your character's power profile and personality; mismatches will be flagged on review.
+            </div>
             <Field label="House" required full>
               <select className="join-select" value={form.house || ""} onChange={e => set("house", e.target.value)}>
                 <option value="">Select house…</option>
