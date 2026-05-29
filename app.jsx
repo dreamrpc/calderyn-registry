@@ -4257,14 +4257,20 @@ function LoreHouses(){
           <p className="lore-house-desc">
             The house that does not fit anywhere else and has stopped pretending to try.
             Engineers, inventors, artists, and people whose power defies clean
-            categorisation. Grimere students do not ask for permission to be
-            unconventional. They just are, and the results tend to speak for themselves.
+            categorisation — if you cannot explain what you do in a single sentence,
+            you are probably Grimere. The labs run all night. The common room looks
+            like a controlled explosion. Grimere students do not ask for permission to
+            be unconventional; they are often surprised to learn that permission was
+            ever a consideration in the first place.
           </p>
           <p className="lore-house-desc">
-            Iris Grimere was here from 2009 to 2013, and never quite left — she runs the
-            diagnostic wing now, which has, by the most conservative count, saved four
-            hundred student lives. Grimere is the only house with a living relationship
-            with its namesake, and the Grimere students are insufferable about it.
+            Iris Grimere was here from 2009 to 2013, and never quite left — she runs
+            the diagnostic wing now, which has, by the most conservative count, saved
+            four hundred student lives. She is also the only Vanguard member who holds
+            an active office at a college she attended, shows up to house events, and
+            answers emails. Grimere is the only house with a living relationship with
+            its namesake, and the Grimere students are insufferable about it in a way
+            that is, frankly, earned.
           </p>
         </article>
       </section>
