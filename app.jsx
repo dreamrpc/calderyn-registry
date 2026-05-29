@@ -4175,18 +4175,21 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            Valaris runs on conviction. These are the students who step forward when
-            the room goes quiet, who take the hit without waiting to be asked, and who
-            carry the moral weight of a decision the same way they carry everything
-            else — without complaint, in front of everyone. They are not the most
-            cautious operators at Calderyn. They are the most certain, which is a
-            different thing entirely, and in the field it matters more.
+            There is a story they tell about the first Valaris student — or maybe the
+            hundredth, the stories blur in the retelling — who walked into a situation
+            that everyone else had quietly decided was someone else's problem. They went
+            in anyway. They did not walk back out the same. Valaris students move toward
+            the thing. Not because they are fearless, but because watching someone else
+            do nothing turns out to be the thing they cannot stand. Saberis, across the
+            quad, has already mapped a route around the problem. Valaris has already
+            gone through the door.
           </p>
           <p className="lore-house-desc">
-            Adrian Valaris himself never set foot in this school as a student. There is
-            no portrait of him as a teenager because <em>no such portrait exists.</em> This
-            is not a thing Valaris students discuss. It is not, really, a thing anyone
-            discusses.
+            Adrian Valaris never attended this school as a student. There is no portrait
+            of him as a teenager here because <em>no such portrait exists.</em> The college
+            has been asked about this, once, and did not answer the question. The Valaris
+            students have made their peace with it. They have also, quietly, decided it
+            means they had to earn the name themselves.
           </p>
         </article>
 
@@ -4200,18 +4203,21 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            Saberis students walk into a room knowing more than you think they do.
-            They are not hostile — they are calculated, which has the same effect in
-            a way that tends to unsettle people. Patient to a degree that reads as
-            predatory. Precise in a way that never wastes a move. The ambition here
-            is not loud and does not need to be — Saberis students already know which
-            result they are working toward, and they started a long time ago.
+            Saberis students already know how this ends. They do not walk into a room
+            — they arrive in one, which is a different thing entirely. Patience here
+            is not a virtue. It is a tool, precise and quiet, unsheathed only when the
+            moment has been chosen rather than stumbled into. This makes them
+            exceptional operators. It also makes them difficult to fully trust —
+            Valaris included, which Saberis students consider Valaris's problem, not
+            theirs. They are not unfriendly. They are simply three moves into a
+            conversation while everyone else is still deciding whether to sit down.
           </p>
           <p className="lore-house-desc">
-            Caius Saberis was here from 2002 to 2006, and the fencing salle still has
-            his trophies on the wall, and Saberis students are expected to know which
-            year he won which one. There are people who find this excessive. They are
-            generally not Saberis students.
+            Caius Saberis kept his trophies in storage. The college moved them to the
+            fencing salle after he graduated, and Saberis students are expected to know
+            which year he won each one. He has never come back to see them. The Saberis
+            students consider this the most Saberis thing about him, and they mean it
+            as a compliment.
           </p>
         </article>
 
@@ -4225,19 +4231,21 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            Orenne is the house that shows up — not for recognition, but because
-            showing up is what you do. These students have the best kitchen on campus,
-            the most actual friendships, and a track record of finishing what others
-            dropped. They are louder at matches than any other house and quieter about
-            their own achievements, and they are the last ones standing at the end of
-            a genuinely hard thing. People underestimate Orenne. Usually once.
+            What people get wrong about Orenne is that they confuse warmth for
+            softness, and these are not the same thing. Orenne students remember your
+            name in the second week. They show up — to the training session nobody
+            organised, to the match nobody came to, to the quiet crisis you mentioned
+            once in passing and assumed no one had heard. The kitchen in their common
+            room is better than anywhere else at Calderyn. This is not an accident.
+            Grimere's common room looks like a controlled explosion. Orenne's looks
+            like somewhere you would actually want to be.
           </p>
           <p className="lore-house-desc">
             Margery Orenne was here from 2005 to 2009, and she comes back every
-            September to give the welcome address and stays after to talk to anyone
-            who wants to. She is the only Vanguard member the students still call by
-            first name, and the Orenne students take a quiet pride in that they would
-            not describe as pride.
+            September — gives the welcome address, then stays for hours talking to
+            whoever wants to. She is the only Vanguard member the students call by
+            first name. The Orenne students are quietly proud of this in a way they
+            would never say out loud, which is also very Orenne.
           </p>
         </article>
 
@@ -4251,22 +4259,21 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The house that does not fit anywhere else and stopped apologising for it.
-            Engineers, artists, inventors, and people whose power nobody has found a
-            clean category for yet — if you cannot explain what you do in a single
-            sentence, you are probably Grimere. The labs run all night. The common
-            room looks like a controlled explosion. Grimere students are genuinely
-            surprised when they have to ask for permission, and the results tend to
-            speak for themselves, often at volume.
+            There is a light on in the Grimere labs at three in the morning. There is
+            almost always a light on in the Grimere labs at three in the morning. The
+            engineers, the artists, the theorists, the people whose power arrived
+            without a manual — this is where they ended up. If you cannot explain what
+            you do in a single sentence, Grimere has a room for you. Orenne finds them
+            inconsistent. Valaris finds them impractical. Saberis finds them
+            fascinating and would never say so. Grimere students are largely
+            unbothered. They have things to build.
           </p>
           <p className="lore-house-desc">
             Iris Grimere was here from 2009 to 2013, and never quite left — she runs
             the diagnostic wing now, which has, by the most conservative count, saved
-            four hundred student lives. She is also the only Vanguard member who holds
-            an active office at a college she attended, shows up to house events, and
-            answers emails. Grimere is the only house with a living relationship with
-            its namesake, and the Grimere students are insufferable about it in a way
-            that is, frankly, earned.
+            four hundred student lives. She is the only Vanguard member with an active
+            office at a college she attended. She shows up. She answers emails. The
+            Grimere students are insufferable about it in a way that is entirely earned.
           </p>
         </article>
       </section>
