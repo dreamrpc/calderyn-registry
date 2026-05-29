@@ -2666,7 +2666,7 @@ function PowersBanned(){
                   <tr key={i} className="pbanned-row">
                     <td className="rn">{String(i+1).padStart(2, "0")}</td>
                     <td className="pbanned-name">{r.name}</td>
-                    <td className="pbanned-reason">{r.holder || <span className="pbanned-reason-default">—</span>}</td>
+                    <td className="pbanned-holder">{r.holder || <span className="pbanned-reason-default">—</span>}</td>
                     <td className="pbanned-reason">{r.reason || <span className="pbanned-reason-default">Operational deployment prohibited.</span>}</td>
                     <td className="pbanned-status">
                       <span className="pbanned-tag" style={{background:"#d4901a", color:"#1a0e00"}}>RESTRICTED</span>

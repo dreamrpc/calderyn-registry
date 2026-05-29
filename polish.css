@@ -24775,6 +24775,13 @@ button.orgs-pill {
   font-style: italic !important;
 }
 .pbanned-tw tbody td.pbanned-status { width: 110px !important; }
+.pbanned-tw tbody td.pbanned-holder {
+  width: 140px !important;
+  min-width: 140px !important;
+  white-space: nowrap !important;
+  color: #f5f1e8 !important;
+  font-size: 13px !important;
+}
 .pbanned-tag {
   display: inline-block !important;
   font-family: var(--mono, 'Söhne Mono', monospace) !important;
