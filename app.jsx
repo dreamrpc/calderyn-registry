@@ -4175,9 +4175,10 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The prestige house. Front-line heroes, future poster children, the students
-            with the cleanest jaws and publicists already on retainer. Confident, and
-            watched, often by each other.
+            The house that moves first. Valaris students do not wait to be certain —
+            they act on conviction, take the hit if it comes, and answer for it
+            afterwards. Not fearless. Decided. There is a difference, and Valaris
+            students understand it before anyone else does.
           </p>
           <p className="lore-house-desc">
             Adrian Valaris himself never set foot in this school as a student. There is no
@@ -4196,8 +4197,10 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            The strategists. The analysts. The patient and the precise. Smaller cohorts,
-            harder examinations, a quieter and more dangerous kind of arrogance.
+            The house with the longest memory. Saberis students are not in a hurry —
+            they are building toward something, and they know exactly what it is.
+            Precise where others are forceful. Ambitious in a way that does not
+            announce itself until it already has what it came for.
           </p>
           <p className="lore-house-desc">
             Caius Saberis was here from 2002 to 2006, and the fencing salle still has his
@@ -4237,8 +4240,10 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            For the technical and the engineering and the cerebral and the creative and,
-            if you are being honest about it, the strange. The labs run all night.
+            The house that does not fit anywhere else and has stopped pretending to try.
+            Engineers, inventors, artists, and people whose power defies clean
+            categorisation. Grimere students do not ask for permission to be
+            unconventional. They just are, and the results tend to speak for themselves.
           </p>
           <p className="lore-house-desc">
             Iris Grimere was here from 2009 to 2013, and never quite left — she runs the
@@ -8056,7 +8061,14 @@ function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
           <>
             <FieldGroup title="Enrollment"/>
             <div className="join-info-card">
-              <strong>House placement is determined by your power and skillset — not chosen freely.</strong> Every incoming student is assessed both mentally and physically before arrival. Your house is assigned based on those results and will be confirmed in your acceptance letter before you set foot on campus. <strong>Valaris</strong> — bravery, bold action, and moral decisiveness; the ones who act when others hesitate. <strong>Orenne</strong> — resilience, hard work, and dependability; those who endure and show up every time. <strong>Saberis</strong> — strategy, precision, and calculated ambition; the patient and the purposeful. <strong>Grimere</strong> — intellectual, technical, and creative; the inventors, the artists, and the unconventional thinkers. Select the house that genuinely fits your character's power profile and personality; mismatches will be flagged on review.
+              <p className="join-info-rule">House placement is not chosen — it is assigned.</p>
+              <p className="join-info-sub">Every student is assessed mentally and physically before arriving. Your house is confirmed in your acceptance letter before you set foot on campus. Select the house that fits your character's power profile; mismatches will be flagged on review.</p>
+              <div className="join-info-houses">
+                <div className="join-info-house"><span className="jih-name">Valaris</span><span className="jih-desc">Bravery, bold action, and moral decisiveness</span></div>
+                <div className="join-info-house"><span className="jih-name">Orenne</span><span className="jih-desc">Resilience, hard work, and dependability</span></div>
+                <div className="join-info-house"><span className="jih-name">Saberis</span><span className="jih-desc">Strategy, precision, and calculated ambition</span></div>
+                <div className="join-info-house"><span className="jih-name">Grimere</span><span className="jih-desc">Intellectual, technical, and creative</span></div>
+              </div>
             </div>
             <Field label="House" required full>
               <select className="join-select" value={form.house || ""} onChange={e => set("house", e.target.value)}>
