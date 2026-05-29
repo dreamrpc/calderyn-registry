@@ -4237,8 +4237,8 @@ function LoreHouses(){
             </div>
           </div>
           <p className="lore-house-desc">
-            For the technical and the engineering and the cerebral and, if you are being
-            honest about it, the strange. The labs run all night.
+            For the technical and the engineering and the cerebral and the creative and,
+            if you are being honest about it, the strange. The labs run all night.
           </p>
           <p className="lore-house-desc">
             Iris Grimere was here from 2009 to 2013, and never quite left — she runs the
@@ -8056,7 +8056,7 @@ function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
           <>
             <FieldGroup title="Enrollment"/>
             <div className="join-info-card">
-              <strong>House placement is determined by your power and skillset — not chosen freely.</strong> Every incoming student is assessed both mentally and physically before arrival. Your house is assigned based on those results and will be confirmed in your acceptance letter before you set foot on campus. <strong>Valaris</strong> — public-facing heroes, charisma, and moral clarity. <strong>Orenne</strong> — resilience, support, and consistency under pressure. <strong>Saberis</strong> — strategy, ambition, and analytical precision. <strong>Grimere</strong> — technical, engineering, and cerebral ability (geniuses, inventors, and the unconventional). Select the house that matches your character's power profile and personality; mismatches will be flagged on review.
+              <strong>House placement is determined by your power and skillset — not chosen freely.</strong> Every incoming student is assessed both mentally and physically before arrival. Your house is assigned based on those results and will be confirmed in your acceptance letter before you set foot on campus. <strong>Valaris</strong> — public-facing heroes, charisma, and moral clarity. <strong>Orenne</strong> — resilience, support, and consistency under pressure. <strong>Saberis</strong> — strategy, ambition, and analytical precision. <strong>Grimere</strong> — technical, engineering, cerebral, and creative ability (geniuses, inventors, artists, and the unconventional). Select the house that matches your character's power profile and personality; mismatches will be flagged on review.
             </div>
             <Field label="House" required full>
               <select className="join-select" value={form.house || ""} onChange={e => set("house", e.target.value)}>
