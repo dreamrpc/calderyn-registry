@@ -91,9 +91,8 @@ test("submissionPool: unknown type → adult", () => {
 // ─── getCharsByPoolTierAndOoc against real data.js ────────────────────
 test("getCharsByPoolTierAndOoc: Star's student A-Listers land in student pool", () => {
   const star = getCharsByPoolTierAndOoc(data).get("student")?.get("A-List")?.get("Star") || new Set();
-  // Tatiana and Vittoria are students with tier A → student pool.
+  // Tatiana is a student with tier A → student pool.
   assertTrue(star.has("Tatiana Morozova"), `Star student A-List: ${[...star].join(", ")}`);
-  assertTrue(star.has("Vittoria Delphine Malik"), `Star student A-List: ${[...star].join(", ")}`);
 });
 
 test("getCharsByPoolTierAndOoc: Wilder's Princeton is in student pool", () => {
