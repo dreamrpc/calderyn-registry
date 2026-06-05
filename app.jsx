@@ -8556,12 +8556,12 @@ function MapLocList({items}){
 function ResidenceBlocks({items}){
   const houseOrder = ["valaris", "orenne", "saberis", "grimere"];
   const byHouse = {};
-  const communal = [];
+  const policy = [];   // residence-wide notes not tied to one house (e.g. Housing Policy)
   items.forEach(loc => {
     if (loc.house && houseOrder.includes(loc.house)) {
       (byHouse[loc.house] = byHouse[loc.house] || []).push(loc);
     } else {
-      communal.push(loc);
+      policy.push(loc);
     }
   });
 
@@ -8596,23 +8596,20 @@ function ResidenceBlocks({items}){
         );
       })}
 
-      {communal.length > 0 && (
+      {policy.length > 0 && (
         <section className="map-house map-house-communal" style={{"--h-color": "#d4a84a"}}>
           <header className="map-house-hd">
             <div className="map-house-hd-l">
-              <span className="map-house-hd-name">COMMUNAL</span>
-              <span className="map-house-hd-virtue">Shared · All four houses</span>
+              <span className="map-house-hd-name">HOUSE POLICY</span>
+              <span className="map-house-hd-virtue">Residence-wide · all four houses</span>
             </div>
             <span className="map-house-hd-count">
-              <b>{communal.length}</b>
-              <span>{communal.length === 1 ? "place" : "places"}</span>
+              <b>{policy.length}</b>
+              <span>{policy.length === 1 ? "note" : "notes"}</span>
             </span>
           </header>
-          <p className="map-house-blurb">
-            Houses are private; the residential quad is not. The lawn between the four buildings, the kitchen, the laundry, the snug and the garden courtyard belong to everyone — house colours come off at the door.
-          </p>
           <ol className="map-stage-pins map-stage-pins-house">
-            {communal.map((loc, i) => (
+            {policy.map((loc, i) => (
               <MapStageLocation key={loc.id} loc={loc} idx={i}/>
             ))}
           </ol>
