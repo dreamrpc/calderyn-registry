@@ -6580,7 +6580,7 @@ const APPLICATION_TYPES = [
   {
     id: "villain",
     name: "Villain",
-    desc: "Villain-side characters and collectives. Not open for applications yet — a planned future addition. See the note on the home page.",
+    desc: "Villain-side characters and collectives. Not open for applications yet (a planned future addition). See the note on the home page.",
     disabled: true,
     soon: "Coming soon",
   },
