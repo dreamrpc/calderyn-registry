@@ -215,9 +215,9 @@ const JOIN_WIZARD = {
     { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
     { id: "role",    title: "Affiliation", subtitle: "Pick a collective to join, or propose a brand-new one.", required: (f) => {
       if (f.collectiveFlow === "createNew") {
-        return ["collectiveFlow", "newCollectiveName", "newCollectiveType", "newCollectiveFaction", "newCollectiveDesc"];
+        return ["collectiveFlow", "newCollectiveName", "newCollectiveType", "newCollectiveDesc"];
       }
-      if (f.collectiveFlow === "joinHero" || f.collectiveFlow === "joinVillain") {
+      if (f.collectiveFlow === "joinHero") {
         return ["collectiveFlow", "alias", "collectiveName", "collectiveRole", "tier"];
       }
       return ["collectiveFlow"];
@@ -6574,7 +6574,7 @@ const APPLICATION_TYPES = [
   {
     id: "collective",
     name: "Hero Collective",
-    desc: "Join an existing collective as a hero or villain, or propose a brand-new collective. Pick a flow on the next step.",
+    desc: "Join an existing hero collective or propose a brand-new one. Villain organisations (crews, syndicates, brokers) apply through Outside Calderyn.",
   },
   {
     id: "outside",
@@ -6650,11 +6650,11 @@ function getOpenGovSeats(){
 }
 
 // Helper: list of collectives. Optionally filter by faction.
-// Existing GROUPS entries don't carry a `faction` field — non-sanctioned
-// groups are treated as hero-side by default, which matches how the
-// existing collectives copy is written ("unsanctioned heroes, B-List
-// tier and below"). New villain-side collectives created through the
-// 3-flow form will land with `faction: "villain"` on the data snippet.
+// Collectives are hero-side only — villain organisations live in the
+// Outside registry's Underworld section, not here. Existing GROUPS
+// entries don't carry a `faction` field and are treated as hero-side
+// by default, which matches how the collectives copy is written
+// ("unsanctioned heroes, B-List tier and below").
 function getCollectives(faction){
   return GROUPS
     .filter(g => !g.sanctioned)
@@ -7022,16 +7022,16 @@ function JoinTab(){
       case "club":       return [...base, "clubPosition"];
       case "gov":        return [...base, "govSeat"];
       case "collective": {
-        // Three sub-flows: joinHero, joinVillain, createNew.
-        // Validation branches accordingly.
+        // Two sub-flows: joinHero, createNew. Collectives are hero-side
+        // only — villain organisations apply through the Outside form.
         const flow = form.collectiveFlow;
         if (flow === "createNew"){
           // Power on a "create" submission is optional — the creator may
           // not be a member themselves, or the founding-member list captures
           // it. Skip the universal power requirement here.
-          return [...base, "collectiveFlow", "newCollectiveName", "newCollectiveType", "newCollectiveFaction", "newCollectiveDesc"];
+          return [...base, "collectiveFlow", "newCollectiveName", "newCollectiveType", "newCollectiveDesc"];
         }
-        if (flow === "joinHero" || flow === "joinVillain"){
+        if (flow === "joinHero"){
           return [...base, "collectiveFlow", "alias", "collectiveName", "collectiveRole", "tier", ...power];
         }
         // No flow chosen yet → only require the flow itself; the rest
@@ -7742,15 +7742,18 @@ function StudentExtras({form, set}){
 }
 
 /* ──────────────────────────────────────────────────────────────────────
-   COLLECTIVE FIELDSET — 3 flows on one form
+   COLLECTIVE FIELDSET — 2 flows on one form
    ──────────────────────────────────────────────────────────────────────
    Flow A — Join an existing hero collective.
-   Flow B — Join an existing villain collective.
-   Flow C — Create a new collective (hero or villain), seed members.
+   Flow B — Create a new hero collective, seed members.
+
+   Collectives are hero-side only. Villain organisations (underworld
+   crews, syndicates, brokers) belong in the Outside registry and apply
+   through the Outside Calderyn form, not here.
 
    The flow picker uses the same .join-typegrid / .join-type chrome as the
    top-level application-type picker so it matches the rest of the form
-   visually. All three flows share the universal Common + Power + Tail
+   visually. Both flows share the universal Common + Power + Tail
    blocks. Create-flow has a small founding-members repeater (alias /
    char / role) that lives entirely in form state — admin pastes the
    resulting GROUPS snippet into data.js.
@@ -7758,18 +7761,16 @@ function StudentExtras({form, set}){
 const COLLECTIVE_FLOWS = [
   { id: "joinHero",    num: "01", name: "Join · Hero-side",
     desc: "Apply to an existing hero collective. Unsanctioned heroes operating outside STRATA contracts." },
-  { id: "joinVillain", num: "02", name: "Join · Villain-side",
-    desc: "Apply to an existing villain collective. Underworld crews, cults, organised antagonists." },
-  { id: "createNew",   num: "03", name: "Create · New collective",
-    desc: "Propose a brand-new collective and its founding members. Hero-side or villain-side." },
+  { id: "createNew",   num: "02", name: "Create · New collective",
+    desc: "Propose a brand-new hero collective and its founding members." },
 ];
 
 function CollectiveFieldset({form, set, Common, wizardPageId}){
   // Page gate — see JoinFieldset's helper for the pattern.
   const onPage = (id) => !wizardPageId || wizardPageId === id;
   const flow = form.collectiveFlow;
-  const isJoin = flow === "joinHero" || flow === "joinVillain";
-  const faction = flow === "joinVillain" ? "villain" : flow === "joinHero" ? "hero" : null;
+  const isJoin = flow === "joinHero";
+  const faction = flow === "joinHero" ? "hero" : null;
   const collectives = getCollectives(faction);
 
   // Kind taxonomy is whatever distinct .type values data.js already uses.
@@ -7811,7 +7812,7 @@ function CollectiveFieldset({form, set, Common, wizardPageId}){
                 type="text"
                 value={form.alias || ""}
                 onChange={e => set("alias", e.target.value)}
-                placeholder={flow === "joinVillain" ? "WRAITH, MAW, etc." : "HEX, NULL, etc."}
+                placeholder="HEX, NULL, etc."
               />
             </Field>
           )}
@@ -7823,7 +7824,7 @@ function CollectiveFieldset({form, set, Common, wizardPageId}){
         <>
           <FieldGroup title="Pick a flow"/>
           <div className="join-flow-blurb">
-            Three paths on one form. Switching flow keeps your character &amp; profile, but resets flow-specific fields.
+            Two paths on one form. Switching flow keeps your character &amp; profile, but resets flow-specific fields. Collectives are hero-side — villain organisations apply through the Outside Calderyn form.
           </div>
           <div className="join-typegrid join-flowgrid">
             {COLLECTIVE_FLOWS.map(opt => (
@@ -7841,7 +7842,6 @@ function CollectiveFieldset({form, set, Common, wizardPageId}){
                   } else {
                     set("newCollectiveName", "");
                     set("newCollectiveType", "");
-                    set("newCollectiveFaction", "");
                     set("newCollectiveDesc", "");
                     set("newCollectiveColor", "");
                     set("newCollectiveBanner", "");
@@ -7859,9 +7859,9 @@ function CollectiveFieldset({form, set, Common, wizardPageId}){
           {/* JOIN-flow affiliation fields */}
           {isJoin && (
             <>
-              <FieldGroup title={flow === "joinVillain" ? "Villain Collective" : "Hero Collective"}/>
+              <FieldGroup title="Hero Collective"/>
               <Field
-                label={flow === "joinVillain" ? "Villain Collective" : "Hero Collective"}
+                label="Hero Collective"
                 required
                 full
                 hint={collectives.length === 0
@@ -7883,9 +7883,7 @@ function CollectiveFieldset({form, set, Common, wizardPageId}){
                     type="text"
                     value={form.collectiveName || ""}
                     onChange={e => set("collectiveName", e.target.value)}
-                    placeholder={flow === "joinVillain"
-                      ? "e.g. The Iron Sigil"
-                      : "e.g. Nightwatch Collective"}
+                    placeholder="e.g. Nightwatch Collective"
                   />
                 )}
               </Field>
@@ -7928,17 +7926,6 @@ function CollectiveFieldset({form, set, Common, wizardPageId}){
                 >
                   <option value="">Select kind…</option>
                   {kinds.map((k, i) => <option key={i} value={k}>{k}</option>)}
-                </select>
-              </Field>
-              <Field label="Faction" required full>
-                <select
-                  className="join-select"
-                  value={form.newCollectiveFaction || ""}
-                  onChange={e => set("newCollectiveFaction", e.target.value)}
-                >
-                  <option value="">Select faction…</option>
-                  <option value="hero">Hero</option>
-                  <option value="villain">Villain</option>
                 </select>
               </Field>
               <Field label="Description" required full hint="One paragraph. Structure, motive, public face.">

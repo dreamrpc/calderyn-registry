@@ -284,7 +284,10 @@ function buildCollective(form, id) {
   const flow = form.collectiveFlow;
 
   if (flow === "createNew") {
-    const fac = ((form.newCollectiveFaction || "hero") + "").toLowerCase();
+    // Collectives are hero-side only; villain orgs go through the Outside
+    // form. Faction is fixed so a stale/hand-crafted payload can't seed a
+    // villain group here.
+    const fac = "hero";
     // Build flat lines so we can tag every one with `// sub:<id>` —
     // that way the same single-pass removal regex used for the simple
     // forms can sweep all of them on toggle-back.
@@ -309,7 +312,7 @@ function buildCollective(form, id) {
     return [{ kind: "path", path: ["groups"], lines }];
   }
 
-  // joinHero / joinVillain — append a member to the named group.
+  // joinHero — append a member to the named group.
   const linkFrag  = form.rpcLink    ? `, link: ${q(form.rpcLink)}`    : "";
   const humanFrag = form.fullyHuman ? `, human: true`                 : "";
   const powerFrag = form.fullyHuman ? ""

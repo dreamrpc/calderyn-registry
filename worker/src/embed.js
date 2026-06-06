@@ -36,15 +36,14 @@ export function buildEmbed(type, form, opts = {}) {
     const flow = form.collectiveFlow;
     const label =
       flow === "joinHero"    ? "Join (Hero-side)"      :
-      flow === "joinVillain" ? "Join (Villain-side)"   :
       flow === "createNew"   ? "Create New Collective" : flow;
     push(fields, "Collective Flow", label, true);
 
-    if (flow === "joinHero" || flow === "joinVillain") {
-      push(fields, "Faction",    flow === "joinVillain" ? "Villain" : "Hero", true);
+    if (flow === "joinHero") {
+      push(fields, "Faction",    "Hero", true);
       push(fields, "Collective", `${form.collectiveName || "?"} — ${form.collectiveRole || "?"}`, false);
     } else if (flow === "createNew") {
-      push(fields, "Faction",        form.newCollectiveFaction === "villain" ? "Villain" : "Hero", true);
+      push(fields, "Faction",        "Hero", true);
       push(fields, "New Collective", form.newCollectiveName || "—", true);
       push(fields, "Kind",           form.newCollectiveType, true);
       push(fields, "Colour",         form.newCollectiveColor, true);
@@ -81,13 +80,10 @@ export function buildEmbed(type, form, opts = {}) {
     title: `New Application · ${typeName}`,
     description:
       type === "collective" && form.collectiveFlow === "createNew"
-        ? `Proposing **${form.newCollectiveName || "(unnamed collective)"}** — ${form.newCollectiveFaction === "villain" ? "villain" : "hero"}-side · submitted by ${form.char || "(unknown)"}`
+        ? `Proposing **${form.newCollectiveName || "(unnamed collective)"}** — hero-side · submitted by ${form.char || "(unknown)"}`
         : `**${form.char}**${form.alias ? ` — *${form.alias}*` : ""}`,
     color:
-      opts.color ??
-      (type === "collective" && (form.collectiveFlow === "joinVillain" || form.newCollectiveFaction === "villain")
-        ? 0x4a1a1a
-        : 0xe31b23),
+      opts.color ?? 0xe31b23,
     fields: capFields(fields),
     footer: { text: opts.footer || "Calderyn College · Central Registry · 2026" },
     timestamp: new Date().toISOString(),

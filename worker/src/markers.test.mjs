@@ -214,7 +214,6 @@ roundTripCase({
     id: "colcrtnw", type: "collective",
     form: {
       collectiveFlow: "createNew",
-      newCollectiveFaction: "hero",
       newCollectiveName: "Test Collective",
       newCollectiveType: "Vigilante Cell",
       newCollectiveDesc: "A test collective.",
@@ -227,6 +226,7 @@ roundTripCase({
     },
   },
   expectPlans: 1,
+  // Collectives are hero-side only, so faction is hardcoded to "hero".
   // 1 wrapper line + 5 properties (name/type/status/faction/desc) +
   // color + banner + members: [ + 2 member lines + ], + }, = 13 lines.
   expectMarkers: 13,
