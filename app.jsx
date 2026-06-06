@@ -766,6 +766,7 @@ function HomeTab({setTab}){
     <div className="home-page">
       <HomeScrollNav/>
       <HomeHero setTab={setTab}/>
+      <HomeVillainNotice/>
       <HomeVanguard/>
       <HomeToday/>
       <HomePowerball setTab={setTab}/>
@@ -6574,7 +6575,14 @@ const APPLICATION_TYPES = [
   {
     id: "collective",
     name: "Hero Collective",
-    desc: "Join an existing hero collective or propose a brand-new one. Villain organisations (crews, syndicates, brokers) apply through Outside Calderyn.",
+    desc: "Join an existing hero collective or propose a brand-new one. Hero-side only for now.",
+  },
+  {
+    id: "villain",
+    name: "Villain",
+    desc: "Villain-side characters and collectives. Not open for applications yet — a planned future addition. See the note on the home page.",
+    disabled: true,
+    soon: "Coming soon",
   },
   {
     id: "outside",
@@ -6650,8 +6658,8 @@ function getOpenGovSeats(){
 }
 
 // Helper: list of collectives. Optionally filter by faction.
-// Collectives are hero-side only — villain organisations live in the
-// Outside registry's Underworld section, not here. Existing GROUPS
+// Collectives are hero-side only — villain-side applications aren't
+// open yet (a planned future addition). Existing GROUPS
 // entries don't carry a `faction` field and are treated as hero-side
 // by default, which matches how the collectives copy is written
 // ("unsanctioned heroes, B-List tier and below").
@@ -6850,6 +6858,59 @@ function JoinHUD({ type, quotaStats, step, alwaysShow, proposedTier }){
   );
 }
 
+function HomeVillainNotice(){
+  // OOC admin notice — villain side isn't open for applications yet.
+  // Lives on the home page as its own section. Inline-styled off the
+  // theme tokens so it tracks light/dark like the rest of the page.
+  return (
+    <section id="home-villain" className="home-section">
+    <div
+      role="note"
+      style={{
+        maxWidth: 880,
+        margin: "0 auto",
+        border: "1px solid rgba(227,27,35,0.45)",
+        borderLeft: "4px solid var(--red)",
+        background: "var(--ink)",
+        borderRadius: "10px",
+        padding: "22px 24px",
+        boxShadow: "0 10px 28px rgba(0,0,0,0.22)",
+      }}
+    >
+      <div style={{
+        fontFamily: "var(--mono)",
+        fontSize: "11px",
+        letterSpacing: "0.14em",
+        textTransform: "uppercase",
+        color: "var(--yellow)",
+        marginBottom: "9px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+      }}>
+        <Icon name="flag" size={12} className="inline-icon"/> Admin Note · OOC · Villain Side
+      </div>
+      <h3 style={{ margin: "0 0 9px", fontSize: "18px", fontWeight: 800, color: "#fff", letterSpacing: "0.01em" }}>
+        Villain applications aren't open yet.
+      </h3>
+      <p style={{ margin: "0 0 10px", lineHeight: 1.55, fontSize: "14px", color: "#d7d3cf" }}>
+        Villain-side characters and collectives aren't being accepted at the moment.
+        They're firmly on the roadmap, but opening the villain side properly needs a
+        major site update, and I'd rather build it right than bolt it on.
+      </p>
+      <p style={{ margin: "0 0 10px", lineHeight: 1.55, fontSize: "14px", color: "#d7d3cf" }}>
+        I'm currently recovering from surgery, so that work is paused for a little
+        while. Thank you for your patience. It genuinely means a lot. Hero
+        applications stay open in the meantime.
+      </p>
+      <div style={{ fontFamily: "var(--mono)", fontSize: "13px", color: "var(--yellow)", marginTop: "12px" }}>
+        Sincerely, Dream
+      </div>
+    </div>
+    </section>
+  );
+}
+
 function JoinTab(){
   const [type, setType]   = useState(null);
   const [form, setForm]   = useState({});
@@ -7023,7 +7084,7 @@ function JoinTab(){
       case "gov":        return [...base, "govSeat"];
       case "collective": {
         // Two sub-flows: joinHero, createNew. Collectives are hero-side
-        // only — villain organisations apply through the Outside form.
+        // only — villain-side applications aren't open yet.
         const flow = form.collectiveFlow;
         if (flow === "createNew"){
           // Power on a "create" submission is optional — the creator may
@@ -7471,8 +7532,15 @@ function JoinTab(){
                 <button
                   key={t.id}
                   type="button"
-                  className={"join-type" + (type === t.id ? " on" : "")}
+                  disabled={t.disabled}
+                  aria-disabled={t.disabled || undefined}
+                  title={t.disabled ? "Not open for applications yet" : undefined}
+                  className={"join-type" + (type === t.id ? " on" : "") + (t.disabled ? " is-soon" : "")}
+                  style={t.disabled ? { opacity: 0.5, cursor: "not-allowed", filter: "grayscale(0.6)" } : undefined}
                   onClick={() => {
+                    // Disabled archetypes (e.g. Villain) are visible but
+                    // not selectable yet — bail before touching state.
+                    if (t.disabled) return;
                     // Only wipe the form when switching to a DIFFERENT
                     // type — clicking the same type just advances back
                     // into the wizard preserving the data the writer
@@ -7486,7 +7554,24 @@ function JoinTab(){
                   }}
                 >
                   <div className="join-type-num">{String(i+1).padStart(2,"0")}</div>
-                  <div className="join-type-name">{t.name}</div>
+                  <div className="join-type-name">
+                    {t.name}
+                    {t.soon && (
+                      <span style={{
+                        marginLeft: 8,
+                        fontFamily: "var(--mono)",
+                        fontSize: 10,
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        color: "var(--ink)",
+                        background: "var(--yellow)",
+                        borderRadius: 4,
+                        padding: "2px 6px",
+                        verticalAlign: "middle",
+                      }}>{t.soon}</span>
+                    )}
+                  </div>
                   <div className="join-type-desc">{t.desc}</div>
                 </button>
               ))}
@@ -7747,9 +7832,8 @@ function StudentExtras({form, set}){
    Flow A — Join an existing hero collective.
    Flow B — Create a new hero collective, seed members.
 
-   Collectives are hero-side only. Villain organisations (underworld
-   crews, syndicates, brokers) belong in the Outside registry and apply
-   through the Outside Calderyn form, not here.
+   Collectives are hero-side only. Villain-side applications aren't open
+   yet — a planned future addition once the villain system is built.
 
    The flow picker uses the same .join-typegrid / .join-type chrome as the
    top-level application-type picker so it matches the rest of the form
@@ -7824,7 +7908,7 @@ function CollectiveFieldset({form, set, Common, wizardPageId}){
         <>
           <FieldGroup title="Pick a flow"/>
           <div className="join-flow-blurb">
-            Two paths on one form. Switching flow keeps your character &amp; profile, but resets flow-specific fields. Collectives are hero-side — villain organisations apply through the Outside Calderyn form.
+            Two paths on one form. Switching flow keeps your character &amp; profile, but resets flow-specific fields. Collectives are hero-side; villain-side applications aren't open yet.
           </div>
           <div className="join-typegrid join-flowgrid">
             {COLLECTIVE_FLOWS.map(opt => (
