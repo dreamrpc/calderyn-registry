@@ -8084,6 +8084,7 @@ code, pre, kbd, samp, var, tt,
    inside a wizard page (e.g. "Power is optional on create-new flow").
    ════════════════════════════════════════════════════════════════════ */
 .join-info-card {
+  grid-column: 1 / -1;
   margin: 0 0 var(--space-5);
   padding: var(--space-4) var(--space-5);
   background: rgba(212, 168, 74, 0.06);
