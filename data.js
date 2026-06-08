@@ -2518,13 +2518,11 @@ heroLists: [
   {
     tier: "E",
     label: "EXPENDABLES",
-    desc: "Not heroes. Not contracted. Not free. The classification below the list — registered abilities with no market, held because the bodies are useful to research. Three harvest classes; the roster behind them is sealed, and most of it is dead on paper.",
+    desc: "Not heroes. Not contracted. Not free. The classification below the list — registered abilities with no market, held because the bodies are useful to research. Three harvest classes exist on paper; the roster behind them is sealed, and only one name is on it.",
     req: "Expendable classification. Not applied for — assigned.",
     color: "#6b3a3a",
     slots: [
       { alias: "Pharmacological · The Vial", role: "Pharmacological", char: "Jane Doe", power: "Pathokinesis · Living & Ability Infection", npc: true },
-      { alias: "Yield · The Vein", role: "Yield", char: null, power: null },
-      { alias: "Benchmark · The Whetstone", role: "Benchmark", char: null, power: null },
     ],
   },
 ],
