@@ -337,7 +337,7 @@ students: [
     link: "https://roleplay.chat/profile.php?user=stormcaller"
   },
   {
-    char: "Issac Whitman",
+    char: "Isaac Whitman",
     alias: "Swapper",
     house: "grimere",
     year: "Junior",
@@ -349,7 +349,7 @@ students: [
     link: "https://roleplay.chat/profile.php?user=Swapper"
   },
   {
-    char: "Emery Bloom",
+    char: "Emery Hollister",
     alias: "Sweet Spot",
     house: "orenne",
     year: "Sophomore",
@@ -1789,7 +1789,7 @@ powers: [
     link: "https://roleplay.chat/profile.php?user=stormcaller"
   },
   {
-    char: "Issac Whitman",
+    char: "Isaac Whitman",
     alias: "Swapper",
     status: "student",
     tier: "B",
@@ -1799,7 +1799,7 @@ powers: [
     link: "https://roleplay.chat/profile.php?user=Swapper"
   },
   {
-    char: "Emery Bloom",
+    char: "Emery Hollister",
     alias: "Sweet Spot",
     status: "student",
     tier: "B",
@@ -2032,7 +2032,7 @@ powers: [
   { char: "Nike Navarro", alias: "SEAFOAM", status: "student", tier: "C", power: "Hydrokinesis · Water Nymph Physiology", expression: "Seafoam possesses an innate connection to water, functioning as both conduit and catalyst. Rather than controlling water through force, she influences it through instinct, emotion, and proximity, causing nearby moisture to respond as naturally as a limb. Water gathers around her in flowing ribbons, spirals, droplets, and seafoam-like currents that move with graceful, organic motion. She can draw from oceans, rivers, rain, humidity, and other nearby sources to create barriers, tendrils, platforms, waves, and currents. More subtle applications allow her to sense disturbances through water, perceive through reflective surfaces, and accelerate healing with purified water. Her powers intensify near large bodies of water and during storms, often accompanied by drifting droplets, rippling reflections, glowing seafoam, and the distant sound of waves.", drawbacks: "Seafoam's abilities are heavily dependent on the presence of water. While she can manipulate moisture in the air, arid environments, extreme heat, and prolonged drought significantly reduce her effectiveness. Large-scale constructs and sustained hydrokinesis rapidly drain her stamina, causing physical exhaustion, dehydration, and loss of focus. Her healing abilities require clean, accessible water and cannot repair severe injuries instantly. Contaminated or magically altered water is difficult to control and may disrupt her powers entirely. Emotional distress can also affect her control, causing currents, waves, or seafoam manifestations to react unpredictably. Although resistant to aquatic pressure and cold, she remains physically vulnerable when caught without sufficient water nearby and cannot maintain advanced abilities indefinitely.", link: "https://roleplay.chat/profile.php?user=seafoam" }, // sub:fc774fe5
   { char: "Damian Hollister", alias: "Silverweave", status: "student", tier: "B", power: "Clothing Manipulation, Fabric Awareness, Enhanced Physicality", expression: "Clothing Manipulation\nDamian’s primary ability allows him to manipulate textiles and clothing that are actively being worn by another person or himself. Unlike telekinesis, his power does not extend to loose objects or fabrics not currently in physical use. Once contact or awareness is established, however, he can exert remarkable control over tension, movement, compression, and directional force within garments.", drawbacks: "Limited Target Scope, Physically Outmatched, Overstimulation & Sensory Strain", link: "https://roleplay.chat/profile.php?user=Silverweave" }, // sub:80ffafe1
   { char: "Roger Lee", alias: "Dragon Force", status: "student", tier: "B", power: "Draconic Force", expression: "The foundation of Roger's power. Roger possesses an extraordinarily potent life-force that continuously fuels and reinforces his body. By consciously directing this energy, he can temporarily amplify his physical abilities beyond their already enhanced baseline. Roger can channel Draconic Force into physical transformations that progressively alter his body. The greater the manifestation, the greater the strain and energy consumption. Roger can project Draconic Force externally as visible crimson-gold energy. At maximum output, the aura can take the shape of an enormous spectral dragon surrounding his body. By compressing Draconic Force within specialized respiratory organs created through manifestation, Roger can unleash devastating ranged attacks. Roger naturally projects a powerful aura of confidence, determination, and authority. This effect becomes noticeably stronger during active combat situations. Roger has received extensive formal martial arts instruction from an early age.\n", drawbacks: "Roger possesses a strong competitive streak and can become emotionally invested in conflicts.\nMaintaining high-level manifestations requires enormous amounts of energy.\nDraconic Force responds strongly to Roger's emotional state.\nRoger places tremendous value on protecting friends, teammates, and innocent bystanders.\nRoger dislikes appearing weak, incapable, or dependent on others.\nWhen actively utilizing Dragon Force, Roger becomes extremely difficult to ignore.\nBecause of his strained relationship with his father and his dislike of abusive authority figures, Roger can react poorly to individuals he perceives as arrogant, controlling, or hypocritical.\nMany of his failures stem not from lack of capability, but from acting before fully considering the consequences of his actions. This is the single greatest obstacle standing between Dragon Force and true A-List status.", link: "https://roleplay.chat/profile.php?user=Dragonforce" }, // sub:2c8ebbe7
-  { char: "Jane Doe", status: "expendable", tier: "E", npc: true, power: "Pathokinesis · Living & Ability Infection", expression: "One contagion expressed as many fevers — Jane's body sickens whatever it touches, and the form the sickness takes depends only on the host. MIASMA — a passive, unswitchable corrupting field: flowers brown, food turns, the healthy near her pick up chills and fog. It sickens her own side exactly as it sickens a threat, which is why she is kept behind glass. THE BITE — her only controlled expression: filed teeth break skin and the host decides the result. Into flesh, festering necrosis; into a powered person, a fever in the gift itself (a healer's mends scar, a light-thrower casts shadow, a teleporter drags a screaming echo); into a mind, slow warm delirium and a sick child's compliance. Fevers break on their own; necrosis does not. THE BREAKOUT — involuntary: fear, lost control, or running her venom dry slams the dial back to the setting she was born at, the field turning acute and, at full, the Bloom — her own body opening into necrotic growth she can neither choose nor steer. PATIENT ZERO — immune to every disease, poison, and biological attack there is, including her own. Mute since birth, held in containment since the hour she was born; the Dean's nullification field is the only thing that switches her off.", drawbacks: "Indiscriminate at the root — the miasma and the delirium do not pick sides, and the bite ferments differently in every host, so she cannot choose the fever she causes. Fear is a trigger she cannot disarm, which makes her most lethal the instant she is most frightened. Her venom is finite, and biting runs her down toward the Breakout. Her one controlled attack needs teeth in skin, and she is physically frail: immune to sickness, but a blade, a bullet, a fall, or the cost of her own Bloom kills her as easily as anyone — more easily. A nullifier shuts her off completely; the Dean's field is both the leash and the only peace she has known." },
+  { char: "Jane Doe", status: "expendable", tier: "E", power: "Pathokinesis · Living & Ability Infection", expression: "One contagion expressed as many fevers — Jane's body sickens whatever it touches, and the form the sickness takes depends only on the host. MIASMA — a passive, unswitchable corrupting field: flowers brown, food turns, the healthy near her pick up chills and fog. It sickens her own side exactly as it sickens a threat, which is why she is kept behind glass. THE BITE — her only controlled expression: filed teeth break skin and the host decides the result. Into flesh, festering necrosis; into a powered person, a fever in the gift itself (a healer's mends scar, a light-thrower casts shadow, a teleporter drags a screaming echo); into a mind, slow warm delirium and a sick child's compliance. Fevers break on their own; necrosis does not. THE BREAKOUT — involuntary: fear, lost control, or running her venom dry slams the dial back to the setting she was born at, the field turning acute and, at full, the Bloom — her own body opening into necrotic growth she can neither choose nor steer. PATIENT ZERO — immune to every disease, poison, and biological attack there is, including her own. Mute since birth, held in containment since the hour she was born; the Dean's nullification field is the only thing that switches her off.", drawbacks: "Indiscriminate at the root — the miasma and the delirium do not pick sides, and the bite ferments differently in every host, so she cannot choose the fever she causes. Fear is a trigger she cannot disarm, which makes her most lethal the instant she is most frightened. Her venom is finite, and biting runs her down toward the Breakout. Her one controlled attack needs teeth in skin, and she is physically frail: immune to sickness, but a blade, a bullet, a fall, or the cost of her own Bloom kills her as easily as anyone — more easily. A nullifier shuts her off completely; the Dean's field is both the leash and the only peace she has known." },
   // AUTO-INSERT:powers — approved Student form powers-registry entries get inserted directly above this marker by the relay Worker. Do not remove.
 ],
 
@@ -2296,7 +2296,7 @@ clubs: [
       { pos: "Flyer", group: "squad", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" }, { pos: "Flyer", group: "squad", char: "Velora Virelli", link: "https://roleplay.chat/profile.php?user=Filament!" }, { pos: "Flyer", group: "squad" },
       { pos: "Base", group: "squad", char: "Manuel \"Manny\" Glint", link: "https://roleplay.chat/profile.php?user=Crashnburn" }, { pos: "Base", group: "squad" }, { pos: "Base", group: "squad" },
       { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" }, { pos: "Tumbler", group: "squad" },
-      { pos: "Alternate Flyer", group: "reserves", char: "Emery Bloom", link: "https://roleplay.chat/profile.php?user=Sweet+Spot" }, { pos: "Alternate Base", group: "reserves" }, { pos: "Alternate Tumbler", group: "reserves", char: "Daphne Callas", link: "https://roleplay.chat/profile.php?user=Verdant!" },
+      { pos: "Alternate Flyer", group: "reserves", char: "Emery Hollister", link: "https://roleplay.chat/profile.php?user=Sweet+Spot" }, { pos: "Alternate Base", group: "reserves" }, { pos: "Alternate Tumbler", group: "reserves", char: "Daphne Callas", link: "https://roleplay.chat/profile.php?user=Verdant!" },
       { pos: "Base", char: "Layla Armstrong", link: "https://roleplay.chat/profile.php?user=Layla_" }, // sub:6f29a7e1
       { pos: "Tumbler", char: "Nina Sterling Evergreen", link: "https://roleplay.chat/profile.php?user=Crown." }, // sub:ae27911b
       { pos: "Tumbler", char: "Nina Sterling Evergreen", link: "https://roleplay.chat/profile.php?user=Crown." }, // sub:9cfb86ea
@@ -2407,7 +2407,7 @@ clubs: [
       { pos: "Editor-in-Chief", group: "masthead" },
       { pos: "Managing Editor", group: "masthead" },
       { pos: "News Editor", group: "section-editors" },
-      { pos: "Investigative Editor", group: "section-editors", char: "Issac Whitman", link: "https://roleplay.chat/profile.php?user=Swapper" },
+      { pos: "Investigative Editor", group: "section-editors", char: "Isaac Whitman", link: "https://roleplay.chat/profile.php?user=Swapper" },
       { pos: "Features Editor", group: "section-editors" },
       { pos: "Sports Editor", group: "section-editors" },
       { pos: "Photo Editor", group: "section-editors", char: "Orion Sterling", link: "https://roleplay.chat/profile.php?user=odyssey" },
@@ -2525,7 +2525,7 @@ heroLists: [
     req: "Expendable classification. Not applied for — assigned.",
     color: "#6b3a3a",
     slots: [
-      { alias: "Pharmacological · The Vial", role: "Pharmacological", char: "Jane Doe", power: "Pathokinesis · Living & Ability Infection", npc: true },
+      { alias: "Pharmacological · The Vial", role: "Pharmacological", char: "Jane Doe", power: "Pathokinesis · Living & Ability Infection" },
     ],
   },
 ],
