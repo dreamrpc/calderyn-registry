@@ -321,7 +321,7 @@ const STUDENT_GOV    = D.studentGov;
 const HERO_LISTS     = D.heroLists;
 const GROUPS         = D.groups;
 const TABS           = D.tabs;
-const TIER_COLOR     = {A:"#e31b23", B:"#1e40af", C:"#d4a843", D:"#54545c"};
+const TIER_COLOR     = {A:"#e31b23", B:"#1e40af", C:"#d4a843", D:"#54545c", E:"#6b3a3a"};
 
 /* RegistryContext — used by global search to deep-link into subviewed tabs */
 const RegContext = React.createContext({
@@ -536,7 +536,7 @@ function TierChip({tier}){
   if(!tier) return <EmptyState label="N/A"/>;
   return (
     <span className="tier-pill" style={{background:TIER_COLOR[tier]||"#555"}}>
-      {tier}-List
+      {tier === "E" ? "Expendable" : `${tier}-List`}
     </span>
   );
 }
@@ -2549,7 +2549,7 @@ function PowersGuide(){
       <section className="tier-bay">
         <header className="bay-hd">
           <div className="bay-hd-tag">01 / Tiers</div>
-          <h3 className="bay-hd-title">A → D List · Market Value</h3>
+          <h3 className="bay-hd-title">A-List → Expendable · Market Value</h3>
           <p className="bay-hd-blurb">Not raw strength. How sellable you are.</p>
         </header>
         <div className="tier-ladder">
@@ -2557,7 +2557,7 @@ function PowersGuide(){
             <article key={t.id} className="tier-card" style={{borderTopColor:t.color}}>
               <div className="tier-card-top">
                 <span className="tier-card-letter" style={{color:t.color}}>{t.tier}</span>
-                <span className="tier-card-list">List</span>
+                {!t.hideList && <span className="tier-card-list">List</span>}
               </div>
               <div className="tier-card-bracket">{t.bracket}</div>
               <div className="tier-card-tagline" style={{color:t.color}}>"{t.tagline}"</div>
@@ -2570,7 +2570,7 @@ function PowersGuide(){
       <section className="status-bay">
         <header className="bay-hd">
           <div className="bay-hd-tag">02 / Statuses</div>
-          <h3 className="bay-hd-title">Six Roles · Same Spectrum</h3>
+          <h3 className="bay-hd-title">Seven Roles · Same Spectrum</h3>
           <p className="bay-hd-blurb">Tier is what you are. Status is what you're doing about it.</p>
         </header>
         <div className="status-cards">
@@ -2719,10 +2719,10 @@ function PowersRegistry(){
       return [{ key: "all", label: null, list: rows.slice().sort(sortByName) }];
     }
     if (groupingMode === "by-tier") {
-      return ["A", "B", "C", "D"]
+      return ["A", "B", "C", "D", "E"]
         .map(t => ({
           key: t,
-          label: `${t}-LIST`,
+          label: t === "E" ? "EXPENDABLE" : `${t}-LIST`,
           list: rows.filter(p => (p.tier || "").toUpperCase() === t).sort(sortByName),
         }))
         .filter(g => g.list.length > 0);
@@ -2874,7 +2874,7 @@ function PowersRegistry(){
             onClick={() => setTier("all")}
             aria-pressed={tier === "all"}
           >All</button>
-          {["A", "B", "C", "D"].map(t => (
+          {["A", "B", "C", "D", "E"].map(t => (
             <button key={t} type="button"
               className={"sf-pill" + (tier === t ? " on" : "")}
               onClick={() => setTier(tier === t ? "all" : t)}
@@ -2939,7 +2939,7 @@ function PowersTab(){
       <PageHead
         stamp="DOC · 08 · POWER REGISTRY"
         title={<>The powered</>}
-        body={<>One tier system (A–D). Six statuses. Read the <strong>Guide</strong> first; the <strong>Registry</strong> is the cast; the <strong>Banned</strong> list is what the registry refuses.</>}
+        body={<>One tier system (A–E). Seven statuses. Read the <strong>Guide</strong> first; the <strong>Registry</strong> is the cast; the <strong>Banned</strong> list is what the registry refuses.</>}
         note={<>{POWERS.length} on file<br/>Same type is fine — same expression is not</>}
         pageNum="P. 008 / VIII"
       />
