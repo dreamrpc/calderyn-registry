@@ -2389,6 +2389,7 @@ clubs: [
       { pos: "Parliamentary", group: "varsity" }, { pos: "Parliamentary", group: "varsity" },
       { pos: "Novice", group: "novice", char: "Lucrecia Sofìa Avalos-Perez", link: "https://roleplay.chat/profile.php?user=Rosetta!" }, { pos: "Novice", group: "novice" },
       { pos: "Research Lead", char: "Damian Hollister", link: "https://roleplay.chat/profile.php?user=Silverweave" }, // sub:80ffafe1
+      { pos: "Research Lead", char: "Damian Hollister", power: , expression: , drawbacks: , link: "https://roleplay.chat/profile.php?user=Silverweave" }, // sub:32a887a1
     ],
   },
   {
