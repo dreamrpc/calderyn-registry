@@ -2301,6 +2301,7 @@ clubs: [
       { pos: "Alternate Flyer", group: "reserves", char: "Emery Bloom", link: "https://roleplay.chat/profile.php?user=Sweet+Spot" }, { pos: "Alternate Base", group: "reserves" }, { pos: "Alternate Tumbler", group: "reserves", char: "Daphne Callas", link: "https://roleplay.chat/profile.php?user=Verdant!" },
       { pos: "Base", char: "Layla Armstrong", link: "https://roleplay.chat/profile.php?user=Layla_" }, // sub:6f29a7e1
       { pos: "Tumbler", char: "Nina Sterling Evergreen", link: "https://roleplay.chat/profile.php?user=Crown." }, // sub:ae27911b
+      { pos: "Tumbler", char: "Nina Sterling Evergreen", link: "https://roleplay.chat/profile.php?user=Crown." }, // sub:9cfb86ea
     ],
   },
   {
