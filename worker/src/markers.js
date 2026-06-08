@@ -257,9 +257,10 @@ function buildStrata(form, id) {
 function buildClub(form, id) {
   const linkFrag  = form.rpcLink    ? `, link: ${q(form.rpcLink)}`    : "";
   const humanFrag = form.fullyHuman ? `, human: true`                 : "";
-  const powerFrag = form.fullyHuman ? ""
-    : `, power: ${q(form.power)}, expression: ${q(form.powerExpression)}, drawbacks: ${q(form.drawbacks)}`;
-  const line = `{ pos: ${q(form.clubPosition)}, char: ${q(form.char)}${powerFrag}${humanFrag}${linkFrag} }, // sub:${id}`;
+  // Club rows show pos/char/link only — power lives in powers[]. Emitting
+  // power fields from an empty club-form value produced invalid `power: ,`
+  // JS that broke data.js parsing (and blanked the whole site).
+  const line = `{ pos: ${q(form.clubPosition)}, char: ${q(form.char)}${humanFrag}${linkFrag} }, // sub:${id}`;
   const path = form.clubTeam
     ? ["clubs", { name: form.clubName }, "teams", { house: form.clubTeam }, "positions"]
     : ["clubs", { name: form.clubName }, "positions"];
@@ -269,10 +270,11 @@ function buildClub(form, id) {
 function buildGov(form, id) {
   const linkFrag  = form.rpcLink    ? `, link: ${q(form.rpcLink)}`    : "";
   const humanFrag = form.fullyHuman ? `, human: true`                 : "";
-  const powerFrag = form.fullyHuman ? ""
-    : `, power: ${q(form.power)}, expression: ${q(form.powerExpression)}, drawbacks: ${q(form.drawbacks)}`;
   const term = form.govTerm || "2026-27";
-  const line = `{ pos: ${q(form.govSeat)}, char: ${q(form.char)}, term: ${q(term)}${powerFrag}${humanFrag}${linkFrag} }, // sub:${id}`;
+  // Gov seats show pos/char/term/link only — power lives in powers[].
+  // Emitting power fields from an empty gov-form value produced invalid
+  // `power: ,` JS that broke data.js parsing.
+  const line = `{ pos: ${q(form.govSeat)}, char: ${q(form.char)}, term: ${q(term)}${humanFrag}${linkFrag} }, // sub:${id}`;
   return [{
     kind: "path",
     path: ["studentGov", { section: form.govSection }, "seats"],

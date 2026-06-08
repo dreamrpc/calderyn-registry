@@ -288,6 +288,36 @@ test("idempotency: applying twice doubles entries without short-circuit", () => 
   assertEq(countEntriesFor(twice, sub.id), 4, "no built-in dedup — caller must guard via countEntriesFor");
 });
 
+// ─── Regression: club/gov rows must never emit empty power fields ─────
+// A club or gov submission for an existing character carries no power
+// info; the builders used to emit `power: , expression: , drawbacks: ,`,
+// which is invalid JS — when it landed in data.js it blanked the entire
+// site. The row must be pos/char(/term)/link only and parse as JS.
+function assertValidObjectLine(line, label) {
+  assertTrue(!/\bpower\s*:/.test(line), `${label}: must not emit power fields → ${line}`);
+  const objText = line.replace(/\s*\/\/\s*sub:.*$/, "").replace(/,\s*$/, "");
+  let obj;
+  try { obj = eval(`(${objText})`); }
+  catch (e) { throw new Error(`${label}: line is not valid JS → ${line}\n   ${e.message}`); }
+  assertTrue(obj && typeof obj === "object", `${label}: did not parse to an object → ${line}`);
+}
+
+test("club: empty power → valid pos/char/link line (no `power: ,`)", () => {
+  const [ins] = buildInsertions({
+    id: "clubreg1", type: "club",
+    form: { clubName: "Symphony & Choir", clubPosition: "Concertmaster", char: "Reg Club", rpcLink: "https://example/c" },
+  });
+  assertValidObjectLine(ins.lines[0], "club");
+});
+
+test("gov: empty power → valid pos/char/term/link line (no `power: ,`)", () => {
+  const [ins] = buildInsertions({
+    id: "govreg1", type: "gov",
+    form: { govSection: "EVENT COMMITTEE", govSeat: "Committee Member", char: "Reg Gov", rpcLink: "https://example/g" },
+  });
+  assertValidObjectLine(ins.lines[0], "gov");
+});
+
 if (failed) {
   console.error(`\n${failed} test(s) failed`);
   process.exit(1);
