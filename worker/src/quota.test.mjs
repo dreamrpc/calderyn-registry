@@ -10,6 +10,8 @@ import {
   getOocForForm,
   getTierLimits,
   checkTierQuota,
+  checkSeniorRaQuota,
+  isSeniorRaRequest,
   submissionPool,
 } from "./quota.js";
 import { lookupOocByRpc, normalize, KNOWN_OOC_NAMES } from "./writers.js";
@@ -252,6 +254,85 @@ test("checkTierQuota: PRIVACY — verdict has no character list field", () => {
   }, { "A-List": 1, "B-List": 99, "C-List": 99 });
   assertFalse("existingChars" in v, "verdict must not include existingChars");
   assertFalse("chars" in v, "verdict must not include chars");
+});
+
+// ─── Senior-RA cap ────────────────────────────────────────────────────
+test("isSeniorRaRequest: detects gov + optGov senior-RA seats", () => {
+  assertTrue(isSeniorRaRequest({ govSeat: "Grimere Rep · Senior RA" }));
+  assertTrue(isSeniorRaRequest({ optGovSeat: "Saberis Rep · Senior RA" }));
+  assertFalse(isSeniorRaRequest({ govSeat: "Committee Chair" }));
+  assertFalse(isSeniorRaRequest({}));
+  assertFalse(isSeniorRaRequest(null));
+});
+
+test("checkSeniorRaQuota: writer with an RA is blocked from a second (real data)", () => {
+  // Storm already holds the Orenne Senior RA (Jason McTavish). A second
+  // Senior RA for any of Storm's accounts must be refused — this is the
+  // exact case that put a duplicate Grimere RA on the board.
+  const v = checkSeniorRaQuota(data, {
+    type: "gov",
+    form: {
+      govSeat: "Grimere Rep · Senior RA",
+      char: "Damian Hollister",
+      rpcLink: "https://roleplay.chat/profile.php?user=Silverweave", // → Storm
+    },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.kind, "senior-ra");
+  assertEq(v.count, 1);
+  assertEq(v.limit, 1);
+});
+
+test("checkSeniorRaQuota: re-approving the writer's existing RA char is allowed", () => {
+  const v = checkSeniorRaQuota(data, {
+    type: "gov",
+    form: {
+      govSeat: "Orenne Rep · Senior RA",
+      char: "Jason McTavish",
+      rpcLink: "https://roleplay.chat/profile.php?user=stormcaller", // → Storm
+    },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+});
+
+test("checkSeniorRaQuota: a writer with no RA can take one", () => {
+  const v = checkSeniorRaQuota(data, {
+    type: "gov",
+    form: { govSeat: "Grimere Rep · Senior RA", char: "Someone New", ooc: "Wilder" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+  assertEq(v.count, 0);
+});
+
+test("checkSeniorRaQuota: non-RA gov seat bypasses the check", () => {
+  const v = checkSeniorRaQuota(data, {
+    type: "gov",
+    form: { govSeat: "Committee Chair", char: "X", ooc: "Storm" },
+  });
+  assertEq(v.allowed, true);
+  assertFalse("kind" in v, "non-RA seat should short-circuit before the RA check");
+});
+
+test("checkSeniorRaQuota: unmapped writer → allowed with warning", () => {
+  const v = checkSeniorRaQuota(data, {
+    type: "gov",
+    form: { govSeat: "Grimere Rep · Senior RA", char: "X", rpcLink: "https://x?user=unknown" },
+  });
+  assertEq(v.allowed, true);
+  assertEq(v.warning, "no_ooc_identifier");
+});
+
+test("checkSeniorRaQuota: PRIVACY — verdict carries no character list", () => {
+  const v = checkSeniorRaQuota(data, {
+    type: "gov",
+    form: {
+      govSeat: "Grimere Rep · Senior RA",
+      char: "Damian Hollister",
+      rpcLink: "https://roleplay.chat/profile.php?user=Silverweave",
+    },
+  });
+  assertFalse("chars" in v, "verdict must not include chars");
+  assertFalse("owned" in v, "verdict must not include owned set");
 });
 
 if (failed) {
