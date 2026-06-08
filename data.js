@@ -2320,7 +2320,7 @@ clubs: [
     ],
     positions: [
       { pos: "Music Director", group: "direction" },
-      { pos: "Concertmaster", group: "direction" },
+      { pos: "Concertmaster", group: "direction", char: "Damian Hollister", link: "https://roleplay.chat/profile.php?user=Silverweave" },
       { pos: "Choir Master", group: "direction" },
       { pos: "Strings Lead", group: "orchestra-leads" },
       { pos: "Woodwind Lead", group: "orchestra-leads" },
@@ -2383,11 +2383,10 @@ clubs: [
     positions: [
       { pos: "Captain", group: "leadership", char: "Montgomery Farthing III", link: "https://roleplay.chat/profile.php?user=upchuck" },
       { pos: "Vice Captain", group: "leadership" },
-      { pos: "Research Lead", group: "leadership" },
+      { pos: "Research Lead", group: "leadership", char: "Damian Hollister", link: "https://roleplay.chat/profile.php?user=Silverweave" },
       { pos: "Policy", group: "varsity" }, { pos: "Policy", group: "varsity" },
       { pos: "Parliamentary", group: "varsity" }, { pos: "Parliamentary", group: "varsity" },
       { pos: "Novice", group: "novice", char: "Lucrecia Sofìa Avalos-Perez", link: "https://roleplay.chat/profile.php?user=Rosetta!" }, { pos: "Novice", group: "novice" },
-      { pos: "Research Lead", char: "Damian Hollister", link: "https://roleplay.chat/profile.php?user=Silverweave" }, // sub:80ffafe1
     ],
   },
   {
