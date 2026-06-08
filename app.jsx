@@ -435,7 +435,7 @@ const SEARCH_INDEX = (() => {
 
   HERO_LISTS.forEach(list => list.slots.forEach(s => {
     push({
-      kind: "Hero",
+      kind: list.tier === "E" ? "Expendable" : "Hero",
       label: s.char || s.alias,
       sub: s.char ? `${s.alias} · ${list.label}` : `${list.label} · open`,
       tab: "strata",
@@ -4939,7 +4939,7 @@ function StrataOverview({onJump}){
     if (r.char) directory.push({ kind: "Corporate", section: sec.section, role: r.role, char: r.char, link: r.link || null, npc: r.npc });
   }));
   HERO_LISTS.forEach(l => l.slots.forEach(s => {
-    if (s.char) directory.push({ kind: `${l.tier}-List Hero`, section: "Talent Roster", role: s.alias, char: s.char, link: s.link || null, power: s.power });
+    if (s.char) directory.push({ kind: l.tier === "E" ? "Expendable" : `${l.tier}-List Hero`, section: "Talent Roster", role: s.alias, char: s.char, link: s.link || null, power: s.power });
   }));
   GROUPS.forEach(g => g.members.forEach(m => {
     if (m.char) directory.push({ kind: g.sanctioned ? "Sanctioned Group" : "Collective", section: g.name, role: m.role || m.alias, char: m.char, link: m.link || null, alias: m.alias, npc: m.npc });
