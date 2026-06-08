@@ -2332,6 +2332,7 @@ clubs: [
       { pos: "Bass Lead", group: "choir-leads" },
       { pos: "Member", group: "members", char: "Lyrica Malaya Song", link: "https://roleplay.chat/profile.php?user=lyrica" }, { pos: "Member", group: "members" },
       { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
+      { pos: "Soprano Lead", char: "Nina Sterling Evergreen", link: "https://roleplay.chat/profile.php?user=Crown." }, // sub:803e09e3
     ],
   },
   {
