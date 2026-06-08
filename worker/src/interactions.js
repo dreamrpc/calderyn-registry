@@ -2,7 +2,7 @@ import { verifySignature, editMessage, postMessage } from "./discord.js";
 import { buildEmbed } from "./embed.js";
 import { updateFile, getFile } from "./github.js";
 import { buildInsertions, applyInsertions, removeBySubmissionId, countEntriesFor } from "./markers.js";
-import { checkTierQuota, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
+import { checkTierQuota, checkSeniorRaQuota, isSeniorRaRequest, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
 import { lookupOocByRpc } from "./writers.js";
 import { ensureWriterMapping } from "./writer-mapping.js";
 
@@ -134,6 +134,18 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
       }
     }
 
+    // Senior-RA cap — at most one Senior RA seat per writer. Gov seats
+    // are tierless and bypass the tier quota above, so check separately.
+    if (!blocked && isSeniorRaRequest(sub.form)) {
+      try {
+        const current = await getFile(env, env.GITHUB_DATA_FILE);
+        const verdict = checkSeniorRaQuota(current.text, sub);
+        if (!verdict.allowed) blocked = verdict;
+      } catch (err) {
+        console.error("senior-RA quota check failed:", err.message);
+      }
+    }
+
     if (!blocked) {
       const insertions = buildInsertions(sub);
       if (insertions.length > 0) {
@@ -174,20 +186,34 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
   // writer nor their existing A-List characters — listing those would
   // tie this RPC account to the writer's other accounts publicly.
   if (blocked) {
-    const poolLabel = blocked.pool === "student" ? "student" : "adult";
-    const blockedEmbed = buildEmbed(sub.type, sub.form, {
-      color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
-      footer: `Calderyn College · Central Registry · 2026 · ⚠ ${poolLabel} ${blocked.tier} quota`,
-    });
-    blockedEmbed.description =
-      `**⚠ Approval blocked — ${poolLabel} ${blocked.tier} quota.**\n` +
-      `This writer already has **${blocked.count} ${poolLabel} ${blocked.tier} characters** ` +
-      `(limit: ${blocked.limit}). The ${poolLabel} pool is counted separately from the ` +
-      `${poolLabel === "student" ? "adult" : "student"} pool, so re-tiering one of those ` +
-      `won't free up a slot here. No new ${poolLabel} ${blocked.tier} approvals can be ` +
-      `accepted until existing ${poolLabel} characters are adjusted to a different tier. ` +
-      `The writer has been notified.\n\n` +
-      (blockedEmbed.description || "");
+    let blockedEmbed;
+    if (blocked.kind === "senior-ra") {
+      blockedEmbed = buildEmbed(sub.type, sub.form, {
+        color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
+        footer: `Calderyn College · Central Registry · 2026 · ⚠ Senior RA limit`,
+      });
+      blockedEmbed.description =
+        `**⚠ Approval blocked — Senior RA limit (one per writer).**\n` +
+        `Each writer may hold **one Senior RA seat** at a time, counted across all of their ` +
+        `accounts. This writer already holds one, so this seat can't be approved until their ` +
+        `existing Senior RA is vacated. The writer has been notified.\n\n` +
+        (blockedEmbed.description || "");
+    } else {
+      const poolLabel = blocked.pool === "student" ? "student" : "adult";
+      blockedEmbed = buildEmbed(sub.type, sub.form, {
+        color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
+        footer: `Calderyn College · Central Registry · 2026 · ⚠ ${poolLabel} ${blocked.tier} quota`,
+      });
+      blockedEmbed.description =
+        `**⚠ Approval blocked — ${poolLabel} ${blocked.tier} quota.**\n` +
+        `This writer already has **${blocked.count} ${poolLabel} ${blocked.tier} characters** ` +
+        `(limit: ${blocked.limit}). The ${poolLabel} pool is counted separately from the ` +
+        `${poolLabel === "student" ? "adult" : "student"} pool, so re-tiering one of those ` +
+        `won't free up a slot here. No new ${poolLabel} ${blocked.tier} approvals can be ` +
+        `accepted until existing ${poolLabel} characters are adjusted to a different tier. ` +
+        `The writer has been notified.\n\n` +
+        (blockedEmbed.description || "");
+    }
     try {
       await editMessage(env, sub.channelId, sub.messageId, {
         embeds: [blockedEmbed],

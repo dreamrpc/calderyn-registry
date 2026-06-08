@@ -210,3 +210,71 @@ export function checkTierQuota(text, sub, limits) {
   }
   return { allowed: true, ooc, pool, tier, count: owned.size, limit };
 }
+
+// ── Senior-RA cap ────────────────────────────────────────────────────
+// House Representatives double as each house's senior Resident
+// Assistant. At most ONE Senior RA seat per writer, counted across all
+// of the writer's RPC accounts (same OOC grouping as the tier quota).
+// Senior RA seats live in the Resident-Assistants council section and
+// are named "<House> Rep · Senior RA". The cap applies to the
+// standalone Gov form (form.govSeat) and to a Student form that also
+// requests a gov seat (form.optGovSeat).
+//
+// PRIVACY: like the tier quota, the verdict carries no character list
+// and no OOC name in any Discord-bound field.
+const SENIOR_RA_SECTION = "STUDENT COUNCIL — RESIDENT ASSISTANTS";
+const SENIOR_RA_RE = /senior\s*ra\b/i;
+export const SENIOR_RA_LIMIT = 1;
+
+// The gov seat a submission is asking for, if any.
+function requestedGovSeat(form) {
+  return (form && (form.govSeat || form.optGovSeat)) || null;
+}
+
+// True when a submission is requesting a Senior RA seat.
+export function isSeniorRaRequest(form) {
+  const seat = requestedGovSeat(form);
+  return !!seat && SENIOR_RA_RE.test(seat);
+}
+
+// Set<char> of the Senior RA seats this writer already holds.
+function getOocSeniorRaChars(text, ooc) {
+  const chars = new Set();
+  if (!ooc) return chars;
+  try {
+    forEachArrayObject(text, ["studentGov", { section: SENIOR_RA_SECTION }, "seats"], (obj) => {
+      const pos = pickStringField(obj, "pos");
+      if (!pos || !SENIOR_RA_RE.test(pos)) return;
+      const char = pickStringField(obj, "char");
+      if (!char) return;
+      if (entryOoc(obj) === ooc) chars.add(char);
+    });
+  } catch (err) {
+    // Fail-open: a scan failure must never block an approval.
+    if (!/no object matching|key not found/.test(err.message)) {
+      console.error("senior-RA scan failed:", err.message);
+    }
+  }
+  return chars;
+}
+
+// Verdict shape mirrors checkTierQuota:
+//   { allowed: true,  kind: "senior-ra", ... }
+//   { allowed: false, kind: "senior-ra", ooc, count, limit }
+export function checkSeniorRaQuota(text, sub) {
+  const form = sub?.form || {};
+  if (!isSeniorRaRequest(form)) return { allowed: true };
+
+  const ooc = getOocForForm(form);
+  if (!ooc) return { allowed: true, kind: "senior-ra", warning: "no_ooc_identifier" };
+
+  const owned = getOocSeniorRaChars(text, ooc);
+  // Re-approving the seat for a character the writer already holds one
+  // for doesn't grow the set — allow it (mirrors the tier-quota rule
+  // for adding a new role to an existing character).
+  const isNewSeat = form.char ? !owned.has(form.char) : true;
+  if (isNewSeat && owned.size + 1 > SENIOR_RA_LIMIT) {
+    return { allowed: false, kind: "senior-ra", ooc, count: owned.size, limit: SENIOR_RA_LIMIT };
+  }
+  return { allowed: true, kind: "senior-ra", ooc, count: owned.size, limit: SENIOR_RA_LIMIT };
+}

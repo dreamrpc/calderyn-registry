@@ -2436,13 +2436,12 @@ studentGov: [
   {
     section: "STUDENT COUNCIL — RESIDENT ASSISTANTS",
     type: "elected",
-    note: "One House Representative per house, doubling as senior Resident Assistant for that house's dorms. They run house meetings, mediate dorm disputes, oversee underclassman conduct, and report to the President. New club proposals start here — pitch your idea to your RA, and if there's enough demonstrated interest, it gets raised to the President for approval. Term: one academic year.",
+    note: "One House Representative per house, doubling as senior Resident Assistant for that house's dorms. They run house meetings, mediate dorm disputes, oversee underclassman conduct, and report to the President. New club proposals start here — pitch your idea to your RA, and if there's enough demonstrated interest, it gets raised to the President for approval. Term: one academic year. One Senior RA per writer: a writer may hold only one of these seats at a time, counted across all of their accounts.",
     seats: [
       { pos: "Valaris Rep · Senior RA", term: "2026–27", char: "Enzo Krüger", link: "https://roleplay.chat/profile.php?user=Starboy!" },
       { pos: "Orenne Rep · Senior RA",  term: "2026–27", char: "Jason McTavish", link: "https://roleplay.chat/profile.php?user=stormcaller" },
       { pos: "Saberis Rep · Senior RA", term: "2026–27" },
       { pos: "Grimere Rep · Senior RA", term: "2026–27" },
-      { pos: "Grimere Rep · Senior RA", term: "2026–27", char: "Damian Hollister", link: "https://roleplay.chat/profile.php?user=Silverweave" }, // sub:80ffafe1
     ],
   },
   {
