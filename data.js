@@ -2451,14 +2451,15 @@ studentGov: [
     note: "Appointed by the President. Plans and runs whatever the campus throws at them — formals, mixers, fundraisers, rivalries, sanctioned and otherwise. Budget approval routes through Treasurer. Two seats per writer max: a writer may hold at most two Event Committee seats, counted across all of their accounts.",
     seats: [
       { pos: "Committee Chair" },
-      { pos: "Committee Chair" },
-      { pos: "Committee Chair" },
-      { pos: "Committee Chair" },
       { pos: "Vice Chair" },
       { pos: "Logistics Lead", char: "Xeno", link: "https://roleplay.chat/profile.php?user=Xenofire" }, // sub:953a48bf
       { pos: "Programming Lead" },
       { pos: "Committee Member", char: "Ariana Ferreira", link: "https://roleplay.chat/profile.php?user=Morpha" },
       { pos: "Committee Member", char: "Lucrecia Sofìa Avalos-Perez", link: "https://roleplay.chat/profile.php?user=Rosetta!" },
+      { pos: "Committee Member" },
+      { pos: "Committee Member" },
+      { pos: "Committee Member" },
+      { pos: "Committee Member" },
     ],
   },
 ],
