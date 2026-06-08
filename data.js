@@ -2332,6 +2332,7 @@ clubs: [
       { pos: "Bass Lead", group: "choir-leads" },
       { pos: "Member", group: "members", char: "Lyrica Malaya Song", link: "https://roleplay.chat/profile.php?user=lyrica" }, { pos: "Member", group: "members" },
       { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
+      { pos: "Concertmaster", char: "Damian Hollister", power: , expression: , drawbacks: , link: "https://roleplay.chat/profile.php?user=Silverweave" }, // sub:07747737
     ],
   },
   {
