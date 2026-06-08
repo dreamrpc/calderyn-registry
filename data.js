@@ -2043,7 +2043,7 @@ powerStatuses: [
   { id: "faculty",      label: "Faculty",      bg: "#15803d", text: "#fff",    desc: "Calderyn staff with a registered ability. Most faculty contracts include a field-deployment clause that suspends external operations during teaching terms — instruction or admin work only. Some faculty negotiate exceptions for ongoing field roles (the Diagnostic Wing director still runs Vanguard tech support; the Dean's nullification field is on call for crisis events on campus). Some are former A-listers cooling off after a bad press cycle. Some never made the leagues at all." },
   { id: "unsanctioned", label: "Unsanctioned", bg: "#0e0e10", text: "#ff2a32", desc: "Operating without a STRATA contract. Independent vigilantes, hostiles, rogue former assets, and anyone who registered but declined a contract. STRATA tracks them, estimates their tier internally, and decides case-by-case whether to recruit, contain, or ignore. Most know they're being watched. Concealment of a registered power outside contract structure is a Class III violation." },
   { id: "inactive",     label: "Civilian",     bg: "#54545c", text: "#fff",    desc: "Registered with STRATA, no operational contract, no active deployment. The largest group on the registry by a wide margin. Includes anyone who chose civilian life from the start (a baker who can heat his ovens with a glance, a nurse with low-grade healing, an office worker who pulls files telekinetically), retired operatives who walked away from a contract, dormant supes whose powers have not manifested in years, and deceased registry entries kept on file as historical record. STRATA tracks tier and ability for the registry, but does not assign handlers, dictate deployment, or restrict daily life. Civilian status is the default outcome for any registered ability whose owner does not want to be a hero." },
-  { id: "expendable",   label: "Expendable",   bg: "#241c1c", text: "#cf8e8e", desc: "Not a contract — a use. A registered ability with no market and no field value, retained because the body carrying it furthers research: 'for the good of supekind' on the record, and STRATA's product pipeline off it. Expendables are not deployed, they are drawn from, across three classes. Pharmacological — immune or filtering bodies dosed with compounds no ethics board would clear. Yield — powers that produce a harvestable material, tapped for it. Benchmark — powers run as live targets to build the restraints and nullifiers used on everyone above them. On paper most Expendables are already dead: no oversight, no next of kin, no exit. The classification appears on the public registry in name only; the roster behind it is sealed." },
+  { id: "expendable",   label: "Expendable",   bg: "#241c1c", text: "#cf8e8e", desc: "Not a contract — a use. A registered ability with no market and no field value, retained because the body carrying it furthers research: 'for the good of supekind' on the record, and STRATA's product pipeline off it. An Expendable is not deployed — it is drawn from: an immune or filtering body dosed with compounds no ethics board would clear. On paper it is already dead — no oversight, no next of kin, no exit. The classification appears on the public registry in name only; the roster behind it is sealed, and there is exactly one name on it." },
 ],
 
 restrictedPowers: [
@@ -2120,15 +2120,13 @@ powerTiers: [
     id: "e", tier: "E", label: "EXPENDABLE", hideList: true,
     tagline: "Not sold. Spent.",
     bracket: "Below Market · Research Asset",
-    deployment: "Not deployed — drawn from. A power with no market and no field value, kept only because the body carrying it is useful to research that 'furthers supekind' (the official line) and STRATA's product pipeline (the real one). Three harvest classes only: Pharmacological, Yield, and Benchmark.",
+    deployment: "Not deployed — drawn from. A power with no market and no field value, kept only because the body carrying it is useful to research that 'furthers supekind' (the official line) and STRATA's product pipeline (the real one). One subject on the books: an immune physiology dosed with compounds no trial could clear.",
     ceiling: "None. No name, no contract, no exit. On paper, most are already dead.",
     cost: "Everything. There is no version of this that comes with a salary.",
     slots: "Not applied for — assigned. A contract implies someone who can refuse.",
     color: "#6b3a3a", accent: "#8a4a4a",
     types: [
-      { name: "Pharmacological", nickname: "The Vial",      use: "Immune or hyper-filtering physiologies dosed with drugs, toxins, suppressants, and anti-powered agents at any concentration — no body count on the books." },
-      { name: "Yield",           nickname: "The Vein",      use: "Powers that secrete, generate, or regenerate a usable substance — tissue, fluid, energy, exotic material — harvested and refined into product." },
-      { name: "Benchmark",       nickname: "The Whetstone", use: "Powers triggered on a schedule as live test targets, so STRATA can build the restraints, nullifiers, detection, and countermeasures it uses on everyone above this line." },
+      { name: "Pharmacological", nickname: "The Vial", use: "Immune or hyper-filtering physiologies dosed with drugs, toxins, suppressants, and anti-powered agents at any concentration — no body count on the books." },
     ],
   },
 ],
@@ -2523,7 +2521,7 @@ heroLists: [
   {
     tier: "E",
     label: "EXPENDABLES",
-    desc: "Not heroes. Not contracted. Not free. The classification below the list — registered abilities with no market, held because the bodies are useful to research. Three harvest classes exist on paper; the roster behind them is sealed, and only one name is on it.",
+    desc: "Not heroes. Not contracted. Not free. The classification below the list — a registered ability with no market, held because the body is useful to research. The roster behind it is sealed, and only one name is on it.",
     req: "Expendable classification. Not applied for — assigned.",
     color: "#6b3a3a",
     slots: [
