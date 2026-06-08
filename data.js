@@ -2151,6 +2151,7 @@ clubs: [
         "Every score is one point. No multi-point shots.",
         "Each quarter opens with a serve from midcourt by the Playmaker of the team awarded the serve (alternating quarters; coin toss for Q1). After every score, the conceding Playmaker serves from their own goal line. The serve must clear midcourt before any teammate may receive it.",
         "Each team names a Team Captain pre-game — any starter — who wears the C, leads the line-up, addresses referees, and may issue one official challenge per game.",
+        "One captaincy per writer — no one wears the C for more than one team, counted across all of their characters.",
         "Tiebreaker is sudden death on a half-size single-elevation court, four players per side.",
       ],
       violence: "Powers may disable, displace, restrain, intercept, or knock down opposing players. Powers may NOT inflict bleeding wounds, fractures, burns above first-degree, or any injury requiring more than on-bench medical attention. The rule is enforced; it is also broken. Powerball has the highest in-season injury rate of any collegiate sport in the country, and STRATA's medical insurance for league players is the most expensive line item in the athletic department's budget. Three personal fouls = ejection. Flagrant fouls (deliberate injury, attack on a downed player or referee, holding past the four-second count, crossing midline outside Playmaker permissions, leaving the goal area as Goalkeeper) = automatic ejection plus a minimum two-game suspension. A career-ending flagrant triggers league review and possible permanent ban.",
@@ -2447,8 +2448,11 @@ studentGov: [
   {
     section: "EVENT COMMITTEE",
     type: "appointed",
-    note: "Appointed by the President. Plans and runs whatever the campus throws at them — formals, mixers, fundraisers, rivalries, sanctioned and otherwise. Budget approval routes through Treasurer.",
+    note: "Appointed by the President. Plans and runs whatever the campus throws at them — formals, mixers, fundraisers, rivalries, sanctioned and otherwise. Budget approval routes through Treasurer. Two seats per writer max: a writer may hold at most two Event Committee seats, counted across all of their accounts.",
     seats: [
+      { pos: "Committee Chair" },
+      { pos: "Committee Chair" },
+      { pos: "Committee Chair" },
       { pos: "Committee Chair" },
       { pos: "Vice Chair" },
       { pos: "Logistics Lead", char: "Xeno", link: "https://roleplay.chat/profile.php?user=Xenofire" }, // sub:953a48bf

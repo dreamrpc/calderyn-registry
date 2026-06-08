@@ -211,40 +211,39 @@ export function checkTierQuota(text, sub, limits) {
   return { allowed: true, ooc, pool, tier, count: owned.size, limit };
 }
 
-// ── Senior-RA cap ────────────────────────────────────────────────────
-// House Representatives double as each house's senior Resident
-// Assistant. At most ONE Senior RA seat per writer, counted across all
-// of the writer's RPC accounts (same OOC grouping as the tier quota).
-// Senior RA seats live in the Resident-Assistants council section and
-// are named "<House> Rep · Senior RA". The cap applies to the
-// standalone Gov form (form.govSeat) and to a Student form that also
-// requests a gov seat (form.optGovSeat).
+// ── Per-section gov-seat caps ────────────────────────────────────────
+// Some Student-Government sections limit how many of their seats a single
+// writer may hold, counted across all of the writer's RPC accounts (same
+// OOC grouping as the tier quota). House Reps double as each house's
+// senior Resident Assistant, so the RA council is capped at one per
+// writer; the Event Committee is capped at two. Caps apply to the
+// standalone Gov form (form.govSection) and to a Student form that also
+// requests a gov seat (form.optGovSection).
 //
 // PRIVACY: like the tier quota, the verdict carries no character list
 // and no OOC name in any Discord-bound field.
-const SENIOR_RA_SECTION = "STUDENT COUNCIL — RESIDENT ASSISTANTS";
-const SENIOR_RA_RE = /senior\s*ra\b/i;
-export const SENIOR_RA_LIMIT = 1;
+const GOV_SECTION_CAPS = {
+  "STUDENT COUNCIL — RESIDENT ASSISTANTS": { limit: 1, label: "Senior RA" },
+  "EVENT COMMITTEE":                       { limit: 2, label: "Event Committee" },
+};
 
-// The gov seat a submission is asking for, if any.
-function requestedGovSeat(form) {
-  return (form && (form.govSeat || form.optGovSeat)) || null;
+// The studentGov section a submission is asking to join, if any.
+function requestedGovSection(form) {
+  return (form && (form.govSection || form.optGovSection)) || null;
 }
 
-// True when a submission is requesting a Senior RA seat.
-export function isSeniorRaRequest(form) {
-  const seat = requestedGovSeat(form);
-  return !!seat && SENIOR_RA_RE.test(seat);
+// True when a submission targets a capped gov section.
+export function isCappedGovSeat(form) {
+  const section = requestedGovSection(form);
+  return !!section && Object.prototype.hasOwnProperty.call(GOV_SECTION_CAPS, section);
 }
 
-// Set<char> of the Senior RA seats this writer already holds.
-function getOocSeniorRaChars(text, ooc) {
+// Set<char> of the seats this writer already holds in `section`.
+function getOocSeatsInSection(text, section, ooc) {
   const chars = new Set();
-  if (!ooc) return chars;
+  if (!section || !ooc) return chars;
   try {
-    forEachArrayObject(text, ["studentGov", { section: SENIOR_RA_SECTION }, "seats"], (obj) => {
-      const pos = pickStringField(obj, "pos");
-      if (!pos || !SENIOR_RA_RE.test(pos)) return;
+    forEachArrayObject(text, ["studentGov", { section }, "seats"], (obj) => {
       const char = pickStringField(obj, "char");
       if (!char) return;
       if (entryOoc(obj) === ooc) chars.add(char);
@@ -252,29 +251,71 @@ function getOocSeniorRaChars(text, ooc) {
   } catch (err) {
     // Fail-open: a scan failure must never block an approval.
     if (!/no object matching|key not found/.test(err.message)) {
-      console.error("senior-RA scan failed:", err.message);
+      console.error("gov-seat scan failed:", err.message);
     }
   }
   return chars;
 }
 
 // Verdict shape mirrors checkTierQuota:
-//   { allowed: true,  kind: "senior-ra", ... }
-//   { allowed: false, kind: "senior-ra", ooc, count, limit }
-export function checkSeniorRaQuota(text, sub) {
+//   { allowed: true,  kind: "gov-seat", ... }
+//   { allowed: false, kind: "gov-seat", section, label, count, limit }
+export function checkGovSeatQuota(text, sub) {
   const form = sub?.form || {};
-  if (!isSeniorRaRequest(form)) return { allowed: true };
+  const section = requestedGovSection(form);
+  const cap = section ? GOV_SECTION_CAPS[section] : null;
+  if (!cap) return { allowed: true };
 
   const ooc = getOocForForm(form);
-  if (!ooc) return { allowed: true, kind: "senior-ra", warning: "no_ooc_identifier" };
+  if (!ooc) return { allowed: true, kind: "gov-seat", warning: "no_ooc_identifier" };
 
-  const owned = getOocSeniorRaChars(text, ooc);
-  // Re-approving the seat for a character the writer already holds one
-  // for doesn't grow the set — allow it (mirrors the tier-quota rule
-  // for adding a new role to an existing character).
+  const owned = getOocSeatsInSection(text, section, ooc);
+  // Re-approving a seat for a character the writer already holds one for
+  // doesn't grow the set — allow it (mirrors the tier-quota rule for
+  // adding a new role to an existing character).
   const isNewSeat = form.char ? !owned.has(form.char) : true;
-  if (isNewSeat && owned.size + 1 > SENIOR_RA_LIMIT) {
-    return { allowed: false, kind: "senior-ra", ooc, count: owned.size, limit: SENIOR_RA_LIMIT };
+  if (isNewSeat && owned.size + 1 > cap.limit) {
+    return { allowed: false, kind: "gov-seat", section, label: cap.label, count: owned.size, limit: cap.limit };
   }
-  return { allowed: true, kind: "senior-ra", ooc, count: owned.size, limit: SENIOR_RA_LIMIT };
+  return { allowed: true, kind: "gov-seat", section, label: cap.label, count: owned.size, limit: cap.limit };
+}
+
+// ── Powerball captaincy invariant ────────────────────────────────────
+// A writer may captain at most one Powerball team. Captaincy is a manual
+// `captain: true` flag on a team position — it is never set through a
+// form, so it can't be blocked at approval time. This data-integrity
+// helper lets the test suite (and any pre-deploy validation) catch a
+// writer who ends up holding the C for two houses.
+const POWERBALL_HOUSES = ["Valaris", "Orenne", "Saberis", "Grimere"];
+
+// Map<ooc, Set<house>> of every filled captain seat, grouped by writer.
+export function getPowerballCaptainsByOoc(text) {
+  const byOoc = new Map();
+  for (const house of POWERBALL_HOUSES) {
+    try {
+      forEachArrayObject(text, ["clubs", { name: "Powerball" }, "teams", { house }, "positions"], (obj) => {
+        if (!/\bcaptain\s*:\s*true\b/.test(obj)) return;
+        const char = pickStringField(obj, "char");
+        if (!char) return;
+        const ooc = entryOoc(obj);
+        if (!ooc) return;
+        if (!byOoc.has(ooc)) byOoc.set(ooc, new Set());
+        byOoc.get(ooc).add(house);
+      });
+    } catch (err) {
+      if (!/no object matching|key not found/.test(err.message)) {
+        console.error(`powerball captain scan failed [${house}]:`, err.message);
+      }
+    }
+  }
+  return byOoc;
+}
+
+// Array of { ooc, houses } for any writer captaining more than one team.
+export function findDuplicatePowerballCaptains(text) {
+  const out = [];
+  for (const [ooc, houses] of getPowerballCaptainsByOoc(text)) {
+    if (houses.size > 1) out.push({ ooc, houses: [...houses] });
+  }
+  return out;
 }

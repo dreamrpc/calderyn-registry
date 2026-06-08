@@ -2,7 +2,7 @@ import { verifySignature, editMessage, postMessage } from "./discord.js";
 import { buildEmbed } from "./embed.js";
 import { updateFile, getFile } from "./github.js";
 import { buildInsertions, applyInsertions, removeBySubmissionId, countEntriesFor } from "./markers.js";
-import { checkTierQuota, checkSeniorRaQuota, isSeniorRaRequest, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
+import { checkTierQuota, checkGovSeatQuota, isCappedGovSeat, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
 import { lookupOocByRpc } from "./writers.js";
 import { ensureWriterMapping } from "./writer-mapping.js";
 
@@ -134,15 +134,16 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
       }
     }
 
-    // Senior-RA cap — at most one Senior RA seat per writer. Gov seats
-    // are tierless and bypass the tier quota above, so check separately.
-    if (!blocked && isSeniorRaRequest(sub.form)) {
+    // Per-section gov-seat caps (e.g. one Senior RA, two Event Committee
+    // seats per writer). Gov seats are tierless and bypass the tier
+    // quota above, so check separately.
+    if (!blocked && isCappedGovSeat(sub.form)) {
       try {
         const current = await getFile(env, env.GITHUB_DATA_FILE);
-        const verdict = checkSeniorRaQuota(current.text, sub);
+        const verdict = checkGovSeatQuota(current.text, sub);
         if (!verdict.allowed) blocked = verdict;
       } catch (err) {
-        console.error("senior-RA quota check failed:", err.message);
+        console.error("gov-seat quota check failed:", err.message);
       }
     }
 
@@ -187,16 +188,18 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
   // tie this RPC account to the writer's other accounts publicly.
   if (blocked) {
     let blockedEmbed;
-    if (blocked.kind === "senior-ra") {
+    if (blocked.kind === "gov-seat") {
+      const seatWord = blocked.limit === 1 ? "seat" : "seats";
       blockedEmbed = buildEmbed(sub.type, sub.form, {
         color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
-        footer: `Calderyn College · Central Registry · 2026 · ⚠ Senior RA limit`,
+        footer: `Calderyn College · Central Registry · 2026 · ⚠ ${blocked.label} limit`,
       });
       blockedEmbed.description =
-        `**⚠ Approval blocked — Senior RA limit (one per writer).**\n` +
-        `Each writer may hold **one Senior RA seat** at a time, counted across all of their ` +
-        `accounts. This writer already holds one, so this seat can't be approved until their ` +
-        `existing Senior RA is vacated. The writer has been notified.\n\n` +
+        `**⚠ Approval blocked — ${blocked.label} limit (${blocked.limit} per writer).**\n` +
+        `Each writer may hold at most **${blocked.limit} ${blocked.label} ${seatWord}**, counted ` +
+        `across all of their accounts. This writer already holds ${blocked.count}, so this seat ` +
+        `can't be approved until ${blocked.limit === 1 ? "the existing one is" : "one is"} vacated. ` +
+        `The writer has been notified.\n\n` +
         (blockedEmbed.description || "");
     } else {
       const poolLabel = blocked.pool === "student" ? "student" : "adult";

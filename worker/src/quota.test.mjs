@@ -10,8 +10,9 @@ import {
   getOocForForm,
   getTierLimits,
   checkTierQuota,
-  checkSeniorRaQuota,
-  isSeniorRaRequest,
+  checkGovSeatQuota,
+  isCappedGovSeat,
+  findDuplicatePowerballCaptains,
   submissionPool,
 } from "./quota.js";
 import { lookupOocByRpc, normalize, KNOWN_OOC_NAMES } from "./writers.js";
@@ -256,37 +257,44 @@ test("checkTierQuota: PRIVACY — verdict has no character list field", () => {
   assertFalse("chars" in v, "verdict must not include chars");
 });
 
-// ─── Senior-RA cap ────────────────────────────────────────────────────
-test("isSeniorRaRequest: detects gov + optGov senior-RA seats", () => {
-  assertTrue(isSeniorRaRequest({ govSeat: "Grimere Rep · Senior RA" }));
-  assertTrue(isSeniorRaRequest({ optGovSeat: "Saberis Rep · Senior RA" }));
-  assertFalse(isSeniorRaRequest({ govSeat: "Committee Chair" }));
-  assertFalse(isSeniorRaRequest({}));
-  assertFalse(isSeniorRaRequest(null));
+// ─── Per-section gov-seat caps ────────────────────────────────────────
+const RA_SECTION = "STUDENT COUNCIL — RESIDENT ASSISTANTS";
+
+test("isCappedGovSeat: true for capped sections, false otherwise", () => {
+  assertTrue(isCappedGovSeat({ govSection: RA_SECTION }));
+  assertTrue(isCappedGovSeat({ govSection: "EVENT COMMITTEE" }));
+  assertTrue(isCappedGovSeat({ optGovSection: "EVENT COMMITTEE" }));
+  assertFalse(isCappedGovSeat({ govSection: "OFFICE OF THE PRESIDENT" }));
+  assertFalse(isCappedGovSeat({}));
+  assertFalse(isCappedGovSeat(null));
 });
 
-test("checkSeniorRaQuota: writer with an RA is blocked from a second (real data)", () => {
-  // Storm already holds the Orenne Senior RA (Jason McTavish). A second
-  // Senior RA for any of Storm's accounts must be refused — this is the
-  // exact case that put a duplicate Grimere RA on the board.
-  const v = checkSeniorRaQuota(data, {
+// Senior RA — limit 1, against real data.js (also proves the cap's
+// section name matches the em-dash in data.js: a mismatch would find no
+// seats and this block assertion would fail).
+test("checkGovSeatQuota: a writer with an RA is blocked from a second (real data)", () => {
+  // Storm already holds the Orenne Senior RA (Jason McTavish).
+  const v = checkGovSeatQuota(data, {
     type: "gov",
     form: {
+      govSection: RA_SECTION,
       govSeat: "Grimere Rep · Senior RA",
       char: "Damian Hollister",
       rpcLink: "https://roleplay.chat/profile.php?user=Silverweave", // → Storm
     },
   });
   assertEq(v.allowed, false, JSON.stringify(v));
-  assertEq(v.kind, "senior-ra");
+  assertEq(v.kind, "gov-seat");
+  assertEq(v.label, "Senior RA");
   assertEq(v.count, 1);
   assertEq(v.limit, 1);
 });
 
-test("checkSeniorRaQuota: re-approving the writer's existing RA char is allowed", () => {
-  const v = checkSeniorRaQuota(data, {
+test("checkGovSeatQuota: re-approving the writer's existing RA char is allowed", () => {
+  const v = checkGovSeatQuota(data, {
     type: "gov",
     form: {
+      govSection: RA_SECTION,
       govSeat: "Orenne Rep · Senior RA",
       char: "Jason McTavish",
       rpcLink: "https://roleplay.chat/profile.php?user=stormcaller", // → Storm
@@ -295,37 +303,79 @@ test("checkSeniorRaQuota: re-approving the writer's existing RA char is allowed"
   assertEq(v.allowed, true, JSON.stringify(v));
 });
 
-test("checkSeniorRaQuota: a writer with no RA can take one", () => {
-  const v = checkSeniorRaQuota(data, {
+test("checkGovSeatQuota: a writer with no RA can take one", () => {
+  const v = checkGovSeatQuota(data, {
     type: "gov",
-    form: { govSeat: "Grimere Rep · Senior RA", char: "Someone New", ooc: "Wilder" },
+    form: { govSection: RA_SECTION, govSeat: "Grimere Rep · Senior RA", char: "Someone New", ooc: "Wilder" },
   });
   assertEq(v.allowed, true, JSON.stringify(v));
   assertEq(v.count, 0);
 });
 
-test("checkSeniorRaQuota: non-RA gov seat bypasses the check", () => {
-  const v = checkSeniorRaQuota(data, {
+// Event Committee — limit 2, against synthetic data with controlled OOC
+// (Crown. and nocturne. both map to Star).
+const EC_TWO = `window.CALDERYN = {
+studentGov: [
+  { section: "EVENT COMMITTEE", type: "appointed", note: "x", seats: [
+    { pos: "Committee Chair", char: "EC One", link: "https://r?user=Crown." },
+    { pos: "Committee Chair", char: "EC Two", link: "https://r?user=nocturne." },
+    { pos: "Committee Chair" },
+  ] },
+],
+};`;
+
+test("checkGovSeatQuota: Event Committee blocks a third seat for one writer", () => {
+  const v = checkGovSeatQuota(EC_TWO, {
     type: "gov",
-    form: { govSeat: "Committee Chair", char: "X", ooc: "Storm" },
+    form: { govSection: "EVENT COMMITTEE", govSeat: "Committee Chair", char: "EC Three", ooc: "Star" },
   });
-  assertEq(v.allowed, true);
-  assertFalse("kind" in v, "non-RA seat should short-circuit before the RA check");
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.label, "Event Committee");
+  assertEq(v.count, 2);
+  assertEq(v.limit, 2);
 });
 
-test("checkSeniorRaQuota: unmapped writer → allowed with warning", () => {
-  const v = checkSeniorRaQuota(data, {
+const EC_ONE = `window.CALDERYN = {
+studentGov: [
+  { section: "EVENT COMMITTEE", seats: [
+    { pos: "Committee Chair", char: "EC One", link: "https://r?user=Crown." },
+    { pos: "Committee Chair" },
+  ] },
+],
+};`;
+
+test("checkGovSeatQuota: Event Committee allows a second seat for one writer", () => {
+  const v = checkGovSeatQuota(EC_ONE, {
     type: "gov",
-    form: { govSeat: "Grimere Rep · Senior RA", char: "X", rpcLink: "https://x?user=unknown" },
+    form: { govSection: "EVENT COMMITTEE", govSeat: "Committee Chair", char: "EC Two", ooc: "Star" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+  assertEq(v.count, 1);
+});
+
+test("checkGovSeatQuota: uncapped gov section bypasses the check", () => {
+  const v = checkGovSeatQuota(data, {
+    type: "gov",
+    form: { govSection: "OFFICE OF THE PRESIDENT", govSeat: "Treasurer", char: "X", ooc: "Storm" },
+  });
+  assertEq(v.allowed, true);
+  assertFalse("kind" in v, "uncapped section should short-circuit");
+});
+
+test("checkGovSeatQuota: unmapped writer → allowed with warning", () => {
+  const v = checkGovSeatQuota(data, {
+    type: "gov",
+    form: { govSection: RA_SECTION, govSeat: "Grimere Rep · Senior RA", char: "X", rpcLink: "https://x?user=unknown" },
   });
   assertEq(v.allowed, true);
   assertEq(v.warning, "no_ooc_identifier");
 });
 
-test("checkSeniorRaQuota: PRIVACY — verdict carries no character list", () => {
-  const v = checkSeniorRaQuota(data, {
+test("checkGovSeatQuota: PRIVACY — verdict carries no character list", () => {
+  const v = checkGovSeatQuota(data, {
     type: "gov",
     form: {
+      govSection: RA_SECTION,
       govSeat: "Grimere Rep · Senior RA",
       char: "Damian Hollister",
       rpcLink: "https://roleplay.chat/profile.php?user=Silverweave",
@@ -333,6 +383,25 @@ test("checkSeniorRaQuota: PRIVACY — verdict carries no character list", () => 
   });
   assertFalse("chars" in v, "verdict must not include chars");
   assertFalse("owned" in v, "verdict must not include owned set");
+});
+
+// ─── Powerball captaincy invariant ────────────────────────────────────
+test("findDuplicatePowerballCaptains: real data.js has none", () => {
+  const dups = findDuplicatePowerballCaptains(data);
+  assertEq(dups.length, 0, JSON.stringify(dups));
+});
+
+test("findDuplicatePowerballCaptains: flags a writer captaining two teams", () => {
+  // Crown. and nocturne. both map to Star.
+  const dup = `window.CALDERYN = {
+clubs: [ { name: "Powerball", teams: [
+  { house: "Valaris", positions: [ { pos: "Goalkeeper", captain: true, char: "Cap A", link: "https://r?user=Crown." } ] },
+  { house: "Orenne", positions: [ { pos: "Playmaker", captain: true, char: "Cap B", link: "https://r?user=nocturne." } ] },
+] } ],
+};`;
+  const dups = findDuplicatePowerballCaptains(dup);
+  assertEq(dups.length, 1, JSON.stringify(dups));
+  assertEq(dups[0].ooc, "Star");
 });
 
 if (failed) {
