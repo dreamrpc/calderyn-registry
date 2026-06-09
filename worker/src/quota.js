@@ -52,6 +52,13 @@ export function getTierLimits(env) {
   };
 }
 
+// Per-writer cap on unsanctioned-status characters (rogue / collective /
+// outside operators with no STRATA contract), counted across all of a
+// writer's accounts regardless of tier. Env-configurable; default 5.
+export function getUnsanctionedLimit(env) {
+  return readInt(env?.UNSANCTIONED_LIMIT_PER_WRITER, 5);
+}
+
 function readInt(raw, fallback) {
   const n = parseInt(raw, 10);
   return Number.isFinite(n) && n > 0 ? n : fallback;
@@ -318,4 +325,60 @@ export function findDuplicatePowerballCaptains(text) {
     if (houses.size > 1) out.push({ ooc, houses: [...houses] });
   }
   return out;
+}
+
+// ── Unsanctioned-character cap ────────────────────────────────────────
+// At most N unsanctioned-status characters per writer, counted across all
+// of the writer's accounts (same OOC grouping as the tier quota). Unlike
+// the tier caps, this counts by *status*, so it catches the typically
+// tierless rogue / collective / outside characters that otherwise slip
+// past A/B/C/D. Fires on approval of any submission that writes an
+// unsanctioned powers[] row: a Collective "join" submission (the relay
+// stamps those unsanctioned) or an Outside submission whose status is
+// "unsanctioned".
+//
+// PRIVACY: verdict carries no character list or OOC name in any
+// Discord-bound field.
+export function submissionIsUnsanctioned(sub) {
+  const form = sub?.form || {};
+  if (sub?.type === "collective" && form.collectiveFlow !== "createNew") return true;
+  if (sub?.type === "outside" && form.outsideStatus === "unsanctioned") return true;
+  return false;
+}
+
+// Map<ooc, Set<char>> of every unsanctioned-status character.
+export function getUnsanctionedCharsByOoc(text) {
+  const out = new Map();
+  try {
+    forEachArrayObject(text, ["powers"], (obj) => {
+      if (pickStringField(obj, "status") !== "unsanctioned") return;
+      const char = pickStringField(obj, "char");
+      const ooc = entryOoc(obj);
+      if (!char || !ooc) return;
+      if (!out.has(ooc)) out.set(ooc, new Set());
+      out.get(ooc).add(char);
+    });
+  } catch (err) {
+    console.error("unsanctioned scan failed:", err.message);
+  }
+  return out;
+}
+
+// Verdict shape mirrors checkTierQuota:
+//   { allowed: true,  kind: "unsanctioned", ... }
+//   { allowed: false, kind: "unsanctioned", ooc, count, limit }
+export function checkUnsanctionedQuota(text, sub, limit) {
+  if (limit == null) return { allowed: true };
+  if (!submissionIsUnsanctioned(sub)) return { allowed: true };
+
+  const ooc = getOocForForm(sub.form || {});
+  if (!ooc) return { allowed: true, kind: "unsanctioned", warning: "no_ooc_identifier" };
+
+  const owned = getUnsanctionedCharsByOoc(text).get(ooc) || new Set();
+  const char = (sub.form || {}).char;
+  const isNewChar = char ? !owned.has(char) : true;
+  if (isNewChar && owned.size + 1 > limit) {
+    return { allowed: false, kind: "unsanctioned", ooc, count: owned.size, limit };
+  }
+  return { allowed: true, kind: "unsanctioned", ooc, count: owned.size, limit };
 }

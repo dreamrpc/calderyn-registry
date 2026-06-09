@@ -60,3 +60,8 @@ CORS_ALLOWED_ORIGINS = "https://calderyncollege.uk,https://www.calderyncollege.u
 A_LIST_LIMIT_PER_WRITER = "5"
 B_LIST_LIMIT_PER_WRITER = "8"
 C_LIST_LIMIT_PER_WRITER = "10"
+# Per-writer cap on unsanctioned-status characters (collective / outside
+# operators with no STRATA contract), counted across all of a writer's
+# accounts regardless of tier — catches the usually tierless rogue
+# characters the A/B/C/D caps don't reach.
+UNSANCTIONED_LIMIT_PER_WRITER = "5"

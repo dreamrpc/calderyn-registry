@@ -2,7 +2,7 @@ import { verifySignature, editMessage, postMessage } from "./discord.js";
 import { buildEmbed } from "./embed.js";
 import { updateFile, getFile } from "./github.js";
 import { buildInsertions, applyInsertions, removeBySubmissionId, countEntriesFor } from "./markers.js";
-import { checkTierQuota, checkGovSeatQuota, isCappedGovSeat, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
+import { checkTierQuota, checkGovSeatQuota, isCappedGovSeat, checkUnsanctionedQuota, getUnsanctionedLimit, submissionIsUnsanctioned, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
 import { lookupOocByRpc } from "./writers.js";
 import { ensureWriterMapping } from "./writer-mapping.js";
 
@@ -147,6 +147,19 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
       }
     }
 
+    // Unsanctioned-character cap — counts by status, catching the usually
+    // tierless rogue / collective / outside characters that bypass the
+    // A/B/C/D tier caps above.
+    if (!blocked && submissionIsUnsanctioned(sub)) {
+      try {
+        const current = await getFile(env, env.GITHUB_DATA_FILE);
+        const verdict = checkUnsanctionedQuota(current.text, sub, getUnsanctionedLimit(env));
+        if (!verdict.allowed) blocked = verdict;
+      } catch (err) {
+        console.error("unsanctioned quota check failed:", err.message);
+      }
+    }
+
     if (!blocked) {
       const insertions = buildInsertions(sub);
       if (insertions.length > 0) {
@@ -199,6 +212,18 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
         `Each writer may hold at most **${blocked.limit} ${blocked.label} ${seatWord}**, counted ` +
         `across all of their accounts. This writer already holds ${blocked.count}, so this seat ` +
         `can't be approved until ${blocked.limit === 1 ? "the existing one is" : "one is"} vacated. ` +
+        `The writer has been notified.\n\n` +
+        (blockedEmbed.description || "");
+    } else if (blocked.kind === "unsanctioned") {
+      blockedEmbed = buildEmbed(sub.type, sub.form, {
+        color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
+        footer: `Calderyn College · Central Registry · 2026 · ⚠ unsanctioned quota`,
+      });
+      blockedEmbed.description =
+        `**⚠ Approval blocked — unsanctioned quota.**\n` +
+        `Each writer may hold at most **${blocked.limit} unsanctioned characters**, counted ` +
+        `across all of their accounts. This writer already has **${blocked.count}**, so no new ` +
+        `unsanctioned character can be approved until one is removed or re-classified. ` +
         `The writer has been notified.\n\n` +
         (blockedEmbed.description || "");
     } else {

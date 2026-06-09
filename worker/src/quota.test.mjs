@@ -13,6 +13,10 @@ import {
   checkGovSeatQuota,
   isCappedGovSeat,
   findDuplicatePowerballCaptains,
+  checkUnsanctionedQuota,
+  getUnsanctionedCharsByOoc,
+  getUnsanctionedLimit,
+  submissionIsUnsanctioned,
   submissionPool,
 } from "./quota.js";
 import { lookupOocByRpc, normalize, KNOWN_OOC_NAMES } from "./writers.js";
@@ -402,6 +406,76 @@ clubs: [ { name: "Powerball", teams: [
   const dups = findDuplicatePowerballCaptains(dup);
   assertEq(dups.length, 1, JSON.stringify(dups));
   assertEq(dups[0].ooc, "Star");
+});
+
+// ─── Unsanctioned-character cap ──────────────────────────────────────
+test("getUnsanctionedLimit: default 5, env override", () => {
+  assertEq(getUnsanctionedLimit({}), 5);
+  assertEq(getUnsanctionedLimit({ UNSANCTIONED_LIMIT_PER_WRITER: "3" }), 3);
+});
+
+test("submissionIsUnsanctioned: collective-join + outside-unsanctioned only", () => {
+  assertTrue(submissionIsUnsanctioned({ type: "collective", form: { collectiveFlow: "joinHero" } }));
+  assertFalse(submissionIsUnsanctioned({ type: "collective", form: { collectiveFlow: "createNew" } }));
+  assertTrue(submissionIsUnsanctioned({ type: "outside", form: { outsideStatus: "unsanctioned" } }));
+  assertFalse(submissionIsUnsanctioned({ type: "outside", form: { outsideStatus: "inactive" } }));
+  assertFalse(submissionIsUnsanctioned({ type: "student", form: { tier: "A-List" } }));
+});
+
+test("getUnsanctionedCharsByOoc: real data groups unsanctioned chars by writer", () => {
+  const m = getUnsanctionedCharsByOoc(data);
+  assertTrue((m.get("Star")   || new Set()).has("Briar Musgraves"), `Star: ${[...(m.get("Star")||[])].join(", ")}`);
+  assertTrue((m.get("Wilder") || new Set()).has("Eirik Aslund"),    "Wilder has Eirik");
+  assertTrue((m.get("Storm")  || new Set()).has("August Marlowe"),  "Storm has August");
+});
+
+// Synthetic — Crown. and nocturne. both map to Star → Star has 2 unsanctioned.
+const UNSANC = `window.CALDERYN = {
+powers: [
+  { char: "Rogue One", status: "unsanctioned", power: "p", link: "https://r?user=Crown." },
+  { char: "Rogue Two", status: "unsanctioned", power: "p", link: "https://r?user=nocturne." },
+],
+};`;
+
+test("checkUnsanctionedQuota: blocked at cap for a new char", () => {
+  const v = checkUnsanctionedQuota(UNSANC, {
+    type: "collective", form: { collectiveFlow: "joinHero", char: "Rogue Three", ooc: "Star" },
+  }, 2);
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.kind, "unsanctioned");
+  assertEq(v.count, 2);
+  assertEq(v.limit, 2);
+});
+
+test("checkUnsanctionedQuota: under cap allowed", () => {
+  const v = checkUnsanctionedQuota(UNSANC, {
+    type: "collective", form: { collectiveFlow: "joinHero", char: "Rogue Three", ooc: "Star" },
+  }, 5);
+  assertEq(v.allowed, true, JSON.stringify(v));
+  assertEq(v.count, 2);
+});
+
+test("checkUnsanctionedQuota: re-approving an existing char is allowed", () => {
+  const v = checkUnsanctionedQuota(UNSANC, {
+    type: "collective", form: { collectiveFlow: "joinHero", char: "Rogue One", ooc: "Star" },
+  }, 2);
+  assertEq(v.allowed, true, JSON.stringify(v));
+});
+
+test("checkUnsanctionedQuota: non-unsanctioned submission bypasses", () => {
+  const v = checkUnsanctionedQuota(UNSANC, {
+    type: "student", form: { tier: "A-List", char: "X", ooc: "Star" },
+  }, 1);
+  assertEq(v.allowed, true);
+  assertFalse("kind" in v, "non-unsanctioned submission should short-circuit");
+});
+
+test("checkUnsanctionedQuota: PRIVACY — verdict carries no character list", () => {
+  const v = checkUnsanctionedQuota(UNSANC, {
+    type: "collective", form: { collectiveFlow: "joinHero", char: "Rogue Three", ooc: "Star" },
+  }, 2);
+  assertFalse("chars" in v, "no chars");
+  assertFalse("owned" in v, "no owned set");
 });
 
 if (failed) {
