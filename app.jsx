@@ -3586,7 +3586,7 @@ function FacultyRegistryView(){
       {deanRow && (
         <div className="dean-card">
           <div className="dean-card-portrait">
-            <img src="https://i.ibb.co/MkG5d93k/d90e71d8-9f02-4194-8ff7-d458ab5fc01d.png" alt="Dr. Devika Ravindrakumar" loading="lazy"/>
+            <img src="https://i.ibb.co/3mt7Ny2n/136a0506-3ef1-457a-a7dc-ae03bf182303.png" alt="Dr. Devika Ravindrakumar" loading="lazy"/>
           </div>
           <div className="dean-card-text">
             <div className="dean-card-eyebrow">Office of the Dean</div>
@@ -4338,7 +4338,7 @@ function LoreDean(){
             </p>
           </div>
           <figure className="lore-intro-portrait-fig">
-            <img src="https://i.ibb.co/MkG5d93k/d90e71d8-9f02-4194-8ff7-d458ab5fc01d.png" alt="Dr. Devika Ravindrakumar — Dean of Calderyn" loading="lazy"/>
+            <img src="https://i.ibb.co/3mt7Ny2n/136a0506-3ef1-457a-a7dc-ae03bf182303.png" alt="Dr. Devika Ravindrakumar — Dean of Calderyn" loading="lazy"/>
             <figcaption>
               <span className="lore-intro-portrait-cap">Dean</span>
               <span className="lore-intro-portrait-name">Devika Ravindrakumar</span>
