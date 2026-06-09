@@ -2417,6 +2417,7 @@ clubs: [
       { pos: "Columnist", char: "Viviane Yamaguchi", link: "https://roleplay.chat/profile.php?user=vein" }, // sub:28edfc1f
       { pos: "Staff Reporter", char: "Evan Holloway", link: "https://roleplay.chat/profile.php?user=shadowshade" }, // sub:4f166b28
       { pos: "Staff Reporter", char: "Daniel Hightower", link: "https://roleplay.chat/profile.php?user=Siege" }, // sub:64886309
+      { pos: "Columnist", char: "Lucrecia Sofìa Avalos-Perez", link: "https://roleplay.chat/profile.php?user=Rosetta!" }, // sub:c8aeb013
     ],
   },
 ],
