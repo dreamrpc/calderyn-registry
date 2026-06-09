@@ -6342,9 +6342,19 @@ function ClubPanelRoster({club, hasTeams}){
   if (groups && groups.length > 0) {
     const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     const byGroup = {};
+    const ensure = (k) => (byGroup[k] = byGroup[k] || []);
+    // Bucket by group. A position with no explicit `group` (a bot-appended
+    // club approval) is routed to the group whose roles include its pos, and
+    // — when filled — drops into an open canonical slot of the same pos
+    // rather than adding a duplicate row, so bot appends render in the right
+    // section instead of vanishing into an unrendered "other" bucket.
+    positions.forEach(p => { if (p.group) ensure(p.group).push(p); });
     positions.forEach(p => {
-      const k = p.group || "other";
-      (byGroup[k] = byGroup[k] || []).push(p);
+      if (p.group) return;
+      const g = groups.find(gr => (gr.roles || []).includes(p.pos));
+      const bucket = ensure(g ? slug(g.label) : "other");
+      const openIdx = p.char ? bucket.findIndex(q => q.pos === p.pos && !q.char) : -1;
+      if (openIdx >= 0) bucket[openIdx] = p; else bucket.push(p);
     });
     return (
       <div className="cp-roster cp-roster-grouped">
