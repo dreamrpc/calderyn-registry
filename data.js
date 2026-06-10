@@ -2186,7 +2186,7 @@ clubs: [
         { pos: "Goalkeeper", char: "Robert Manucharian", link: "https://roleplay.chat/profile.php?user=Golden%20Fool" }, // sub:5adf244b
       ]},
       { house: "Saberis", bg: "#15803d", train: ["THU · 6:00 AM", "MON · 7:00 PM"], positions: [
-        { pos: "Playmaker", captain: true },
+        { pos: "Playmaker", captain: true, char: "Michael Greystone", link: "https://roleplay.chat/profile.php?user=Dead+Man+Walkin" }, // sub:14fea86e
         { pos: "Attack", char: "Sven Skarsen", link: "https://roleplay.chat/profile.php?user=blood+eagle" }, { pos: "Attack" },
         { pos: "Defence" }, { pos: "Defence" },
         { pos: "Goalkeeper" },
@@ -2194,7 +2194,6 @@ clubs: [
         { pos: "Reserve · Attack", char: "Dexter Crowley", link: "https://roleplay.chat/profile.php?user=Gremlin" }, { pos: "Reserve · Attack" }, // sub:e31100af
         { pos: "Reserve · Defence" }, { pos: "Reserve · Defence" },
         { pos: "Reserve · Goalkeeper" },
-        { pos: "Playmaker", char: "Michael Greystone", link: "https://roleplay.chat/profile.php?user=Dead+Man+Walkin" }, // sub:14fea86e
       ]},
       { house: "Grimere", bg: "#1e40af", train: ["FRI · 6:00 AM", "TUE · 7:00 PM"], positions: [
         { pos: "Playmaker", captain: true, char: "Cesare Delgado", link: "https://roleplay.chat/profile.php?user=delgado" },
