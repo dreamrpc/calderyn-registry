@@ -2396,6 +2396,7 @@ clubs: [
       { pos: "Policy", group: "varsity" }, { pos: "Policy", group: "varsity" },
       { pos: "Parliamentary", group: "varsity" }, { pos: "Parliamentary", group: "varsity" },
       { pos: "Novice", group: "novice", char: "Lucrecia Sofìa Avalos-Perez", link: "https://roleplay.chat/profile.php?user=Rosetta!" }, { pos: "Novice", group: "novice" },
+      { pos: "Novice", char: "Eira Skarsen", link: "https://roleplay.chat/profile.php?user=Svalinn" }, // sub:c9b5dc5a
     ],
   },
   {
