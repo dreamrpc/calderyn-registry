@@ -2339,6 +2339,7 @@ clubs: [
       { pos: "Soprano Lead", char: "Nina Sterling Evergreen", link: "https://roleplay.chat/profile.php?user=Crown." }, // sub:803e09e3
       { pos: "Strings Lead", char: "Marina Warbeck", link: "https://roleplay.chat/profile.php?user=shutter" }, // sub:7287dcac
       { pos: "Member", char: "Eira Skarsen", link: "https://roleplay.chat/profile.php?user=Svalinn" }, // sub:75878f9d
+      { pos: "Member", char: "Eira Skarsen", link: "https://roleplay.chat/profile.php?user=Svalinn" }, // sub:25d7f4ae
     ],
   },
   {
