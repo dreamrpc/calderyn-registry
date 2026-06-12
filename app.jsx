@@ -204,7 +204,7 @@ const JOIN_WIZARD = {
   ],
   club: [
     { id: "profile", title: "Profile",     subtitle: "Who's writing, who they're playing.", required: ["char", "rpcLink", "ooc"] },
-    { id: "role",    title: "Position",    subtitle: "Pick from the open club roster.",     required: ["clubPosition"] },
+    { id: "role",    title: "Position",    subtitle: "Pick from the open club roster.",     required: (f) => f.clubName === "Supebrawl" ? ["clubPosition", "supebrawlInvite"] : ["clubPosition"] },
     { id: "submit",  title: "Confirm",     subtitle: "Read the line, sign the line.",       required: ["rulesAgree"] },
   ],
   gov: [
@@ -4443,9 +4443,13 @@ function LoreHounds(){
         <div className="lore-intro-stamp">PARTIAL RECORD · SECURITY ADDENDUM</div>
         <h2 className="lore-intro-title">The <span className="accent">Hounds.</span></h2>
         <p className="lore-lead">
-          Every school has a security team. Calderyn's is excellent — pressed uniforms,
-          first names remembered, incident reports filed on time. It is run by a calm,
-          unhurried man named <strong><a href="https://roleplay.chat/profile.php?user=Gauging+The+Room" target="_blank" rel="noopener noreferrer">Nathan Maddock</a></strong> — Security
+          Calderyn doesn't keep a security team so much as a campus police force —
+          pressed navy, patrol routes that never quite repeat, checkpoints at the gates,
+          incident reports filed on time and read by people above the school. They are
+          not cruel and they are not friendly. They are police: courteous when courtesy
+          is efficient, cold the rest of the time, and loyal to exactly two things —
+          STRATA, and the Dean. The force is run by a calm, unhurried man
+          named <strong><a href="https://roleplay.chat/profile.php?user=Gauging+The+Room" target="_blank" rel="noopener noreferrer">Nathan Maddock</a></strong> — Security
           Chief, listed in the faculty registry between the Chief Medical Officer and the
           Head Groundskeeper, as ordinary as a man can be made to look on paper.
         </p>
@@ -4487,7 +4491,7 @@ function LoreHounds(){
           employers — how strong it is going to get. He tracks an aura signature for a
           mile. He reads the trace a person leaves in a room for a day after they've left
           it. A C-List threat assessment with A-List consequences, walking the quad twice
-          a morning, smiling at students, every one of whom he has already read.
+          a morning, nodding at nobody, reading everyone.
         </p>
         <p className="lore-p">
           Old injuries flare when the weather turns, and crowds run loud for him — a
@@ -4520,9 +4524,11 @@ function LoreHounds(){
           routed through STRATA internal operations; the strength of the unit; where it
           kennels between deployments; or how many times it has deployed since Geneva.
           Students who ask are told campus security exists to keep them safe, which is
-          true. Students who keep asking are invited to a friendly chat with the Security
-          Chief, who remembers their name, asks after their coursework, and reads them —
-          top to bottom, current and projected — while he walks them to the door.
+          true. Students who keep asking are brought in for a conversation with the
+          Security Chief — short, exact, nothing in it you could file a complaint about
+          — and read, top to bottom, current and projected, on the walk to the door.
+          The Hounds wear Calderyn colours, but the leash runs to STRATA, and on this
+          campus the hand on it is the Dean's. Nobody else's name opens their doors.
         </p>
       </section>
     </div>
@@ -7190,7 +7196,7 @@ function JoinTab(){
     if (!currentPage) return [];
     const r = currentPage.required;
     return typeof r === "function" ? r(form) : (r || []);
-  }, [currentPage, form.fullyHuman, form.strataRole]);
+  }, [currentPage, form.fullyHuman, form.strataRole, form.clubName, form.supebrawlInvite]);
 
   const currentPageMissing = currentPageRequired.filter(k => !form[k] || !String(form[k]).trim());
   const canAdvance = step === 0
@@ -7234,7 +7240,9 @@ function JoinTab(){
       case "strata":     return form.strataRole === "corporate"
                                 ? [...base, "strataRole", "strataDept", "strataTitle", ...power]
                                 : [...base, "strataRole", "alias", "tier", ...power];
-      case "club":       return [...base, "clubPosition"];
+      case "club":       return form.clubName === "Supebrawl"
+                                ? [...base, "clubPosition", "supebrawlInvite"]
+                                : [...base, "clubPosition"];
       case "gov":        return [...base, "govSeat"];
       case "collective": {
         // Two sub-flows: joinHero, createNew. Collectives are hero-side
@@ -7256,7 +7264,7 @@ function JoinTab(){
       case "outside":    return [...base, "outsideOrg", "outsideRole", "outsideStatus", "tier", ...power];
       default: return base;
     }
-  }, [type, form.fullyHuman]);
+  }, [type, form.fullyHuman, form.strataRole, form.clubName]);
 
   const missing = requiredFields.filter(k => !form[k] || !String(form[k]).trim());
 
@@ -7926,7 +7934,10 @@ function TailFields({form, set}){
 
 /* Optional cross-references for Student form (clubs + gov) */
 function StudentExtras({form, set}){
-  const openPos = getOpenClubPositions();
+  // Supebrawl is invite-only (cleared with Sven's typist in RP) and has
+  // its own confirmation checkbox on the Club form — keep it out of the
+  // student form's optional shortcut entirely.
+  const openPos = getOpenClubPositions().filter(p => p.club !== "Supebrawl");
   const openSeats = getOpenGovSeats();
   return (
     <>
@@ -8527,6 +8538,9 @@ function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
                   const idx = raw === "" ? -1 : parseInt(raw, 10);
                   const found = idx >= 0 ? openPos[idx] : null;
                   set("clubPositionKey", raw);
+                  // Invite confirmation is per-selection — never carry it
+                  // over from a previously picked Supebrawl slot.
+                  set("supebrawlInvite", false);
                   if (found){
                     set("clubPosition", found.position);
                     set("clubName",     found.club);
@@ -8546,6 +8560,14 @@ function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
                 ))}
               </select>
             </Field>
+            {form.clubName === "Supebrawl" && (
+              <Field label="Supebrawl · Invitation Check" required hint="Supebrawl is invite-only. The ring is Sven Skarsen's — entry is arranged with his typist in RP before any application goes in. One character per writer." full>
+                <label className="join-checkbox">
+                  <input type="checkbox" checked={!!form.supebrawlInvite} onChange={e => set("supebrawlInvite", e.target.checked)}/>
+                  <span>I have spoken to Sven Skarsen's typist in RP and this character's invitation to the ring has been agreed.</span>
+                </label>
+              </Field>
+            )}
           </>
         )}
         {onPage("submit") && <TailFields form={form} set={set}/>}

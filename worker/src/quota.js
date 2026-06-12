@@ -341,6 +341,13 @@ export function findDuplicatePowerballCaptains(text) {
 //   Drama Society    — 2 positions total
 //   Swim Team        — 2 positions total
 //   Engineering Club — 2 positions total
+//   Supe Athletics   — 2 positions total
+//   Cooking Club     — 2 positions total
+//   Chess Club       — 2 positions total
+//   Supebrawl        — 1 position total (invite-only ring; the form
+//                      also requires confirmation that Sven Skarsen's
+//                      typist approved the invite in RP — see
+//                      supebrawlInvite in submit.js)
 //
 // Caps fire twice: at submit time (handleSubmit returns a friendly
 // explanation the form shows the writer before anything is posted)
@@ -357,6 +364,10 @@ const CLUB_CAPS = {
   "Drama Society":    { total: 2 },
   "Swim Team":        { total: 2 },
   "Engineering Club": { total: 2 },
+  "Supe Athletics":   { total: 2 },
+  "Cooking Club":     { total: 2 },
+  "Chess Club":       { total: 2 },
+  "Supebrawl":        { total: 1 },
 };
 
 // Reserve-bench positions: Powerball uses "Reserve · X", Cheer Squad
