@@ -93,6 +93,7 @@ const ICON_PATHS = {
   "cloud-rain":     <><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></>,
   "cloud-snow":     <><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M8 15h.01"/><path d="M8 19h.01"/><path d="M12 17h.01"/><path d="M12 21h.01"/><path d="M16 15h.01"/><path d="M16 19h.01"/></>,
   "cloud-sun":      <><path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/></>,
+  "crosshair":      <><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></>,
   "sun":            <><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></>,
   "external-link":  <><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/></>,
   "file-text":      <><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></>,
@@ -3768,6 +3769,7 @@ const LORE_TABS = [
   { id: "vanguard",  label: "Vanguard",  icon: "shield"         },
   { id: "houses",    label: "Houses",    icon: "flag"           },
   { id: "dean",      label: "Dean",      icon: "users"          },
+  { id: "hounds",    label: "Hounds",    icon: "crosshair"      },
   { id: "incidents", label: "Cassandra", icon: "alert-triangle" },
 ];
 
@@ -3841,7 +3843,7 @@ function HousesTab(){
       <PageHead
         stamp="DOC · 02 · LORE"
         title={<>The <em>lore</em></>}
-        body="Six sections. Read in order or jump to whichever you need. The dot rail on the right tracks where you are."
+        body="Seven sections. Read in order or jump to whichever you need. The dot rail on the right tracks where you are."
         note={<>Public record · IC-visible<br/>Plot-locked content lives elsewhere</>}
         pageNum="P. 002 / VIII"
       />
@@ -3877,6 +3879,7 @@ function HousesTab(){
         <section id="lore-vanguard"  className="lore-section"><LoreVanguard/></section>
         <section id="lore-houses"    className="lore-section"><LoreHouses/></section>
         <section id="lore-dean"      className="lore-section"><LoreDean/></section>
+        <section id="lore-hounds"    className="lore-section"><LoreHounds/></section>
         <section id="lore-incidents" className="lore-section"><LoreIncidents/></section>
       </div>
     </div>
@@ -3891,14 +3894,15 @@ function LoreStart({onJump}){
     { id: "vanguard",  n: "03", title: "The Vanguard",         blurb: "Paragon, Vigil, Aegis, Switchboard. The four." },
     { id: "houses",    n: "04", title: "The Houses",           blurb: "Valaris, Orenne, Saberis, Grimere. Pick yours." },
     { id: "dean",      n: "05", title: "The Dean",             blurb: "Dr. Devika Ravindrakumar. Fifteen metres. The line." },
-    { id: "incidents", n: "06", title: "Cassandra",            blurb: "August 2023. The press cycle no one survived." },
+    { id: "hounds",    n: "06", title: "H.O.U.N.D.S.",         blurb: "Campus security — and the unit behind the uniform." },
+    { id: "incidents", n: "07", title: "Cassandra",            blurb: "August 2023. The press cycle no one survived." },
   ];
 
   return (
     <div className="lore lore-start">
       <section className="lore-block lore-start-grid">
         <div className="ls-col ls-col-read">
-          <div className="lore-eyebrow">Six pages, in order &middot; click any to read</div>
+          <div className="lore-eyebrow">Seven pages, in order &middot; click any to read</div>
           <h3 className="lore-h">Read in <span className="accent">order.</span></h3>
           <ol className="ls-read">
             {READ_ORDER.map(r => (
@@ -4426,6 +4430,99 @@ function LoreDean(){
           her. <em>A hero whose power was taking other heroes' powers away</em>, they said,
           was a difficult sell. She has never said, in any interview, whether she regrets
           it.
+        </p>
+      </section>
+    </div>
+  );
+}
+
+function LoreHounds(){
+  return (
+    <div className="lore">
+      <section className="lore-block lore-intro">
+        <div className="lore-intro-stamp">PARTIAL RECORD · SECURITY ADDENDUM</div>
+        <h2 className="lore-intro-title">The <span className="accent">Hounds.</span></h2>
+        <p className="lore-lead">
+          Every school has a security team. Calderyn's is excellent — pressed uniforms,
+          first names remembered, incident reports filed on time. It is run by a calm,
+          unhurried man named <strong><a href="https://roleplay.chat/profile.php?user=Gauging+The+Room" target="_blank" rel="noopener noreferrer">Nathan Maddock</a></strong> — Security
+          Chief, listed in the faculty registry between the Chief Medical Officer and the
+          Head Groundskeeper, as ordinary as a man can be made to look on paper.
+        </p>
+        <p className="lore-lead">
+          The paper is doing a lot of work.
+        </p>
+      </section>
+
+      <section className="lore-block">
+        <div className="lore-eyebrow">The Acronym</div>
+        <h3 className="lore-h">Hostile Operations Unit for <span className="accent">Neutralizing</span> Dangerous Superhumans.</h3>
+        <p className="lore-p">
+          STRATA solves most powered problems the company way: a contract, a containment
+          order, a reassignment, a door in the STRATA wing that nobody photographs. The
+          H.O.U.N.D.S. exist for the remainder — the small, carefully unpublished list of
+          superhumans who cannot be contained, cannot be bought, and cannot be left where
+          they are. The unit's name says <em>neutralizing</em> because a lawyer chose the
+          word, and the lawyer chose well: it is accurate, and it sounds like paperwork.
+          When the Hounds are sent, every other option has already been tried, or already
+          been ruled out, and the file that comes back is short.
+        </p>
+        <p className="lore-p">
+          Maddock founded the unit and still leads it. The campus security post is not a
+          cover story so much as a second, true job — the school gets a genuinely
+          first-rate security chief, and STRATA gets its best tracker living inside the
+          densest concentration of young powered talent in Europe. Neither party considers
+          this a coincidence. Neither party puts it in writing.
+        </p>
+      </section>
+
+      <section className="lore-block">
+        <div className="lore-eyebrow">The Founder · GAUGE</div>
+        <h3 className="lore-h">He reads what you are. Then he reads what you'll <span className="accent">become.</span></h3>
+        <p className="lore-p">
+          On the registry, Maddock — callsign <strong>Gauge</strong> — is a C-List aura
+          analyst, and the rating is honest about the wrong thing. He cannot level a city
+          block. What he can do is look at a person and read the make and model: what the
+          power is, how strong it runs, where it fails, and — the part that matters to his
+          employers — how strong it is going to get. He tracks an aura signature for a
+          mile. He reads the trace a person leaves in a room for a day after they've left
+          it. A C-List threat assessment with A-List consequences, walking the quad twice
+          a morning, smiling at students, every one of whom he has already read.
+        </p>
+        <p className="lore-p">
+          Old injuries flare when the weather turns, and crowds run loud for him — a
+          campus full of untrained auras is, by his own account, like living over a
+          nightclub. He has never once filed a complaint about it. The Hounds' founder
+          considers the noise useful.
+        </p>
+      </section>
+
+      <section className="lore-block">
+        <div className="lore-eyebrow">The Other Leash</div>
+        <h3 className="lore-h">Not every hunt ends with a <span className="accent">body.</span></h3>
+        <p className="lore-p">
+          Some hunts end with an enrolment. When a power profile crosses the right desk —
+          a manifestation in a country with no programme, a talent the board wants inside
+          the wall before a competitor or a cause finds it — the Hounds are the ones sent
+          to bring the subject in. The school calls it recruitment outreach. The
+          prospectus calls it scouting. The students it happens to mostly don't know it
+          happened to them, and the ones who do know tend to be the quietest people in
+          the room about it.
+        </p>
+      </section>
+
+      <section className="lore-block">
+        <div className="lore-eyebrow">What Is On Record</div>
+        <h3 className="lore-h">A payroll line and a kennel nobody <span className="accent">tours.</span></h3>
+        <p className="lore-p">
+          On record: Calderyn College employs a campus security office, headed by
+          N. Maddock, budgeted through facilities. Not on record: the second budget line,
+          routed through STRATA internal operations; the strength of the unit; where it
+          kennels between deployments; or how many times it has deployed since Geneva.
+          Students who ask are told campus security exists to keep them safe, which is
+          true. Students who keep asking are invited to a friendly chat with the Security
+          Chief, who remembers their name, asks after their coursework, and reads them —
+          top to bottom, current and projected — while he walks them to the door.
         </p>
       </section>
     </div>
@@ -5549,7 +5646,7 @@ function ClubsTab(){
       <PageHead
         stamp="DOC · 05 · CAMPUS ORGS"
         title={<>Clubs &amp; societies</>}
-        body="Six campus clubs. Pick one from the directory to view its full roster, rules, and post-graduation pathway. Leadership is one role per player. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval."
+        body={`${["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve"][CLUBS.length] || CLUBS.length} campus clubs. Pick one from the directory to view its full roster, rules, and post-graduation pathway. Leadership is one role per player. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval.`}
         pageNum="P. 005 / VIII"
       />
 
@@ -8736,16 +8833,16 @@ function ResidenceBlocks({items}){
         <section className="map-house map-house-communal" style={{"--h-color": "#d4a84a"}}>
           <header className="map-house-hd">
             <div className="map-house-hd-l">
-              <span className="map-house-hd-name">COMMUNAL</span>
-              <span className="map-house-hd-virtue">Shared · All four houses</span>
+              <span className="map-house-hd-name">POLICY</span>
+              <span className="map-house-hd-virtue">Applies to all four houses</span>
             </div>
             <span className="map-house-hd-count">
               <b>{communal.length}</b>
-              <span>{communal.length === 1 ? "place" : "places"}</span>
+              <span>{communal.length === 1 ? "entry" : "entries"}</span>
             </span>
           </header>
           <p className="map-house-blurb">
-            Houses are private; the residential quad is not. The lawn between the four buildings, the kitchen, the laundry, the snug and the garden courtyard belong to everyone — house colours come off at the door.
+            Houses are private; the shared spaces between them are not. The residential quad, the communal kitchen, the laundry, the snug and the garden courtyard belong to everyone — you'll find them under <strong>Campus Commons</strong>.
           </p>
           <ol className="map-stage-pins map-stage-pins-house">
             {communal.map((loc, i) => (

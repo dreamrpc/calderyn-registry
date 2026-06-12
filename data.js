@@ -2725,7 +2725,7 @@ mapDistricts: [
   {
     id: "commons",
     name: "Campus Commons",
-    blurb: "The non-academic inside of the wall — the bits of campus that aren't classrooms or labs. Faculty cottages, the shop, the campus pub, the sit-down restaurant. Where the school stops being a school for an hour at a time.",
+    blurb: "The non-academic inside of the wall — the bits of campus that aren't classrooms or labs. Faculty cottages, the shop, the campus pub, the sit-down restaurant, and the shared spaces of the residential quad. Where the school stops being a school for an hour at a time.",
     color: "#8a6a3a",
     image: "https://files.catbox.moe/696iic.png",
   },
@@ -2912,7 +2912,9 @@ mapLocations: [
   /* ═══ HOUSE RESIDENCES ════════════════════════════════════════════
      Each house has 3 rooms: Common Room → Dorms → Signature room.
      `house` field colour-codes cards per-house.
-     Communal spaces at the end serve all four houses. */
+     The shared residential spaces (quad, kitchen, laundry, snug,
+     garden courtyard) are listed under CAMPUS COMMONS — only the
+     cross-house Housing Policy entry stays in this district. */
 
   // ── VALARIS — Falcon · Justice · the public-facing house ── #c41a1a
   { id: "valaris-common", district: "residence", n: "V·1", house: "valaris",
@@ -2994,38 +2996,8 @@ mapLocations: [
     tags: ["Signature", "Workshop", "Members only"],
   },
 
-  // ── COMMUNAL — shared between all four houses ── neutral grey
-  { id: "residential-quad", district: "residence", n: "C·1",
-    name: "The Residential Quad",
-    sub: "Open lawn between the four houses",
-    desc: "Eighty metres of lawn bordered by all four house buildings. Picnic tables, a pair of stone benches that get fought over in good weather, a single oak in the middle that was planted in 2020 with one shovelful of earth from each house. The quad is the only place on campus where house colours mix freely. Faculty don't supervise it. Houses police it themselves.",
-    tags: ["All houses", "Open lawn"],
-  },
-  { id: "residential-kitchen", district: "residence", n: "C·2",
-    name: "The Communal Kitchen",
-    sub: "Ground floor · between Saberis & Orenne",
-    desc: "Two stoves, three ovens, a pantry the houses contribute to on a rota, and an espresso machine that has not stopped working since 2021. Open to all four houses. Sign-up board for cooking slots is on the door, mostly observed. The unwritten rule is you clean what you used and one thing somebody else didn't.",
-    tags: ["All houses", "24/7"],
-  },
-  { id: "residential-laundry", district: "residence", n: "C·3",
-    name: "The Laundry",
-    sub: "Sub-level · centre of the quad",
-    desc: "Twelve washers, twelve dryers, four ironing boards, one folding table the size of a small bed. Open to every resident. The lighting is good. The acoustics are unusually warm. By tradition, laundry-room conversations are not repeated outside it — a convention even the four house presidents observe.",
-    tags: ["All houses", "Off the record"],
-  },
-  { id: "residential-snug", district: "residence", n: "C·4",
-    name: "The Snug",
-    sub: "Inter-house lounge · ground floor",
-    desc: "A single low-ceilinged room with sofas from all four houses, a mismatched coffee table, a kettle, and a record player with a milk-crate of vinyl that gets added to but never thinned. The Snug is where students from different houses meet on neutral ground — house colours come off at the door by tradition. House meetings happen in the houses. Friendships happen here.",
-    tags: ["All houses", "Neutral ground"],
-  },
-  { id: "residential-courtyard", district: "residence", n: "C·5",
-    name: "The Garden Courtyard",
-    sub: "Walled garden · north of the quad",
-    desc: "A small walled garden with raised beds, a greenhouse the Saberis grad-society maintains, and a stone fire pit that gets lit on the last night of every term. Open to all houses. The vegetables grown here go to the communal kitchen. The tradition of lighting the pit is older than the houses themselves — a holdover from the 1965 staff garden.",
-    tags: ["All houses", "Garden", "Term tradition"],
-  },
-  { id: "residential-policy", district: "residence", n: "C·6",
+  // ── HOUSING POLICY — applies across all four houses ──
+  { id: "residential-policy", district: "residence", n: "C·1",
     name: "Housing Policy",
     sub: "Room allocation across all four houses",
     desc: "Dorm rooms are shared by gender as a matter of default: girls room with girls, boys room with boys. The Dean's office handles exceptions on a case-by-case basis. A single room is granted to the standing Student Body President for the duration of their term, and to any student whose circumstances warrant it — transitioning students, students who don't identify with a specific gender, medical or safeguarding cases, and anything else the Dean signs off on. Requests are confidential. The waitlist is short and the conversation is private.",
@@ -3147,6 +3119,40 @@ mapLocations: [
     sub: "Non-denominational chapel · Memorial Garden",
     desc: "A small stone chapel at the quiet end of the commons, kept non-denominational since the 1980s and used mostly for the annual memorial service and the occasional faculty wedding. The doors are unlocked from dawn to dusk and the back pew is, by a tradition nobody legislated, where students sit when they need somewhere that isn't a counsellor's office. <strong>The Memorial Garden to the Fallen Heroes</strong> runs the length of the chapel's east wall &mdash; a walled walk of pale stone, planted with white roses and a single ancient yew, with the names of Calderyn alumni heroes lost in the field cut into the inner wall. The newest panel is the <em>Cassandra panel</em>, commissioned by <a href=\"https://roleplay.chat/profile.php?user=illuminate\" target=\"_blank\" rel=\"noopener noreferrer\">Celestia &quot;Stella&quot; Starkov</a> in memory of <strong>SOLARIS</strong> &mdash; her boyfriend, former A-list STRATA hero and nephew to the current CEO of STRATA &mdash; and the other alumni heroes who answered the call and fell with him in the Cassandra incident. The names beside his are kept by the school but not by the public registry; the families asked, and the school agreed.",
     tags: ["Open dawn–dusk", "Memorial"],
+  },
+
+  // ── Shared residential spaces — between the four houses, open to
+  //    everyone. Listed here rather than under House Residences:
+  //    they're commons, not house territory. ──
+  { id: "residential-quad", district: "commons", n: "K7",
+    name: "The Residential Quad",
+    sub: "Open lawn between the four houses",
+    desc: "Eighty metres of lawn bordered by all four house buildings. Picnic tables, a pair of stone benches that get fought over in good weather, a single oak in the middle that was planted in 2020 with one shovelful of earth from each house. The quad is the only place on campus where house colours mix freely. Faculty don't supervise it. Houses police it themselves.",
+    tags: ["All houses", "Open lawn"],
+  },
+  { id: "residential-kitchen", district: "commons", n: "K8",
+    name: "The Communal Kitchen",
+    sub: "Ground floor · between Saberis & Orenne",
+    desc: "Two stoves, three ovens, a pantry the houses contribute to on a rota, and an espresso machine that has not stopped working since 2021. Open to all four houses. Sign-up board for cooking slots is on the door, mostly observed. The unwritten rule is you clean what you used and one thing somebody else didn't.",
+    tags: ["All houses", "24/7"],
+  },
+  { id: "residential-laundry", district: "commons", n: "K9",
+    name: "The Laundry",
+    sub: "Sub-level · centre of the quad",
+    desc: "Twelve washers, twelve dryers, four ironing boards, one folding table the size of a small bed. Open to every resident. The lighting is good. The acoustics are unusually warm. By tradition, laundry-room conversations are not repeated outside it — a convention even the four house presidents observe.",
+    tags: ["All houses", "Off the record"],
+  },
+  { id: "residential-snug", district: "commons", n: "K10",
+    name: "The Snug",
+    sub: "Inter-house lounge · ground floor",
+    desc: "A single low-ceilinged room with sofas from all four houses, a mismatched coffee table, a kettle, and a record player with a milk-crate of vinyl that gets added to but never thinned. The Snug is where students from different houses meet on neutral ground — house colours come off at the door by tradition. House meetings happen in the houses. Friendships happen here.",
+    tags: ["All houses", "Neutral ground"],
+  },
+  { id: "residential-courtyard", district: "commons", n: "K11",
+    name: "The Garden Courtyard",
+    sub: "Walled garden · north of the quad",
+    desc: "A small walled garden with raised beds, a greenhouse the Saberis grad-society maintains, and a stone fire pit that gets lit on the last night of every term. Open to all houses. The vegetables grown here go to the communal kitchen. The tradition of lighting the pit is older than the houses themselves — a holdover from the 1965 staff garden.",
+    tags: ["All houses", "Garden", "Term tradition"],
   },
 
   /* ═══ PERIMETER ════════════════════════════════════════════════════ */
