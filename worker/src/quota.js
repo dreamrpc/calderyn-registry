@@ -340,9 +340,10 @@ export function findDuplicatePowerballCaptains(text) {
 //
 //   Powerball        — 1 main-team spot + 1 reserve spot, across all
 //                      four house teams (league staff is uncapped)
-//   Dance & Gym      — 2 characters per genre team, and at most 1
-//                      team-lead role (Captain / Coach) per writer
-//                      across the whole programme
+//   Dance Club       — 2 characters per genre team, and at most 1
+//                      team-lead role (Coach) per writer across the
+//                      four squads
+//   Gymnastics       — 2 positions total
 //   Cheer Squad      — 2 main-squad spots + 2 reserve (Alternate) spots
 //   Symphony & Choir — 3 positions total, at most 1 of them a lead
 //                      role (anything other than "Member")
@@ -365,13 +366,14 @@ export function findDuplicatePowerballCaptains(text) {
 //
 // PRIVACY: like the other quotas, verdicts carry counts only — no
 // character list and no OOC name in any Discord-bound field.
-// Genre teams of the Dance & Gymnastics programme — team-scoped caps
-// scan these rosters the same way Powerball scans its house teams.
-const DANCE_TEAMS = ["Gymnastics", "Ballet", "Latin Dance", "Contemporary", "Street & Hip-Hop"];
+// Genre teams of the Dance Club — team-scoped caps scan these rosters
+// the same way Powerball scans its house teams.
+const DANCE_TEAMS = ["Ballet", "Latin Dance", "Contemporary", "Street & Hip-Hop"];
 
 const CLUB_CAPS = {
-  "Powerball":          { main: 1, reserve: 1, teams: POWERBALL_HOUSES },
-  "Dance & Gymnastics": { perTeam: 2, lead: 1, teams: DANCE_TEAMS },
+  "Powerball":        { main: 1, reserve: 1, teams: POWERBALL_HOUSES },
+  "Dance Club":       { perTeam: 2, lead: 1, teams: DANCE_TEAMS },
+  "Gymnastics":       { total: 2 },
   "Cheer Squad":      { main: 2, reserve: 2 },
   "Symphony & Choir": { total: 3, lead: 1 },
   "Debate Club":      { total: 2 },
