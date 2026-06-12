@@ -53,13 +53,15 @@ GITHUB_DATA_FILE = "data.js"
 # raw Cloudflare URL if they need to bypass DNS for debugging.
 CORS_ALLOWED_ORIGINS = "https://calderyncollege.uk,https://www.calderyncollege.uk,https://calderyn-registry.pages.dev"
 
-# Per-tier per-writer caps. Approvals that would push a writer past
-# the cap for the submission's tier are blocked with an explanatory
-# message; the submission stays in the queue so an admin can lower the
-# tier or reject it. D-List submissions are uncapped.
-A_LIST_LIMIT_PER_WRITER = "5"
-B_LIST_LIMIT_PER_WRITER = "8"
-C_LIST_LIMIT_PER_WRITER = "10"
+# Per-tier per-writer caps — hard caps on every tier, per pool
+# (students and adults counted separately). Submissions over the cap
+# are refused at submit time with an explanation, and any that slip
+# through are blocked again at approve time; the submission stays in
+# the queue so an admin can lower the tier or reject it.
+A_LIST_LIMIT_PER_WRITER = "6"
+B_LIST_LIMIT_PER_WRITER = "9"
+C_LIST_LIMIT_PER_WRITER = "11"
+D_LIST_LIMIT_PER_WRITER = "12"
 # Per-writer cap on unsanctioned-status characters (collective / outside
 # operators with no STRATA contract), counted across all of a writer's
 # accounts regardless of tier — catches the usually tierless rogue

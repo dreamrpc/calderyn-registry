@@ -9,6 +9,8 @@ import {
   isCappedClubSubmission,
   checkClubQuota,
   clubQuotaMessage,
+  checkTierQuota,
+  getTierLimits,
 } from "./quota.js";
 
 export async function handleSubmit(request, env, ctx) {
@@ -43,28 +45,56 @@ export async function handleSubmit(request, env, ctx) {
     }, 409);
   }
 
-  // Per-writer club caps — checked BEFORE anything is posted so an
+  // Hard quota gates — checked BEFORE anything is posted so an
   // over-cap writer gets immediate feedback on the form instead of a
-  // doomed pending application. Covers the Club form and the Student
-  // form's optional club position. Fail-open on data fetch errors (a
-  // GitHub hiccup must never block submissions; the same check re-runs
-  // as a hard gate at approve time in interactions.js).
-  if (isCappedClubSubmission(form)) {
+  // doomed pending application. One data.js fetch covers both the
+  // per-tier caps (every tier is hard-capped, per pool) and the
+  // per-writer club caps (Club form + the Student form's optional
+  // club position). Fail-open on data fetch errors (a GitHub hiccup
+  // must never block submissions; the same checks re-run as hard
+  // gates at approve time in interactions.js).
+  const needsTierCheck = !!form.tier;
+  const needsClubCheck = isCappedClubSubmission(form);
+  if (needsTierCheck || needsClubCheck) {
     try {
       const { text } = await getFile(env, env.GITHUB_DATA_FILE);
-      const verdict = checkClubQuota(text, { type, form });
-      if (!verdict.allowed) {
-        return json({
-          error: "club_quota",
-          club: verdict.club,
-          scope: verdict.scope,
-          count: verdict.count,
-          limit: verdict.limit,
-          message: clubQuotaMessage(verdict),
-        }, 409);
+
+      if (needsTierCheck) {
+        const verdict = checkTierQuota(text, { type, form }, getTierLimits(env));
+        if (!verdict.allowed) {
+          const poolLabel = verdict.pool === "student" ? "student" : "adult";
+          return json({
+            error: "tier_quota",
+            pool: verdict.pool,
+            tier: verdict.tier,
+            count: verdict.count,
+            limit: verdict.limit,
+            message:
+              `The ${verdict.tier} cap is full for your ${poolLabel} characters: each writer ` +
+              `may have at most ${verdict.limit} ${poolLabel} ${verdict.tier} characters, ` +
+              `counted across all of their accounts, and you're at ${verdict.count}. The ` +
+              `${poolLabel === "student" ? "adult" : "student"} pool is counted separately. ` +
+              `Pick a different tier, or free a slot by re-tiering one of your existing ` +
+              `${poolLabel} ${verdict.tier} characters.`,
+          }, 409);
+        }
+      }
+
+      if (needsClubCheck) {
+        const verdict = checkClubQuota(text, { type, form });
+        if (!verdict.allowed) {
+          return json({
+            error: "club_quota",
+            club: verdict.club,
+            scope: verdict.scope,
+            count: verdict.count,
+            limit: verdict.limit,
+            message: clubQuotaMessage(verdict),
+          }, 409);
+        }
       }
     } catch (err) {
-      console.error("submit-time club quota check failed:", err.message);
+      console.error("submit-time quota check failed:", err.message);
     }
   }
 
