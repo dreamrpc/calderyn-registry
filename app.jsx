@@ -5601,11 +5601,16 @@ function ClubDrawer({club, onClose}){
         aria-label={club.name}
         onClick={e => e.stopPropagation()}
       >
-        <header className="cdrawer-hd" style={{background: club.bg}}>
-          <div className="cdrawer-hd-body">
-            {club.category && <div className="cdrawer-cat">{club.category}</div>}
-            <h2 className="cdrawer-name">{club.name}</h2>
-            {club.tag && <div className="cdrawer-tag">{club.tag}</div>}
+        {/* Same designed header treatment as the old detail column —
+            Druk name on the club's accent gradient with the halftone
+            pass — so the drawer matches the rest of the page. */}
+        <header className="cdrawer-top">
+          <div className="cdh cdrawer-cdh" style={{"--accent": club.bg}}>
+            <div className="cdh-inner">
+              {club.category && <span className="cdh-cat">{club.category}</span>}
+              <h2 className="cdh-name">{club.name}</h2>
+              {club.tag && <div className="cdh-sub">{club.tag}</div>}
+            </div>
           </div>
           <button
             type="button"
@@ -5675,6 +5680,7 @@ function ClubsTab(){
           {CLUBS.map((c, i) => {
             const t = clubTotal(c);
             const f = clubFilled(c);
+            const pct = t ? Math.round((f / t) * 100) : 0;
             return (
               <li key={i}>
                 <button
@@ -5684,12 +5690,16 @@ function ClubsTab(){
                   onClick={() => setOpenIdx(i)}
                   aria-haspopup="dialog"
                 >
-                  <span className="clubcard-bar" aria-hidden="true"/>
-                  {c.category && <span className="clubcard-cat">{c.category}</span>}
-                  <span className="clubcard-name">{c.name}</span>
-                  {c.tag && <span className="clubcard-tag">{c.tag}</span>}
-                  <span className="clubcard-foot">
+                  <span className="clubcard-eyebrow">
+                    {c.category && <span className="clubcard-cat">{c.category}</span>}
                     <span className="clubcard-access">{c.access || "Open"}</span>
+                  </span>
+                  <span className="clubcard-name">{c.name}</span>
+                  {c.desc && <span className="clubcard-desc">{c.desc}</span>}
+                  <span className="clubcard-foot">
+                    <span className="clubcard-meter" aria-hidden="true">
+                      <span className="clubcard-meter-fill" style={{width: pct + "%"}}/>
+                    </span>
                     <span className="clubcard-stat"><b>{f}</b> / {t} filled</span>
                   </span>
                 </button>
