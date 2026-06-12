@@ -2398,7 +2398,8 @@ clubs: [
         positions: [
           { pos: "Coach", captain: true },
           { pos: "Dancer", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" },
-          { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" },
+          { pos: "Dancer", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" },
+          { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" },
         ],
       },
       {
@@ -2413,14 +2414,16 @@ clubs: [
         house: "Contemporary", bg: "#2e6b6b",
         positions: [
           { pos: "Coach", captain: true },
-          { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" },
+          { pos: "Dancer", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" },
+          { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" },
         ],
       },
       {
         house: "Street & Hip-Hop", bg: "#3d4451",
         positions: [
           { pos: "Coach", captain: true },
-          { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" },
+          { pos: "Dancer", char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" },
+          { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" },
         ],
       },
     ],
@@ -2535,8 +2538,8 @@ clubs: [
       { pos: "Project Lead", group: "leadership" },
       { pos: "Fabricator", group: "build-team" }, { pos: "Fabricator", group: "build-team" },
       { pos: "Systems & Power", group: "build-team" }, { pos: "Systems & Power", group: "build-team" },
-      { pos: "Software", group: "build-team" }, { pos: "Software", group: "build-team" },
-      { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
+      { pos: "Software", group: "build-team", char: "Vecna Ravindrakumar", link: "https://roleplay.chat/profile.php?user=vecna" }, { pos: "Software", group: "build-team" },
+      { pos: "Member", group: "members", char: "Sven Skarsen", link: "https://roleplay.chat/profile.php?user=blood+eagle" }, { pos: "Member", group: "members" },
       { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
     ],
   },
