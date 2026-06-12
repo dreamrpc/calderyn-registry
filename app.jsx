@@ -5561,155 +5561,119 @@ function ClubRules({rules}){
   );
 }
 
-/* Right-hand slide-over with the selected club's full info. Opened by
-   clicking a directory card; Esc, the overlay, or × closes it. Reuses
-   the existing detail-column classes (cdet-meta, clubdf-tabs/-body)
-   for the inner chrome so only the drawer shell needs new styling. */
-function ClubDrawer({club, onClose}){
-  const [tab, setTab] = useState("about");
-  const hasRules = !!club.rules;
-  const hasTeams = !!(club.teams && club.teams.length);
-  const total = clubTotal(club);
-  const filled = clubFilled(club);
-  const tabs = [
-    {id: "about",  label: "About"},
-    ...(hasRules ? [{id: "rules", label: "Rules"}] : []),
-    {id: "roster", label: "Roster"},
-  ];
-
-  // Reset to About whenever the drawer opens on a different club.
-  useEffect(() => { setTab("about"); }, [club]);
-
-  // Esc closes; lock page scroll while the drawer is mounted.
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [onClose]);
-
-  return (
-    <div className="cdrawer-overlay" onClick={onClose} role="presentation">
-      <aside
-        className="cdrawer"
-        role="dialog"
-        aria-modal="true"
-        aria-label={club.name}
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Same designed header treatment as the old detail column —
-            Druk name on the club's accent gradient with the halftone
-            pass — so the drawer matches the rest of the page. */}
-        <header className="cdrawer-top">
-          <div className="cdh cdrawer-cdh" style={{"--accent": club.bg}}>
-            <div className="cdh-inner">
-              {club.category && <span className="cdh-cat">{club.category}</span>}
-              <h2 className="cdh-name">{club.name}</h2>
-              {club.tag && <div className="cdh-sub">{club.tag}</div>}
-            </div>
-          </div>
-          <button
-            type="button"
-            className="cdrawer-close"
-            onClick={onClose}
-            aria-label="Close"
-          ><span aria-hidden="true">×</span></button>
-        </header>
-
-        <div className="cdet-meta cdrawer-meta">
-          <div className="cdet-meta-cell">
-            <span className="cdet-meta-lbl">Access</span>
-            <span className="cdet-meta-val">{club.access || "Open"}</span>
-          </div>
-          <div className="cdet-meta-cell">
-            <span className="cdet-meta-lbl">Roster</span>
-            <span className="cdet-meta-val">
-              <span className="rn-big">{filled}</span>
-              <span className="rn-tot">/ {total}</span>
-              <span className="rn-suf">active</span>
-            </span>
-          </div>
-        </div>
-
-        <nav className="clubdf-tabs" role="tablist">
-          {tabs.map(t => (
-            <button
-              key={t.id}
-              type="button"
-              role="tab"
-              aria-selected={tab === t.id}
-              className={"clubdf-tab" + (tab === t.id ? " on" : "")}
-              onClick={() => setTab(t.id)}
-              style={{"--accent": club.bg}}
-            >{t.label}</button>
-          ))}
-        </nav>
-
-        <div className="clubdf-body cdrawer-body">
-          {tab === "about"  && <ClubPanelAbout club={club}/>}
-          {tab === "rules"  && hasRules && <ClubRules rules={club.rules}/>}
-          {tab === "roster" && <ClubPanelRoster club={club} hasTeams={hasTeams}/>}
-        </div>
-      </aside>
-    </div>
-  );
-}
-
 function ClubsTab(){
-  // Card-grid directory: every club visible at once, no scrolling a
-  // sidebar. Clicking a card slides the ClubDrawer in from the right
-  // with the full about / rules / roster panels.
-  const [openIdx, setOpenIdx] = useState(null);
-  const club = openIdx != null ? CLUBS[openIdx] : null;
+  // Split directory: compact one-line list on the left (every club
+  // visible, no scrolling), and the club's full info inline on the
+  // right — the designed .cdh header plus the About / Rules / Roster
+  // panels. No popups.
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const [tab, setTab] = useState("about");
+
+  // Reset to About whenever the user picks a different club.
+  useEffect(() => { setTab("about"); }, [selectedIdx]);
+
+  const club = CLUBS[selectedIdx];
+  const hasRules = !!(club && club.rules);
+  const hasTeams = !!(club && club.teams && club.teams.length);
+  const total = club ? clubTotal(club) : 0;
+  const filled = club ? clubFilled(club) : 0;
+  const accent = (club && club.bg) || "#c41a1a";
 
   return (
     <div>
       <PageHead
         stamp="DOC · 05 · CAMPUS ORGS"
         title={<>Clubs &amp; societies</>}
-        body={`${["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen"][CLUBS.length] || CLUBS.length} campus clubs. Click any card for the full roster, rules, and post-graduation pathway. You can apply for more than one club — one application per position. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval.`}
+        body={`${["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen"][CLUBS.length] || CLUBS.length} campus clubs. Pick one from the directory for its full roster, rules, and post-graduation pathway. You can apply for more than one club — one application per position. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval.`}
         pageNum="P. 005 / VIII"
       />
 
       <div className="clubsx">
-        <ul className="clubgrid" role="list" aria-label="Clubs directory">
-          {CLUBS.map((c, i) => {
-            const t = clubTotal(c);
-            const f = clubFilled(c);
-            const pct = t ? Math.round((f / t) * 100) : 0;
-            return (
-              <li key={i}>
-                <button
-                  type="button"
-                  className={"clubcard" + (openIdx === i ? " on" : "")}
-                  style={{"--accent": c.bg}}
-                  onClick={() => setOpenIdx(i)}
-                  aria-haspopup="dialog"
-                >
-                  <span className="clubcard-eyebrow">
-                    {c.category && <span className="clubcard-cat">{c.category}</span>}
-                    <span className="clubcard-access">{c.access || "Open"}</span>
-                  </span>
-                  <span className="clubcard-name">{c.name}</span>
-                  {c.desc && <span className="clubcard-desc">{c.desc}</span>}
-                  <span className="clubcard-foot">
-                    <span className="clubcard-meter" aria-hidden="true">
-                      <span className="clubcard-meter-fill" style={{width: pct + "%"}}/>
-                    </span>
-                    <span className="clubcard-stat"><b>{f}</b> / {t} filled</span>
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+        <div className="clubs-split2">
+          {/* ── DIRECTORY · one line per club ───────────────────────── */}
+          <aside className="clist" aria-label="Clubs directory">
+            <div className="clist-hd">
+              <span className="clist-hd-lbl">Directory</span>
+              <span className="clist-hd-count">{CLUBS.length} clubs</span>
+            </div>
+            <ul className="clist-rows" role="tablist">
+              {CLUBS.map((c, i) => {
+                const active = i === selectedIdx;
+                return (
+                  <li key={i} role="presentation">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={active}
+                      className={"clist-row" + (active ? " on" : "")}
+                      style={{"--accent": c.bg}}
+                      onClick={() => setSelectedIdx(i)}
+                    >
+                      <span className="clist-row-name">{c.name}</span>
+                      <span className="clist-row-stat"><b>{clubFilled(c)}</b>/{clubTotal(c)}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="clist-note">
+              Per-writer club caps apply, counted across your characters — caps rise as the room grows.
+            </p>
+          </aside>
 
-      {club && <ClubDrawer club={club} onClose={() => setOpenIdx(null)}/>}
+          {/* ── DETAIL · inline, right ──────────────────────────────── */}
+          <main className="cdet2" key={selectedIdx}>
+            <div className="cdh" style={{"--accent": accent}}>
+              <div className="cdh-inner">
+                {club.category && (
+                  <span className="cdh-cat">{club.category}</span>
+                )}
+                <h1 className="cdh-name">{club.name}</h1>
+                {club.tag && <div className="cdh-sub">{club.tag}</div>}
+              </div>
+            </div>
+
+            <div className="cdet-meta">
+              <div className="cdet-meta-cell">
+                <span className="cdet-meta-lbl">Access</span>
+                <span className="cdet-meta-val">{club.access || "Open"}</span>
+              </div>
+              <div className="cdet-meta-cell">
+                <span className="cdet-meta-lbl">Roster</span>
+                <span className="cdet-meta-val">
+                  <span className="rn-big">{filled}</span>
+                  <span className="rn-tot">/ {total}</span>
+                  <span className="rn-suf">active</span>
+                </span>
+              </div>
+            </div>
+
+            <nav className="clubdf-tabs" role="tablist">
+              {[
+                {id: "about",  label: "About"},
+                ...(hasRules ? [{id: "rules", label: "Rules"}] : []),
+                {id: "roster", label: "Roster"},
+              ].map(t => (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === t.id}
+                  className={"clubdf-tab" + (tab === t.id ? " on" : "")}
+                  onClick={() => setTab(t.id)}
+                  style={{"--accent": accent}}
+                >{t.label}</button>
+              ))}
+            </nav>
+
+            <div className="clubdf-body">
+              {tab === "about"  && <ClubPanelAbout club={club}/>}
+              {tab === "rules"  && hasRules && <ClubRules rules={club.rules}/>}
+              {tab === "roster" && <ClubPanelRoster club={club} hasTeams={hasTeams}/>}
+            </div>
+          </main>
+        </div>
+      </div>
     </div>
   );
 }
