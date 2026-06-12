@@ -663,6 +663,81 @@ test("club: PRIVACY — verdict carries no character list or OOC name", () => {
   assertFalse("ooc" in v, "no ooc on club verdicts");
 });
 
+test("club: Swim Team + Engineering Club are capped clubs", () => {
+  assertTrue(isCappedClubSubmission({ clubName: "Swim Team" }), "swim team capped");
+  assertTrue(isCappedClubSubmission({ optClubName: "Engineering Club" }), "engineering club capped");
+});
+
+test("club: Swim Team — fresh roster, any writer can join (real data)", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Swim Team", clubPosition: "Freestyle", char: "New Swimmer", ooc: "Star" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+  assertEq(v.count, 0);
+});
+
+test("club: Engineering Club — fresh roster, any writer can join (real data)", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Engineering Club", clubPosition: "Member", char: "New Builder", ooc: "Skully" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+  assertEq(v.count, 0);
+});
+
+// Synthetic roster: one writer (Star, via two of her RPC accounts)
+// already holding 2 positions — the third is blocked at the 2-cap.
+const SWIM_AT_CAP = `window.CALDERYN = {
+clubs: [
+  {
+    name: "Swim Team",
+    positions: [
+      { pos: "Captain", char: "Swimmer One", link: "https://roleplay.chat/profile.php?user=Crown." },
+      { pos: "Butterfly", char: "Swimmer Two", link: "https://roleplay.chat/profile.php?user=Svalinn" },
+      { pos: "Freestyle" },
+    ],
+  },
+  {
+    name: "Engineering Club",
+    positions: [
+      { pos: "President", char: "Builder One", link: "https://roleplay.chat/profile.php?user=Crown." },
+      { pos: "Software", char: "Builder Two", link: "https://roleplay.chat/profile.php?user=Svalinn" },
+      { pos: "Member" },
+    ],
+  },
+],
+};`;
+
+test("club: Swim Team — writer at 2/2 is blocked (synthetic)", () => {
+  const v = checkClubQuota(SWIM_AT_CAP, {
+    type: "club",
+    form: { clubName: "Swim Team", clubPosition: "Freestyle", char: "Swimmer Three", ooc: "Star" },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.scope, "positions");
+  assertEq(v.count, 2);
+  assertEq(v.limit, 2);
+});
+
+test("club: Swim Team — re-approving an existing char is allowed (synthetic)", () => {
+  const v = checkClubQuota(SWIM_AT_CAP, {
+    type: "club",
+    form: { clubName: "Swim Team", clubPosition: "Freestyle", char: "Swimmer One", ooc: "Star" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+});
+
+test("club: Engineering Club — writer at 2/2 is blocked (synthetic)", () => {
+  const v = checkClubQuota(SWIM_AT_CAP, {
+    type: "club",
+    form: { clubName: "Engineering Club", clubPosition: "Member", char: "Builder Three", ooc: "Star" },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.count, 2);
+  assertEq(v.limit, 2);
+});
+
 test("club: clubQuotaMessage explains the room-growth rationale", () => {
   const v = checkClubQuota(data, {
     type: "club",

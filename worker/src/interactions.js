@@ -150,12 +150,12 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
       }
     }
 
-    // Per-writer club caps (Powerball / Cheer Squad / Symphony & Choir /
-    // Debate Club / Drama Society). Club positions are tierless and
-    // bypass the tier quota, so check separately. Covers the Club form
-    // and the Student form's optional club position. Normally the
-    // submit-time gate in submit.js catches this first; this re-check
-    // guards submissions that were already pending when a cap landed.
+    // Per-writer club caps (see CLUB_CAPS in quota.js for the list).
+    // Club positions are tierless and bypass the tier quota, so check
+    // separately. Covers the Club form and the Student form's optional
+    // club position. Normally the submit-time gate in submit.js catches
+    // this first; this re-check guards submissions that were already
+    // pending when a cap landed.
     if (!blocked && isCappedClubSubmission(sub.form)) {
       try {
         const current = await getFile(env, env.GITHUB_DATA_FILE);
