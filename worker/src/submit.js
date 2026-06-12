@@ -29,6 +29,20 @@ export async function handleSubmit(request, env, ctx) {
     return json({ ok: true });
   }
 
+  // Supebrawl is invite-only: Sven Skarsen's typist clears every entry
+  // in RP before an application is even allowed to exist. The form
+  // collects that confirmation as a required checkbox; this server-side
+  // check catches stale or hand-crafted payloads that skip it. Applies
+  // to any form shape that can target a club (clubName / optClubName).
+  if ((form.clubName || form.optClubName) === "Supebrawl" && !form.supebrawlInvite) {
+    return json({
+      error: "supebrawl_invite_required",
+      message:
+        "Supebrawl is invite-only. Speak to Sven Skarsen's typist in RP first — " +
+        "once the invite is agreed, tick the confirmation box on the form and resubmit.",
+    }, 409);
+  }
+
   // Per-writer club caps — checked BEFORE anything is posted so an
   // over-cap writer gets immediate feedback on the form instead of a
   // doomed pending application. Covers the Club form and the Student

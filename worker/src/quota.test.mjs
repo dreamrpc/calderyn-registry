@@ -738,6 +738,43 @@ test("club: Engineering Club — writer at 2/2 is blocked (synthetic)", () => {
   assertEq(v.limit, 2);
 });
 
+test("club: athletics / cooking / chess / Supebrawl are capped clubs", () => {
+  for (const c of ["Supe Athletics", "Cooking Club", "Chess Club", "Supebrawl"]) {
+    assertTrue(isCappedClubSubmission({ clubName: c }), `${c} should be capped`);
+  }
+});
+
+test("club: fresh rosters — athletics, cooking, chess allow first joins (real data)", () => {
+  for (const c of ["Supe Athletics", "Cooking Club", "Chess Club"]) {
+    const v = checkClubQuota(data, {
+      type: "club",
+      form: { clubName: c, clubPosition: "Member", char: "New Char", ooc: "Star" },
+    });
+    assertEq(v.allowed, true, `${c}: ${JSON.stringify(v)}`);
+    assertEq(v.count, 0, `${c} count`);
+  }
+});
+
+test("club: Supebrawl — one slot per writer; Sven + Cesare's writer is full (real data)", () => {
+  // Dream seeds the ring with both Sven (Ringrunner) and Cesare
+  // (Contender) — already over the 1-cap, so any further Dream entry
+  // is blocked. A writer with no one in the ring can take a slot
+  // (after the in-RP invite, which the form + submit gate enforce).
+  const dream = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Supebrawl", clubPosition: "Contender", char: "Second Fighter", ooc: "Dream" },
+  });
+  assertEq(dream.allowed, false, JSON.stringify(dream));
+  assertEq(dream.count, 2);
+  assertEq(dream.limit, 1);
+
+  const star = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Supebrawl", clubPosition: "Contender", char: "Challenger", ooc: "Star" },
+  });
+  assertEq(star.allowed, true, JSON.stringify(star));
+});
+
 test("club: clubQuotaMessage explains the room-growth rationale", () => {
   const v = checkClubQuota(data, {
     type: "club",
