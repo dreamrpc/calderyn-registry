@@ -29472,3 +29472,21 @@ button.orgs-pill {
   line-height: 1.5;
   color: var(--text-low, #a8a298);
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   CLUB ROSTERS · READABILITY PASS — applies on top of the .cdet
+   roster system. Subtle zebra striping helps scanning long member
+   groups; the team tables match the grouped tables' name size and
+   position-column width so every roster reads identically.
+   ════════════════════════════════════════════════════════════════════ */
+.cdet .clubdf-body .cp-rgroup-tbl tbody tr:nth-child(even) td,
+.cdet .clubdf-body .kb-team-tbl tbody tr:nth-child(even):not(.kb-starters-hd):not(.kb-reserves-hd) td {
+  background: rgba(255, 255, 255, 0.015) !important;
+}
+.cdet .clubdf-body .kb-team-tbl td {
+  font-size: 14.5px !important;
+}
+.cdet .clubdf-body .kb-team-tbl .kb-team-pos-cell {
+  width: 38% !important;
+  font-size: 11px !important;
+}
