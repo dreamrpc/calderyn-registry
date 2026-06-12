@@ -6346,7 +6346,10 @@ function ClubPanelRoster({club, hasTeams}){
             const reserves = t.positions.filter(p => (p.pos || "").toLowerCase().startsWith("reserve"));
             return (
               <div key={ti} className="kb-team">
-                <div className="kb-team-hd" style={{background:t.bg}}>
+                {/* --team-bg feeds the polish layer's header rule, which
+                    overrides inline backgrounds — without it, non-
+                    Powerball teams (Dance squads) fell back to grey. */}
+                <div className="kb-team-hd" style={{background: t.bg, "--team-bg": t.bg}}>
               <div className="kb-team-name">{t.house.toUpperCase()}</div>
               {captain && (
                 <div className="kb-team-cap">
