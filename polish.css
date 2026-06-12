@@ -29273,53 +29273,36 @@ button.orgs-pill {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   CLUBS DIRECTORY · CARD GRID + RIGHT DRAWER — quiet editorial cards
-   (display name, two-line description, thin roster meter; the club's
-   accent appears only as a top rule and on hover). Clicking a card
-   opens the right-hand drawer, whose header reuses the designed .cdh
-   treatment and whose panels inherit the clubdf-body pass.
+   CLUBS · SPLIT DIRECTORY — compact one-line list on the left (every
+   club visible without scrolling), the club's full info inline on the
+   right. Uniform and quiet: list rows are plain sans on the panel
+   surface, the club's accent appears only on the active row's left
+   rule, and the display face (Druk) lives solely in the .cdh header,
+   exactly like the rest of the site.
    ════════════════════════════════════════════════════════════════════ */
-.clubgrid {
-  list-style: none;
-  margin: 0 auto;
-  padding: 0;
+.clubs-split2 {
   max-width: 1600px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 16px;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
 }
-.clubgrid > li { display: flex; }
-.clubcard {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  text-align: left;
-  cursor: pointer;
+.clist {
+  position: sticky;
+  top: calc(var(--hdr-h, 84px) + var(--tabs-h, 53px) + 16px);
   background: var(--paper-2, #101010);
   border: 1px solid var(--rule-soft, rgba(255,255,255,0.08));
-  border-top: 3px solid var(--accent, var(--red, #c41a1a));
-  color: var(--text);
-  font-family: var(--sans);
-  padding: 18px 20px 16px;
-  transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
 }
-.clubcard:hover,
-.clubcard:focus-visible,
-.clubcard.on {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent, #c41a1a) 55%, transparent);
-  border-top-color: var(--accent, #c41a1a);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
-}
-.clubcard-eyebrow {
+.clist-hd {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 10px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--rule-soft, rgba(255,255,255,0.08));
 }
-.clubcard-cat {
+.clist-hd-lbl {
   font-family: var(--mono);
   font-size: var(--t-micro, 10px);
   font-weight: 700;
@@ -29327,129 +29310,86 @@ button.orgs-pill {
   text-transform: uppercase;
   color: var(--gold-bright, #f1cd72);
 }
-.clubcard-access {
+.clist-hd-count {
   font-family: var(--mono);
   font-size: var(--t-micro, 10px);
-  letter-spacing: var(--ls-eyebrow, 0.16em);
-  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--text-low, #a8a298);
 }
-.clubcard-name {
-  font-family: var(--display, 'Druk', sans-serif);
-  font-weight: 900;
-  font-size: 27px;
-  letter-spacing: var(--ls-display, 0.02em);
-  line-height: 0.95;
-  text-transform: uppercase;
-  color: #fff;
-}
-.clubcard-desc {
-  font-size: var(--t-small, 13px);
-  line-height: 1.55;
-  color: var(--text-low, #a8a298);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.clubcard-foot {
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--rule-soft, rgba(255,255,255,0.07));
-}
-.clubcard-meter {
-  flex: 1 1 auto;
-  height: 3px;
-  background: rgba(255,255,255,0.10);
-  overflow: hidden;
-}
-.clubcard-meter-fill {
-  display: block;
-  height: 100%;
-  background: var(--accent, var(--red, #c41a1a));
-}
-.clubcard-stat {
-  flex: none;
-  font-family: var(--mono);
-  font-size: var(--t-eyebrow, 11px);
-  letter-spacing: 0.05em;
-  color: var(--text-low, #a8a298);
-  white-space: nowrap;
-}
-.clubcard-stat b { color: var(--text, #efe9dc); font-weight: 700; }
-
-/* ── Drawer shell ────────────────────────────────────────────────── */
-.cdrawer-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1200;
-  background: rgba(4, 4, 4, 0.66);
-  backdrop-filter: blur(2px);
-  display: flex;
-  justify-content: flex-end;
-  animation: cdrawer-fade 0.16s ease-out;
-}
-@keyframes cdrawer-fade { from { opacity: 0; } to { opacity: 1; } }
-.cdrawer {
-  width: min(940px, 96vw);
-  height: 100%;
-  background: var(--paper, #0c0c0c);
-  border-left: 1px solid var(--rule-soft, rgba(255,255,255,0.1));
-  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.5);
+.clist-rows {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  animation: cdrawer-in 0.22s cubic-bezier(0.22, 0.8, 0.36, 1);
+  gap: 1px;
 }
-@keyframes cdrawer-in {
-  from { transform: translateX(48px); opacity: 0.5; }
-  to   { transform: translateX(0);    opacity: 1; }
-}
-.cdrawer-top { position: relative; padding: 20px 22px 0; }
-/* The reused .cdh header keeps its designed gradient + halftone but
-   sits flush inside the drawer: trim the offset shadow + margin that
-   made sense on the open page. */
-.cdrawer-cdh {
-  margin-bottom: 0 !important;
-  box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 0.5) !important;
-}
-.cdrawer-cdh .cdh-name { font-size: clamp(34px, 4.5vw, 56px) !important; }
-.cdrawer-close {
-  position: absolute;
-  top: 32px;
-  right: 36px;
-  z-index: 5;
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  color: #fff;
-  font-size: 22px;
-  line-height: 1;
+.clist-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px 9px 13px;
+  background: transparent;
+  border: 0;
+  border-left: 3px solid transparent;
+  font-family: var(--sans);
+  font-size: var(--t-small, 13px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-mid, #dcd6c8);
+  text-align: left;
   cursor: pointer;
-  transition: background 0.12s, transform 0.12s;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
 }
-.cdrawer-close:hover { background: #000; transform: rotate(90deg); }
-.cdrawer-meta {
-  margin: 18px 22px 0;
-  border-bottom: 1px solid var(--rule-soft, rgba(255,255,255,0.08));
+.clist-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text, #efe9dc);
 }
-.cdrawer .clubdf-tabs { padding: 0 22px; }
-.cdrawer .clubdf-body { padding: 32px 22px 72px; }
-@media (max-width: 700px) {
-  .clubgrid { grid-template-columns: 1fr; gap: 12px; }
-  .clubcard-name { font-size: 23px; }
-  .cdrawer { width: 100vw; border-left: 0; }
-  .cdrawer-top { padding: 12px 12px 0; }
-  .cdrawer-close { top: 22px; right: 24px; }
-  .cdrawer-meta { margin: 14px 12px 0; }
-  .cdrawer .clubdf-tabs { padding: 0 12px; }
-  .cdrawer .clubdf-body { padding: 24px 12px 64px; }
+.clist-row.on {
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: var(--accent, var(--red, #c41a1a));
+  color: #fff;
+}
+.clist-row-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.clist-row-stat {
+  flex: none;
+  font-family: var(--mono);
+  font-size: var(--t-micro, 10px);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--text-low, #a8a298);
+}
+.clist-row-stat b { font-weight: 700; color: var(--text-mid, #dcd6c8); }
+.clist-row.on .clist-row-stat,
+.clist-row.on .clist-row-stat b { color: #fff; }
+.clist-note {
+  margin: 0;
+  padding: 12px 16px;
+  border-top: 1px solid var(--rule-soft, rgba(255,255,255,0.08));
+  font-size: var(--t-cap, 12px);
+  line-height: 1.55;
+  color: var(--text-low, #a8a298);
+}
+.cdet2 {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+@media (max-width: 980px) {
+  .clubs-split2 { grid-template-columns: 1fr; gap: 18px; }
+  .clist { position: static; }
+  .clist-rows {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
 }
 
 /* ── Club-cap usage readout (join form, under the position picker) ── */
