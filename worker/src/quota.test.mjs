@@ -63,22 +63,24 @@ test("extractRpcUsername: preserves +", () => {
 });
 
 // ─── getTierLimits ────────────────────────────────────────────────────
-test("getTierLimits: defaults when env unset", () => {
+test("getTierLimits: defaults when env unset — every tier hard-capped", () => {
   const l = getTierLimits({});
-  assertEq(l["A-List"], 5);
-  assertEq(l["B-List"], 8);
-  assertEq(l["C-List"], 10);
-  assertFalse("D-List" in l, "D-List intentionally absent → uncapped");
+  assertEq(l["A-List"], 6);
+  assertEq(l["B-List"], 9);
+  assertEq(l["C-List"], 11);
+  assertEq(l["D-List"], 12);
 });
 test("getTierLimits: env overrides parse as ints", () => {
   const l = getTierLimits({
     A_LIST_LIMIT_PER_WRITER: "3",
     B_LIST_LIMIT_PER_WRITER: "7",
     C_LIST_LIMIT_PER_WRITER: "15",
+    D_LIST_LIMIT_PER_WRITER: "20",
   });
   assertEq(l["A-List"], 3);
   assertEq(l["B-List"], 7);
   assertEq(l["C-List"], 15);
+  assertEq(l["D-List"], 20);
 });
 
 // ─── submissionPool ────────────────────────────────────────────────────
@@ -216,13 +218,44 @@ test("checkTierQuota: B-List under cap → allowed", () => {
   assertEq(v.allowed, true);
   assertEq(v.tier, "B-List");
 });
-test("checkTierQuota: D-List always allowed", () => {
+test("checkTierQuota: D-List under cap → allowed (D is hard-capped now)", () => {
+  // Star has 1 student D-Lister; default cap is 12.
   const v = checkTierQuota(data, {
     type: "student",
     form: { tier: "D-List", char: "Whoever", ooc: "Star" },
   }, getTierLimits({}));
   assertEq(v.allowed, true);
   assertEq(v.tier, "D-List");
+});
+test("checkTierQuota: D-List blocked at cap", () => {
+  const v = checkTierQuota(data, {
+    type: "student",
+    form: { tier: "D-List", char: "One Too Many", ooc: "Star" },
+  }, { "A-List": 99, "B-List": 99, "C-List": 99, "D-List": 1 });
+  assertEq(v.allowed, false);
+  assertEq(v.tier, "D-List");
+  assertEq(v.limit, 1);
+});
+test("checkTierQuota: new default caps against real data (Star)", () => {
+  // Star (student pool) sits at A 5, B 9, C 8 today. Under the new
+  // 6 / 9 / 11 / 12 caps: one more A fits, B is full at exactly the
+  // cap, one more C fits.
+  const a = checkTierQuota(data, {
+    type: "student", form: { tier: "A-List", char: "Sixth A", ooc: "Star" },
+  }, getTierLimits({}));
+  assertEq(a.allowed, true, `A verdict: ${JSON.stringify(a)}`);
+
+  const b = checkTierQuota(data, {
+    type: "student", form: { tier: "B-List", char: "Tenth B", ooc: "Star" },
+  }, getTierLimits({}));
+  assertEq(b.allowed, false, `B verdict: ${JSON.stringify(b)}`);
+  assertEq(b.count, 9);
+  assertEq(b.limit, 9);
+
+  const c = checkTierQuota(data, {
+    type: "student", form: { tier: "C-List", char: "Ninth C", ooc: "Star" },
+  }, getTierLimits({}));
+  assertEq(c.allowed, true, `C verdict: ${JSON.stringify(c)}`);
 });
 
 // ─── checkTierQuota: edge cases ───────────────────────────────────────
@@ -755,11 +788,12 @@ test("club: fresh rosters — athletics, cooking, chess allow first joins (real 
   }
 });
 
-test("club: Supebrawl — one slot per writer; Sven + Cesare's writer is full (real data)", () => {
+test("club: Supebrawl — one slot per writer (real data)", () => {
   // Dream seeds the ring with both Sven (Ringrunner) and Cesare
   // (Contender) — already over the 1-cap, so any further Dream entry
-  // is blocked. A writer with no one in the ring can take a slot
-  // (after the in-RP invite, which the form + submit gate enforce).
+  // is blocked. Star holds Anton's contender slot — at cap, blocked.
+  // A writer with no one in the ring can take a slot (after the in-RP
+  // invite, which the form + submit gate enforce).
   const dream = checkClubQuota(data, {
     type: "club",
     form: { clubName: "Supebrawl", clubPosition: "Contender", char: "Second Fighter", ooc: "Dream" },
@@ -772,7 +806,14 @@ test("club: Supebrawl — one slot per writer; Sven + Cesare's writer is full (r
     type: "club",
     form: { clubName: "Supebrawl", clubPosition: "Contender", char: "Challenger", ooc: "Star" },
   });
-  assertEq(star.allowed, true, JSON.stringify(star));
+  assertEq(star.allowed, false, JSON.stringify(star));
+  assertEq(star.count, 1);
+
+  const wilder = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Supebrawl", clubPosition: "Contender", char: "New Blood", ooc: "Wilder" },
+  });
+  assertEq(wilder.allowed, true, JSON.stringify(wilder));
 });
 
 test("club: clubQuotaMessage explains the room-growth rationale", () => {

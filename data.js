@@ -114,10 +114,12 @@ houses: [
 //   Each writer (OOC identity) has TWO independent character pools
 //   — students and adults — and each pool gets the same tier caps,
 //   counted across every RPC account they own:
-//       A-List → max 5    (per pool)
-//       B-List → max 8    (per pool)
-//       C-List → max 10   (per pool)
-//       D-List → uncapped
+//       A-List → max 6    (per pool)
+//       B-List → max 9    (per pool)
+//       C-List → max 11   (per pool)
+//       D-List → max 12   (per pool)
+//   Every tier is HARD-capped — applications over the cap are refused
+//   at submit time and blocked again at approval.
 //   Student characters and adult characters are counted SEPARATELY:
 //   a writer at the student A-List cap can still submit an adult
 //   A-Lister, and vice versa.
@@ -2567,7 +2569,8 @@ clubs: [
     positions: [
       { pos: "Ringrunner", group: "the-ring", char: "Sven Skarsen", link: "https://roleplay.chat/profile.php?user=blood+eagle" },
       { pos: "Contender", group: "contenders", char: "Cesare Delgado", link: "https://roleplay.chat/profile.php?user=delgado" },
-      { pos: "Contender", group: "contenders" }, { pos: "Contender", group: "contenders" },
+      { pos: "Contender", group: "contenders", char: "Antonie Ciaran Jean-Baptiste ", link: "https://roleplay.chat/profile.php?user=Blink" },
+      { pos: "Contender", group: "contenders" },
       { pos: "Contender", group: "contenders" }, { pos: "Contender", group: "contenders" },
       { pos: "Contender", group: "contenders" }, { pos: "Contender", group: "contenders" },
       { pos: "Contender", group: "contenders" },

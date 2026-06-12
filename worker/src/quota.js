@@ -3,10 +3,14 @@
 // Rule: each OOC writer has TWO independent character pools — students
 // and adults — and each pool gets its own tier caps:
 //
-//       A-List → max 5    A_LIST_LIMIT_PER_WRITER
-//       B-List → max 8    B_LIST_LIMIT_PER_WRITER
-//       C-List → max 10   C_LIST_LIMIT_PER_WRITER
-//       D-List → uncapped
+//       A-List → max 6    A_LIST_LIMIT_PER_WRITER
+//       B-List → max 9    B_LIST_LIMIT_PER_WRITER
+//       C-List → max 11   C_LIST_LIMIT_PER_WRITER
+//       D-List → max 12   D_LIST_LIMIT_PER_WRITER
+//
+// Hard caps — every tier is capped, enforced both at submit time
+// (submit.js refuses the application with an explanation) and at
+// approve time (interactions.js blocks the click with an amber embed).
 //
 // Pool determination for an existing character:
 //   powers[].status === "student"  → student pool
@@ -39,9 +43,10 @@ import { forEachArrayObject } from "./scanner.js";
 import { lookupOocByRpc } from "./writers.js";
 
 const DEFAULT_LIMITS = {
-  "A-List": 5,
-  "B-List": 8,
-  "C-List": 10,
+  "A-List": 6,
+  "B-List": 9,
+  "C-List": 11,
+  "D-List": 12,
 };
 
 export function getTierLimits(env) {
@@ -49,6 +54,7 @@ export function getTierLimits(env) {
     "A-List": readInt(env?.A_LIST_LIMIT_PER_WRITER, DEFAULT_LIMITS["A-List"]),
     "B-List": readInt(env?.B_LIST_LIMIT_PER_WRITER, DEFAULT_LIMITS["B-List"]),
     "C-List": readInt(env?.C_LIST_LIMIT_PER_WRITER, DEFAULT_LIMITS["C-List"]),
+    "D-List": readInt(env?.D_LIST_LIMIT_PER_WRITER, DEFAULT_LIMITS["D-List"]),
   };
 }
 
