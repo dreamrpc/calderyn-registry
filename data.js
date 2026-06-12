@@ -2364,7 +2364,7 @@ clubs: [
     category: "Performance",
     access: "Tryout",
     tag: "PERFORMANCE — POWERS ENCOURAGED",
-    desc: "Performs at every Powerball match and STRATA campus event. Powers are part of the routine — flight, propulsion, force projection, sonic flair, anything choreographed and rehearsed. Coach is a retired A-lister with a clipboard and zero patience for sloppy power control. Sloppy execution is what gets you flagged at the league level, not the powers themselves.",
+    desc: "Performs at every Powerball match and STRATA campus event. Powers are part of the routine — flight, propulsion, force projection, sonic flair, anything choreographed and rehearsed. Coach is a retired A-lister with a clipboard and zero patience for sloppy power control. Sloppy execution is what gets you flagged at the league level, not the powers themselves. Per writer: no more than two characters on the main squad and two on reserve.",
     meets: ["TUE · 5:00 PM", "THU · 5:00 PM", "GAME DAYS"],
     output: "Performs at every home Powerball match · STRATA campus events · Annual showcase",
     groups: [
@@ -2434,7 +2434,7 @@ clubs: [
     category: "Performance",
     access: "Audition",
     tag: "POWERS WELCOME · BLIND AUDITION",
-    desc: "Calderyn's combined orchestral ensemble and college choir. Performs at the Dean's dinners, alumni events, the annual memorial service, and one full joint programme each spring. Auditions are blind and any power is welcome — sonic, kinetic, illusory, perceptual, anything that makes the music better. The Music Director cares about the result; argue with the result and they'll show you the door.",
+    desc: "Calderyn's combined orchestral ensemble and college choir. Performs at the Dean's dinners, alumni events, the annual memorial service, and one full joint programme each spring. Auditions are blind and any power is welcome — sonic, kinetic, illusory, perceptual, anything that makes the music better. The Music Director cares about the result; argue with the result and they'll show you the door. Per writer: at most two characters, no more than one in a lead role.",
     meets: ["MON · 7:00 PM", "WED · 7:00 PM", "SAT · 10:00 AM"],
     output: "Dean's dinners · Alumni events · Annual memorial service · Annual joint programme",
     groups: [
@@ -2468,7 +2468,7 @@ clubs: [
     category: "Performance",
     access: "Open",
     tag: "PERFORMANCE — POWERS INTEGRATED",
-    desc: "Two main productions a year — a musical and a straight play — plus occasional devised work. Powers are part of the craft: a flying actor, a telekinetic set change, illusion-based lighting, sonic vocal range. The script gets written around what the cast can actually do. Closest thing on campus to live, choreographed combat performance — minus the bruises.",
+    desc: "Two main productions a year — a musical and a straight play — plus occasional devised work. Powers are part of the craft: a flying actor, a telekinetic set change, illusion-based lighting, sonic vocal range. The script gets written around what the cast can actually do. Closest thing on campus to live, choreographed combat performance — minus the bruises. Per writer: at most two characters, no more than one in a lead role.",
     meets: ["TUE · 6:00 PM", "FRI · 6:00 PM", "PRODUCTION WEEKS DAILY"],
     output: "Two productions per year · Devised work as scheduled · Showcase performances",
     groups: [
@@ -2501,7 +2501,7 @@ clubs: [
     category: "Academic",
     access: "Open",
     tag: "INTER-UNIVERSITY CIRCUIT",
-    desc: "Competes on the inter-university debate circuit. Policy, parliamentary, Lincoln-Douglas. Telepathic, persuasive, and empathic abilities are barred by league rule. Administration sends a STRATA observer to every home round.",
+    desc: "Competes on the inter-university debate circuit. Policy, parliamentary, Lincoln-Douglas. Telepathic, persuasive, and empathic abilities are barred by league rule. Administration sends a STRATA observer to every home round. Per writer: no more than two members.",
     meets: ["MON · 7:30 PM", "THU · 7:30 PM"],
     output: "Inter-university circuit · Home round once per term · Nationals if qualified",
     groups: [
@@ -2525,7 +2525,7 @@ clubs: [
     category: "Academic",
     access: "Open",
     tag: "BUILD NIGHTS · WORKSHOP ACCESS",
-    desc: "Hands-on build club run out of the Engineering department's student workshop — robotics, gadgetry, salvage rebuilds, and one ridiculous termly flagship project the faculty pretends not to fund. Powers are welcome as tools (technokinesis, precision telekinesis, thermal work) but every build has to function without them — the league bench-tests entries cold. Workshop safety sign-off is mandatory before you touch anything that sparks.",
+    desc: "Hands-on build club run out of the Engineering department's student workshop — robotics, gadgetry, salvage rebuilds, and one ridiculous termly flagship project the faculty pretends not to fund. Powers are welcome as tools (technokinesis, precision telekinesis, thermal work) but every build has to function without them — the league bench-tests entries cold. Workshop safety sign-off is mandatory before you touch anything that sparks. Per writer: at most two characters, no more than one in a lead role.",
     meets: ["TUE · 7:00 PM", "SAT · 1:00 PM"],
     output: "Termly build showcase · Inter-university robotics entry · Campus repair drives",
     groups: [
@@ -2571,7 +2571,7 @@ clubs: [
     category: "Academic",
     access: "Open",
     tag: "INTER-UNIVERSITY CIRCUIT · CLEAN BOARDS",
-    desc: "Competes on the same inter-university circuit as Debate, under the same suspicion. Telepathy, precognition, probability manipulation, and accelerated cognition are barred at the board by league rule — every rated game is played inside a dampened room with an arbiter who has heard every excuse. What's left is just chess, which the club regards as the entire point. Casual boards run in the Snug most evenings, where the league rules are a polite fiction.",
+    desc: "Competes on the same inter-university circuit as Debate, under the same suspicion. Telepathy, precognition, probability manipulation, and accelerated cognition are barred at the board by league rule — every rated game is played inside a dampened room with an arbiter who has heard every excuse. What's left is just chess, which the club regards as the entire point. Casual boards run in the Snug most evenings, where the league rules are a polite fiction. Per writer: no more than two members.",
     meets: ["TUE · 7:30 PM", "SUN · 2:00 PM"],
     output: "Inter-university circuit · Termly internal ladder · Casual boards in the Snug",
     groups: [
@@ -2595,7 +2595,7 @@ clubs: [
     category: "Publications",
     access: "Application",
     tag: "STUDENT-RUN NEWS",
-    desc: "The student-run news outlet. Campus reporting, investigative features, the Powerball beat, faculty profiles, anonymous tip line. Publishes weekly online and in a printed end-of-term anthology. STRATA reads every issue, has pulled three articles in the last decade, and the editors keep going.",
+    desc: "The student-run news outlet. Campus reporting, investigative features, the Powerball beat, faculty profiles, anonymous tip line. Publishes weekly online and in a printed end-of-term anthology. STRATA reads every issue, has pulled three articles in the last decade, and the editors keep going. Per writer: no more than two members.",
     meets: ["WED · 8:00 PM", "SUN · 4:00 PM"],
     output: "Weekly online edition · End-of-term printed anthology · Breaking coverage as needed",
     groups: [
