@@ -1,8 +1,15 @@
 import { buildEmbed } from "./embed.js";
 import { postMessage } from "./discord.js";
+import { getFile } from "./github.js";
 import { ensureWriterMapping } from "./writer-mapping.js";
 import { lookupOocByRpc } from "./writers.js";
-import { extractRpcUsername, getOocForForm } from "./quota.js";
+import {
+  extractRpcUsername,
+  getOocForForm,
+  isCappedClubSubmission,
+  checkClubQuota,
+  clubQuotaMessage,
+} from "./quota.js";
 
 export async function handleSubmit(request, env, ctx) {
   let body;
@@ -20,6 +27,31 @@ export async function handleSubmit(request, env, ctx) {
   // Honeypot — silent success so spammers don't get feedback.
   if (form.hp) {
     return json({ ok: true });
+  }
+
+  // Per-writer club caps — checked BEFORE anything is posted so an
+  // over-cap writer gets immediate feedback on the form instead of a
+  // doomed pending application. Covers the Club form and the Student
+  // form's optional club position. Fail-open on data fetch errors (a
+  // GitHub hiccup must never block submissions; the same check re-runs
+  // as a hard gate at approve time in interactions.js).
+  if (isCappedClubSubmission(form)) {
+    try {
+      const { text } = await getFile(env, env.GITHUB_DATA_FILE);
+      const verdict = checkClubQuota(text, { type, form });
+      if (!verdict.allowed) {
+        return json({
+          error: "club_quota",
+          club: verdict.club,
+          scope: verdict.scope,
+          count: verdict.count,
+          limit: verdict.limit,
+          message: clubQuotaMessage(verdict),
+        }, 409);
+      }
+    } catch (err) {
+      console.error("submit-time club quota check failed:", err.message);
+    }
   }
 
   const id = newSubmissionId();

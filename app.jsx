@@ -7226,6 +7226,14 @@ function JoinTab(){
           body: txt.slice(0, 400),
           origin: typeof window !== "undefined" ? window.location.origin : "?",
         });
+        // Structured rejections (e.g. per-writer club caps) carry a
+        // writer-facing message — show it verbatim instead of the
+        // generic relay-error copy.
+        let server = null;
+        try { server = JSON.parse(txt); } catch {}
+        if (server && typeof server.message === "string" && server.message.trim()){
+          throw new Error(server.message);
+        }
         throw new Error("Server rejected (HTTP " + res.status + "). The admin team has been pinged automatically. Try again in a minute, or contact an admin in #strata-ops.");
       }
       // Pull the real Worker-assigned submission ID out of the
@@ -7825,7 +7833,7 @@ function StudentExtras({form, set}){
   const openSeats = getOpenGovSeats();
   return (
     <>
-      <Field label="Optional · Club Position" hint="If this student also wants to join a club. Skip if you'll decide later." full>
+      <Field label="Optional · Club Position" hint="If this student also wants to join a club. Skip if you'll decide later. Per-writer club caps apply — to keep enough room for new writers, you can only hold a limited number of positions per club, counted across your characters. Caps will increase as the room grows." full>
         <select
           className="join-select"
           value={form.optClubPositionKey ?? ""}
@@ -8413,7 +8421,7 @@ function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
         {onPage("role") && (
           <>
             <FieldGroup title="Club Position"/>
-            <Field label="Open Club Position" required hint="Only open positions are listed" full>
+            <Field label="Open Club Position" required hint="Only open positions are listed. Per-writer club caps apply — to keep enough room for new writers, you can only hold a limited number of positions per club, counted across your characters. Caps will increase as the room grows." full>
               <select
                 className="join-select"
                 value={form.clubPositionKey ?? ""}

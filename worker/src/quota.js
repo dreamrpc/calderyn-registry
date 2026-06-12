@@ -327,6 +327,140 @@ export function findDuplicatePowerballCaptains(text) {
   return out;
 }
 
+// ── Per-writer club caps ─────────────────────────────────────────────
+// Keeps club rosters from being monopolised so there's room for new
+// writers — caps rise as the room grows. Counted per OOC writer across
+// all of their RPC accounts (same grouping as the tier quota):
+//
+//   Powerball        — 1 main-team spot + 1 reserve spot, across all
+//                      four house teams (league staff is uncapped)
+//   Cheer Squad      — 2 main-squad spots + 2 reserve (Alternate) spots
+//   Symphony & Choir — 3 positions total, at most 1 of them a lead
+//                      role (anything other than "Member")
+//   Debate Club      — 2 positions total
+//   Drama Society    — 2 positions total
+//
+// Caps fire twice: at submit time (handleSubmit returns a friendly
+// explanation the form shows the writer before anything is posted)
+// and again at approve time (belt-and-suspenders for submissions that
+// were already pending when a cap landed, or stale payloads).
+//
+// PRIVACY: like the other quotas, verdicts carry counts only — no
+// character list and no OOC name in any Discord-bound field.
+const CLUB_CAPS = {
+  "Powerball":        { main: 1, reserve: 1, teamsOnly: true },
+  "Cheer Squad":      { main: 2, reserve: 2 },
+  "Symphony & Choir": { total: 3, lead: 1 },
+  "Debate Club":      { total: 2 },
+  "Drama Society":    { total: 2 },
+};
+
+// Reserve-bench positions: Powerball uses "Reserve · X", Cheer Squad
+// uses "Alternate X".
+function isReservePos(pos) {
+  return /^(reserve|alternate)\b/i.test(String(pos || "").trim());
+}
+
+// The club a submission is asking to join, if any. Covers the
+// standalone Club form (clubName) and the Student form's optional
+// club position (optClubName).
+function requestedClub(form) {
+  return (form && (form.clubName || form.optClubName)) || null;
+}
+
+// True when a submission targets a capped club.
+export function isCappedClubSubmission(form) {
+  const club = requestedClub(form);
+  return !!club && Object.prototype.hasOwnProperty.call(CLUB_CAPS, club);
+}
+
+// Sets of this writer's characters in `clubName`, bucketed for the cap
+// checks. For Powerball only the four house-team rosters count — the
+// club-level positions array is league staff, not players.
+function getOocClubPositions(text, clubName, ooc) {
+  const out = { all: new Set(), main: new Set(), reserve: new Set(), lead: new Set() };
+  if (!clubName || !ooc) return out;
+  const tally = (obj) => {
+    const char = pickStringField(obj, "char");
+    if (!char) return;
+    if (entryOoc(obj) !== ooc) return;
+    const pos = pickStringField(obj, "pos") || "";
+    out.all.add(char);
+    if (isReservePos(pos)) out.reserve.add(char);
+    else out.main.add(char);
+    if (pos && pos !== "Member") out.lead.add(char);
+  };
+  const paths = CLUB_CAPS[clubName]?.teamsOnly
+    ? POWERBALL_HOUSES.map(h => ["clubs", { name: clubName }, "teams", { house: h }, "positions"])
+    : [["clubs", { name: clubName }, "positions"]];
+  for (const path of paths) {
+    try {
+      forEachArrayObject(text, path, tally);
+    } catch (err) {
+      // Fail-open: a scan failure must never block an approval.
+      if (!/no object matching|key not found/.test(err.message)) {
+        console.error(`club quota scan failed [${clubName}]:`, err.message);
+      }
+    }
+  }
+  return out;
+}
+
+// Verdict shape mirrors checkGovSeatQuota:
+//   { allowed: true,  kind: "club", ... }
+//   { allowed: false, kind: "club", club, scope, count, limit }
+// `scope` is display copy for the bucket that's full ("positions",
+// "lead roles", "main-roster spots", "reserve spots").
+export function checkClubQuota(text, sub) {
+  const form = sub?.form || {};
+  const club = requestedClub(form);
+  const cap = club ? CLUB_CAPS[club] : null;
+  if (!cap) return { allowed: true };
+
+  // Powerball league-staff applications (no team) aren't player slots.
+  const team = form.clubTeam || form.optClubTeam || "";
+  if (cap.teamsOnly && !team) return { allowed: true, kind: "club", club };
+
+  const ooc = getOocForForm(form);
+  if (!ooc) return { allowed: true, kind: "club", warning: "no_ooc_identifier" };
+
+  const pos = String(form.clubPosition || form.optClubPosition || "");
+  const owned = getOocClubPositions(text, club, ooc);
+  const char = form.char || "";
+  // Re-approving a position for a character already counted in a
+  // bucket doesn't grow that bucket — allow it (mirrors the gov-seat
+  // rule for toggling an existing approval).
+  const grows = (set) => (char ? !set.has(char) : true);
+
+  if (cap.total != null && grows(owned.all) && owned.all.size + 1 > cap.total) {
+    return { allowed: false, kind: "club", club, scope: "positions", count: owned.all.size, limit: cap.total };
+  }
+  const wantsLead = !!pos && pos !== "Member";
+  if (cap.lead != null && wantsLead && grows(owned.lead) && owned.lead.size + 1 > cap.lead) {
+    return { allowed: false, kind: "club", club, scope: "lead roles", count: owned.lead.size, limit: cap.lead };
+  }
+  const wantsReserve = isReservePos(pos);
+  if (cap.main != null && !wantsReserve && grows(owned.main) && owned.main.size + 1 > cap.main) {
+    return { allowed: false, kind: "club", club, scope: "main-roster spots", count: owned.main.size, limit: cap.main };
+  }
+  if (cap.reserve != null && wantsReserve && grows(owned.reserve) && owned.reserve.size + 1 > cap.reserve) {
+    return { allowed: false, kind: "club", club, scope: "reserve spots", count: owned.reserve.size, limit: cap.reserve };
+  }
+  return { allowed: true, kind: "club", club, count: owned.all.size };
+}
+
+// Shared copy for the submit-time block and the form hint: why caps
+// exist. Discord's blocked embed builds its own variant inline.
+export function clubQuotaMessage(verdict) {
+  return (
+    `${verdict.club} is at its per-writer cap for you: each writer may hold at most ` +
+    `${verdict.limit} ${verdict.scope} there, counted across all of their characters ` +
+    `and accounts, and you're at ${verdict.count}. To make sure there's enough room ` +
+    `for new writers in the room, there are caps on how many characters you can have ` +
+    `in a club — the caps will increase as the room grows.`
+  );
+}
+
 // ── Unsanctioned-character cap ────────────────────────────────────────
 // At most N unsanctioned-status characters per writer, counted across all
 // of the writer's accounts (same OOC grouping as the tier quota). Unlike
