@@ -2293,7 +2293,7 @@ clubs: [
     category: "Athletics",
     access: "Tryout",
     tag: "VARSITY AQUATICS · POWER-CLASSED LANES",
-    desc: "Calderyn's varsity swim programme. The inter-university league runs power-classed lanes — assisted and unassisted — so a hydrokinetic and a baseline sprinter can both make the squad without the times turning into a joke. Propulsion, water manipulation, and density tricks are legal only in assisted events and only on declaration; sandbagging a classification gets the whole relay disqualified. Early-morning practices, cold water, no sympathy.",
+    desc: "Calderyn's varsity swim programme. The inter-university league runs power-classed lanes — assisted and unassisted — so a hydrokinetic and a baseline sprinter can both make the squad without the times turning into a joke. Propulsion, water manipulation, and density tricks are legal only in assisted events and only on declaration; sandbagging a classification gets the whole relay disqualified. Early-morning practices, cold water, no sympathy. Per writer: at most two characters, no more than one in a lead role.",
     meets: ["MON · 6:00 AM", "WED · 6:00 AM", "SAT · 8:00 AM"],
     output: "Inter-university meets · House gala each term · Nationals if qualified",
     groups: [
@@ -2317,7 +2317,7 @@ clubs: [
     category: "Athletics",
     access: "Tryout",
     tag: "TRACK & FIELD · POWER-CLASSED EVENTS",
-    desc: "Varsity track and field, run under the same power-classed rulebook as the swim programme — assisted and unassisted events, declared classifications, lane officials with stopwatches and grudges. A speedster running unassisted is a disqualification; a speedster running assisted against other speedsters is the fastest thing the public is allowed to watch on a Saturday. Jumps and throws have their own classes, their own nets, and their own insurance schedule.",
+    desc: "Varsity track and field, run under the same power-classed rulebook as the swim programme — assisted and unassisted events, declared classifications, lane officials with stopwatches and grudges. A speedster running unassisted is a disqualification; a speedster running assisted against other speedsters is the fastest thing the public is allowed to watch on a Saturday. Jumps and throws have their own classes, their own nets, and their own insurance schedule. Per writer: at most two characters, no more than one in a lead role.",
     meets: ["TUE · 6:00 AM", "THU · 6:00 AM", "MEET DAYS"],
     output: "Inter-university meets · House championship each spring · Nationals if qualified",
     groups: [
@@ -2342,7 +2342,7 @@ clubs: [
     category: "Athletics",
     access: "Tryout",
     tag: "APPARATUS CIRCUIT · POWER-CLASSED",
-    desc: "Calderyn's competitive gymnastics squad — vault, bars, beam, and floor on the inter-university apparatus circuit, under the same power-classed rulebook as the swim and athletics programmes: assisted and unassisted events, declared classifications, judges with clipboards and long memories. Flight powers make beam look easy right up until the unassisted rounds. The squad answers to its team captain, who sets the line-up, the training block, and the tone.",
+    desc: "Calderyn's competitive gymnastics squad — vault, bars, beam, and floor on the inter-university apparatus circuit, under the same power-classed rulebook as the swim and athletics programmes: assisted and unassisted events, declared classifications, judges with clipboards and long memories. Flight powers make beam look easy right up until the unassisted rounds. The squad answers to its team captain, who sets the line-up, the training block, and the tone. Per writer: at most two characters, no more than one in a lead role.",
     meets: ["TUE · 6:00 AM", "FRI · 6:00 AM", "MEET DAYS"],
     output: "Inter-university apparatus circuit · House gala exhibition · Nationals if qualified",
     groups: [
@@ -2501,7 +2501,7 @@ clubs: [
     category: "Academic",
     access: "Open",
     tag: "INTER-UNIVERSITY CIRCUIT",
-    desc: "Competes on the inter-university debate circuit. Policy, parliamentary, Lincoln-Douglas. Telepathic, persuasive, and empathic abilities are barred by league rule. Administration sends a STRATA observer to every home round. Per writer: no more than two members.",
+    desc: "Competes on the inter-university debate circuit. Policy, parliamentary, Lincoln-Douglas. Telepathic, persuasive, and empathic abilities are barred by league rule. Administration sends a STRATA observer to every home round. Per writer: at most two characters, no more than one in a lead role.",
     meets: ["MON · 7:30 PM", "THU · 7:30 PM"],
     output: "Inter-university circuit · Home round once per term · Nationals if qualified",
     groups: [
@@ -2549,7 +2549,7 @@ clubs: [
     category: "Social",
     access: "Open",
     tag: "COMMUNAL KITCHEN · TERM SUPPERS",
-    desc: "Runs out of the Communal Kitchen on the commons three nights a week, and out of sheer nerve the rest of the time. Powers are welcome at the bench under kitchen rules — heat hands declare before touching the pans, chronosense calls the timers, and nobody pressure-cooks anything with telekinesis twice. Hosts one open supper per term for the whole campus, caters the house galas when asked nicely, and maintains a standing feud with the refectory that both sides privately enjoy.",
+    desc: "Runs out of the Communal Kitchen on the commons three nights a week, and out of sheer nerve the rest of the time. Powers are welcome at the bench under kitchen rules — heat hands declare before touching the pans, chronosense calls the timers, and nobody pressure-cooks anything with telekinesis twice. Hosts one open supper per term for the whole campus, caters the house galas when asked nicely, and maintains a standing feud with the refectory that both sides privately enjoy. Per writer: at most two characters, no more than one in a lead role.",
     meets: ["MON · 6:30 PM", "WED · 6:30 PM", "SUN · 11:00 AM"],
     output: "Open supper each term · House gala catering · The bake sale STRATA pretends not to fund",
     groups: [
@@ -2571,7 +2571,7 @@ clubs: [
     category: "Academic",
     access: "Open",
     tag: "INTER-UNIVERSITY CIRCUIT · CLEAN BOARDS",
-    desc: "Competes on the same inter-university circuit as Debate, under the same suspicion. Telepathy, precognition, probability manipulation, and accelerated cognition are barred at the board by league rule — every rated game is played inside a dampened room with an arbiter who has heard every excuse. What's left is just chess, which the club regards as the entire point. Casual boards run in the Snug most evenings, where the league rules are a polite fiction. Per writer: no more than two members.",
+    desc: "Competes on the same inter-university circuit as Debate, under the same suspicion. Telepathy, precognition, probability manipulation, and accelerated cognition are barred at the board by league rule — every rated game is played inside a dampened room with an arbiter who has heard every excuse. What's left is just chess, which the club regards as the entire point. Casual boards run in the Snug most evenings, where the league rules are a polite fiction. Per writer: at most two characters, no more than one in a lead role.",
     meets: ["TUE · 7:30 PM", "SUN · 2:00 PM"],
     output: "Inter-university circuit · Termly internal ladder · Casual boards in the Snug",
     groups: [
@@ -2595,7 +2595,7 @@ clubs: [
     category: "Publications",
     access: "Application",
     tag: "STUDENT-RUN NEWS",
-    desc: "The student-run news outlet. Campus reporting, investigative features, the Powerball beat, faculty profiles, anonymous tip line. Publishes weekly online and in a printed end-of-term anthology. STRATA reads every issue, has pulled three articles in the last decade, and the editors keep going. Per writer: no more than two members.",
+    desc: "The student-run news outlet. Campus reporting, investigative features, the Powerball beat, faculty profiles, anonymous tip line. Publishes weekly online and in a printed end-of-term anthology. STRATA reads every issue, has pulled three articles in the last decade, and the editors keep going. Per writer: at most two characters, no more than one in a lead role.",
     meets: ["WED · 8:00 PM", "SUN · 4:00 PM"],
     output: "Weekly online edition · End-of-term printed anthology · Breaking coverage as needed",
     groups: [
