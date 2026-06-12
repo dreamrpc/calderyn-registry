@@ -12,6 +12,9 @@ import {
   checkTierQuota,
   checkGovSeatQuota,
   isCappedGovSeat,
+  checkClubQuota,
+  isCappedClubSubmission,
+  clubQuotaMessage,
   findDuplicatePowerballCaptains,
   checkUnsanctionedQuota,
   getUnsanctionedCharsByOoc,
@@ -476,6 +479,199 @@ test("checkUnsanctionedQuota: PRIVACY — verdict carries no character list", ()
   }, 2);
   assertFalse("chars" in v, "no chars");
   assertFalse("owned" in v, "no owned set");
+});
+
+// ─── per-writer club caps ──────────────────────────────────────────────
+// Ground truth in the real data.js at the time these were written:
+//   Star    — Powerball mains {Enzo, Ariana} reserves {Roan};
+//             Cheer mains {Velora, Nina} reserves {Emery, Daphne};
+//             S&C {Nina (Soprano Lead), Eira (Member)};
+//             Debate {Lucrecia, Eira}; Drama {Velora}
+//   Katniss — Powerball mains {Katniss Saunders}, no reserves
+//   Dream   — Cheer mains {Stella (Captain), Tina}
+//   Sin     — Cheer mains {Layla}
+
+test("isCappedClubSubmission: capped clubs on both form shapes", () => {
+  assertTrue(isCappedClubSubmission({ clubName: "Powerball" }), "club form");
+  assertTrue(isCappedClubSubmission({ optClubName: "Debate Club" }), "student optional club");
+  assertFalse(isCappedClubSubmission({ clubName: "Cape & Dagger" }), "uncapped club");
+  assertFalse(isCappedClubSubmission({}), "no club");
+});
+
+test("club: Powerball — Star blocked from another main-team spot", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Powerball", clubTeam: "Saberis", clubPosition: "Defence", char: "Brand New", ooc: "Star" },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.scope, "main-roster spots");
+  assertEq(v.count, 2);
+  assertEq(v.limit, 1);
+});
+
+test("club: Powerball — Star blocked from another reserve spot", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Powerball", clubTeam: "Grimere", clubPosition: "Reserve · Defence", char: "Brand New", ooc: "Star" },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.scope, "reserve spots");
+  assertEq(v.count, 1);
+  assertEq(v.limit, 1);
+});
+
+test("club: Powerball — writer with a main but no reserve can take a reserve", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Powerball", clubTeam: "Orenne", clubPosition: "Reserve · Attack", char: "New Kid", ooc: "Katniss" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+});
+
+test("club: Powerball — league staff (no team) is uncapped", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Powerball", clubPosition: "Head Coach", char: "Coach Char", ooc: "Star" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+});
+
+test("club: Cheer Squad — Star blocked from a third main spot", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Cheer Squad", clubPosition: "Tumbler", char: "Brand New", ooc: "Star" },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.scope, "main-roster spots");
+  assertEq(v.count, 2);
+  assertEq(v.limit, 2);
+});
+
+test("club: Cheer Squad — Star blocked from a third reserve spot", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Cheer Squad", clubPosition: "Alternate Base", char: "Brand New", ooc: "Star" },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.scope, "reserve spots");
+});
+
+test("club: Cheer Squad — caps apply to everyone (Dream at 2 mains)", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Cheer Squad", clubPosition: "Flyer", char: "New Char", ooc: "Dream" },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+});
+
+test("club: Cheer Squad — writer under the cap can join", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Cheer Squad", clubPosition: "Base", char: "Second Char", ooc: "Sin" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+});
+
+test("club: S&C — Star can still take a third non-lead Member slot", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Symphony & Choir", clubPosition: "Member", char: "Third Char", ooc: "Star" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+});
+
+test("club: S&C — Star blocked from a second lead role", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Symphony & Choir", clubPosition: "Alto Lead", char: "Third Char", ooc: "Star" },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.scope, "lead roles");
+  assertEq(v.count, 1);
+  assertEq(v.limit, 1);
+});
+
+test("club: S&C — re-approving the existing lead char is allowed", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Symphony & Choir", clubPosition: "Soprano Lead", char: "Nina Sterling Evergreen", ooc: "Star" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+});
+
+test("club: Debate Club — Star at 2/2 is blocked", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Debate Club", clubPosition: "Novice", char: "Brand New", ooc: "Star" },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.scope, "positions");
+  assertEq(v.count, 2);
+  assertEq(v.limit, 2);
+});
+
+test("club: Debate Club — re-approving an existing char is allowed", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Debate Club", clubPosition: "Novice", char: "Eira Skarsen", ooc: "Star" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+});
+
+test("club: Drama Society — Star at 1/2 can take one more", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Drama Society", clubPosition: "Actor", char: "Second Char", ooc: "Star" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+});
+
+test("club: Student form's optional club position is capped too", () => {
+  const v = checkClubQuota(data, {
+    type: "student",
+    form: { tier: "C-List", char: "New Student", ooc: "Star", optClubName: "Debate Club", optClubPosition: "Novice" },
+  });
+  assertEq(v.allowed, false, JSON.stringify(v));
+  assertEq(v.club, "Debate Club");
+});
+
+test("club: unknown writer passes with a warning (fail-open)", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Debate Club", clubPosition: "Novice", char: "X", rpcLink: "https://x?user=totally-unknown" },
+  });
+  assertEq(v.allowed, true, JSON.stringify(v));
+  assertEq(v.warning, "no_ooc_identifier");
+});
+
+test("club: uncapped club short-circuits", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Cape & Dagger", clubPosition: "Reporter", char: "X", ooc: "Star" },
+  });
+  assertEq(v.allowed, true);
+  assertFalse("kind" in v, "uncapped club should short-circuit");
+});
+
+test("club: PRIVACY — verdict carries no character list or OOC name", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Debate Club", clubPosition: "Novice", char: "Brand New", ooc: "Star" },
+  });
+  assertFalse("chars" in v, "no chars");
+  assertFalse("owned" in v, "no owned set");
+  assertFalse("ooc" in v, "no ooc on club verdicts");
+});
+
+test("club: clubQuotaMessage explains the room-growth rationale", () => {
+  const v = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Debate Club", clubPosition: "Novice", char: "Brand New", ooc: "Star" },
+  });
+  const msg = clubQuotaMessage(v);
+  assertTrue(/room for new writers/i.test(msg), "mentions room for new writers");
+  assertTrue(/increase as the room grows/i.test(msg), "mentions caps growing");
+  assertTrue(msg.includes("Debate Club"), "names the club");
 });
 
 if (failed) {

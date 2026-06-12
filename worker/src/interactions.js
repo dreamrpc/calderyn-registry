@@ -2,7 +2,7 @@ import { verifySignature, editMessage, postMessage } from "./discord.js";
 import { buildEmbed } from "./embed.js";
 import { updateFile, getFile } from "./github.js";
 import { buildInsertions, applyInsertions, removeBySubmissionId, countEntriesFor } from "./markers.js";
-import { checkTierQuota, checkGovSeatQuota, isCappedGovSeat, checkUnsanctionedQuota, getUnsanctionedLimit, submissionIsUnsanctioned, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
+import { checkTierQuota, checkGovSeatQuota, isCappedGovSeat, checkClubQuota, isCappedClubSubmission, checkUnsanctionedQuota, getUnsanctionedLimit, submissionIsUnsanctioned, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
 import { lookupOocByRpc } from "./writers.js";
 import { ensureWriterMapping } from "./writer-mapping.js";
 
@@ -150,6 +150,22 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
       }
     }
 
+    // Per-writer club caps (Powerball / Cheer Squad / Symphony & Choir /
+    // Debate Club / Drama Society). Club positions are tierless and
+    // bypass the tier quota, so check separately. Covers the Club form
+    // and the Student form's optional club position. Normally the
+    // submit-time gate in submit.js catches this first; this re-check
+    // guards submissions that were already pending when a cap landed.
+    if (!blocked && isCappedClubSubmission(sub.form)) {
+      try {
+        const current = await getFile(env, env.GITHUB_DATA_FILE);
+        const verdict = checkClubQuota(current.text, sub);
+        if (!verdict.allowed) blocked = verdict;
+      } catch (err) {
+        console.error("club quota check failed:", err.message);
+      }
+    }
+
     // Unsanctioned-character cap — counts by status, catching the usually
     // tierless rogue / collective / outside characters that bypass the
     // A/B/C/D tier caps above.
@@ -216,6 +232,18 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
         `across all of their accounts. This writer already holds ${blocked.count}, so this seat ` +
         `can't be approved until ${blocked.limit === 1 ? "the existing one is" : "one is"} vacated. ` +
         `The writer has been notified.\n\n` +
+        (blockedEmbed.description || "");
+    } else if (blocked.kind === "club") {
+      blockedEmbed = buildEmbed(sub.type, sub.form, {
+        color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
+        footer: `Calderyn College · Central Registry · 2026 · ⚠ ${blocked.club} cap`,
+      });
+      blockedEmbed.description =
+        `**⚠ Approval blocked — ${blocked.club} per-writer cap.**\n` +
+        `Each writer may hold at most **${blocked.limit} ${blocked.scope}** in ${blocked.club}, ` +
+        `counted across all of their accounts. This writer already holds ${blocked.count}, so ` +
+        `this position can't be approved until one is vacated. Club caps keep roster room open ` +
+        `for new writers and will rise as the room grows. The writer has been notified.\n\n` +
         (blockedEmbed.description || "");
     } else if (blocked.kind === "unsanctioned") {
       blockedEmbed = buildEmbed(sub.type, sub.form, {
