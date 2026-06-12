@@ -2609,8 +2609,8 @@ clubs: [
     bg: "#6b0f0f",
     category: "Underground",
     access: "Invite only",
-    tag: "UNSANCTIONED · ILLEGAL · INVITATION THROUGH SVEN SKARSEN, IN RP",
-    desc: "The other sport. An underground league — no licence, no insurance, no STRATA sanction — powered fights in venues that change every time, streamed to an audience that rivals Powerball's, with purses and side-bets in currencies the Treasury hasn't met. His contenders fight, and his contenders get paid. Heavily illegal, which has never once slowed the door queue. The ring is Sven Skarsen's, and there is no sign-up sheet: you get found, you get watched, and if you're worth the trouble, you get invited. Eight contender slots. One character per writer. Before you apply here, you clear it with Sven's typist in RP — applications without that conversation behind them go nowhere.",
+    tag: "UNSANCTIONED · ILLEGAL · INVITE ONLY · ONE CHARACTER PER WRITER",
+    desc: "The other sport. An underground league — no licence, no insurance, no STRATA sanction — powered fights in venues that change every time, streamed to an audience that rivals Powerball's, with purses and side-bets in currencies the Treasury hasn't met. His contenders fight, and his contenders get paid. Heavily illegal, which has never once slowed the door queue. The ring is Sven Skarsen's, and there is no sign-up sheet: you get found, you get watched, and if you're worth the trouble, you get invited. Eight contender slots. One character per writer. The invite happens in RP; the clearance happens OOC — talk to Sven's typist before you apply, because applications without that conversation behind them go nowhere.",
     meets: ["YOU'LL BE TOLD WHERE", "YOU'LL BE TOLD WHEN"],
     output: "Fight nights · A ranking nobody prints · Money nobody declares",
     groups: [

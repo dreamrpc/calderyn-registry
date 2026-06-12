@@ -40,7 +40,7 @@ export async function handleSubmit(request, env, ctx) {
     return json({
       error: "supebrawl_invite_required",
       message:
-        "Supebrawl is invite-only. Speak to Sven Skarsen's typist in RP first — " +
+        "Supebrawl is invite-only — one character per writer. Talk to Sven Skarsen's typist OOC first — " +
         "once the invite is agreed, tick the confirmation box on the form and resubmit.",
     }, 409);
   }

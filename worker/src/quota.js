@@ -354,8 +354,8 @@ export function findDuplicatePowerballCaptains(text) {
 //   Cooking Club     — 2 positions total
 //   Chess Club       — 2 positions total
 //   Supebrawl        — 1 position total (invite-only ring; the form
-//                      also requires confirmation that Sven Skarsen's
-//                      typist approved the invite in RP — see
+//                      also requires OOC confirmation from Sven
+//                      Skarsen's typist that the invite stands — see
 //                      supebrawlInvite in submit.js)
 //
 // Caps fire twice: at submit time (handleSubmit returns a friendly

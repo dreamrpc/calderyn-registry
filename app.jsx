@@ -7904,7 +7904,7 @@ function TailFields({form, set}){
 
 /* Optional cross-references for Student form (clubs + gov) */
 function StudentExtras({form, set}){
-  // Supebrawl is invite-only (cleared with Sven's typist in RP) and has
+  // Supebrawl is invite-only (cleared OOC with Sven's typist) and has
   // its own confirmation checkbox on the Club form — keep it out of the
   // student form's optional shortcut entirely.
   const openPos = getOpenClubPositions().filter(p => p.club !== "Supebrawl");
@@ -8531,10 +8531,10 @@ function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
               </select>
             </Field>
             {form.clubName === "Supebrawl" && (
-              <Field label="Supebrawl · Invitation Check" required hint="Supebrawl is invite-only. The ring is Sven Skarsen's — entry is arranged with his typist in RP before any application goes in. One character per writer." full>
+              <Field label="Supebrawl · Invitation Check" required hint="Supebrawl is invite-only — one character per writer. The ring is Sven Skarsen's: the invite happens in RP, and you clear it OOC with his typist before any application goes in." full>
                 <label className="join-checkbox">
                   <input type="checkbox" checked={!!form.supebrawlInvite} onChange={e => set("supebrawlInvite", e.target.checked)}/>
-                  <span>I have spoken to Sven Skarsen's typist in RP and this character's invitation to the ring has been agreed.</span>
+                  <span>I have spoken to Sven Skarsen's typist OOC and this character's invitation to the ring has been agreed.</span>
                 </label>
               </Field>
             )}
