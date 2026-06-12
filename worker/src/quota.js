@@ -339,6 +339,8 @@ export function findDuplicatePowerballCaptains(text) {
 //                      role (anything other than "Member")
 //   Debate Club      — 2 positions total
 //   Drama Society    — 2 positions total
+//   Swim Team        — 2 positions total
+//   Engineering Club — 2 positions total
 //
 // Caps fire twice: at submit time (handleSubmit returns a friendly
 // explanation the form shows the writer before anything is posted)
@@ -353,6 +355,8 @@ const CLUB_CAPS = {
   "Symphony & Choir": { total: 3, lead: 1 },
   "Debate Club":      { total: 2 },
   "Drama Society":    { total: 2 },
+  "Swim Team":        { total: 2 },
+  "Engineering Club": { total: 2 },
 };
 
 // Reserve-bench positions: Powerball uses "Reserve · X", Cheer Squad
