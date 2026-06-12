@@ -5,12 +5,17 @@
 // per-pool, per-tier integer counts.
 //
 // Request body (JSON):
-//   { ooc?: string, rpcLink?: string }
-// At least one must resolve to a known OOC writer; otherwise we
-// respond with zeroes (no error, so the form can show clean stats for
-// "new writer" submissions before they type a freeform tag).
+//   { ooc?: string, rpcLink?: string,
+//     clubName?, clubTeam?, clubPosition? }   (club-cap usage preview)
+// At least one of ooc/rpcLink must resolve to a known OOC writer;
+// otherwise we respond with zeroes (no error, so the form can show
+// clean stats for "new writer" submissions before they type a
+// freeform tag). When a capped club is selected, the response also
+// carries `club: { club, buckets: [{ label, count, limit }] }` so the
+// form can show the writer's live usage — including over-cap states
+// on grandfathered rosters — before they submit.
 
-import { getCharsByPoolTierAndOoc, getOocForForm, getTierLimits } from "./quota.js";
+import { getCharsByPoolTierAndOoc, getOocForForm, getTierLimits, clubQuotaUsage } from "./quota.js";
 import { getFile } from "./github.js";
 
 const TIERS = ["A-List", "B-List", "C-List", "D-List"];
@@ -53,6 +58,15 @@ export async function handleQuotaStats(request, env) {
       out[pool][tier] = byPool.get(pool)?.get(tier)?.get(writer)?.size || 0;
     }
   }
+
+  // Club-cap usage preview for the selected club position, if any.
+  try {
+    const usage = clubQuotaUsage(text, body || {});
+    if (usage) out.club = usage;
+  } catch (err) {
+    console.error("club usage preview failed:", err.message);
+  }
+
   return json(out);
 }
 

@@ -5561,20 +5561,26 @@ function ClubRules({rules}){
   );
 }
 
-function ClubModal({club, onClose}){
+/* Right-hand slide-over with the selected club's full info. Opened by
+   clicking a directory card; Esc, the overlay, or × closes it. Reuses
+   the existing detail-column classes (cdet-meta, clubdf-tabs/-body)
+   for the inner chrome so only the drawer shell needs new styling. */
+function ClubDrawer({club, onClose}){
   const [tab, setTab] = useState("about");
   const hasRules = !!club.rules;
-  const hasTeams = !!club.teams;
+  const hasTeams = !!(club.teams && club.teams.length);
+  const total = clubTotal(club);
+  const filled = clubFilled(club);
   const tabs = [
     {id: "about",  label: "About"},
     ...(hasRules ? [{id: "rules", label: "Rules"}] : []),
     {id: "roster", label: "Roster"},
   ];
 
-  // Reset to About whenever the modal opens on a different club.
+  // Reset to About whenever the drawer opens on a different club.
   useEffect(() => { setTab("about"); }, [club]);
 
-  // Esc closes; lock page scroll while the modal is mounted.
+  // Esc closes; lock page scroll while the drawer is mounted.
   useEffect(() => {
     const onKey = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
@@ -5587,172 +5593,113 @@ function ClubModal({club, onClose}){
   }, [onClose]);
 
   return (
-    <div
-      className="club-modal-overlay"
-      onClick={onClose}
-      role="presentation"
-    >
-      <div
-        className="club-modal"
+    <div className="cdrawer-overlay" onClick={onClose} role="presentation">
+      <aside
+        className="cdrawer"
         role="dialog"
         aria-modal="true"
         aria-label={club.name}
         onClick={e => e.stopPropagation()}
       >
-        <header className="club-modal-hd" style={{background: club.bg}}>
-          <div className="club-modal-hd-body">
-            {club.category && <div className="club-modal-cat">{club.category}</div>}
-            <h2 className="club-modal-name">{club.name}</h2>
-            {club.tag && <div className="club-modal-tag">{club.tag}</div>}
+        <header className="cdrawer-hd" style={{background: club.bg}}>
+          <div className="cdrawer-hd-body">
+            {club.category && <div className="cdrawer-cat">{club.category}</div>}
+            <h2 className="cdrawer-name">{club.name}</h2>
+            {club.tag && <div className="cdrawer-tag">{club.tag}</div>}
           </div>
           <button
             type="button"
-            className="club-modal-close"
+            className="cdrawer-close"
             onClick={onClose}
             aria-label="Close"
           ><span aria-hidden="true">×</span></button>
         </header>
-        <nav className="club-modal-tabs" role="tablist">
+
+        <div className="cdet-meta cdrawer-meta">
+          <div className="cdet-meta-cell">
+            <span className="cdet-meta-lbl">Access</span>
+            <span className="cdet-meta-val">{club.access || "Open"}</span>
+          </div>
+          <div className="cdet-meta-cell">
+            <span className="cdet-meta-lbl">Roster</span>
+            <span className="cdet-meta-val">
+              <span className="rn-big">{filled}</span>
+              <span className="rn-tot">/ {total}</span>
+              <span className="rn-suf">active</span>
+            </span>
+          </div>
+        </div>
+
+        <nav className="clubdf-tabs" role="tablist">
           {tabs.map(t => (
             <button
               key={t.id}
+              type="button"
               role="tab"
               aria-selected={tab === t.id}
-              className={"club-modal-tab" + (tab === t.id ? " on" : "")}
+              className={"clubdf-tab" + (tab === t.id ? " on" : "")}
               onClick={() => setTab(t.id)}
+              style={{"--accent": club.bg}}
             >{t.label}</button>
           ))}
         </nav>
-        <div className="club-modal-body">
+
+        <div className="clubdf-body cdrawer-body">
           {tab === "about"  && <ClubPanelAbout club={club}/>}
           {tab === "rules"  && hasRules && <ClubRules rules={club.rules}/>}
           {tab === "roster" && <ClubPanelRoster club={club} hasTeams={hasTeams}/>}
         </div>
-      </div>
+      </aside>
     </div>
   );
 }
 
 function ClubsTab(){
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const [tab, setTab] = useState("about");
-
-  // Reset to About whenever the user picks a different club.
-  useEffect(() => { setTab("about"); }, [selectedIdx]);
-
-  const club = CLUBS[selectedIdx];
-  const hasRules = !!(club && club.rules);
-  const hasTeams = !!(club && club.teams && club.teams.length);
-  const total = club ? clubTotal(club) : 0;
-  const filled = club ? clubFilled(club) : 0;
-  const accent = (club && club.bg) || "#c41a1a";
+  // Card-grid directory: every club visible at once, no scrolling a
+  // sidebar. Clicking a card slides the ClubDrawer in from the right
+  // with the full about / rules / roster panels.
+  const [openIdx, setOpenIdx] = useState(null);
+  const club = openIdx != null ? CLUBS[openIdx] : null;
 
   return (
     <div>
       <PageHead
         stamp="DOC · 05 · CAMPUS ORGS"
         title={<>Clubs &amp; societies</>}
-        body={`${["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve"][CLUBS.length] || CLUBS.length} campus clubs. Pick one from the directory to view its full roster, rules, and post-graduation pathway. Leadership is one role per player. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval.`}
+        body={`${["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen"][CLUBS.length] || CLUBS.length} campus clubs. Click any card for the full roster, rules, and post-graduation pathway. You can apply for more than one club — one application per position. New clubs go through your house RA — if there's enough interest, the Student Body President considers it for approval.`}
         pageNum="P. 005 / VIII"
       />
 
       <div className="clubsx">
-        <div className="clubs-split">
-          {/* ── DIRECTORY ─────────────────────────────────────────── */}
-          <aside className="cdir" aria-label="Clubs directory">
-            <div className="cdir-hd">
-              <span className="cdir-hd-lbl">Directory</span>
-              <span className="cdir-hd-count">
-                {CLUBS.length} <em>/ {CLUBS.length}</em>
-              </span>
-            </div>
-            <ul className="cdir-list" role="tablist">
-              {CLUBS.map((c, i) => {
-                const t = clubTotal(c);
-                const f = clubFilled(c);
-                const active = i === selectedIdx;
-                return (
-                  <li key={i} role="presentation">
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={active}
-                      className={"cdir-row" + (active ? " on" : "")}
-                      style={{"--accent": c.bg}}
-                      onClick={() => setSelectedIdx(i)}
-                    >
-                      <span className="cdir-row-body">
-                        <span className="cdir-row-name">{c.name}</span>
-                        <span className="cdir-row-foot">
-                          {c.category && (
-                            <span className="cdir-row-cat">{c.category}</span>
-                          )}
-                          <span className="cdir-row-stat">
-                            <b>{f}</b><span className="sep">/</span>{t}
-                            <span className="lbl">filled</span>
-                          </span>
-                        </span>
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </aside>
-
-          {/* ── DETAIL ────────────────────────────────────────────── */}
-          <main className="cdet" key={selectedIdx}>
-            <div className="cdh" style={{"--accent": accent}}>
-              <div className="cdh-inner">
-                {club.category && (
-                  <span className="cdh-cat">{club.category}</span>
-                )}
-                <h1 className="cdh-name">{club.name}</h1>
-                {club.tag && <div className="cdh-sub">{club.tag}</div>}
-              </div>
-            </div>
-
-            <div className="cdet-meta">
-              <div className="cdet-meta-cell">
-                <span className="cdet-meta-lbl">Access</span>
-                <span className="cdet-meta-val">{club.access || "Open"}</span>
-              </div>
-              <div className="cdet-meta-cell">
-                <span className="cdet-meta-lbl">Roster</span>
-                <span className="cdet-meta-val">
-                  <span className="rn-big">{filled}</span>
-                  <span className="rn-tot">/ {total}</span>
-                  <span className="rn-suf">active</span>
-                </span>
-              </div>
-            </div>
-
-            <nav className="clubdf-tabs" role="tablist">
-              {[
-                {id: "about",  label: "About"},
-                ...(hasRules ? [{id: "rules", label: "Rules"}] : []),
-                {id: "roster", label: "Roster"},
-              ].map(t => (
+        <ul className="clubgrid" role="list" aria-label="Clubs directory">
+          {CLUBS.map((c, i) => {
+            const t = clubTotal(c);
+            const f = clubFilled(c);
+            return (
+              <li key={i}>
                 <button
-                  key={t.id}
                   type="button"
-                  role="tab"
-                  aria-selected={tab === t.id}
-                  className={"clubdf-tab" + (tab === t.id ? " on" : "")}
-                  onClick={() => setTab(t.id)}
-                  style={{"--accent": accent}}
-                >{t.label}</button>
-              ))}
-            </nav>
-
-            <div className="clubdf-body">
-              {tab === "about"  && <ClubPanelAbout club={club}/>}
-              {tab === "rules"  && hasRules && <ClubRules rules={club.rules}/>}
-              {tab === "roster" && <ClubPanelRoster club={club} hasTeams={hasTeams}/>}
-            </div>
-          </main>
-        </div>
+                  className={"clubcard" + (openIdx === i ? " on" : "")}
+                  style={{"--accent": c.bg}}
+                  onClick={() => setOpenIdx(i)}
+                  aria-haspopup="dialog"
+                >
+                  <span className="clubcard-bar" aria-hidden="true"/>
+                  {c.category && <span className="clubcard-cat">{c.category}</span>}
+                  <span className="clubcard-name">{c.name}</span>
+                  {c.tag && <span className="clubcard-tag">{c.tag}</span>}
+                  <span className="clubcard-foot">
+                    <span className="clubcard-access">{c.access || "Open"}</span>
+                    <span className="clubcard-stat"><b>{f}</b> / {t} filled</span>
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
+
+      {club && <ClubDrawer club={club} onClose={() => setOpenIdx(null)}/>}
     </div>
   );
 }
@@ -6416,7 +6363,7 @@ function ClubPanelRoster({club, hasTeams}){
                 <div className="kb-team-cap">
                   <span className="kb-team-cap-left">
                     <i className="fa-solid fa-star kb-team-cap-icon" aria-hidden="true"></i>
-                    <span className="kb-team-cap-label">Captain</span>
+                    <span className="kb-team-cap-label">{captain.pos || "Captain"}</span>
                   </span>
                   <span className="kb-team-cap-right">
                     {captain.char
@@ -6437,7 +6384,7 @@ function ClubPanelRoster({club, hasTeams}){
                                 <table className="kb-team-tbl">
                   <tbody>
                     {starters.length > 0 && (
-                      <tr className="kb-starters-hd"><td colSpan={2}>Starting Six</td></tr>
+                      <tr className="kb-starters-hd"><td colSpan={2}>{club.teamTableLabel || "Starting Six"}</td></tr>
                     )}
                     {starters.map((p, pi) => (
                       <tr key={"s"+pi}>
@@ -6469,19 +6416,21 @@ function ClubPanelRoster({club, hasTeams}){
           })}
         </div>
 
-        <div className="cp-staff-block">
-          <div className="cp-staff-tag"><i className="fa-solid fa-clipboard-user" aria-hidden="true"></i> League Staff</div>
-          <table className="cp-staff-tbl">
-            <tbody>
-              {club.positions.map((p, pi) => (
-                <tr key={pi}>
-                  <td className="cp-staff-pos">{p.pos}</td>
-                  <td className="cp-staff-char">{p.char ? <CLink name={p.char} link={p.link||null}/> : <EmptyState/>}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {(club.positions || []).length > 0 && (
+          <div className="cp-staff-block">
+            <div className="cp-staff-tag"><i className="fa-solid fa-clipboard-user" aria-hidden="true"></i> League Staff</div>
+            <table className="cp-staff-tbl">
+              <tbody>
+                {club.positions.map((p, pi) => (
+                  <tr key={pi}>
+                    <td className="cp-staff-pos">{p.pos}</td>
+                    <td className="cp-staff-char">{p.char ? <CLink name={p.char} link={p.link||null}/> : <EmptyState/>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     );
   }
@@ -7203,9 +7152,13 @@ function JoinTab(){
     ? !!type
     : currentPageMissing.length === 0;
 
-  // Re-fetch quota stats when the writer's OOC tag changes. Debounce
-  // by waiting until the value is stable for 300ms so a user typing
-  // their freeform tag doesn't fire a request on every keystroke.
+  // Re-fetch quota stats when the writer's OOC tag — or their club
+  // position pick — changes. Debounce by waiting until the value is
+  // stable for 300ms so a user typing their freeform tag doesn't fire
+  // a request on every keystroke. The club fields let the endpoint
+  // also return the writer's live usage against the selected club's
+  // per-writer caps (shown under the position picker, including
+  // over-cap states on grandfathered rosters).
   useEffect(() => {
     const ooc = (form.ooc || "").trim();
     if (!ooc) { setQuotaStats(null); return; }
@@ -7215,7 +7168,13 @@ function JoinTab(){
         const res = await fetch(QUOTA_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ooc, rpcLink: form.rpcLink || "" }),
+          body: JSON.stringify({
+            ooc,
+            rpcLink: form.rpcLink || "",
+            clubName:     form.clubName     || form.optClubName     || "",
+            clubTeam:     form.clubTeam     || form.optClubTeam     || "",
+            clubPosition: form.clubPosition || form.optClubPosition || "",
+          }),
         });
         if (!res.ok || cancelled) return;
         const stats = await res.json();
@@ -7226,7 +7185,7 @@ function JoinTab(){
       }
     }, 300);
     return () => { cancelled = true; clearTimeout(handle); };
-  }, [form.ooc, form.rpcLink]);
+  }, [form.ooc, form.rpcLink, form.clubName, form.optClubName, form.clubTeam, form.optClubTeam, form.clubPosition, form.optClubPosition]);
 
   // Validation: list missing required fields per application type
   const requiredFields = useMemo(() => {
@@ -7589,6 +7548,7 @@ function JoinTab(){
                     <li>Admin reads your submission against the masterlist and quota.</li>
                     <li>You'll receive a message on your linked RPC profile with the decision and any follow-up questions.</li>
                     <li>If approved, you'll be added to the roster and the channel — this page will update automatically.</li>
+                    <li>No need to wait — <em>Submit another application</em> below starts a fresh one (alts, more clubs, a gov seat) while this one stays pending.</li>
                   </>
                 )}
               </ol>
@@ -8567,6 +8527,32 @@ function JoinFieldset({type, form, set, quotaStats, oocTags, wizardPageId}){
                   <span>I have spoken to Sven Skarsen's typist in RP and this character's invitation to the ring has been agreed.</span>
                 </label>
               </Field>
+            )}
+            {/* Live per-writer club-cap usage for the selected pick —
+                surfaces FULL / OVER CAP before submit instead of only
+                blocking at the relay. Data comes back with the quota
+                stats (counts only, no names). */}
+            {form.clubPosition && quotaStats?.club?.buckets?.length > 0 && (
+              <div className="join-club-usage" role="status">
+                <span className="join-club-usage-lbl">Your {quotaStats.club.club} usage</span>
+                <span className="join-club-usage-chips">
+                  {quotaStats.club.buckets.map((b, i) => {
+                    const over = b.count > b.limit;
+                    const full = b.count >= b.limit;
+                    return (
+                      <span key={i} className={"join-club-usage-chip" + (over ? " is-over" : full ? " is-full" : "")}>
+                        <b>{b.count}</b>&thinsp;/&thinsp;{b.limit} {b.label}
+                        {(over || full) && <em>{over ? "OVER CAP" : "FULL"}</em>}
+                      </span>
+                    );
+                  })}
+                </span>
+                {quotaStats.club.buckets.some(b => b.count >= b.limit) && (
+                  <span className="join-club-usage-note">
+                    This pick is at or over the per-writer cap — the relay will refuse it. Caps rise as the room grows.
+                  </span>
+                )}
+              </div>
             )}
           </>
         )}
