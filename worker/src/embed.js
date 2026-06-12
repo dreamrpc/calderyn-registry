@@ -30,7 +30,7 @@ export function buildEmbed(type, form, opts = {}) {
 
   if (form.facultyRole)  push(fields, "Faculty Role",  `${form.facultyRole} (${form.facultySection || "?"})`, false);
   if (form.clubPosition) push(fields, "Club Position", `${form.clubName || "?"} — ${form.clubPosition}${form.clubTeam ? ` (${form.clubTeam})` : ""}`, false);
-  if (form.supebrawlInvite) push(fields, "Supebrawl Invite", "✅ Cleared with Sven Skarsen's typist in RP", false);
+  if (form.supebrawlInvite) push(fields, "Supebrawl Invite", "✅ Cleared OOC with Sven Skarsen's typist", false);
   if (form.govSeat)      push(fields, "Gov Seat",      `${form.govSeat} (${form.govSection || "?"})`, false);
 
   if (type === "collective" && form.collectiveFlow) {
