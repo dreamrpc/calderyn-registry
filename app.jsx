@@ -5622,7 +5622,7 @@ function ClubsTab(){
           </aside>
 
           {/* ── DETAIL · inline, right ──────────────────────────────── */}
-          <main className="cdet2" key={selectedIdx}>
+          <main className="cdet" key={selectedIdx}>
             <div className="cdh" style={{"--accent": accent}}>
               <div className="cdh-inner">
                 {club.category && (

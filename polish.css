@@ -29377,11 +29377,6 @@ button.orgs-pill {
   line-height: 1.55;
   color: var(--text-low, #a8a298);
 }
-.cdet2 {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
 @media (max-width: 980px) {
   .clubs-split2 { grid-template-columns: 1fr; gap: 18px; }
   .clist { position: static; }
