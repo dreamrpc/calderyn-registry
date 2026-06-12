@@ -258,7 +258,42 @@ const HC_PRIMARY     = Object.fromEntries(
 const HOUSES         = D.houses;
 const TIER_C          = {"A-List":"#e31b23","B-List":"#1e40af","C-List":"#15803d","D-List":"#54545c","Unclassified":"#555"};
 const STUDENTS       = D.students;
-const FACULTY        = D.faculty;
+
+// Collapse relay-Worker slot fills onto their open placeholder rows.
+// Approved faculty / club / gov / strata / outside applications are
+// APPENDED to the target array by the Worker — the original open-slot
+// row stays put so the Discord reject toggle can roll back by deleting
+// `// sub:<id>` lines alone (see worker/src/markers.js). At load time,
+// each appended filled row takes over the first still-open row ABOVE it
+// with the same `key` value ("role" / "pos"; pass null when any open
+// row is a match, e.g. hero-list slots): slot fields the fill doesn't
+// carry (group, term, …) are kept from the placeholder, and the
+// appended duplicate row is dropped — so rosters, OPEN dropdowns,
+// counts, and search all see one row per slot. Rows hand-merged into
+// their slot are safe: their open twins sit at or after them, and only
+// rows ABOVE a fill can be consumed.
+function collapseSlotRows(rows, key){
+  const out = [...rows];
+  for (let j = 1; j < out.length; j++){
+    const f = out[j];
+    if (!f || !f.char) continue;
+    const fk = key ? String(f[key] ?? "") : null;
+    if (key && !fk) continue;
+    for (let i = 0; i < j; i++){
+      const o = out[i];
+      if (!o || o.char || o.clf) continue;
+      if (key && String(o[key] ?? "") !== fk) continue;
+      out[i] = { ...o, ...f };
+      out.splice(j, 1);
+      j--;
+      break;
+    }
+  }
+  return out;
+}
+
+const FACULTY        = D.faculty.map(sec =>
+  ({ ...sec, rows: collapseSlotRows(sec.rows || [], "role") }));
 const AUX_FACULTY    = D.auxFaculty || [];
 // Forward declaration so applyAuxFaculty can be defined below and
 // still reference AUX_FACULTY. DEPARTMENTS is initialised after the
@@ -310,15 +345,27 @@ function applyAuxFaculty(dept){
 // Registry, dropdowns, and global search.
 DEPARTMENTS = (D.departments || []).map(applyAuxFaculty);
 const STRATA         = D.strata;
-const OUTSIDE        = D.outside;
+const OUTSIDE        = D.outside.map(sec => ({
+  ...sec,
+  orgs: (sec.orgs || []).map(org =>
+    ({ ...org, roles: collapseSlotRows(org.roles || [], "role") })),
+}));
 const POWERS         = D.powers;
 const POWER_STATUSES    = D.powerStatuses;
 const BANNED_POWERS     = D.bannedPowers;
 const RESTRICTED_POWERS = D.restrictedPowers || [];
 const POWER_TIERS    = D.powerTiers;
-const CLUBS          = D.clubs;
-const STUDENT_GOV    = D.studentGov;
-const HERO_LISTS     = D.heroLists;
+const CLUBS          = D.clubs.map(c => ({
+  ...c,
+  positions: c.positions ? collapseSlotRows(c.positions, "pos") : c.positions,
+  teams: c.teams
+    ? c.teams.map(t => ({ ...t, positions: collapseSlotRows(t.positions || [], "pos") }))
+    : c.teams,
+}));
+const STUDENT_GOV    = D.studentGov.map(sec =>
+  ({ ...sec, seats: collapseSlotRows(sec.seats || [], "pos") }));
+const HERO_LISTS     = D.heroLists.map(list =>
+  ({ ...list, slots: collapseSlotRows(list.slots || [], null) }));
 const GROUPS         = D.groups;
 const TABS           = D.tabs;
 const TIER_COLOR     = {A:"#e31b23", B:"#1e40af", C:"#d4a843", D:"#54545c", E:"#6b3a3a"};

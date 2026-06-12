@@ -112,7 +112,10 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
   // Data-file mutation runs for every form type in Phase 2. Each type's
   // entries are built by markers.js; slot-fill types (faculty, strata,
   // club, gov) append next to any existing placeholder rather than
-  // replacing them — see the audit-log note in logEmbed.
+  // replacing them, which keeps the reject toggle a pure line-delete.
+  // The registry front-end collapses each appended fill onto its open
+  // slot at render time (collapseSlotRows in app.jsx), so the roster
+  // never lists a slot twice.
   let rosterChange = null; // "added" | "removed" | null
   let commitSha = null;
   let blocked = null;     // populated if quota fails
@@ -274,24 +277,19 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
     toState === "approved" ? ` · ✅ approved by ${actor?.username || "admin"}` :
     toState === "rejected" ? ` · ❌ rejected by ${actor?.username || "admin"}` :
     "";
-  // Slot-fill forms keep their placeholder row when we append — admin
-  // may want to delete it manually so the slot isn't listed twice.
-  const SLOT_FILL_TYPES = new Set(["faculty", "strata", "club", "gov"]);
-  const note =
-    toState === "approved" && rosterChange === "added" && SLOT_FILL_TYPES.has(sub.type)
-      ? "\n_Tip: the original placeholder row for this slot is still in data.js — delete it manually if you want a clean roster._"
-      : "";
-
   const newEmbed = buildEmbed(sub.type, sub.form, {
     color: newColor,
     footer: `Calderyn College · Central Registry · 2026${footerSuffix}`,
   });
 
   // Prepend a status banner to description so the state is unmissable.
+  // (No more "delete the placeholder manually" tip — slot-fill appends
+  // leave the placeholder row in data.js on purpose, and the registry
+  // collapses the fill onto its open slot at render time.)
   newEmbed.description =
     (toState === "approved" ? "**✅ Approved.**" :
      toState === "rejected" ? "**❌ Rejected.**" : "") +
-    (newEmbed.description ? `\n${newEmbed.description}` : "") + note;
+    (newEmbed.description ? `\n${newEmbed.description}` : "");
 
   try {
     await editMessage(env, sub.channelId, sub.messageId, {
