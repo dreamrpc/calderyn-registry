@@ -5608,8 +5608,23 @@ function ClubsTab(){
                       className={"clist-row" + (active ? " on" : "")}
                       style={{"--accent": c.bg}}
                       onClick={() => setSelectedIdx(i)}
+                      onKeyDown={e => {
+                        // Arrow-key navigation through the directory.
+                        if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+                        e.preventDefault();
+                        const next = e.key === "ArrowDown"
+                          ? Math.min(i + 1, CLUBS.length - 1)
+                          : Math.max(i - 1, 0);
+                        setSelectedIdx(next);
+                        const li = e.currentTarget.closest("li");
+                        const sib = e.key === "ArrowDown" ? li?.nextElementSibling : li?.previousElementSibling;
+                        sib?.querySelector("button")?.focus();
+                      }}
                     >
-                      <span className="clist-row-name">{c.name}</span>
+                      <span className="clist-row-main">
+                        <span className="clist-row-name">{c.name}</span>
+                        <span className="clist-row-meta">{c.category || "Club"} · {c.access || "Open"}</span>
+                      </span>
                       <span className="clist-row-stat"><b>{clubFilled(c)}</b>/{clubTotal(c)}</span>
                     </button>
                   </li>

@@ -29284,13 +29284,16 @@ button.orgs-pill {
   max-width: 1600px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 300px minmax(0, 1fr);
+  grid-template-columns: 400px minmax(0, 1fr);
   gap: 28px;
   align-items: start;
 }
 .clist {
   position: sticky;
   top: calc(var(--hdr-h, 84px) + var(--tabs-h, 53px) + 16px);
+  max-height: calc(100vh - var(--hdr-h, 84px) - var(--tabs-h, 53px) - 32px);
+  display: flex;
+  flex-direction: column;
   background: var(--paper-2, #101010);
   border: 1px solid var(--rule-soft, rgba(255,255,255,0.08));
 }
@@ -29323,25 +29326,32 @@ button.orgs-pill {
   display: flex;
   flex-direction: column;
   gap: 1px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.18) transparent;
 }
 .clist-row {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 9px 12px 9px 13px;
+  gap: 14px;
+  padding: 10px 14px 10px 15px;
   background: transparent;
   border: 0;
   border-left: 3px solid transparent;
   font-family: var(--sans);
-  font-size: var(--t-small, 13px);
-  font-weight: 600;
-  letter-spacing: 0.01em;
   color: var(--text-mid, #dcd6c8);
   text-align: left;
   cursor: pointer;
   transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.clist-row-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 .clist-row:hover {
   background: rgba(255, 255, 255, 0.03);
@@ -29353,11 +29363,26 @@ button.orgs-pill {
   color: #fff;
 }
 .clist-row-name {
-  min-width: 0;
+  font-size: var(--t-base, 14px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.clist-row-meta {
+  font-family: var(--mono);
+  font-size: var(--t-micro, 10px);
+  font-weight: 500;
+  letter-spacing: var(--ls-eyebrow, 0.16em);
+  text-transform: uppercase;
+  color: var(--text-low, #a8a298);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.clist-row.on .clist-row-meta { color: rgba(255,255,255,0.75); }
 .clist-row-stat {
   flex: none;
   font-family: var(--mono);
