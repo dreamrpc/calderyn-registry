@@ -817,15 +817,15 @@ test("club: Supebrawl — one slot per writer (real data)", () => {
   assertEq(wilder.allowed, true, JSON.stringify(wilder));
 });
 
-// ─── Dance & Gymnastics — per-team + team-lead caps ───────────────────
-// Seeds (all Dream's): Sylvia (Gymnastics Captain), Tina (Latin Coach),
-// Stella (Ballet Dancer + Latin Dancer). Latin team holds 2 Dream chars;
-// Dream holds 2 team-lead roles (grandfathered over the 1-cap).
+// ─── Dance Club — per-team + team-lead caps ───────────────────────────
+// Seeds (all Dream's): Tina (Latin Coach), Stella (Ballet Dancer +
+// Latin Dancer). Latin team holds 2 Dream chars; Tina is Dream's one
+// team-lead. Gymnastics is its own club now (Sylvia captains it).
 
 test("club: dance — third character on one team is blocked (perTeam 2)", () => {
   const v = checkClubQuota(data, {
     type: "club",
-    form: { clubName: "Dance & Gymnastics", clubTeam: "Latin Dance", clubPosition: "Dancer", char: "Third Latin", ooc: "Dream" },
+    form: { clubName: "Dance Club", clubTeam: "Latin Dance", clubPosition: "Dancer", char: "Third Latin", ooc: "Dream" },
   });
   assertEq(v.allowed, false, JSON.stringify(v));
   assertEq(v.count, 2);
@@ -836,7 +836,7 @@ test("club: dance — third character on one team is blocked (perTeam 2)", () =>
 test("club: dance — same writer fine on a different team (cross-team membership)", () => {
   const v = checkClubQuota(data, {
     type: "club",
-    form: { clubName: "Dance & Gymnastics", clubTeam: "Ballet", clubPosition: "Dancer", char: "Second Ballet", ooc: "Dream" },
+    form: { clubName: "Dance Club", clubTeam: "Ballet", clubPosition: "Dancer", char: "Second Ballet", ooc: "Dream" },
   });
   assertEq(v.allowed, true, JSON.stringify(v));
 });
@@ -844,32 +844,32 @@ test("club: dance — same writer fine on a different team (cross-team membershi
 test("club: dance — second team-lead role is blocked (lead 1)", () => {
   const v = checkClubQuota(data, {
     type: "club",
-    form: { clubName: "Dance & Gymnastics", clubTeam: "Contemporary", clubPosition: "Coach", char: "New Coach", ooc: "Dream" },
+    form: { clubName: "Dance Club", clubTeam: "Contemporary", clubPosition: "Coach", char: "New Coach", ooc: "Dream" },
   });
   assertEq(v.allowed, false, JSON.stringify(v));
   assertEq(v.scope, "team-lead roles");
-  assertEq(v.count, 2);
+  assertEq(v.count, 1);
   assertEq(v.limit, 1);
 });
 
 test("club: dance — fresh writer can join and can lead", () => {
   const join = checkClubQuota(data, {
     type: "club",
-    form: { clubName: "Dance & Gymnastics", clubTeam: "Gymnastics", clubPosition: "Gymnast", char: "New Gymnast", ooc: "Star" },
+    form: { clubName: "Dance Club", clubTeam: "Street & Hip-Hop", clubPosition: "Dancer", char: "New Dancer", ooc: "Star" },
   });
   assertEq(join.allowed, true, JSON.stringify(join));
   const lead = checkClubQuota(data, {
     type: "club",
-    form: { clubName: "Dance & Gymnastics", clubTeam: "Ballet", clubPosition: "Coach", char: "New Coach", ooc: "Star" },
+    form: { clubName: "Dance Club", clubTeam: "Ballet", clubPosition: "Coach", char: "New Coach", ooc: "Star" },
   });
   assertEq(lead.allowed, true, JSON.stringify(lead));
 });
 
 test("club: clubQuotaUsage — live counts for the form readout", () => {
   const u = clubQuotaUsage(data, {
-    ooc: "Dream", clubName: "Dance & Gymnastics", clubTeam: "Latin Dance", clubPosition: "Dancer",
+    ooc: "Dream", clubName: "Dance Club", clubTeam: "Latin Dance", clubPosition: "Dancer",
   });
-  assertEq(u.club, "Dance & Gymnastics");
+  assertEq(u.club, "Dance Club");
   const team = u.buckets.find(b => /Latin Dance/.test(b.label));
   assertTrue(team, "has a Latin Dance bucket");
   assertEq(team.count, 2);
@@ -881,6 +881,22 @@ test("club: clubQuotaUsage — live counts for the form readout", () => {
   assertEq(tot.limit, 1);
   // Uncapped club → null (form shows nothing).
   assertEq(clubQuotaUsage(data, { ooc: "Dream", clubName: "Cape & Dagger", clubPosition: "Columnist" }), null);
+});
+
+test("club: Gymnastics — standalone club, capped at 2 total", () => {
+  assertTrue(isCappedClubSubmission({ clubName: "Gymnastics" }), "gymnastics capped");
+  // Dream holds Sylvia (Captain) — one of two slots used.
+  const second = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Gymnastics", clubPosition: "Gymnast", char: "Second Gym Char", ooc: "Dream" },
+  });
+  assertEq(second.allowed, true, JSON.stringify(second));
+  assertEq(second.count, 1);
+  const fresh = checkClubQuota(data, {
+    type: "club",
+    form: { clubName: "Gymnastics", clubPosition: "Gymnast", char: "New Gymnast", ooc: "Star" },
+  });
+  assertEq(fresh.allowed, true, JSON.stringify(fresh));
 });
 
 test("club: clubQuotaMessage explains the room-growth rationale", () => {

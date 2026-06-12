@@ -2337,6 +2337,28 @@ clubs: [
     ],
   },
   {
+    name: "Gymnastics",
+    bg: "#8a2658",
+    category: "Athletics",
+    access: "Tryout",
+    tag: "APPARATUS CIRCUIT · POWER-CLASSED",
+    desc: "Calderyn's competitive gymnastics squad — vault, bars, beam, and floor on the inter-university apparatus circuit, under the same power-classed rulebook as the swim and athletics programmes: assisted and unassisted events, declared classifications, judges with clipboards and long memories. Flight powers make beam look easy right up until the unassisted rounds. The squad answers to its team captain, who sets the line-up, the training block, and the tone.",
+    meets: ["TUE · 6:00 AM", "FRI · 6:00 AM", "MEET DAYS"],
+    output: "Inter-university apparatus circuit · House gala exhibition · Nationals if qualified",
+    groups: [
+      { label: "Leadership", roles: ["Captain"] },
+      { label: "Squad", roles: ["Gymnast"] },
+      { label: "Reserves", roles: ["Alternate Gymnast"] },
+    ],
+    positions: [
+      { pos: "Captain", group: "leadership", char: "Sylvia Strathe", link: "https://roleplay.chat/profile.php?user=sylvia" },
+      { pos: "Gymnast", group: "squad" }, { pos: "Gymnast", group: "squad" },
+      { pos: "Gymnast", group: "squad" }, { pos: "Gymnast", group: "squad" },
+      { pos: "Gymnast", group: "squad" }, { pos: "Gymnast", group: "squad" },
+      { pos: "Alternate Gymnast", group: "reserves" }, { pos: "Alternate Gymnast", group: "reserves" },
+    ],
+  },
+  {
     name: "Cheer Squad",
     bg: "#7a1a4a",
     category: "Performance",
@@ -2361,24 +2383,16 @@ clubs: [
     ],
   },
   {
-    name: "Dance & Gymnastics",
+    name: "Dance Club",
     bg: "#a32d62",
     category: "Performance",
     access: "Tryout",
     tag: "GENRE TEAMS · CROSS-TEAM MEMBERSHIP WELCOME",
-    desc: "One programme, five squads. Each dance genre runs as its own team under its own coach — the coach sets the choreography, the cuts, and the temperature of the room — while the gymnastics squad competes under a team captain on the inter-university apparatus circuit. Dancers are encouraged to train across genres: belonging to two teams is normal, belonging to three is a scheduling problem you chose. Powers are part of the vocabulary where the routine calls for it — flight holds, zero-G tumbling passes, kinetic lifts — and banned the moment they get sloppy. Per writer: at most two characters on any one team, and you can lead only one team.",
+    desc: "Four genre squads, each run by its own coach — the coach sets the choreography, the cuts, and the temperature of the room. Dancers are encouraged to train across genres: belonging to two teams is normal, belonging to three is a scheduling problem you chose. Powers are part of the vocabulary where the routine calls for it — flight holds, zero-G lifts, kinetic partnering — and banned the moment they get sloppy. Per writer: at most two characters on any one team, and you can lead only one team.",
     meets: ["MON · 5:30 PM", "THU · 5:30 PM", "SAT · 10:00 AM"],
-    output: "Termly showcase · Inter-university apparatus circuit · House gala performances",
+    output: "Termly showcase · House gala performances · Joint numbers with Cheer Squad",
     teamTableLabel: "Squad",
     teams: [
-      {
-        house: "Gymnastics", bg: "#8a2658",
-        positions: [
-          { pos: "Captain", captain: true, char: "Sylvia Strathe", link: "https://roleplay.chat/profile.php?user=sylvia" },
-          { pos: "Gymnast" }, { pos: "Gymnast" },
-          { pos: "Gymnast" }, { pos: "Gymnast" }, { pos: "Gymnast" },
-        ],
-      },
       {
         house: "Ballet", bg: "#5a3b8a",
         positions: [
