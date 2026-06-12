@@ -340,6 +340,9 @@ export function findDuplicatePowerballCaptains(text) {
 //
 //   Powerball        — 1 main-team spot + 1 reserve spot, across all
 //                      four house teams (league staff is uncapped)
+//   Dance & Gym      — 2 characters per genre team, and at most 1
+//                      team-lead role (Captain / Coach) per writer
+//                      across the whole programme
 //   Cheer Squad      — 2 main-squad spots + 2 reserve (Alternate) spots
 //   Symphony & Choir — 3 positions total, at most 1 of them a lead
 //                      role (anything other than "Member")
@@ -362,8 +365,13 @@ export function findDuplicatePowerballCaptains(text) {
 //
 // PRIVACY: like the other quotas, verdicts carry counts only — no
 // character list and no OOC name in any Discord-bound field.
+// Genre teams of the Dance & Gymnastics programme — team-scoped caps
+// scan these rosters the same way Powerball scans its house teams.
+const DANCE_TEAMS = ["Gymnastics", "Ballet", "Latin Dance", "Contemporary", "Street & Hip-Hop"];
+
 const CLUB_CAPS = {
-  "Powerball":        { main: 1, reserve: 1, teamsOnly: true },
+  "Powerball":          { main: 1, reserve: 1, teams: POWERBALL_HOUSES },
+  "Dance & Gymnastics": { perTeam: 2, lead: 1, teams: DANCE_TEAMS },
   "Cheer Squad":      { main: 2, reserve: 2 },
   "Symphony & Choir": { total: 3, lead: 1 },
   "Debate Club":      { total: 2 },
@@ -395,13 +403,21 @@ export function isCappedClubSubmission(form) {
   return !!club && Object.prototype.hasOwnProperty.call(CLUB_CAPS, club);
 }
 
+// Team-lead positions for team-scoped clubs (Dance & Gymnastics):
+// the gymnastics Captain and each genre team's Coach.
+function isTeamLeadPos(pos) {
+  return /\b(captain|coach)\b/i.test(String(pos || ""));
+}
+
 // Sets of this writer's characters in `clubName`, bucketed for the cap
-// checks. For Powerball only the four house-team rosters count — the
-// club-level positions array is league staff, not players.
+// checks. Clubs whose cap lists `teams` count only the team rosters —
+// the club-level positions array (Powerball's league staff) doesn't
+// count. For those clubs, `byTeam` carries one Set per team for the
+// per-team caps, and `teamLead` collects Captain/Coach holders.
 function getOocClubPositions(text, clubName, ooc) {
-  const out = { all: new Set(), main: new Set(), reserve: new Set(), lead: new Set() };
+  const out = { all: new Set(), main: new Set(), reserve: new Set(), lead: new Set(), teamLead: new Set(), byTeam: new Map() };
   if (!clubName || !ooc) return out;
-  const tally = (obj) => {
+  const tally = (team) => (obj) => {
     const char = pickStringField(obj, "char");
     if (!char) return;
     if (entryOoc(obj) !== ooc) return;
@@ -410,13 +426,19 @@ function getOocClubPositions(text, clubName, ooc) {
     if (isReservePos(pos)) out.reserve.add(char);
     else out.main.add(char);
     if (pos && pos !== "Member") out.lead.add(char);
+    if (isTeamLeadPos(pos)) out.teamLead.add(char);
+    if (team) {
+      if (!out.byTeam.has(team)) out.byTeam.set(team, new Set());
+      out.byTeam.get(team).add(char);
+    }
   };
-  const paths = CLUB_CAPS[clubName]?.teamsOnly
-    ? POWERBALL_HOUSES.map(h => ["clubs", { name: clubName }, "teams", { house: h }, "positions"])
-    : [["clubs", { name: clubName }, "positions"]];
-  for (const path of paths) {
+  const teams = CLUB_CAPS[clubName]?.teams;
+  const paths = teams
+    ? teams.map(t => ({ team: t, path: ["clubs", { name: clubName }, "teams", { house: t }, "positions"] }))
+    : [{ team: null, path: ["clubs", { name: clubName }, "positions"] }];
+  for (const { team, path } of paths) {
     try {
-      forEachArrayObject(text, path, tally);
+      forEachArrayObject(text, path, tally(team));
     } catch (err) {
       // Fail-open: a scan failure must never block an approval.
       if (!/no object matching|key not found/.test(err.message)) {
@@ -438,9 +460,10 @@ export function checkClubQuota(text, sub) {
   const cap = club ? CLUB_CAPS[club] : null;
   if (!cap) return { allowed: true };
 
-  // Powerball league-staff applications (no team) aren't player slots.
+  // Team-scoped clubs: applications without a team (Powerball league
+  // staff) aren't player slots and bypass the player caps.
   const team = form.clubTeam || form.optClubTeam || "";
-  if (cap.teamsOnly && !team) return { allowed: true, kind: "club", club };
+  if (cap.teams && !team) return { allowed: true, kind: "club", club };
 
   const ooc = getOocForForm(form);
   if (!ooc) return { allowed: true, kind: "club", warning: "no_ooc_identifier" };
@@ -456,9 +479,21 @@ export function checkClubQuota(text, sub) {
   if (cap.total != null && grows(owned.all) && owned.all.size + 1 > cap.total) {
     return { allowed: false, kind: "club", club, scope: "positions", count: owned.all.size, limit: cap.total };
   }
-  const wantsLead = !!pos && pos !== "Member";
-  if (cap.lead != null && wantsLead && grows(owned.lead) && owned.lead.size + 1 > cap.lead) {
-    return { allowed: false, kind: "club", club, scope: "lead roles", count: owned.lead.size, limit: cap.lead };
+  if (cap.perTeam != null && team) {
+    const onTeam = owned.byTeam.get(team) || new Set();
+    if (grows(onTeam) && onTeam.size + 1 > cap.perTeam) {
+      return { allowed: false, kind: "club", club, scope: `spots on the ${team} team`, count: onTeam.size, limit: cap.perTeam };
+    }
+  }
+  if (cap.lead != null) {
+    // Team-scoped clubs cap Captain/Coach roles; Symphony & Choir caps
+    // anything that isn't a plain Member.
+    const leadSet  = cap.teams ? owned.teamLead : owned.lead;
+    const wantsIt  = cap.teams ? isTeamLeadPos(pos) : (!!pos && pos !== "Member");
+    const scope    = cap.teams ? "team-lead roles" : "lead roles";
+    if (wantsIt && grows(leadSet) && leadSet.size + 1 > cap.lead) {
+      return { allowed: false, kind: "club", club, scope, count: leadSet.size, limit: cap.lead };
+    }
   }
   const wantsReserve = isReservePos(pos);
   if (cap.main != null && !wantsReserve && grows(owned.main) && owned.main.size + 1 > cap.main) {
@@ -468,6 +503,48 @@ export function checkClubQuota(text, sub) {
     return { allowed: false, kind: "club", club, scope: "reserve spots", count: owned.reserve.size, limit: cap.reserve };
   }
   return { allowed: true, kind: "club", club, count: owned.all.size };
+}
+
+// Usage readout for the join form: every cap bucket that applies to
+// the writer's CURRENT club selection, with live counts, so the form
+// can show "2 / 2 · FULL" (or an over-cap state for grandfathered
+// rosters) before submission instead of only blocking at submit.
+// PRIVACY: counts only — no character names, no OOC name.
+export function clubQuotaUsage(text, form) {
+  const club = requestedClub(form);
+  const cap = club ? CLUB_CAPS[club] : null;
+  if (!cap) return null;
+  const team = form.clubTeam || form.optClubTeam || "";
+  if (cap.teams && !team) return { club, buckets: [] }; // league staff — uncapped
+  const ooc = getOocForForm(form);
+  if (!ooc) return { club, buckets: [], unresolved: true };
+
+  const pos = String(form.clubPosition || form.optClubPosition || "");
+  const owned = getOocClubPositions(text, club, ooc);
+  const buckets = [];
+  if (cap.total != null) {
+    buckets.push({ label: "positions", count: owned.all.size, limit: cap.total });
+  }
+  if (cap.perTeam != null && team) {
+    buckets.push({ label: `${team} team`, count: (owned.byTeam.get(team) || new Set()).size, limit: cap.perTeam });
+  }
+  if (cap.lead != null) {
+    const isLeadReq = cap.teams ? isTeamLeadPos(pos) : (!!pos && pos !== "Member");
+    if (isLeadReq) {
+      buckets.push({
+        label: cap.teams ? "team-lead roles" : "lead roles",
+        count: (cap.teams ? owned.teamLead : owned.lead).size,
+        limit: cap.lead,
+      });
+    }
+  }
+  if (cap.main != null && !isReservePos(pos)) {
+    buckets.push({ label: "main-roster spots", count: owned.main.size, limit: cap.main });
+  }
+  if (cap.reserve != null && isReservePos(pos)) {
+    buckets.push({ label: "reserve spots", count: owned.reserve.size, limit: cap.reserve });
+  }
+  return { club, buckets };
 }
 
 // Shared copy for the submit-time block and the form hint: why caps

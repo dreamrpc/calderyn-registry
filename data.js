@@ -2361,6 +2361,57 @@ clubs: [
     ],
   },
   {
+    name: "Dance & Gymnastics",
+    bg: "#a32d62",
+    category: "Performance",
+    access: "Tryout",
+    tag: "GENRE TEAMS · CROSS-TEAM MEMBERSHIP WELCOME",
+    desc: "One programme, five squads. Each dance genre runs as its own team under its own coach — the coach sets the choreography, the cuts, and the temperature of the room — while the gymnastics squad competes under a team captain on the inter-university apparatus circuit. Dancers are encouraged to train across genres: belonging to two teams is normal, belonging to three is a scheduling problem you chose. Powers are part of the vocabulary where the routine calls for it — flight holds, zero-G tumbling passes, kinetic lifts — and banned the moment they get sloppy. Per writer: at most two characters on any one team, and you can lead only one team.",
+    meets: ["MON · 5:30 PM", "THU · 5:30 PM", "SAT · 10:00 AM"],
+    output: "Termly showcase · Inter-university apparatus circuit · House gala performances",
+    teamTableLabel: "Squad",
+    teams: [
+      {
+        house: "Gymnastics", bg: "#8a2658",
+        positions: [
+          { pos: "Captain", captain: true, char: "Sylvia Strathe", link: "https://roleplay.chat/profile.php?user=sylvia" },
+          { pos: "Gymnast" }, { pos: "Gymnast" },
+          { pos: "Gymnast" }, { pos: "Gymnast" }, { pos: "Gymnast" },
+        ],
+      },
+      {
+        house: "Ballet", bg: "#5a3b8a",
+        positions: [
+          { pos: "Coach", captain: true },
+          { pos: "Dancer", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" },
+          { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" },
+        ],
+      },
+      {
+        house: "Latin Dance", bg: "#b3541a",
+        positions: [
+          { pos: "Coach", captain: true, char: "Valentina \"Tina\" Salvador", link: "https://roleplay.chat/profile.php?user=serpentina" },
+          { pos: "Dancer", char: "Celestia \"Stella\" Starkov", link: "https://roleplay.chat/profile.php?user=illuminate" },
+          { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" },
+        ],
+      },
+      {
+        house: "Contemporary", bg: "#2e6b6b",
+        positions: [
+          { pos: "Coach", captain: true },
+          { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" },
+        ],
+      },
+      {
+        house: "Street & Hip-Hop", bg: "#3d4451",
+        positions: [
+          { pos: "Coach", captain: true },
+          { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" }, { pos: "Dancer" },
+        ],
+      },
+    ],
+  },
+  {
     name: "Symphony & Choir",
     bg: "#1e40af",
     category: "Performance",
@@ -2559,7 +2610,7 @@ clubs: [
     category: "Underground",
     access: "Invite only",
     tag: "UNSANCTIONED · ILLEGAL · INVITATION THROUGH SVEN SKARSEN, IN RP",
-    desc: "The other sport. No league, no licence, no insurance, no STRATA sanction — powered fights in places that change every time, streamed to an audience that rivals Powerball's and bets in currencies the Treasury hasn't met. Heavily illegal, which has never once slowed the door queue. The ring is run by Sven Skarsen, and there is no sign-up sheet: you get found, you get watched, and if you're worth the trouble, you get invited. Eight contender slots. One character per writer. Before you apply here, you clear it with Sven's typist in RP — applications without that conversation behind them go nowhere.",
+    desc: "The other sport. An underground league — no licence, no insurance, no STRATA sanction — powered fights in venues that change every time, streamed to an audience that rivals Powerball's, with purses and side-bets in currencies the Treasury hasn't met. His contenders fight, and his contenders get paid. Heavily illegal, which has never once slowed the door queue. The ring is Sven Skarsen's, and there is no sign-up sheet: you get found, you get watched, and if you're worth the trouble, you get invited. Eight contender slots. One character per writer. Before you apply here, you clear it with Sven's typist in RP — applications without that conversation behind them go nowhere.",
     meets: ["YOU'LL BE TOLD WHERE", "YOU'LL BE TOLD WHEN"],
     output: "Fight nights · A ranking nobody prints · Money nobody declares",
     groups: [
