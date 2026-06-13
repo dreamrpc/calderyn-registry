@@ -16,6 +16,11 @@
 //   POST /api/events/:slug/highlights
 //   DELETE /api/events/:slug/highlights/:id
 //   PATCH  /api/events/:slug/highlights/:id
+//   GET  /api/events/:slug/coverage
+//   POST /api/events/:slug/coverage
+//   DELETE /api/events/:slug/coverage/:id
+//   PATCH  /api/events/:slug/coverage/:id
+//   GET  /api/registry/writer-characters
 //   POST /api/upload
 //   GET  /api/image/* (R2 pass-through)
 
@@ -93,6 +98,28 @@ export async function handleEvents(request, env, url) {
   if (hlIdMatch) {
     if (method === 'DELETE') return deleteHighlight(request, env, hlIdMatch[1], hlIdMatch[2]);
     if (method === 'PATCH')  return patchHighlight(request, env, hlIdMatch[1], hlIdMatch[2]);
+    return json({ error: 'method_not_allowed' }, 405);
+  }
+
+  // /api/registry/writer-characters
+  if (pathname === '/api/registry/writer-characters') {
+    if (method === 'GET') return getWriterCharacters(request, env);
+    return json({ error: 'method_not_allowed' }, 405);
+  }
+
+  // /api/events/:slug/coverage
+  const coverageMatch = pathname.match(/^\/api\/events\/([^/]+)\/coverage$/);
+  if (coverageMatch) {
+    if (method === 'GET')  return getCoverage(request, env, coverageMatch[1]);
+    if (method === 'POST') return postCoverage(request, env, coverageMatch[1]);
+    return json({ error: 'method_not_allowed' }, 405);
+  }
+
+  // /api/events/:slug/coverage/:id
+  const coverageIdMatch = pathname.match(/^\/api\/events\/([^/]+)\/coverage\/([^/]+)$/);
+  if (coverageIdMatch) {
+    if (method === 'DELETE') return deleteCoverage(request, env, coverageIdMatch[1], coverageIdMatch[2]);
+    if (method === 'PATCH')  return patchCoverage(request, env, coverageIdMatch[1], coverageIdMatch[2]);
     return json({ error: 'method_not_allowed' }, 405);
   }
 
@@ -354,6 +381,104 @@ async function patchHighlight(request, env, slug, id) {
   ).bind(...vals).run();
   const row = await env.DB.prepare('SELECT * FROM highlights WHERE id = ?').bind(id).first();
   return json({ highlight: row });
+}
+
+// ─── writer character lookup ──────────────────────────────────────────────────
+
+async function getWriterCharacters(request, env) {
+  const url = new URL(request.url);
+  const writerTag = (url.searchParams.get('writer_tag') || '').toLowerCase().trim();
+  if (!writerTag) return json({ characters: [] });
+
+  try {
+    const ghRes = await fetch(
+      `https://raw.githubusercontent.com/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/${env.GITHUB_BRANCH}/data.js`,
+      { headers: { 'User-Agent': 'calderyn-worker' } }
+    );
+    if (!ghRes.ok) return json({ characters: [] });
+    const text = await ghRes.text();
+
+    const characters = [];
+    const rpcPattern = new RegExp(`rpc\\s*:\\s*["']${writerTag}["']`, 'gi');
+    let m;
+    while ((m = rpcPattern.exec(text)) !== null) {
+      // Look back ~500 chars for the char: field
+      const chunk = text.slice(Math.max(0, m.index - 500), m.index + 200);
+      const charMatch = chunk.match(/char\s*:\s*["']([^"']+)["']/);
+      if (charMatch) {
+        const name = charMatch[1];
+        if (!characters.find(c => c.name === name)) {
+          characters.push({ name });
+        }
+      }
+    }
+    return json({ characters, writer_tag: writerTag });
+  } catch {
+    return json({ characters: [] });
+  }
+}
+
+// ─── coverage ─────────────────────────────────────────────────────────────────
+
+async function getCoverage(request, env, slug) {
+  const event = await env.DB.prepare('SELECT id FROM events WHERE slug=?').bind(slug).first();
+  if (!event) return json({ error: 'not_found' }, 404);
+  const rows = await env.DB.prepare(
+    'SELECT * FROM coverage_posts WHERE event_id=? AND is_hidden=0 ORDER BY is_pinned DESC, created_at DESC'
+  ).bind(event.id).all();
+  return json({ posts: rows.results });
+}
+
+async function postCoverage(request, env, slug) {
+  const event = await env.DB.prepare('SELECT id FROM events WHERE slug=?').bind(slug).first();
+  if (!event) return json({ error: 'not_found' }, 404);
+
+  const body = await request.json().catch(() => null);
+  if (!body) return json({ error: 'invalid_json' }, 400);
+
+  const { writer_tag, character_name, icon_url, scene_url, comment } = body;
+
+  if (!writer_tag || !character_name || !icon_url || !scene_url || !comment) {
+    return json({ error: 'All fields required' }, 400);
+  }
+  if (comment.length > 500) return json({ error: 'Comment too long (max 500 chars)' }, 400);
+  if (comment.length < 1) return json({ error: 'Comment required' }, 400);
+
+  const submittedBy = writerId(request) || 'anon';
+  const id = crypto.randomUUID().slice(0, 12);
+
+  await env.DB.prepare(
+    'INSERT INTO coverage_posts (id,event_id,writer_tag,character_name,icon_url,scene_url,comment,submitted_by) VALUES (?,?,?,?,?,?,?,?)'
+  ).bind(id, event.id, writer_tag, character_name, icon_url, scene_url, comment, submittedBy).run();
+
+  return json({ id }, 201);
+}
+
+async function deleteCoverage(request, env, slug, postId) {
+  const wid = writerId(request);
+  const admin = isAdmin(request, env);
+
+  const post = await env.DB.prepare('SELECT * FROM coverage_posts WHERE id=?').bind(postId).first();
+  if (!post) return json({ error: 'not_found' }, 404);
+  if (!admin && post.submitted_by !== wid) return json({ error: 'forbidden' }, 403);
+
+  await env.DB.prepare('DELETE FROM coverage_posts WHERE id=?').bind(postId).run();
+  return json({ ok: true });
+}
+
+async function patchCoverage(request, env, slug, postId) {
+  if (!isAdmin(request, env)) return json({ error: 'forbidden' }, 403);
+
+  const body = await request.json().catch(() => ({}));
+  const sets = []; const vals = [];
+  if ('is_pinned' in body) { sets.push('is_pinned = ?'); vals.push(body.is_pinned ? 1 : 0); }
+  if ('is_hidden' in body) { sets.push('is_hidden = ?'); vals.push(body.is_hidden ? 1 : 0); }
+  if (!sets.length) return json({ error: 'no_fields' }, 400);
+  vals.push(postId);
+  await env.DB.prepare(
+    `UPDATE coverage_posts SET ${sets.join(', ')} WHERE id = ?`
+  ).bind(...vals).run();
+  return json({ ok: true });
 }
 
 // ─── image upload / R2 ───────────────────────────────────────────────────────

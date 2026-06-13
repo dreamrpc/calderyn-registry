@@ -29532,21 +29532,13 @@ button.orgs-pill {
 .masthead.is-scrolled .mast-inner { height: 52px !important; }
 
 /* ════════════════════════════════════════════════════════════════════
-   TABS — right-edge fade mask so overflowing tabs hint scrollability
-   ════════════════════════════════════════════════════════════════════ */
-.tabs {
-  -webkit-mask: linear-gradient(90deg, #000 94%, transparent);
-  mask: linear-gradient(90deg, #000 94%, transparent);
-}
-
-/* ════════════════════════════════════════════════════════════════════
    CARD HOVER — uniform lift + shadow for the main card types
+   (excludes .club which is a large section wrapper, not a card)
    ════════════════════════════════════════════════════════════════════ */
 .home-vg-panel,
 .home-programme-card,
 .role-card,
 .tier-card,
-.club,
 .case-card,
 .org-card {
   transition: transform .18s, box-shadow .18s;
@@ -29555,7 +29547,6 @@ button.orgs-pill {
 .home-programme-card:hover,
 .role-card:hover,
 .tier-card:hover,
-.club:hover,
 .case-card:hover,
 .org-card:hover {
   transform: translateY(-2px);
