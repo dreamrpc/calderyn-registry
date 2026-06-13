@@ -15,9 +15,13 @@
 <link rel="icon" type="image/png" href="https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png"/>
 <link rel="shortcut icon" type="image/png" href="https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png"/>
 <link rel="apple-touch-icon" href="https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png"/>
-<!-- Pure font stack: Druk + Söhne (incl. Söhne Mono).
-     Both self-hosted from /fonts/ via @font-face declarations at the
-     top of polish.css. No third-party / Google Fonts loads. -->
+<!-- Comic-art type system, shared with the events / charity-fair pages:
+     Anton (display) · Bebas Neue (labels) · Fraunces (serif accents) ·
+     Inter (body). Free Google Fonts — replaces the former Söhne + Druk
+     trial faces, which required paid web licenses. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
@@ -66,16 +70,16 @@
   --h-saberis:  #15803d;          /* strong green */
   --h-grimere:  #1e40af;          /* royal blue */
 
-  /* ─── typography ─── */
-  /* PURE FONT STACK — Druk + Söhne family only. No web fallbacks
-     to Inter / Bebas / Bungee / Fraunces / 'Söhne' / Times. */
-  --sans:         'Söhne', system-ui, -apple-system, sans-serif;
-  --display:      'Druk', 'Söhne Breit', 'Söhne', sans-serif;
-  --display-wide: 'Druk Wide', 'Druk', 'Söhne Breit', sans-serif;
-  --mono:         'Söhne Mono', ui-monospace, monospace;
-  --serif:        'Söhne', system-ui, sans-serif;    /* legacy alias — points to Söhne */
-  --comic:        'Druk', 'Söhne Breit', sans-serif; /* legacy alias — points to Druk */
-  --comic-shade:  'Druk Wide', 'Druk', sans-serif;   /* legacy alias — points to Druk Wide */
+  /* ─── typography — comic-art system, shared with the events pages ─── */
+  /* Anton (display) · Bebas Neue (labels/mono) · Fraunces (serif accents)
+     · Inter (body). Loaded via Google Fonts <link> in <head>. */
+  --sans:         'Inter', system-ui, -apple-system, sans-serif;
+  --display:      'Anton', 'Inter', sans-serif;
+  --display-wide: 'Anton', 'Inter', sans-serif;
+  --mono:         'Bebas Neue', ui-monospace, monospace;
+  --serif:        'Fraunces', Georgia, 'Times New Roman', serif;
+  --comic:        'Anton', sans-serif;
+  --comic-shade:  'Anton', sans-serif;
 
   /* ─── header heights ───
      Must match the rendered heights of .mast-inner and the .tab strip
@@ -5712,13 +5716,14 @@ span.cname{ font-weight:600; color:var(--ink); }
   --muted:       #b0aca2;
   --faint:       #6e6a62;
 
-  /* ─── Calderyn shield: crimson + gold ─── */
-  --red:         #c11a2c;
-  --red-deep:    #7d1018;
-  --red-bright:  #e4324a;
-  --yellow:      #d4a84a;
-  --yellow-deep: #8a6a25;
-  --gold-bright: #f1cd72;
+  /* ─── Calderyn shield: crimson + gold — matched to the events /
+     charity-fair comic palette so the whole site reads as one set ─── */
+  --red:         #8E121C;
+  --red-deep:    #6d0e15;
+  --red-bright:  #D11F2A;
+  --yellow:      #C9A24A;
+  --yellow-deep: #9c7a32;
+  --gold-bright: #F2D584;
 
   /* ─── Strata: silver / chrome ─── */
   --silver:      #c9cdd3;
@@ -5737,8 +5742,8 @@ span.cname{ font-weight:600; color:var(--ink); }
   --dur:         220ms;
   --dur-slow:    360ms;
 
-  /* ─── editorial display family — redirected to Söhne for the pure stack ─── */
-  --serif:       'Söhne', system-ui, sans-serif;
+  /* ─── editorial accent family — Fraunces italic, as on the events pages ─── */
+  --serif:       'Fraunces', Georgia, 'Times New Roman', serif;
 }
 
 /* ─── canvas reset ─── */
@@ -10685,11 +10690,11 @@ button.class-chip-btn{
   /* Alias missing token: the existing system uses --yellow / --gold-bright
      but earlier waves never declared a plain --gold. Several Wave 8 rules
      reference var(--gold); alias it to --yellow so they resolve. */
-  --gold:         #d4a84a;
+  --gold:         #C9A24A;
 
-  /* Comic / display aliases redirected to the pure stack */
-  --comic:        'Druk', 'Söhne Breit', sans-serif;
-  --comic-shade:  'Druk Wide', 'Druk', sans-serif;
+  /* Comic / display aliases redirected to the comic-art stack */
+  --comic:        'Anton', sans-serif;
+  --comic-shade:  'Anton', sans-serif;
 
   /* hard panel ink — slightly off-true-black for warmth */
   --panel-ink:    #07070b;
