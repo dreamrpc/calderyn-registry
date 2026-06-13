@@ -3589,11 +3589,16 @@ body {
 }
 
 /* ── TEAMS GRID — 2×2 ──────────────────────────────────────────────── */
+.cdet .clubdf-body .cp-roster {
+  width: 100% !important;
+  max-width: none !important;
+}
 .cdet .clubdf-body .kb-teams {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: 20px !important;
   padding: 0 !important;
+  width: 100% !important;
 }
 @media (max-width: 980px) {
   .cdet .clubdf-body .kb-teams { grid-template-columns: 1fr !important; }
