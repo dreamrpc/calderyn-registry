@@ -94,7 +94,7 @@
 
 /* ─── reset ─── */
 *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
-html{ font-size:15px; -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+html{ font-size:16px; -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
 body{
   background:var(--paper);
   font-family:var(--sans);
@@ -102,7 +102,7 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   text-rendering:optimizeLegibility;
-  line-height:1.55;
+  line-height:1.6;
   min-height:100vh;
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
 }
@@ -13440,6 +13440,17 @@ button.class-chip-btn{
       setTimeout(waitForChrome, 50);
     }
   })();
+})();
+
+(function(){
+  const mast = document.querySelector('.masthead');
+  if (!mast) return;
+  let last = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    mast.classList.toggle('is-scrolled', y > 40);
+    last = y;
+  }, { passive: true });
 })();
 </script>
 
