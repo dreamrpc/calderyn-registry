@@ -8552,12 +8552,9 @@ html { scroll-behavior: smooth; }
 }
 .home-hero-bg, .home-hero-inner { z-index: 2; position: relative; }
 
-/* CMYK offset on the gold middle line — red + cyan ghost shadows
-   like ink-misregistration in a print run. */
+/* Hero gold middle line — soft glow only, no CMYK offset. */
 .home-hero-line-2 {
   text-shadow:
-    -3px 0 0 rgba(227, 27, 35, 0.55),
-     3px 0 0 rgba(46, 188, 212, 0.45),
     0 0 24px rgba(212, 168, 74, 0.35) !important;
 }
 
@@ -8607,9 +8604,7 @@ html { scroll-behavior: smooth; }
 }
 .home-section-title-accent {
   color: var(--yellow, #d4a84a);
-  text-shadow:
-    -2px 0 0 rgba(227, 27, 35, 0.5),
-     2px 0 0 rgba(46, 188, 212, 0.4);
+  text-shadow: none;
 }
 .home-section-stamp {
   display: inline-block !important;
@@ -8879,9 +8874,7 @@ html { scroll-behavior: smooth; }
 .home-programme-line:nth-child(2) {
   color: var(--yellow, #d4a84a) !important;
   font-style: normal !important;
-  text-shadow:
-    -2px 0 0 rgba(227, 27, 35, 0.4),
-     2px 0 0 rgba(46, 188, 212, 0.3);
+  text-shadow: none;
 }
 .home-programme-line:last-child {
   color: var(--text-2, #c9c3b5) !important;
@@ -9048,7 +9041,7 @@ html { scroll-behavior: smooth; }
   color: #ffffff !important;
   margin: 0 0 var(--space-4) !important;
   text-transform: uppercase;
-  text-shadow: 6px 6px 0 #0a0a0a;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.4);
 }
 .home-cta-sub {
   font-family: var(--sans, 'Söhne', system-ui) !important;
@@ -9231,7 +9224,7 @@ html { scroll-behavior: smooth; }
 .home-cta-title {
   font-size: clamp(48px, 7vw, 96px) !important;
   line-height: 0.9 !important;
-  text-shadow: 4px 4px 0 #0a0a0a !important;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.4) !important;
 }
 .home-cta-sub { font-size: 15px !important; }
 
@@ -10277,7 +10270,7 @@ html { scroll-behavior: smooth; }
 }
 .home-cta-title {
   font-size: clamp(40px, 5.6vw, 76px) !important;
-  text-shadow: 4px 4px 0 #0a0a0a !important;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.4) !important;
 }
 .home-programme-line {
   font-size: clamp(20px, 2.2vw, 28px) !important;
@@ -13222,9 +13215,7 @@ nav.home-scrollnav,
 }
 .home-section-title-accent {
   color: var(--yellow, #d4a84a);
-  text-shadow:
-    -1.5px 0 0 rgba(227, 27, 35, 0.4),
-     1.5px 0 0 rgba(46, 188, 212, 0.32) !important;
+  text-shadow: none !important;
 }
 .home-section-lede {
   font-family: var(--sans, 'Söhne', system-ui) !important;
@@ -29528,4 +29519,36 @@ button.orgs-pill {
 .cdet .clubdf-body .kb-team-tbl .kb-team-pos-cell {
   width: 38% !important;
   font-size: 11px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   SCROLL-COMPACT MASTHEAD — collapses non-essential chrome once the
+   user has scrolled past the hero fold. Keeps the brand + nav visible
+   but hides sub-brand text and meta cells to recover vertical space.
+   ════════════════════════════════════════════════════════════════════ */
+.masthead { transition: height .2s ease; }
+.masthead.is-scrolled .mast-brand-sub,
+.masthead.is-scrolled .mast-meta-cell { opacity: 0; pointer-events: none; transition: opacity .15s; }
+.masthead.is-scrolled .mast-inner { height: 52px !important; }
+
+/* ════════════════════════════════════════════════════════════════════
+   CARD HOVER — uniform lift + shadow for the main card types
+   (excludes .club which is a large section wrapper, not a card)
+   ════════════════════════════════════════════════════════════════════ */
+.home-vg-panel,
+.home-programme-card,
+.role-card,
+.tier-card,
+.case-card,
+.org-card {
+  transition: transform .18s, box-shadow .18s;
+}
+.home-vg-panel:hover,
+.home-programme-card:hover,
+.role-card:hover,
+.tier-card:hover,
+.case-card:hover,
+.org-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,.5);
 }

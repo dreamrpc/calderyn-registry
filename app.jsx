@@ -9911,6 +9911,10 @@ function App(){
               <span>{t.label}</span>
             </button>
           ))}
+          <a className="tab tab-events" href="/events" role="tab" aria-selected="false" tabIndex={0}>
+            <span className="tab-num">11</span>
+            <span>Events</span>
+          </a>
         </div>
       </nav>
 

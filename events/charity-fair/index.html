@@ -131,7 +131,7 @@ nav{
 .hero h1{
   font-family:'Anton',sans-serif;text-transform:uppercase;
   font-size:clamp(38px,6.5vw,80px);color:var(--paper);
-  letter-spacing:.004em;line-height:.9;
+  letter-spacing:.004em;line-height:1.0;
   text-shadow:3px 3px 0 var(--ink-stroke),5px 5px 0 rgba(142,18,28,.85);
 }
 .hero h1 em{
@@ -198,7 +198,7 @@ nav{
    TAB BAR
    ═══════════════════════════════════════════════════════ */
 .tab-bar{
-  position:sticky;top:78px;z-index:90;
+  position:sticky;top:62px;z-index:90;
   background:var(--panel);border-bottom:3px solid var(--gold);
   display:flex;gap:0;
 }
@@ -310,14 +310,15 @@ nav{
 }
 
 /* figure panels / comic panels */
-.panels{display:flex;gap:18px;margin:22px 0 24px;flex-wrap:wrap}
+.panels{display:flex;flex-direction:column;gap:18px;margin:22px 0 24px}
 .panel-fig{
-  flex:1;min-width:220px;
+  width:100%;
   border:3px solid var(--ink-stroke);border-radius:6px;overflow:hidden;
   box-shadow:0 0 0 2px var(--gold),8px 8px 0 rgba(0,0,0,.5);
   background:#060509;
 }
-.panel-fig img{width:100%;height:auto;object-fit:contain;display:block}
+.panel-fig img{width:100%;height:auto;object-fit:contain;display:block;cursor:zoom-in;transition:filter .2s}
+.panel-fig img:hover{filter:brightness(1.07)}
 .panel-ph{
   min-height:200px;
   display:flex;align-items:center;justify-content:center;
@@ -620,6 +621,62 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
 #backTop:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 rgba(0,0,0,.6)}
 
 :focus-visible{outline:3px solid var(--gold-bright);outline-offset:3px;border-radius:3px}
+
+/* ═══════════════════════════════════════════════════════
+   COVERAGE GRID
+   ═══════════════════════════════════════════════════════ */
+.coverage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+.cv-card {
+  background: var(--panel);
+  border: 3px solid var(--ink-stroke);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 0 2px var(--gold-deep), 6px 6px 0 rgba(0,0,0,.5);
+  transition: box-shadow .18s;
+}
+.cv-card.is-pinned { box-shadow: 0 0 0 2px var(--gold-bright), 7px 7px 0 rgba(0,0,0,.5); }
+.cv-card:hover { box-shadow: 0 0 0 2px var(--gold), 7px 7px 0 rgba(0,0,0,.55); }
+.cv-scene {
+  width: 100%; aspect-ratio: 16/9; object-fit: contain;
+  background: #060509; border-bottom: 2px solid var(--ink-stroke);
+  cursor: zoom-in; display: block; transition: filter .2s;
+}
+.cv-scene:hover { filter: brightness(1.07); }
+.cv-footer {
+  display: flex; gap: 12px; padding: 14px 14px 10px; align-items: flex-start;
+}
+.cv-icon {
+  width: 52px; height: 52px; border-radius: 6px; object-fit: cover;
+  border: 2px solid var(--ink-stroke); flex-shrink: 0;
+  box-shadow: 2px 2px 0 rgba(0,0,0,.4);
+}
+.cv-icon-ph {
+  width: 52px; height: 52px; border-radius: 6px;
+  border: 2px solid var(--gold-deep); flex-shrink: 0;
+  background: var(--panel-2); display: flex; align-items: center; justify-content: center;
+}
+.cv-body { flex: 1; min-width: 0; }
+.cv-char {
+  font-family: 'Anton', sans-serif; font-size: 16px; text-transform: uppercase;
+  letter-spacing: .01em; color: var(--paper); text-shadow: 1px 1px 0 var(--ink-stroke);
+  margin-bottom: 2px;
+}
+.cv-tag {
+  font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: .1em;
+  color: var(--gold); margin-bottom: 6px;
+}
+.cv-comment {
+  font-size: 14px; color: var(--cream); line-height: 1.55;
+  font-style: italic;
+}
+.cv-actions { display: flex; gap: 6px; padding: 0 12px 10px; flex-wrap: wrap; }
+.cv-empty {
+  grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--muted-2);
+}
 </style>
 </head>
 <body>
@@ -699,6 +756,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
   <button class="tab-btn active" data-tab="itinerary" role="tab" aria-selected="true">Itinerary</button>
   <button class="tab-btn" data-tab="outfits" role="tab" aria-selected="false">Outfits Gallery</button>
   <button class="tab-btn" data-tab="highlights" role="tab" aria-selected="false">Event Highlights</button>
+  <button class="tab-btn" data-tab="coverage" role="tab" aria-selected="false">Cape &amp; Dagger</button>
 </div>
 
 <!-- ═══════════════════════════════════════════════════
@@ -795,10 +853,10 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="panels">
         <figure class="panel-fig">
-          <img src="https://i.ibb.co/VY5214pb/01ac1890-ff1f-4f45-ba96-c47755f14fe5.png" alt="Coach layout" loading="lazy">
+          <img src="https://i.ibb.co/VY5214pb/01ac1890-ff1f-4f45-ba96-c47755f14fe5.png" alt="Coach layout" loading="lazy" data-zoom data-cap="The Calderyn coach — layout diagram.">
         </figure>
         <figure class="panel-fig">
-          <img src="https://i.ibb.co/My3KbSCP/75d3beb2-ede7-41a8-bab9-bf52430324e5.png" alt="Bus staff positions" loading="lazy">
+          <img src="https://i.ibb.co/My3KbSCP/75d3beb2-ede7-41a8-bab9-bf52430324e5.png" alt="Bus staff positions" loading="lazy" data-zoom data-cap="The bus staff — Henry on the door, Margaux greeting guests.">
         </figure>
       </div>
       <p class="detail-text">The Calderyn coach arrives outside the hospital. A red carpet leads from the coach to the entrance — Henry holds the door, Margaux greets guests, and a live DJ set builds the atmosphere while the press pen waits to the left.</p>
@@ -898,7 +956,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="panels">
         <figure class="panel-fig">
-          <img src="https://i.ibb.co/HpHcjmG8/d4dbc1f9-43ff-48e7-a00f-8ab25d847796.png" alt="Games zone" loading="lazy">
+          <img src="https://i.ibb.co/HpHcjmG8/d4dbc1f9-43ff-48e7-a00f-8ab25d847796.png" alt="Games zone" loading="lazy" data-zoom data-cap="The full games zone — eight stalls, one prize wall.">
         </figure>
       </div>
       <div class="note-box">
@@ -1247,6 +1305,96 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
 </div>
 
 <!-- ═══════════════════════════════════════════════════
+     COVERAGE TAB
+     ═══════════════════════════════════════════════════ -->
+<div id="tab-coverage" class="tab-pane" hidden>
+  <div class="wrap" style="padding-top:48px;padding-bottom:80px">
+
+    <div class="sh"><span class="eyebrow">Cape &amp; Dagger</span><span class="ln"></span></div>
+    <p class="sec-lead" style="color:var(--muted);font-size:17px;max-width:60ch;margin-bottom:28px">
+      In-character coverage from the fair floor. Pick your character, drop a scene photo, and leave a quote.
+    </p>
+
+    <div class="gallery-actions">
+      <button class="btn-gold" id="addCoverageBtn">+ Add coverage</button>
+    </div>
+
+    <!-- Coverage grid -->
+    <div id="coverageGrid" class="coverage-grid"></div>
+
+    <!-- Coverage submit modal -->
+    <div class="modal" id="coverageModal" hidden role="dialog" aria-modal="true" aria-label="Add coverage">
+      <div class="modal-box">
+        <button class="modal-close" id="closeCoverageModal" aria-label="Close">✕</button>
+        <h3 class="modal-title">Cape &amp; Dagger Coverage</h3>
+
+        <form id="coverageForm">
+          <!-- Step 1: Writer tag -->
+          <label>Your writer tag (RPC username) <span class="req">*</span>
+            <div style="display:flex;gap:8px;margin-top:5px">
+              <input type="text" name="writer_tag" id="cvWriterTag" required placeholder="e.g. illunimate" style="flex:1">
+              <button type="button" class="btn-gold" id="cvLookupBtn" style="font-size:14px;padding:9px 14px">Look up</button>
+            </div>
+            <p class="hint" style="font-size:12px;color:var(--muted);margin-top:5px">Enter your roleplay.chat username</p>
+          </label>
+
+          <!-- Step 2: Character selector (populated after lookup) -->
+          <div id="cvCharSection" style="margin-top:4px">
+            <label>Character <span class="req">*</span>
+              <select name="character_name" id="cvCharSelect" required disabled style="margin-top:5px">
+                <option value="">Look up your writer tag first…</option>
+              </select>
+            </label>
+          </div>
+
+          <!-- Step 3: Character icon (250×250) -->
+          <label>Character icon (250 × 250 px) <span class="req">*</span>
+            <div class="upload-area" id="cvIconArea" style="margin-top:5px">
+              <input type="file" id="cvIconFile" accept="image/*" hidden>
+              <div class="upload-inner" id="cvIconInner">
+                <svg viewBox="0 0 24 24" fill="none" width="28" height="28"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <p>Upload 250×250 character icon or <button type="button" class="link-btn" id="cvIconPick">browse</button></p>
+                <p class="hint">Square image recommended · max 4 MB</p>
+              </div>
+            </div>
+            <label style="margin-top:8px;font-size:13px;color:var(--muted)">— or paste icon URL
+              <input type="url" id="cvIconUrl" placeholder="https://..." style="margin-top:4px">
+            </label>
+          </label>
+
+          <!-- Step 4: Scene image -->
+          <label>Scene image <span class="req">*</span>
+            <div class="upload-area" id="cvSceneArea" style="margin-top:5px">
+              <input type="file" id="cvSceneFile" accept="image/*" hidden>
+              <div class="upload-inner" id="cvSceneInner">
+                <svg viewBox="0 0 24 24" fill="none" width="28" height="28"><rect x="3" y="4" width="18" height="15" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3 14l5-5 4 3 3-3 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <p>Upload scene image or <button type="button" class="link-btn" id="cvScenePick">browse</button></p>
+                <p class="hint">JPEG, PNG, GIF, WebP · max 8 MB</p>
+              </div>
+            </div>
+            <label style="margin-top:8px;font-size:13px;color:var(--muted)">— or paste scene URL
+              <input type="url" id="cvSceneUrl" placeholder="https://..." style="margin-top:4px">
+            </label>
+          </label>
+
+          <!-- Step 5: In-character comment -->
+          <label>In-character comment <span class="req">*</span>
+            <textarea name="comment" id="cvComment" required maxlength="500" rows="3"
+              placeholder="Write as your character — a quote, reaction, or caption from the floor…"
+              style="display:block;width:100%;margin-top:5px;background:var(--ink-2);color:var(--cream);border:2px solid var(--gold-deep);border-radius:5px;padding:9px 13px;font-family:Inter,sans-serif;font-size:15px;resize:vertical"></textarea>
+            <p class="hint" style="font-size:12px;color:var(--muted);margin-top:3px"><span id="cvCharCount">0</span>/500</p>
+          </label>
+
+          <div class="form-error" id="cvError" hidden></div>
+          <button type="submit" class="btn-gold" id="cvSubmitBtn">Post coverage</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
      FOOTER
      ═══════════════════════════════════════════════════ -->
 <footer>
@@ -1310,7 +1458,7 @@ function apiHeaders(extra = {}) {
 /* ─────────────────────────────────────────────
    d. Tab switching
    ───────────────────────────────────────────── */
-const TABS = ['itinerary', 'outfits', 'highlights'];
+const TABS = ['itinerary', 'outfits', 'highlights', 'coverage'];
 
 function activateTab(name) {
   if (!TABS.includes(name)) name = 'itinerary';
@@ -1327,6 +1475,7 @@ function activateTab(name) {
   });
   if (name === 'outfits')    loadOutfits();
   if (name === 'highlights') loadHighlights();
+  if (name === 'coverage')   loadCoverage();
 }
 
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1758,6 +1907,220 @@ addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
 document.querySelectorAll('img[data-zoom]').forEach(img => {
   img.addEventListener('click', () => openLightbox(img.src, img.dataset.cap || ''));
 });
+
+/* ─────────────────────────────────────────────
+   h2. Cape & Dagger Coverage
+   ───────────────────────────────────────────── */
+
+// Open/close modal
+document.getElementById('addCoverageBtn').addEventListener('click', () => {
+  document.getElementById('coverageModal').hidden = false;
+});
+document.getElementById('closeCoverageModal').addEventListener('click', () => {
+  document.getElementById('coverageModal').hidden = true;
+});
+
+// Character count
+document.getElementById('cvComment').addEventListener('input', function() {
+  document.getElementById('cvCharCount').textContent = this.value.length;
+});
+
+// Writer tag lookup
+document.getElementById('cvLookupBtn').addEventListener('click', async () => {
+  const tag = document.getElementById('cvWriterTag').value.trim().toLowerCase();
+  if (!tag) return;
+  const sel = document.getElementById('cvCharSelect');
+  sel.innerHTML = '<option value="">Loading…</option>';
+  sel.disabled = true;
+  try {
+    const res  = await fetch(`${API}/api/registry/writer-characters?writer_tag=${encodeURIComponent(tag)}`);
+    const data = await res.json();
+    const chars = data.characters || [];
+    if (!chars.length) {
+      sel.innerHTML = '<option value="">No characters found for that tag</option>';
+    } else {
+      sel.innerHTML = '<option value="">Select character…</option>'
+        + chars.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+      sel.disabled = false;
+    }
+  } catch {
+    sel.innerHTML = '<option value="">Lookup failed — type name manually</option>';
+    sel.disabled = false;
+    // Fall back to a text input
+    const manual = document.createElement('input');
+    manual.type = 'text';
+    manual.name = 'character_name';
+    manual.placeholder = 'Type character name…';
+    manual.style.marginTop = '6px';
+    manual.required = true;
+    sel.parentNode.appendChild(manual);
+  }
+});
+
+// File upload helpers for icon and scene
+let cvIconData = null, cvSceneData = null;
+
+function setupUpload(pickBtnId, fileInputId, areaId, innerId, urlInputId, onFile) {
+  const pickBtn = document.getElementById(pickBtnId);
+  const fileInput = document.getElementById(fileInputId);
+  const area = document.getElementById(areaId);
+  const inner = document.getElementById(innerId);
+  const urlInput = document.getElementById(urlInputId);
+  pickBtn.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    const f = fileInput.files[0]; if (!f) return;
+    const obj = { file: f, objectUrl: URL.createObjectURL(f) };
+    onFile(obj);
+    inner.innerHTML = `<img src="${obj.objectUrl}" style="max-height:90px;object-fit:contain;border-radius:4px"><p style="font-size:12px;margin-top:4px">${f.name}</p>`;
+    if (urlInput) urlInput.value = '';
+  });
+  ['dragover','dragleave','drop'].forEach(ev => {
+    area.addEventListener(ev, e => {
+      e.preventDefault();
+      if (ev === 'dragover') area.classList.add('drag-over');
+      if (ev === 'dragleave') area.classList.remove('drag-over');
+      if (ev === 'drop') {
+        area.classList.remove('drag-over');
+        const f = e.dataTransfer.files[0];
+        if (f) { fileInput.files = e.dataTransfer.files; fileInput.dispatchEvent(new Event('change')); }
+      }
+    });
+  });
+}
+
+setupUpload('cvIconPick', 'cvIconFile', 'cvIconArea', 'cvIconInner', 'cvIconUrl', d => { cvIconData = d; });
+setupUpload('cvScenePick', 'cvSceneFile', 'cvSceneArea', 'cvSceneInner', 'cvSceneUrl', d => { cvSceneData = d; });
+
+async function uploadFile(fileData, subtype) {
+  const fd = new FormData();
+  fd.append('image', fileData.file);
+  fd.append('event_slug', SLUG);
+  fd.append('subtype', subtype);
+  const up = await fetch(`${API}/api/upload`, {
+    method: 'POST', body: fd,
+    headers: { 'x-writer-id': getWriterId(), ...(ADMIN_TOKEN ? { 'Authorization': `Bearer ${ADMIN_TOKEN}` } : {}) }
+  });
+  const upData = await up.json();
+  if (!up.ok) throw new Error(upData.detail || upData.error || 'Upload failed');
+  return upData.url.startsWith('/') ? API + upData.url : upData.url;
+}
+
+// Store original inner HTML for reset
+const originalIconInner = document.getElementById('cvIconInner').innerHTML;
+const originalSceneInner = document.getElementById('cvSceneInner').innerHTML;
+
+// Submit coverage
+document.getElementById('coverageForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target;
+  const errEl = document.getElementById('cvError');
+  errEl.hidden = true;
+  const submitBtn = document.getElementById('cvSubmitBtn');
+  submitBtn.disabled = true; submitBtn.textContent = 'Posting…';
+
+  try {
+    let iconUrl = document.getElementById('cvIconUrl').value.trim();
+    let sceneUrl = document.getElementById('cvSceneUrl').value.trim();
+
+    if (!iconUrl && cvIconData) iconUrl = await uploadFile(cvIconData, 'coverage-icons');
+    if (!sceneUrl && cvSceneData) sceneUrl = await uploadFile(cvSceneData, 'coverage-scenes');
+
+    if (!iconUrl) { errEl.textContent = 'Please upload a character icon or paste a URL.'; errEl.hidden = false; return; }
+    if (!sceneUrl) { errEl.textContent = 'Please upload a scene image or paste a URL.'; errEl.hidden = false; return; }
+
+    const charName = form.character_name ? form.character_name.value
+      : (document.querySelector('#cvCharSection input[name="character_name"]') || {}).value || '';
+
+    const body = {
+      writer_tag: form.writer_tag.value.trim(),
+      character_name: charName,
+      icon_url: iconUrl,
+      scene_url: sceneUrl,
+      comment: form.comment.value.trim()
+    };
+    if (!body.character_name) { errEl.textContent = 'Please select or enter a character name.'; errEl.hidden = false; return; }
+
+    const res  = await fetch(`${API}/api/events/${SLUG}/coverage`, {
+      method: 'POST', headers: apiHeaders(), body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) { errEl.textContent = data.detail || data.error || 'Submission failed.'; errEl.hidden = false; return; }
+
+    document.getElementById('coverageModal').hidden = true;
+    form.reset(); cvIconData = null; cvSceneData = null;
+    document.getElementById('cvIconInner').innerHTML = originalIconInner;
+    document.getElementById('cvSceneInner').innerHTML = originalSceneInner;
+    document.getElementById('cvCharCount').textContent = '0';
+    document.getElementById('cvCharSelect').innerHTML = '<option value="">Look up your writer tag first…</option>';
+    document.getElementById('cvCharSelect').disabled = true;
+    loadCoverage();
+  } catch (err) { errEl.textContent = err.message || 'An error occurred.'; errEl.hidden = false; }
+  finally { submitBtn.disabled = false; submitBtn.textContent = 'Post coverage'; }
+});
+
+// Load and render coverage
+async function loadCoverage() {
+  const grid = document.getElementById('coverageGrid');
+  grid.innerHTML = '<div class="cv-empty"><p style="color:var(--muted)">Loading…</p></div>';
+  try {
+    const res  = await fetch(`${API}/api/events/${SLUG}/coverage`);
+    const data = await res.json();
+    renderCoverage(data.posts || []);
+  } catch {
+    grid.innerHTML = '<div class="cv-empty"><p style="color:var(--muted)">Could not load coverage.</p></div>';
+  }
+}
+
+function renderCoverage(posts) {
+  const wid  = getWriterId();
+  const grid = document.getElementById('coverageGrid');
+  if (!posts.length) {
+    grid.innerHTML = '<div class="cv-empty"><p>No coverage yet — be the first to post.</p></div>';
+    return;
+  }
+  grid.innerHTML = posts.map(p => {
+    const sceneUrl = p.scene_url.startsWith('/api/') ? API + p.scene_url : p.scene_url;
+    const iconUrl  = p.icon_url.startsWith('/api/') ? API + p.icon_url : p.icon_url;
+    const canDel = isAdmin() || p.submitted_by === wid;
+    const del  = canDel ? `<button class="delete-btn" data-id="${p.id}">✕ Delete</button>` : '';
+    const pin  = isAdmin() ? `<button class="admin-btn" data-id="${p.id}" data-pinned="${p.is_pinned}">📌 ${p.is_pinned ? 'Unpin':'Pin'}</button>` : '';
+    return `
+<div class="cv-card${p.is_pinned ? ' is-pinned' : ''}">
+  <img class="cv-scene" src="${sceneUrl}" alt="${p.character_name} scene" data-zoom data-cap="${p.character_name} — ${p.comment}">
+  <div class="cv-footer">
+    <img class="cv-icon" src="${iconUrl}" alt="${p.character_name} icon" onerror="this.style.display='none'">
+    <div class="cv-body">
+      <div class="cv-char">${p.character_name}</div>
+      <div class="cv-tag">@${p.writer_tag}</div>
+      <div class="cv-comment">"${p.comment}"</div>
+    </div>
+  </div>
+  <div class="cv-actions">${pin}${del}</div>
+</div>`;
+  }).join('');
+
+  grid.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Delete this post?')) return;
+      await fetch(`${API}/api/events/${SLUG}/coverage/${btn.dataset.id}`, {
+        method: 'DELETE', headers: apiHeaders({ 'Content-Type': undefined })
+      });
+      loadCoverage();
+    });
+  });
+  grid.querySelectorAll('.admin-btn[data-pinned]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const pinned = btn.dataset.pinned === '1' || btn.dataset.pinned === 'true';
+      await fetch(`${API}/api/events/${SLUG}/coverage/${btn.dataset.id}`, {
+        method: 'PATCH', headers: apiHeaders(), body: JSON.stringify({ is_pinned: !pinned })
+      });
+      loadCoverage();
+    });
+  });
+  grid.querySelectorAll('.cv-scene[data-zoom]').forEach(img => {
+    img.addEventListener('click', () => openLightbox(img.src, img.dataset.cap || ''));
+  });
+}
 
 /* ─────────────────────────────────────────────
    j. Itinerary extras
