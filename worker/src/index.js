@@ -3,6 +3,7 @@ import { handleInteraction } from "./interactions.js";
 import { handleQuotaStats } from "./quota-stats.js";
 import { handleWriterTags } from "./writer-tags.js";
 import { handleStatus } from "./status.js";
+import { handleEvents, handleSeedHostOutfit } from "./events.js";
 
 export default {
   async fetch(request, env, ctx) {
@@ -35,6 +36,21 @@ async function route(request, env, ctx) {
     return preflight(env, request);
   }
 
+  // ─── events API ────────────────────────────────────────────────
+  // Admin host-outfit seed: PATCH /api/admin/events/:slug/host-outfit
+  const hostOutfitMatch = url.pathname.match(/^\/api\/admin\/events\/([^/]+)\/host-outfit$/);
+  if (hostOutfitMatch && request.method === "PATCH") {
+    return withCors(await handleSeedHostOutfit(request, env, hostOutfitMatch[1]), env, request);
+  }
+
+  // All other /api/events and /api/upload and /api/image routes
+  if (url.pathname.startsWith("/api/")) {
+    const result = await handleEvents(request, env, url);
+    if (result) return withCors(result, env, request);
+    // fall through to 404 below
+  }
+
+  // ─── existing routes ────────────────────────────────────────────
   if (url.pathname === "/submit" && request.method === "POST") {
     return withCors(await handleSubmit(request, env, ctx), env, request);
   }
@@ -70,8 +86,8 @@ function preflight(env, request) {
     status: 204,
     headers: {
       "access-control-allow-origin": origin,
-      "access-control-allow-methods": "POST, OPTIONS",
-      "access-control-allow-headers": "content-type",
+      "access-control-allow-methods": "GET, POST, PATCH, DELETE, OPTIONS",
+      "access-control-allow-headers": "content-type, authorization, x-writer-id, x-writer-name",
       "access-control-max-age": "86400",
       "vary": "origin",
     },

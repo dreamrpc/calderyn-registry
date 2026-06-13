@@ -38,6 +38,10 @@ jobs:
           mkdir -p dist
           cp app.jsx data.js index.html polish.css dist/
           cp calderyn_college_logo_transparent.png dist/
+          # events hub pages
+          [ -d events ] && cp -r events dist/ || true
+          # self-hosted fonts used by the registry app
+          [ -d fonts ] && cp -r fonts dist/ || true
           # .nojekyll is a GH Pages relic; harmless on CF Pages.
           [ -f .nojekyll ] && cp .nojekyll dist/ || true
 

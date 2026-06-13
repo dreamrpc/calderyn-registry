@@ -9,6 +9,24 @@ compatibility_date = "2025-01-15"
 binding = "SUBMISSIONS"
 id = "f4b40cc6287b4654835bd47d21857b97"
 
+# D1 database for Events Hub (outfits, highlights).
+# Create with: wrangler d1 create calderyn-events
+# Apply schema: wrangler d1 migrations apply calderyn-events --remote
+# then paste the returned database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "calderyn-events"
+database_id   = "REPLACE_WITH_D1_DATABASE_ID"
+
+# R2 bucket for uploaded event images.
+# Create with: wrangler r2 bucket create calderyn-events-media
+[[r2_buckets]]
+binding    = "MEDIA"
+bucket_name = "calderyn-events-media"
+
+# Events admin token — set via: wrangler secret put EVENTS_ADMIN_TOKEN
+# EVENTS_ADMIN_TOKEN = "set-via-secret"
+
 # Public, non-secret config. Set via `wrangler secret put` for sensitive
 # values (see README.md): DISCORD_PUBLIC_KEY, DISCORD_BOT_TOKEN,
 # GITHUB_TOKEN.
