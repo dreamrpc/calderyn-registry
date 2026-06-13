@@ -5568,11 +5568,27 @@ function ClubsTab(){
   // panels. No popups.
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [tab, setTab] = useState("about");
+  const [filterCat, setFilterCat] = useState("all");
+
+  // Derive category list from data (preserving a logical display order).
+  const CAT_ORDER = ["Athletics", "Performance", "Academic", "Social", "Publications", "Underground"];
+  const categories = useMemo(() => {
+    const present = new Set(CLUBS.map(c => c.category).filter(Boolean));
+    return CAT_ORDER.filter(c => present.has(c));
+  }, []);
+
+  const filteredClubs = useMemo(
+    () => filterCat === "all" ? CLUBS : CLUBS.filter(c => c.category === filterCat),
+    [filterCat]
+  );
+
+  // When the filter changes, reset to the first visible club.
+  useEffect(() => { setSelectedIdx(0); }, [filterCat]);
 
   // Reset to About whenever the user picks a different club.
   useEffect(() => { setTab("about"); }, [selectedIdx]);
 
-  const club = CLUBS[selectedIdx];
+  const club = filteredClubs[selectedIdx];
   const hasRules = !!(club && club.rules);
   const hasTeams = !!(club && club.teams && club.teams.length);
   const total = club ? clubTotal(club) : 0;
@@ -5594,13 +5610,28 @@ function ClubsTab(){
           <aside className="clist" aria-label="Clubs directory">
             <div className="clist-hd">
               <span className="clist-hd-lbl">Directory</span>
-              <span className="clist-hd-count">{CLUBS.length} clubs</span>
+              <span className="clist-hd-count">{filteredClubs.length}{filterCat !== "all" ? ` of ${CLUBS.length}` : ""} clubs</span>
+            </div>
+            <div className="clist-filter" role="group" aria-label="Filter by category">
+              <button
+                type="button"
+                className={"clist-filter-pill" + (filterCat === "all" ? " on" : "")}
+                onClick={() => setFilterCat("all")}
+              >All</button>
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  type="button"
+                  className={"clist-filter-pill" + (filterCat === cat ? " on" : "")}
+                  onClick={() => setFilterCat(cat)}
+                >{cat}</button>
+              ))}
             </div>
             <ul className="clist-rows" role="tablist">
-              {CLUBS.map((c, i) => {
+              {filteredClubs.map((c, i) => {
                 const active = i === selectedIdx;
                 return (
-                  <li key={i} role="presentation">
+                  <li key={c.name} role="presentation">
                     <button
                       type="button"
                       role="tab"
@@ -5613,7 +5644,7 @@ function ClubsTab(){
                         if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
                         e.preventDefault();
                         const next = e.key === "ArrowDown"
-                          ? Math.min(i + 1, CLUBS.length - 1)
+                          ? Math.min(i + 1, filteredClubs.length - 1)
                           : Math.max(i - 1, 0);
                         setSelectedIdx(next);
                         const li = e.currentTarget.closest("li");
