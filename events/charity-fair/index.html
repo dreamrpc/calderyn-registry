@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOSH Charity Fair · Calderyn College</title>
+<link rel="icon" type="image/png" href="https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png">
+<link rel="shortcut icon" type="image/png" href="https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png">
+<link rel="apple-touch-icon" href="https://i.ibb.co/XgCpzmt/calderyn-college-logo-transparent.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   DESIGN TOKENS
+   ═══════════════════════════════════════════════════════ */
+:root{
+  --ink:#08070a;
+  --ink-2:#0d0b11;
+  --ink-3:#18151f;
+  --panel:#14111a;
+  --panel-2:#1b1722;
+  --line:rgba(201,162,74,.34);
+  --line-soft:rgba(231,212,160,.12);
+  --gold:#C9A24A;
+  --gold-bright:#F2D584;
+  --gold-deep:#9c7a32;
+  --red:#8E121C;
+  --red-bright:#D11F2A;
+  --blue:#2B6CB0;
+  --cream:#F4ECD8;
+  --paper:#FBF4E0;
+  --muted:#a89b7d;
+  --muted-2:#897d62;
+  --ink-stroke:#000;
+}
+
+/* ─── reset ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px;-webkit-text-size-adjust:100%}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+body{
+  background:var(--ink);
+  color:var(--cream);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(120% 80% at 50% -10%,rgba(142,18,28,.28),transparent 55%),
+    radial-gradient(90% 60% at 100% 100%,rgba(43,108,176,.10),transparent 60%),
+    repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.16) 3px,transparent 4px);
+  background-attachment:fixed;
+}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 26px}
+.eyebrow{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold)}
+
+/* ═══════════════════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════════════════ */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,7,10,.92);
+  backdrop-filter:blur(14px);
+  border-bottom:2px solid var(--gold);
+  box-shadow:0 3px 0 rgba(142,18,28,.55),0 6px 20px rgba(0,0,0,.6);
+}
+.nav-inner{
+  display:flex;align-items:center;gap:20px;
+  max-width:1080px;margin:0 auto;padding:12px 26px;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .crest{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 2px 0 rgba(0,0,0,.7))}
+.brand span{
+  font-family:'Anton',sans-serif;font-size:20px;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--paper);
+  text-shadow:1.5px 1.5px 0 var(--ink-stroke);
+}
+.nav-links{display:flex;gap:2px;margin-left:auto}
+.nav-links a{
+  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--cream);
+  padding:7px 13px;border-radius:5px;
+  transition:color .15s,background .15s;
+}
+.nav-links a:hover,.nav-links a[aria-current]{color:var(--ink);background:var(--gold-bright)}
+.menu-btn{
+  display:none;margin-left:auto;
+  background:none;border:2px solid var(--gold);
+  color:var(--gold-bright);width:44px;height:42px;
+  border-radius:7px;cursor:pointer;
+  align-items:center;justify-content:center;
+}
+.menu-btn svg{width:20px;height:20px}
+@media(max-width:860px){
+  .nav-links{display:none;width:100%;flex-direction:column;gap:0;margin:10px 0 2px}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:12px;border-top:1px solid var(--line-soft)}
+  .menu-btn{display:flex}
+  .nav-inner{flex-wrap:wrap}
+}
+
+/* ═══════════════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════════════ */
+.hero{
+  padding:64px 0 54px;text-align:center;
+  border-bottom:3px solid var(--gold);
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(201,162,74,.10) 1.1px,transparent 1.4px);
+  background-size:10px 10px;opacity:.6;pointer-events:none;
+}
+/* radiating burst behind crest */
+.hero::after{
+  content:"";position:absolute;
+  top:0;left:50%;transform:translateX(-50%);
+  width:480px;height:260px;
+  background:conic-gradient(from 0deg,transparent 0deg,rgba(201,162,74,.07) 10deg,transparent 20deg,rgba(201,162,74,.05) 30deg,transparent 40deg,rgba(201,162,74,.07) 50deg,transparent 60deg,rgba(201,162,74,.05) 70deg,transparent 80deg,rgba(201,162,74,.07) 90deg,transparent 100deg,rgba(201,162,74,.05) 110deg,transparent 120deg,rgba(201,162,74,.07) 130deg,transparent 140deg,rgba(201,162,74,.05) 150deg,transparent 160deg,rgba(201,162,74,.07) 170deg,transparent 180deg,rgba(201,162,74,.05) 190deg,transparent 200deg,rgba(201,162,74,.07) 210deg,transparent 220deg,rgba(201,162,74,.05) 230deg,transparent 240deg,rgba(201,162,74,.07) 250deg,transparent 260deg,rgba(201,162,74,.05) 270deg,transparent 280deg,rgba(201,162,74,.07) 290deg,transparent 300deg,rgba(201,162,74,.05) 310deg,transparent 320deg,rgba(201,162,74,.07) 330deg,transparent 340deg,rgba(201,162,74,.05) 350deg,transparent 360deg);
+  pointer-events:none;z-index:0;
+}
+.hero>.wrap{position:relative;z-index:1}
+.hero-crest{display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px}
+.hero-crest img{object-fit:contain;filter:drop-shadow(0 4px 0 var(--ink)) drop-shadow(0 8px 22px rgba(201,162,74,.35))}
+.hero .eyebrow{margin-bottom:12px}
+.hero h1{
+  font-family:'Anton',sans-serif;text-transform:uppercase;
+  font-size:clamp(38px,6.5vw,80px);color:var(--paper);
+  letter-spacing:.004em;line-height:.9;
+  text-shadow:3px 3px 0 var(--ink-stroke),5px 5px 0 rgba(142,18,28,.85);
+}
+.hero h1 em{
+  display:block;font-style:normal;color:var(--gold-bright);
+  text-shadow:3px 3px 0 var(--ink-stroke),5px 5px 0 rgba(142,18,28,.9);
+}
+.hero .sub{font-size:17px;color:var(--cream);max-width:48ch;margin:16px auto 0;line-height:1.55}
+.hero-meta{
+  display:flex;justify-content:center;gap:40px;flex-wrap:wrap;
+  margin-top:28px;padding-top:22px;
+  border-top:1px solid var(--line-soft);
+}
+.hero-meta .k{
+  font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:3px;
+}
+.hero-meta .v{
+  font-family:'Anton',sans-serif;font-size:20px;letter-spacing:.02em;
+  color:var(--paper);text-shadow:1.5px 1.5px 0 var(--ink-stroke);
+}
+.hero-meta a.v{transition:color .15s}
+.hero-meta a.v:hover{color:var(--gold-bright)}
+.tz-note{
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted-2);margin-top:16px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   LIVE BANNER
+   ═══════════════════════════════════════════════════════ */
+.live{background:rgba(142,18,28,.22);border-bottom:2px solid var(--red);padding:12px 0}
+.live[hidden]{display:none}
+.live-card{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.live-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.16em;
+  text-transform:uppercase;
+  background:var(--red-bright);color:var(--paper);
+  border:2px solid var(--ink-stroke);border-radius:4px;
+  padding:5px 12px;box-shadow:2px 2px 0 rgba(0,0,0,.5);
+  flex-shrink:0;
+}
+.live-badge .dot{
+  width:8px;height:8px;border-radius:50%;background:currentColor;
+  animation:pulse 1.3s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+.live-body{flex:1;min-width:0}
+.live-now{font-family:'Anton',sans-serif;font-size:18px;color:var(--paper);text-shadow:1px 1px 0 var(--ink-stroke)}
+.live-sub{font-size:14px;color:var(--muted);margin-top:2px}
+.live-cta{
+  font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink);
+  background:var(--gold-bright);border:2px solid var(--ink-stroke);
+  border-radius:4px;padding:7px 16px;
+  box-shadow:2px 2px 0 rgba(0,0,0,.5);flex-shrink:0;
+  transition:transform .15s,box-shadow .15s;
+}
+.live-cta:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 rgba(0,0,0,.6)}
+
+/* ═══════════════════════════════════════════════════════
+   TAB BAR
+   ═══════════════════════════════════════════════════════ */
+.tab-bar{
+  position:sticky;top:78px;z-index:90;
+  background:var(--panel);border-bottom:3px solid var(--gold);
+  display:flex;gap:0;
+}
+.tab-btn{
+  flex:1;
+  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);background:none;border:none;
+  border-bottom:4px solid transparent;
+  padding:14px 20px;cursor:pointer;
+  transition:color .15s,border-color .15s;
+}
+.tab-btn:hover{color:var(--cream)}
+.tab-btn.active{color:var(--gold-bright);border-bottom-color:var(--gold-bright)}
+
+/* ═══════════════════════════════════════════════════════
+   OOC NOTICE
+   ═══════════════════════════════════════════════════════ */
+.ooc{padding:40px 0 10px}
+.ooc-card{
+  background:linear-gradient(135deg,rgba(142,18,28,.16),rgba(20,17,26,.9));
+  border:3px solid var(--ink-stroke);border-radius:8px;
+  box-shadow:0 0 0 2px var(--red),8px 8px 0 rgba(0,0,0,.5);
+  padding:28px 32px 24px;
+}
+.ooc-card .hd{display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.ooc-card .hd svg{width:28px;height:28px;color:var(--red-bright);flex-shrink:0}
+.ooc-card .hd h2{
+  font-family:'Anton',sans-serif;font-size:clamp(20px,3vw,26px);
+  text-transform:uppercase;color:var(--paper);letter-spacing:.02em;
+  text-shadow:2px 2px 0 var(--ink-stroke);flex:1;
+}
+.ooc-card .tag{
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.16em;
+  text-transform:uppercase;background:var(--red-bright);color:var(--paper);
+  border:2px solid var(--ink-stroke);border-radius:4px;padding:3px 10px;
+  box-shadow:2px 2px 0 rgba(0,0,0,.5);flex-shrink:0;
+}
+.ooc-card .sub{font-size:15px;color:var(--muted);margin-bottom:16px}
+.ooc-card ul{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.ooc-card li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:15px;color:var(--cream);line-height:1.5;
+}
+.ooc-card li svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;color:var(--gold)}
+.ooc-quote{
+  font-family:'Fraunces',serif;font-style:italic;
+  font-size:16px;color:var(--paper);
+  border-left:3px solid var(--gold);padding-left:16px;
+  margin-top:4px;
+}
+.ooc-quote .attr{
+  display:block;margin-top:4px;
+  font-family:'Bebas Neue',sans-serif;font-style:normal;
+  font-size:13px;letter-spacing:.14em;color:var(--gold);
+}
+
+/* ═══════════════════════════════════════════════════════
+   TIMELINE STRIP
+   ═══════════════════════════════════════════════════════ */
+#schedule{padding:32px 0 0}
+.timeline{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:4px;
+  margin-top:12px;
+}
+@media(max-width:700px){.timeline{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:420px){.timeline{grid-template-columns:repeat(2,1fr)}}
+.tl-item{
+  background:var(--panel);border:2px solid var(--ink-stroke);
+  border-radius:5px;padding:12px 14px;
+  box-shadow:0 0 0 1.5px var(--gold-deep),3px 3px 0 rgba(0,0,0,.5);
+  text-align:center;transition:transform .15s,box-shadow .15s;
+  display:block;
+}
+.tl-item:hover{transform:translate(-1px,-1px);box-shadow:0 0 0 1.5px var(--gold-bright),4px 4px 0 rgba(0,0,0,.6)}
+.tl-num{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.2em;color:var(--muted-2)}
+.tl-title{font-family:'Anton',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:.02em;color:var(--paper);margin:2px 0}
+.tl-time{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.1em;color:var(--gold)}
+
+/* ═══════════════════════════════════════════════════════
+   ITINERARY SECTIONS
+   ═══════════════════════════════════════════════════════ */
+.itin-section{padding:56px 0 32px;border-bottom:1px solid var(--line-soft)}
+.itin-section:last-of-type{border-bottom:none}
+
+.sec-label{
+  display:inline-flex;align-items:center;gap:10px;margin-bottom:16px;
+}
+.sec-num{
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.22em;
+  color:var(--ink);background:var(--gold-bright);
+  border:2px solid var(--ink-stroke);border-radius:4px;
+  padding:3px 9px;box-shadow:2px 2px 0 rgba(0,0,0,.5);
+}
+.sec-head{
+  display:flex;align-items:baseline;gap:16px;margin-bottom:18px;flex-wrap:wrap;
+}
+.sec-head h2{
+  font-family:'Anton',sans-serif;text-transform:uppercase;
+  font-size:clamp(26px,4.5vw,48px);color:var(--paper);letter-spacing:.005em;
+  text-shadow:3px 3px 0 var(--ink-stroke),4px 4px 0 rgba(142,18,28,.6);
+  line-height:1;
+}
+.sec-floor{
+  font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);
+}
+.sec-time{
+  font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.1em;color:var(--gold);
+}
+
+/* figure panels / comic panels */
+.panels{display:flex;gap:18px;margin:22px 0 24px;flex-wrap:wrap}
+.panel-fig{
+  flex:1;min-width:220px;
+  border:3px solid var(--ink-stroke);border-radius:6px;overflow:hidden;
+  box-shadow:0 0 0 2px var(--gold),8px 8px 0 rgba(0,0,0,.5);
+  background:#060509;
+}
+.panel-fig img{width:100%;height:auto;object-fit:contain;display:block}
+.panel-ph{
+  min-height:200px;
+  display:flex;align-items:center;justify-content:center;
+  background-image:radial-gradient(rgba(201,162,74,.08) 1px,transparent 1.3px);
+  background-size:10px 10px;
+}
+.panel-ph svg{width:48px;height:48px;color:var(--gold);opacity:.35}
+
+.detail-text{font-size:15px;color:var(--cream);line-height:1.65;margin-bottom:12px}
+.detail-text + .detail-text{margin-top:0}
+
+.keylist{
+  display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;
+}
+.keylist-item{
+  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink);
+  background:var(--gold-bright);border:2px solid var(--ink-stroke);
+  border-radius:4px;padding:4px 12px;box-shadow:2px 2px 0 rgba(0,0,0,.5);
+}
+
+/* activity rows */
+.activity-table{width:100%;border-collapse:collapse;margin-top:16px}
+.activity-table th{
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);
+  padding:8px 12px;text-align:left;
+  border-bottom:2px solid var(--gold-deep);
+}
+.activity-table td{
+  font-size:14px;color:var(--cream);
+  padding:9px 12px;border-bottom:1px solid var(--line-soft);
+}
+.activity-table tr:last-child td{border-bottom:none}
+.activity-table td:last-child{color:var(--muted);font-size:13px}
+.no-roll-pill{
+  font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink);
+  background:var(--gold);border:1.5px solid var(--ink-stroke);
+  border-radius:3px;padding:2px 7px;box-shadow:1.5px 1.5px 0 rgba(0,0,0,.4);
+  white-space:nowrap;
+}
+
+/* note box */
+.note-box{
+  background:rgba(201,162,74,.10);border:2px solid var(--gold-deep);
+  border-radius:6px;padding:14px 18px;margin:16px 0;
+  font-size:15px;color:var(--cream);
+}
+.note-box strong{color:var(--gold-bright)}
+
+/* roll banner */
+.roll-banner{
+  background:linear-gradient(90deg,var(--red),rgba(142,18,28,.8));
+  border:3px solid var(--ink-stroke);border-radius:6px;
+  box-shadow:0 0 0 1.5px var(--gold-deep),5px 5px 0 rgba(0,0,0,.5);
+  padding:14px 20px;margin:18px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.roll-d20{
+  font-family:'Anton',sans-serif;font-size:36px;color:var(--gold-bright);
+  text-shadow:2px 2px 0 var(--ink-stroke);flex-shrink:0;
+}
+.roll-text{font-size:15px;color:var(--paper);line-height:1.5}
+.roll-text strong{color:var(--gold-bright)}
+
+/* game details */
+details.game{
+  border:2px solid var(--ink-stroke);border-radius:6px;
+  box-shadow:0 0 0 1.5px var(--gold-deep),4px 4px 0 rgba(0,0,0,.45);
+  margin-bottom:12px;overflow:hidden;
+  background:var(--panel);
+}
+details.game summary{
+  font-family:'Anton',sans-serif;font-size:18px;letter-spacing:.02em;
+  text-transform:uppercase;color:var(--paper);
+  text-shadow:1.5px 1.5px 0 var(--ink-stroke);
+  padding:14px 18px;cursor:pointer;list-style:none;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  transition:background .15s;
+}
+details.game summary::after{
+  content:'▸';color:var(--gold);font-size:18px;transition:transform .2s;flex-shrink:0;
+}
+details.game[open] summary::after{transform:rotate(90deg)}
+details.game summary::-webkit-details-marker{display:none}
+details.game summary:hover{background:var(--panel-2)}
+.game-body{padding:0 18px 16px;border-top:1px solid var(--line-soft)}
+.roll-table{width:100%;border-collapse:collapse;margin-top:12px}
+.roll-table th{
+  font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted-2);padding:6px 10px;text-align:left;border-bottom:1.5px solid var(--gold-deep);
+}
+.roll-table td{
+  font-size:14px;color:var(--cream);padding:8px 10px;border-bottom:1px solid var(--line-soft);
+  vertical-align:top;
+}
+.roll-table tr:last-child td{border-bottom:none}
+.roll-table td:first-child{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold-bright);letter-spacing:.06em;width:80px;flex-shrink:0}
+.roll-jackpot td{background:rgba(201,162,74,.10)}
+.roll-jackpot td:first-child{color:var(--gold-bright)}
+
+/* ─── sh (section header divider) ─── */
+.sh{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.sh .ln{flex:1;height:3px;background:repeating-linear-gradient(90deg,var(--gold) 0 14px,transparent 14px 22px)}
+
+/* ─── itin-link visibility helper ─── */
+.itin-link{}
+
+/* ═══════════════════════════════════════════════════════
+   GALLERY ACTIONS
+   ═══════════════════════════════════════════════════════ */
+.gallery-actions{display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.limit-note{
+  font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.1em;color:var(--muted);
+}
+
+/* ─── Gold button ─── */
+.btn-gold{
+  font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink);background:var(--gold-bright);border:2px solid var(--ink-stroke);border-radius:5px;
+  padding:10px 20px;box-shadow:3px 3px 0 rgba(0,0,0,.5);cursor:pointer;
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-gold:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:4px 4px 0 rgba(0,0,0,.6)}
+.btn-gold:disabled{opacity:.5;cursor:not-allowed}
+
+/* ═══════════════════════════════════════════════════════
+   OUTFIT CARDS
+   ═══════════════════════════════════════════════════════ */
+.host-block{margin-bottom:40px}
+.host-card{display:flex;justify-content:center}
+.outfit-host{max-width:360px;width:100%}
+.outfit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;margin-bottom:48px}
+.outfit-card{
+  background:var(--panel);border:3px solid var(--ink-stroke);border-radius:6px;overflow:hidden;
+  box-shadow:0 0 0 2px var(--gold-deep),5px 5px 0 rgba(0,0,0,.45);
+}
+.outfit-card.is-featured{box-shadow:0 0 0 2px var(--gold-bright),6px 6px 0 rgba(0,0,0,.5)}
+.outfit-card .frame{
+  background:#060509;border-bottom:2px solid var(--ink-stroke);min-height:160px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.outfit-img{width:100%;height:auto;max-height:300px;object-fit:contain;cursor:zoom-in;transition:filter .2s}
+.outfit-img:hover{filter:brightness(1.08)}
+.outfit-card.outfit-host .frame{min-height:240px}
+.outfit-host-ph{display:flex;flex-direction:column;align-items:center}
+.ph-frame{
+  width:100%;min-height:200px;
+  display:flex;align-items:center;justify-content:center;
+  background-image:radial-gradient(rgba(201,162,74,.08) 1px,transparent 1.3px);
+  background-size:10px 10px;
+}
+.ph-frame svg{color:var(--gold);opacity:.4}
+.card-name{
+  font-family:'Anton',sans-serif;font-size:17px;text-transform:uppercase;color:var(--paper);
+  padding:10px 12px 2px;letter-spacing:.01em;
+}
+.card-by{font-size:12px;color:var(--muted);padding:0 12px 10px}
+.card-actions{display:flex;gap:6px;padding:0 10px 10px;flex-wrap:wrap}
+
+/* Category group */
+.cat-group{margin-bottom:40px}
+.empty-cat{color:var(--muted);font-size:14px;padding:20px 0}
+
+/* ═══════════════════════════════════════════════════════
+   HIGHLIGHTS GRID
+   ═══════════════════════════════════════════════════════ */
+.hl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px}
+.hl-card{
+  background:var(--panel);border:3px solid var(--ink-stroke);border-radius:6px;overflow:hidden;
+  box-shadow:0 0 0 2px var(--gold-deep),5px 5px 0 rgba(0,0,0,.45);
+}
+.hl-card.is-pinned{box-shadow:0 0 0 2px var(--gold-bright),6px 6px 0 rgba(0,0,0,.5)}
+.hl-card .frame{
+  background:#060509;border-bottom:2px solid var(--ink-stroke);min-height:180px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.hl-img{width:100%;height:auto;max-height:400px;object-fit:contain;cursor:zoom-in;transition:filter .2s}
+.hl-img:hover{filter:brightness(1.08)}
+.hl-caption{
+  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.04em;color:var(--gold);
+  padding:10px 12px 2px;text-transform:uppercase;
+}
+.hl-meta{font-family:'Anton',sans-serif;font-size:15px;color:var(--paper);padding:0 12px 8px}
+.hl-by{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);font-weight:400}
+.hl-empty{text-align:center;padding:60px 20px;color:var(--muted-2)}
+.hl-empty svg{margin:0 auto 12px;color:var(--gold);opacity:.4}
+
+/* ═══════════════════════════════════════════════════════
+   MODAL
+   ═══════════════════════════════════════════════════════ */
+.modal{
+  position:fixed;inset:0;z-index:300;background:rgba(4,3,6,.92);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.modal[hidden]{display:none}
+.modal-box{
+  background:var(--panel-2);border:3px solid var(--ink-stroke);border-radius:8px;
+  box-shadow:0 0 0 2px var(--gold),12px 12px 0 rgba(0,0,0,.6);
+  padding:28px 30px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;
+}
+.modal-title{
+  font-family:'Anton',sans-serif;font-size:26px;text-transform:uppercase;color:var(--paper);
+  text-shadow:2px 2px 0 var(--ink-stroke);margin-bottom:20px;
+}
+.modal-close{
+  position:absolute;top:14px;right:14px;background:none;border:none;color:var(--muted);
+  font-size:20px;cursor:pointer;width:32px;height:32px;
+}
+.modal-close:hover{color:var(--gold-bright)}
+.modal-box label{
+  display:block;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:16px;
+}
+.modal-box label input,.modal-box label select{
+  display:block;width:100%;background:var(--ink-2);color:var(--cream);
+  border:2px solid var(--gold-deep);border-radius:5px;padding:9px 13px;margin-top:5px;
+  font-family:'Inter',sans-serif;font-size:15px;
+}
+.modal-box label input:focus,.modal-box label select:focus{outline:none;border-color:var(--gold-bright)}
+.req{color:var(--red-bright)}
+.upload-area{
+  background:var(--ink-2);border:2px dashed var(--gold-deep);border-radius:6px;
+  padding:20px;text-align:center;margin-top:5px;
+  transition:border-color .15s,background .15s;
+}
+.upload-area.drag-over{border-color:var(--gold-bright);background:rgba(201,162,74,.08)}
+.upload-inner p{font-size:13px;color:var(--muted);margin-top:6px}
+.upload-inner .hint{font-size:12px;color:var(--muted-2)}
+.link-btn{background:none;border:none;color:var(--gold-bright);cursor:pointer;text-decoration:underline;font-size:inherit}
+.form-error{
+  background:var(--red);border:2px solid var(--ink-stroke);border-radius:5px;
+  padding:10px 14px;font-size:14px;color:var(--paper);margin-bottom:12px;
+}
+.admin-btn{
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.06em;
+  background:var(--panel-2);border:1.5px solid var(--gold-deep);border-radius:4px;
+  color:var(--gold);padding:4px 9px;cursor:pointer;
+}
+.admin-btn:hover{background:var(--gold-deep);color:var(--ink)}
+.delete-btn{
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.06em;
+  background:var(--red);border:1.5px solid var(--ink-stroke);border-radius:4px;
+  color:var(--paper);padding:4px 9px;cursor:pointer;
+}
+.admin-panel{
+  margin-top:40px;padding:20px;background:var(--panel);
+  border:2px solid var(--red-bright);border-radius:6px;
+}
+
+/* tab pane heading helpers */
+.tab-pane .sec-head{margin-bottom:10px}
+.tab-pane .sec-lead{color:var(--muted);font-size:17px;max-width:60ch;margin-bottom:24px}
+
+/* ═══════════════════════════════════════════════════════
+   LIGHTBOX
+   ═══════════════════════════════════════════════════════ */
+.lightbox{
+  position:fixed;inset:0;z-index:400;background:rgba(4,3,6,.96);
+  display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;
+  padding:20px;
+}
+.lightbox.open{display:flex}
+#lbImg{max-width:100%;max-height:80vh;object-fit:contain;border:3px solid var(--ink-stroke);
+  box-shadow:0 0 0 2px var(--gold),10px 10px 0 rgba(0,0,0,.6)}
+#lbCap{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+#lbClose{
+  position:absolute;top:18px;right:22px;background:none;border:none;
+  color:var(--muted);font-size:28px;cursor:pointer;
+}
+#lbClose:hover{color:var(--gold-bright)}
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════ */
+footer{
+  padding:50px 0 44px;text-align:center;
+  border-top:3px solid var(--gold);
+  background:radial-gradient(90% 130% at 50% 100%,rgba(142,18,28,.24),transparent 70%);
+}
+footer .crest{width:52px;height:52px;object-fit:contain;margin:0 auto 14px;filter:drop-shadow(0 3px 0 var(--ink)) drop-shadow(0 6px 16px rgba(201,162,74,.28))}
+footer h3{
+  font-family:'Anton',sans-serif;text-transform:uppercase;
+  font-size:clamp(18px,3vw,26px);color:var(--paper);text-shadow:2px 2px 0 var(--ink-stroke);
+}
+footer .rule{display:block;width:100px;height:3px;background:repeating-linear-gradient(90deg,var(--gold) 0 10px,transparent 10px 18px);margin:14px auto}
+footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:10px}
+
+/* ─── back to top ─── */
+#backTop{
+  position:fixed;bottom:28px;right:24px;z-index:200;
+  background:var(--gold);color:var(--ink);border:2px solid var(--ink-stroke);
+  border-radius:5px;width:42px;height:42px;
+  font-size:20px;cursor:pointer;
+  box-shadow:3px 3px 0 rgba(0,0,0,.5);
+  display:none;align-items:center;justify-content:center;
+  transition:transform .15s,box-shadow .15s;
+}
+#backTop.show{display:flex}
+#backTop:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 rgba(0,0,0,.6)}
+
+:focus-visible{outline:3px solid var(--gold-bright);outline-offset:3px;border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     NAV
+     ═══════════════════════════════════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <img class="crest" src="https://i.ibb.co/0jxFvkGf/calderyn-college-logo-transparent.webp" alt="Calderyn College crest">
+      <span>Calderyn College</span>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="/">Registry</a>
+      <a href="/events">Events</a>
+      <a href="#arrival" class="itin-link">Arrival</a>
+      <a href="#atrium" class="itin-link">Atrium</a>
+      <a href="#games" class="itin-link">Games</a>
+      <a href="#stage" class="itin-link">Stage</a>
+      <a href="#wards" class="itin-link">Wards</a>
+      <a href="#winddown" class="itin-link">Wind Down</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-crest"><img src="https://i.ibb.co/0jxFvkGf/calderyn-college-logo-transparent.webp" alt="Calderyn College crest" style="width:104px;height:104px;object-fit:contain;filter:drop-shadow(0 4px 0 var(--ink)) drop-shadow(0 8px 22px rgba(201,162,74,.35))"></div>
+    <p class="eyebrow">Calderyn College · Community Charity Event</p>
+    <h1>Great Ormond Street Hospital<br><em>Charity Fair</em></h1>
+    <p class="sub">The full event itinerary, from red-carpet arrival to evening wind down. An OOC plan for writers.</p>
+    <div class="hero-meta">
+      <div>
+        <div class="k">Host</div>
+        <a class="v" href="https://roleplay.chat/profile.php?user=illunimate" target="_blank" rel="noopener">Stella Starkov</a>
+      </div>
+      <div>
+        <div class="k">Starts</div>
+        <div class="v"><span class="lt" data-utc="16:00" data-uk="5:00 PM">17:00</span></div>
+      </div>
+      <div>
+        <div class="k">Closes</div>
+        <div class="v"><span class="lt" data-utc="19:30" data-uk="8:30 PM">20:30</span></div>
+      </div>
+    </div>
+    <p class="tz-note" id="tzNote">Times shown in your local time · event runs 5:00–8:30 PM UK time.</p>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════
+     LIVE STATUS BANNER
+     ═══════════════════════════════════════════════════ -->
+<section class="live" id="live" hidden>
+  <div class="wrap">
+    <div class="live-card">
+      <span class="live-badge" id="liveBadge"><span class="dot"></span><span id="liveBadgeText">—</span></span>
+      <div class="live-body">
+        <div class="live-now" id="liveNow">—</div>
+        <div class="live-sub" id="liveSub"></div>
+      </div>
+      <a class="live-cta" id="liveCta" href="#schedule">View schedule</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB BAR
+     ═══════════════════════════════════════════════════ -->
+<div class="tab-bar" role="tablist">
+  <button class="tab-btn active" data-tab="itinerary" role="tab" aria-selected="true">Itinerary</button>
+  <button class="tab-btn" data-tab="outfits" role="tab" aria-selected="false">Outfits Gallery</button>
+  <button class="tab-btn" data-tab="highlights" role="tab" aria-selected="false">Event Highlights</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     ITINERARY TAB
+     ═══════════════════════════════════════════════════ -->
+<div id="tab-itinerary">
+
+  <!-- OOC NOTICE -->
+  <section class="ooc">
+    <div class="wrap">
+      <div class="ooc-card">
+        <div class="hd">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h2>Before You Write — OOC Notice</h2>
+          <span class="tag">Please read</span>
+        </div>
+        <p class="sub">A few ground rules before scenes begin. These apply to everyone for the duration of the fair.</p>
+        <ul>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12.5" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+            The cameras are rolling. This is a public, press-covered event — characters are on the record, so play it as a watched, on-camera moment.
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            This is a children's charity fair. Handle every scene with care and keep all interactions with the kids wholesome, warm, and entirely appropriate.
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4M12 3l8 4.5v9L12 21l-8-4.5v-9z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            No inappropriate, suggestive, or adult content involving minors of any kind. This is a hard line and is non-negotiable.
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3 8-8M3 12h.01M3 6h.01M3 18h.01M7 6h6M7 18h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Stick to the itinerary and be where you need to be. Keep your character in the right place at the right time so scenes line up and nobody's left waiting.
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Follow all roleplay.chat rules at all times.
+          </li>
+        </ul>
+        <p class="ooc-quote">"Embarrass the school enough on TV and I can't justify the dean not expelling you."<span class="attr">— Stella Starkov</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE STRIP -->
+  <section id="schedule">
+    <div class="wrap">
+      <div class="sh"><span class="eyebrow">Schedule at a Glance</span><span class="ln"></span></div>
+      <div class="timeline">
+        <a class="tl-item" href="#arrival">
+          <div class="tl-num">01</div>
+          <div class="tl-title">Arrival</div>
+          <div class="tl-time"><span class="lt" data-utc="16:00" data-uk="5:00 PM">17:00</span></div>
+        </a>
+        <a class="tl-item" href="#atrium">
+          <div class="tl-num">02</div>
+          <div class="tl-title">Atrium</div>
+          <div class="tl-time">Ground Floor</div>
+        </a>
+        <a class="tl-item" href="#games">
+          <div class="tl-num">03</div>
+          <div class="tl-title">Games</div>
+          <div class="tl-time">Ground Floor</div>
+        </a>
+        <a class="tl-item" href="#stage">
+          <div class="tl-num">04</div>
+          <div class="tl-title">Cheer</div>
+          <div class="tl-time"><span class="lt" data-utc="18:30" data-uk="7:30 PM">19:30</span></div>
+        </a>
+        <a class="tl-item" href="#wards">
+          <div class="tl-num">05</div>
+          <div class="tl-title">Wards</div>
+          <div class="tl-time">Anytime</div>
+        </a>
+        <a class="tl-item" href="#winddown">
+          <div class="tl-num">06</div>
+          <div class="tl-title">Wind Down</div>
+          <div class="tl-time"><span class="lt" data-utc="19:30" data-uk="8:30 PM">20:30</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 01: ARRIVAL ─── -->
+  <section class="itin-section" id="arrival">
+    <div class="wrap">
+      <div class="sec-label">
+        <span class="sec-num">01</span>
+        <span class="eyebrow">Red Carpet</span>
+      </div>
+      <div class="sec-head">
+        <h2>Arrival</h2>
+        <span class="sec-time"><span class="lt" data-utc="16:00" data-uk="5:00 PM">17:00</span></span>
+      </div>
+      <div class="panels">
+        <figure class="panel-fig">
+          <img src="https://i.ibb.co/VY5214pb/01ac1890-ff1f-4f45-ba96-c47755f14fe5.png" alt="Coach layout" loading="lazy">
+        </figure>
+        <figure class="panel-fig">
+          <img src="https://i.ibb.co/My3KbSCP/75d3beb2-ede7-41a8-bab9-bf52430324e5.png" alt="Bus staff positions" loading="lazy">
+        </figure>
+      </div>
+      <p class="detail-text">The Calderyn coach arrives outside the hospital. A red carpet leads from the coach to the entrance — Henry holds the door, Margaux greets guests, and a live DJ set builds the atmosphere while the press pen waits to the left.</p>
+      <p class="detail-text">Stella steps off first, walks the carpet, delivers her address and takes questions before the photo call. The rest of the squad disembark during or after, free to take quick press moments before heading inside.</p>
+      <div class="keylist">
+        <span class="keylist-item">Red carpet</span>
+        <span class="keylist-item">Press pen</span>
+        <span class="keylist-item">Henry + Margaux</span>
+        <span class="keylist-item">Live DJ</span>
+        <span class="keylist-item">Stella's address</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 02: MAIN ATRIUM ─── -->
+  <section class="itin-section" id="atrium">
+    <div class="wrap">
+      <div class="sec-label">
+        <span class="sec-num">02</span>
+        <span class="eyebrow">Ground Floor</span>
+      </div>
+      <div class="sec-head">
+        <h2>Main Atrium</h2>
+        <span class="sec-floor">Ground Floor</span>
+      </div>
+      <div class="panels">
+        <figure class="panel-fig">
+          <div class="panel-ph">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 16l5-5 4 4 4-5 5 6M3 4h18v16H3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </figure>
+      </div>
+      <table class="activity-table">
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>Roll</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Autograph Station</td>
+            <td><span class="no-roll-pill">No roll · Free RP</span></td>
+            <td>Sign programmes, shirts, anything brought by kids or staff</td>
+          </tr>
+          <tr>
+            <td>Photo Booth</td>
+            <td><span class="no-roll-pill">No roll · Free RP</span></td>
+            <td>Prop box, themed backdrops, polaroids</td>
+          </tr>
+          <tr>
+            <td>Face Painting</td>
+            <td><span class="no-roll-pill">No roll · Free RP</span></td>
+            <td>Kids and visitors can request designs</td>
+          </tr>
+          <tr>
+            <td>Balloon Artist</td>
+            <td><span class="no-roll-pill">No roll · Free RP</span></td>
+            <td>Animals, swords, hats — take requests</td>
+          </tr>
+          <tr>
+            <td>Caricature Artist</td>
+            <td><span class="no-roll-pill">No roll · Free RP</span></td>
+            <td>Sit for a sketch or watch from the crowd</td>
+          </tr>
+          <tr>
+            <td>Candy Floss &amp; Popcorn</td>
+            <td><span class="no-roll-pill">No roll · Free RP</span></td>
+            <td>Free for all</td>
+          </tr>
+          <tr>
+            <td>Ice Cream Cart</td>
+            <td><span class="no-roll-pill">No roll · Free RP</span></td>
+            <td>Free for all</td>
+          </tr>
+          <tr>
+            <td>Smoothie &amp; Juice Bar</td>
+            <td><span class="no-roll-pill">No roll · Free RP</span></td>
+            <td>Free for all</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 03: GAMES ZONE ─── -->
+  <section class="itin-section" id="games">
+    <div class="wrap">
+      <div class="sec-label">
+        <span class="sec-num">03</span>
+        <span class="eyebrow">Ground Floor</span>
+      </div>
+      <div class="sec-head">
+        <h2>Games Zone</h2>
+        <span class="sec-floor">Ground Floor</span>
+      </div>
+      <div class="panels">
+        <figure class="panel-fig">
+          <img src="https://i.ibb.co/HpHcjmG8/d4dbc1f9-43ff-48e7-a00f-8ab25d847796.png" alt="Games zone" loading="lazy">
+        </figure>
+      </div>
+      <div class="note-box">
+        <strong>You're playing for a kid.</strong> Each character is paired with a child from the hospital. The child cheers you on — let that come through in your writing. Make them feel the excitement of every roll.
+      </div>
+      <div class="roll-banner">
+        <div class="roll-d20">D20</div>
+        <div class="roll-text">
+          <strong>Roll a D20 — higher is better.</strong><br>
+          A natural 20 always wins the jackpot prize. Prizes go directly to your paired kid.
+        </div>
+      </div>
+
+      <details class="game">
+        <summary>Ring Toss</summary>
+        <div class="game-body">
+          <table class="roll-table">
+            <thead><tr><th>Roll</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>1–5</td><td>Miss — not a single ring lands. The kid groans sympathetically.</td></tr>
+              <tr><td>6–10</td><td>One ring on — small prize for the kid.</td></tr>
+              <tr><td>11–15</td><td>Two rings on — medium prize.</td></tr>
+              <tr><td>16–19</td><td>Three rings on — large prize.</td></tr>
+              <tr class="roll-jackpot"><td>20</td><td>Jackpot — signed jersey. The kid goes absolutely wild.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="game">
+        <summary>Balloon Darts</summary>
+        <div class="game-body">
+          <table class="roll-table">
+            <thead><tr><th>Roll</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>1–5</td><td>Miss — the balloons remain intact and judgmental.</td></tr>
+              <tr><td>6–10</td><td>Pop one — small prize.</td></tr>
+              <tr><td>11–15</td><td>Pop two — medium prize.</td></tr>
+              <tr><td>16–19</td><td>Pop three — large prize.</td></tr>
+              <tr class="roll-jackpot"><td>20</td><td>Jackpot — signed item + instant polaroid with the kid.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="game">
+        <summary>Penalty Shootout</summary>
+        <div class="game-body">
+          <p style="font-size:14px;color:var(--muted);margin:12px 0 6px">If a defender rolls as well, highest roll wins. Ties go to the shooter.</p>
+          <table class="roll-table">
+            <thead><tr><th>Roll</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>1–5</td><td>Skied over the bar — the keeper didn't even need to move.</td></tr>
+              <tr><td>6–10</td><td>Saved — good attempt, just not enough.</td></tr>
+              <tr><td>11–15</td><td>Goal! — small prize.</td></tr>
+              <tr><td>16–19</td><td>Screamer into the top corner — medium prize.</td></tr>
+              <tr class="roll-jackpot"><td>20</td><td>Unstoppable — jackpot. The crowd erupts.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="game">
+        <summary>Basketball Shootout</summary>
+        <div class="game-body">
+          <table class="roll-table">
+            <thead><tr><th>Roll</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>1–5</td><td>Airball — not even close to the rim.</td></tr>
+              <tr><td>6–10</td><td>Rim shot — rattles out.</td></tr>
+              <tr><td>11–15</td><td>Basket — small prize.</td></tr>
+              <tr><td>16–19</td><td>Swish — clean through the net, medium prize.</td></tr>
+              <tr class="roll-jackpot"><td>20</td><td>Jackpot — perfect arc, nothing but net. The place loses it.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="game">
+        <summary>Strength Tester</summary>
+        <div class="game-body">
+          <table class="roll-table">
+            <thead><tr><th>Roll</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>1–5</td><td>The bell didn't even flinch. Awkward silence.</td></tr>
+              <tr><td>6–10</td><td>Halfway — a polite ripple of applause.</td></tr>
+              <tr><td>11–15</td><td>Three-quarters — small prize, respectable effort.</td></tr>
+              <tr><td>16–19</td><td>High score — medium prize, the crowd cheers.</td></tr>
+              <tr class="roll-jackpot"><td>20</td><td>Jackpot — the bell rings clean, absolute pandemonium.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="game">
+        <summary>Skee-Ball Alley</summary>
+        <div class="game-body">
+          <p style="font-size:14px;color:var(--muted);margin:12px 0 6px">Points accumulate across rolls. Exchange at the prize counter.</p>
+          <table class="roll-table">
+            <thead><tr><th>Roll</th><th>Points Scored</th></tr></thead>
+            <tbody>
+              <tr><td>1–4</td><td>10 pts — outer ring</td></tr>
+              <tr><td>5–9</td><td>20 pts — middle ring</td></tr>
+              <tr><td>10–14</td><td>30 pts — inner ring</td></tr>
+              <tr><td>15–18</td><td>40 pts — bull zone</td></tr>
+              <tr class="roll-jackpot"><td>19–20</td><td>100 pts — the tiny top hole. Legendary.</td></tr>
+            </tbody>
+          </table>
+          <div class="keylist" style="margin-top:14px">
+            <span class="keylist-item">50 pts — small prize</span>
+            <span class="keylist-item">100 pts — medium prize</span>
+            <span class="keylist-item">200 pts — large prize</span>
+            <span class="keylist-item">300 pts — jackpot</span>
+          </div>
+        </div>
+      </details>
+
+      <details class="game">
+        <summary>Obstacle Course</summary>
+        <div class="game-body">
+          <table class="roll-table">
+            <thead><tr><th>Roll</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>1–5</td><td>Wiped out on the first obstacle. The kid can't stop laughing.</td></tr>
+              <tr><td>6–10</td><td>Slow but steady — made it through.</td></tr>
+              <tr><td>11–15</td><td>Solid run — small prize.</td></tr>
+              <tr><td>16–19</td><td>Fast and clean — medium prize, the crowd is impressed.</td></tr>
+              <tr class="roll-jackpot"><td>20</td><td>Course record — jackpot. The announcer loses their composure.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details class="game">
+        <summary>Hook-A-Duck</summary>
+        <div class="game-body">
+          <table class="roll-table">
+            <thead><tr><th>Roll</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>1–5</td><td>Standard duck — small prize. Still a prize!</td></tr>
+              <tr><td>6–12</td><td>Silver duck — medium prize.</td></tr>
+              <tr><td>13–18</td><td>Gold duck — large prize.</td></tr>
+              <tr><td>19</td><td>Diamond duck — signed merchandise.</td></tr>
+              <tr class="roll-jackpot"><td>20</td><td>Legendary duck — jackpot. No one has ever seen this duck before.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <!-- ─── SECTION 04: CHEER PERFORMANCE ─── -->
+  <section class="itin-section" id="stage">
+    <div class="wrap">
+      <div class="sec-label">
+        <span class="sec-num">04</span>
+        <span class="eyebrow">Main Stage</span>
+      </div>
+      <div class="sec-head">
+        <h2>Cheer Performance</h2>
+        <span class="sec-time"><span class="lt" data-utc="18:30" data-uk="7:30 PM">19:30</span></span>
+      </div>
+      <div class="panels">
+        <figure class="panel-fig">
+          <div class="panel-ph">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 16l5-5 4 4 4-5 5 6M3 4h18v16H3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </figure>
+      </div>
+      <div class="note-box">
+        <strong>No roll — pure RP.</strong> Cheer Squad writers describe the routine at their own pace. Crowd reactions are completely free — anyone can write their character watching, cheering, filming, or getting emotional in the stands. Let it land.
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 05: WARD VISITS ─── -->
+  <section class="itin-section" id="wards">
+    <div class="wrap">
+      <div class="sec-label">
+        <span class="sec-num">05</span>
+        <span class="eyebrow">Hospital Wards</span>
+      </div>
+      <div class="sec-head">
+        <h2>Ward Visits</h2>
+        <span class="sec-time">Anytime</span>
+      </div>
+      <div class="panels">
+        <figure class="panel-fig">
+          <div class="panel-ph">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 16l5-5 4 4 4-5 5 6M3 4h18v16H3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </figure>
+      </div>
+      <div class="note-box">
+        <strong>Free RP · No roll required.</strong> Characters can slip away to the wards at any point during the event — before arrival scenes wrap, between games, or after the cheer performance. Keep these scenes warm, respectful, and character-focused. The kids are what this is all about.
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SECTION 06: WIND DOWN ─── -->
+  <section class="itin-section" id="winddown">
+    <div class="wrap">
+      <div class="sec-label">
+        <span class="sec-num">06</span>
+        <span class="eyebrow">Evening</span>
+      </div>
+      <div class="sec-head">
+        <h2>Wind Down</h2>
+        <span class="sec-time"><span class="lt" data-utc="19:30" data-uk="8:30 PM">20:30</span></span>
+      </div>
+      <div class="panels">
+        <figure class="panel-fig">
+          <div class="panel-ph">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 16l5-5 4 4 4-5 5 6M3 4h18v16H3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </figure>
+      </div>
+      <div class="note-box">
+        <strong>No rolls.</strong> The fair winds down. Let scenes close naturally — quiet conversations, goodbyes, characters reflecting on the night. The coach departs when writers are done. No pressure, no clock.
+      </div>
+    </div>
+  </section>
+
+</div><!-- /tab-itinerary -->
+
+<!-- ═══════════════════════════════════════════════════
+     OUTFITS TAB
+     ═══════════════════════════════════════════════════ -->
+<div id="tab-outfits" class="tab-pane" hidden>
+  <div class="wrap" style="padding-top:48px;padding-bottom:80px">
+
+    <div class="sec-head"><h2>Outfits Gallery</h2></div>
+    <p class="sec-lead">Character outfits for the charity fair. Upload your look to appear in the right category.</p>
+
+    <div class="gallery-actions">
+      <button class="btn-gold" id="addOutfitBtn">+ Add your outfit</button>
+      <span class="limit-note" id="outfitLimitNote"></span>
+    </div>
+
+    <!-- HOST BLOCK -->
+    <div class="host-block" id="hostBlock">
+      <div class="eyebrow" style="margin-bottom:12px">Host · Stella Starkov</div>
+      <div class="host-card" id="hostCard">
+        <!-- injected by JS -->
+      </div>
+    </div>
+
+    <!-- CATEGORY GROUPS -->
+    <div id="outfitGroups"><!-- injected by JS --></div>
+
+    <!-- OUTFIT SUBMIT MODAL -->
+    <div class="modal" id="outfitModal" hidden role="dialog" aria-modal="true" aria-label="Add outfit">
+      <div class="modal-box">
+        <button class="modal-close" id="closeOutfitModal" aria-label="Close">✕</button>
+        <h3 class="modal-title">Add Your Outfit</h3>
+        <form id="outfitForm">
+          <label>Character name <span class="req">*</span>
+            <input type="text" name="character_name" required maxlength="80" placeholder="e.g. Ren Kasai">
+          </label>
+          <label>Category <span class="req">*</span>
+            <select name="category" required>
+              <option value="">Choose…</option>
+              <option value="cheer">Cheer Squad</option>
+              <option value="powerball">Powerball</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label>Image
+            <div class="upload-area" id="outfitUploadArea">
+              <input type="file" id="outfitFile" accept="image/*" hidden>
+              <div class="upload-inner" id="outfitUploadInner">
+                <svg viewBox="0 0 24 24" fill="none" width="32" height="32"><path d="M12 16V8m0 0-3 3m3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
+                <p>Drop image here or <button type="button" class="link-btn" id="outfitPickBtn">browse</button></p>
+                <p class="hint">JPEG, PNG, GIF, WebP · max 8 MB</p>
+              </div>
+            </div>
+          </label>
+          <label>— or paste an image URL
+            <input type="url" name="image_url" id="outfitUrlInput" placeholder="https://...">
+          </label>
+          <div class="form-error" id="outfitError" hidden></div>
+          <button type="submit" class="btn-gold" id="outfitSubmitBtn">Submit outfit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ADMIN: set host outfit -->
+    <div class="admin-panel" id="adminHostPanel" hidden>
+      <div class="eyebrow" style="margin-bottom:10px">Admin · Set Stella's Host Outfit</div>
+      <form id="hostOutfitForm" style="display:flex;gap:10px;flex-wrap:wrap">
+        <input type="url" name="host_image_url" placeholder="Paste image URL…" style="flex:1;min-width:200px;background:var(--ink-2);color:var(--cream);border:2px solid var(--gold-deep);border-radius:5px;padding:9px 13px;font-family:'Inter',sans-serif;font-size:15px">
+        <button type="submit" class="btn-gold" style="flex-shrink:0">Set host outfit</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     HIGHLIGHTS TAB
+     ═══════════════════════════════════════════════════ -->
+<div id="tab-highlights" class="tab-pane" hidden>
+  <div class="wrap" style="padding-top:48px;padding-bottom:80px">
+    <div class="sec-head"><h2>Event Highlights</h2></div>
+    <p class="sec-lead">Share a scene moment from the fair. Each image tells a story from the floor.</p>
+
+    <div class="gallery-actions">
+      <button class="btn-gold" id="addHighlightBtn">+ Share a highlight</button>
+      <span class="limit-note" id="hlLimitNote"></span>
+    </div>
+
+    <div id="highlightsGrid" class="hl-grid"><!-- injected by JS --></div>
+
+    <!-- HIGHLIGHT SUBMIT MODAL -->
+    <div class="modal" id="hlModal" hidden role="dialog" aria-modal="true" aria-label="Share highlight">
+      <div class="modal-box">
+        <button class="modal-close" id="closeHlModal" aria-label="Close">✕</button>
+        <h3 class="modal-title">Share a Highlight</h3>
+        <form id="hlForm">
+          <label>Character name <span class="req">*</span>
+            <input type="text" name="character_name" required maxlength="80" placeholder="e.g. Ren Kasai">
+          </label>
+          <label>Scene title / caption <span class="req">*</span>
+            <input type="text" name="caption" required maxlength="120" placeholder="A short caption (max 120 chars)">
+          </label>
+          <label>Image
+            <div class="upload-area" id="hlUploadArea">
+              <input type="file" id="hlFile" accept="image/*" hidden>
+              <div class="upload-inner" id="hlUploadInner">
+                <svg viewBox="0 0 24 24" fill="none" width="32" height="32"><path d="M12 16V8m0 0-3 3m3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/></svg>
+                <p>Drop image here or <button type="button" class="link-btn" id="hlPickBtn">browse</button></p>
+                <p class="hint">JPEG, PNG, GIF, WebP · max 8 MB</p>
+              </div>
+            </div>
+          </label>
+          <label>— or paste an image URL
+            <input type="url" name="image_url" id="hlUrlInput" placeholder="https://...">
+          </label>
+          <div class="form-error" id="hlError" hidden></div>
+          <button type="submit" class="btn-gold" id="hlSubmitBtn">Submit highlight</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════ -->
+<footer>
+  <div class="wrap">
+    <img class="crest" src="https://i.ibb.co/0jxFvkGf/calderyn-college-logo-transparent.webp" alt="Calderyn College crest">
+    <h3>Calderyn College</h3>
+    <span class="rule"></span>
+    <p>Great Ormond Street Hospital Charity Fair</p>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button id="lbClose" aria-label="Close lightbox">✕</button>
+  <img id="lbImg" src="" alt="">
+  <div id="lbCap"></div>
+</div>
+
+<!-- BACK TO TOP -->
+<button id="backTop" aria-label="Back to top">↑</button>
+
+<!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════════════ -->
+<script>
+/* ─────────────────────────────────────────────
+   a. Shared constants
+   ───────────────────────────────────────────── */
+const API  = 'https://calderyn-registry-relay.dreamroleplaywriter.workers.dev';
+const SLUG = 'charity-fair';
+
+/* ─────────────────────────────────────────────
+   b. Writer identity
+   ───────────────────────────────────────────── */
+function getWriterId() {
+  let id = localStorage.getItem('cld_wid');
+  if (!id) { id = crypto.randomUUID(); localStorage.setItem('cld_wid', id); }
+  return id;
+}
+function getWriterName() { return localStorage.getItem('cld_wname') || ''; }
+function setWriterName(n) { localStorage.setItem('cld_wname', n); }
+
+/* ─────────────────────────────────────────────
+   c. Admin mode
+   ───────────────────────────────────────────── */
+const params = new URLSearchParams(location.search);
+if (params.has('admin')) sessionStorage.setItem('cld_admin', params.get('admin'));
+const ADMIN_TOKEN = sessionStorage.getItem('cld_admin') || '';
+function isAdmin() { return !!ADMIN_TOKEN; }
+
+function apiHeaders(extra = {}) {
+  const h = {
+    'Content-Type': 'application/json',
+    'x-writer-id': getWriterId(),
+    'x-writer-name': getWriterName()
+  };
+  if (ADMIN_TOKEN) h['Authorization'] = `Bearer ${ADMIN_TOKEN}`;
+  return { ...h, ...extra };
+}
+
+/* ─────────────────────────────────────────────
+   d. Tab switching
+   ───────────────────────────────────────────── */
+const TABS = ['itinerary', 'outfits', 'highlights'];
+
+function activateTab(name) {
+  if (!TABS.includes(name)) name = 'itinerary';
+  TABS.forEach(t => {
+    const pane = document.getElementById(`tab-${t}`);
+    const btn  = document.querySelector(`[data-tab="${t}"]`);
+    if (pane) pane.hidden = (t !== name);
+    if (btn)  btn.classList.toggle('active', t === name);
+    btn?.setAttribute('aria-selected', t === name);
+  });
+  // Show/hide itinerary section nav links
+  document.querySelectorAll('.itin-link').forEach(a => {
+    a.style.display = (name === 'itinerary') ? '' : 'none';
+  });
+  if (name === 'outfits')    loadOutfits();
+  if (name === 'highlights') loadHighlights();
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    history.pushState(null, '', `#${btn.dataset.tab}`);
+    activateTab(btn.dataset.tab);
+  });
+});
+
+function tabFromHash() {
+  const h = location.hash.slice(1);
+  const itinAnchors = ['arrival','atrium','games','stage','wards','winddown','schedule','top'];
+  if (itinAnchors.includes(h)) return 'itinerary';
+  if (TABS.includes(h)) return h;
+  return 'itinerary';
+}
+
+addEventListener('hashchange', () => activateTab(tabFromHash()));
+activateTab(tabFromHash());
+
+/* ─────────────────────────────────────────────
+   e. Load outfits
+   ───────────────────────────────────────────── */
+async function loadOutfits() {
+  try {
+    const res  = await fetch(`${API}/api/events/${SLUG}/outfits`);
+    const data = await res.json();
+    renderOutfits(data.outfits || []);
+  } catch {
+    document.getElementById('outfitGroups').innerHTML = '<p style="color:var(--muted)">Could not load outfits.</p>';
+  }
+}
+
+function renderOutfits(outfits) {
+  const wid = getWriterId();
+
+  // Host card
+  const host = outfits.find(o => o.category === 'host');
+  const hostCard = document.getElementById('hostCard');
+  if (host) {
+    hostCard.innerHTML = outfitCardHtml(host, wid, true);
+  } else {
+    hostCard.innerHTML = `<div class="outfit-card outfit-host-ph"><div class="frame ph-frame"><svg viewBox="0 0 24 24" fill="none" width="40" height="40"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></div><div class="card-name">Stella Starkov</div><div class="card-by">Host · image coming soon</div></div>`;
+  }
+
+  // Admin host panel
+  if (isAdmin()) document.getElementById('adminHostPanel').hidden = false;
+
+  // Category groups
+  const cats = [
+    { key: 'cheer',     label: 'Cheer Squad' },
+    { key: 'powerball', label: 'Powerball' },
+    { key: 'other',     label: 'Other' },
+  ];
+  const groups = document.getElementById('outfitGroups');
+  groups.innerHTML = cats.map(({ key, label }) => {
+    const items = outfits.filter(o => o.category === key && !o.is_hidden);
+    return `
+<div class="cat-group">
+  <div class="sh"><span class="eyebrow">${label}</span><span class="ln"></span></div>
+  <div class="outfit-grid">
+    ${items.length ? items.map(o => outfitCardHtml(o, wid)).join('') : `<p class="empty-cat">No outfits yet — be the first!</p>`}
+  </div>
+</div>`;
+  }).join('');
+
+  // Attach delete handlers
+  groups.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => deleteOutfit(btn.dataset.id));
+  });
+  document.querySelectorAll('#hostCard .delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => deleteOutfit(btn.dataset.id));
+  });
+  // Lightbox
+  document.querySelectorAll('.outfit-img[data-zoom]').forEach(img => {
+    img.addEventListener('click', () => openLightbox(img.src, img.dataset.cap || ''));
+  });
+  // Writer limit note
+  const myCount = outfits.filter(o => o.submitted_by === wid && !o.is_hidden).length;
+  document.getElementById('outfitLimitNote').textContent = `${myCount} submitted`;
+}
+
+function outfitCardHtml(o, wid, isHost = false) {
+  const imgUrl = o.image_url.startsWith('/api/image/') ? API + o.image_url : o.image_url;
+  const canDel = isAdmin() || o.submitted_by === wid;
+  const pin  = isAdmin() && !isHost
+    ? `<button class="admin-btn" onclick="toggleOutfitFeature('${o.id}',${o.is_featured})">★ ${o.is_featured ? 'Unfeature' : 'Feature'}</button>`
+    : '';
+  const del  = canDel ? `<button class="delete-btn" data-id="${o.id}">✕ Delete</button>` : '';
+  return `
+<div class="outfit-card${isHost ? ' outfit-host' : ''}${o.is_featured ? ' is-featured' : ''}">
+  <div class="frame"><img class="outfit-img" src="${imgUrl}" alt="${o.character_name} outfit" data-zoom data-cap="${o.character_name} — ${o.writer_name || 'anonymous'}"></div>
+  <div class="card-name">${o.character_name}</div>
+  <div class="card-by">by ${o.writer_name || 'anonymous'}</div>
+  <div class="card-actions">${pin}${del}</div>
+</div>`;
+}
+
+async function deleteOutfit(id) {
+  if (!confirm('Delete this outfit?')) return;
+  const h = apiHeaders({ 'Content-Type': undefined });
+  delete h['Content-Type'];
+  await fetch(`${API}/api/events/${SLUG}/outfits/${id}`, { method: 'DELETE', headers: h });
+  loadOutfits();
+}
+
+async function toggleOutfitFeature(id, current) {
+  await fetch(`${API}/api/events/${SLUG}/outfits/${id}`, {
+    method: 'PATCH', headers: apiHeaders(),
+    body: JSON.stringify({ is_featured: !current })
+  });
+  loadOutfits();
+}
+
+/* ─────────────────────────────────────────────
+   f. Submit outfit form
+   ───────────────────────────────────────────── */
+document.getElementById('addOutfitBtn').addEventListener('click', () => {
+  document.getElementById('outfitModal').hidden = false;
+});
+document.getElementById('closeOutfitModal').addEventListener('click', () => {
+  document.getElementById('outfitModal').hidden = true;
+});
+
+let outfitFileData = null;
+const outfitPickBtn    = document.getElementById('outfitPickBtn');
+const outfitFile       = document.getElementById('outfitFile');
+const outfitUploadArea = document.getElementById('outfitUploadArea');
+
+outfitPickBtn.addEventListener('click', () => outfitFile.click());
+outfitFile.addEventListener('change', () => {
+  const f = outfitFile.files[0];
+  if (!f) return;
+  if (outfitFileData) URL.revokeObjectURL(outfitFileData.objectUrl);
+  outfitFileData = { file: f, objectUrl: URL.createObjectURL(f) };
+  document.getElementById('outfitUploadInner').innerHTML = `<img src="${outfitFileData.objectUrl}" style="max-height:120px;object-fit:contain;border-radius:4px"><p style="font-size:13px;margin-top:6px">${f.name}</p>`;
+  document.getElementById('outfitUrlInput').value = '';
+});
+
+['dragover','dragleave','drop'].forEach(ev => {
+  outfitUploadArea.addEventListener(ev, e => {
+    e.preventDefault();
+    if (ev === 'dragover')  outfitUploadArea.classList.add('drag-over');
+    if (ev === 'dragleave') outfitUploadArea.classList.remove('drag-over');
+    if (ev === 'drop') {
+      outfitUploadArea.classList.remove('drag-over');
+      const f = e.dataTransfer.files[0];
+      if (f) { outfitFile.files = e.dataTransfer.files; outfitFile.dispatchEvent(new Event('change')); }
+    }
+  });
+});
+
+document.getElementById('outfitForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target;
+  const errEl = document.getElementById('outfitError');
+  errEl.hidden = true;
+  const submitBtn = document.getElementById('outfitSubmitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting…';
+
+  let wname = getWriterName();
+  if (!wname) {
+    wname = prompt('Your writer name (shown on submissions):') || '';
+    if (wname) setWriterName(wname);
+  }
+
+  try {
+    let imageUrl = document.getElementById('outfitUrlInput').value.trim();
+
+    if (!imageUrl && outfitFileData) {
+      const fd = new FormData();
+      fd.append('image', outfitFileData.file);
+      fd.append('event_slug', SLUG);
+      fd.append('subtype', 'outfits');
+      const up = await fetch(`${API}/api/upload`, {
+        method: 'POST', body: fd,
+        headers: { 'x-writer-id': getWriterId(), ...(ADMIN_TOKEN ? { 'Authorization': `Bearer ${ADMIN_TOKEN}` } : {}) }
+      });
+      const upData = await up.json();
+      if (!up.ok) throw new Error(upData.detail || upData.error || 'Upload failed');
+      imageUrl = upData.url.startsWith('/') ? API + upData.url : upData.url;
+    }
+
+    if (!imageUrl) {
+      errEl.textContent = 'Please upload an image or paste a URL.';
+      errEl.hidden = false;
+      return;
+    }
+
+    const body = {
+      category: form.category.value,
+      character_name: form.character_name.value,
+      image_url: imageUrl,
+    };
+
+    const res  = await fetch(`${API}/api/events/${SLUG}/outfits`, {
+      method: 'POST', headers: apiHeaders(), body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      errEl.textContent = data.detail || data.error || 'Submission failed.';
+      errEl.hidden = false;
+      return;
+    }
+
+    document.getElementById('outfitModal').hidden = true;
+    form.reset();
+    outfitFileData = null;
+    loadOutfits();
+  } catch (err) {
+    errEl.textContent = err.message || 'An error occurred.';
+    errEl.hidden = false;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit outfit';
+  }
+});
+
+// Admin: set host outfit
+document.getElementById('hostOutfitForm')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const url = e.target.host_image_url.value.trim();
+  if (!url) return;
+  await fetch(`${API}/api/admin/events/${SLUG}/host-outfit`, {
+    method: 'PATCH', headers: apiHeaders(), body: JSON.stringify({ image_url: url })
+  });
+  e.target.reset();
+  loadOutfits();
+});
+
+/* ─────────────────────────────────────────────
+   g. Load highlights
+   ───────────────────────────────────────────── */
+async function loadHighlights() {
+  try {
+    const res  = await fetch(`${API}/api/events/${SLUG}/highlights`);
+    const data = await res.json();
+    renderHighlights(data.highlights || []);
+  } catch {
+    document.getElementById('highlightsGrid').innerHTML = '<p style="color:var(--muted)">Could not load highlights.</p>';
+  }
+}
+
+function renderHighlights(highlights) {
+  const wid  = getWriterId();
+  const grid = document.getElementById('highlightsGrid');
+
+  if (!highlights.length) {
+    grid.innerHTML = `<div class="hl-empty"><svg viewBox="0 0 24 24" fill="none" width="40" height="40"><path d="M3 16l5-5 4 4 4-5 5 6M3 4h18v16H3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><p>No highlights yet — share a scene!</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = highlights.map(h => {
+    const imgUrl = h.image_url.startsWith('/api/image/') ? API + h.image_url : h.image_url;
+    const canDel = isAdmin() || h.submitted_by === wid;
+    const pin  = isAdmin() ? `<button class="admin-btn" onclick="toggleHlPin('${h.id}',${h.is_pinned})">📌 ${h.is_pinned ? 'Unpin' : 'Pin'}</button>` : '';
+    const del  = canDel ? `<button class="delete-btn" data-id="${h.id}">✕ Delete</button>` : '';
+    return `
+<div class="hl-card${h.is_pinned ? ' is-pinned' : ''}">
+  <div class="frame"><img class="hl-img" src="${imgUrl}" alt="${h.caption}" data-zoom data-cap="${h.caption} — ${h.character_name}"></div>
+  <div class="hl-caption">${h.caption}</div>
+  <div class="hl-meta">${h.character_name} <span class="hl-by">by ${h.writer_name || 'anonymous'}</span></div>
+  <div class="card-actions">${pin}${del}</div>
+</div>`;
+  }).join('');
+
+  grid.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => deleteHighlight(btn.dataset.id));
+  });
+  grid.querySelectorAll('.hl-img[data-zoom]').forEach(img => {
+    img.addEventListener('click', () => openLightbox(img.src, img.dataset.cap || ''));
+  });
+
+  // Writer limit note
+  const used = highlights.filter(h => h.submitted_by === wid && !h.is_hidden).length;
+  const cap  = 4;
+  const left = cap - used;
+  const note = document.getElementById('hlLimitNote');
+  note.textContent = `${used} of ${cap} used`;
+  if (left <= 0) {
+    document.getElementById('addHighlightBtn').disabled = true;
+    document.getElementById('addHighlightBtn').textContent = 'Limit reached (4/4)';
+    note.textContent = 'Limit reached — delete one to add another.';
+  }
+}
+
+async function deleteHighlight(id) {
+  if (!confirm('Delete this highlight?')) return;
+  const h = apiHeaders({ 'Content-Type': undefined });
+  delete h['Content-Type'];
+  await fetch(`${API}/api/events/${SLUG}/highlights/${id}`, { method: 'DELETE', headers: h });
+  loadHighlights();
+}
+
+async function toggleHlPin(id, current) {
+  await fetch(`${API}/api/events/${SLUG}/highlights/${id}`, {
+    method: 'PATCH', headers: apiHeaders(), body: JSON.stringify({ is_pinned: !current })
+  });
+  loadHighlights();
+}
+
+/* ─────────────────────────────────────────────
+   h. Highlight submit form
+   ───────────────────────────────────────────── */
+document.getElementById('addHighlightBtn').addEventListener('click', () => {
+  document.getElementById('hlModal').hidden = false;
+});
+document.getElementById('closeHlModal').addEventListener('click', () => {
+  document.getElementById('hlModal').hidden = true;
+});
+
+let hlFileData = null;
+const hlPickBtn    = document.getElementById('hlPickBtn');
+const hlFile       = document.getElementById('hlFile');
+const hlUploadArea = document.getElementById('hlUploadArea');
+
+hlPickBtn.addEventListener('click', () => hlFile.click());
+hlFile.addEventListener('change', () => {
+  const f = hlFile.files[0];
+  if (!f) return;
+  if (hlFileData) URL.revokeObjectURL(hlFileData.objectUrl);
+  hlFileData = { file: f, objectUrl: URL.createObjectURL(f) };
+  document.getElementById('hlUploadInner').innerHTML = `<img src="${hlFileData.objectUrl}" style="max-height:120px;object-fit:contain;border-radius:4px"><p style="font-size:13px;margin-top:6px">${f.name}</p>`;
+  document.getElementById('hlUrlInput').value = '';
+});
+
+['dragover','dragleave','drop'].forEach(ev => {
+  hlUploadArea.addEventListener(ev, e => {
+    e.preventDefault();
+    if (ev === 'dragover')  hlUploadArea.classList.add('drag-over');
+    if (ev === 'dragleave') hlUploadArea.classList.remove('drag-over');
+    if (ev === 'drop') {
+      hlUploadArea.classList.remove('drag-over');
+      const f = e.dataTransfer.files[0];
+      if (f) { hlFile.files = e.dataTransfer.files; hlFile.dispatchEvent(new Event('change')); }
+    }
+  });
+});
+
+document.getElementById('hlForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target;
+  const errEl = document.getElementById('hlError');
+  errEl.hidden = true;
+  const submitBtn = document.getElementById('hlSubmitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting…';
+
+  let wname = getWriterName();
+  if (!wname) {
+    wname = prompt('Your writer name:') || '';
+    if (wname) setWriterName(wname);
+  }
+
+  try {
+    let imageUrl = document.getElementById('hlUrlInput').value.trim();
+    if (!imageUrl && hlFileData) {
+      const fd = new FormData();
+      fd.append('image', hlFileData.file);
+      fd.append('event_slug', SLUG);
+      fd.append('subtype', 'highlights');
+      const up = await fetch(`${API}/api/upload`, {
+        method: 'POST', body: fd,
+        headers: { 'x-writer-id': getWriterId(), ...(ADMIN_TOKEN ? { 'Authorization': `Bearer ${ADMIN_TOKEN}` } : {}) }
+      });
+      const upData = await up.json();
+      if (!up.ok) throw new Error(upData.detail || upData.error || 'Upload failed');
+      imageUrl = upData.url.startsWith('/') ? API + upData.url : upData.url;
+    }
+
+    if (!imageUrl) {
+      errEl.textContent = 'Please upload an image or paste a URL.';
+      errEl.hidden = false;
+      return;
+    }
+
+    const body = {
+      character_name: form.character_name.value,
+      caption: form.caption.value,
+      image_url: imageUrl
+    };
+    const res  = await fetch(`${API}/api/events/${SLUG}/highlights`, {
+      method: 'POST', headers: apiHeaders(), body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      errEl.textContent = data.detail || data.error || 'Submission failed.';
+      errEl.hidden = false;
+      return;
+    }
+
+    document.getElementById('hlModal').hidden = true;
+    form.reset();
+    hlFileData = null;
+    loadHighlights();
+  } catch (err) {
+    errEl.textContent = err.message || 'An error occurred.';
+    errEl.hidden = false;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit highlight';
+  }
+});
+
+/* ─────────────────────────────────────────────
+   i. Lightbox
+   ───────────────────────────────────────────── */
+const lb    = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbCap = document.getElementById('lbCap');
+
+function openLightbox(src, cap) {
+  lbImg.src = src;
+  lbCap.textContent = cap;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLb() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+  lbImg.src = '';
+}
+lb.addEventListener('click', e => { if (e.target !== lbImg) closeLb(); });
+document.getElementById('lbClose').addEventListener('click', closeLb);
+addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+// Static zoom-able images (itinerary panels)
+document.querySelectorAll('img[data-zoom]').forEach(img => {
+  img.addEventListener('click', () => openLightbox(img.src, img.dataset.cap || ''));
+});
+
+/* ─────────────────────────────────────────────
+   j. Itinerary extras
+   ───────────────────────────────────────────── */
+
+// Menu toggle
+const menuBtn = document.getElementById('menuBtn');
+const navLinks = document.getElementById('navLinks');
+menuBtn.addEventListener('click', () => {
+  const open = navLinks.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded', open);
+});
+
+// Back to top
+const backTop = document.getElementById('backTop');
+addEventListener('scroll', () => {
+  backTop.classList.toggle('show', scrollY > 600);
+}, { passive: true });
+backTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Local timezone conversion for .lt[data-utc] elements
+// Event date: Sunday 14 June 2026
+function convertTimes() {
+  const EVENT_DATE = '2026-06-14';
+  document.querySelectorAll('.lt[data-utc]').forEach(el => {
+    try {
+      const utcTime = el.dataset.utc; // "HH:MM"
+      const [hh, mm] = utcTime.split(':').map(Number);
+      const utcMs = Date.UTC(2026, 5, 14, hh, mm); // months 0-indexed, June=5
+      const local = new Date(utcMs);
+      const formatted = local.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      el.textContent = formatted;
+      // If local tz is same as UTC, also update tzNote
+    } catch (err) {
+      // leave as-is
+    }
+  });
+
+  // Update timezone note
+  try {
+    const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const sampleUTC = new Date(Date.UTC(2026, 5, 14, 16, 0));
+    const localStr  = sampleUTC.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    const note = document.getElementById('tzNote');
+    if (note) note.textContent = `Times shown in your local time (${tzName}) · event runs 5:00–8:30 PM UK time.`;
+  } catch {}
+}
+convertTimes();
+
+// Live status banner
+(function liveBanner() {
+  const U = (h, m) => Date.UTC(2026, 5, 14, h, m);
+  const phases = [
+    [U(16,0),  U(16,30), 'Arrival',            'Red carpet outside'],
+    [U(16,30), U(18,30), 'Atrium & Games',      'Ground floor'],
+    [U(18,30), U(18,50), 'Cheer Performance',   'Atrium stage'],
+    [U(18,50), U(19,30), 'Wind Down',           'Scenes closing'],
+  ];
+
+  function tick() {
+    const now = Date.now();
+    const eventStart = U(16, 0);
+    const eventEnd   = U(19, 30);
+    const live = document.getElementById('live');
+    const badge = document.getElementById('liveBadge');
+    const badgeText = document.getElementById('liveBadgeText');
+    const liveNow   = document.getElementById('liveNow');
+    const liveSub   = document.getElementById('liveSub');
+    const liveCta   = document.getElementById('liveCta');
+
+    if (now < eventStart || now >= eventEnd) {
+      live.hidden = true;
+      return;
+    }
+
+    live.hidden = false;
+    const phase = phases.find(([s, e]) => now >= s && now < e);
+    if (phase) {
+      badgeText.textContent = 'Live Now';
+      liveNow.textContent   = phase[2];
+      liveSub.textContent   = phase[3];
+    } else {
+      badgeText.textContent = 'Live';
+      liveNow.textContent   = 'Event in progress';
+      liveSub.textContent   = '';
+    }
+  }
+
+  tick();
+  setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>
