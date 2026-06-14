@@ -687,6 +687,34 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
 .cv-empty {
   grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--muted-2);
 }
+/* ── Cheer roster ── */
+.cheer-roster{margin-bottom:36px}
+.roster-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:12px;
+}
+.roster-card{
+  display:flex;flex-direction:column;gap:6px;
+  background:var(--panel);
+  border:2px solid var(--ink-stroke);
+  border-radius:6px;
+  padding:14px 16px;
+  text-decoration:none;
+  box-shadow:3px 3px 0 var(--ink-stroke);
+  transition:transform .15s,box-shadow .15s;
+}
+.roster-card:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink-stroke)}
+.roster-role{
+  font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--muted);
+}
+.roster-role.captain{color:var(--gold-bright)}
+.roster-role.alt{color:var(--muted-2)}
+.roster-name{
+  font-family:'Anton',sans-serif;font-size:15px;letter-spacing:.02em;
+  text-transform:uppercase;color:var(--paper);
+}
 </style>
 </head>
 <body>
@@ -813,14 +841,12 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
         <a class="tl-item" href="#arrival">
           <div class="tl-num">01</div>
           <div class="tl-title">Bus Ride</div>
-          <div class="tl-time">IC 9:00 AM</div>
-          <div class="tl-time" style="font-size:11px;opacity:.6;letter-spacing:.06em">OOC <span class="lt" data-utc="16:00" data-uk="5:00 PM">5:00 PM</span></div>
+          <div class="tl-time"><span class="lt" data-utc="16:00" data-uk="5:00 PM">5:00 PM</span></div>
         </a>
         <a class="tl-item" href="#atrium">
           <div class="tl-num">02</div>
           <div class="tl-title">Arrival</div>
-          <div class="tl-time">IC 10:00 AM</div>
-          <div class="tl-time" style="font-size:11px;opacity:.6;letter-spacing:.06em">OOC <span class="lt" data-utc="17:00" data-uk="6:00 PM">6:00 PM</span></div>
+          <div class="tl-time"><span class="lt" data-utc="17:00" data-uk="6:00 PM">6:00 PM</span></div>
         </a>
         <a class="tl-item" href="#games">
           <div class="tl-num">03</div>
@@ -830,8 +856,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
         <a class="tl-item" href="#stage">
           <div class="tl-num">04</div>
           <div class="tl-title">Cheer</div>
-          <div class="tl-time">IC 11:30 AM</div>
-          <div class="tl-time" style="font-size:11px;opacity:.6;letter-spacing:.06em">OOC <span class="lt" data-utc="18:30" data-uk="7:30 PM">7:30 PM</span></div>
+          <div class="tl-time"><span class="lt" data-utc="18:30" data-uk="7:30 PM">7:30 PM</span></div>
         </a>
         <a class="tl-item" href="#wards">
           <div class="tl-num">05</div>
@@ -841,8 +866,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
         <a class="tl-item" href="#winddown">
           <div class="tl-num">06</div>
           <div class="tl-title">Bus Home</div>
-          <div class="tl-time">IC 12:30 PM</div>
-          <div class="tl-time" style="font-size:11px;opacity:.6;letter-spacing:.06em">OOC <span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></div>
+          <div class="tl-time"><span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></div>
         </a>
       </div>
     </div>
@@ -857,7 +881,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="sec-head">
         <h2>Bus Ride</h2>
-        <div class="time-group"><span class="ic-time">9:00 AM</span><span class="sec-time ooc-label"><span class="lt" data-utc="16:00" data-uk="5:00 PM">5:00 PM</span></span></div>
+        <span class="sec-time"><span class="lt" data-utc="16:00" data-uk="5:00 PM">5:00 PM</span></span>
       </div>
       <div class="panels">
         <figure class="panel-fig">
@@ -887,7 +911,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="sec-head">
         <h2>Arrival &amp; Main Atrium</h2>
-        <div class="time-group"><span class="ic-time">10:00 AM</span><span class="sec-time ooc-label"><span class="lt" data-utc="17:00" data-uk="6:00 PM">6:00 PM</span></span></div>
+        <span class="sec-time"><span class="lt" data-utc="17:00" data-uk="6:00 PM">6:00 PM</span></span>
       </div>
       <p class="detail-text">The coach pulls up at 6:00 PM. A red carpet leads from the entrance — Stella steps off first, walks it, delivers her welcome address, and takes a few press questions before the photo call. The rest of the squad disembark during or after and head inside.</p>
       <div class="keylist" style="margin-bottom:32px">
@@ -1131,7 +1155,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="sec-head">
         <h2>Cheer Performance</h2>
-        <div class="time-group"><span class="ic-time">11:30 AM</span><span class="sec-time ooc-label"><span class="lt" data-utc="18:30" data-uk="7:30 PM">7:30 PM</span></span></div>
+        <span class="sec-time"><span class="lt" data-utc="18:30" data-uk="7:30 PM">7:30 PM</span></span>
       </div>
       <div class="panels">
         <figure class="panel-fig">
@@ -1139,6 +1163,43 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
             <svg viewBox="0 0 24 24" fill="none"><path d="M3 16l5-5 4 4 4-5 5 6M3 4h18v16H3z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
         </figure>
+      </div>
+      <div class="cheer-roster">
+        <div class="sh" style="margin-bottom:20px"><span class="eyebrow">Performing Squad</span><span class="ln"></span></div>
+        <div class="roster-grid">
+          <a class="roster-card" href="https://roleplay.chat/profile.php?user=illuminate" target="_blank" rel="noopener">
+            <span class="roster-role captain">Captain</span>
+            <span class="roster-name">Celestia &ldquo;Stella&rdquo; Starkov</span>
+          </a>
+          <a class="roster-card" href="https://roleplay.chat/profile.php?user=serpentina" target="_blank" rel="noopener">
+            <span class="roster-role">Flyer</span>
+            <span class="roster-name">Valentina &ldquo;Tina&rdquo; Salvador</span>
+          </a>
+          <a class="roster-card" href="https://roleplay.chat/profile.php?user=Filament!" target="_blank" rel="noopener">
+            <span class="roster-role">Flyer</span>
+            <span class="roster-name">Velora Virelli</span>
+          </a>
+          <a class="roster-card" href="https://roleplay.chat/profile.php?user=Crashnburn" target="_blank" rel="noopener">
+            <span class="roster-role">Base</span>
+            <span class="roster-name">Manuel &ldquo;Manny&rdquo; Glint</span>
+          </a>
+          <a class="roster-card" href="https://roleplay.chat/profile.php?user=Layla_" target="_blank" rel="noopener">
+            <span class="roster-role">Base</span>
+            <span class="roster-name">Layla Armstrong</span>
+          </a>
+          <a class="roster-card" href="https://roleplay.chat/profile.php?user=Crown." target="_blank" rel="noopener">
+            <span class="roster-role">Tumbler</span>
+            <span class="roster-name">Nina Sterling Evergreen</span>
+          </a>
+          <a class="roster-card" href="https://roleplay.chat/profile.php?user=Sweet+Spot" target="_blank" rel="noopener">
+            <span class="roster-role alt">Alt. Flyer</span>
+            <span class="roster-name">Emery Hollister</span>
+          </a>
+          <a class="roster-card" href="https://roleplay.chat/profile.php?user=Verdant!" target="_blank" rel="noopener">
+            <span class="roster-role alt">Alt. Tumbler</span>
+            <span class="roster-name">Daphne Callas</span>
+          </a>
+        </div>
       </div>
       <div class="note-box">
         <strong>No roll — pure RP.</strong> Cheer Squad writers describe the routine at their own pace. Crowd reactions are completely free — anyone can write their character watching, cheering, filming, or getting emotional in the stands. Let it land.
@@ -1179,7 +1240,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="sec-head">
         <h2>Bus Home</h2>
-        <div class="time-group"><span class="ic-time">12:30 PM</span><span class="sec-time ooc-label"><span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></span></div>
+        <span class="sec-time"><span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></span>
       </div>
       <div class="note-box">
         <strong>No rolls.</strong> The fair winds down around 8:30 PM and the coach reassembles outside. Let scenes close naturally — quiet goodbyes, characters reflecting on the night on the ride back. No pressure, no clock. The coach departs when writers are done.
