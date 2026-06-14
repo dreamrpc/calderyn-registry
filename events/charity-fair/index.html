@@ -792,10 +792,10 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div>
         <div class="k">Closes (OOC)</div>
-        <div class="v"><span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></div>
+        <div class="v"><span class="lt" data-utc="21:00" data-uk="10:00 PM">9:00 PM</span></div>
       </div>
     </div>
-    <p class="tz-note" id="tzNote">All times shown in your local timezone. OOC: 5:00–8:30 PM UK. IC: 9:00 AM–12:30 PM.</p>
+    <p class="tz-note" id="tzNote">All times shown in your local timezone. OOC: 5:00 PM–9:00 PM GMT. IC: 9:00 AM–12:30 PM.</p>
   </div>
 </header>
 
@@ -890,7 +890,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
         <a class="tl-item" href="#winddown">
           <div class="tl-num">06</div>
           <div class="tl-title">Bus Home</div>
-          <div class="tl-time"><span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></div>
+          <div class="tl-time"><span class="lt" data-utc="21:00" data-uk="10:00 PM">9:00 PM</span></div>
         </a>
       </div>
     </div>
@@ -1377,9 +1377,9 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="sec-head">
         <h2>Bus Home</h2>
-        <span class="sec-time"><span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></span>
+        <span class="sec-time"><span class="lt" data-utc="21:00" data-uk="10:00 PM">9:00 PM</span></span>
       </div>
-      <p class="detail-text">The fair winds down around 8:30 PM and the coach reassembles outside. Once everyone is aboard, the full luxury service opens — this is when the second floor lounge, dinner service, and the rooftop spa all come online. No pressure, no clock. The coach departs when writers are done.</p>
+      <p class="detail-text">The fair winds down around 9:00 PM and the coach reassembles outside. Once everyone is aboard, the full luxury service opens — this is when the second floor lounge, dinner service, and the rooftop spa all come online. No pressure, no clock. The coach departs when writers are done.</p>
 
       <div class="note-box" style="border-color:var(--gold-deep);margin-bottom:32px">
         <strong>Bar &amp; champagne now open.</strong> Alcohol is served on the return journey only, paired with the seated dinner service on the second floor. Mocktails and soft drinks are available to all guests throughout.
@@ -1550,7 +1550,7 @@ function convertTimes() {
   try {
     const tzName    = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const localStart = toLocal(16, 0);    // 4:00 PM UTC = 5:00 PM BST
-    const localEnd   = toLocal(19, 30);   // 7:30 PM UTC = 8:30 PM BST
+    const localEnd   = toLocal(21, 0);    // 9:00 PM UTC = 10:00 PM BST
     const note = document.getElementById('tzNote');
     if (note) note.textContent = `All times shown in your local timezone (${tzName}). OOC: ${localStart}–${localEnd}. IC: 9:00 AM–12:30 PM.`;
   } catch {}
@@ -1564,13 +1564,13 @@ convertTimes();
     [U(16,0),  U(17,0),  'Bus Ride',            'En route to GOSH'],
     [U(17,0),  U(18,30), 'Free Play',            'Atrium, Games, Wards'],
     [U(18,30), U(18,50), 'Cheer Performance',    'Main stage'],
-    [U(18,50), U(19,30), 'More Free Play',       'Atrium, Games, Wards'],
+    [U(18,50), U(21,0),  'More Free Play',       'Atrium, Games, Wards'],
   ];
 
   function tick() {
     const now = Date.now();
     const eventStart = U(16, 0);
-    const eventEnd   = U(19, 30);
+    const eventEnd   = U(21, 0);
     const live = document.getElementById('live');
     const badge = document.getElementById('liveBadge');
     const badgeText = document.getElementById('liveBadgeText');
