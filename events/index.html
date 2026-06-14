@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Events · Calderyn College</title>
+<title>Events | Calderyn College</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -216,7 +216,7 @@ function renderCard(event) {
       <div class="date-line">${fmtDate(event.date)}</div>
       <p class="blurb">${event.blurb || ''}</p>
       <div class="footer">
-        <span class="cta">View event →</span>
+        <span class="cta">View event <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" style="width:12px;height:12px;display:inline-block;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-left:5px"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
         ${statusPill(status)}
       </div>
     </div>
