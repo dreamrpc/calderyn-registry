@@ -308,6 +308,16 @@ nav{
 .sec-time{
   font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.1em;color:var(--gold);
 }
+.ic-time{
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.14em;
+  color:var(--muted);text-transform:uppercase;
+}
+.ic-time::before{content:'IC · '}
+.ooc-label::before{content:'OOC · '}
+.ooc-label{
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.14em;color:var(--muted);
+}
+.time-group{display:flex;flex-direction:column;gap:3px;align-self:center;}
 
 /* figure panels / comic panels */
 .panels{display:flex;flex-direction:column;gap:18px;margin:22px 0 24px}
@@ -721,15 +731,19 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
         <a class="v" href="https://roleplay.chat/profile.php?user=illunimate" target="_blank" rel="noopener">Stella Starkov</a>
       </div>
       <div>
-        <div class="k">Starts</div>
+        <div class="k">IC Time</div>
+        <div class="v">9:00 AM – 12:30 PM</div>
+      </div>
+      <div>
+        <div class="k">Starts (OOC)</div>
         <div class="v"><span class="lt" data-utc="16:00" data-uk="5:00 PM">5:00 PM</span></div>
       </div>
       <div>
-        <div class="k">Closes</div>
+        <div class="k">Closes (OOC)</div>
         <div class="v"><span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></div>
       </div>
     </div>
-    <p class="tz-note" id="tzNote">Times shown in your local timezone · 5:00–8:30 PM UK time</p>
+    <p class="tz-note" id="tzNote">OOC writing session times shown in your local timezone · 5:00–8:30 PM UK time · IC the event runs 9:00 AM–12:30 PM</p>
   </div>
 </header>
 
@@ -799,12 +813,14 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
         <a class="tl-item" href="#arrival">
           <div class="tl-num">01</div>
           <div class="tl-title">Bus Ride</div>
-          <div class="tl-time"><span class="lt" data-utc="16:00" data-uk="5:00 PM">5:00 PM</span></div>
+          <div class="tl-time">IC 9:00 AM</div>
+          <div class="tl-time" style="font-size:11px;opacity:.6;letter-spacing:.06em">OOC <span class="lt" data-utc="16:00" data-uk="5:00 PM">5:00 PM</span></div>
         </a>
         <a class="tl-item" href="#atrium">
           <div class="tl-num">02</div>
           <div class="tl-title">Arrival</div>
-          <div class="tl-time"><span class="lt" data-utc="17:00" data-uk="6:00 PM">6:00 PM</span></div>
+          <div class="tl-time">IC 10:00 AM</div>
+          <div class="tl-time" style="font-size:11px;opacity:.6;letter-spacing:.06em">OOC <span class="lt" data-utc="17:00" data-uk="6:00 PM">6:00 PM</span></div>
         </a>
         <a class="tl-item" href="#games">
           <div class="tl-num">03</div>
@@ -814,7 +830,8 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
         <a class="tl-item" href="#stage">
           <div class="tl-num">04</div>
           <div class="tl-title">Cheer</div>
-          <div class="tl-time"><span class="lt" data-utc="18:30" data-uk="7:30 PM">7:30 PM</span></div>
+          <div class="tl-time">IC 11:30 AM</div>
+          <div class="tl-time" style="font-size:11px;opacity:.6;letter-spacing:.06em">OOC <span class="lt" data-utc="18:30" data-uk="7:30 PM">7:30 PM</span></div>
         </a>
         <a class="tl-item" href="#wards">
           <div class="tl-num">05</div>
@@ -824,7 +841,8 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
         <a class="tl-item" href="#winddown">
           <div class="tl-num">06</div>
           <div class="tl-title">Bus Home</div>
-          <div class="tl-time"><span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></div>
+          <div class="tl-time">IC 12:30 PM</div>
+          <div class="tl-time" style="font-size:11px;opacity:.6;letter-spacing:.06em">OOC <span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></div>
         </a>
       </div>
     </div>
@@ -839,7 +857,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="sec-head">
         <h2>Bus Ride</h2>
-        <span class="sec-time"><span class="lt" data-utc="16:00" data-uk="5:00 PM">5:00 PM</span></span>
+        <div class="time-group"><span class="ic-time">9:00 AM</span><span class="sec-time ooc-label"><span class="lt" data-utc="16:00" data-uk="5:00 PM">5:00 PM</span></span></div>
       </div>
       <div class="panels">
         <figure class="panel-fig">
@@ -869,7 +887,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="sec-head">
         <h2>Arrival &amp; Main Atrium</h2>
-        <span class="sec-time"><span class="lt" data-utc="17:00" data-uk="6:00 PM">6:00 PM</span></span>
+        <div class="time-group"><span class="ic-time">10:00 AM</span><span class="sec-time ooc-label"><span class="lt" data-utc="17:00" data-uk="6:00 PM">6:00 PM</span></span></div>
       </div>
       <p class="detail-text">The coach pulls up at 6:00 PM. A red carpet leads from the entrance — Stella steps off first, walks it, delivers her welcome address, and takes a few press questions before the photo call. The rest of the squad disembark during or after and head inside.</p>
       <div class="keylist" style="margin-bottom:32px">
@@ -1113,7 +1131,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="sec-head">
         <h2>Cheer Performance</h2>
-        <span class="sec-time"><span class="lt" data-utc="18:30" data-uk="7:30 PM">7:30 PM</span></span>
+        <div class="time-group"><span class="ic-time">11:30 AM</span><span class="sec-time ooc-label"><span class="lt" data-utc="18:30" data-uk="7:30 PM">7:30 PM</span></span></div>
       </div>
       <div class="panels">
         <figure class="panel-fig">
@@ -1161,7 +1179,7 @@ footer p{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);l
       </div>
       <div class="sec-head">
         <h2>Bus Home</h2>
-        <span class="sec-time"><span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></span>
+        <div class="time-group"><span class="ic-time">12:30 PM</span><span class="sec-time ooc-label"><span class="lt" data-utc="19:30" data-uk="8:30 PM">8:30 PM</span></span></div>
       </div>
       <div class="note-box">
         <strong>No rolls.</strong> The fair winds down around 8:30 PM and the coach reassembles outside. Let scenes close naturally — quiet goodbyes, characters reflecting on the night on the ride back. No pressure, no clock. The coach departs when writers are done.
@@ -1256,7 +1274,7 @@ function convertTimes() {
     const localStart = toLocal(16, 0);    // 4:00 PM UTC = 5:00 PM BST
     const localEnd   = toLocal(19, 30);   // 7:30 PM UTC = 8:30 PM BST
     const note = document.getElementById('tzNote');
-    if (note) note.textContent = `All times in your local timezone (${tzName}) · ${localStart}–${localEnd}`;
+    if (note) note.textContent = `OOC writing session · all times in your local timezone (${tzName}) · ${localStart}–${localEnd} · IC the event runs 9:00 AM–12:30 PM`;
   } catch {}
 }
 convertTimes();
