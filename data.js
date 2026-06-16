@@ -2562,7 +2562,7 @@ clubs: [
     positions: [
       { pos: "Head of Kitchen", group: "leadership" },
       { pos: "Line Cook", group: "kitchen" }, { pos: "Line Cook", group: "kitchen" }, { pos: "Line Cook", group: "kitchen" },
-      { pos: "Baker", group: "kitchen" }, { pos: "Baker", group: "kitchen" },
+      { pos: "Baker", group: "kitchen", char: "Viviane Yamaguchi", link: "https://roleplay.chat/profile.php?user=vein" }, { pos: "Baker", group: "kitchen" },
       { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
       { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
     ],
