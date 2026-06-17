@@ -25,10 +25,15 @@ id = "f4b40cc6287b4654835bd47d21857b97"
 # database_id   = "REPLACE_WITH_D1_DATABASE_ID"
 
 # R2 bucket for uploaded event images.
-# Create with: wrangler r2 bucket create calderyn-events-media
-[[r2_buckets]]
-binding    = "MEDIA"
-bucket_name = "calderyn-events-media"
+# ── TEMPORARILY DISABLED (same reason as the D1 binding above) ─────────
+# The bucket 'calderyn-events-media' doesn't exist yet, so wrangler fails
+# (R2 error 10085) and the Worker can't deploy. events.js guards
+# `!env.MEDIA` (returns 503 "Storage not configured"); no core route uses
+# it. TO RESTORE: run `wrangler r2 bucket create calderyn-events-media`,
+# then uncomment the three lines below.
+# [[r2_buckets]]
+# binding    = "MEDIA"
+# bucket_name = "calderyn-events-media"
 
 # Events admin token — set via: wrangler secret put EVENTS_ADMIN_TOKEN
 # EVENTS_ADMIN_TOKEN = "set-via-secret"
