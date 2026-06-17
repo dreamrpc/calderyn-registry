@@ -18,6 +18,9 @@ import {
   clubQuotaUsage,
   findDuplicatePowerballCaptains,
   findWritersWithMultipleHounds,
+  checkHoundQuota,
+  isHoundSubmission,
+  getHoundsLimit,
   checkUnsanctionedQuota,
   getUnsanctionedCharsByOoc,
   getUnsanctionedLimit,
@@ -464,6 +467,78 @@ faculty: [ { section: "H.O.U.N.D.S.", rows: [
   const dups = findWritersWithMultipleHounds(dup);
   assertEq(dups.length, 1, JSON.stringify(dups));
   assertEq(dups[0].ooc, "Star");
+});
+
+// ─── H.O.U.N.D.S. applyable per-writer cap ────────────────────────────
+test("isHoundSubmission: true only for the Hounds section", () => {
+  assertTrue(isHoundSubmission({ facultySection: "H.O.U.N.D.S." }));
+  assertFalse(isHoundSubmission({ facultySection: "SUPPORT STAFF" }));
+  assertFalse(isHoundSubmission({}));
+});
+
+test("getHoundsLimit: default 1, env override", () => {
+  assertEq(getHoundsLimit({}), 1);
+  assertEq(getHoundsLimit({ HOUNDS_LIMIT_PER_WRITER: "2" }), 2);
+});
+
+test("checkHoundQuota: a writer with a hound is blocked from a second", () => {
+  // Crown. and nocturne. both map to Star — two accounts, one writer.
+  const text = `window.CALDERYN = {
+faculty: [ { section: "H.O.U.N.D.S.", rows: [
+  { role: "Hound", char: "Hound A", link: "https://r?user=Crown." },
+] } ],
+};`;
+  const v = checkHoundQuota(text, {
+    type: "faculty",
+    form: { facultySection: "H.O.U.N.D.S.", facultyRole: "Hound", char: "Hound B", rpcLink: "https://r?user=nocturne." },
+  }, 1);
+  assertFalse(v.allowed);
+  assertEq(v.kind, "hound");
+  assertEq(v.count, 1);
+});
+
+test("checkHoundQuota: a writer with no hound can take one", () => {
+  const text = `window.CALDERYN = { faculty: [ { section: "H.O.U.N.D.S.", rows: [] } ] };`;
+  const v = checkHoundQuota(text, {
+    type: "faculty",
+    form: { facultySection: "H.O.U.N.D.S.", char: "New Hound", rpcLink: "https://r?user=Crown." },
+  }, 1);
+  assertTrue(v.allowed);
+});
+
+test("checkHoundQuota: re-approving the writer's existing hound is allowed", () => {
+  const text = `window.CALDERYN = {
+faculty: [ { section: "H.O.U.N.D.S.", rows: [
+  { role: "Hound", char: "Hound A", link: "https://r?user=Crown." },
+] } ],
+};`;
+  const v = checkHoundQuota(text, {
+    type: "faculty",
+    form: { facultySection: "H.O.U.N.D.S.", char: "Hound A", rpcLink: "https://r?user=nocturne." },
+  }, 1);
+  assertTrue(v.allowed);
+});
+
+test("checkHoundQuota: non-hound faculty submission bypasses the check", () => {
+  const v = checkHoundQuota(data, {
+    type: "faculty",
+    form: { facultySection: "SUPPORT STAFF", char: "X", rpcLink: "https://r?user=Crown." },
+  }, 1);
+  assertTrue(v.allowed);
+});
+
+test("checkHoundQuota: PRIVACY — verdict carries no character list", () => {
+  const text = `window.CALDERYN = {
+faculty: [ { section: "H.O.U.N.D.S.", rows: [
+  { role: "Hound", char: "Hound A", link: "https://r?user=Crown." },
+] } ],
+};`;
+  const v = checkHoundQuota(text, {
+    type: "faculty",
+    form: { facultySection: "H.O.U.N.D.S.", char: "Hound B", rpcLink: "https://r?user=nocturne." },
+  }, 1);
+  assertFalse("chars" in v, "verdict must not include chars");
+  assertFalse("owned" in v, "verdict must not include owned set");
 });
 
 // ─── Unsanctioned-character cap ──────────────────────────────────────

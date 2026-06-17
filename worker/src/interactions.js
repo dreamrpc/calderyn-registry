@@ -2,7 +2,7 @@ import { verifySignature, editMessage, postMessage } from "./discord.js";
 import { buildEmbed } from "./embed.js";
 import { updateFile, getFile } from "./github.js";
 import { buildInsertions, applyInsertions, removeBySubmissionId, countEntriesFor } from "./markers.js";
-import { checkTierQuota, checkGovSeatQuota, isCappedGovSeat, checkClubQuota, isCappedClubSubmission, checkUnsanctionedQuota, getUnsanctionedLimit, submissionIsUnsanctioned, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
+import { checkTierQuota, checkGovSeatQuota, isCappedGovSeat, checkHoundQuota, isHoundSubmission, getHoundsLimit, checkClubQuota, isCappedClubSubmission, checkUnsanctionedQuota, getUnsanctionedLimit, submissionIsUnsanctioned, getTierLimits, getOocForForm, extractRpcUsername } from "./quota.js";
 import { lookupOocByRpc } from "./writers.js";
 import { ensureWriterMapping } from "./writer-mapping.js";
 
@@ -150,6 +150,19 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
       }
     }
 
+    // Per-writer H.O.U.N.D.S. cap — one seat in the unit per writer. Hound
+    // applications carry a tier (checked above), but the tier cap doesn't
+    // stop a writer taking several hound slots, so check separately.
+    if (!blocked && isHoundSubmission(sub.form)) {
+      try {
+        const current = await getFile(env, env.GITHUB_DATA_FILE);
+        const verdict = checkHoundQuota(current.text, sub, getHoundsLimit(env));
+        if (!verdict.allowed) blocked = verdict;
+      } catch (err) {
+        console.error("hound quota check failed:", err.message);
+      }
+    }
+
     // Per-writer club caps (see CLUB_CAPS in quota.js for the list).
     // Club positions are tierless and bypass the tier quota, so check
     // separately. Covers the Club form and the Student form's optional
@@ -229,6 +242,19 @@ async function finalizeAction({ env, sub, toState, fromState, actor }) {
       blockedEmbed.description =
         `**⚠ Approval blocked — ${blocked.label} limit (${blocked.limit} per writer).**\n` +
         `Each writer may hold at most **${blocked.limit} ${blocked.label} ${seatWord}**, counted ` +
+        `across all of their accounts. This writer already holds ${blocked.count}, so this seat ` +
+        `can't be approved until ${blocked.limit === 1 ? "the existing one is" : "one is"} vacated. ` +
+        `The writer has been notified.\n\n` +
+        (blockedEmbed.description || "");
+    } else if (blocked.kind === "hound") {
+      const seatWord = blocked.limit === 1 ? "seat" : "seats";
+      blockedEmbed = buildEmbed(sub.type, sub.form, {
+        color: 0xf59e0b, // amber — distinguishable from approved/rejected/pending
+        footer: `Calderyn College · Central Registry · 2026 · ⚠ H.O.U.N.D.S. limit`,
+      });
+      blockedEmbed.description =
+        `**⚠ Approval blocked — H.O.U.N.D.S. limit (${blocked.limit} per writer).**\n` +
+        `Each writer may hold at most **${blocked.limit} ${seatWord}** in the unit, counted ` +
         `across all of their accounts. This writer already holds ${blocked.count}, so this seat ` +
         `can't be approved until ${blocked.limit === 1 ? "the existing one is" : "one is"} vacated. ` +
         `The writer has been notified.\n\n` +

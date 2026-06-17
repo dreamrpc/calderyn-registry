@@ -337,10 +337,10 @@ export function findDuplicatePowerballCaptains(text) {
 // A writer may hold at most ONE seat in the H.O.U.N.D.S. unit — the
 // Handler or any of the six operative slots — counted across all of
 // their RPC accounts (same OOC grouping as every other cap). Hound
-// seats are placed by hand in data.js (there is no application form for
-// them), so — exactly like the Powerball captaincy flag — this can't be
-// blocked at approve time. This data-integrity helper lets the test
-// suite catch a writer who ends up holding two seats in the unit.
+// Hounds are applyable through the Faculty form (facultySection
+// "H.O.U.N.D.S."), and checkHoundQuota below blocks a second seat at
+// approve time. These helpers also let the test suite catch any
+// hand-placed duplicate seat in data.js.
 const HOUNDS_SECTION = "H.O.U.N.D.S.";
 
 // Map<ooc, Set<char>> of every filled H.O.U.N.D.S. seat, grouped by writer.
@@ -371,6 +371,41 @@ export function findWritersWithMultipleHounds(text) {
     if (chars.size > 1) out.push({ ooc, chars: [...chars] });
   }
   return out;
+}
+
+// Per-writer cap on H.O.U.N.D.S. seats. Default 1 (one seat in the unit
+// per writer); env-configurable like the other limits.
+export function getHoundsLimit(env) {
+  return readInt(env?.HOUNDS_LIMIT_PER_WRITER, 1);
+}
+
+// True when a submission is applying for a H.O.U.N.D.S. seat — a Faculty
+// form whose facultySection is the Hounds unit.
+export function isHoundSubmission(form) {
+  return String(form?.facultySection || "").toUpperCase() === HOUNDS_SECTION;
+}
+
+// Verdict shape mirrors checkGovSeatQuota:
+//   { allowed: true,  kind: "hound", ... }
+//   { allowed: false, kind: "hound", count, limit }
+// Faculty hound applications carry a tier (caught by checkTierQuota), but
+// the tier cap doesn't stop a writer taking several hound slots — this
+// dedicated cap does. PRIVACY: verdict carries counts only — no character
+// list and no OOC name in any Discord-bound field.
+export function checkHoundQuota(text, sub, limit) {
+  const form = sub?.form || {};
+  if (!isHoundSubmission(form)) return { allowed: true };
+  if (limit == null) return { allowed: true, kind: "hound" };
+
+  const ooc = getOocForForm(form);
+  if (!ooc) return { allowed: true, kind: "hound", warning: "no_ooc_identifier" };
+
+  const owned = getHoundsByOoc(text).get(ooc) || new Set();
+  const isNew = form.char ? !owned.has(form.char) : true;
+  if (isNew && owned.size + 1 > limit) {
+    return { allowed: false, kind: "hound", count: owned.size, limit };
+  }
+  return { allowed: true, kind: "hound", count: owned.size, limit };
 }
 
 // ── Per-writer club caps ─────────────────────────────────────────────

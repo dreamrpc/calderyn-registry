@@ -10,13 +10,19 @@ binding = "SUBMISSIONS"
 id = "f4b40cc6287b4654835bd47d21857b97"
 
 # D1 database for Events Hub (outfits, highlights).
-# Create with: wrangler d1 create calderyn-events
-# Apply schema: wrangler d1 migrations apply calderyn-events --remote
-# then paste the returned database_id below.
-[[d1_databases]]
-binding = "DB"
-database_name = "calderyn-events"
-database_id   = "REPLACE_WITH_D1_DATABASE_ID"
+# ── TEMPORARILY DISABLED ──────────────────────────────────────────────
+# The binding below carried a placeholder database_id, which made
+# `wrangler deploy` fail (D1 error 10021) and blocked EVERY Worker deploy
+# since mid-June. events.js guards `!env.DB` and returns a clean error, and
+# no core route (/submit, /interactions, quota) touches DB, so the registry
+# is unaffected — only the Events Hub API is offline until this is restored.
+# TO RESTORE: run `wrangler d1 create calderyn-events`, paste the printed
+# id into database_id, run `wrangler d1 migrations apply calderyn-events
+# --remote`, then uncomment the four lines below.
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "calderyn-events"
+# database_id   = "REPLACE_WITH_D1_DATABASE_ID"
 
 # R2 bucket for uploaded event images.
 # Create with: wrangler r2 bucket create calderyn-events-media
@@ -85,3 +91,6 @@ D_LIST_LIMIT_PER_WRITER = "12"
 # accounts regardless of tier — catches the usually tierless rogue
 # characters the A/B/C/D caps don't reach.
 UNSANCTIONED_LIMIT_PER_WRITER = "5"
+# Per-writer cap on H.O.U.N.D.S. seats — one seat in the unit per writer
+# (Handler or operative), counted across all of a writer's accounts.
+HOUNDS_LIMIT_PER_WRITER = "1"
