@@ -6838,6 +6838,18 @@ function getOpenFacultyRoles(){
       }
     });
   });
+  // H.O.U.N.D.S. — the six operative slots all share the role "Hound", so
+  // collapse them into a single option (the Worker fills the first open
+  // slot via collapseSlotRows at render). One entry per distinct open role.
+  const houndsSec = FACULTY.find(s => s.hounds || /hounds/i.test(s.section));
+  if (houndsSec){
+    const seenHoundRole = new Set();
+    houndsSec.rows.forEach(r => {
+      if (r.char || r.clf || seenHoundRole.has(r.role)) return;
+      seenHoundRole.add(r.role);
+      out.push({ section: houndsSec.section, role: r.role });
+    });
+  }
   // Department slots — Head of Department + numbered profs + instructional
   // staff. Reserved heads (e.g. MDA Room Owner) and filled slots are
   // excluded.
