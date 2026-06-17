@@ -17,6 +17,7 @@ import {
   clubQuotaMessage,
   clubQuotaUsage,
   findDuplicatePowerballCaptains,
+  findWritersWithMultipleHounds,
   checkUnsanctionedQuota,
   getUnsanctionedCharsByOoc,
   getUnsanctionedLimit,
@@ -441,6 +442,26 @@ clubs: [ { name: "Powerball", teams: [
 ] } ],
 };`;
   const dups = findDuplicatePowerballCaptains(dup);
+  assertEq(dups.length, 1, JSON.stringify(dups));
+  assertEq(dups[0].ooc, "Star");
+});
+
+// ─── H.O.U.N.D.S. one-seat-per-writer invariant ──────────────────────
+test("findWritersWithMultipleHounds: real data.js has none", () => {
+  const dups = findWritersWithMultipleHounds(data);
+  assertEq(dups.length, 0, JSON.stringify(dups));
+});
+
+test("findWritersWithMultipleHounds: flags a writer holding two Hound seats", () => {
+  // Crown. and nocturne. both map to Star — two accounts, one writer.
+  const dup = `window.CALDERYN = {
+faculty: [ { section: "H.O.U.N.D.S.", rows: [
+  { role: "Founder · Handler", char: "Nathan Maddock", link: "https://r?user=Gauging+The+Room" },
+  { role: "Hound", char: "Hound A", link: "https://r?user=Crown." },
+  { role: "Hound", char: "Hound B", link: "https://r?user=nocturne." },
+] } ],
+};`;
+  const dups = findWritersWithMultipleHounds(dup);
   assertEq(dups.length, 1, JSON.stringify(dups));
   assertEq(dups[0].ooc, "Star");
 });

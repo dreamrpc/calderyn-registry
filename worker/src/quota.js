@@ -333,6 +333,46 @@ export function findDuplicatePowerballCaptains(text) {
   return out;
 }
 
+// ── H.O.U.N.D.S. one-seat-per-writer invariant ───────────────────────
+// A writer may hold at most ONE seat in the H.O.U.N.D.S. unit — the
+// Handler or any of the six operative slots — counted across all of
+// their RPC accounts (same OOC grouping as every other cap). Hound
+// seats are placed by hand in data.js (there is no application form for
+// them), so — exactly like the Powerball captaincy flag — this can't be
+// blocked at approve time. This data-integrity helper lets the test
+// suite catch a writer who ends up holding two seats in the unit.
+const HOUNDS_SECTION = "H.O.U.N.D.S.";
+
+// Map<ooc, Set<char>> of every filled H.O.U.N.D.S. seat, grouped by writer.
+export function getHoundsByOoc(text) {
+  const byOoc = new Map();
+  try {
+    forEachArrayObject(text, ["faculty", { section: HOUNDS_SECTION }, "rows"], (obj) => {
+      const char = pickStringField(obj, "char");
+      if (!char) return;
+      const ooc = entryOoc(obj);
+      if (!ooc) return;
+      if (!byOoc.has(ooc)) byOoc.set(ooc, new Set());
+      byOoc.get(ooc).add(char);
+    });
+  } catch (err) {
+    // Fail-open: a missing section or scan failure must never throw.
+    if (!/no object matching|key not found/.test(err.message)) {
+      console.error("hounds scan failed:", err.message);
+    }
+  }
+  return byOoc;
+}
+
+// Array of { ooc, chars } for any writer holding more than one Hound seat.
+export function findWritersWithMultipleHounds(text) {
+  const out = [];
+  for (const [ooc, chars] of getHoundsByOoc(text)) {
+    if (chars.size > 1) out.push({ ooc, chars: [...chars] });
+  }
+  return out;
+}
+
 // ── Per-writer club caps ─────────────────────────────────────────────
 // Keeps club rosters from being monopolised so there's room for new
 // writers — caps rise as the room grows. Counted per OOC writer across

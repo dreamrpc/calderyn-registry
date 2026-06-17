@@ -725,7 +725,7 @@ faculty: [
   {
     section: "H.O.U.N.D.S.",
     hounds: true,
-    note: "Hostile Operations Unit for Neutralizing Dangerous Superhumans — STRATA's off-record field unit, run out of the campus security office. The Handler holds a faculty post as Security Chief; the pack does not. Six operative slots run as background NPCs until claimed.",
+    note: "Hostile Operations Unit for Neutralizing Dangerous Superhumans — STRATA's off-record field unit, run out of the campus security office. The Handler holds a faculty post as Security Chief; the pack does not. Six operative slots run as background NPCs until claimed — one seat per writer.",
     rows: [
       { role: "Founder · Handler", char: "Nathan Maddock", stage: "Gauge", tier: "C", power: "Aura Analysis", link: "https://roleplay.chat/profile.php?user=Gauging+The+Room", leader: true },
       { role: "Hound" },
