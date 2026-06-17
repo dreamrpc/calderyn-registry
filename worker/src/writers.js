@@ -94,6 +94,7 @@ const RPC_TO_OOC_RAW = {
   "shutter": "Dream",
   "Svalinn": "Star",
   "Parallax": "Star",
+  "LichHound": "Storm",
   // AUTO-INSERT:writers — newly-approved writer mappings get added
   // by the relay Worker directly above this marker (one line per RPC
   // account). Do not remove. See worker/src/writer-mapping.js for the
