@@ -26179,6 +26179,278 @@ button.orgs-pill {
 
 
 /* ════════════════════════════════════════════════════════════════════
+   H.O.U.N.D.S. · Faculty Registry field-unit block
+   Sibling of .freg-support, but with the Hounds' own identity: red
+   accent (the lore section's accent), a featured Handler card, and a
+   grid of classified "OPEN" operative spots.
+   ════════════════════════════════════════════════════════════════════ */
+.freg-hounds {
+  margin: clamp(24px, 3vw, 36px) clamp(20px, 4vw, 32px) clamp(36px, 4vw, 60px) !important;
+  max-width: 1500px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  background:
+    linear-gradient(180deg, rgba(227,27,35,0.04), transparent 240px),
+    #08080b !important;
+  border: 1px solid rgba(227,27,35,0.22) !important;
+  border-left: 4px solid var(--red, #e31b23) !important;
+  padding: 22px 24px !important;
+}
+.freg-hounds-hd {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 14px !important;
+  border-bottom: 1px solid rgba(227,27,35,0.18) !important;
+}
+.freg-hounds-eyebrow {
+  display: block !important;
+  font-family: var(--mono, 'Bebas Neue', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,90,96,0.95) !important;
+  margin-bottom: 6px !important;
+}
+.freg-hounds-name {
+  font-family: var(--display, 'Anton', sans-serif) !important;
+  font-weight: 900 !important;
+  font-size: 24px !important;
+  letter-spacing: 0.04em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+}
+.freg-hounds-count {
+  font-family: var(--mono, 'Bebas Neue', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  padding: 4px 10px !important;
+  border: 1px solid rgba(227,27,35,0.4) !important;
+  background: rgba(227,27,35,0.06) !important;
+  white-space: nowrap !important;
+}
+.freg-hounds-count-of { color: #4a4a52 !important; }
+.freg-hounds-note {
+  font-family: var(--sans, 'Inter', system-ui) !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: var(--text-2, #c9c3b5) !important;
+  margin: 0 0 18px !important;
+  max-width: 880px !important;
+}
+
+/* ── Handler · featured leader card ─────────────────────────────── */
+.hound-leader {
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
+  padding: 18px 20px !important;
+  background:
+    radial-gradient(circle 1px at 50% 50%, rgba(227,27,35,0.10) 1px, transparent 1.5px) 0 0 / 7px 7px,
+    #0b0b0e !important;
+  border: 1px solid rgba(227,27,35,0.28) !important;
+  border-left: 3px solid var(--red, #e31b23) !important;
+}
+.hound-leader-badge {
+  flex: 0 0 auto !important;
+  width: 52px !important;
+  height: 52px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: rgba(227,27,35,0.08) !important;
+  border: 1px solid rgba(227,27,35,0.45) !important;
+  color: var(--red-bright, #ff2a32) !important;
+  font-size: 22px !important;
+}
+.hound-leader-text { min-width: 0 !important; }
+.hound-leader-role {
+  display: block !important;
+  font-family: var(--mono, 'Bebas Neue', monospace) !important;
+  font-size: 9.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,90,96,0.92) !important;
+  margin-bottom: 4px !important;
+}
+.hound-leader-name {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  font-family: var(--display, 'Anton', sans-serif) !important;
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.01em !important;
+  color: var(--text-1, #f5f1e8) !important;
+  line-height: 1.1 !important;
+}
+.hound-leader-name .clink,
+.hound-leader-name .cname { color: inherit !important; }
+.hound-leader-meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px 22px !important;
+  margin-top: 8px !important;
+}
+.hound-leader-callsign,
+.hound-leader-power {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+}
+.hound-leader-callsign-lbl,
+.hound-leader-power-lbl {
+  font-family: var(--mono, 'Bebas Neue', monospace) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+}
+.hound-leader-callsign-val {
+  font-family: var(--mono, 'Bebas Neue', monospace) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: var(--red-bright, #ff5a60) !important;
+}
+.hound-leader-power-val {
+  font-family: var(--sans, 'Inter', system-ui) !important;
+  font-size: 13px !important;
+  color: var(--text-2, #c9c3b5) !important;
+}
+
+/* ── The Pack · sub-heading ─────────────────────────────────────── */
+.hound-pack-hd {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin: 22px 0 14px !important;
+}
+.hound-pack-eyebrow {
+  font-family: var(--mono, 'Bebas Neue', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.26em !important;
+  text-transform: uppercase !important;
+  color: var(--text-3, #948d80) !important;
+  white-space: nowrap !important;
+}
+.hound-pack-rule {
+  flex: 1 1 auto !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, rgba(227,27,35,0.35), transparent) !important;
+}
+
+/* ── The Pack · operative spots grid ────────────────────────────── */
+.hound-pack {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)) !important;
+  gap: 12px !important;
+}
+.hound-spot {
+  position: relative !important;
+  min-height: 104px !important;
+  padding: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  background: #0a0a0a !important;
+  border: 1px solid #1d1d20 !important;
+  overflow: hidden !important;
+}
+.hound-spot.is-open {
+  border-style: dashed !important;
+  border-color: rgba(227,27,35,0.28) !important;
+  background:
+    repeating-linear-gradient(135deg, rgba(227,27,35,0.045) 0 8px, transparent 8px 16px),
+    #090909 !important;
+}
+.hound-spot.is-filled {
+  border-color: rgba(227,27,35,0.3) !important;
+  border-left: 3px solid var(--red, #e31b23) !important;
+}
+.hound-spot-no {
+  position: absolute !important;
+  top: 8px !important;
+  right: 10px !important;
+  font-family: var(--mono, 'Bebas Neue', monospace) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  color: #3a3a40 !important;
+}
+.hound-spot-body { width: 100% !important; min-width: 0 !important; }
+.hound-spot-redacted {
+  display: inline-block !important;
+  font-family: var(--mono, 'Bebas Neue', monospace) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: #5a5a62 !important;
+  padding: 2px 8px !important;
+  background: linear-gradient(180deg, #161618, #0e0e10) !important;
+  border-left: 2px solid rgba(227,27,35,0.5) !important;
+  margin-bottom: 10px !important;
+}
+.hound-spot-open {
+  display: inline-block !important;
+  font-family: var(--mono, 'Bebas Neue', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.24em !important;
+  text-transform: uppercase !important;
+  color: #d4a843 !important;
+  padding: 3px 10px !important;
+  border: 1px solid rgba(212,168,74,0.45) !important;
+  background: rgba(212,168,74,0.05) !important;
+}
+.hound-spot-name {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 7px !important;
+  font-family: var(--sans, 'Inter', system-ui) !important;
+  font-weight: 700 !important;
+  font-size: 14.5px !important;
+  color: var(--text-1, #f5f1e8) !important;
+}
+.hound-spot-name .clink,
+.hound-spot-name .cname { color: inherit !important; }
+.hound-spot-callsign {
+  font-family: var(--mono, 'Bebas Neue', monospace) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--red-bright, #ff5a60) !important;
+  margin-top: 5px !important;
+}
+.hound-spot-power {
+  font-family: var(--sans, 'Inter', system-ui) !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  color: var(--text-3, #948d80) !important;
+  margin-top: 6px !important;
+}
+@media (max-width: 640px) {
+  .hound-leader { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+  .hound-pack { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important; }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
    POWERS GUIDE · STATUS CARDS · cleaner tag chip + tighter layout
    Two complaints from the user:
    - The status-tag chip (UNSANCTIONED / CIVILIAN / etc.) renders

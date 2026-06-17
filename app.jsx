@@ -3563,6 +3563,9 @@ function FacultyRegistryView(){
   // Find Support Staff section
   const supportSection = FACULTY.find(s => /support staff/i.test(s.section));
 
+  // Find the H.O.U.N.D.S. section (STRATA off-record field unit)
+  const houndsSection = FACULTY.find(s => s.hounds || /hounds/i.test(s.section));
+
   return (
     <div className="freg">
       <div className="freg-hint">
@@ -3756,7 +3759,104 @@ function FacultyRegistryView(){
           </div>
         </section>
       )}
+
+      {/* H.O.U.N.D.S. · STRATA's off-record field unit, run out of campus
+          security. The Handler is on faculty; the pack runs as NPC slots. */}
+      <HoundsSection section={houndsSection}/>
     </div>
+  );
+}
+
+/* H.O.U.N.D.S. roster block for the Faculty Registry. Leads with the
+   faculty leader (the Handler — Maddock / Gauge), then renders the open
+   operative spots as classified dossier slots. */
+function HoundsSection({ section }){
+  if (!section) return null;
+  const rows   = section.rows || [];
+  const leader = rows.find(r => r.leader) || rows.find(r => r.char) || null;
+  const spots  = rows.filter(r => r !== leader);
+  const filled = rows.filter(r => r.char).length;
+
+  return (
+    <section className="freg-hounds">
+      <header className="freg-hounds-hd">
+        <div className="freg-hounds-hd-l">
+          <span className="freg-hounds-eyebrow">STRATA · Internal Operations · Classified</span>
+          <h3 className="freg-hounds-name">{section.section}</h3>
+        </div>
+        <span className="freg-hounds-count">
+          {filled}<span className="freg-hounds-count-of"> / {rows.length}</span> on file
+        </span>
+      </header>
+
+      {section.note && <p className="freg-hounds-note">{section.note}</p>}
+
+      {leader && (
+        <article className="hound-leader">
+          <div className="hound-leader-badge" aria-hidden="true">
+            <i className="fa-solid fa-shield-halved"></i>
+          </div>
+          <div className="hound-leader-text">
+            <span className="hound-leader-role">{leader.role || "Handler"}</span>
+            <div className="hound-leader-name">
+              {leader.link
+                ? <CLink name={leader.char} link={leader.link}/>
+                : <span>{leader.char}</span>}
+              {leader.tier && <TierChip tier={leader.tier}/>}
+              {leader.npc && <NpcBadge/>}
+            </div>
+            <div className="hound-leader-meta">
+              {leader.stage && (
+                <span className="hound-leader-callsign">
+                  <span className="hound-leader-callsign-lbl">Callsign</span>
+                  <span className="hound-leader-callsign-val">{leader.stage}</span>
+                </span>
+              )}
+              {leader.power && (
+                <span className="hound-leader-power">
+                  <span className="hound-leader-power-lbl">Power</span>
+                  <span className="hound-leader-power-val">{leader.power}</span>
+                </span>
+              )}
+            </div>
+          </div>
+        </article>
+      )}
+
+      <div className="hound-pack-hd">
+        <span className="hound-pack-eyebrow">The Pack</span>
+        <span className="hound-pack-rule" aria-hidden="true"/>
+      </div>
+
+      <div className="hound-pack">
+        {spots.map((r, i) => (
+          <article
+            key={i}
+            className={"hound-spot" + (r.char ? " is-filled" : " is-open")}
+          >
+            <span className="hound-spot-no" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+            {r.char ? (
+              <div className="hound-spot-body">
+                <div className="hound-spot-name">
+                  {r.link
+                    ? <CLink name={r.char} link={r.link}/>
+                    : <span>{r.char}</span>}
+                  {r.tier && <TierChip tier={r.tier}/>}
+                  {r.npc && <NpcBadge/>}
+                </div>
+                {r.stage && <div className="hound-spot-callsign">{r.stage}</div>}
+                {r.power && <div className="hound-spot-power">{r.power}</div>}
+              </div>
+            ) : (
+              <div className="hound-spot-body">
+                <div className="hound-spot-redacted" aria-hidden="true">CLASSIFIED</div>
+                <div className="hound-spot-open">OPEN</div>
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 

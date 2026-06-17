@@ -715,6 +715,27 @@ faculty: [
       { role: "Security Chief", char: "Nathan Maddock", stage: "Gauge", power: "Aura Analysis", expression: "Identifying powers and abilities\nDetermining relative power levels\nDetecting strengths and weaknesses\nEstimating future potential\nTracking aura signatures up to 1 mile away\nReading aura traces left behind for up to 24 hours\nRecognizing emotional and psychological states through aura shifts", drawbacks: "Human durability\nAura information can become overwhelming in crowded areas\nRequires line of sight for detailed aura analysis\nOld combat injuries occasionally flare up", link: "https://roleplay.chat/profile.php?user=Gauging+The+Room" }, // sub:99a8d967
     ],
   },
+
+  /* ─── H.O.U.N.D.S. · STRATA off-record field unit ──────────────────
+     Run out of the campus security office. The Handler holds a faculty
+     post (Security Chief, see Support Staff above); the pack does not.
+     The six "Hound" rows are OPEN operative slots — a filled row appended
+     by the Worker collapses into the first open slot, same as every other
+     roster on the registry. */
+  {
+    section: "H.O.U.N.D.S.",
+    hounds: true,
+    note: "Hostile Operations Unit for Neutralizing Dangerous Superhumans — STRATA's off-record field unit, run out of the campus security office. The Handler holds a faculty post as Security Chief; the pack does not. Six operative slots run as background NPCs until claimed.",
+    rows: [
+      { role: "Founder · Handler", char: "Nathan Maddock", stage: "Gauge", tier: "C", power: "Aura Analysis", link: "https://roleplay.chat/profile.php?user=Gauging+The+Room", leader: true },
+      { role: "Hound" },
+      { role: "Hound" },
+      { role: "Hound" },
+      { role: "Hound" },
+      { role: "Hound" },
+      { role: "Hound" },
+    ],
+  },
 ],
 
 /* ═══════════════════════════════════════════════════════════════════════════
