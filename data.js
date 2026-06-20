@@ -3382,6 +3382,18 @@ mapLocations: [
     desc: "The park itself is technically off-campus, but the strip along the wall isn't really park territory either. Senior students walk it at dusk. Faculty acknowledge it exists by leaving the side gate unlocked between 18:00 and 20:00 in good weather.",
     tags: ["Permissive", "Daylight only"],
   },
+  { id: "engineering-garage", district: "perimeter", n: "P7",
+    name: "The Engineering Garage",
+    sub: "Vehicle bays · south wall",
+    desc: "A two-bay vehicle shed set into the south wall, a short walk from the Service Tunnel, that Engineering keeps open to its students for builds too big or too loud for the Drafting Halls. Roller doors tall enough for a van, an inspection pit, welding bays, a gantry crane that groans but holds, and a parts wall run on the same honour-rota as the kitchens. On paper it exists to service the grounds and the maintenance bots; in practice it's where engineering-track students rebuild engines, weld frames, and finish the senior projects that won't fit on a bench. Swipe access for the Engineering elective — everyone else needs a member to let them in.",
+    tags: ["Engineering students", "Vehicle bays", "After-hours making"],
+  },
+  { id: "south-carpark", district: "perimeter", n: "P8",
+    name: "The South Car Park",
+    sub: "Parking apron · beside the garage",
+    desc: "The tarmac apron between the Engineering Garage and the Main Gate: staff cars, a handful of senior students' bangers, the marked visitor bays, and the unmarked vans that come and go through the Service Tunnel. Lit, camera-covered, and gridded in faded white lines nobody repaints. Engineering students wheel half-finished builds out of the garage and onto the empty spaces at the far end to road-test them, which Facilities tolerates right up until something leaks.",
+    tags: ["Parking", "Beside the garage", "Camera-covered"],
+  },
 
   /* ═══ OFF-CAMPUS ═══════════════════════════════════════════════════ */
   { id: "iron-owl", district: "outside", n: "X1",
