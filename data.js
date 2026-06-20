@@ -3046,6 +3046,12 @@ mapLocations: [
     desc: "Two adjoining rooms on the third floor west — one set up as a mock committee chamber with a long curved desk, the other a standard seminar room for the policy-reading modules. Where the Politics & Public Affairs department teaches the disciplines that govern how powered persons actually operate inside the state and the market. Elective track.",
     tags: ["Elective track", "Policy", "Committee room"],
   },
+  { id: "skate-ramp", district: "academic", n: "A18",
+    name: "The Skate Ramp",
+    sub: "Unsanctioned · refectory courtyard",
+    desc: "A half-pipe and a pair of grind rails that rose out of the main courtyard outside the Refectory more or less overnight — Moni Li compressed the whole thing straight up out of the existing flagstone with her geokinesis, no concrete poured and no work order filed. She built it for Katniss and Dex to skate, but word travelled fast, and on any dry afternoon it pulls avid skaters from every house and a few who don't even go here. It has never been school-sanctioned — it sits on no facilities plan and was never approved. Student Body President Montgomery 'Upchuck' Farthing III brought a motion to have it torn out and lost the Student Council vote on the record, so the ramp stays until someone with more than a gavel decides otherwise.",
+    tags: ["Unsanctioned", "Built by Moni Li", "All skaters welcome"],
+  },
 
   /* ═══ TRAINING WING ════════════════════════════════════════════════ */
   { id: "arena", district: "training", n: "T1",
