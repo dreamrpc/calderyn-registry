@@ -158,6 +158,72 @@ roundTripCase({
   expectPlans: 1,
 });
 
+// ─── H.O.U.N.D.S. seat (Faculty form → faculty[H.O.U.N.D.S.].rows) ──
+// A hound is applied through the Faculty form. It carries a callsign and
+// a tier, and must display the same way as a hand-placed hound: callsign
+// + tier on the roster card AND in the powers registry. Round-trips clean
+// like every other form (faculty[].rows insert + powers[] entry).
+roundTripCase({
+  name: "faculty hound: roster row + powers entry, both round-trip",
+  id: "hnd00001",
+  sub: {
+    id: "hnd00001", type: "faculty",
+    form: {
+      facultySection: "H.O.U.N.D.S.",
+      facultyRole: "Hound",
+      char: "Hound Test", alias: "FANG",
+      tier: "A-List",
+      power: "P", powerExpression: "PE", drawbacks: "D",
+      rpcLink: "https://example/hound",
+    },
+  },
+  expectPlans: 2,
+});
+
+// Content check: the callsign (stage on the roster row, alias in powers[])
+// and the tier land in BOTH places, so a fresh hound application displays
+// exactly like the hand-placed founder. Regression guard for the gap where
+// the Faculty form collected a tier but the builder dropped it for hounds.
+test("faculty hound: callsign + tier land on both the roster row and the powers entry", () => {
+  const plans = buildInsertions({
+    id: "hnd00002", type: "faculty",
+    form: {
+      facultySection: "H.O.U.N.D.S.", facultyRole: "Hound",
+      char: "Hound Two", alias: "LICH", tier: "A-List",
+      power: "P", powerExpression: "PE", drawbacks: "D",
+      rpcLink: "https://example/h2",
+    },
+  });
+  assertEq(plans.length, 2, "plan count");
+  const roster = plans.find(p => p.kind === "path");
+  const powers = plans.find(p => p.kind === "marker" && p.marker === "powers");
+  assertTrue(roster, "roster path plan present");
+  assertTrue(powers, "powers marker plan present");
+  const rosterLine = roster.lines[0];
+  assertTrue(rosterLine.includes('stage: "LICH"'), `roster row carries callsign: ${rosterLine}`);
+  assertTrue(rosterLine.includes('tier: "A"'),     `roster row carries tier: ${rosterLine}`);
+  assertTrue(powers.line.includes('alias: "LICH"'),    `powers entry carries callsign: ${powers.line}`);
+  assertTrue(powers.line.includes('tier: "A"'),        `powers entry carries tier: ${powers.line}`);
+  assertTrue(powers.line.includes('status: "faculty"'),`powers entry keeps faculty status: ${powers.line}`);
+});
+
+// A non-hound faculty seat (Dean / Support Staff) stays tierless on the
+// roster row — only hounds show a tier chip there.
+test("faculty non-hound: roster row stays tierless", () => {
+  const plans = buildInsertions({
+    id: "hnd00003", type: "faculty",
+    form: {
+      facultySection: "OFFICE OF THE DEAN", facultyRole: "Registrar",
+      char: "Dean Staff", alias: "REG", tier: "A-List",
+      power: "P", powerExpression: "PE", drawbacks: "D",
+      rpcLink: "https://example/d",
+    },
+  });
+  const roster = plans.find(p => p.kind === "path");
+  assertTrue(roster, "roster path plan present");
+  assertTrue(!roster.lines[0].includes("tier:"), `dean row has no tier: ${roster.lines[0]}`);
+});
+
 // ─── STRATA hero list (Phase 2) ─────────────────────────────────────
 roundTripCase({
   name: "strata: path into heroLists[<tier>].slots",

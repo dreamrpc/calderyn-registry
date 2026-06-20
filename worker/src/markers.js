@@ -216,8 +216,22 @@ function buildFaculty(form, id) {
     return out;
   }
 
-  // Legacy Dean / Support Staff section → FACULTY[].rows path insert.
-  const facultyLine = `{ role: ${q(form.facultyRole)}, char: ${q(form.char)}, stage: ${stageFrag}${powerFrag}${humanFrag}${linkFrag} }, // sub:${id}`;
+  // Legacy Dean / Support Staff / H.O.U.N.D.S. section → FACULTY[].rows
+  // path insert. (H.O.U.N.D.S. seats are applyable through this form; the
+  // section lives in faculty[] like Dean / Support Staff, so it routes
+  // here too.)
+  //
+  // A H.O.U.N.D.S. operative carries a tier: their hound card renders a
+  // tier chip (the Handler row has one) and the callsign shows as the
+  // row's `stage`. Carry the tier through on BOTH the roster row and the
+  // powers[] entry so an applied hound displays exactly like a hand-placed
+  // one — callsign + tier in the same two places. Dean / Support Staff
+  // rows don't show a tier, so they keep the tierless shape.
+  const isHound = String(form.facultySection || "").toUpperCase() === "H.O.U.N.D.S.";
+  const houndTierLetter = (form.tier || "").replace(/-List$/, "");
+  const houndTierFrag = isHound && houndTierLetter ? `, tier: ${q(houndTierLetter)}` : "";
+
+  const facultyLine = `{ role: ${q(form.facultyRole)}, char: ${q(form.char)}, stage: ${stageFrag}${houndTierFrag}${powerFrag}${humanFrag}${linkFrag} }, // sub:${id}`;
   const out = [{
     kind: "path",
     path: ["faculty", { section: form.facultySection }, "rows"],
@@ -227,12 +241,13 @@ function buildFaculty(form, id) {
   // Also write a powers[] entry so the quota scanner can see this
   // character — the powers[] array is the canonical place per-pool
   // per-tier counting reads from. Skip for fully-human applicants
-  // (no power, expression, drawbacks to record).
+  // (no power, expression, drawbacks to record). Hounds carry their tier
+  // here too (includeTier) so the powers registry shows their tier chip.
   if (!form.fullyHuman) {
     out.push({
       kind: "marker",
       marker: "powers",
-      line: powersLine(form, id, "faculty"),
+      line: powersLine(form, id, "faculty", { includeTier: isHound }),
     });
   }
   return out;
@@ -360,8 +375,12 @@ function buildOutside(form, id) {
   return out;
 }
 
-// Helper used by student + collective-join + outside (when powered).
-function powersLine(form, id, status) {
+// Helper used by student + collective-join + outside + faculty (when
+// powered). `opts.includeTier` carries the tier onto a status that
+// normally has none — used by H.O.U.N.D.S. operatives, who are tiered
+// (their card and the powers registry both show a tier chip) even though
+// they sit at faculty status.
+function powersLine(form, id, status, opts = {}) {
   const aliasFrag = form.alias ? `, alias: ${q(form.alias)}` : "";
   const linkFrag  = form.rpcLink ? `, link: ${q(form.rpcLink)}` : "";
   let tierFrag = "";
@@ -370,6 +389,9 @@ function powersLine(form, id, status) {
     if (t) tierFrag = `, tier: ${q(t)}`;
   } else if (status === "unsanctioned") {
     const t = form.tier && form.tier !== "N/A" ? form.tier.replace("-List", "") : "";
+    if (t) tierFrag = `, tier: ${q(t)}`;
+  } else if (opts.includeTier) {
+    const t = form.tier ? form.tier.replace("-List", "") : "";
     if (t) tierFrag = `, tier: ${q(t)}`;
   }
   return `  { char: ${q(form.char)}${aliasFrag}, status: ${q(status)}${tierFrag}, power: ${q(form.power)}, expression: ${q(form.powerExpression)}, drawbacks: ${q(form.drawbacks)}${linkFrag} }, // sub:${id}`;
