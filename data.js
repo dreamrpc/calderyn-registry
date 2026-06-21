@@ -2302,10 +2302,10 @@ clubs: [
           note: "Upset of the season. Delgado dragged Grimere through Valaris's Defence from the Playmaker slot — 14 assists, possession for 28 of 48 minutes, three of those assists landing in the final eight to seal the 3-point margin. His second MVP of the season." },
         // Cup final shifted off Stella's GOSH-visit Saturday so the
         // Powerball squads aren't being asked to do both in one day.
-        // Now sits on the following Saturday — still inside the
+        // Now sits on Sunday 21 June — still inside the
         // summer term, evening kickoff back as is normal for the
         // league.
-        { id: 6, date: "2026-06-20", time: "19:30 BST", venue: "Powerball Arena · Greenwich · CUP FINAL",
+        { id: 6, date: "2026-06-21", time: "19:30 BST", venue: "Powerball Arena · Greenwich · CUP FINAL",
           home: "orenne",   away: "grimere", status: "upcoming",
           home_score: null, away_score: null,
           note: "CUP FINAL · A Grimere win or draw seals the title. An Orenne win on differential could throw it back open." },
