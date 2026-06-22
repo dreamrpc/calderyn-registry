@@ -1600,6 +1600,18 @@ outside: [
           },
         ],
       },
+      {
+        name: "The Long Exhale",
+        type: "Massage & Recovery Studio",
+        note: "Discreet bodywork-and-recovery studio off the Greenwich riverside, owned and run by Emilio Marchetti. Civilian appointments by day; after hours the books fill with STRATA contractors who need putting back together and would rather it stayed off a file. Good staff, low light, and nobody asks who the late appointments are.",
+        roles: [
+          { role: "Owner", char: "Emilio Marchetti", link: "https://roleplay.chat/profile.php?user=endorphin" },
+          { role: "Massage Therapist" },
+          { role: "Massage Therapist" },
+          { role: "Recovery Therapist" },
+          { role: "Front Desk" },
+        ],
+      },
     ],
   },
 ],
@@ -2068,6 +2080,7 @@ powers: [
   { char: "Nathan Maddock", alias: "Gauge", status: "faculty", power: "Aura Analysis", expression: "Identifying powers and abilities\nDetermining relative power levels\nDetecting strengths and weaknesses\nEstimating future potential\nTracking aura signatures up to 1 mile away\nReading aura traces left behind for up to 24 hours\nRecognizing emotional and psychological states through aura shifts", drawbacks: "Human durability\nAura information can become overwhelming in crowded areas\nRequires line of sight for detailed aura analysis\nOld combat injuries occasionally flare up", link: "https://roleplay.chat/profile.php?user=Gauging+The+Room" }, // sub:99a8d967
   { char: "Selene Strathe", alias: "Parallax", status: "student", tier: "C", power: "Intangibility, Phase Transit, Phase Anchoring, Telepathic Immunity, Elemental Intangibility, Enhanced Physical Attributes", expression: "Intangibility\nSelene possesses the ability to shift herself partially out of phase with conventional matter, allowing physical objects, barriers, and many forms of energy to pass harmlessly through her. While intangible, she can move through walls, floors, ceilings, restraints, and most physical obstacles without resistance. Through years of training, she has developed exceptional precision over her phasing, allowing her to selectively phase portions of her body rather than committing to a full-body transition.\n\n(List: https://docs.google.com/document/d/1CcvwhbsLrN60TG4pdw8sIL0G0cDG-w9xfTMICEl2lvQ/edit?usp=sharing)", drawbacks: "Breath Dependency, Forced Tangibility, Physical Exertion Reduces Duration, Limited Offensive Output, Sensory Disconnection, Human Vulnerability, Hypervigilance, Self-Reliance, Information Compulsion, Emotional Guardedness, Family Exposure", link: "https://roleplay.chat/profile.php?user=Parallax" }, // sub:8df52d65
   { char: "Sirius Strathe", alias: "Lich", status: "faculty", tier: "A", power: "Cellular Regeneration", expression: "Regenerates injuries/bodily damage. Limb/organs are replace/regrown at an accelerated rate, but speed is determined by damage/importance of organ. Immune to most, if not all diseases/toxins. ", drawbacks: "Goes into a catatonic state while regrowing vital organs, i.e heart, lungs, brain. CAN BE KILLED with enough damage to vital organs.", link: "https://roleplay.chat/profile.php?user=LichHound" }, // sub:fb7c4bcb
+  { char: "Emilio Marchetti", alias: "ENDORPHIN", status: "strata", tier: "C", power: "Saturation — Neuro-Somatic Conduction (pleasure & pain), Somatic Body-Reading, Enhanced Physiology", expression: "Touch-based mastery of the nervous system — his own and, on skin contact, anyone else's. Working the body the way a masseur does — pressure, breath, the long muscles, the nerves — he plays its chemistry directly. UP: floods endorphins and dopamine for euphoria, painlessness, trance, and real trauma-release; the bliss is chemically genuine and bodies learn to crave it. DOWN: reverses the same touch, stripping the body's own painkillers and lighting every pain receptor at once — total agony, held as long as his hand stays, with no wound, no mark, nothing for an autopsy. Pushed too far either way, the heart stops telling ecstasy from terror. SOMATIC READ: reads people off their tells — pulse, breath, micro-expressions, where they hold their tension — clocking pain, fear, and lies before a word is said. ENHANCED PHYSIOLOGY: elevated strength, durability, reflexes, stamina, and recovery, plus near-total pain tolerance, since he can switch his own off. A low field of calm rolls off him at close range whether he wills it or not.", drawbacks: "Contact-locked and melee-only — no touch, no power; armour and barriers blunt or block him; useless at range. Two-way door — he absorbs an echo of everything he inflicts: deals agony and takes a share, gives bliss and comes down needing it, quietly addicted to his own supply and dissociating because of it. Reads bodies, not minds — no telepathy; trained liars, flat-affect types, and numbed or unreadable subjects fool him, and crowds drown the signal. Enhanced, not flagship — durable, not bulletproof; recovery, not regeneration; nulling his own pain means he can wreck himself without noticing, and it rebounds hard afterward. Cannot switch off the ambient calm. The catatonic or lethal overload is a rare catastrophe, not a reliable tool.", link: "https://roleplay.chat/profile.php?user=endorphin" },
   // AUTO-INSERT:powers — approved Student form powers-registry entries get inserted directly above this marker by the relay Worker. Do not remove.
 ],
 
@@ -2751,7 +2764,7 @@ heroLists: [
     req: "C-List tier or above.",
     color: "#15803d",
     slots: [
-      { alias: "[Open]", role: "Regional Hero", char: null, power: null },
+      { alias: "ENDORPHIN", role: "Contracted Specialist · Recovery", char: "Emilio Marchetti", power: "Saturation · Neuro-Somatic Conduction", link: "https://roleplay.chat/profile.php?user=endorphin" },
       { alias: "[Open]", role: "Regional Hero", char: null, power: null },
       { alias: "[Open]", role: "Regional Hero", char: null, power: null },
     ],
@@ -3449,6 +3462,12 @@ mapLocations: [
     sub: "International operator HQ · off-campus",
     desc: "STRATA’s flagship corporate tower, off-campus and across the river. International operator HQ, mission dispatch, and senior STRATA leadership all sit above the student-facing floors. Crisis monitoring runs around the clock. Calderyn students see the lobby on supervised visits and nowhere else unless someone has already decided their day for them.",
     tags: ["Corporate HQ", "Off-campus"],
+  },
+  { id: "long-exhale", district: "outside", n: "X9",
+    name: "The Long Exhale",
+    sub: "Massage & recovery studio · riverside",
+    desc: "Emilio Marchetti's bodywork studio, tucked along the Greenwich riverside between the market and the water. Warm light, low jazz, eucalyptus and good coffee. Civilian clients by day; after dark the appointment book turns into a quiet list of STRATA contractors being put back together off the record. The card in the window says recovery and sports massage. It does not mention what else the owner's hands can do.",
+    tags: ["Massage studio", "STRATA-adjacent", "Discreet"],
   },
 ],
 
