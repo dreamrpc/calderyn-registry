@@ -2316,18 +2316,25 @@ clubs: [
           note: "Upset of the season. Delgado dragged Grimere through Valaris's Defence from the Playmaker slot — 14 assists, possession for 28 of 48 minutes, three of those assists landing in the final eight to seal the 3-point margin. His second MVP of the season." },
         // Cup final (21 Jun) was ABANDONED — Grimere forfeited when
         // Cesare Delgado no-showed and they couldn't field a Playmaker.
-        // Orenne took the walkover (recorded as a 1-0 default), but it
-        // left Orenne, Valaris, and Grimere deadlocked on 6 pts each;
-        // Saberis are out at 0-3. The title goes to a replay on Sunday
-        // 28 June (game 7), which decides the cup.
+        // Orenne took the walkover (recorded as a 1-0 default), leaving
+        // Orenne, Valaris, and Grimere deadlocked on 6 pts; Saberis out
+        // at 0-3. The tie is broken by a seeded playoff, ranked on the
+        // league tiebreaker (goal difference): #1 Grimere (+10) earn a
+        // bye to the final; #2 Valaris (+7) and #3 Orenne (+4) meet in an
+        // eliminator on Sat 27 Jun (game 7), and the winner faces Grimere
+        // for the cup on Sun 28 Jun (game 8).
         { id: 6, date: "2026-06-21", time: "19:30 BST", venue: "Powerball Arena · Greenwich · CUP FINAL (ABANDONED)",
           home: "orenne",   away: "grimere", status: "played", forfeit: true,
           home_score: 1, away_score: 0,
           note: "CUP FINAL ABANDONED · Cesare Delgado, Grimere's Playmaker, never arrived; with no one to run the floor Grimere couldn't field and forfeited. Orenne took the walkover, but the default settled nothing — Orenne, Valaris, and Grimere all finish level on 6 points, a three-way deadlock for the title. Saberis, 0-3, are knocked out. The cup goes to a replay." },
-        { id: 7, date: "2026-06-28", time: "19:30 BST", venue: "Powerball Arena · Greenwich · CUP FINAL (REPLAY)",
-          home: "orenne",   away: "grimere", status: "upcoming",
+        { id: 7, date: "2026-06-27", time: "19:30 BST", venue: "Powerball Arena · Greenwich · CUP ELIMINATOR",
+          home: "valaris",  away: "orenne", status: "upcoming",
           home_score: null, away_score: null,
-          note: "CUP FINAL · REPLAY · The title decider. With Orenne, Valaris, and Grimere deadlocked on 6 points after the abandoned final, the cup is settled here — the winner moves clear on 9 and takes it. Win or go home, and this time Cesare had better show up." },
+          note: "CUP ELIMINATOR · The deadlock's #2 and #3 seeds play off for a place in the final. Valaris (goal difference +7) host Orenne (+4); the winner advances to face top seed Grimere, the loser finishes third. Grimere, top of the three on goal difference, sit this one out." },
+        { id: 8, date: "2026-06-28", time: "19:30 BST", venue: "Powerball Arena · Greenwich · CUP FINAL",
+          home: "grimere",  away: "tbd", status: "upcoming",
+          home_score: null, away_score: null,
+          note: "CUP FINAL · The title decider. Grimere — top of the deadlocked three on goal difference, rested on a bye — host the winner of Saturday's Valaris–Orenne eliminator. Whoever takes this lifts the cup. This time Cesare had better show up." },
       ],
     },
   },
