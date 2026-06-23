@@ -1580,7 +1580,6 @@ function PowerballHero({ game, standings, schedule }){
         <div className="pb-hero-side pb-hero-side-home">
           <HouseCrest id={game.home} size={96} className="pb-hero-side-crest"/>
           <div className="pb-hero-side-head">
-            <span className="pb-hero-side-tag">HOME</span>
             {homeRank > 0 && (
               <span className="pb-hero-side-rank">
                 <span className="pb-hero-side-rank-n">{homeRank}</span>
@@ -1615,7 +1614,6 @@ function PowerballHero({ game, standings, schedule }){
                 <span className="pb-hero-side-rank-ord">{ordSuffix(awayRank)}</span>
               </span>
             )}
-            <span className="pb-hero-side-tag">AWAY</span>
           </div>
           <div className="pb-hero-side-name">{houseName(game.away)}</div>
           <div className="pb-hero-side-record">{awayStand ? `${awayStand.w}-${awayStand.d}-${awayStand.l} · ${awayStand.pts} pts` : "—"}</div>
