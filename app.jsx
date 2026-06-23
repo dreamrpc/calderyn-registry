@@ -4022,7 +4022,7 @@ function LoreStart({onJump}){
           <div className="lore-eyebrow">If you have 30 seconds</div>
           <h3 className="lore-h">The <span className="accent">pitch.</span></h3>
           <p className="ls-pitch">
-            It is 2026. About two thousand registered superhumans live in the UK, owned in one sense or another by <strong>STRATA International</strong>. The four most famous are the <strong>Vanguard</strong>. Most came out of <strong>Calderyn College</strong> in Greenwich. You&rsquo;re about to play a student, a faculty member, or someone in the world around the school. Everyone is in the registry. That&rsquo;s the room.
+            It is 2026. About two thousand registered superhumans live in the UK, nearly all of them under contract to <strong>STRATA International</strong>. The four most famous are the <strong>Vanguard</strong>. Most came out of <strong>Calderyn College</strong> in Greenwich. You&rsquo;re about to play a student, a faculty member, or someone in the world around the school. Everyone is in the registry. That&rsquo;s the room.
           </p>
 
           <div className="lore-eyebrow" style={{marginTop:"24px"}}>Glossary &middot; the essentials</div>
@@ -4107,8 +4107,7 @@ function LoreWorld(){
           medical research compound. It became <strong>Calderyn College for the Powered</strong> as
           STRATA grew around it, and it sits today on the same Greenwich campus the Institute
           has occupied for sixty-one years. It teaches powered young adults between the ages
-          of eighteen and twenty-two. The brochures say <em>excellence, responsibility,
-          legacy, service</em>, in that order, in a serif font.
+          of eighteen and twenty-two. The brochures say the usual serif-font things.
         </p>
         <p className="lore-p">
           Calderyn does not fail students. It <em>reassigns</em> them. Some graduate into
@@ -4124,21 +4123,14 @@ function LoreWorld(){
         <div className="lore-eyebrow">Geneva, 2009</div>
         <h3 className="lore-h">The pipeline closed before it ever <span className="accent">opened</span>.</h3>
         <p className="lore-p">
-          For sixty years, Calderyn's reason to exist was a war that never came. Powered
-          persons were prepared for armed conflict — trained, conditioned, classified into
-          tiers, slotted into doctrine — but no signatory state ever actually deployed one.
-          The Cold War ended without the call coming. The post-Soviet decades produced
-          incidents, never mobilisations. By 2009, the world's governments looked at what
-          had been quietly built and signed the <strong>Geneva Powered Persons
-          Convention</strong>, which forbade superhumans from fighting in wars before the
-          first one had fought in one.
-        </p>
-        <p className="lore-p">
-          Heroes do civilian work now — disasters, hostage situations, the rescue of cats
-          from particularly tall trees. <em>Officially</em> is doing a great deal of work
-          in that sentence. What the Convention closed was a <em>future</em>, not a past.
-          The supes Calderyn had been making for sixty years had been made for a use that
-          was now illegal before they had ever been used for it.
+          For sixty years, Calderyn's reason to exist was a war that never came: powered
+          persons trained and classified for armed conflict no signatory state ever deployed
+          them into. In 2009 the <strong>Geneva Powered Persons Convention</strong> forbade
+          superhumans from fighting in wars before the first one ever had — closing a
+          <em>future</em>, not a past. The supes Calderyn had spent sixty years making had
+          been made for a use that was illegal before they were ever used for it. Heroes do
+          civilian work now; <em>officially</em> is doing most of that sentence's lifting.
+          The full story is its own subject — see <em>The Programme</em>.
         </p>
       </section>
     </div>
@@ -4273,11 +4265,8 @@ function LoreHouses(){
         <div className="lore-intro-stamp">PUBLIC RECORD · ORIENTATION READING</div>
         <h2 className="lore-intro-title">The <span className="accent">Houses.</span></h2>
         <p className="lore-lead">
-          There are four of them, named in 2020 after the four members of the Vanguard.
-          STRATA presents this as ancient tradition, and the gold leaf in the dining hall
-          is very convincing, but the names are six years old. The students will tell you
-          the rivalries are real anyway, because eighteen-year-olds will make a rivalry out
-          of weather.
+          There are four of them, named in 2020 after the four members of the Vanguard —
+          though STRATA would prefer you didn't dwell on the date.
         </p>
         <p className="lore-lead">
           Three of the four namesakes attended Calderyn as students. The fourth did not.
@@ -4288,19 +4277,14 @@ function LoreHouses(){
         <div className="lore-eyebrow">2020 · Branding Initiative</div>
         <h3 className="lore-h">Older than your <span className="accent">memory</span> of them. Younger than the <span className="accent">school.</span></h3>
         <p className="lore-p">
-          Calderyn did not have houses before 2020. The house system was created after the
-          Vanguard became the most famous heroes in the world — partly as a student-organisation
-          framework the institution genuinely needed, and partly as STRATA propaganda. Each
-          house was named after one member of the Vanguard, turning four <strong>living
-          corporate assets</strong> into campus tradition almost overnight.
-        </p>
-        <p className="lore-p">
-          The houses are not ancient. They are <em>brand architecture.</em> STRATA looked at the
-          four people who sold the most merchandise, the most magazine covers, and the most
-          rolling-news minutes in the country, and decided the students should live inside
-          their mythology. The crests were commissioned, the dining-hall banners were aged
-          chemically, and the colours were licensed back to STRATA's apparel division in the
-          same calendar year.
+          Calderyn did not have houses before 2020. The system was created after the Vanguard
+          became the most famous heroes in the world — part student-organisation framework the
+          institution genuinely needed, part STRATA propaganda. STRATA took the four people who
+          sold the most merchandise, magazine covers, and rolling-news minutes in the country
+          and named a house after each, turning four <strong>living corporate assets</strong>
+          into campus tradition almost overnight. The crests were commissioned, the dining-hall
+          banners aged chemically, the colours licensed back to STRATA's apparel division inside
+          the same calendar year. Not ancient. <em>Brand architecture.</em>
         </p>
         <p className="lore-p">
           The students don't care. Six years is enough. The rivalries are real. The pride is
@@ -4498,7 +4482,7 @@ function LoreDean(){
 
       <section className="lore-block">
         <div className="lore-eyebrow">Power · Field Nullification</div>
-        <h3 className="lore-h">Within fifteen metres, the line is <span className="accent">drawn</span>.</h3>
+        <h3 className="lore-h">Within fifteen metres, nothing <span className="accent">works</span>.</h3>
         <p className="lore-p">
           Within fifteen metres of her, when she projects the field, no superhuman ability
           functions. There is no fading. There is no warning. The line between powered and
@@ -4624,7 +4608,7 @@ function LoreHounds(){
           Students who ask are told campus security exists to keep them safe, which is
           true. Students who keep asking are brought in for a conversation with the
           Security Chief — short, exact, nothing in it you could file a complaint about
-          — and read, top to bottom, current and projected, on the walk to the door.
+          — and read, top to bottom, on the walk to the door.
           The Hounds wear Calderyn colours, but the leash runs to STRATA, and on this
           campus the hand on it is the Dean's. Nobody else's name opens their doors.
         </p>
@@ -4656,13 +4640,7 @@ function LoreHistory(){
         </p>
         <p className="lore-lead">
           The reason it was made is the part the brochures most carefully do not mention.
-          For the first sixty years of the programme, supes were being prepared for
-          armed service — Cold War contingency, defence-pipeline thinking, a strategic
-          asset class no government wanted to be the second to develop. None of them were
-          ever actually deployed. The wars the programme was built for did not come, and
-          the wars that did come arrived in formats supes could not legally be used in.
-          By the time Geneva was signed in 2009, the entire enterprise had spent six
-          decades preparing children for a job that ultimately never existed.
+          The timeline that follows is that reason, in order.
         </p>
       </section>
 
@@ -4778,7 +4756,7 @@ function LoreHistory(){
       <section className="lore-block">
         <div className="lore-eyebrow">Casting Rule · Strict</div>
         <h3 className="lore-h">Cradle bands are <span className="accent">hard limits.</span></h3>
-        <p className="lore-p">Cradle bands are hard limits. A character's age must fall inside the age range of their Cradle phase — Cradle III runs roughly ages 0–26, Cradle II 31–46, and Cradle I 51–58. Powers track the Cradle a character was born into, so anyone with abilities is expected to sit in the band that matches their Cradle. <strong>The Dean</strong> and <strong>Vale</strong> are the only Cradle I characters above 46. <strong>Paragon</strong> is a Cradle II character (age 31–46) who received the Cradle I injection — a Cradle II body with Cradle I powers, which is why he sits in the 31–46 band even though his power profile reads as Cradle I. Submissions outside those bands will not be accepted — please <a href="#lore" style={{color:"#c83030",textDecoration:"underline"}}>read the lore</a> (start with <em>The Programme</em>) before submitting.</p>
+        <p className="lore-p">A character's age must fall inside the age range of their Cradle phase — Cradle III runs roughly ages 0–26, Cradle II 31–46, and Cradle I 51–58. Powers track the Cradle a character was born into, so anyone with abilities is expected to sit in the band that matches their Cradle. <strong>The Dean</strong> and <strong>Vale</strong> are the only Cradle I characters above 46. <strong>Paragon</strong> is a Cradle II character (age 31–46) who received the Cradle I injection — a Cradle II body with Cradle I powers, which is why he sits in the 31–46 band even though his power profile reads as Cradle I. Submissions outside those bands will not be accepted — please <a href="#lore" style={{color:"#c83030",textDecoration:"underline"}}>read the lore</a> (start with <em>The Programme</em>) before submitting.</p>
       </section>                                                                                                                
 
       <section className="lore-block">
