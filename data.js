@@ -2585,11 +2585,11 @@ clubs: [
       { label: "Members", roles: ["Member"] },
     ],
     positions: [
-      { pos: "President", group: "leadership" },
+      { pos: "President", group: "leadership", char: "Vecna Ravindrakumar", link: "https://roleplay.chat/profile.php?user=vecna" },
       { pos: "Project Lead", group: "leadership" },
       { pos: "Fabricator", group: "build-team" }, { pos: "Fabricator", group: "build-team" },
       { pos: "Systems & Power", group: "build-team" }, { pos: "Systems & Power", group: "build-team" },
-      { pos: "Software", group: "build-team", char: "Vecna Ravindrakumar", link: "https://roleplay.chat/profile.php?user=vecna" }, { pos: "Software", group: "build-team" },
+      { pos: "Software", group: "build-team" }, { pos: "Software", group: "build-team" },
       { pos: "Member", group: "members", char: "Sven Skarsen", link: "https://roleplay.chat/profile.php?user=blood+eagle" }, { pos: "Member", group: "members" },
       { pos: "Member", group: "members" }, { pos: "Member", group: "members" },
     ],
