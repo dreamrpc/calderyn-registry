@@ -2314,15 +2314,20 @@ clubs: [
           mvp: "Cesare Delgado", mvp_team: "grimere",
           mvp_link: "https://roleplay.chat/profile.php?user=delgado",
           note: "Upset of the season. Delgado dragged Grimere through Valaris's Defence from the Playmaker slot — 14 assists, possession for 28 of 48 minutes, three of those assists landing in the final eight to seal the 3-point margin. His second MVP of the season." },
-        // Cup final shifted off Stella's GOSH-visit Saturday so the
-        // Powerball squads aren't being asked to do both in one day.
-        // Now sits on Sunday 21 June — still inside the
-        // summer term, evening kickoff back as is normal for the
-        // league.
-        { id: 6, date: "2026-06-21", time: "19:30 BST", venue: "Powerball Arena · Greenwich · CUP FINAL",
+        // Cup final (21 Jun) was ABANDONED — Grimere forfeited when
+        // Cesare Delgado no-showed and they couldn't field a Playmaker.
+        // Orenne took the walkover (recorded as a 1-0 default), but it
+        // left Orenne, Valaris, and Grimere deadlocked on 6 pts each;
+        // Saberis are out at 0-3. The title goes to a replay on Sunday
+        // 28 June (game 7), which decides the cup.
+        { id: 6, date: "2026-06-21", time: "19:30 BST", venue: "Powerball Arena · Greenwich · CUP FINAL (ABANDONED)",
+          home: "orenne",   away: "grimere", status: "played", forfeit: true,
+          home_score: 1, away_score: 0,
+          note: "CUP FINAL ABANDONED · Cesare Delgado, Grimere's Playmaker, never arrived; with no one to run the floor Grimere couldn't field and forfeited. Orenne took the walkover, but the default settled nothing — Orenne, Valaris, and Grimere all finish level on 6 points, a three-way deadlock for the title. Saberis, 0-3, are knocked out. The cup goes to a replay." },
+        { id: 7, date: "2026-06-28", time: "19:30 BST", venue: "Powerball Arena · Greenwich · CUP FINAL (REPLAY)",
           home: "orenne",   away: "grimere", status: "upcoming",
           home_score: null, away_score: null,
-          note: "CUP FINAL · A Grimere win or draw seals the title. An Orenne win on differential could throw it back open." },
+          note: "CUP FINAL · REPLAY · The title decider. With Orenne, Valaris, and Grimere deadlocked on 6 points after the abandoned final, the cup is settled here — the winner moves clear on 9 and takes it. Win or go home, and this time Cesare had better show up." },
       ],
     },
   },
