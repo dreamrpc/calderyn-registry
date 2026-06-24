@@ -1625,10 +1625,10 @@ outside: [
         type: "Civilian Pool",
         note: "The general public of the borough — shopkeepers, students, parents, bystanders, the simply unaffiliated. No badge, no contract, no powers on file. Open to any civilian character who lives or works in Greenwich without belonging to one of the institutions above.",
         roles: [
-          { role: "Civilian", char: "Cora McCallister", human: true, link: "https://roleplay.chat/profile.php?user=Cora+McCallister" }, // sub:83f01ac5
-          { role: "Civilian" },
-          { role: "Civilian" },
-          { role: "Civilian" },
+          { role: "Resident", char: "Cora McCallister", human: true, link: "https://roleplay.chat/profile.php?user=Cora+McCallister" }, // sub:83f01ac5
+          { role: "Resident" },
+          { role: "Resident" },
+          { role: "Resident" },
         ],
       },
     ],
