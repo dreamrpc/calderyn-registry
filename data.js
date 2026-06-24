@@ -1272,6 +1272,7 @@ outside: [
           { role: "Mayor (Ceremonial)", char: "Lynda Byrd",     npc: true },
           { role: "Chief Executive" },
           { role: "Press Officer" },
+          { role: "Civilian", char: "Cora McCallister", human: true, link: "https://roleplay.chat/profile.php?user=Cora+McCallister" }, // sub:83f01ac5
         ],
       },
       {
