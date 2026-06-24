@@ -2254,6 +2254,7 @@ clubs: [
         { pos: "Reserve · Attack" }, { pos: "Reserve · Attack" },
         { pos: "Reserve · Defence" }, { pos: "Reserve · Defence" },
         { pos: "Reserve · Goalkeeper" },
+        { pos: "Defence", char: "Moni Li", link: "https://roleplay.chat/profile.php?user=Moni+Li" }, // sub:13e0698f
       ]},
     ],
     courtNote: "Practice court is open Saturday and Sunday — first come, first served, any house.",
