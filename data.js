@@ -1272,7 +1272,6 @@ outside: [
           { role: "Mayor (Ceremonial)", char: "Lynda Byrd",     npc: true },
           { role: "Chief Executive" },
           { role: "Press Officer" },
-          { role: "Civilian", char: "Cora McCallister", human: true, link: "https://roleplay.chat/profile.php?user=Cora+McCallister" }, // sub:83f01ac5
         ],
       },
       {
@@ -1613,6 +1612,23 @@ outside: [
           { role: "Massage Therapist" },
           { role: "Spa Therapist" },
           { role: "Front Desk" },
+        ],
+      },
+    ],
+  },
+  {
+    section: "RESIDENTS & CIVILIANS",
+    note: "Ordinary Greenwich residents with no institutional affiliation — the people powered incidents happen around rather than to. STRATA registers them as civilians: no contract, no operational status, nothing on file but a name.",
+    orgs: [
+      {
+        name: "Greenwich Residents",
+        type: "Civilian Pool",
+        note: "The general public of the borough — shopkeepers, students, parents, bystanders, the simply unaffiliated. No badge, no contract, no powers on file. Open to any civilian character who lives or works in Greenwich without belonging to one of the institutions above.",
+        roles: [
+          { role: "Civilian", char: "Cora McCallister", human: true, link: "https://roleplay.chat/profile.php?user=Cora+McCallister" }, // sub:83f01ac5
+          { role: "Civilian" },
+          { role: "Civilian" },
+          { role: "Civilian" },
         ],
       },
     ],

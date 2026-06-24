@@ -5466,6 +5466,7 @@ const OUTSIDE_SHORT = {
   "underworld":            "Underworld",
   "professional-powerball":"Powerball",
   "local-business-trade":  "Business",
+  "residents-civilians":   "Civilians",
 };
 
 function OutsideTab(){
