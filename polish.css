@@ -10475,6 +10475,10 @@ html { scroll-behavior: smooth; }
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   gap: var(--space-4) !important;
+  /* Cards size to their own content — don't stretch a short card to
+     match the tallest one in its row (that left dead space at the
+     bottom of cards with fewer roles). */
+  align-items: start !important;
 }
 /* Solo card on its own row spans full width — no dead space beside it.
    Catches both: a section with one org total, and the last card on a
