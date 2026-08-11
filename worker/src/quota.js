@@ -70,11 +70,27 @@ function readInt(raw, fallback) {
   return Number.isFinite(n) && n > 0 ? n : fallback;
 }
 
+// Pull the RPC username out of a roleplay.chat (or similar) profile
+// URL. roleplay.chat supports several URL shapes interchangeably:
+//   https://roleplay.chat/profile.php?user=Zephyr   (canonical)
+//   https://www.roleplay.chat/u/Zephyr              (short)
+//   https://www.roleplay.chat/p/Zephyr              (alt short)
+//   https://www.roleplay.chat/users/Zephyr          (verbose)
+// Returns the username as it appears in the URL (with `+`/`%xx`
+// intact); callers compare via writers.js's normalize() for
+// case/encoding-insensitive matching.
 export function extractRpcUsername(url) {
   if (!url) return null;
-  const m = /[?&]user=([^&"]+)/.exec(String(url));
-  if (!m) return null;
-  return m[1];
+  const s = String(url);
+  // ?user=NAME query-string form, preferred when both are present.
+  let m = /[?&]user=([^&"#\s]+)/.exec(s);
+  if (m) return m[1];
+  // Path-style forms: /u/NAME, /p/NAME, /users/NAME. Stops at the
+  // next `/`, `?`, `#`, or whitespace so trailing path segments,
+  // query strings, and fragments don't end up in the captured value.
+  m = /\/(?:u|p|users)\/([^?#"&/\s]+)/i.exec(s);
+  if (m) return m[1];
+  return null;
 }
 
 function pickStringField(objText, key) {

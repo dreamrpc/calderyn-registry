@@ -8829,8 +8829,19 @@ function Field({label, required, hint, full, children}){
 }
 
 function Honeypot({form, set}){
+  // Visually hidden so sighted users never see the "Leave this field
+  // empty" instruction and can't accidentally type into it. Bots that
+  // parse the DOM and fill every input still trip the trap because
+  // the field is fully present in the markup.
   return (
-    <div className="join-hp" aria-hidden="true">
+    <div className="join-hp" aria-hidden="true" style={{
+      position: "absolute",
+      left: "-9999px",
+      top: "auto",
+      width: "1px",
+      height: "1px",
+      overflow: "hidden",
+    }}>
       <label>Leave this field empty
         <input type="text" tabIndex={-1} autoComplete="off" value={form.hp || ""} onChange={e => set("hp", e.target.value)}/>
       </label>
